@@ -1,6 +1,6 @@
 /**
  * Top-level planner catalog surface (domain / API / tools).
- * Live guest/canvas placement catalog lives under `features/planner/project/catalog/`.
+ * Live guest/canvas placement catalog lives under `features/planner/catalog/`.
  * Do not treat this tree as the plan canvas host.
  * @see features/planner/CONTENTS.md — Dual trees
  */

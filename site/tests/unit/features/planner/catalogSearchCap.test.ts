@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   PLANNER_CATALOG_RESULT_CAP,
   capCatalogResults,
-} from "@/features/planner/project/catalog/catalogSearch";
+} from "@/features/planner/catalog/catalogSearch";
 
 /**
  * Inventory catalogue default cap = 50 (owner multi-line multi-SKU floor).

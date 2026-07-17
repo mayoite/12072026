@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import { proveDescriptorFootprintMm } from "@/features/admin/svg-editor/lifecycle/footprintMmProof";
-import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import { tryLoad } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 function syntheticDescriptor(
   geometry: { widthMm: number; depthMm: number; heightMm: number },

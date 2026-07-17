@@ -7,6 +7,9 @@ export {
 export {
   PlannerFabricStage,
   type PlannerFabricStageProps,
+  /** Live workspace name — same component as PlannerFabricStage. */
+  PlannerFabricStage as PlannerCanvasStage,
+  type PlannerFabricStageProps as PlannerCanvasStageProps,
 } from "./PlannerFabricStage";
 
 export {

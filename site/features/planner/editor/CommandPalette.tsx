@@ -25,7 +25,7 @@ import {
   runPaletteCommand,
   type PaletteCommand,
   type PaletteCommandHandlers,
-} from "@/features/planner/project/lib/commands/paletteCommands";
+} from "@/features/planner/lib/commands/paletteCommands";
 import styles from "./command-palette.module.css";
 
 export interface CommandPaletteProps {

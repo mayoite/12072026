@@ -1,8 +1,8 @@
 import type {
   PlannerEntityCollection,
   PlannerEntityMap,
-} from "@/features/planner/project/model/actions/projectActions";
-import type { PlannerFloor, PlannerProject } from "@/features/planner/project/model/types";
+} from "@/features/planner/model/actions/projectActions";
+import type { PlannerFloor, PlannerProject } from "@/features/planner/model/types";
 import type { SelectedEntity } from "./PropertiesPanel";
 import type { CanvasSelection } from "./useWorkspaceCanvas";
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { useValidation } from "@/features/planner/editor/useValidation";
-import { createPlannerProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/model/project";
 
 describe("useValidation", () => {
   it("validates an active floor snapshot", () => {

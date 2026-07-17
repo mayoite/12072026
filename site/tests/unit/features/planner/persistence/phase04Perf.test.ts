@@ -15,15 +15,15 @@ import {
   isCommandBlockedForContext,
   type PlannerAccessContext,
   type PlannerCommandKey,
-} from "@/features/planner/project/lib/commands/plannerAccessContext";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import { promoteGuestSession } from "@/features/planner/project/persistence/guestPromotion";
+} from "@/features/planner/lib/commands/plannerAccessContext";
+import { createPlannerProject } from "@/features/planner/model/project";
+import { promoteGuestSession } from "@/features/planner/persistence/guestPromotion";
 import {
   createMemberPlanRepository,
   type FetchFn,
   type MemberPlanRepository,
-} from "@/features/planner/project/persistence/memberPlanRepository";
-import type { StagingPlannerDocument } from "@/features/planner/project/persistence/plannerDocumentTypes";
+} from "@/features/planner/persistence/memberPlanRepository";
+import type { StagingPlannerDocument } from "@/features/planner/persistence/plannerDocumentTypes";
 
 /** Perf budgets always run — no silent skip under coverage. */
 const describePhase04Benchmarks = describe;

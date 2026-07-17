@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 
-import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
-import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
-import type { PlannerSaveStatus } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
+import type { PlannerAccessContext } from "@/features/planner/lib/commands/plannerAccessContext";
+import type { PlannerDisplayUnit } from "@/features/planner/model/types";
+import type { PlannerSaveStatus } from "@/features/planner/persistence/usePlannerWorkspaceAutosave";
 import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +14,8 @@ import {
   PLANNER_STEPS,
   PLANNER_STEP_DETAILS,
   PLANNER_STEP_LABELS,
+  derivePlannerStepCompletion,
+  plannerForwardWarning,
   type PlannerStep,
 } from "../plannerStep";
 import { TopBar } from "../TopBar";
@@ -43,6 +45,7 @@ export interface ModularPlannerShellProps {
   saveStatusLabel?: string;
   storage?: PlannerPersistStorage;
   cloudEnabled?: boolean;
+  isOffline?: boolean;
   inventory: ReactNode;
   /** Optional assistant. It is an overlay action, not a dock panel. */
   assistant?: ReactNode;
@@ -60,6 +63,7 @@ export interface ModularPlannerShellProps {
   onSave?: () => void;
   onExport?: (format?: string) => void;
   onImport?: () => void;
+  onSketchToPlan?: () => void;
   canUndo?: boolean;
   canRedo?: boolean;
   undoLabel?: string;
@@ -80,6 +84,8 @@ export interface ModularPlannerShellProps {
   planMetrics?: WorkspacePlanMetrics;
   /** Hide tools dock when in 3D (tools are 2D Fabric). */
   showTools?: boolean;
+  /** When true, ensure the properties dock is visible. */
+  hasSelection?: boolean;
 }
 
 const STEP_PRESET: Record<PlannerStep, LayoutPresetId> = {
@@ -92,11 +98,28 @@ function PlannerWorkflowBar({
   currentStep,
   onStepChange,
   onOpenAssistant,
+  planMetrics,
 }: {
   currentStep: PlannerStep;
   onStepChange: (step: PlannerStep) => void;
   onOpenAssistant?: () => void;
+  planMetrics?: WorkspacePlanMetrics;
 }) {
+  const completion = useMemo(
+    () => derivePlannerStepCompletion(planMetrics),
+    [planMetrics],
+  );
+  const [warning, setWarning] = useState<string | null>(null);
+
+  useEffect(() => {
+    setWarning(plannerForwardWarning(currentStep, completion));
+  }, [completion, currentStep]);
+
+  const changeStep = (step: PlannerStep) => {
+    setWarning(plannerForwardWarning(step, completion));
+    onStepChange(step);
+  };
+
   return (
     <nav
       className={`${styles.workflowBar} pw-step-bar`}
@@ -113,13 +136,18 @@ function PlannerWorkflowBar({
                 className={`${styles.workflowButton} pw-step-bar__btn`}
                 data-step={step}
                 data-active={active ? "true" : undefined}
+                data-completion={completion[step]}
                 aria-current={active ? "step" : undefined}
-                onClick={() => onStepChange(step)}
+                aria-label={`${index + 1}. ${PLANNER_STEP_LABELS[step]}. ${completion[step]}. ${PLANNER_STEP_DETAILS[step]}`}
+                onClick={() => changeStep(step)}
               >
                 <span className={styles.workflowNumber}>{index + 1}</span>
                 <span className={styles.workflowCopy}>
                   <strong>{PLANNER_STEP_LABELS[step]}</strong>
                   <small>{PLANNER_STEP_DETAILS[step]}</small>
+                  <span className={styles.workflowCompletion}>
+                    {completion[step] === "complete" ? "Complete" : "Incomplete"}
+                  </span>
                 </span>
               </button>
             </li>
@@ -131,6 +159,14 @@ function PlannerWorkflowBar({
           AI assist
         </button>
       ) : null}
+      <p
+        className={styles.workflowWarning}
+        role="status"
+        aria-live="polite"
+        hidden={!warning}
+      >
+        {warning}
+      </p>
     </nav>
   );
 }
@@ -152,6 +188,7 @@ export function ModularPlannerShell({
   saveStatusLabel,
   storage,
   cloudEnabled,
+  isOffline,
   inventory,
   assistant,
   review,
@@ -166,6 +203,7 @@ export function ModularPlannerShell({
   onSave,
   onExport,
   onImport,
+  onSketchToPlan,
   canUndo,
   canRedo,
   undoLabel,
@@ -185,6 +223,7 @@ export function ModularPlannerShell({
   onToggleSnap,
   planMetrics,
   showTools = true,
+  hasSelection = false,
 }: ModularPlannerShellProps) {
   const id = useId();
   const isMobile = useIsMobile();
@@ -240,6 +279,11 @@ export function ModularPlannerShell({
     },
     [],
   );
+
+  useEffect(() => {
+    if (!hasSelection || isMobile) return;
+    showDockPanel("properties");
+  }, [hasSelection, isMobile, showDockPanel]);
 
   const handleDockApiReady = useCallback((api: DockviewApi) => {
     dockApiRef.current = api;
@@ -304,6 +348,7 @@ export function ModularPlannerShell({
         saveStatusLabel={saveStatusLabel}
         storage={storage}
         cloudEnabled={cloudEnabled}
+        isOffline={isOffline}
         leftPanel={slots.inventory}
         rightPanel={slots.properties}
         onViewModeChange={onViewModeChange}
@@ -312,6 +357,7 @@ export function ModularPlannerShell({
         onSave={onSave}
         onExport={onExport}
         onImport={onImport}
+        onSketchToPlan={onSketchToPlan}
         canUndo={canUndo}
         canRedo={canRedo}
         undoLabel={undoLabel}
@@ -336,6 +382,7 @@ export function ModularPlannerShell({
             currentStep={plannerStep}
             onStepChange={changePlannerStep}
             onOpenAssistant={assistant ? () => setAssistantOpen(true) : undefined}
+            planMetrics={planMetrics}
           />
           <div className={styles.mobileCanvasStage}>
             {children}
@@ -400,6 +447,7 @@ export function ModularPlannerShell({
         onSave={onSave}
         onExport={onExport}
         onImport={onImport}
+        onSketchToPlan={onSketchToPlan}
         canUndo={canUndo}
         canRedo={canRedo}
         undoLabel={undoLabel}
@@ -417,6 +465,7 @@ export function ModularPlannerShell({
         onResetLayout={resetLayout}
         onShowDockPanel={showDockPanel}
         chromeMode="slim"
+        isOffline={isOffline}
         {...topBarSaveStatusProps}
       />
 
@@ -425,6 +474,7 @@ export function ModularPlannerShell({
           currentStep={plannerStep}
           onStepChange={changePlannerStep}
           onOpenAssistant={assistant ? () => setAssistantOpen(true) : undefined}
+          planMetrics={planMetrics}
         />
         <div className={styles.dockStage}>
           <PlannerDockHost

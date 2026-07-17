@@ -7,8 +7,8 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-import { tryLoad, clearLoaderCache } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import { tryLoad, clearLoaderCache } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 export interface DualReadMirrorRecord {
   readonly slug: string;

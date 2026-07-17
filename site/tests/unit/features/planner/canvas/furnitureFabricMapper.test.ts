@@ -15,8 +15,8 @@ import {
   PLANNER_FABRIC_FURNITURE_ENV,
   isPlannerFabricFurnitureEnabled,
 } from "@/features/planner/canvas/fabricFurnitureFlag";
-import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
-import type { CanvasTransform } from "@/features/planner/project/lib/geometry/snapping";
+import type { PlannerFurnitureItem } from "@/features/planner/model/types";
+import type { CanvasTransform } from "@/features/planner/lib/geometry/snapping";
 
 function makeItem(
   overrides: Partial<PlannerFurnitureItem> & Pick<PlannerFurnitureItem, "id">,

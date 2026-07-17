@@ -17,13 +17,14 @@ export interface HydrationResult {
   };
 }
 
+export type ConflictResolutionChoice = "local" | "cloud";
+
 /**
  * Hydrate cloud plan on load
  * Lane 3 Hydration Precedence Ranking:
  * 1. Valid schema only
- * 2. Newest updatedAt among valid records
- * 3. Use contentHash and remoteRevision as conflict evidence
- * 4. Use explicit source preference only as final tie-breaker
+ * 2. Same contentHash → newest updatedAt
+ * 3. Different contentHash or remoteRevision → explicit conflict (never silent overwrite)
  */
 export function hydrateCloudPlanIntoIndexedDb(
   localPlan: OfflinePlan | null,
@@ -49,7 +50,6 @@ export function hydrateCloudPlanIntoIndexedDb(
 
   const localTime = new Date(localPlan.updatedAt).getTime();
   const cloudTime = new Date(cloudPlan.updatedAt).getTime();
-
   const sameContentHash = localPlan.contentHash === cloudPlan.contentHash;
 
   if (sameContentHash) {
@@ -60,30 +60,21 @@ export function hydrateCloudPlanIntoIndexedDb(
     };
   }
 
-  if (localPlan.remoteRevision && cloudPlan.remoteRevision && 
-      localPlan.remoteRevision !== cloudPlan.remoteRevision) {
-    return {
-      plan: null,
-      source: "conflict",
-      conflictDetails: {
-        localHash: localPlan.contentHash,
-        remoteHash: cloudPlan.contentHash,
-        localUpdatedAt: localPlan.updatedAt,
-        remoteUpdatedAt: cloudPlan.updatedAt,
-      },
-    };
-  }
-
-  const newer = cloudTime > localTime ? cloudPlan : localPlan;
+  // Divergent content always requires an explicit keep-local / keep-cloud choice.
   return {
-    plan: newer,
-    source: cloudTime > localTime ? "cloud" : "local",
+    plan: null,
+    source: "conflict",
+    conflictDetails: {
+      localHash: localPlan.contentHash,
+      remoteHash: cloudPlan.contentHash,
+      localUpdatedAt: localPlan.updatedAt,
+      remoteUpdatedAt: cloudPlan.updatedAt,
+    },
   };
 }
 
 /**
- * Detect conflict between local and cloud plans
- * Explicit conflict handling per Lane 3 requirements
+ * Detect if local and cloud plans are in conflict
  */
 export function detectPlanConflict(
   localPlan: OfflinePlan,
@@ -97,25 +88,22 @@ export function detectPlanConflict(
     return true;
   }
 
-  return false;
+  return true;
 }
 
 /**
- * Choose deterministically between conflicted versions
- * Preference: newest by updatedAt
+ * Apply an explicit customer conflict choice.
+ * Never auto-picks a winner from timestamps alone.
  */
 export function resolveConflict(
   localPlan: OfflinePlan,
-  cloudPlan: OfflinePlan
+  cloudPlan: OfflinePlan,
+  choice: ConflictResolutionChoice,
 ): OfflinePlan {
-  const localTime = new Date(localPlan.updatedAt).getTime();
-  const cloudTime = new Date(cloudPlan.updatedAt).getTime();
-
-  const winner = cloudTime >= localTime ? cloudPlan : localPlan;
-
+  const winner = choice === "local" ? localPlan : cloudPlan;
   return {
     ...winner,
-    syncState: "conflict",
-    syncErrorCode: "CONFLICT_DETECTED",
+    syncState: "idle",
+    syncErrorCode: null,
   };
 }

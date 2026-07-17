@@ -155,4 +155,21 @@ describe("TopBar save status pill — plannerSaveStatusLabel table", () => {
     expect(saveBtn).toBeDisabled();
     expect(saveBtn).toHaveTextContent("Saving…");
   });
+
+  it("shows offline separately without hiding local save state", () => {
+    render(
+      <TopBar
+        {...baseProps}
+        accessContext="guest"
+        saveStatus="saved"
+        saveStorage="local"
+        isOffline
+      />,
+    );
+
+    const pill = screen.getByTestId("open3d-save-status");
+    expect(pill).toHaveAttribute("data-connection", "offline");
+    expect(pill).toHaveTextContent("Offline · Draft saved locally");
+    expect(pill).toHaveAttribute("data-status", "saved");
+  });
 });

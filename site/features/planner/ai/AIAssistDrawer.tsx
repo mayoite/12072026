@@ -14,7 +14,6 @@ import {
 import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
 
 import { AiAdvisorChatPane } from "./AiAdvisorChatPane";
-import { applySuggestedLayout } from "./applySuggestedLayout";
 import {
   CATALOG_TIER_LABELS,
   resolveSpaceSuggestDefaults,
@@ -340,12 +339,14 @@ function SuggestLayoutPane({
 
   const handleApplyLayout = useCallback(() => {
     if (!previewLayout) return;
-    if (onApplyLayout) {
-      onApplyLayout(previewLayout);
-      onFitCanvas?.();
-    } else {
-      applySuggestedLayout(null, previewLayout);
+    if (!onApplyLayout) {
+      setLayoutError(
+        "Layout apply is unavailable in this session. Drawing and placement still work without AI.",
+      );
+      return;
     }
+    onApplyLayout(previewLayout);
+    onFitCanvas?.();
     setLayoutError(null);
   }, [onApplyLayout, onFitCanvas, previewLayout]);
 

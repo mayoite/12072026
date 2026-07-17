@@ -9,7 +9,7 @@ import {
   type WorkstationModuleKindV0,
   type WorkstationShapeV0,
   workstationFootprintMm,
-} from "@/features/planner/project/catalog/workstationSystemV0";
+} from "@/features/planner/catalog/workstationSystemV0";
 
 export type WorkstationFamilyOption = {
   readonly optionId: string;

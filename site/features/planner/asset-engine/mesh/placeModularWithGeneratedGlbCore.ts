@@ -11,17 +11,17 @@ import { stampFurnitureGeneratedGlb } from "@/features/planner/asset-engine/mesh
 import {
   placeCatalogItemInProject,
   type PlacementOptions,
-} from "@/features/planner/project/catalog/placementAction";
-import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/project/catalog/modularCabinetV0GlbExport";
-import { defaultCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
+} from "@/features/planner/catalog/placementAction";
+import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/catalog/modularCabinetV0GlbExport";
+import { defaultCabinetV0Options } from "@/features/planner/catalog/modularCabinetV0";
 import type {
   PlannerCatalogItem,
   PlannerCatalogVariant,
-} from "@/features/planner/project/catalog/catalogTypes";
+} from "@/features/planner/catalog/catalogTypes";
 import type {
   PlannerFurnitureItem,
   PlannerProject,
-} from "@/features/planner/project/model/types";
+} from "@/features/planner/model/types";
 
 export type PlaceModularGlbWriteResult = {
   readonly absolutePath: string | null;
@@ -139,7 +139,7 @@ export async function placeModularWithGeneratedGlbCore(
 
   const modularOptions = defaultCabinetV0Options(furniture.modularOptions);
   const planPath = modularCabinetV0GeneratedRelativePath(modularOptions);
-  const writeToPublic = options?.writeToPublic !== false;
+  const writeToPublic = options?.writeToPublic === true;
 
   const exportResult = await exportModularCabinetV0GlbBinary(modularOptions);
   if (!exportResult.ok) {

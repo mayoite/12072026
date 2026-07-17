@@ -3,18 +3,18 @@ import {
   attachGeneratedGlbToFurniture,
   stampFurnitureGeneratedGlb,
 } from "@/features/planner/asset-engine/mesh/stampFurnitureGeneratedGlb";
-import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/project/catalog/modularCabinetV0GlbExport";
-import { defaultCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
+import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/catalog/modularCabinetV0GlbExport";
+import { defaultCabinetV0Options } from "@/features/planner/catalog/modularCabinetV0";
 import {
   isSystemGeneratedGlbUrl,
   rejectDesignerStaticGlbUrl,
 } from "@/features/planner/lib/glbAssetPolicy";
-import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
+import type { PlannerFurnitureItem } from "@/features/planner/model/types";
 import {
   placeCatalogItemInProject,
-} from "@/features/planner/project/catalog/placementAction";
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+} from "@/features/planner/catalog/placementAction";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
+import type { PlannerProject } from "@/features/planner/model/types";
 
 function sampleFurniture(
   overrides: Partial<PlannerFurnitureItem> = {},

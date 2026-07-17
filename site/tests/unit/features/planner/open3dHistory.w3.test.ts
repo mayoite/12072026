@@ -4,11 +4,11 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { createPlannerProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/model/project";
 import {
   addFurniture,
-} from "@/features/planner/project/model/operations/pureActions";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+} from "@/features/planner/model/operations/pureActions";
+import type { PlannerProject } from "@/features/planner/model/types";
 import {
   beginPlannerDrag,
   commitPlannerDrag,
@@ -18,7 +18,7 @@ import {
   redoPlannerAction,
   undoPlannerAction,
   updatePlannerProject,
-} from "@/features/planner/project/store/history";
+} from "@/features/planner/store/history";
 import { applySelectionDelete } from "@/features/planner/editor/workspaceEntityHelpers";
 
 const FLOOR_ID = "floor-hist";

@@ -9,12 +9,12 @@ import {
   type FabricObject,
 } from "fabric";
 
-import { furnitureBlock2DFromItem } from "@/features/planner/project/catalog/furnitureBlock2D";
+import { furnitureBlock2DFromItem } from "@/features/planner/catalog/furnitureBlock2D";
 import {
   getSvgPlanImage,
   isPublishedSvgPlanUrl,
-} from "@/features/planner/project/catalog/svg/svgPlanSymbolCache";
-import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
+} from "@/features/planner/catalog/svg/svgPlanSymbolCache";
+import type { PlannerFurnitureItem } from "@/features/planner/model/types";
 import type { Prim } from "@/lib/catalog/blocks2d";
 
 import type { FurnitureFabricPose } from "./furnitureFabricMapper";

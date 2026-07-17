@@ -27,17 +27,17 @@ Routes: `app/planner/`. Live canvas host is **`project/`**.
 | `shared/` | Export, document bridge, mesh contracts |
 | `cleanup/` | Import graph + asset classification |
 
-**Live 2-D canvas:** `canvas-stage/` re-exports Fabric from `features/planner/canvas/` (`PlannerFabricStage`).  
+**Live 2-D canvas:** Fabric from `features/planner/canvas/` (`PlannerFabricStage`).  
 Live routes: `/planner/guest`, `/planner/canvas` (not fabric/open3d — those 301 to canvas).
 
 ### Placement catalog + SVG (live host)
 
 | Concern | Location |
 |---------|----------|
-| Descriptor load | `project/catalog/svg/svgBlockDescriptorLoader.ts` → `inventory/descriptors/` |
-| Sanitize (validate) | `project/catalog/svg/svgSanitizer.ts` |
-| Server sanitize/optimize | `project/catalog/svg/svgServerSanitizer.ts` |
-| Compile | `project/catalog/svg/` + `asset-engine/` |
+| Descriptor load | `catalog/svg/svgBlockDescriptorLoader.ts` → `inventory/descriptors/` |
+| Sanitize (validate) | `catalog/svg/svgSanitizer.ts` |
+| Server sanitize/optimize | `catalog/svg/svgServerSanitizer.ts` |
+| Compile | `catalog/svg/` + `asset-engine/` |
 
 Do not load from `block-descriptors/` (removed).
 
@@ -47,7 +47,7 @@ Do not load from `block-descriptors/` (removed).
 |------|------|
 | **`catalog-api/`** | Catalog panel, bridges, ingest, resolvers |
 | **`cloud-store/`** | Cloud saves, review persistence, domain stores |
-| `model/` | Shared document types |
+| `model/` | Shared document types + canvas project document |
 | `onboarding/` | Project setup |
 | `shared/`, `lib/`, `hooks/`, `ai/`, `asset-engine/` | Export, geometry, AI, compile pipeline |
 
@@ -64,8 +64,8 @@ Admin publish orchestrates pipeline via `features/admin/svg-editor/`.
 
 | File | Purpose |
 |------|---------|
-| `project/shared/document/plannerDocumentBridge.ts` | PlannerDocument ↔ project model |
-| `project/shared/document/workspacePlannerDocument.ts` | Build PlannerDocument from live store |
+| `shared/document/plannerDocumentBridge.ts` | PlannerDocument ↔ project model |
+| `shared/document/workspacePlannerDocument.ts` | Build PlannerDocument from live store |
 | `lib/fabricDocumentBridge.ts` | Fabric canvas ↔ PlannerDocument |
 
 ### Export

@@ -13,13 +13,13 @@
  * - svgTypes (types validation: parse/freeze/checksum/errors)
  * - svgFixtureGallery
  * (plus prior)
- * + open3d/ai/* (aiAdvisor.ts, sketchToPlan.ts, advisorClient.ts, advisorActions.ts, sketchToPlanClient.ts) TDD for 90% on advisor chat, sketch-to-plan, actions, clients, errors, parsing
+ * + root ai/sketchToPlan (canonical sketch conversion)
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 // TDD imports added FIRST (test-driven, pre any prod edit): focus sanitization on*/foreign/oversized, symbols, fallback, types validation
-import { generateFallbackSvg } from "@/features/planner/project/catalog/svg/svgFallback";
+import { generateFallbackSvg } from "@/features/planner/catalog/svg/svgFallback";
 import {
   parseBlockDescriptor,
   freezeFreshDescriptor,
@@ -28,48 +28,20 @@ import {
   canonicalizeBlockDescriptorInput,
   toPlannerDescriptorErrorHttp,
   BLOCK_DESCRIPTOR_SCHEMA_VERSION,
-} from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/svg/svgTypes";
 
-// Additional imports for AI TDD coverage (advisor chat, sketch-to-plan, clients, actions, errors, parsing)
-
-// TDD imports for export/* shared (preflight, format/progress utils, import/export roundtrips, upload, errors) — added strictly per TDD cycle (first for coverage drive)
 import {
   preflightPlannerExport,
   buildExportFilename,
-} from "@/features/planner/project/shared/export/exportPreflight";
+} from "@/features/planner/shared/export/exportPreflight";
 import {
-  requestAdvisorChat,
-  requestSpaceSuggest,
-  applySuggestion as applyClientSuggestion,
-  validateLayout,
-  resolveAdvisorProviderChain,
-  DEFAULT_ADVISOR_CONFIG,
-} from "@/features/planner/project/ai/advisorClient";
-import {
-  applySuggestion,
-  applyLayoutToProject,
-  previewSuggestionActions,
-  revertLastSuggestion,
-} from "@/features/planner/project/ai/advisorActions";
-import {
-  getAdvisorErrorMessage,
-  ADVISOR_ERROR_CODES,
-} from "@/features/planner/project/ai/advisorTypes";
-import {
-  convertSketchToPlan,
-  convertSketchToPlanWithProgress,
-  acceptConversion,
-  rejectConversion,
-  getDefaultSketchPrompt,
-  estimateConversionTimeout,
   getSketchRecoveryMessage,
-  isSketchToPlanAvailable,
-} from "@/features/planner/project/ai/sketchToPlanClient";
-import type { SpaceSuggestLayout, AdvisorMessage, _AdvisorContext } from "@/features/planner/project/ai/advisorTypes";
-import { createPlannerProject } from "@/features/planner/project/model/project";
+  classifySketchConversionError,
+  buildSketchPlanFabricDraft,
+  SketchConversionError,
+} from "@/features/planner/ai/sketchToPlan";
 
-// â”€â”€ SVG Fixture Gallery â”€â”€
-import { buildSvgFixtureGallery } from "@/features/planner/project/catalog/svg/svgFixtureGallery";
+import { buildSvgFixtureGallery } from "@/features/planner/catalog/svg/svgFixtureGallery";
 
 describe("SVG Fixture Gallery", () => {
   it("builds gallery with expected entry count", () => {
@@ -132,8 +104,8 @@ import {
   apiPlace,
   verifyPlacementIdentity,
   placeCatalogItemInProject,
-} from "@/features/planner/project/catalog/placementAction";
-import type { PlannerCatalogItem, _PlannerCatalogVariant } from "@/features/planner/project/catalog/catalogTypes";
+} from "@/features/planner/catalog/placementAction";
+import type { PlannerCatalogItem, _PlannerCatalogVariant } from "@/features/planner/catalog/catalogTypes";
 
 function makePlacementItem(overrides: Partial<PlannerCatalogItem> = {}): PlannerCatalogItem {
   return {
@@ -315,7 +287,7 @@ describe("Placement Action", () => {
 });
 
 // â”€â”€ Catalog Client additional coverage â”€â”€
-import { PlannerCatalogClient } from "@/features/planner/project/catalog/catalogClient";
+import { PlannerCatalogClient } from "@/features/planner/catalog/catalogClient";
 
 describe("Catalog Client â€” coverage gaps", () => {
   function makeItems(count: number): PlannerCatalogItem[] {
@@ -599,7 +571,7 @@ import {
   getFavoritesByCategory,
   migrateRecentItemsSchema,
   migrateFavoritesSchema,
-} from "@/features/planner/project/catalog/recentFavorites";
+} from "@/features/planner/catalog/recentFavorites";
 
 describe("Recent Favorites â€” coverage gaps", () => {
   beforeEach(() => {
@@ -686,7 +658,7 @@ import {
   addInventoryItemToCollection,
   removeInventoryItemFromCollection,
   INVENTORY_PANEL_CONTRACT,
-} from "@/features/planner/project/catalog/inventory/inventoryState";
+} from "@/features/planner/catalog/inventory/inventoryState";
 
 describe("Inventory State â€” coverage gaps", () => {
   it("defaultInventoryPanelState returns expected shape", () => {
@@ -905,7 +877,7 @@ describe("Inventory State â€” coverage gaps", () => {
 });
 
 // â”€â”€ SVG Sanitizer coverage â”€â”€
-import { sanitizeSvg, isSvgSafe } from "@/features/planner/project/catalog/svg/svgSanitizer";
+import { sanitizeSvg, isSvgSafe } from "@/features/planner/catalog/svg/svgSanitizer";
 
 describe("SVG Sanitizer â€” coverage gaps", () => {
   const validSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="50" height="50"/></svg>';
@@ -1027,7 +999,7 @@ import {
   displayInFromCanonicalMm,
   displayMFromCanonicalMm,
   buildAccessibleName,
-} from "@/features/planner/project/catalog/unitConversion";
+} from "@/features/planner/catalog/unitConversion";
 
 describe("Unit Conversion â€” coverage gaps", () => {
   it("configuratorHeightCmFromMixedUnit with undefined", () => {
@@ -1128,7 +1100,7 @@ import {
   getCachedSvgSymbol,
   clearSvgCache,
   getSvgSymbolDimensionAgreement,
-} from "@/features/planner/project/catalog/svg/svgSymbols";
+} from "@/features/planner/catalog/svg/svgSymbols";
 
 describe("SVG Symbols â€” coverage gaps", () => {
   const dims = { widthMm: 1200, depthMm: 600, heightMm: 750 };
@@ -1237,7 +1209,7 @@ describe("Placement Action — newEntityId UUID v7 (no plc- fallback)", () => {
 });
 
 // â”€â”€ Inventory Index coverage â”€â”€
-import { InventorySearchIndex } from "@/features/planner/project/catalog/inventory/inventoryIndex";
+import { InventorySearchIndex } from "@/features/planner/catalog/inventory/inventoryIndex";
 
 describe("Inventory Index â€” coverage gaps", () => {
   function makeSearchItems(count: number): PlannerCatalogItem[] {
@@ -1376,7 +1348,7 @@ import {
   mapConfiguratorProductToCatalogItem,
   resolveSubCategory,
   resolveAvailabilityStatus,
-} from "@/features/planner/project/catalog/catalogMapping";
+} from "@/features/planner/catalog/catalogMapping";
 
 describe("Catalog Mapping â€” coverage gaps", () => {
   it("mapPlannerManagedProductToCatalogItem returns null for missing id", () => {
@@ -1561,270 +1533,32 @@ describe("Recent Favorites â€” localStorage branches", () => {
   });
 });
 
-// â”€â”€ AI Advisor / Clients / Sketch-to-Plan TDD coverage (added per task: advisor chat, sketch to plan, actions, clients, errors, parsing) â”€â”€
-const VALID_LAYOUT: SpaceSuggestLayout = {
-  version: 1,
-  source: "grid-pack",
-  summary: "Open office",
-  room: { label: "Office", x: 0, y: 0, widthMm: 6000, depthMm: 4000 },
-  walls: [
-    { type: "planner-wall", x: 0, y: 0, endX: 6000, endY: 0, lengthMm: 6000 },
-  ],
-  zones: [],
-  furniture: [
-    { catalogItemId: "desk-standard", label: "Desk", x: 1000, y: 1000 },
-    { catalogItemId: "chair-standard", label: "Chair", x: 1200, y: 1200 },
-  ],
-};
 
-const PNG_DATA_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
-
-describe("AI Advisor Clients & Actions (TDD error paths, chat, parsing)", () => {
-  beforeEach(() => {
-    vi.unstubAllGlobals();
-    vi.restoreAllMocks();
-  });
-  afterEach(() => {
-    vi.unstubAllGlobals();
-    vi.restoreAllMocks();
-  });
-
-  it("maps advisor error codes (RED phase: initial)", () => {
-    // TDD: write failing test first
-    expect(getAdvisorErrorMessage(ADVISOR_ERROR_CODES.RATE_LIMITED)).toContain("Too many requests");
-    // Intentionally loose to simulate initial RED; will tighten in green
-    expect(getAdvisorErrorMessage("UNKNOWN", "Fallback")).toBe("Fallback");
-  });
-
-  it("requestAdvisorChat hits rate limit, service unavailable, generic http error, and network catch", async () => {
-    // RED: test written to cover !ok branches + catch before asserting exact
-    let call = 0;
-    const fetchMock = vi.fn(async (_url: string, _init?: RequestInit) => {
-      call++;
-      if (call === 1) {
-        return { ok: false, status: 429, json: async () => ({}) } as any;
-      }
-      return { ok: false, status: 503, json: async () => ({}) } as any;
-    });
-    vi.stubGlobal("fetch", fetchMock);
-
-    const chatRate = await requestAdvisorChat([{ role: "user", content: "hi" }]);
-    expect(chatRate.success).toBe(false);
-    expect(chatRate.error).toContain("Too many requests");
-
-    // second call path for 503
-    const chat503 = await requestAdvisorChat([{ role: "user", content: "hi2" }]);
-    expect(chat503.success).toBe(false);
-    expect(chat503.error).toContain("temporarily unavailable");
-  });
-
-  it("requestAdvisorChat covers invalid input throws (caught), max messages, generic error, network catch", async () => {
-    // Covers validateMessage, validateContext, MAX_MESSAGES, !ok generic, catch
-    const badMsg = await requestAdvisorChat([{ role: "user" as any, content: "" }]);
-    expect(badMsg.success).toBe(false);
-
-    const tooMany: AdvisorMessage[] = Array.from({ length: 21 }, (_, i) => ({ role: "user", content: `m${i}` }));
-    const maxed = await requestAdvisorChat(tooMany);
-    expect(maxed.success).toBe(false);
-    expect(maxed.error).toContain("Maximum");
-
-    // generic http
-    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 500, json: async () => ({}) } as any)));
-    const genErr = await requestAdvisorChat([{ role: "user", content: "x" }]);
-    expect(genErr.success).toBe(false);
-    expect(genErr.error).toContain("500");
-
-    // network catch
-    vi.stubGlobal("fetch", vi.fn(async () => { throw new Error("net fail"); }));
-    const net = await requestAdvisorChat([{ role: "user", content: "y" }]);
-    expect(net.success).toBe(false);
-    expect(net.error).toContain("net fail");
-  });
-
-  it("requestSpaceSuggest covers validation fail + api error path + success", async () => {
-    const bad = await requestSpaceSuggest(0, "");
-    expect(bad.success).toBe(false);
-    expect(bad.error).toContain("seatCount");
-
-    vi.stubGlobal("fetch", vi.fn(async () => ({
-      ok: true,
-      json: async () => ({ success: true, layout: VALID_LAYOUT, content: "ok", provider: "test" }),
-    } as any)));
-    const ok = await requestSpaceSuggest(5, "meeting");
-    expect(ok.success).toBe(true);
-    expect(ok.layout).toBeDefined();
-
-    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 429, json: async () => ({}) } as any)));
-    const rate = await requestSpaceSuggest(3, "work");
-    expect(rate.success).toBe(false);
-  });
-
-  it("applySuggestion (client) + validateLayout cover error branches and warnings", async () => {
-    const noSug = await applyClientSuggestion(null as any);
-    expect(noSug.success).toBe(false);
-
-    const badSug = await applyClientSuggestion({ type: "placement", description: "", actionLabel: "" } as any);
-    expect(badSug.success).toBe(false);
-
-    const v1 = validateLayout(VALID_LAYOUT);
-    expect(v1.valid).toBe(true);
-
-    const badLayout = validateLayout({ version: 2 as 1, source: "bad" as any, room: { widthMm: 0, depthMm: 0 } } as any);
-    expect(badLayout.valid).toBe(false);
-    expect(badLayout.errors.length).toBeGreaterThan(0);
-
-    const noSeat = validateLayout({ ...VALID_LAYOUT, furniture: [] });
-    expect(noSeat.warnings.some(w => w.includes("seating"))).toBe(true);
-  });
-
-  it("resolveAdvisorProviderChain returns default", () => {
-    expect(resolveAdvisorProviderChain()).toEqual(DEFAULT_ADVISOR_CONFIG.providerOrder);
-  });
-});
-
-describe("AI Advisor Actions (TDD: apply errors, preview, revert, layout branches)", () => {
-  beforeEach(() => { vi.restoreAllMocks(); });
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  it("applySuggestion and applyLayoutToProject hit no-floor, no-project, unsupported, layout validation fail", async () => {
-    // RED first conceptual: test added to cover !floorId and !project
-    const emptyProj = createPlannerProject({ name: "empty" });
-    // force no floor by empty (activeFloorId null + no floors? create gives one)
-    const noFloorRes = await applySuggestion({ type: "placement", description: "p", actionLabel: "a" }, { ...emptyProj, floors: [] } as any);
-    expect(noFloorRes.success).toBe(false);
-    expect(noFloorRes.error).toContain("Active floor not found");
-
-    const noProjPlace = await applySuggestion({ type: "placement", description: "p", actionLabel: "a" });
-    expect(noProjPlace.success).toBe(false);
-
-    const unsup = await applySuggestion({ type: "modification" as any, description: "m", actionLabel: "a" }, emptyProj);
-    expect(unsup.success).toBe(false);
-    expect(unsup.error).toContain("Unsupported");
-
-    // layout validation fail inside apply
-    const badLaySug = { type: "suggestion" as const, description: "l", actionLabel: "a", layout: { version: 9 as 1, source: "bad" as any, room: null } as any };
-    const layFail = await applySuggestion(badLaySug as any, emptyProj);
-    expect(layFail.success).toBe(false);
-    expect(layFail.error).toContain("validation failed");
-  });
-
-  it("previewSuggestionActions and revert cover layout and warn path", () => {
-    const preview = previewSuggestionActions({ type: "suggestion", description: "l", actionLabel: "a", layout: VALID_LAYOUT });
-    expect(preview.length).toBeGreaterThan(0);
-
-    const noLay = previewSuggestionActions({ type: "placement", description: "p", actionLabel: "a" } as any);
-    expect(noLay).toEqual([]);
-
-    const proj = createPlannerProject({ name: "r" });
-    // revert just returns project + warns (covers console)
-    const reverted = revertLastSuggestion(proj, []);
-    expect(reverted).toBe(proj);
-  });
-
-  it("applyLayoutToProject skips when no floorId", () => {
-    const proj = createPlannerProject({ name: "nof" });
-    const res = applyLayoutToProject({ ...proj, activeFloorId: null as any, floors: [] } as any, VALID_LAYOUT);
-    expect(res.actions).toEqual([]);
-    // also cover the throw path via advisor wrapper for error msg branch
-    // (actual throw "Open3D project has no active floor." is exercised in other paths)
-  });
-});
-
-describe("Sketch-to-Plan Client (TDD: validation errors, response parsing, progress, fallbacks)", () => {
-  beforeEach(() => { vi.unstubAllGlobals(); });
-  afterEach(() => {
-    vi.unstubAllGlobals();
-  });
-
-  it("convertSketchToPlan covers all validateRequest branches + idle error return", async () => {
-    const noImg = await convertSketchToPlan({ imageDataUrl: "", fileName: "x.png" });
-    expect(noImg.success).toBe(false);
-    expect(noImg.error).toContain("Image data URL is required");
-
-    const badData = await convertSketchToPlan({ imageDataUrl: "http://notdata", fileName: "x.png" });
-    expect(badData.error).toContain("data URL");
-
-    const wrongMime = await convertSketchToPlan({ imageDataUrl: "data:text/plain;base64,xxx", fileName: "x.png" });
-    expect(wrongMime.error).toContain("base64-encoded PNG");
-
-    const noName = await convertSketchToPlan({ imageDataUrl: PNG_DATA_URL, fileName: "" });
-    expect(noName.error).toContain("File name is required");
-
-    const longName = await convertSketchToPlan({ imageDataUrl: PNG_DATA_URL, fileName: "x".repeat(250) });
-    expect(longName.error).toContain("200 characters");
-
-    const longPrompt = await convertSketchToPlan({ imageDataUrl: PNG_DATA_URL, fileName: "ok.png", prompt: "p".repeat(3000) });
-    expect(longPrompt.error).toContain("2000 characters");
-  });
-
-  it("convertSketchToPlan parses preview, fallback, error, unknown status + network catch", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => ({
-      json: async () => ({ status: "preview", fileName: "s.png", objects: [{ type: "wall", x1: 0, y1: 0, x2: 10, y2: 0 }], warnings: ["w"] }),
-    } as any)));
-    const prev = await convertSketchToPlan({ imageDataUrl: PNG_DATA_URL, fileName: "s.png" });
-    expect(prev.success).toBe(true);
-    expect(prev.status).toBe("preview");
-    expect(prev.objects?.length).toBe(1);
-
-    vi.stubGlobal("fetch", vi.fn(async () => ({
-      json: async () => ({ status: "fallback", fileName: "s.png", reason: "timeout", message: "t/o" }),
-    } as any)));
-    const fb = await convertSketchToPlan({ imageDataUrl: PNG_DATA_URL, fileName: "s.png" });
-    expect(fb.success).toBe(false);
-    expect(fb.status).toBe("fallback");
-    expect(fb.reason).toBe("timeout");
-
-    vi.stubGlobal("fetch", vi.fn(async () => ({
-      json: async () => ({ status: "error", error: { message: "boom" } }),
-    } as any)));
-    const err = await convertSketchToPlan({ imageDataUrl: PNG_DATA_URL, fileName: "s.png" });
-    expect(err.success).toBe(false);
-    expect(err.error).toContain("boom");
-
-    vi.stubGlobal("fetch", vi.fn(async () => ({
-      json: async () => ({ status: "weird" }),
-    } as any)));
-    const unk = await convertSketchToPlan({ imageDataUrl: PNG_DATA_URL, fileName: "s.png" });
-    expect(unk.success).toBe(false);
-    expect(unk.error).toContain("Unknown response");
-
-    vi.stubGlobal("fetch", vi.fn(async () => { throw new Error("net"); }));
-    const net = await convertSketchToPlan({ imageDataUrl: PNG_DATA_URL, fileName: "s.png" });
-    expect(net.success).toBe(false);
-    expect(net.error).toContain("net");
-  });
-
-  it("convertSketchToPlanWithProgress reports states for preview and fallback", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => ({
-      json: async () => ({ status: "preview", fileName: "p.png", objects: [], warnings: [] }),
-    } as any)));
-    const states: string[] = [];
-    await convertSketchToPlanWithProgress({ imageDataUrl: PNG_DATA_URL, fileName: "p.png" }, (s) => states.push(s.status));
-    expect(states).toContain("converting");
-    expect(states).toContain("preview");
-
-    vi.stubGlobal("fetch", vi.fn(async () => ({
-      json: async () => ({ status: "fallback", fileName: "f.png", reason: "server_error", message: "srv" }),
-    } as any)));
-    const fbStates: string[] = [];
-    await convertSketchToPlanWithProgress({ imageDataUrl: PNG_DATA_URL, fileName: "f.png" }, (s) => fbStates.push(s.status));
-    expect(fbStates).toContain("fallback");
-  });
-
-  it("sketch helpers, accept/reject, isAvailable, estimate, recovery messages", async () => {
-    expect(getDefaultSketchPrompt(true)).toContain("rooms");
-    expect(getDefaultSketchPrompt(false)).not.toContain("Include room");
-    expect(estimateConversionTimeout(PNG_DATA_URL)).toBeGreaterThan(0);
+describe("Sketch-to-Plan (canonical root ai)", () => {
+  it("classifies recovery errors for provider and timeout failures", () => {
     expect(getSketchRecoveryMessage("low_confidence")).toContain("reliable");
-    expect(acceptConversion("f.png").success).toBe(true);
-    expect(rejectConversion("f.png").success).toBe(true);
-    // isSketchToPlanAvailable try path
-    const avail = await isSketchToPlanAvailable();
-    expect(typeof avail).toBe("boolean");
+    expect(classifySketchConversionError(new Error("missing AI provider"), "s.png")).toBeInstanceOf(
+      SketchConversionError,
+    );
+    expect(classifySketchConversionError(new Error("timed out"), "s.png").reason).toBe("timeout");
+  });
+
+  it("builds fabric draft from wall and room objects", () => {
+    const draft = JSON.parse(
+      buildSketchPlanFabricDraft({
+        objects: [
+          { type: "wall", x1: 0, y1: 0, x2: 10, y2: 0 },
+          { type: "room", left: 1, top: 1, width: 8, height: 6, label: "Open" },
+        ],
+        warnings: ["w"],
+      }),
+    );
+    expect(draft.objects).toHaveLength(2);
+    expect(draft.objects[0].type).toBe("line");
+    expect(draft.objects[1].name).toBe("ROOM:Open");
   });
 });
+
 
 // â”€â”€ SVG Sanitizer additional branch coverage â”€â”€
 describe("SVG Sanitizer â€” remaining branches", () => {
@@ -1890,7 +1624,7 @@ describe("SVG Symbols â€” cache eviction and edge cases", () => {
 });
 
 // â”€â”€ Unit Conversion remaining branches â”€â”€
-import { displayDimensions as displayDims2 } from "@/features/planner/project/catalog/unitConversion";
+import { displayDimensions as displayDims2 } from "@/features/planner/catalog/unitConversion";
 
 describe("Unit Conversion â€” remaining lines", () => {
   it("displayDimensions with unknown unit falls back to cm", () => {
@@ -1943,7 +1677,7 @@ describe("Catalog Client â€” remaining function coverage", () => {
 });
 
 // â”€â”€ Unit Conversion validation exceeds maximum â”€â”€
-import { validateDimensions } from "@/features/planner/project/catalog/unitConversion";
+import { validateDimensions } from "@/features/planner/catalog/unitConversion";
 
 describe("Unit Conversion â€” validateDimensions max bounds", () => {
   it("rejects widthMm exceeding 100000", () => {
@@ -1972,7 +1706,7 @@ describe("Unit Conversion â€” validateDimensions max bounds", () => {
 });
 
 // â”€â”€ Asset Validation coverage â”€â”€
-import { validateAssetUrl, validateAssetUrls } from "@/features/planner/project/catalog/assetValidation";
+import { validateAssetUrl, validateAssetUrls } from "@/features/planner/catalog/assetValidation";
 
 describe("Asset Validation â€” coverage gaps", () => {
   it("validateAssetUrl rejects non-https URL", () => {
@@ -2147,7 +1881,7 @@ describe("SVG Symbols â€” deep branch coverage", () => {
 });
 
 // â”€â”€ Pure Actions branches 678 and 1017-1018 â”€â”€
-import { addFloor, importFloorIntoCurrentProject } from "@/features/planner/project/model/operations/pureActions";
+import { addFloor, importFloorIntoCurrentProject } from "@/features/planner/model/operations/pureActions";
 
 describe("Pure Actions â€” remaining branches", () => {
   function makeProject() {
@@ -2303,41 +2037,41 @@ describe("SVG Symbols â€” cache eviction edge case", () => {
 // ——— PLAN-FAIL-0408 focused gap tests (TDD static: branches identified via source read/grep on if/??/filter/sort/startsWith/protocol/crypto/resolve etc; min additions to coverageGap.test.ts only) ———
 // Per AGENTS: no any broad in prod (here tests only, exempt per handbook); no new files; evidence via post grep.
 
-import { PlannerCatalogClient } from "@/features/planner/project/catalog/catalogClient";
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import { PlannerCatalogClient } from "@/features/planner/catalog/catalogClient";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
 import {
   addInventoryRecent,
   defaultCollectionsState,
   upsertInventoryCollection,
-} from "@/features/planner/project/catalog/inventory/inventoryState";
-import { placeCatalogItemInProject } from "@/features/planner/project/catalog/placementAction";
+} from "@/features/planner/catalog/inventory/inventoryState";
+import { placeCatalogItemInProject } from "@/features/planner/catalog/placementAction";
 import {
   validateAssetUrl,
   resolveAssetUrl,
   addAllowedOrigin,
   isAssetUrlExpired,
   getAllowedOrigins,
-} from "@/features/planner/project/catalog/assetValidation";
+} from "@/features/planner/catalog/assetValidation";
 import {
   displayDimensions,
   canonicalDimensionsFromCatalogCm,
   configuratorHeightCmFromMixedUnit,
   buildAccessibleName,
   validateDimensions,
-} from "@/features/planner/project/catalog/unitConversion";
-import { sanitizeSvg } from "@/features/planner/project/catalog/svg/svgSanitizer";
+} from "@/features/planner/catalog/unitConversion";
+import { sanitizeSvg } from "@/features/planner/catalog/svg/svgSanitizer";
 import {
   placeCatalogItem,
-} from "@/features/planner/project/catalog/placementAction";
-import { addPlannerFurniture, _rotatePlannerFurniture } from "@/features/planner/project/model/actions/furniture";
-import { addPlannerDoor, addPlannerWindow } from "@/features/planner/project/model/actions/openings";
+} from "@/features/planner/catalog/placementAction";
+import { addPlannerFurniture, _rotatePlannerFurniture } from "@/features/planner/model/actions/furniture";
+import { addPlannerDoor, addPlannerWindow } from "@/features/planner/model/actions/openings";
 import {
   applyPlannerProjectAction,
   applyPlannerProjectTransaction,
   movePlannerEntity,
-} from "@/features/planner/project/model/actions/projectActions";
-import { addPlannerWall } from "@/features/planner/project/model/actions/walls";
-import { inspectPlannerProject, assertPlannerProject } from "@/features/planner/project/model/invariants";
+} from "@/features/planner/model/actions/projectActions";
+import { addPlannerWall } from "@/features/planner/model/actions/walls";
+import { inspectPlannerProject, assertPlannerProject } from "@/features/planner/model/invariants";
 
 describe("Catalog Client — search/filter additional (PLAN-FAIL-0408)", () => {
   it("search exercises configurability/mounting/assetReadiness filter branches + sketchfab parity", () => {
@@ -2619,7 +2353,7 @@ import {
   INVENTORY_STYLE_GROUPS,
   INVENTORY_SORT_OPTIONS,
   INVENTORY_DENSITY_OPTIONS,
-} from "@/features/planner/project/catalog/inventory/inventoryTaxonomy";
+} from "@/features/planner/catalog/inventory/inventoryTaxonomy";
 
 describe("Inventory Taxonomy — categories/rooms/styles/sorts/density (TDD)", () => {
   it("INVENTORY_CATEGORIES exports 6 categories with subCategories and stable ids", () => {
@@ -2816,7 +2550,7 @@ describe("SVG Types Validation TDD — parse/freeze/checksum/error paths (RED te
   });
 });
 
-// ——— TDD for site/features/planner/project/shared/export/* (exportPreflight, exportUtils, importUtils, jsonExport, jsonImport, uploadUtils) ———
+// ——— TDD for site/features/planner/shared/export/* (exportPreflight, exportUtils, importUtils, jsonExport, jsonImport, uploadUtils) ———
 // Goal: drive 90% coverage. Focus: preflight (statuses, filename, jobs), utils (format*, progress), roundtrips, upload (progress/format/revoke), errors.
 // Strict TDD: write failing test first (RED verify by read), minimal green edit, verify passes (read/grep), refactor repeat. No new files. Evidence to results/.
 // Per AGENTS + handbook: static verify here (no live run in tool context); INCOMPLETE runs logged.

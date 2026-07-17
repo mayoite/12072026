@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   DEFAULT_PLANNER_WORKSPACE_PREFERENCES,
   parsePlannerWorkspacePreferences,
-} from "@/features/planner/project/store/workspacePreferences";
+} from "@/features/planner/store/workspacePreferences";
 
 describe("planner workspace preferences", () => {
   it("accepts valid versioned preferences", () => {

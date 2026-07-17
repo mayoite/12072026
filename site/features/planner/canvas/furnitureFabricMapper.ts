@@ -7,13 +7,13 @@
  * Fabric JSON is never persisted; document furniture is the source of truth.
  */
 
-import type { PlannerFurnitureItem, PlannerPoint } from "@/features/planner/project/model/types";
-import { normalizeDegrees } from "@/features/planner/project/model/units";
+import type { PlannerFurnitureItem, PlannerPoint } from "@/features/planner/model/types";
+import { normalizeDegrees } from "@/features/planner/model/units";
 import {
   projectToScreen,
   screenToProject,
   type CanvasTransform,
-} from "@/features/planner/project/lib/geometry/snapping";
+} from "@/features/planner/lib/geometry/snapping";
 
 /** Default furniture footprint when width/depth omitted. */
 export const DEFAULT_FURNITURE_FOOTPRINT_MM = 600;

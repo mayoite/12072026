@@ -1,6 +1,6 @@
 import type { PlannerTool } from "@/features/planner/editor/canvasTool";
-import type { CanvasTransform, SnapKind } from "@/features/planner/project/lib/geometry/snapping";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+import type { CanvasTransform, SnapKind } from "@/features/planner/lib/geometry/snapping";
+import type { PlannerProject } from "@/features/planner/model/types";
 
 export type CanvasDrawingState = "ready" | "drawing" | "panning";
 

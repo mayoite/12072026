@@ -18,37 +18,38 @@ import {
   PlannerCanvasStage,
   type PlannerCanvasStageHandle,
   type CanvasStatusSnapshot,
-} from "@/features/planner/project/canvas-stage";
+} from "@/features/planner/canvas";
 import {
   placeCatalogItemInProject,
   placeWorkstationConfigOnProject,
   placeWorkstationInstancesOnProject,
-} from "@/features/planner/project/catalog/placementAction";
-import type { WorkstationConfigV0 } from "@/features/planner/project/catalog/workstationSystemV0";
-import { workstationConfigKey } from "@/features/planner/project/catalog/workstationSystemV0";
+} from "@/features/planner/catalog/placementAction";
+import type { WorkstationConfigV0 } from "@/features/planner/catalog/workstationSystemV0";
+import { workstationConfigKey } from "@/features/planner/catalog/workstationSystemV0";
 import {
   defaultWorkstationConfiguratorDraftV0,
   isWorkstationV0BatchPlaceCount,
   resolveWorkstationConfigFromDraft,
   takePendingWorkstationConfig,
-} from "@/features/planner/project/catalog/workstationConfiguratorV0";
+} from "@/features/planner/catalog/workstationConfiguratorV0";
 import { placeModularWithGeneratedGlbBrowser } from "@/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbBrowser";
 import { shouldPlaceModularWithGeneratedGlb } from "@/features/planner/asset-engine/mesh/shouldPlaceModularWithGeneratedGlb";
-import { importPlannerPlannerText } from "@/features/planner/project/shared/export/importUtils";
-import { usePlannerWorkspaceAutosave } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
-import { setActiveFloor } from "@/features/planner/project/model/operations/pureActions";
+import { importPlannerPlannerText } from "@/features/planner/shared/export/importUtils";
+import { usePlannerWorkspaceAutosave } from "@/features/planner/persistence/usePlannerWorkspaceAutosave";
 import {
-  createPlannerProject,
-  createRectangularRoomProject,
-} from "@/features/planner/project/model/project";
-import { addPlannerWall } from "@/features/planner/project/model/actions/walls";
+  addRectangularRoom,
+  setActiveFloor,
+} from "@/features/planner/model/operations/pureActions";
+import { createPlannerProject } from "@/features/planner/model/project";
+import { addPlannerWall } from "@/features/planner/model/actions/walls";
 import {
   addPlannerDoor,
   addPlannerWindow,
-} from "@/features/planner/project/model/actions/openings";
+  updatePlannerOpening,
+} from "@/features/planner/model/actions/openings";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
-import type { PlannerProject } from "@/features/planner/project/model/types";
-import { preflightPlannerExport } from "@/features/planner/project/shared/export/exportPreflight";
+import type { PlannerProject } from "@/features/planner/model/types";
+import { preflightPlannerExport } from "@/features/planner/shared/export/exportPreflight";
 import {
   downloadJSON,
   downloadSVG,
@@ -58,24 +59,41 @@ import {
   downloadWorkstationBoqJSON,
   downloadFurnitureBoqJSON,
   downloadFurnitureBoqCSV,
-} from "@/features/planner/project/shared/export/exportUtils";
+} from "@/features/planner/shared/export/exportUtils";
 import {
   buildPlannerFurnitureBoq,
   buildPlannerBoqFilename,
   exportPlannerFurnitureBoqToCsv,
   exportPlannerFurnitureBoqToJson,
-} from "@/features/planner/project/shared/export/projectFurnitureBoq";
+} from "@/features/planner/shared/export/projectFurnitureBoq";
 import {
   summarizeWorkstationBoqV0,
   workstationBoqToQuoteCartItems,
-} from "@/features/planner/project/catalog/workstationBoqV0";
+} from "@/features/planner/catalog/workstationBoqV0";
 import { useQuoteCart } from "@/lib/store/quoteCart";
-import { usePlannerSvgCatalog } from "@/features/planner/project/catalog/usePlannerWorkspaceCatalog";
+import { usePlannerSvgCatalog } from "@/features/planner/catalog/usePlannerWorkspaceCatalog";
 import { CommandPalette } from "./CommandPalette";
 import { CommandsPaletteTrigger } from "./CommandsPaletteTrigger";
 import workspaceStyles from "./workspace.module.css";
 import { PropertiesPanel } from "./PropertiesPanel";
+import {
+  ExactRoomPanel,
+  type ExactRoomDimensions,
+} from "./ExactRoomPanel";
 import { ReviewQuotePanel } from "./ReviewQuotePanel";
+import {
+  SketchToPlanDialog,
+  type SketchToPlanUiState,
+} from "./SketchToPlanDialog";
+import { applySketchWallObjects } from "@/features/planner/ai/applySketchWallObjects";
+import {
+  getSketchRecoveryMessage,
+  type SketchToPlanResponse,
+} from "@/features/planner/ai/sketchToPlan";
+import { browserApiFetch } from "@/lib/api/browserApi";
+import { readFloorPlanImageFile } from "@/features/planner/lib/floorPlanImageImport";
+import type { SketchRecoveryReason } from "@/features/shared/api/schemas";
+import type { ValidationIssue } from "@/features/planner/lib/validation/types";
 import {
   describePlannerRedoLabel,
   describePlannerUndoLabel,
@@ -103,7 +121,6 @@ import {
 } from "./workspaceEntityHelpers";
 import {
   plannerSaveStatusLabel,
-  plannerSaveStatusBarLabel,
   formatSelectionStatus,
   formatSnapStatus,
   formatToolStatus,
@@ -111,18 +128,18 @@ import {
 import { summarizeFloorMetrics } from "./workspacePlanMetrics";
 import { useValidation } from "./useValidation";
 import { alignEntities, distributeEntities, type PositionedEntity } from "@/features/planner/lib/geometry/alignDistribute";
-import type { PlannerDisplayUnit, PlannerPoint } from "@/features/planner/project/model/types";
-import { formatLengthDisplay } from "@/features/planner/project/model/units";
-import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
-import type { PlannerEntityCollection } from "@/features/planner/project/model/actions/projectActions";
-import type { PaletteCommandHandlers } from "@/features/planner/project/lib/commands/paletteCommands";
+import type { PlannerDisplayUnit, PlannerPoint } from "@/features/planner/model/types";
+import { formatLengthDisplay } from "@/features/planner/model/units";
+import type { PlannerAccessContext } from "@/features/planner/lib/commands/plannerAccessContext";
+import type { PlannerEntityCollection } from "@/features/planner/model/actions/projectActions";
+import type { PaletteCommandHandlers } from "@/features/planner/lib/commands/paletteCommands";
 import {
   DEFAULT_PLANNER_WORKSPACE_PREFERENCES,
-} from "@/features/planner/project/store/workspacePreferences";
+} from "@/features/planner/store/workspacePreferences";
 import {
   patchPlannerWorkspacePreferences,
   readPlannerWorkspacePreferencesFromStorage,
-} from "@/features/planner/project/store/workspacePreferencesStorage";
+} from "@/features/planner/store/workspacePreferencesStorage";
 import { applyLayoutToWorkspace } from "@/features/planner/ai/applyLayoutToWorkspace";
 import { AIAssistDrawer } from "@/features/planner/ai/AIAssistDrawer";
 import { extractProjectPlacements } from "@/features/planner/ai/extractProjectPlacements";
@@ -146,6 +163,8 @@ export function OOPlannerWorkspace({
   const projectName = planId ? `Plan ${planId}` : "Untitled plan";
   const canvasRef = useRef<PlannerCanvasStageHandle>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
+  const sketchInputRef = useRef<HTMLInputElement>(null);
+  const [sketchUi, setSketchUi] = useState<SketchToPlanUiState>({ status: "idle" });
   const workspaceCanvas = useWorkspaceCanvas({
     projectName,
   });
@@ -327,6 +346,19 @@ export function OOPlannerWorkspace({
       workspaceCanvas.activeFloor,
     );
   }, [workspaceCanvas.activeFloor, workspaceCanvas.selection]);
+  const selectedHostWallLengthMm = useMemo(() => {
+    if (
+      !selectedEntity ||
+      (selectedEntity.collection !== "doors" && selectedEntity.collection !== "windows")
+    ) {
+      return undefined;
+    }
+    const entity = selectedEntity.entity as { wallId: string };
+    const wall = activeFloor?.walls.find((candidate) => candidate.id === entity.wallId);
+    return wall
+      ? Math.hypot(wall.end.x - wall.start.x, wall.end.y - wall.start.y)
+      : undefined;
+  }, [activeFloor, selectedEntity]);
   const isCanvasEmpty = activeFloor
     ? activeFloor.walls.length === 0 &&
       activeFloor.rooms.length === 0 &&
@@ -395,15 +427,40 @@ export function OOPlannerWorkspace({
   }, []);
 
   const handleStartTemplate = useCallback(() => {
-    workspaceCanvas.replaceProject(
-      createRectangularRoomProject({
-        name: workspaceCanvas.project.name,
-        widthMm: 5000,
-        depthMm: 4000,
-      }),
-    );
-    setWorkspaceMessage("Created a 5 × 4 m starter room.");
-  }, [workspaceCanvas]);
+    setActiveTool("room");
+    armedToolRef.current = "room";
+    setWorkspaceMessage("Enter exact room dimensions.");
+  }, []);
+
+  const handleCreateExactRoom = useCallback(
+    ({ widthMm, depthMm, wallThicknessMm }: ExactRoomDimensions) => {
+      workspaceCanvas.updateProject((project) => {
+        const floor =
+          project.floors.find((candidate) => candidate.id === project.activeFloorId) ??
+          project.floors[0];
+        const points = floor?.walls.flatMap((wall) => [wall.start, wall.end]) ?? [];
+        const start = points.length
+          ? {
+              x: Math.max(...points.map((point) => point.x)) + 1000,
+              y: Math.min(...points.map((point) => point.y)),
+            }
+          : { x: 0, y: 0 };
+        return addRectangularRoom(
+          project,
+          start,
+          { x: start.x + widthMm, y: start.y + depthMm },
+          { idFactory: newEntityId, wallThicknessMm },
+        ).project;
+      });
+      setActiveTool("select");
+      armedToolRef.current = "select";
+      setWorkspaceMessage(
+        `Created exact room ${formatLengthDisplay(widthMm, displayUnit)} × ${formatLengthDisplay(depthMm, displayUnit)}.`,
+      );
+      queueMicrotask(() => canvasRef.current?.fitToView());
+    },
+    [displayUnit, workspaceCanvas],
+  );
 
   const handleUpdateEntity = useCallback(
     (
@@ -411,12 +468,23 @@ export function OOPlannerWorkspace({
       id: string,
       updates: Record<string, unknown>,
     ) => {
-      workspaceCanvas.dispatch({
-        type: "update",
-        collection,
-        id,
-        updates,
-      });
+      if (collection === "doors" || collection === "windows") {
+        try {
+          const next = updatePlannerOpening(
+            workspaceCanvas.project,
+            collection,
+            id,
+            updates,
+          );
+          workspaceCanvas.updateProject(() => next);
+        } catch (error) {
+          setWorkspaceMessage(
+            error instanceof Error ? error.message : "Opening could not be updated.",
+          );
+        }
+        return;
+      }
+      workspaceCanvas.dispatch({ type: "update", collection, id, updates });
     },
     [workspaceCanvas],
   );
@@ -463,23 +531,27 @@ export function OOPlannerWorkspace({
   );
 
   const handleWallDrawn = useCallback(
-    (start: PlannerPoint, end: PlannerPoint) => {
+    (start: PlannerPoint, end: PlannerPoint, input?: { thicknessMm?: number }) => {
       workspaceCanvas.updateProject((project) =>
-        addPlannerWall(project, { start, end }, newEntityId),
+        addPlannerWall(
+          project,
+          { start, end, thickness: input?.thicknessMm },
+          newEntityId,
+        ),
       );
-      setActiveTool("select");
-      armedToolRef.current = "select";
-      setWorkspaceMessage("Wall added.");
+      setWorkspaceMessage(
+        "Wall added. Next segment starts from this endpoint — Escape to stop.",
+      );
     },
     [workspaceCanvas],
   );
 
   const handleOpeningPlaced = useCallback(
     (wallId: string, position: number, kind: "door" | "window" = "door") => {
-      if (kind === "window") {
-        workspaceCanvas.updateProject((project) =>
-          addPlannerWindow(
-            project,
+      try {
+        if (kind === "window") {
+          const next = addPlannerWindow(
+            workspaceCanvas.project,
             {
               wallId,
               position,
@@ -489,13 +561,12 @@ export function OOPlannerWorkspace({
               type: "standard",
             },
             newEntityId,
-          ),
-        );
-        setWorkspaceMessage("Window added.");
-      } else {
-        workspaceCanvas.updateProject((project) =>
-          addPlannerDoor(
-            project,
+          );
+          workspaceCanvas.updateProject(() => next);
+          setWorkspaceMessage("Window added.");
+        } else {
+          const next = addPlannerDoor(
+            workspaceCanvas.project,
             {
               wallId,
               position,
@@ -506,9 +577,15 @@ export function OOPlannerWorkspace({
               flipSide: false,
             },
             newEntityId,
-          ),
+          );
+          workspaceCanvas.updateProject(() => next);
+          setWorkspaceMessage("Door added.");
+        }
+      } catch (error) {
+        setWorkspaceMessage(
+          error instanceof Error ? error.message : "Opening could not be placed.",
         );
-        setWorkspaceMessage(kind === "door" ? "Door added." : "Opening added.");
+        return;
       }
       setActiveTool("select");
       armedToolRef.current = "select";
@@ -529,7 +606,12 @@ export function OOPlannerWorkspace({
   );
 
   const handleCanvasSelection = useCallback(
-    (selection: { type: "wall" | "furniture"; id: string } | null) => {
+    (
+      selection: {
+        type: Exclude<CanvasSelection["type"], "none">;
+        id: string;
+      } | null,
+    ) => {
       workspaceCanvas.setSelection(
         selection
           ? { type: selection.type, ids: [selection.id] }
@@ -576,17 +658,45 @@ export function OOPlannerWorkspace({
     const { selection } = workspaceCanvas;
     if (selection.type === "none" || selection.ids.length === 0) return;
     for (const id of selection.ids) {
-      const resolved = resolveSelectedEntity(selection, workspaceCanvas.activeFloor);
-      if (resolved) {
-        workspaceCanvas.dispatch({
-          type: "duplicate",
-          collection: resolved.collection,
-          id,
-          newId: newEntityId(),
-        } as const);
-      }
+      const resolved = resolveSelectedEntity(
+        { type: selection.type, ids: [id] },
+        workspaceCanvas.activeFloor,
+      );
+      if (!resolved) continue;
+      workspaceCanvas.dispatch({
+        type: "duplicate",
+        collection: resolved.collection,
+        id,
+        newId: newEntityId(),
+      } as const);
     }
   }, [workspaceCanvas]);
+
+  /** Arrow keys — nudge selected furniture without dragging. */
+  const nudgeSelection = useCallback(
+    (dxMm: number, dyMm: number) => {
+      const { selection } = workspaceCanvas;
+      if (selection.type !== "furniture" || selection.ids.length === 0) return;
+      workspaceCanvas.updateProject((project) => {
+        let next = project;
+        for (const id of selection.ids) {
+          const floor =
+            next.floors.find((entry) => entry.id === next.activeFloorId) ??
+            next.floors[0];
+          const item = floor?.furniture.find((furniture) => furniture.id === id);
+          if (!item) continue;
+          next = updateEntityInProject(next, "furniture", id, {
+            position: {
+              x: item.position.x + dxMm,
+              y: item.position.y + dyMm,
+            },
+          });
+        }
+        return next;
+      });
+    },
+    [workspaceCanvas],
+  );
 
   const handleAlignEntities = useCallback(
     (axis: "x" | "y", anchor: "min" | "center" | "max") => {
@@ -826,7 +936,7 @@ export function OOPlannerWorkspace({
               baseProject,
               catalogItem,
               point,
-              { placedFrom: "click", writeToPublic: true },
+              { placedFrom: "click", writeToPublic: false },
             );
             workspaceCanvas.updateProject(() => result.project);
             const placedId =
@@ -1014,8 +1124,12 @@ export function OOPlannerWorkspace({
         return;
       }
       if (format === "svg") {
-        downloadSVG(workspaceCanvas.project);
-        setWorkspaceMessage(`${downloadVerb} ${check.filename}`);
+        const ok = downloadSVG(workspaceCanvas.project, undefined, check.filename);
+        setWorkspaceMessage(
+          ok
+            ? `${downloadVerb} ${check.filename}`
+            : "SVG export failed. The floor has no drawable geometry.",
+        );
         return;
       }
       if (format === "png") {
@@ -1023,8 +1137,12 @@ export function OOPlannerWorkspace({
           document.createElement("canvas"),
           workspaceCanvas.project,
           check.filename,
-        ).then(() => {
-          setWorkspaceMessage(`${downloadVerb} ${check.filename}`);
+        ).then((ok) => {
+          setWorkspaceMessage(
+            ok
+              ? `${downloadVerb} ${check.filename}`
+              : "PNG export failed. Try SVG export or reduce plan size.",
+          );
         });
         return;
       }
@@ -1041,12 +1159,15 @@ export function OOPlannerWorkspace({
         return;
       }
       if (format === "dxf") {
-        void downloadDXF(workspaceCanvas.project, check.filename).then(() => {
-          setWorkspaceMessage(`${downloadVerb} ${check.filename}`);
+        void downloadDXF(workspaceCanvas.project, check.filename).then((ok) => {
+          setWorkspaceMessage(
+            ok
+              ? `${downloadVerb} ${check.filename}`
+              : "DXF export failed. Check that the floor has walls or furniture.",
+          );
         });
         return;
       }
-      // Unreachable for ready formats; preflight blocks png/pdf/dxf as unsupported.
       setWorkspaceMessage(
         check.messages[0] ?? `Export unavailable for ${format}`,
       );
@@ -1057,6 +1178,149 @@ export function OOPlannerWorkspace({
   const handleImportClick = useCallback(() => {
     importInputRef.current?.click();
   }, []);
+
+  const handleSketchToPlanClick = useCallback(() => {
+    sketchInputRef.current?.click();
+  }, []);
+
+  const dismissSketchUi = useCallback(() => {
+    setSketchUi({ status: "idle" });
+  }, []);
+
+  const handleSketchFile = useCallback(
+    async (event: ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      event.target.value = "";
+      if (!file) return;
+
+      setSketchUi({ status: "converting", fileName: file.name });
+      try {
+        const image = await readFloorPlanImageFile(file);
+        if (!/^data:image\/(png|jpe?g|webp);base64,/i.test(image.dataUrl)) {
+          setSketchUi({
+            status: "fallback",
+            fileName: file.name,
+            reason: "unsupported_input",
+            message: getSketchRecoveryMessage("unsupported_input"),
+          });
+          return;
+        }
+
+        const response = await browserApiFetch("/api/planner/sketch-to-plan", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            imageDataUrl: image.dataUrl,
+            fileName: file.name,
+            prompt: "Convert this floor sketch into editable walls in millimetres.",
+            includeRooms: true,
+          }),
+        });
+
+        const body = (await response.json().catch(() => null)) as
+          | {
+              success?: boolean;
+              status?: string;
+              objects?: SketchToPlanResponse["objects"];
+              warnings?: string[];
+              reason?: SketchRecoveryReason;
+              message?: string;
+              error?: string;
+            }
+          | null;
+
+        if (!response.ok) {
+          setSketchUi({
+            status: "error",
+            fileName: file.name,
+            message:
+              body?.message ??
+              body?.error ??
+              `Sketch conversion failed (${response.status}).`,
+          });
+          return;
+        }
+
+        if (body?.status === "fallback") {
+          setSketchUi({
+            status: "fallback",
+            fileName: file.name,
+            reason: body.reason ?? "server_error",
+            message:
+              body.message ??
+              getSketchRecoveryMessage(body.reason ?? "server_error"),
+          });
+          return;
+        }
+
+        if (body?.status === "preview" && Array.isArray(body.objects)) {
+          setSketchUi({
+            status: "preview",
+            fileName: file.name,
+            objects: body.objects,
+            warnings: body.warnings ?? [],
+          });
+          return;
+        }
+
+        setSketchUi({
+          status: "error",
+          fileName: file.name,
+          message: "Sketch conversion returned an unexpected response.",
+        });
+      } catch (error) {
+        setSketchUi({
+          status: "error",
+          fileName: file.name,
+          message:
+            error instanceof Error
+              ? error.message
+              : "Could not read or convert that sketch.",
+        });
+      }
+    },
+    [],
+  );
+
+  const acceptSketchGeometry = useCallback(() => {
+    if (sketchUi.status !== "preview") return;
+    const walls = sketchUi.objects.filter(
+      (object): object is Extract<SketchToPlanResponse["objects"][number], { type: "wall" }> =>
+        object.type === "wall",
+    );
+    workspaceCanvas.updateProject((project) =>
+      applySketchWallObjects(project, walls, newEntityId),
+    );
+    setWorkspaceMessage(
+      `Accepted ${walls.length} wall${walls.length === 1 ? "" : "s"} from ${sketchUi.fileName}. Undo to reverse.`,
+    );
+    setSketchUi({ status: "idle" });
+    requestAnimationFrame(() => {
+      canvasRef.current?.fitToView?.();
+    });
+  }, [sketchUi, workspaceCanvas]);
+
+  const rejectSketchGeometry = useCallback(() => {
+    if (sketchUi.status === "preview") {
+      setWorkspaceMessage(`Rejected sketch conversion for ${sketchUi.fileName}.`);
+    }
+    setSketchUi({ status: "idle" });
+  }, [sketchUi]);
+
+  const handleValidationFocus = useCallback(
+    (issue: ValidationIssue) => {
+      if (issue.objectIds.length > 0) {
+        workspaceCanvas.setSelection({
+          type: "furniture",
+          ids: [...issue.objectIds],
+        });
+      }
+      if (issue.focusMm) {
+        canvasRef.current?.focusOnPoint(issue.focusMm.x, issue.focusMm.y);
+      }
+    },
+    [workspaceCanvas],
+  );
 
   const handleImportFile = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -1130,6 +1394,7 @@ export function OOPlannerWorkspace({
     redo: runRedo,
     deleteSelection,
     duplicateSelection,
+    nudgeSelection,
     cancel: () => {
       setPendingCatalogItemId(null);
       canvasRef.current?.cancel();
@@ -1167,20 +1432,14 @@ export function OOPlannerWorkspace({
   const saveStorage = autosave.storage ?? "local";
   const saveCloudEnabled = autosave.cloudEnabled ?? false;
   const isLocalSaved = autosave.isLocalSaved ?? autosave.isSynced;
-  /** Full copy for TopBar; compact strip for footer (avoids dual save essay). */
+  /** TopBar is the only visible save authority. */
   const saveStatusLabel = plannerSaveStatusLabel({
     status: autosave.status,
     storage: saveStorage,
     lastSavedAt: autosave.lastSavedAt,
     cloudEnabled: saveCloudEnabled,
     guestMode,
-  });
-  const saveStatusBarLabel = plannerSaveStatusBarLabel({
-    status: autosave.status,
-    storage: saveStorage,
-    lastSavedAt: autosave.lastSavedAt,
-    cloudEnabled: saveCloudEnabled,
-    guestMode,
+    isOffline: autosave.isOffline,
   });
   const showGuestPlaceHint =
     guestMode &&
@@ -1216,6 +1475,24 @@ export function OOPlannerWorkspace({
         aria-label="Import project file"
         onChange={handleImportFile}
       />
+      <input
+        ref={sketchInputRef}
+        type="file"
+        accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp"
+        className="sr-only"
+        tabIndex={-1}
+        aria-hidden
+        aria-label="Upload sketch for Sketch to plan"
+        onChange={(event) => {
+          void handleSketchFile(event);
+        }}
+      />
+      <SketchToPlanDialog
+        state={sketchUi}
+        onAccept={acceptSketchGeometry}
+        onReject={rejectSketchGeometry}
+        onDismiss={dismissSketchUi}
+      />
       <ModularPlannerShell
         accessContext={accessContext}
         projectName={workspaceCanvas.project.name}
@@ -1230,6 +1507,7 @@ export function OOPlannerWorkspace({
         saveStatusLabel={saveStatusLabel}
         storage={saveStorage}
         cloudEnabled={saveCloudEnabled}
+        isOffline={autosave.isOffline}
         canUndo={workspaceCanvas.canUndo}
         canRedo={workspaceCanvas.canRedo}
         undoLabel={undoLabel}
@@ -1240,6 +1518,7 @@ export function OOPlannerWorkspace({
         onSave={handleSave}
         onExport={(format) => handleExport(format ?? "json")}
         onImport={handleImportClick}
+        onSketchToPlan={handleSketchToPlanClick}
         onFloorChange={handleFloorChange}
         floors={workspaceCanvas.project.floors.map((floor) => ({
           id: floor.id,
@@ -1257,6 +1536,7 @@ export function OOPlannerWorkspace({
         onToolChange={setTool}
         onZoomReset={() => canvasRef.current?.fitToView()}
         showTools={viewMode === "2d"}
+        hasSelection={Boolean(selectedEntity || multiSelection)}
         inventory={
           <WorkspaceLeftPanel
             catalogItems={catalog.items}
@@ -1284,6 +1564,7 @@ export function OOPlannerWorkspace({
             workstationSeats={planMetrics.workstationSeats}
             onDownloadBoq={() => handleExport("boq-csv")}
             onAddWorkstationsToQuote={() => handleExport("quote")}
+            onFocusIssue={handleValidationFocus}
           />
         }
         properties={
@@ -1292,6 +1573,7 @@ export function OOPlannerWorkspace({
               selectedEntity={selectedEntity}
               multiSelection={multiSelection}
               displayUnit={displayUnit}
+              hostWallLengthMm={selectedHostWallLengthMm}
                 callbacks={{
                   onUpdateEntity: handleUpdateEntity,
                   onDeleteEntity: handleDeleteEntity,
@@ -1349,27 +1631,6 @@ export function OOPlannerWorkspace({
                   : "Loading catalog…"}
               </span>
             ) : null}
-            {autosave.status === "saving" ||
-            autosave.status === "unsaved" ||
-            autosave.status === "error" ? (
-              <span
-                className="open3d-status-pill open3d-status-pill--muted"
-                data-testid="open3d-save-status-bar"
-                data-status={autosave.status}
-                data-storage={saveCloudEnabled ? saveStorage : "local"}
-              >
-                {saveStatusBarLabel}
-              </span>
-            ) : (
-              <span
-                className="sr-only"
-                data-testid="open3d-save-status-bar"
-                data-status={autosave.status}
-                data-storage={saveCloudEnabled ? saveStorage : "local"}
-              >
-                {saveStatusBarLabel}
-              </span>
-            )}
             {validationResult.issues.length > 0 ? (
               <span
                 className={`open3d-status-pill open3d-status-pill--accent ${workspaceStyles.validationPill}`}
@@ -1404,6 +1665,7 @@ export function OOPlannerWorkspace({
               activeFloor={activeFloor}
               gridEnabled={gridEnabled}
               snapEnabled={snapEnabled}
+              displayUnit={displayUnit}
               pendingCatalogPlacement={
                 pendingCatalogItemId !== null ||
                 pendingWorkstationConfig !== null
@@ -1422,6 +1684,14 @@ export function OOPlannerWorkspace({
               onFurnitureModified={handleFurnitureModified}
               onStatusChange={setCanvasStatus}
             />
+            {activeTool === "room" ? (
+              <ExactRoomPanel
+                key={displayUnit}
+                displayUnit={displayUnit}
+                onCreate={handleCreateExactRoom}
+                onCancel={() => setTool("select")}
+              />
+            ) : null}
             {/* Tool guidance: rail tooltips. Empty card only when zero geometry. */}
             {isCanvasEmpty && (
               <section
@@ -1444,7 +1714,7 @@ export function OOPlannerWorkspace({
                     Draw walls
                   </button>
                   <button type="button" onClick={handleStartTemplate}>
-                    Starter room 5 × 4 m
+                    Create exact room
                   </button>
                   <button type="button" onClick={handleStartPlaceWorkstation}>
                     Place workstation

@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 
 import { WorkstationConfiguratorPanel } from "@/features/planner/editor/WorkstationConfiguratorPanel";
-import type { WorkstationConfigV0 } from "@/features/planner/project/catalog/workstationSystemV0";
+import type { WorkstationConfigV0 } from "@/features/planner/catalog/workstationSystemV0";
 
 describe("WorkstationConfiguratorPanel", () => {
   it("arms single place with resolved config", () => {

@@ -11,7 +11,7 @@ import { BLOCK_DESCRIPTORS_DIR_DEFAULT,
   clearLoaderCache,
   loadAll,
   type BlockDescriptor,
-} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+} from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import { ADMIN_CATALOG_OPS_DIR_DEFAULT } from "@/lib/paths/adminCatalogOps";
 
 export type {

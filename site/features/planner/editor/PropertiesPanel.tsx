@@ -15,16 +15,16 @@ import { entityCollectionLabel } from "./plannerHistoryLabels";
 import type {
   PlannerEntityCollection,
   PlannerEntityMap,
-} from "@/features/planner/project/model/actions/projectActions";
-import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
+} from "@/features/planner/model/actions/projectActions";
+import type { PlannerDisplayUnit } from "@/features/planner/model/types";
 import {
   formatAreaDisplay,
   formatFootprintDisplay,
   formatLengthDisplay,
   formatLengthInput,
   parseLengthInput,
-} from "@/features/planner/project/model/units";
-import { parseWorkstationConfigKey } from "@/features/planner/project/catalog/workstationSystemV0";
+} from "@/features/planner/model/units";
+import { parseWorkstationConfigKey } from "@/features/planner/catalog/workstationSystemV0";
 import styles from "./properties.module.css";
 
 /**
@@ -97,6 +97,8 @@ export interface PropertiesPanelProps {
   callbacks?: PropertiesPanelCallbacks;
   /** Display unit for dimensions (document store stays mm). */
   displayUnit?: PlannerDisplayUnit;
+  /** Canonical host-wall length for door/window offset editing. */
+  hostWallLengthMm?: number;
 }
 
 /**
@@ -153,6 +155,7 @@ export const PropertiesPanel = memo(function PropertiesPanel({
   multiSelection = null,
   callbacks,
   displayUnit = "mm",
+  hostWallLengthMm,
 }: PropertiesPanelProps) {
   const id = useId();
 
@@ -162,6 +165,23 @@ export const PropertiesPanel = memo(function PropertiesPanel({
     selectedEntity.entity &&
     "locked" in selectedEntity.entity &&
     (selectedEntity.entity as { locked?: boolean }).locked === true
+  );
+
+  const commitOpeningOffset = useCallback(
+    (raw: string) => {
+      if (!selectedEntity || isLocked || !hostWallLengthMm) return false;
+      const offsetMm = parseLengthInput(raw, displayUnit);
+      if (offsetMm === null || offsetMm < 0 || offsetMm > hostWallLengthMm) {
+        return false;
+      }
+      callbacks?.onUpdateEntity?.(
+        selectedEntity.collection,
+        selectedEntity.id,
+        { position: offsetMm / hostWallLengthMm },
+      );
+      return true;
+    },
+    [callbacks, displayUnit, hostWallLengthMm, isLocked, selectedEntity],
   );
   // GS REC-01 contextual props; locked reject everywhere (command + ui) per task7. No explicit any.
 
@@ -421,10 +441,13 @@ export const PropertiesPanel = memo(function PropertiesPanel({
             <div className={styles.propertyGrid}>
               <PropertyField
                 id={`${id}-position`}
-                label="Position"
-                value={formatLengthInput(door.position, displayUnit)}
+                label="Wall offset"
+                value={formatLengthInput(
+                  hostWallLengthMm ? door.position * hostWallLengthMm : door.position,
+                  displayUnit,
+                )}
                 unit={displayUnit}
-                onCommit={(value) => commitLengthValue(value, "position")}
+                onCommit={commitOpeningOffset}
                 readOnly={fieldReadOnly}
               />
             </div>
@@ -485,6 +508,8 @@ export const PropertiesPanel = memo(function PropertiesPanel({
       selectedEntity,
       callbacks,
       fieldReadOnly,
+      hostWallLengthMm,
+      commitOpeningOffset,
     ],
   );
 
@@ -537,10 +562,13 @@ export const PropertiesPanel = memo(function PropertiesPanel({
             <div className={styles.propertyGrid}>
               <PropertyField
                 id={`${id}-position`}
-                label="Position"
-                value={formatLengthInput(window.position, displayUnit)}
+                label="Wall offset"
+                value={formatLengthInput(
+                  hostWallLengthMm ? window.position * hostWallLengthMm : window.position,
+                  displayUnit,
+                )}
                 unit={displayUnit}
-                onCommit={(value) => commitLengthValue(value, "position")}
+                onCommit={commitOpeningOffset}
                 readOnly={fieldReadOnly}
               />
             </div>
@@ -566,7 +594,15 @@ export const PropertiesPanel = memo(function PropertiesPanel({
         </>
       );
     },
-    [id, displayUnit, commitLengthValue, handleSelectChange, fieldReadOnly],
+    [
+      id,
+      displayUnit,
+      commitLengthValue,
+      handleSelectChange,
+      fieldReadOnly,
+      hostWallLengthMm,
+      commitOpeningOffset,
+    ],
   );
 
   /**

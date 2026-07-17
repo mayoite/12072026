@@ -16,7 +16,7 @@ import { createRequire } from "node:module";
 import {
   loadBySlug,
   type BlockDescriptor,
-} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+} from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 
 const SITE_ROOT = path.resolve(__dirname, "../../..");
 const REPO_ROOT = path.resolve(SITE_ROOT, "..");

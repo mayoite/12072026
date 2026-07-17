@@ -3,8 +3,8 @@ import type { PlannerDocument, PlannerJsonValue } from "@/features/planner/model
 import {
   plannerDocumentToPlannerProject,
   plannerProjectToPlannerDocument,
-} from "@/features/planner/project/shared/document/plannerDocumentBridge";
-import { createRectangularRoomProject, createPlannerSceneEnvelope } from "@/features/planner/project/model/project";
+} from "@/features/planner/shared/document/plannerDocumentBridge";
+import { createRectangularRoomProject, createPlannerSceneEnvelope } from "@/features/planner/model/project";
 
 function ids(...values: string[]) {
   let index = 0;

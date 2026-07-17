@@ -16,7 +16,7 @@ import type {
   BlockDescriptorVariant,
   MountPlane,
   BlockDescriptorLiveAnnouncementCategory,
-} from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/svg/svgTypes";
 import type { SvgBlockDefinitionV1 } from "../contracts/svgBlockSchemas";
 
 export interface FormVec2 {

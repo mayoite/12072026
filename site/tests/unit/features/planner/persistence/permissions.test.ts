@@ -4,13 +4,13 @@ import {
   GUEST_BLOCKED_COMMAND_KEYS,
   isCommandBlockedForContext,
   type PlannerCommandKey,
-} from "@/features/planner/project/lib/commands/plannerAccessContext";
+} from "@/features/planner/lib/commands/plannerAccessContext";
 import {
   executeCommand,
   feasibilityCommands,
   getFeasibilityCommand,
   type FeasibilityCommandContext,
-} from "@/features/planner/project/lib/commands/registry";
+} from "@/features/planner/lib/commands/registry";
 
 const mockContext: FeasibilityCommandContext = {
   activateDrawWall: () => undefined,

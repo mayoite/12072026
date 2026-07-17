@@ -7,13 +7,13 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { notFound } from "next/navigation";
 import SvgEditorDetailPage from "@/app/admin/svg-editor/[id]/page";
-import * as loader from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import * as loader from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 
 vi.mock("next/navigation", () => ({
   notFound: vi.fn(() => { throw new Error("notfound"); }),
 }));
 
-vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", () => ({
+vi.mock("@/features/planner/catalog/svg/svgBlockDescriptorLoader", () => ({
   tryLoad: vi.fn(),
   BLOCK_DESCRIPTORS_DIR_DEFAULT: "mock-dir",
 }));

@@ -4,20 +4,20 @@ import {
   emitWorkstationFamilyContract,
   WORKSTATION_FAMILY_V0_FIXTURE,
 } from "@/features/admin/workstation/workstationFamilyContract";
-import { buyerNeedsMigrationChoice } from "@/features/planner/project/catalog/workstationFamilyBuyer";
+import { buyerNeedsMigrationChoice } from "@/features/planner/catalog/workstationFamilyBuyer";
 import {
   assessBuyerPlacement,
   buyerConfiguratorPreview,
   draftToFamilySelection,
   topologyIdForShape,
-} from "@/features/planner/project/catalog/workstationFamilyBuyer";
+} from "@/features/planner/catalog/workstationFamilyBuyer";
 import {
   defaultWorkstationConfiguratorDraftV0,
   setConfiguratorShape,
   setConfiguratorSize,
   toggleConfiguratorModule,
-} from "@/features/planner/project/catalog/workstationConfiguratorV0";
-import { WORKSTATION_V0_SIZE_GRID } from "@/features/planner/project/catalog/workstationSystemV0";
+} from "@/features/planner/catalog/workstationConfiguratorV0";
+import { WORKSTATION_V0_SIZE_GRID } from "@/features/planner/catalog/workstationSystemV0";
 
 describe("workstationFamilyBuyer", () => {
   it("maps linear draft to 2-seat topology and drives 2D/3D/BOQ from contract", () => {

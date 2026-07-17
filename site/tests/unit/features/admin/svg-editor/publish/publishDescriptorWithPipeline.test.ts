@@ -10,8 +10,8 @@ import path from "node:path";
 
 import { afterEach, describe, it, expect, vi } from "vitest";
 
-import { BLOCK_DESCRIPTOR_SCHEMA_VERSION } from "@/features/planner/project/catalog/svg/svgTypes";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import { BLOCK_DESCRIPTOR_SCHEMA_VERSION } from "@/features/planner/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import type { PipelineResult } from "@/features/admin/svg-editor/publish/svgPipelineRunner";
 import type { PersistResult } from "@/features/admin/svg-editor/storage/persistBlockDescriptor";
 import type { SvgCompileStagesResult } from "@/features/planner/asset-engine/svg/runSvgCompileStages";

@@ -12,7 +12,7 @@
 
 "use client";
 
-import type { BlockDescriptorVariant } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptorVariant } from "@/features/planner/catalog/svg/svgTypes";
 import {
   fieldsForVariant,
   SVG_EDITOR_FIELD_GROUP_LABEL,

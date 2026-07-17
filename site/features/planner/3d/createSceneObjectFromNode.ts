@@ -11,18 +11,18 @@ import type * as THREE from "three";
 import {
   defaultCabinetV0Options,
   generateCabinetV0Mesh,
-} from "@/features/planner/project/catalog/modularCabinetV0";
+} from "@/features/planner/catalog/modularCabinetV0";
 import {
   generateWorkstationV0Mesh,
   workstationConfigFromOptions,
-} from "@/features/planner/project/catalog/workstationMeshV0";
+} from "@/features/planner/catalog/workstationMeshV0";
 import {
   createWorkstationConfigV0,
   parseWorkstationConfigKey,
-} from "@/features/planner/project/catalog/workstationSystemV0";
-import { ParametricBuilder } from "@/features/planner/project/catalog/parametricBuilder";
-import { resolvePaintColor } from "@/features/planner/project/shared/readThemeColor";
-import { PLANNER_COLOR_TOKENS } from "@/features/planner/project/shared/themeColorTokens";
+} from "@/features/planner/catalog/workstationSystemV0";
+import { ParametricBuilder } from "@/features/planner/catalog/parametricBuilder";
+import { resolvePaintColor } from "@/features/planner/shared/readThemeColor";
+import { PLANNER_COLOR_TOKENS } from "@/features/planner/shared/themeColorTokens";
 import { mmToMeters, type PlannerSceneNode } from "./buildPlannerSceneNodes";
 
 type ThreeModule = typeof THREE;

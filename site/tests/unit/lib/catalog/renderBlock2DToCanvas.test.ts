@@ -5,7 +5,7 @@ import {
   resolveCanvasStrokeWidthMm,
 } from "@/lib/catalog/renderBlock2DToCanvas";
 import type { Block2D } from "@/lib/catalog/blocks2d";
-import { furnitureBlock2DFromItem } from "@/features/planner/project/catalog/furnitureBlock2D";
+import { furnitureBlock2DFromItem } from "@/features/planner/catalog/furnitureBlock2D";
 
 describe("resolveCanvasStrokeWidthMm", () => {
   it("floors thin mm strokes under plan zoom so detail stays visible", () => {

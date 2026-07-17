@@ -11,6 +11,8 @@
     "dev": "pnpm --filter oando-site dev",
     "dev:turbo": "pnpm --filter oando-site dev:turbo",
     "check:layout": "node scripts/check-repo-layout.mjs",
+    "planner:lift-verify": "node scripts/planner-lift-project-trees.mjs --verify",
+    "planner:lift": "node scripts/planner-lift-project-trees.mjs",
     "check:plans-purity": "node scripts/check-plans-purity.mjs",
     "check:docs-purity": "node scripts/check-docs-purity.mjs",
     "check:failures": "node scripts/check-failures.mjs",
@@ -56,8 +58,5 @@
     "@secretlint/secretlint-rule-preset-recommend": "^13.0.2",
     "secretlint": "^13.0.2",
     "turbo": "2.10.5"
-  },
-  "dependencies": {
-    "codex": "^0.2.3"
   }
 }

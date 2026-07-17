@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
-import { inventoryCategoriesForProduct } from "@/features/planner/project/catalog/inventory/inventoryTaxonomy";
-import { mapDescriptorToCatalogItem } from "@/features/planner/project/catalog/svg/descriptorCatalogBridge.server";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
+import { inventoryCategoriesForProduct } from "@/features/planner/catalog/inventory/inventoryTaxonomy";
+import { mapDescriptorToCatalogItem } from "@/features/planner/catalog/svg/descriptorCatalogBridge.server";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 function symbolItem(slug: string): PlannerCatalogItem {
   const descriptor = {

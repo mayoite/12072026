@@ -15,8 +15,8 @@
 
 import { createHash } from "node:crypto";
 
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
-import type { PlannerDescriptorError, PlannerResult } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
+import type { PlannerDescriptorError, PlannerResult } from "@/features/planner/catalog/svg/svgTypes";
 import {
   parseAdminPayload,
   persistBlockDescriptor,

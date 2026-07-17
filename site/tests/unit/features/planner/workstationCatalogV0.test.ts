@@ -1,20 +1,20 @@
 import { describe, expect, it } from "vitest";
 
-import { placeCatalogItemInProject } from "@/features/planner/project/catalog/placementAction";
+import { placeCatalogItemInProject } from "@/features/planner/catalog/placementAction";
 import {
   expandWorkstationV0CatalogItems,
   workstationConfigToCatalogItem,
   WORKSTATION_V0_DEMO_CATALOG_ITEMS,
-} from "@/features/planner/project/catalog/workstationCatalogV0";
+} from "@/features/planner/catalog/workstationCatalogV0";
 import {
   createWorkstationConfigV0,
   parseWorkstationConfigKey,
   workstationConfigKey,
   workstationFootprintMm,
-} from "@/features/planner/project/catalog/workstationSystemV0";
+} from "@/features/planner/catalog/workstationSystemV0";
 import { PLANNER_DEMO_CATALOG_ITEMS } from "@/features/planner/editor/demoCatalogItems";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+import { createPlannerProject } from "@/features/planner/model/project";
+import type { PlannerProject } from "@/features/planner/model/types";
 
 function ids(...values: string[]) {
   let index = 0;

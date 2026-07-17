@@ -7,15 +7,15 @@ import {
   stampFurnitureFromModularOptions,
   stampFurnitureGeneratedGlb,
 } from "@/features/planner/asset-engine";
-import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/project/catalog/modularCabinetV0GlbExport";
-import { defaultCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
-import { placeCatalogItemInProject } from "@/features/planner/project/catalog/placementAction";
+import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/catalog/modularCabinetV0GlbExport";
+import { defaultCabinetV0Options } from "@/features/planner/catalog/modularCabinetV0";
+import { placeCatalogItemInProject } from "@/features/planner/catalog/placementAction";
 import { isSystemGeneratedGlbUrl } from "@/features/planner/lib/glbAssetPolicy";
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
 import type {
   PlannerFurnitureItem,
   PlannerProject,
-} from "@/features/planner/project/model/types";
+} from "@/features/planner/model/types";
 
 const tempRoots: string[] = [];
 
@@ -377,7 +377,7 @@ describe("placeModularWithGeneratedGlbPlan (write + stamp matrix)", () => {
       emptyProject(),
       modularCatalogItem(),
       { x: 0, y: 0 },
-      { materialOverride: "oak", placedFrom: "api", publicRoot },
+      { materialOverride: "oak", placedFrom: "api", publicRoot, writeToPublic: true },
     );
     expect(result.stamped).toBe(true);
     expect(result.written).toBe(true);
@@ -398,7 +398,7 @@ describe("path-only vs write+stamp naming", () => {
       emptyProject(),
       modularCatalogItem(),
       { x: 10, y: 20 },
-      { publicRoot: tempPublicRoot() },
+      { publicRoot: tempPublicRoot(), writeToPublic: true },
     );
     expect(place.stamped).toBe(true);
     expect(place.written).toBe(true);

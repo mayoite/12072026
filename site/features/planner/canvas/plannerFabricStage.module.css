@@ -97,3 +97,77 @@
     var(--planner-grid-offset-x, 0) var(--planner-grid-offset-y, 0),
     var(--planner-grid-offset-x, 0) var(--planner-grid-offset-y, 0);
 }
+
+.wallReadout {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  min-height: 1.75rem;
+  padding: 0.25rem 0.5rem;
+  transform: translate(0.75rem, 0.75rem);
+  pointer-events: auto;
+  color: var(--text-heading);
+  background: var(--surface-panel);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  font-size: 0.75rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.wallReadout span {
+  color: var(--text-muted);
+}
+
+.wallReadout label {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.wallReadout input {
+  width: 4.5rem;
+  min-height: 1.5rem;
+  padding: 0.15rem 0.3rem;
+  color: var(--text-heading);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  font: inherit;
+}
+
+.wallReadout button {
+  min-height: 1.5rem;
+  padding: 0.15rem 0.45rem;
+  color: var(--text-inverse);
+  background: var(--color-primary);
+  border: 0;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.wallReadoutLive {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.wallReadout .wallReadoutError {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  width: max-content;
+  max-width: 20rem;
+  padding: 0.35rem 0.5rem;
+  color: var(--danger-text, var(--text-heading));
+  background: var(--surface-panel);
+  border: 1px solid var(--danger-border, var(--border-soft));
+  border-radius: var(--radius-sm);
+}

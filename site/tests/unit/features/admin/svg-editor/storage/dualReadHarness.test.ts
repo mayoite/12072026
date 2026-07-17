@@ -8,7 +8,7 @@ import {
 } from "@/features/admin/svg-editor/storage/dualReadHarness";
 import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/newBlockDescriptorStub";
 import { persistBlockDescriptor } from "@/features/admin/svg-editor/storage/persistBlockDescriptor";
-import { computeBlockDescriptorChecksum } from "@/features/planner/project/catalog/svg/svgTypes";
+import { computeBlockDescriptorChecksum } from "@/features/planner/catalog/svg/svgTypes";
 
 describe("dualReadHarness", () => {
   let dir = "";

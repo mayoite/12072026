@@ -35,4 +35,40 @@ describe("useWorkspaceKeyboard", () => {
     expect(setTool).toHaveBeenCalledWith("wall");
     expect(CANVAS_TOOL_SHORTCUTS.wall).toBe("W");
   });
+
+  it("nudgeSelection fires on arrow keys with fine shift step", () => {
+    const nudgeSelection = vi.fn();
+    renderHook(() =>
+      useWorkspaceKeyboard({
+        setTool: vi.fn(),
+        toggleView: vi.fn(),
+        openPalette: vi.fn(),
+        undo: vi.fn(),
+        redo: vi.fn(),
+        cancel: vi.fn(),
+        nudgeSelection,
+      }),
+    );
+    act(() => {
+      window.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowRight",
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+    });
+    expect(nudgeSelection).toHaveBeenCalledWith(100, 0);
+    act(() => {
+      window.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowUp",
+          shiftKey: true,
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+    });
+    expect(nudgeSelection).toHaveBeenCalledWith(0, -10);
+  });
 });

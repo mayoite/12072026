@@ -13,7 +13,7 @@ import {
   validationLabelForArtifact,
   type SvgInventoryRow,
 } from "@/features/admin/svg-editor/lifecycle/svgInventoryFilter";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 function row(
   partial: Partial<BlockDescriptor> & Pick<BlockDescriptor, "slug" | "variant">,

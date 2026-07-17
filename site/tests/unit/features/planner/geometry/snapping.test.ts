@@ -7,7 +7,7 @@ import {
   wheelZoomFactor,
   zoomTransformAt,
   type CanvasTransform,
-} from "@/features/planner/project/lib/geometry/snapping";
+} from "@/features/planner/lib/geometry/snapping";
 
 describe("projectToScreen / screenToProject", () => {
   it("round-trips project mm through screen space", () => {

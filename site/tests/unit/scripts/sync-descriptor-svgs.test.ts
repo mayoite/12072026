@@ -6,7 +6,7 @@ import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
 import { describe, expect, it } from "vitest";
-import { loadAll } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { loadAll } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import { syncDescriptorSvgs } from "../../../scripts/sync-descriptor-svgs";
 
 describe("sync-descriptor-svgs (name-mirror)", () => {

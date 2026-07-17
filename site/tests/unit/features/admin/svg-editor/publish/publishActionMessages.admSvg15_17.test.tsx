@@ -17,7 +17,7 @@ import {
   publishSuccessMessage,
   releasedSvgHref,
 } from "@/features/admin/svg-editor/publish/publishActionMessages";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }) }));
 vi.mock("@/features/admin/svg-editor/publish/useDebouncedCompile", () => ({

@@ -25,7 +25,7 @@ import {
   undoLabel,
 } from "@/features/admin/svg-editor/scene/svgSceneHistory";
 import { createHeadlessEngineAdapter } from "@/features/admin/svg-editor/scene/svgEngineAdapter";
-import { compileSvgBlockV1 } from "@/features/planner/project/catalog/svg/svgCompiler.server";
+import { compileSvgBlockV1 } from "@/features/planner/catalog/svg/svgCompiler.server";
 
 function rect(id: string, over: Partial<SvgSceneNode> = {}): SvgSceneNode {
   return {

@@ -3,18 +3,18 @@ import { describe, expect, it } from "vitest";
 import {
   placeWorkstationConfigOnProject,
   placeWorkstationInstancesOnProject,
-} from "@/features/planner/project/catalog/placementAction";
+} from "@/features/planner/catalog/placementAction";
 import {
   summarizeWorkstationBoqV0,
   workstationBoqToQuoteCartItems,
   workstationV0UnitPriceInr,
   WORKSTATION_V0_GST_RATE,
-} from "@/features/planner/project/catalog/workstationBoqV0";
+} from "@/features/planner/catalog/workstationBoqV0";
 import {
   createWorkstationConfigV0,
   workstationConfigKey,
-} from "@/features/planner/project/catalog/workstationSystemV0";
-import { createPlannerProject } from "@/features/planner/project/model/project";
+} from "@/features/planner/catalog/workstationSystemV0";
+import { createPlannerProject } from "@/features/planner/model/project";
 
 function ids(...values: string[]) {
   let index = 0;

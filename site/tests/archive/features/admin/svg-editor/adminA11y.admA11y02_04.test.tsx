@@ -22,7 +22,7 @@ import type {
   SvgSceneNode,
 } from "@/features/admin/svg-editor/scene/svgSceneDocument";
 import type { SvgEngineAdapter } from "@/features/admin/svg-editor/scene/svgEngineAdapter";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 const mockSetViewport = vi.fn();
 const mockZoomToFit = vi.fn();

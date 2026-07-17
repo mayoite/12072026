@@ -51,6 +51,14 @@ describe("selectionFromFabricTarget (Fabric → setSelection)", () => {
     });
   });
 
+  it.each(["door", "window"] as const)("returns %s selection", (type) => {
+    const target = makeCarrier({
+      [CANVAS_ENTITY_TYPE_PROP]: type,
+      [FURNITURE_ENTITY_ID_PROP]: `${type}-1`,
+    });
+    expect(selectionFromFabricTarget(target)).toEqual({ type, id: `${type}-1` });
+  });
+
   it("reads entityId written via writeFurnitureEntityId", () => {
     const target = makeCarrier({ [CANVAS_ENTITY_TYPE_PROP]: "furniture" });
     writeFurnitureEntityId(target, "pose-keep");
@@ -70,7 +78,7 @@ describe("selectionFromFabricTarget (Fabric → setSelection)", () => {
     expect(selectionFromFabricTarget(noType)).toBeNull();
 
     const badType = makeCarrier({
-      [CANVAS_ENTITY_TYPE_PROP]: "door",
+      [CANVAS_ENTITY_TYPE_PROP]: "unsupported",
       [FURNITURE_ENTITY_ID_PROP]: "x",
     });
     expect(selectionFromFabricTarget(badType)).toBeNull();

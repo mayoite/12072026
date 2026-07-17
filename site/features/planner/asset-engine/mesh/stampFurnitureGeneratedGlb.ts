@@ -19,9 +19,9 @@ import {
   assertNoDesignerStaticGlb,
   isSystemGeneratedGlbUrl,
 } from "@/features/planner/lib/glbAssetPolicy";
-import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/project/catalog/modularCabinetV0GlbExport";
-import { defaultCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
-import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
+import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/catalog/modularCabinetV0GlbExport";
+import { defaultCabinetV0Options } from "@/features/planner/catalog/modularCabinetV0";
+import type { PlannerFurnitureItem } from "@/features/planner/model/types";
 
 /**
  * Stamp a system-generated GLB path onto furniture for catalog/document + G8.

@@ -4,15 +4,15 @@
 
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 
-import { BLOCK_DESCRIPTORS_DIR_DEFAULT } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { BLOCK_DESCRIPTORS_DIR_DEFAULT } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import {
   parseBlockDescriptor,
-} from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/svg/svgTypes";
 import {
   readLatestPointer,
   resolveCurrentVersion,
   versionedDescriptorPath,
-} from "@/features/planner/project/catalog/svg/descriptorPointer";
+} from "@/features/planner/catalog/svg/descriptorPointer";
 
 export type DescriptorRevisionEntry = {
   readonly version: number;

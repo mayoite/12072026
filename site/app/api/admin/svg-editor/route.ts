@@ -25,12 +25,12 @@ import { DrizzleSvgRevisionPersistence } from "@/features/admin/svg-editor/stora
 import { ImmutableSvgRevisionRepository } from "@/features/admin/svg-editor/svgRevisionRepository.server";
 import { isProductsDatabaseConfigured } from "@/platform/drizzle/databaseUrls";
 import { writeR2ObjectText } from "@/lib/storage/r2Catalog";
-import { buildBlockThumbPngUrl } from "@/features/planner/project/catalog/svg/svgPreviewAssets";
+import { buildBlockThumbPngUrl } from "@/features/planner/catalog/svg/svgPreviewAssets";
 import {
   toPlannerDescriptorErrorHttp,
   type PlannerDescriptorError,
-} from "@/features/planner/project/catalog/svg/svgTypes";
-import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+} from "@/features/planner/catalog/svg/svgTypes";
+import { tryLoad } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import { assertDraftNotStale, readOpenedBaselineFromPayload } from "@/features/admin/svg-editor/lifecycle/staleDraftPublishGate";
 import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
 

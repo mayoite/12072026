@@ -9,7 +9,7 @@ import {
   PRODUCTION_IMPORT_GRAPH,
   plannerHybridRoutes,
   plannerNativeRoutes,
-} from "@/features/planner/project/cleanup/importGraphProof";
+} from "@/features/planner/cleanup/importGraphProof";
 import {
   PLANNER_FABRIC_FURNITURE_ENV,
   isPlannerFabricFurnitureEnabled,

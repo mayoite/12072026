@@ -4,8 +4,8 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { pickOpeningAtPoint } from "@/features/planner/project/lib/geometry/canvasPicking";
-import type { PlannerWall } from "@/features/planner/project/model/types";
+import { pickOpeningAtPoint } from "@/features/planner/lib/geometry/canvasPicking";
+import type { PlannerWall } from "@/features/planner/model/types";
 
 describe("pickOpeningAtPoint (quality non-reg)", () => {
   const wall: PlannerWall = {

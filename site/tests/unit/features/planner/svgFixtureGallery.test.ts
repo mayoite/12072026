@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { buildSvgFixtureGallery } from "@/features/planner/project/catalog/svg/svgFixtureGallery";
+import { buildSvgFixtureGallery } from "@/features/planner/catalog/svg/svgFixtureGallery";
 
 describe("SVG fixture gallery (PLAN-FAIL-018)", () => {
   it("renders themed fixtures with stable physical dimensions", () => {

@@ -4,7 +4,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import type { PlannerFloor } from "@/features/planner/project/model/types";
+import type { PlannerFloor } from "@/features/planner/model/types";
 import styles from "./threeViewerInner.module.css";
 import type {
   Group,
@@ -15,7 +15,7 @@ import type {
 
 import type * as THREE from "three";
 import { shouldLoadGlb } from "@/features/planner/lib/glbAssetPolicy";
-import { readThreeThemeColor } from "@/features/planner/project/shared/readThemeColor";
+import { readThreeThemeColor } from "@/features/planner/shared/readThemeColor";
 import { buildPlannerSceneNodes } from "./buildPlannerSceneNodes";
 import {
   addNodesToGroup,

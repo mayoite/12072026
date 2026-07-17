@@ -6,7 +6,7 @@ import {
   buildSvgCatalogPublicUrl,
   isSvgAssetUrl,
   SVG_THUMBNAIL_WIDTHS,
-} from "@/features/planner/project/catalog/svg/svgPreviewAssets";
+} from "@/features/planner/catalog/svg/svgPreviewAssets";
 
 describe("svgPreviewAssets", () => {
   it("detects SVG asset URLs", () => {

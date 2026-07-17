@@ -2,7 +2,7 @@
  * Admin P06 — restore a prior descriptor revision forward (history preserved).
  */
 
-import { BLOCK_DESCRIPTORS_DIR_DEFAULT } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { BLOCK_DESCRIPTORS_DIR_DEFAULT } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import { persistBlockDescriptor } from "../storage/persistBlockDescriptor";
 import { publishDescriptorWithPipeline } from "../publish/publishDescriptorWithPipeline";
 import { appendDescriptorAudit } from "../storage/descriptorAuditLog";

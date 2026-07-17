@@ -537,6 +537,7 @@
 }
 
 .workflowBar {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-3);
@@ -544,6 +545,23 @@
   padding: var(--space-2) var(--space-4);
   background: var(--ws-panel-bg);
   border-bottom: 1px solid var(--ws-panel-border);
+}
+
+.workflowWarning {
+  position: absolute;
+  z-index: 2;
+  top: calc(100% + var(--space-1));
+  right: var(--space-4);
+  max-width: min(34rem, calc(100vw - var(--space-8)));
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  color: var(--ws-text-primary);
+  background: var(--ws-panel-bg);
+  border: 1px solid var(--warning-border, var(--ws-panel-border));
+  border-radius: var(--radius-md);
+  box-shadow: var(--ws-shadow-float);
+  font-size: 0.75rem;
+  line-height: 1.4;
 }
 
 .workflowSteps {
@@ -600,6 +618,84 @@
   cursor: pointer;
 }
 
+.exactRoomPanel {
+  position: absolute;
+  z-index: var(--ws-z-floating);
+  top: var(--space-4);
+  left: 50%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(7rem, 1fr)) auto;
+  gap: var(--space-2);
+  align-items: end;
+  width: min(48rem, calc(100% - var(--space-8)));
+  padding: var(--space-3);
+  transform: translateX(-50%);
+  color: var(--ws-text-primary);
+  background: var(--ws-panel-bg);
+  border: 1px solid var(--ws-panel-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--ws-shadow-float);
+}
+
+.exactRoomHeading {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.exactRoomHeading span,
+.exactRoomField span {
+  color: var(--ws-text-muted);
+  font-size: 0.75rem;
+}
+
+.exactRoomField {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.exactRoomField input {
+  min-width: 0;
+  min-height: var(--ws-control-h);
+  padding: var(--space-2);
+  color: var(--ws-text-primary);
+  background: var(--planner-surface-subtle);
+  border: 1px solid var(--ws-panel-border);
+  border-radius: var(--radius-md);
+  font: inherit;
+}
+
+.exactRoomActions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.exactRoomActions button {
+  min-height: var(--ws-control-h);
+  padding: var(--space-2) var(--space-3);
+  color: var(--ws-text-primary);
+  background: var(--ws-panel-bg);
+  border: 1px solid var(--ws-panel-border);
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.exactRoomActions .exactRoomPrimary {
+  color: var(--text-inverse);
+  background: var(--ws-accent);
+  border-color: var(--ws-accent);
+}
+
+.exactRoomError {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--danger-text, var(--ws-text-primary));
+  font-size: 0.75rem;
+}
+
 .workflowStep {
   min-width: 0;
 }
@@ -627,6 +723,12 @@
   color: var(--ws-text-primary);
   background: color-mix(in srgb, var(--ws-accent) 9%, var(--ws-panel-bg));
   border-color: color-mix(in srgb, var(--ws-accent) 38%, var(--ws-panel-border));
+}
+
+.workflowButton[data-completion="complete"] .workflowNumber {
+  color: var(--text-inverse);
+  background: var(--success, var(--ws-accent));
+  border-color: var(--success, var(--ws-accent));
 }
 
 .workflowNumber {
@@ -658,6 +760,17 @@
   color: var(--ws-text-muted);
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.workflowCompletion {
+  color: var(--ws-text-muted);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.workflowButton[data-completion="complete"] .workflowCompletion {
+  color: var(--success-text, var(--ws-accent));
 }
 
 .mobileCanvasStack {
@@ -693,6 +806,22 @@
   background: var(--ws-panel-bg);
   color: var(--ws-text-muted);
   font-size: 0.75rem;
+}
+
+@media (max-width: 48rem) {
+  .exactRoomPanel {
+    top: var(--space-2);
+    grid-template-columns: 1fr 1fr;
+    width: calc(100% - var(--space-4));
+    max-height: calc(100% - var(--space-4));
+    overflow: auto;
+  }
+
+  .exactRoomHeading,
+  .exactRoomActions,
+  .exactRoomError {
+    grid-column: 1 / -1;
+  }
 }
 
 .mobilePanelLabel {

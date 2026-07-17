@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { isSvgSafe, sanitizeSvg } from "@/features/planner/project/catalog/svg/svgSanitizer";
+import { isSvgSafe, sanitizeSvg } from "@/features/planner/catalog/svg/svgSanitizer";
 
 describe("svg sanitizer", () => {
   const cleanSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>`;

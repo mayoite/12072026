@@ -7,7 +7,7 @@ import { success } from "@/features/shared/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import { listDescriptorRevisions } from "@/features/admin/svg-editor/lifecycle/descriptorRevisionIndex";
 import { readDescriptorAuditForSlug } from "@/features/admin/svg-editor/storage/descriptorAuditLog";
-import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { tryLoad } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 
 type RouteContext = {
   params: Promise<{ slug: string }>;

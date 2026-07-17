@@ -15,7 +15,7 @@ import { resolvePublicDir } from "@/lib/paths/sitePackageRoot.server";
 import { Render } from "@puckeditor/core";
 import {
   tryLoad,
-} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+} from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import {
   puckConfig,
   getPuckData,
@@ -25,7 +25,7 @@ import {
 import {
   buildBlockThumbPngUrl,
   buildBlockThumbSrcSet,
-} from "@/features/planner/project/catalog/svg/svgPreviewAssets";
+} from "@/features/planner/catalog/svg/svgPreviewAssets";
 import { sanitizeInlineSvg } from "@/lib/security/sanitize";
 
 function readInlineSvg(slug: string): string | null {

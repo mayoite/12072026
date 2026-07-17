@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 
 import {
   type CanvasTransform,
-} from "@/features/planner/project/lib/geometry/snapping";
+} from "@/features/planner/lib/geometry/snapping";
 
 export type PlannerGridOverlayStyle = CSSProperties & {
   "--planner-grid-size-px": string;

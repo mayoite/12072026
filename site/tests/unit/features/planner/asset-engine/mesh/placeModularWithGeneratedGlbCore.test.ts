@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { placeModularWithGeneratedGlbCore } from "@/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbCore";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import { MODULAR_CABINET_V0_CATALOG_ID } from "@/features/planner/project/catalog/placementAction";
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import { createPlannerProject } from "@/features/planner/model/project";
+import { MODULAR_CABINET_V0_CATALOG_ID } from "@/features/planner/catalog/placementAction";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
 
 function modularCatalogItem(): PlannerCatalogItem {
   return {

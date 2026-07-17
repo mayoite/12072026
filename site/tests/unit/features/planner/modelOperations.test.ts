@@ -1,9 +1,9 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import type { PlannerProject, PlannerSceneEnvelope } from "@/features/planner/project/model/types";
+import type { PlannerProject, PlannerSceneEnvelope } from "@/features/planner/model/types";
 import {
   createPlannerProject,
   createRectangularRoomProject,
-} from "@/features/planner/project/model/project";
+} from "@/features/planner/model/project";
 import {
   addWall,
   removeWall,
@@ -63,7 +63,7 @@ import {
   ungroupElements,
   updateRoom,
   importFloorIntoCurrentProject,
-} from "@/features/planner/project/model/operations/pureActions";
+} from "@/features/planner/model/operations/pureActions";
 import {
   createHistoryState,
   pushHistory,
@@ -74,7 +74,7 @@ import {
   redo,
   jumpToHistoryIndex,
   getHistoryEntries,
-} from "@/features/planner/project/model/operations/history";
+} from "@/features/planner/model/operations/history";
 import {
   registerMigration,
   getRegisteredMigrations,
@@ -82,7 +82,7 @@ import {
   createEnvelopeV1,
   validateEnvelope,
   resetMigrations,
-} from "@/features/planner/project/model/operations/migration";
+} from "@/features/planner/model/operations/migration";
 
 function envelopeWithVersion(project: PlannerProject, version: number): PlannerSceneEnvelope {
   return { ...createEnvelopeV1(project), version } as unknown as PlannerSceneEnvelope;

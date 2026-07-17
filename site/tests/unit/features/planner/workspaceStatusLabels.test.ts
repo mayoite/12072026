@@ -9,7 +9,7 @@ import {
   plannerSaveStatusLabel,
   type PlannerPersistStorage,
 } from "@/features/planner/editor/workspaceStatusLabels";
-import type { PlannerSaveStatus } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
+import type { PlannerSaveStatus } from "@/features/planner/persistence/usePlannerWorkspaceAutosave";
 
 /** Buyer-facing lies when open3d is local-IDB only (cloudEnabled=false). */
 const FORBIDDEN_LOCAL_HONESTY = [

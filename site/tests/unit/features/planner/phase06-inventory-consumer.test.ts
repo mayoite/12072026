@@ -7,13 +7,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NextRequest } from "next/server";
 
-import { PlannerCatalogClient } from "@/features/planner/project/catalog/catalogClient";
-import { loadPlannerCatalog } from "@/features/planner/project/catalog/catalogQuery";
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
-import { clearLoaderCache } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { PlannerCatalogClient } from "@/features/planner/catalog/catalogClient";
+import { loadPlannerCatalog } from "@/features/planner/catalog/catalogQuery";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
+import { clearLoaderCache } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import { loadBuyerVisibleDescriptors } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
-import { filterBuyerFacingCatalogItems } from "@/features/planner/project/catalog/catalogBuyerVisibility";
-import { mapDescriptorsToCatalogItems } from "@/features/planner/project/catalog/svg/descriptorCatalogBridge.server";
+import { filterBuyerFacingCatalogItems } from "@/features/planner/catalog/catalogBuyerVisibility";
+import { mapDescriptorsToCatalogItems } from "@/features/planner/catalog/svg/descriptorCatalogBridge.server";
 import { GET as getSvgBlocks } from "@/app/api/planner/catalog/svg-blocks/route";
 
 vi.mock("@/app/api/_lib/public", () => ({

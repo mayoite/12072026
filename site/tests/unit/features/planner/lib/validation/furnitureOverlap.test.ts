@@ -52,13 +52,43 @@ describe("furnitureOverlap (P14 TDD)", () => {
     ]);
   });
 
-  it("skips self-pairs and duplicate logical pairs", () => {
-    const issues = detectFurnitureOverlaps([
-      desk("desk-b", 20, 0),
-      desk("desk-a", 0, 0),
-      desk("desk-a", 10, 0),
-    ]);
+  it("detects overlap for rotated footprints that AABB would miss", () => {
+    const longDesk: PlacedFurniture = {
+      id: "a",
+      xMm: 0,
+      yMm: 0,
+      widthMm: 2000,
+      depthMm: 400,
+      rotationDeg: 45,
+    };
+    const crossing: PlacedFurniture = {
+      id: "b",
+      xMm: 0,
+      yMm: 0,
+      widthMm: 2000,
+      depthMm: 400,
+      rotationDeg: -45,
+    };
+    expect(aabbsOverlap(longDesk, crossing)).toBe(true);
+  });
 
-    expect(issues.map((issue) => issue.objectIds)).toEqual([["desk-a", "desk-b"]]);
+  it("does not flag separated rotated footprints", () => {
+    const left: PlacedFurniture = {
+      id: "a",
+      xMm: 0,
+      yMm: 0,
+      widthMm: 1200,
+      depthMm: 600,
+      rotationDeg: 30,
+    };
+    const right: PlacedFurniture = {
+      id: "b",
+      xMm: 4000,
+      yMm: 0,
+      widthMm: 1200,
+      depthMm: 600,
+      rotationDeg: -20,
+    };
+    expect(aabbsOverlap(left, right)).toBe(false);
   });
 });

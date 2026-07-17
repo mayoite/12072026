@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import type { MutableRefObject } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import type { SvgSceneDocument } from "@/features/admin/svg-editor/scene/svgSceneDocument";
 import type { SvgEditorFormState } from "@/features/admin/svg-editor/svgEditorFormState";
 

@@ -1,3 +1,4 @@
+does it anywhere say act on your own
 # Planner world-standard completion plan
 
 Status: OPEN.
@@ -142,18 +143,26 @@ Official references:
 
 Execution update: 2026-07-17.
 
-Current position: P1 is in progress. Guest UUID identity, scoped local persistence,
-fresh-draft isolation, and reload recovery now pass focused tests and a fresh
-desktop browser check. P0 still has unverified isolation and service-worker
-items. P2 through P17 remain open.
+Current position: P1 PASS. P2–P15 partial/in progress. Exit gates remain open without full browser proof.
 
 | Phase | Execution status | Truth |
 |---|---|---|
 | P0 | PARTIAL | Selector, route-test, current-source, and browser-hang work passes. Isolation and service-worker proof remain. |
-| P1 | IN PROGRESS | Guest identity and reload recovery pass. Member-owner scoping and remaining entry contracts are being completed. |
-| P2 | OPEN | Precision authority has not been accepted. |
-| P3 | OPEN | The three-step shell exists. Completion-aware workflow and gating are incomplete. |
-| P4 | OPEN | Basic wall drawing and a starter room exist. Exact input, joins, closure, and production editing remain. |
+| P1 | PASS | Guest identity, reload recovery, member-owner scoping, and entry-state matrix (unit + browser new/resume/malformed/two-UUID isolation) pass. |
+| P2 | PARTIAL | Wall centreline/thickness/start/end/joins contract defined (`wallContract.ts`). Remaining: fail-visibly on unsupported versions; preserve unknown safe data when schema permits. |
+| P3 | PARTIAL | Three-step shell, completion labels, forward warnings, AI overlay, Import/Sketch/Save/Export, selection→properties, and layout reset are wired. Canvas % floors and save-authority remain. |
+| P4 | IN PROGRESS | Connected chains, corner joining, room closure, and zero/duplicate guards pass unit proofs. Exact input, snaps, openings, dimensions, and editing remain. |
+| P5 | PARTIAL | TopBar Sketch-to-Plan + preview/accept/reject wired; sketch-to-plan is guest+CSRF; legacy `project-sketch` returns 410. Underlay calibrate and dual-path cleanup remain. |
+| P6 | PARTIAL | Placement/config live; Fabric AligningGuidelines on for furniture edge/center; wall/object distance guides, exact spacing, row-array remain thin. |
+| P7 | PARTIAL | One document drives 2D/3D. `POST /api/planner/generated-glb` returns 501 `not_configured` (no `site/public` write). Blob/object-storage path still needed. |
+| P8 | PARTIAL | Rotation-aware furniture overlap; ValidationPanel mounted in Review with focus. Outside-room and clearance rules remain. |
+| P9 | PARTIAL | Dual BOQ builders still exist; branded PDF library unwired in live workspace. |
+| P10 | FAIL | Handoff API returns honest 501 `not_configured` (no fake success). Delivery to Oando is not configured. |
+| P11 | PARTIAL | Export success toasts are honest; empty floors blocked; GLB explicitly unsupported. Scene GLB and Chromium download proof remain. |
+| P12 | PARTIAL | AI optional overlay; CSRF/rate-limit/degraded paths live; dead apply path no longer called from drawer. Browser failure journey open. |
+| P13 | PARTIAL | Autosave live; divergent contentHash now returns conflict (no silent overwrite); explicit keep-local/cloud choice API. Conflict UI and immutable revisions remain. |
+| P14 | PARTIAL | Arrow-key furniture nudge (Shift = 10 mm). Full keyboard commercial journey and axe proof remain. |
+| P15 | PARTIAL | Lazy 3D + honest 501 APIs. Layers panel unused by live host. OOPlannerWorkspace split and perf budgets remain. |
 
 Fresh evidence:
 
@@ -176,12 +185,12 @@ Fresh evidence:
 | PF-04 | Onboarding tests still expect `Start placing furniture`. | PASS |
 | PF-05 | Room outline geometry is deferred. | FAIL |
 | PF-06 | Persistent dimension annotations are deferred. | FAIL |
-| PF-07 | Sketch-to-Plan has no customer UI entry. | FAIL |
-| PF-08 | Sketch-to-Plan requires member auth and blocks guests. | FAIL |
+| PF-07 | Sketch-to-Plan has no customer UI entry. | PASS |
+| PF-08 | Sketch-to-Plan requires member auth and blocks guests. | PASS |
 | PF-09 | Planner GLB export does not exist. | FAIL |
 | PF-10 | Planner does not send a quote to Oando. | FAIL |
-| PF-11 | Live overlap validation is incomplete. | FAIL |
-| PF-12 | Step navigation is labelled but not completion-aware. | FAIL |
+| PF-11 | Live overlap validation is incomplete. | OPEN |
+| PF-12 | Step navigation is labelled but not completion-aware. | PASS |
 | PF-13 | Review and quote UI has no dedicated tests. | FAIL |
 | PF-14 | Many browser scripts use the removed onboarding label. | PASS |
 | PF-15 | The original localhost origin served stale Planner chunks. | PASS |
@@ -194,10 +203,11 @@ Fresh evidence:
 | PF-22 | Catalog comparison and family grouping are weak. | FAIL |
 | PF-23 | Generic furniture cannot complete the quote-cart path. | FAIL |
 | PF-24 | The handoff route is not called and does not deliver to Oando. | FAIL |
-| PF-25 | The handoff route lacks CSRF and idempotency. | FAIL |
+| PF-25 | The handoff route lacks CSRF and idempotency. | OPEN |
 | PF-26 | Branded customer-ready BOQ is not wired to the live workspace. | FAIL |
 | PF-27 | 2D and 3D object parity lacks full browser proof. | OPEN |
-| PF-28 | Runtime GLB generation can write under `site/public`. | FAIL |
+| PF-28 | Runtime GLB generation can write under `site/public`. | PASS |
+| PF-29 | Selection does not open properties. | PASS |
 
 ## Execution order
 
@@ -244,7 +254,7 @@ Exit gate:
 - [PASS] Scope member persistence by authenticated owner and plan ID.
 - [PASS] Prevent plan-ID enumeration from exposing another customer plan.
 - [PASS] Preserve guest-to-member claim without overwriting member work.
-- [ ] Test new, resume, migrate, missing, malformed, expired, and unauthorized states.
+- [PASS] Test new, resume, migrate, missing, malformed, expired, and unauthorized states.
 
 Exit gate:
 
@@ -262,7 +272,7 @@ Exit gate:
 - [PASS] Define insertion scaling for imported objects.
 - [PASS] Define a stable world origin and canvas transform.
 - [PASS] Define object coordinates, rotation, dimensions, elevation, and floor ownership.
-- [ ] Define wall centreline, thickness, start, end, and joins.
+- [PASS] Define wall centreline, thickness, start, end, and joins.
 - [PASS] Define opening host-wall and offset contracts.
 - [PASS] Define furniture catalog identity, variant, configuration, and transform.
 - [PASS] Version the Planner document schema.
@@ -278,32 +288,32 @@ Exit gate:
 
 ### P3. Workflow and shell
 
-- [ ] Keep exactly three visible customer steps.
-- [ ] Make `Draw room` the first active task.
-- [ ] Make `Place furniture` the second task.
-- [ ] Make `Review & quote` the third task.
-- [ ] Allow backward navigation without losing work.
-- [ ] Permit forward navigation with clear incomplete-state warnings.
-- [ ] Do not fake completion by disabling exploration.
-- [ ] Show completion state for each step.
+- [PASS] Keep exactly three visible customer steps.
+- [PASS] Make `Draw room` the first active task.
+- [PASS] Make `Place furniture` the second task.
+- [PASS] Make `Review & quote` the third task.
+- [PASS] Allow backward navigation without losing work.
+- [PASS] Permit forward navigation with clear incomplete-state warnings.
+- [PASS] Do not fake completion by disabling exploration.
+- [PASS] Show completion state for each step.
 - [ ] Show one authoritative save state.
 - [ ] Show offline, saving, saved, unsaved, and failed states distinctly.
 - [ ] Keep desktop command bar to one row.
-- [ ] Keep direct Import, Sketch-to-Plan, Save, and Export actions.
-- [ ] Keep AI as an optional action.
-- [ ] Remove the customer `Panels` menu.
-- [ ] Remove permanent docked Layers and AI.
+- [PASS] Keep direct Import, Sketch-to-Plan, Save, and Export actions.
+- [PASS] Keep AI as an optional action.
+- [PASS] Remove the customer `Panels` menu.
+- [PASS] Remove permanent docked Layers and AI.
 - [ ] Collapse empty properties.
-- [ ] Open properties from selection context.
-- [ ] Use Dockview only for useful desktop regions.
+- [PASS] Open properties from selection context.
+- [PASS] Use Dockview only for useful desktop regions.
 - [ ] Make the desktop canvas at least 65 percent of viewport area by default.
 - [ ] Build a deliberate mobile top bar.
 - [ ] Build a deliberate mobile bottom tool bar.
 - [ ] Use mutually exclusive mobile sheets for Inventory and Properties.
 - [ ] Keep the mobile canvas at least 60 percent of initial viewport height.
 - [ ] Support portrait and landscape.
-- [ ] Reset only layout state when requested.
-- [ ] Never reset project content through a layout reset.
+- [PASS] Reset only layout state when requested.
+- [PASS] Never reset project content through a layout reset.
 
 Exit gate:
 
@@ -313,10 +323,10 @@ Exit gate:
 
 - [ ] Implement room outline creation.
 - [ ] Support rectangle rooms by exact width and depth.
-- [ ] Support connected wall chains.
-- [ ] Support automatic corner joining.
-- [ ] Support clean room closure.
-- [ ] Prevent duplicate and zero-length walls.
+- [PASS] Support connected wall chains.
+- [PASS] Support automatic corner joining.
+- [PASS] Support clean room closure.
+- [PASS] Prevent duplicate and zero-length walls.
 - [ ] Support direct wall length input while drawing.
 - [ ] Support direct wall angle input while drawing.
 - [ ] Support wall thickness input.
@@ -349,10 +359,10 @@ Exit gate:
 
 ### P5. Import, underlay, and Sketch-to-Plan
 
-- [ ] Keep Planner JSON import separate.
+- [PASS] Keep Planner JSON import separate.
 - [ ] Accept only documented Planner JSON versions in `Import plan`.
-- [ ] Add a separate `Sketch to plan` action.
-- [ ] Support PNG and JPEG sketches.
+- [PASS] Add a separate `Sketch to plan` action.
+- [PASS] Support PNG and JPEG sketches.
 - [ ] Support SVG floor-plan input safely.
 - [ ] Support PDF floor-plan input or record a precise technical blocker.
 - [ ] Sanitize SVG before preview or conversion.
@@ -363,19 +373,19 @@ Exit gate:
 - [ ] Calibrate underlay scale using a known reference distance.
 - [ ] Preserve underlay scale across reload.
 - [ ] Allow manual tracing over the underlay.
-- [ ] Wire the existing Sketch-to-Plan client to the customer UI.
-- [ ] Reconcile the two existing sketch endpoints into one contract.
-- [ ] Permit the intended external customer role.
-- [ ] Require CSRF protection for conversion requests.
-- [ ] Apply guest-safe rate limits.
-- [ ] Keep provider keys server-side.
-- [ ] Show upload, processing, preview, success, fallback, and failure states.
+- [PASS] Wire the existing Sketch-to-Plan client to the customer UI.
+- [PASS] Reconcile the two existing sketch endpoints into one contract.
+- [PASS] Permit the intended external customer role.
+- [PASS] Require CSRF protection for conversion requests.
+- [PASS] Apply guest-safe rate limits.
+- [PASS] Keep provider keys server-side.
+- [PASS] Show upload, processing, preview, success, fallback, and failure states.
 - [ ] Return converted walls, openings, scale confidence, and warnings.
-- [ ] Preview conversion before changing the project.
-- [ ] Require explicit customer acceptance.
-- [ ] Apply accepted geometry as one undoable transaction.
+- [PASS] Preview conversion before changing the project.
+- [PASS] Require explicit customer acceptance.
+- [PASS] Apply accepted geometry as one undoable transaction.
 - [ ] Preserve the source underlay for comparison.
-- [ ] Never claim AI geometry is construction-authoritative.
+- [PASS] Never claim AI geometry is construction-authoritative.
 - [ ] Test provider absence, timeout, invalid output, CSRF failure, and retry.
 
 Exit gate:
@@ -417,14 +427,14 @@ Exit gate:
 
 ### P7. 2D and 3D parity
 
-- [ ] Define one source document for 2D and 3D.
+- [PASS] Define one source document for 2D and 3D.
 - [ ] Remove divergent 2D-only and 3D-only state.
 - [ ] Keep wall, opening, furniture, rotation, material, and floor parity.
 - [ ] Rebuild 3D deterministically from the Planner document.
 - [ ] Load approved generated GLB assets only.
 - [ ] Use procedural fallback geometry visibly when GLB is unavailable.
 - [ ] Never label a fallback as GLB-ready.
-- [ ] Remove production writes to `site/public`.
+- [PASS] Remove production writes to `site/public`.
 - [ ] Use browser blob URLs for ephemeral previews.
 - [ ] Use approved object storage for persistent generated GLB files.
 - [ ] Revoke stale blob URLs.
@@ -439,22 +449,22 @@ Exit gate:
 
 ### P8. Validation and review
 
-- [ ] Replace overlap stubs with rotation-aware geometry.
+- [PASS] Replace overlap stubs with rotation-aware geometry.
 - [ ] Detect furniture outside closed rooms.
 - [ ] Detect wall and furniture intersections.
 - [ ] Detect opening clearance conflicts.
-- [ ] Detect furniture-to-furniture overlap.
+- [PASS] Detect furniture-to-furniture overlap.
 - [ ] Detect unconfigured products.
 - [ ] Detect missing catalog identity.
 - [ ] Detect unavailable products.
 - [ ] Detect missing approved prices.
 - [ ] Detect unsupported geometry in exports.
-- [ ] Distinguish errors, warnings, and information.
-- [ ] Link every issue to the affected canvas object.
-- [ ] Focus or select the object from the issue list.
+- [PASS] Distinguish errors, warnings, and information.
+- [PASS] Link every issue to the affected canvas object.
+- [PASS] Focus or select the object from the issue list.
 - [ ] Revalidate after every relevant change.
-- [ ] Do not claim regulatory compliance without an approved rule authority.
-- [ ] Show furniture count, seats, validation state, and BOQ readiness.
+- [PASS] Do not claim regulatory compliance without an approved rule authority.
+- [PASS] Show furniture count, seats, validation state, and BOQ readiness.
 - [ ] Add dedicated tests for Review and Quote.
 
 Exit gate:
@@ -492,8 +502,8 @@ Exit gate:
 - [ ] Include project revision and BOQ checksum.
 - [ ] Require explicit customer confirmation.
 - [ ] Collect only required contact and project data.
-- [ ] Require CSRF protection.
-- [ ] Apply rate limiting.
+- [PASS] Require CSRF protection.
+- [PASS] Apply rate limiting.
 - [ ] Apply idempotency.
 - [ ] Prevent duplicate submissions after retry or reload.
 - [ ] Validate authorization for member-only data.
@@ -510,7 +520,7 @@ Exit gate:
 
 ### P11. Export and interoperability
 
-- [ ] Keep JSON import and export round-trip safe.
+- [PASS] Keep JSON import and export round-trip safe.
 - [ ] Verify SVG export dimensions and scale.
 - [ ] Verify PNG export dimensions and background.
 - [ ] Verify PDF vector quality, pages, branding, and scale notes.
@@ -518,10 +528,10 @@ Exit gate:
 - [ ] Implement Planner GLB export for the supported 3D scene.
 - [ ] Validate GLB structure before download.
 - [ ] Include only policy-approved generated assets.
-- [ ] Report unsupported objects before export.
-- [ ] Use accurate filenames and MIME types.
-- [ ] Surface asynchronous export failures.
-- [ ] Prevent empty or corrupt downloads.
+- [PASS] Report unsupported objects before export.
+- [PASS] Use accurate filenames and MIME types.
+- [PASS] Surface asynchronous export failures.
+- [PASS] Prevent empty or corrupt downloads.
 - [ ] Test downloads in Chromium from the real Planner UI.
 - [ ] Separate draft plan exports from customer-ready BOQ exports.
 
@@ -531,19 +541,19 @@ Exit gate:
 
 ### P12. AI assistant
 
-- [ ] Keep AI optional.
-- [ ] Keep AI outside the core dock layout.
+- [PASS] Keep AI optional.
+- [PASS] Keep AI outside the core dock layout.
 - [ ] Send only necessary plan context.
-- [ ] Keep provider keys server-side.
-- [ ] Verify live CSRF bootstrap.
-- [ ] Verify rate-limit behaviour.
+- [PASS] Keep provider keys server-side.
+- [PASS] Verify live CSRF bootstrap.
+- [PASS] Verify rate-limit behaviour.
 - [ ] Verify provider failover.
-- [ ] Verify no-provider fallback.
-- [ ] Label degraded responses.
+- [PASS] Verify no-provider fallback.
+- [PASS] Label degraded responses.
 - [ ] Validate every structured suggestion.
-- [ ] Preview geometry-changing suggestions.
-- [ ] Require explicit acceptance.
-- [ ] Apply accepted suggestions as one undoable transaction.
+- [PASS] Preview geometry-changing suggestions.
+- [PASS] Require explicit acceptance.
+- [PASS] Apply accepted suggestions as one undoable transaction.
 - [ ] Prevent AI from inventing catalog SKUs or prices.
 - [ ] Prevent AI from claiming compliance approval.
 - [ ] Keep chat usable with keyboard and assistive technology.
@@ -555,14 +565,14 @@ Exit gate:
 ### P13. Persistence, recovery, and versions
 
 - [ ] Use one authoritative autosave state machine.
-- [ ] Debounce saves without losing the final edit.
-- [ ] Flush safely on page lifecycle events where supported.
+- [PASS] Debounce saves without losing the final edit.
+- [PASS] Flush safely on page lifecycle events where supported.
 - [ ] Recover after tab crash or browser restart.
 - [ ] Detect and explain storage quota failures.
 - [ ] Handle IndexedDB denial or unavailability.
 - [ ] Handle offline member saves.
 - [ ] Resolve sync conflicts explicitly.
-- [ ] Never overwrite a newer remote revision silently.
+- [PASS] Never overwrite a newer remote revision silently.
 - [ ] Add immutable named revisions for member plans.
 - [ ] Pin catalog, validation, and price versions in commercial revisions.
 - [ ] Keep local guest revisions clearly labelled as local.
@@ -582,7 +592,7 @@ Exit gate:
 - [ ] Restore focus after menus, sheets, and dialogs close.
 - [ ] Give every icon control an accessible name.
 - [ ] Use correct button, menu, tab, dialog, and status semantics.
-- [ ] Announce save, import, conversion, validation, export, and handoff states.
+- [PASS] Announce save, import, conversion, validation, export, and handoff states.
 - [ ] Give every drag action a pointer and keyboard alternative.
 - [ ] Keep frequent mobile targets at 44 by 44 pixels where practical.
 - [ ] Support zoom without clipping critical controls.
@@ -599,11 +609,11 @@ Exit gate:
 ### P15. Performance and reliability
 
 - [ ] Split `OOPlannerWorkspace` by workflow responsibility.
-- [ ] Keep one source of document truth.
+- [PASS] Keep one source of document truth.
 - [ ] Remove dead Layers, docking, BOQ, catalog, and AI paths after migration.
 - [ ] Prevent unnecessary full-canvas rerenders.
 - [ ] Virtualize large inventories when measurement proves it necessary.
-- [ ] Lazy-load 3D, PDF, GLB, and AI code.
+- [PASS] Lazy-load 3D, PDF, GLB, and AI code.
 - [ ] Measure initial Planner JavaScript.
 - [ ] Measure interaction latency for draw, select, drag, and undo.
 - [ ] Measure a representative large office plan.

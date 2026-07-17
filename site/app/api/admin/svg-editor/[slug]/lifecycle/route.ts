@@ -13,7 +13,7 @@ import {
   setCatalogLifecycle,
 } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
 import { appendDescriptorAudit } from "@/features/admin/svg-editor/storage/descriptorAuditLog";
-import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { tryLoad } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
 
 function parseState(value: unknown): CatalogLifecycleState | null {

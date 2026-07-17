@@ -4,16 +4,16 @@ import { buildPlannerSceneNodes } from "@/features/planner/3d/buildPlannerSceneN
 import {
   defaultCabinetV0Options,
   generateCabinetV0Footprint,
-} from "@/features/planner/project/catalog/modularCabinetV0";
-import { resolveFurniture2DFootprint } from "@/features/planner/project/catalog/parametricBuilder";
+} from "@/features/planner/catalog/modularCabinetV0";
+import { resolveFurniture2DFootprint } from "@/features/planner/catalog/parametricBuilder";
 import {
   addFurniture,
   addWall,
   updateFurniture,
-} from "@/features/planner/project/model/operations/pureActions";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import type { PlannerProject } from "@/features/planner/project/model/types";
-import { degreesToRadians } from "@/features/planner/project/model/units";
+} from "@/features/planner/model/operations/pureActions";
+import { createPlannerProject } from "@/features/planner/model/project";
+import type { PlannerProject } from "@/features/planner/model/types";
+import { degreesToRadians } from "@/features/planner/model/units";
 
 function ids(...values: string[]) {
   let index = 0;

@@ -6,15 +6,15 @@ import type {
   PlannerPoint,
   PlannerWall,
   PlannerFloor,
-} from "@/features/planner/project/model/types";
-import { readThemeColor } from "@/features/planner/project/shared/readThemeColor";
-import { createPlannerHistory, type PlannerHistoryState } from "@/features/planner/project/store/history";
+} from "@/features/planner/model/types";
+import { readThemeColor } from "@/features/planner/shared/readThemeColor";
+import { createPlannerHistory, type PlannerHistoryState } from "@/features/planner/store/history";
 import {
   executePlannerCommand,
   type PlannerCommand,
-} from "@/features/planner/project/lib/commands/plannerCommand";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import type { PlannerProjectAction } from "@/features/planner/project/model/actions/projectActions";
+} from "@/features/planner/lib/commands/plannerCommand";
+import { createPlannerProject } from "@/features/planner/model/project";
+import type { PlannerProjectAction } from "@/features/planner/model/actions/projectActions";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
 
 export interface CanvasSelection {

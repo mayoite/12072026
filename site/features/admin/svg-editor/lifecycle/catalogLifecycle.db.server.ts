@@ -3,8 +3,8 @@ import "server-only";
 import { productsDb } from "@/platform/drizzle/productsDb";
 import { isProductsDatabaseConfigured } from "@/platform/drizzle/databaseUrls";
 import { blockDescriptors } from "@/platform/drizzle/schema/catalog";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
-import type { PlannerSvgCatalogDescriptor } from "@/features/planner/project/catalog/svg/descriptorCatalogBridge.server";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
+import type { PlannerSvgCatalogDescriptor } from "@/features/planner/catalog/svg/descriptorCatalogBridge.server";
 import { SvgBlockDefinitionV1Schema } from "@/features/admin/svg-editor/contracts/svgBlockSchemas";
 import {
   loadBuyerVisibleDescriptors,

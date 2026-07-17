@@ -7,7 +7,7 @@ import {
   drawSvgPlanSymbol,
   getSvgPlanImage,
   isPublishedSvgPlanUrl,
-} from "@/features/planner/project/catalog/svg/svgPlanSymbolCache";
+} from "@/features/planner/catalog/svg/svgPlanSymbolCache";
 
 type FakeImg = {
   decoding: string;

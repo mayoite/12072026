@@ -35,12 +35,12 @@ import {
   type BlockDescriptor,
   type PlannerDescriptorError,
   type PlannerResult,
-} from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/svg/svgTypes";
 import {
   BLOCK_DESCRIPTORS_DIR_DEFAULT,
   clearLoaderCache,
   loadAll as loaderLoadAll,
-} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+} from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 
 import { retainDescriptorArchive } from "./descriptorArchive";
 import {
@@ -54,7 +54,7 @@ import {
   resolveCurrentVersion,
   versionedDescriptorPath,
   writeLatestPointer,
-} from "@/features/planner/project/catalog/svg/descriptorPointer";
+} from "@/features/planner/catalog/svg/descriptorPointer";
 import { verifyDualRead, writeDualReadEvidence } from "./dualReadHarness";
 
 /** Reasons surfaced to the per-route `withAuth` envelope. */

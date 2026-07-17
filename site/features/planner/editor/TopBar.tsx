@@ -17,9 +17,9 @@ import {
   RadioGroup,
   Radio,
 } from "react-aria-components";
-import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
-import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
-import type { PlannerSaveStatus } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
+import type { PlannerAccessContext } from "@/features/planner/lib/commands/plannerAccessContext";
+import type { PlannerDisplayUnit } from "@/features/planner/model/types";
+import type { PlannerSaveStatus } from "@/features/planner/persistence/usePlannerWorkspaceAutosave";
 import type { PanelId } from "./useDockingSystem";
 import { PlannerMenuPopover } from "@/features/planner/ui/PlannerMenuPopover";
 import {
@@ -68,6 +68,8 @@ export interface TopBarProps {
   saveStorage?: PlannerPersistStorage;
   /** When false (default), cloud storage is forced to local labeling. */
   saveCloudEnabled?: boolean;
+  /** Browser network state. Local persistence remains available while offline. */
+  isOffline?: boolean;
   viewMode: "2d" | "3d";
   floors?: Array<{ id: string; name: string }>;
   activeFloorId?: string;
@@ -78,6 +80,8 @@ export interface TopBarProps {
   onSave?: () => void;
   onExport?: (format?: string) => void;
   onImport?: () => void;
+  /** Separate from Import plan — image/PDF sketch conversion. */
+  onSketchToPlan?: () => void;
   canUndo?: boolean;
   canRedo?: boolean;
   undoLabel?: string;
@@ -153,6 +157,7 @@ export function TopBar({
   saveStatus,
   saveStorage = "local",
   saveCloudEnabled = false,
+  isOffline = false,
   viewMode,
   floors = [],
   activeFloorId,
@@ -163,6 +168,7 @@ export function TopBar({
   onSave,
   onExport,
   onImport,
+  onSketchToPlan,
   canUndo = false,
   canRedo = false,
   undoLabel,
@@ -186,6 +192,8 @@ export function TopBar({
   chromePacks,
   onChromePlacement,
   onMoveChromePack,
+  onResetLayout,
+  onShowDockPanel,
   chromeMode = "full",
 }: TopBarProps) {
   const [isEditingName, setIsEditingName] = useState(false);
@@ -230,6 +238,7 @@ export function TopBar({
       lastSavedAt: null,
       cloudEnabled: saveCloudEnabled,
       guestMode,
+      isOffline,
     });
 
   const unitOptions: PlannerDisplayUnit[] = ["mm", "cm", "m", "in", "ft-in"];
@@ -540,6 +549,7 @@ export function TopBar({
           aria-atomic="true"
           data-testid="open3d-save-status"
           data-status={resolvedSaveStatus}
+          data-connection={isOffline ? "offline" : "online"}
           data-storage={effectiveStorage}
           data-modified={isModified || resolvedSaveStatus === "unsaved"}
           data-synced={
@@ -582,6 +592,34 @@ export function TopBar({
                 onPress={onImport}
               >
                 Import plan
+              </Button>
+            ) : null}
+            {onSketchToPlan ? (
+              <Button
+                className={styles.btn}
+                aria-label="Sketch to plan — convert an image sketch into editable walls"
+                data-testid="planner-sketch-to-plan"
+                onPress={onSketchToPlan}
+              >
+                Sketch to plan
+              </Button>
+            ) : null}
+            {onShowDockPanel ? (
+              <Button
+                className={styles.btn}
+                aria-label="Open properties panel"
+                onPress={() => onShowDockPanel("properties")}
+              >
+                Properties
+              </Button>
+            ) : null}
+            {onResetLayout ? (
+              <Button
+                className={styles.btn}
+                aria-label="Reset panel layout"
+                onPress={onResetLayout}
+              >
+                Reset layout
               </Button>
             ) : null}
             {showGuestActions && (

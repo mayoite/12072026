@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { LayersPanel } from "@/features/planner/editor/LayersPanel";
 import { DEFAULT_LAYER_VISIBILITY } from "@/features/planner/editor/layerVisibility";
-import { createPlannerProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/model/project";
 
 describe("LayersPanel", () => {
   it("lists layer categories for a floor", () => {

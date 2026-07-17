@@ -54,11 +54,11 @@ describe("CanvasToolRail RAC upgrade + a11y", () => {
     expect(within(rail).getByRole("radio", { name: openingName })).toBe(openingBtn);
   });
 
-  it("marks deferred Room tool in accessible name", () => {
+  it("marks Room as a live exact-input tool", () => {
     render(<CanvasToolRail activeTool="wall" onToolChange={vi.fn()} />);
     const roomName = toolAccessibleName("room");
-    expect(roomName).toMatch(/deferred/i);
-    expect(screen.getByRole("radio", { name: roomName })).toHaveAttribute("data-deferred", "true");
+    expect(roomName).toBe("Room (R)");
+    expect(screen.getByRole("radio", { name: roomName })).toHaveAttribute("data-tier", "live");
   });
 
   it("exposes Zoom to fit as RAC button without fake 0 key", () => {
@@ -132,19 +132,18 @@ describe("CanvasToolRail RAC upgrade + a11y", () => {
     }
   });
 
-  it("renders both deferred draw tools (room + dimension) on the rail", () => {
+  it("keeps only dimension deferred on the rail", () => {
     render(<CanvasToolRail activeTool="wall" onToolChange={vi.fn()} />);
-    for (const tool of ["room", "dimension"] as const) {
-      expect(CANVAS_TOOL_REQUIREMENT[tool]).toBe("deferred");
-      const btn = screen.getByRole("radio", { name: toolAccessibleName(tool) });
-      expect(btn).toHaveAttribute("data-deferred", "true");
-      expect(btn).toHaveAttribute("data-tier", "deferred");
-    }
+    expect(CANVAS_TOOL_REQUIREMENT.room).toBe("live");
+    expect(screen.getByTestId("canvas-tool-room")).not.toHaveAttribute("data-deferred");
+    const dimension = screen.getByRole("radio", { name: toolAccessibleName("dimension") });
+    expect(dimension).toHaveAttribute("data-deferred", "true");
+    expect(dimension).toHaveAttribute("data-tier", "deferred");
   });
 
   it("keeps live draw tools free of deferred attrs", () => {
     render(<CanvasToolRail activeTool="wall" onToolChange={vi.fn()} />);
-    for (const tool of ["wall", "opening", "placement"] as const) {
+    for (const tool of ["room", "wall", "opening", "placement"] as const) {
       const btn = screen.getByTestId(`canvas-tool-${tool}`);
       expect(btn).toHaveAttribute("data-tier", "live");
       expect(btn).not.toHaveAttribute("data-deferred");

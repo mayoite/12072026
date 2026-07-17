@@ -9,10 +9,10 @@
 import { useEffect, useRef } from "react";
 import { Canvas, Rect, type FabricObject, type ModifiedEvent } from "fabric";
 
-import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
-import type { CanvasTransform } from "@/features/planner/project/lib/geometry/snapping";
-import { resolvePaintColor } from "@/features/planner/project/shared/readThemeColor";
-import { PLANNER_COLOR_TOKENS } from "@/features/planner/project/shared/themeColorTokens";
+import type { PlannerFurnitureItem } from "@/features/planner/model/types";
+import type { CanvasTransform } from "@/features/planner/lib/geometry/snapping";
+import { resolvePaintColor } from "@/features/planner/shared/readThemeColor";
+import { PLANNER_COLOR_TOKENS } from "@/features/planner/shared/themeColorTokens";
 import {
   DEFAULT_FABRIC_STAGE_TRANSFORM,
   fabricPoseToDocumentUpdate,

@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { placeWorkstationInstancesOnProject } from "@/features/planner/project/catalog/placementAction";
+import { placeWorkstationInstancesOnProject } from "@/features/planner/catalog/placementAction";
 import {
   createWorkstationConfigV0,
-} from "@/features/planner/project/catalog/workstationSystemV0";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import type { PlannerFurnitureItem, PlannerProject } from "@/features/planner/project/model/types";
+} from "@/features/planner/catalog/workstationSystemV0";
+import { createPlannerProject } from "@/features/planner/model/project";
+import type { PlannerFurnitureItem, PlannerProject } from "@/features/planner/model/types";
 import {
   buildPlannerBoqFilename,
   buildPlannerFurnitureBoq,
@@ -13,7 +13,7 @@ import {
   exportPlannerFurnitureBoqToJson,
   PLANNER_FURNITURE_BOQ_KIND,
   PLANNER_FURNITURE_BOQ_PRICING_NOTE,
-} from "@/features/planner/project/shared/export/projectFurnitureBoq";
+} from "@/features/planner/shared/export/projectFurnitureBoq";
 
 function ids(...values: string[]) {
   let index = 0;

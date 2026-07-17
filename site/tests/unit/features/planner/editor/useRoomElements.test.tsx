@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useRoomElements } from "@/features/planner/editor/useRoomElements";
-import { createPlannerProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/model/project";
 
 describe("useRoomElements", () => {
   it("returns room element mode helpers", () => {

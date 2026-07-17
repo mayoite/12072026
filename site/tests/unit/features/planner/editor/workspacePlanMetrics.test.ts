@@ -3,8 +3,8 @@ import { summarizeFloorMetrics } from "@/features/planner/editor/workspacePlanMe
 import {
   createWorkstationConfigV0,
   workstationConfigKey,
-} from "@/features/planner/project/catalog/workstationSystemV0";
-import type { PlannerFloor } from "@/features/planner/project/model/types";
+} from "@/features/planner/catalog/workstationSystemV0";
+import type { PlannerFloor } from "@/features/planner/model/types";
 
 function emptyFloor(overrides: Partial<PlannerFloor> = {}): PlannerFloor {
   return {
@@ -77,6 +77,35 @@ describe("workspacePlanMetrics", () => {
     expect(m.furniture).toBe(0);
     expect(m.workstationSeats).toBe(0);
     expect(m.boqReady).toBe(false);
+    expect(m.closedRoom).toBe(false);
     expect(summarizeFloorMetrics(undefined).objects).toBe(0);
+  });
+
+  it("distinguishes a closed room from disconnected wall counts", () => {
+    const wall = (id: string, start: { x: number; y: number }, end: { x: number; y: number }) => ({
+      id,
+      start,
+      end,
+      height: 2700,
+      thickness: 150,
+    });
+    const closed = summarizeFloorMetrics(emptyFloor({
+      walls: [
+        wall("a", { x: 0, y: 0 }, { x: 4000, y: 0 }),
+        wall("b", { x: 4000, y: 0 }, { x: 4000, y: 3000 }),
+        wall("c", { x: 4000, y: 3000 }, { x: 0, y: 3000 }),
+        wall("d", { x: 0, y: 3000 }, { x: 0, y: 0 }),
+      ],
+    }));
+    const disconnected = summarizeFloorMetrics(emptyFloor({
+      walls: [
+        wall("a", { x: 0, y: 0 }, { x: 1000, y: 0 }),
+        wall("b", { x: 2000, y: 0 }, { x: 3000, y: 0 }),
+        wall("c", { x: 4000, y: 0 }, { x: 5000, y: 0 }),
+        wall("d", { x: 6000, y: 0 }, { x: 7000, y: 0 }),
+      ],
+    }));
+    expect(closed.closedRoom).toBe(true);
+    expect(disconnected.closedRoom).toBe(false);
   });
 });

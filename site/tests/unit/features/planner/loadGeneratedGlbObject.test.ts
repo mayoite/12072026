@@ -7,7 +7,7 @@ import {
   resolveGeneratedGlbFetchUrl,
   type GltfUrlLoader,
 } from "@/features/planner/3d/loadGeneratedGlbObject";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+import type { PlannerProject } from "@/features/planner/model/types";
 import type { PlannerSceneNode } from "@/features/planner/3d/buildPlannerSceneNodes";
 
 const TEST_ORIGIN = "https://viewer.test.example";

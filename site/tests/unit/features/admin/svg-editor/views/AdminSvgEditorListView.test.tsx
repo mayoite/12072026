@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { AdminSvgEditorListView } from "@/features/admin/svg-editor/views/AdminSvgEditorListView";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 vi.mock("next/link", () => ({
   default: ({

@@ -5,8 +5,8 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { parsePlannerProject } from "@/features/planner/project/shared/document/projectParser";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+import { parsePlannerProject } from "@/features/planner/shared/document/projectParser";
+import type { PlannerProject } from "@/features/planner/model/types";
 
 function baseProject(): PlannerProject {
   return {

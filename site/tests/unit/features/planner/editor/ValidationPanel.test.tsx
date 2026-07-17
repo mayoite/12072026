@@ -10,9 +10,11 @@ describe("ValidationPanel", () => {
           issues: [
             {
               id: "1",
+              ruleId: "furniture-overlap",
               severity: "error",
+              objectIds: ["desk-1"],
               message: "Wall too short",
-              code: "wall-short",
+              remedy: "Lengthen the wall",
             },
           ],
           errors: 1,

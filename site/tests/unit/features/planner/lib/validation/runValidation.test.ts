@@ -3,8 +3,8 @@ import {
   runFloorValidation,
   countBySeverity,
 } from "@/features/planner/lib/validation/runValidation";
-import type { PlannerFloor, PlannerFurnitureItem } from "@/features/planner/project/model/types";
-import { createRectangularRoomProject } from "@/features/planner/project/model/project";
+import type { PlannerFloor, PlannerFurnitureItem } from "@/features/planner/model/types";
+import { createRectangularRoomProject } from "@/features/planner/model/project";
 
 function floorWithFurniture(items: PlannerFurnitureItem[]): PlannerFloor {
   const project = createRectangularRoomProject({ name: "test", widthMm: 5000, depthMm: 4000 });

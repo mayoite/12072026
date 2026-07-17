@@ -5,7 +5,7 @@ import {
   INVENTORY_CATEGORIES,
   INVENTORY_ROOM_GROUPS,
   type InventoryIconName,
-} from "@/features/planner/project/catalog/inventory/inventoryTaxonomy";
+} from "@/features/planner/catalog/inventory/inventoryTaxonomy";
 import { InventoryIcon } from "@/features/planner/editor/inventoryIcons";
 
 /**

@@ -14,7 +14,7 @@ import { revalidatePath } from "next/cache";
 import {
   tryLoad,
   type BlockDescriptor,
-} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+} from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import { formStateToDescriptorInput } from "@/features/admin/svg-editor/form/svgEditorFormAdapters";
 import type { SvgEditorFormState } from "@/features/admin/svg-editor/form/svgEditorFormState";
 import {

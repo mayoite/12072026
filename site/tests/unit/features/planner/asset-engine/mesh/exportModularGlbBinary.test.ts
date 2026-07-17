@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { exportModularCabinetV0GlbBinary } from "@/features/planner/asset-engine/mesh/exportModularGlbBinary";
-import { defaultCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
+import { defaultCabinetV0Options } from "@/features/planner/catalog/modularCabinetV0";
 
 describe("exportModularGlbBinary", () => {
   it("exports binary GLB under catalog-assets/generated/", async () => {

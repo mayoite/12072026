@@ -2,11 +2,11 @@ import { describe, it, expect, vi } from "vitest";
 import {
   createMemberPlanRepository,
   type FetchFn,
-} from "@/features/planner/project/persistence/memberPlanRepository";
+} from "@/features/planner/persistence/memberPlanRepository";
 import {
   isStagingPlannerDocument,
   type StagingPlannerDocument,
-} from "@/features/planner/project/persistence/plannerDocumentTypes";
+} from "@/features/planner/persistence/plannerDocumentTypes";
 
 // â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 

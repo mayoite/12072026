@@ -6,8 +6,8 @@ import {
   selectionAfterBatchPlace,
   applySelectionDelete,
 } from "@/features/planner/editor/workspaceEntityHelpers";
-import { createRectangularRoomProject } from "@/features/planner/project/model/project";
-import { addPlannerFurniture } from "@/features/planner/project/model/actions/furniture";
+import { createRectangularRoomProject } from "@/features/planner/model/project";
+import { addPlannerFurniture } from "@/features/planner/model/actions/furniture";
 
 function ids(...values: string[]) {
   let i = 0;

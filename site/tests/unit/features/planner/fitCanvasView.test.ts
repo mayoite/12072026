@@ -4,9 +4,9 @@ import {
   CANVAS_DEFAULT_SCALE,
   fitCanvasTransformToFloor,
   nativeCanvasScaleLimits,
-} from "@/features/planner/project/lib/geometry/fitCanvasView";
-import { projectToScreen } from "@/features/planner/project/lib/geometry/snapping";
-import { createPlannerProject } from "@/features/planner/project/model/project";
+} from "@/features/planner/lib/geometry/fitCanvasView";
+import { projectToScreen } from "@/features/planner/lib/geometry/snapping";
+import { createPlannerProject } from "@/features/planner/model/project";
 
 describe("fitCanvasView", () => {
   it("exposes scale limits aligned with planner viewport config", () => {

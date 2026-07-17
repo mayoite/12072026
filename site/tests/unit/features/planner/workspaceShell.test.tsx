@@ -20,14 +20,14 @@ import {
 import { useDoorWindowPlacement } from "@/features/planner/editor/useDoorWindowPlacement";
 import { toolFromShortcutKey } from "@/features/planner/editor/useWorkspaceKeyboard";
 import { runtimeToolFor } from "@/features/planner/editor/canvasTool";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import type { PlannerWall } from "@/features/planner/project/model/types";
+import { createPlannerProject } from "@/features/planner/model/project";
+import type { PlannerWall } from "@/features/planner/model/types";
 
 // TDD mocks for OOPlannerWorkspace render coverage (minimal to isolate; hoisted by vitest)
 vi.mock("@/features/planner/editor/CanvasToolRail", () => ({ CanvasToolRail: () => <div data-testid="tool-rail" /> }));
 vi.mock("@/features/planner/editor/CommandPalette", () => ({ CommandPalette: () => <div data-testid="cmd-palette" /> }));
 vi.mock("@/features/planner/editor/LayersPanel", () => ({ LayersPanel: () => <div data-testid="layers" /> }));
-vi.mock("@/features/planner/project/canvas-stage", () => ({
+vi.mock("@/features/planner/canvas", () => ({
   PlannerCanvasStage: ({
     children,
   }: {
@@ -76,11 +76,11 @@ const { mockCatalogHook } = vi.hoisted(() => ({
     retry: vi.fn(),
   }),
 }));
-vi.mock("@/features/planner/project/catalog/usePlannerWorkspaceCatalog", () => ({
+vi.mock("@/features/planner/catalog/usePlannerWorkspaceCatalog", () => ({
   usePlannerWorkspaceCatalog: mockCatalogHook,
   usePlannerSvgCatalog: mockCatalogHook,
 }));
-vi.mock("@/features/planner/project/persistence/usePlannerWorkspaceAutosave", () => ({
+vi.mock("@/features/planner/persistence/usePlannerWorkspaceAutosave", () => ({
   usePlannerWorkspaceAutosave: () => ({ status: "idle", isModified: false, isSynced: true, schedulePersist: vi.fn(), restoreSnapshot: async () => null }),
 }));
 

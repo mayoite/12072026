@@ -3,8 +3,8 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createElement, type PropsWithChildren } from "react";
 
-import { usePlannerWorkspaceCatalog, usePlannerSvgCatalog } from "@/features/planner/project/catalog/usePlannerWorkspaceCatalog";
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import { usePlannerWorkspaceCatalog, usePlannerSvgCatalog } from "@/features/planner/catalog/usePlannerWorkspaceCatalog";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
 
 function renderCatalogHook() {
   const client = new QueryClient({

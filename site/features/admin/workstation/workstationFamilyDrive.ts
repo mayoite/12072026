@@ -8,12 +8,12 @@ import {
   type WorkstationConfigV0,
   type WorkstationFootprintMm,
   type WorkstationModuleKindV0,
-} from "@/features/planner/project/catalog/workstationSystemV0";
-import { workstationV0UnitPriceInr } from "@/features/planner/project/catalog/workstationBoqV0";
+} from "@/features/planner/catalog/workstationSystemV0";
+import { workstationV0UnitPriceInr } from "@/features/planner/catalog/workstationBoqV0";
 import {
   generateWorkstationV0MeshPlan,
   type WorkstationV0MeshPlan,
-} from "@/features/planner/project/catalog/workstationMeshV0";
+} from "@/features/planner/catalog/workstationMeshV0";
 
 import type {
   WorkstationFamilyContract,

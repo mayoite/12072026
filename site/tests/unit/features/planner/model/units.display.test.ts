@@ -8,7 +8,7 @@ import {
   formatQuantityDisplay,
   PLANNER_PRECISION,
   parseLengthInput,
-} from "@/features/planner/project/model/units";
+} from "@/features/planner/model/units";
 
 describe("display unit conversion (canonical mm)", () => {
   it("formats mm / m / ft-in for labels", () => {

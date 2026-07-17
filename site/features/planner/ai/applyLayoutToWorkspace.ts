@@ -1,11 +1,11 @@
 import { canvasUnitsToMillimeters } from "@/features/planner/lib/canvasBounds";
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
-import { placeCatalogItemInProject } from "@/features/planner/project/catalog/placementAction";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
+import { placeCatalogItemInProject } from "@/features/planner/catalog/placementAction";
 import {
   addRectangularRoom,
   addWall,
-} from "@/features/planner/project/model/operations/pureActions";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+} from "@/features/planner/model/operations/pureActions";
+import type { PlannerProject } from "@/features/planner/model/types";
 
 import { validateLayoutSchema } from "./aiStatus";
 import type { SuggestedLayoutJson } from "./types";

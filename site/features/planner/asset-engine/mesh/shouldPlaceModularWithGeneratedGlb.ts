@@ -6,7 +6,7 @@
  * Other items (including future modular geometry modes) stay procedural place.
  */
 
-import { MODULAR_CABINET_V0_CATALOG_ID } from "@/features/planner/project/catalog/placementAction";
+import { MODULAR_CABINET_V0_CATALOG_ID } from "@/features/planner/catalog/placementAction";
 
 export type ModularGlbPlaceCatalogRef = {
   readonly id: string;

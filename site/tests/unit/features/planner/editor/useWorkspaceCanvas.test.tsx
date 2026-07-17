@@ -4,7 +4,7 @@ import {
   useWorkspaceCanvas,
   useCanvasDrawing,
 } from "@/features/planner/editor/useWorkspaceCanvas";
-import type { PlannerWall } from "@/features/planner/project/model/types";
+import type { PlannerWall } from "@/features/planner/model/types";
 
 afterEach(() => cleanup());
 

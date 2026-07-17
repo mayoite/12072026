@@ -7,7 +7,7 @@ import {
   hasCoreProductFieldErrors,
   validateCoreProductFields,
 } from "@/features/admin/svg-editor/form/validateCoreProductFields";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 /** Read-only load — never writes catalog files. */
 function loadSideTableForm() {

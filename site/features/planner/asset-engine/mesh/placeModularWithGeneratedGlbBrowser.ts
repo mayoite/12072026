@@ -12,12 +12,12 @@ import {
   placeModularWithGeneratedGlbCore,
   type PlaceModularWithGeneratedGlbCoreResult,
 } from "@/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbCore";
-import type { PlacementOptions } from "@/features/planner/project/catalog/placementAction";
+import type { PlacementOptions } from "@/features/planner/catalog/placementAction";
 import type {
   PlannerCatalogItem,
   PlannerCatalogVariant,
-} from "@/features/planner/project/catalog/catalogTypes";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+} from "@/features/planner/catalog/catalogTypes";
+import type { PlannerProject } from "@/features/planner/model/types";
 
 export const GENERATED_GLB_WRITE_API_PATH = "/api/planner/generated-glb";
 
@@ -109,7 +109,7 @@ export async function placeModularWithGeneratedGlbBrowser(
   position: { x: number; y: number },
   options?: PlaceModularWithGeneratedGlbBrowserOptions,
 ): Promise<PlaceModularWithGeneratedGlbBrowserResult> {
-  const writeToPublic = options?.writeToPublic !== false;
+  const writeToPublic = options?.writeToPublic === true;
   return placeModularWithGeneratedGlbCore(project, item, position, {
     variant: options?.variant,
     placedFrom: options?.placedFrom ?? "click",

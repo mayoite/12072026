@@ -9,8 +9,8 @@ import type { NextRequest } from "next/server";
 
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 import { success } from "@/features/shared/api/apiResponse";
-import { mapDescriptorsToCatalogItems } from "@/features/planner/project/catalog/svg/descriptorCatalogBridge.server";
-import { filterBuyerFacingCatalogItems } from "@/features/planner/project/catalog/catalogBuyerVisibility";
+import { mapDescriptorsToCatalogItems } from "@/features/planner/catalog/svg/descriptorCatalogBridge.server";
+import { filterBuyerFacingCatalogItems } from "@/features/planner/catalog/catalogBuyerVisibility";
 import { loadBuyerVisibleDescriptorsWithDb } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server";
 import { readSvgArtifactStatus } from "@/features/admin/svg-editor/publish/svgArtifactStatus.server";
 

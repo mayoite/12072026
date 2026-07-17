@@ -17,7 +17,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { PencilSimple as Pencil, Plus } from "@phosphor-icons/react";
 
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import { apiPath, browserApiFetch } from "@/lib/api/browserApi";
 import type { CatalogLifecycleManifest, CatalogLifecycleState } from "../lifecycle/catalogLifecycle.shared";
 import { resolveCatalogLifecycle } from "../lifecycle/catalogLifecycle.shared";

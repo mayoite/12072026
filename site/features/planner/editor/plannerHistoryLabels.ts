@@ -1,5 +1,5 @@
-import type { PlannerHistoryState } from "@/features/planner/project/store/history";
-import type { PlannerFloor, PlannerProject } from "@/features/planner/project/model/types";
+import type { PlannerHistoryState } from "@/features/planner/store/history";
+import type { PlannerFloor, PlannerProject } from "@/features/planner/model/types";
 
 const ENTITY_LABELS: Record<string, string> = {
   furniture: "furniture",

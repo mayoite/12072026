@@ -5,16 +5,16 @@ import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { StrictMode, type ReactNode } from "react";
 
-import { usePlannerWorkspaceAutosave } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
-import { createPlannerProject } from "@/features/planner/project/model/project";
+import { usePlannerWorkspaceAutosave } from "@/features/planner/persistence/usePlannerWorkspaceAutosave";
+import { createPlannerProject } from "@/features/planner/model/project";
 import {
   createAutoSaver,
   getPlannerProjectId,
   loadProject,
   migrateGuestProjectToMember,
 } from "@/features/planner/persistence/persistence";
-import { buildPlannerSessionEnvelope } from "@/features/planner/project/persistence/plannerSession";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+import { buildPlannerSessionEnvelope } from "@/features/planner/persistence/open3dSession";
+import type { PlannerProject } from "@/features/planner/model/types";
 
 const scheduleSave = vi.fn();
 const flush = vi.fn(() => Promise.resolve());

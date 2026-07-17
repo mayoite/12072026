@@ -5,7 +5,7 @@ import {
   scenePartsToBlocks,
 } from "@/features/admin/svg-editor/form/svgEditorFormAdapters";
 import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/newBlockDescriptorStub";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import type { SvgBlockDefinitionV1 } from "@/features/admin/svg-editor/contracts/svgBlockSchemas";
 
 describe("svgEditorFormAdapters", () => {

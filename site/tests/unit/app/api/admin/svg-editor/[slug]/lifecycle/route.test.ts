@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 import { setCatalogLifecycle } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
 import { appendDescriptorAudit } from "@/features/admin/svg-editor/storage/descriptorAuditLog";
-import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { tryLoad } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 
 const { revalidatePath } = vi.hoisted(() => ({ revalidatePath: vi.fn() }));
 
@@ -46,7 +46,7 @@ vi.mock("@/features/admin/svg-editor/storage/descriptorAuditLog", () => ({
   appendDescriptorAudit: vi.fn(),
 }));
 
-vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", () => ({
+vi.mock("@/features/planner/catalog/svg/svgBlockDescriptorLoader", () => ({
   tryLoad: vi.fn(),
 }));
 

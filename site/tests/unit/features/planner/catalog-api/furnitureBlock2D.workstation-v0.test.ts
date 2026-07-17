@@ -5,14 +5,14 @@ import { describe, expect, it } from "vitest";
 import {
   furnitureBlock2DFromItem,
   workstationBlock2DFromItem,
-} from "@/features/planner/project/catalog/furnitureBlock2D";
+} from "@/features/planner/catalog/furnitureBlock2D";
 import {
   createWorkstationConfigV0,
   workstationConfigKey,
   workstationFootprintMm,
   workstationPlanPrims,
-} from "@/features/planner/project/catalog/workstationSystemV0";
-import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
+} from "@/features/planner/catalog/workstationSystemV0";
+import type { PlannerFurnitureItem } from "@/features/planner/model/types";
 
 function wsItem(
   partial?: Partial<PlannerFurnitureItem>,

@@ -24,8 +24,8 @@ import { PLANNER_IDENTITY_CONFIGS } from "@/features/planner/model/plannerIdenti
 import {
   GUEST_BLOCKED_COMMAND_KEYS,
   isCommandBlockedForContext,
-} from "@/features/planner/project/lib/commands/plannerAccessContext";
-import { toPlannerDescriptorErrorHttp } from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/lib/commands/plannerAccessContext";
+import { toPlannerDescriptorErrorHttp } from "@/features/planner/catalog/svg/svgTypes";
 
 const PLANNER_IDS = Object.keys(PLANNER_IDENTITY_CONFIGS) as Array<
   keyof typeof PLANNER_IDENTITY_CONFIGS

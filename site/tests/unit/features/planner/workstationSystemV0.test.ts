@@ -8,7 +8,7 @@ import {
   workstationConfigKey,
   workstationFootprintMm,
   workstationPlanPrims,
-} from "@/features/planner/project/catalog/workstationSystemV0";
+} from "@/features/planner/catalog/workstationSystemV0";
 
 describe("workstationSystemV0", () => {
   it("exposes the product size grid (900×600, 900×750, 1200×600, 1500×600)", () => {

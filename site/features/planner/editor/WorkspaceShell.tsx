@@ -6,9 +6,9 @@ import { PanelContainer } from "./PanelContainer";
 import { DockDropZones } from "./DockDropZones";
 import { TopBar } from "./TopBar";
 import { WorkspaceChromeProvider } from "./workspaceChromeContext";
-import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
-import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
-import type { PlannerSaveStatus } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
+import type { PlannerAccessContext } from "@/features/planner/lib/commands/plannerAccessContext";
+import type { PlannerDisplayUnit } from "@/features/planner/model/types";
+import type { PlannerSaveStatus } from "@/features/planner/persistence/usePlannerWorkspaceAutosave";
 import type { PlannerPersistStorage } from "./workspaceStatusLabels";
 import type { WorkspacePlanMetrics } from "./workspacePlanMetrics";
 import styles from "./workspace.module.css";
@@ -46,6 +46,7 @@ export interface WorkspaceShellProps {
   storage?: PlannerPersistStorage;
   /** When false, UI must not imply account/cloud save. Pass-through only. */
   cloudEnabled?: boolean;
+  isOffline?: boolean;
   /** Left panel content */
   leftPanel?: React.ReactNode;
   /** Right panel content */
@@ -66,6 +67,7 @@ export interface WorkspaceShellProps {
   onExport?: (format?: string) => void;
   /** Called when import is triggered */
   onImport?: () => void;
+  onSketchToPlan?: () => void;
   /** Undo/redo controls for top bar */
   canUndo?: boolean;
   canRedo?: boolean;
@@ -109,6 +111,7 @@ export function WorkspaceShell({
   saveStatusLabel,
   storage,
   cloudEnabled,
+  isOffline,
   leftPanel,
   rightPanel,
   bottomPanel,
@@ -119,6 +122,7 @@ export function WorkspaceShell({
   onSave,
   onExport,
   onImport,
+  onSketchToPlan,
   canUndo,
   canRedo,
   undoLabel,
@@ -308,6 +312,7 @@ export function WorkspaceShell({
     ...(saveStatusLabel !== undefined ? { saveStatusLabel } : {}),
     ...(storage !== undefined ? { saveStorage: storage } : {}),
     ...(cloudEnabled !== undefined ? { saveCloudEnabled: cloudEnabled } : {}),
+    ...(isOffline !== undefined ? { isOffline } : {}),
   };
 
   const bottomPanelOpen =
@@ -344,6 +349,7 @@ export function WorkspaceShell({
         onSave={onSave}
         onExport={onExport}
         onImport={onImport}
+        onSketchToPlan={onSketchToPlan}
         canUndo={canUndo}
         canRedo={canRedo}
         undoLabel={undoLabel}

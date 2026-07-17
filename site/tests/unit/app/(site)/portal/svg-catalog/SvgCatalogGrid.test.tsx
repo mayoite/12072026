@@ -11,7 +11,7 @@ import {
   type SvgCatalogCard,
 } from "@/app/(site)/portal/svg-catalog/SvgCatalogGrid";
 
-vi.mock("@/features/planner/project/catalog/svg/svgPreviewAssets", () => ({
+vi.mock("@/features/planner/catalog/svg/svgPreviewAssets", () => ({
   buildBlockThumbSrcSet: (slug: string) =>
     `https://cdn/${slug}@1x.png 1x, https://cdn/${slug}@2x.png 2x`,
 }));

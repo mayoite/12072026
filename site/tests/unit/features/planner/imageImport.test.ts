@@ -5,7 +5,7 @@ import {
   loadImageFile,
   createBackgroundImage,
   importImageAsBackground,
-} from "@/features/planner/project/lib/imageImport";
+} from "@/features/planner/lib/imageImport";
 
 describe("imageImport", () => {
   describe("validateImageFile", () => {

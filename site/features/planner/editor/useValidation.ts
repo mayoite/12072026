@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import type { PlannerFloor } from "@/features/planner/project/model/types";
+import type { PlannerFloor } from "@/features/planner/model/types";
 import {
   runFloorValidation,
   type ValidationResult,

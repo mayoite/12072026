@@ -46,6 +46,14 @@ vi.mock("fabric", () => ({
   FabricObject: class {},
 }));
 
+vi.mock("fabric/extensions", () => ({
+  AligningGuidelines: vi.fn(function MockAligningGuidelines(this: {
+    dispose: ReturnType<typeof vi.fn>;
+  }) {
+    this.dispose = vi.fn();
+  }),
+}));
+
 describe("PlannerFabricStage", () => {
   afterEach(() => {
     cleanup();

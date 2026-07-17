@@ -46,7 +46,7 @@ import {
   type BlockDescriptorConfigurable,
   type BlockDescriptorParametric,
   type BlockDescriptorVariant,
-} from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/svg/svgTypes";
 
 
 // ── Puck field descriptor (typed mirror of @puckeditor/core Field) ──────────

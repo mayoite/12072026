@@ -19,7 +19,7 @@ import {
   SVG_THEMES,
   CATEGORY_SHAPE_COLORS,
   type SvgThemeName,
-} from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/svg/svgTypes";
 
 describe("03A-SVG: Types & Themes", () => {
   it("all themes bind semantic CSS tokens with usable stroke and opacity", () => {
@@ -72,10 +72,10 @@ import {
   getSvgSymbolDimensionAgreement,
   resolveSymbolGenerator,
   registerSymbolGenerator,
-} from "@/features/planner/project/catalog/svg/svgSymbols";
-import type { PlannerCatalogDimensions } from "@/features/planner/project/catalog/catalogTypes";
-import { sanitizeSvg, isSvgSafe } from "@/features/planner/project/catalog/svg/svgSanitizer";
-import { generateFallbackSvg } from "@/features/planner/project/catalog/svg/svgFallback";
+} from "@/features/planner/catalog/svg/svgSymbols";
+import type { PlannerCatalogDimensions } from "@/features/planner/catalog/catalogTypes";
+import { sanitizeSvg, isSvgSafe } from "@/features/planner/catalog/svg/svgSanitizer";
+import { generateFallbackSvg } from "@/features/planner/catalog/svg/svgFallback";
 
 describe("03A-SVG: Symbol Generation", () => {
   const dims: PlannerCatalogDimensions = { widthMm: 1200, depthMm: 600, heightMm: 750 };
@@ -502,7 +502,7 @@ import {
   INVENTORY_STYLE_GROUPS,
   INVENTORY_SORT_OPTIONS,
   INVENTORY_DENSITY_OPTIONS,
-} from "@/features/planner/project/catalog/inventory/inventoryTaxonomy";
+} from "@/features/planner/catalog/inventory/inventoryTaxonomy";
 
 describe("03A-INV: Taxonomy", () => {
   it("has all 6 category groups", () => {
@@ -543,8 +543,8 @@ describe("03A-INV: Taxonomy", () => {
 // Inventory Search Index
 // ────────────────────────────────────────────────────────────────
 
-import { InventorySearchIndex } from "@/features/planner/project/catalog/inventory/inventoryIndex";
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import { InventorySearchIndex } from "@/features/planner/catalog/inventory/inventoryIndex";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
 
 describe("03A-INV: Search Index", () => {
   function makeItem(
@@ -907,7 +907,7 @@ import {
   upsertInventoryCollection,
   addInventoryItemToCollection,
   removeInventoryItemFromCollection,
-} from "@/features/planner/project/catalog/inventory/inventoryState";
+} from "@/features/planner/catalog/inventory/inventoryState";
 
 describe("03A-INV: State Contracts", () => {
   describe("defaultInventoryPanelState", () => {

@@ -10,7 +10,7 @@ import {
 
 export const CANVAS_ENTITY_TYPE_PROP = "plannerEntityType" as const;
 
-export type FabricCanvasEntityType = "wall" | "furniture";
+export type FabricCanvasEntityType = "wall" | "door" | "window" | "furniture";
 
 export type FabricEntitySelection = {
   type: FabricCanvasEntityType;
@@ -40,13 +40,18 @@ export function readCanvasEntityType(
   target: EntityTypeCarrier | null | undefined,
 ): FabricCanvasEntityType | null {
   const value = target?.get?.(CANVAS_ENTITY_TYPE_PROP);
-  return value === "wall" || value === "furniture" ? value : null;
+  return value === "wall" ||
+    value === "door" ||
+    value === "window" ||
+    value === "furniture"
+    ? value
+    : null;
 }
 
 /**
  * Map a Fabric active object to a document selection payload.
  * Walks parent Group when a sub-prim is hit (Block2D groups store id on the root).
- * Returns null for empty canvas, missing metadata, or non-furniture/wall types.
+ * Returns null for empty canvas, missing metadata, or unsupported types.
  */
 export function selectionFromFabricTarget(
   target: ParentableCarrier | null | undefined,

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
-import { mapDescriptorsToCatalogItems } from "@/features/planner/project/catalog/svg/descriptorCatalogBridge.server";
+import { mapDescriptorsToCatalogItems } from "@/features/planner/catalog/svg/descriptorCatalogBridge.server";
 import { loadBuyerVisibleDescriptorsWithDb } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server";
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 import { readSvgArtifactStatus } from "@/features/admin/svg-editor/publish/svgArtifactStatus.server";
@@ -10,7 +10,7 @@ vi.mock("@/app/api/_lib/public", () => ({
 }));
 
 vi.mock(
-  "@/features/planner/project/catalog/svg/descriptorCatalogBridge.server",
+  "@/features/planner/catalog/svg/descriptorCatalogBridge.server",
   () => ({
     mapDescriptorsToCatalogItems: vi.fn(),
   }),

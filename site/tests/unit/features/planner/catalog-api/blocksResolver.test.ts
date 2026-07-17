@@ -39,7 +39,7 @@ import {
   BLOCK_DESCRIPTOR_SCHEMA_VERSION,
   freezeFreshDescriptor,
   type BlockDescriptor,
-} from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/svg/svgTypes";
 import {
   assertResolvedNonEmpty,
   BlockResolverError,
@@ -48,7 +48,7 @@ import {
   type BlockResolverErrorKind,
   type ResolvedBlock,
   type ResolvedBlocks,
-} from "@/features/planner/project/catalog/svg/blocksResolver";
+} from "@/features/planner/catalog/svg/blocksResolver";
 
 // ── Fixture builders (mirror the Phase 02 blockDescriptor.test.ts style) ─────
 

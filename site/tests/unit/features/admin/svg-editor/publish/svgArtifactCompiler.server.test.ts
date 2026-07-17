@@ -13,7 +13,7 @@ vi.mock("@resvg/resvg-js", () => ({
   },
 }));
 
-vi.mock("@/features/planner/project/catalog/svg/svgCompiler.server", () => ({
+vi.mock("@/features/planner/catalog/svg/svgCompiler.server", () => ({
   compileSvgBlockV1: vi.fn(() => ({
     svg: '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"></svg>',
     checksum: "abc",
@@ -21,7 +21,7 @@ vi.mock("@/features/planner/project/catalog/svg/svgCompiler.server", () => ({
   })),
 }));
 
-vi.mock("@/features/planner/project/catalog/svg/svgPreviewAssets", () => ({
+vi.mock("@/features/planner/catalog/svg/svgPreviewAssets", () => ({
   SVG_RASTER_MASTER_WIDTH: 10,
   SVG_THUMBNAIL_WIDTHS: [10],
 }));

@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import { addPlannerWall } from "@/features/planner/project/model/actions/walls";
-import { addFurniture } from "@/features/planner/project/model/operations/pureActions";
+import { createPlannerProject } from "@/features/planner/model/project";
+import { addPlannerWall } from "@/features/planner/model/actions/walls";
+import { addFurniture } from "@/features/planner/model/operations/pureActions";
 import {
   buildPlannerSessionEnvelope,
   parsePlannerSessionSnapshot,
-} from "@/features/planner/project/persistence/plannerSession";
+} from "@/features/planner/persistence/open3dSession";
 
 function ids(...values: string[]) {
   let index = 0;

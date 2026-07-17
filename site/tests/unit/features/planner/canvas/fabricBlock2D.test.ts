@@ -10,8 +10,8 @@ import {
   PLAN_PAINT_MODE_PROP,
   resolveFabricPrimPaint,
 } from "@/features/planner/canvas/fabricBlock2D";
-import { clearSvgPlanSymbolCacheForTests } from "@/features/planner/project/catalog/svg/svgPlanSymbolCache";
-import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
+import { clearSvgPlanSymbolCacheForTests } from "@/features/planner/catalog/svg/svgPlanSymbolCache";
+import type { PlannerFurnitureItem } from "@/features/planner/model/types";
 
 function cabinetItem(): PlannerFurnitureItem {
   return {

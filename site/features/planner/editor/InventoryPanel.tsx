@@ -21,7 +21,7 @@ import type {
   InventoryPanelState,
   InventoryCommand,
   InventoryCollectionsState,
-} from "@/features/planner/project/catalog/inventory/inventoryState";
+} from "@/features/planner/catalog/inventory/inventoryState";
 import {
   defaultInventoryPanelState,
   reduceInventoryCommand,
@@ -30,28 +30,28 @@ import {
   addInventoryFavorite,
   removeInventoryFavorite,
   isInventoryFavorite,
-} from "@/features/planner/project/catalog/inventory/inventoryState";
+} from "@/features/planner/catalog/inventory/inventoryState";
 import {
   inventoryCategoriesForProduct,
   inventoryRoomGroupsForProduct,
-} from "@/features/planner/project/catalog/inventory/inventoryTaxonomy";
+} from "@/features/planner/catalog/inventory/inventoryTaxonomy";
 import { InventoryIcon } from "./inventoryIcons";
 import {
   PLANNER_CATALOG_RESULT_CAP,
   capCatalogResults,
   rankCatalogItems,
-} from "@/features/planner/project/catalog/catalogSearch";
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+} from "@/features/planner/catalog/catalogSearch";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
 import {
   filterBuyerFacingCatalogItems,
   formatCatalogFootprint,
   prioritizeOfficeSystemsBrowse,
-} from "@/features/planner/project/catalog/catalogBuyerVisibility";
-import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
-import type { WorkstationConfigV0 } from "@/features/planner/project/catalog/workstationSystemV0";
+} from "@/features/planner/catalog/catalogBuyerVisibility";
+import type { PlannerDisplayUnit } from "@/features/planner/model/types";
+import type { WorkstationConfigV0 } from "@/features/planner/catalog/workstationSystemV0";
 import { PLANNER_DEMO_CATALOG_ITEMS } from "./demoCatalogItems";
-import { isSvgAssetUrl } from "@/features/planner/project/catalog/svg/svgPreviewAssets";
-import { usePlannerSvgCatalog } from "@/features/planner/project/catalog/usePlannerWorkspaceCatalog";
+import { isSvgAssetUrl } from "@/features/planner/catalog/svg/svgPreviewAssets";
+import { usePlannerSvgCatalog } from "@/features/planner/catalog/usePlannerWorkspaceCatalog";
 import { WorkstationConfiguratorPanel } from "./WorkstationConfiguratorPanel";
 import styles from "./inventory.module.css";
 

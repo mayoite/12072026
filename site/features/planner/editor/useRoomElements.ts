@@ -10,7 +10,7 @@ import type {
   PlannerProject,
   PlannerRoom,
   PlannerStair,
-} from "@/features/planner/project/model/types";
+} from "@/features/planner/model/types";
 import {
   addStair,
   addColumn,
@@ -23,7 +23,7 @@ import {
   removeMeasurement,
   removeAnnotation,
   removeGuide,
-} from "@/features/planner/project/model/operations/pureActions";
+} from "@/features/planner/model/operations/pureActions";
 
 export type RoomElementMode =
   | { mode: "select" }

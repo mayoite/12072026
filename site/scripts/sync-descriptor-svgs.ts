@@ -9,7 +9,7 @@ import path from "node:path";
 
 import { compileSvgForPublish } from "../features/planner/asset-engine/svg/compileSvgForPublish";
 import { resolveBlockDescriptorsDir, resolvePublicDir } from "../lib/paths/sitePackageRoot";
-import { clearLoaderCache, loadAll } from "../features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { clearLoaderCache, loadAll } from "../features/planner/catalog/svg/svgBlockDescriptorLoader";
 
 export async function syncDescriptorSvgs(options: {
   outDir?: string;

@@ -6,8 +6,8 @@ import { describe, expect, it } from "vitest";
 import {
   furnitureBlock2DFromItem,
   furnitureBlockUsesCenteredPath,
-} from "@/features/planner/project/catalog/furnitureBlock2D";
-import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
+} from "@/features/planner/catalog/furnitureBlock2D";
+import type { PlannerFurnitureItem } from "@/features/planner/model/types";
 import { renderBlock2DToCanvas } from "@/lib/catalog/renderBlock2DToCanvas";
 import type { Prim } from "@/lib/catalog/blocks2d";
 

@@ -1,8 +1,8 @@
 import type { PlannerTool } from "./canvasTool";
 import { CANVAS_TOOL_LABELS, CANVAS_TOOL_SHORTCUTS } from "./canvasTool";
-import type { SnapKind } from "@/features/planner/project/lib/geometry/snapping";
+import type { SnapKind } from "@/features/planner/lib/geometry/snapping";
 import type { CanvasSelection } from "./useWorkspaceCanvas";
-import type { PlannerSaveStatus } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
+import type { PlannerSaveStatus } from "@/features/planner/persistence/usePlannerWorkspaceAutosave";
 
 const SELECTION_LABELS: Record<Exclude<CanvasSelection["type"], "none">, string> = {
   wall: "Wall",
@@ -37,6 +37,7 @@ export type PlannerSaveStatusLabelInput = {
   lastSavedAt: string | null;
   cloudEnabled: boolean;
   guestMode?: boolean;
+  isOffline?: boolean;
 };
 
 /**
@@ -45,6 +46,9 @@ export type PlannerSaveStatusLabelInput = {
  * Status strip uses plannerSaveStatusBarLabel (short) to avoid dual essay.
  */
 export function plannerSaveStatusLabel(input: PlannerSaveStatusLabelInput): string {
+  if (input.isOffline) {
+    return `Offline · ${plannerSaveStatusLabel({ ...input, isOffline: false })}`;
+  }
   const guestMode = input.guestMode ?? false;
   const storage: PlannerPersistStorage =
     input.cloudEnabled && input.storage === "cloud" ? "cloud" : "local";

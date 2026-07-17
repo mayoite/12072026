@@ -101,11 +101,11 @@ export const VITEST_COMMON_COVERAGE_REPORTERS = [
  */
 export const VITEST_PLANNER_GATE_COVERAGE_INCLUDE = [
   // Systems v0 spine (unit-tested; expand only when suite owns the file)
-  "features/planner/project/catalog/workstation*.ts",
-  "features/planner/project/catalog/placementAction.ts",
-  "features/planner/project/catalog/furnitureBlock2D.ts",
-  "features/planner/project/catalog/proofCatalog.ts",
-  "features/planner/project/lib/geometry/canvasPicking.ts",
+  "features/planner/catalog/workstation*.ts",
+  "features/planner/catalog/placementAction.ts",
+  "features/planner/catalog/furnitureBlock2D.ts",
+  "features/planner/catalog/proofCatalog.ts",
+  "features/planner/lib/geometry/canvasPicking.ts",
 ] as const;
 
 /** Carve-outs inside allowlist globs only (keep tiny). */

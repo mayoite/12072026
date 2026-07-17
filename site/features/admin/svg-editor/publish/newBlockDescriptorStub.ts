@@ -4,7 +4,7 @@
  * Pure helper — not a server action. Checksum / id overwritten on persist.
  */
 
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 
 export function makeNewBlockDescriptorStub(): BlockDescriptor {
   // Catalog descriptors store Unix seconds (not Date.now() ms).

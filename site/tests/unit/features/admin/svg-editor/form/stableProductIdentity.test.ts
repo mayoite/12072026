@@ -6,7 +6,7 @@ import {
   descriptorToFormState,
   formStateToDescriptorInput,
 } from "@/features/admin/svg-editor/form/svgEditorFormAdapters";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 /** Read-only fixture load — never writes catalog files. */
 function loadSideTable(): BlockDescriptor {

@@ -1,0 +1,100 @@
+import type { PlannerDoor, PlannerProject, PlannerWindow } from "../types";
+import type { PlannerIdFactory } from "../project";
+import { applyPlannerProjectAction, activeFloorOrThrow } from "./projectActions";
+
+function assertOpening(project: PlannerProject, wallId: string, position: number, width: number): void {
+  const floor = activeFloorOrThrow(project);
+  const wall = floor.walls.find((item) => item.id === wallId);
+  if (!wall) throw new Error(`Opening wall "${wallId}" does not exist.`);
+  if (position < 0 || position > 1) throw new Error("Opening position must be between 0 and 1.");
+  if (!Number.isFinite(width) || width <= 0) throw new Error("Opening width must be positive.");
+  const wallLength = Math.hypot(wall.end.x - wall.start.x, wall.end.y - wall.start.y);
+  if (width >= wallLength) throw new Error("Opening width must be shorter than its wall.");
+  const center = position * wallLength;
+  const start = center - width / 2;
+  const end = center + width / 2;
+  if (start < 0 || end > wallLength) {
+    throw new Error("Opening must fit fully within its host wall.");
+  }
+  const existing = [
+    ...floor.doors.map((item) => ({ position: item.position, width: item.width })),
+    ...floor.windows.map((item) => ({ position: item.position, width: item.width })),
+  ];
+  const overlaps = existing.some((item) => {
+    const itemCenter = item.position * wallLength;
+    const itemStart = itemCenter - item.width / 2;
+    const itemEnd = itemCenter + item.width / 2;
+    return start < itemEnd && end > itemStart;
+  });
+  if (overlaps) throw new Error("Opening overlaps another opening on this wall.");
+}
+
+export function addPlannerDoor(
+  project: PlannerProject,
+  door: Omit<PlannerDoor, "id">,
+  idFactory: PlannerIdFactory,
+  now?: string,
+): PlannerProject {
+  assertOpening(project, door.wallId, door.position, door.width);
+  return applyPlannerProjectAction(
+    project,
+    { type: "add", collection: "doors", entity: { ...door, id: idFactory() } },
+    now,
+  );
+}
+
+export function addPlannerWindow(
+  project: PlannerProject,
+  window: Omit<PlannerWindow, "id">,
+  idFactory: PlannerIdFactory,
+  now?: string,
+): PlannerProject {
+  assertOpening(project, window.wallId, window.position, window.width);
+  return applyPlannerProjectAction(
+    project,
+    { type: "add", collection: "windows", entity: { ...window, id: idFactory() } },
+    now,
+  );
+}
+
+export function updatePlannerOpening(
+  project: PlannerProject,
+  collection: "doors" | "windows",
+  id: string,
+  updates: Record<string, unknown>,
+  now?: string,
+): PlannerProject {
+  const floor = activeFloorOrThrow(project);
+  if (collection === "doors") {
+    const current = floor.doors.find((item) => item.id === id);
+    if (!current) throw new Error(`Door "${id}" does not exist.`);
+    const candidate: PlannerDoor = { ...current, ...(updates as Partial<PlannerDoor>) };
+    const withoutCurrent: PlannerProject = {
+      ...project,
+      floors: project.floors.map((item) =>
+        item.id === floor.id
+          ? { ...item, doors: item.doors.filter((door) => door.id !== id) }
+          : item,
+      ),
+    };
+    assertOpening(withoutCurrent, candidate.wallId, candidate.position, candidate.width);
+  } else {
+    const current = floor.windows.find((item) => item.id === id);
+    if (!current) throw new Error(`Window "${id}" does not exist.`);
+    const candidate: PlannerWindow = { ...current, ...(updates as Partial<PlannerWindow>) };
+    const withoutCurrent: PlannerProject = {
+      ...project,
+      floors: project.floors.map((item) =>
+        item.id === floor.id
+          ? { ...item, windows: item.windows.filter((window) => window.id !== id) }
+          : item,
+      ),
+    };
+    assertOpening(withoutCurrent, candidate.wallId, candidate.position, candidate.width);
+  }
+  return applyPlannerProjectAction(
+    project,
+    { type: "update", collection, id, updates },
+    now,
+  );
+}

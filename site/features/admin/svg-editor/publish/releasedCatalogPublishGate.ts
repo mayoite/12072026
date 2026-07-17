@@ -7,8 +7,8 @@
 
 import { createHash } from "node:crypto";
 
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
-import { BLOCK_DESCRIPTOR_SLUG_REGEX } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
+import { BLOCK_DESCRIPTOR_SLUG_REGEX } from "@/features/planner/catalog/svg/svgTypes";
 import {
   parseReleasedCatalogProductV1,
   type ReleasedAvailability,

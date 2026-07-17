@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 import AdminSvgEditorListView from "@/features/admin/svg-editor/views/AdminSvgEditorListView";
 import { readLifecycleManifest } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
 import { readSvgArtifactStatuses } from "@/features/admin/svg-editor/publish/svgArtifactStatus.server";
-import { loadAll } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { loadAll } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 
 export const metadata: Metadata = {
   title: "SVG block editor | Oando Admin",

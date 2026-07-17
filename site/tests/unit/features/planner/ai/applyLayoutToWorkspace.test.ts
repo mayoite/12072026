@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { applyLayoutToWorkspace } from "@/features/planner/ai/applyLayoutToWorkspace";
-import { createPlannerProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/model/project";
 import type { SuggestedLayoutJson } from "@/features/planner/ai/types";
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
 
 const baseLayout: SuggestedLayoutJson = {
   version: 1,

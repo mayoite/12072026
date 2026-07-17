@@ -5,9 +5,9 @@ import {
   describePlannerUndoLabel,
   entityCollectionLabel,
 } from "@/features/planner/editor/plannerHistoryLabels";
-import { createPlannerHistory } from "@/features/planner/project/store/history";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
+import { createPlannerHistory } from "@/features/planner/store/history";
+import { createPlannerProject } from "@/features/planner/model/project";
+import type { PlannerFurnitureItem } from "@/features/planner/model/types";
 
 function furnitureItem(overrides: Partial<PlannerFurnitureItem> = {}): PlannerFurnitureItem {
   return {

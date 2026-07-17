@@ -11,7 +11,7 @@ import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-import { loadAll } from "../features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { loadAll } from "../features/planner/catalog/svg/svgBlockDescriptorLoader";
 import { resolvePublicDir } from "../lib/paths/sitePackageRoot";
 
 interface DryRunRow {

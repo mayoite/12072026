@@ -5,7 +5,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/newBlockDescriptorStub";
 import { descriptorToFormState } from "@/features/admin/svg-editor/form/svgEditorFormAdapters";
-import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { tryLoad } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import type { SvgEditorFormState } from "@/features/admin/svg-editor/form/svgEditorFormState";
 
 const { resolveAuthContext, compileSvgForPublish } = vi.hoisted(() => ({

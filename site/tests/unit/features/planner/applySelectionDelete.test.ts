@@ -8,17 +8,17 @@ import {
   updateEntityInProject,
 } from "@/features/planner/editor/workspaceEntityHelpers";
 import type { CanvasSelection } from "@/features/planner/editor/useWorkspaceCanvas";
-import { createPlannerProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/model/project";
 import {
   addFurniture,
   addWall,
-} from "@/features/planner/project/model/operations/pureActions";
-import type { PlannerFurnitureItem, PlannerProject } from "@/features/planner/project/model/types";
+} from "@/features/planner/model/operations/pureActions";
+import type { PlannerFurnitureItem, PlannerProject } from "@/features/planner/model/types";
 import {
   createPlannerHistory,
   undoPlannerAction,
   updatePlannerProject,
-} from "@/features/planner/project/store/history";
+} from "@/features/planner/store/history";
 
 function ids(...values: string[]) {
   let index = 0;

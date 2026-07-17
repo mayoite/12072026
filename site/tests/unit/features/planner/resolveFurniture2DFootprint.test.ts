@@ -2,12 +2,12 @@ import { describe, expect, it } from "vitest";
 import {
   defaultCabinetV0Options,
   generateCabinetV0Footprint,
-} from "@/features/planner/project/catalog/modularCabinetV0";
+} from "@/features/planner/catalog/modularCabinetV0";
 import {
   ParametricBuilder,
   resolveFurniture2DFootprint,
-} from "@/features/planner/project/catalog/parametricBuilder";
-import type { BlockDescriptorParametric } from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/parametricBuilder";
+import type { BlockDescriptorParametric } from "@/features/planner/catalog/svg/svgTypes";
 
 describe("resolveFurniture2DFootprint", () => {
   it("uses generateCabinetV0Footprint when modular-cabinet-v0 + modularOptions", () => {

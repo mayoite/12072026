@@ -7,9 +7,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import SvgEditorListPage from "@/app/admin/svg-editor/page";
-import * as loader from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import * as loader from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 
-vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", () => ({
+vi.mock("@/features/planner/catalog/svg/svgBlockDescriptorLoader", () => ({
   loadAll: vi.fn(),
   BLOCK_DESCRIPTORS_DIR_DEFAULT: "mock-dir",
 }));

@@ -4,15 +4,15 @@ import {
   buildPaletteCommands,
   filterPaletteCommands,
   runPaletteCommand,
-} from "@/features/planner/project/lib/commands/paletteCommands";
+} from "@/features/planner/lib/commands/paletteCommands";
 import {
   DEFAULT_LAYER_VISIBILITY,
   summarizeFloorLayers,
   toggleLayerVisibility,
 } from "@/features/planner/editor/layerVisibility";
 import { toolFromShortcutKey } from "@/features/planner/editor/useWorkspaceKeyboard";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import { addPlannerWall } from "@/features/planner/project/model/actions/walls";
+import { createPlannerProject } from "@/features/planner/model/project";
+import { addPlannerWall } from "@/features/planner/model/actions/walls";
 
 describe("donor parity — command palette", () => {
   it("builds searchable palette commands with donor tool shortcuts", () => {

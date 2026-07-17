@@ -4,11 +4,11 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   executePlannerCommand,
   type PlannerCommand,
-} from "@/features/planner/project/lib/commands/plannerCommand";
+} from "@/features/planner/lib/commands/plannerCommand";
 import { useWorkspaceCanvas } from "@/features/planner/editor/useWorkspaceCanvas";
-import { createPlannerHistory } from "@/features/planner/project/store/history";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+import { createPlannerHistory } from "@/features/planner/store/history";
+import { createPlannerProject } from "@/features/planner/model/project";
+import type { PlannerProject } from "@/features/planner/model/types";
 
 function projectWithFurniture(locked: boolean): PlannerProject {
   const project = createPlannerProject({

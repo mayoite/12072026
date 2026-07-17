@@ -1,7 +1,13 @@
 "use client";
 
+/**
+ * Customer Layers panel — not mounted in the live ModularPlannerShell host.
+ * Internal `layerVisibility` still drives canvas show/hide defaults.
+ * Kept for unit coverage until P15 removes dead docking chrome.
+ */
+
 import { useCallback, memo } from "react";
-import type { PlannerFloor } from "@/features/planner/project/model/types";
+import type { PlannerFloor } from "@/features/planner/model/types";
 import {
   DEFAULT_LAYER_VISIBILITY,
   summarizeFloorLayers,

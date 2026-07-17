@@ -22,7 +22,7 @@ import { persistBlockDescriptor } from "@/features/admin/svg-editor/storage/pers
 import {
   BLOCK_DESCRIPTOR_SCHEMA_VERSION,
   computeBlockDescriptorChecksum,
-} from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/svg/svgTypes";
 
 const VALID_UUID = "11111111-1114-4111-8111-111111111111";
 

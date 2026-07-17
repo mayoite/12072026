@@ -8,7 +8,7 @@ import {
   WORKSTATION_V0_SIZE_GRID,
   type WorkstationConfigV0,
   type WorkstationModuleKindV0,
-} from "@/features/planner/project/catalog/workstationSystemV0";
+} from "@/features/planner/catalog/workstationSystemV0";
 import {
   WORKSTATION_V0_BATCH_PLACE_COUNTS,
   WORKSTATION_V0_TOGGLE_MODULES,
@@ -21,7 +21,7 @@ import {
   sizeGridLabel,
   toggleConfiguratorModule,
   type WorkstationConfiguratorDraftV0,
-} from "@/features/planner/project/catalog/workstationConfiguratorV0";
+} from "@/features/planner/catalog/workstationConfiguratorV0";
 import styles from "./workstationConfigurator.module.css";
 
 export type WorkstationConfiguratorPanelProps = {

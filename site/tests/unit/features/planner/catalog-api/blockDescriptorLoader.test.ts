@@ -29,7 +29,7 @@ import {
   tryLoad,
   clearLoaderCache,
   type PlannerDescriptorError,
-} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+} from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 
 const VALID_UUID_V4 = "f81e3a1b-16f4-4c2a-9e6b-8e1f3b7e1a44";
 

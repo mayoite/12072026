@@ -1,6 +1,6 @@
 /**
  * Top-level planner cloud-store (portal / API persistence, legacy workspace stores).
- * Live guest/canvas project store lives under `features/planner/project/store/`.
+ * Live guest/canvas project store lives under `features/planner/store/`.
  * Do not treat this tree as the plan canvas host.
  * @see features/planner/CONTENTS.md — Dual trees
  *

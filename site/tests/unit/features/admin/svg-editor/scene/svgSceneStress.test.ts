@@ -8,7 +8,7 @@ import type {
   SvgSceneDocument,
   SvgSceneNode,
 } from "@/features/admin/svg-editor/scene/svgSceneDocument";
-import { compileSvgBlockV1 } from "@/features/planner/project/catalog/svg/svgCompiler.server";
+import { compileSvgBlockV1 } from "@/features/planner/catalog/svg/svgCompiler.server";
 
 /**
  * A4.0 proof — deterministic round-trip and serialization performance at the

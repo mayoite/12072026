@@ -1,6 +1,6 @@
-import type { PlannerCatalogItem, PlannerCatalogCategory } from "@/features/planner/project/catalog/catalogTypes";
-import { WORKSTATION_V0_DEMO_CATALOG_ITEMS } from "@/features/planner/project/catalog/workstationCatalogV0";
-import { proofCatalogItem } from "@/features/planner/project/catalog/proofCatalog";
+import type { PlannerCatalogItem, PlannerCatalogCategory } from "@/features/planner/catalog/catalogTypes";
+import { WORKSTATION_V0_DEMO_CATALOG_ITEMS } from "@/features/planner/catalog/workstationCatalogV0";
+import { proofCatalogItem } from "@/features/planner/catalog/proofCatalog";
 
 function createCatalogItemFromProof(proof: typeof proofCatalogItem): PlannerCatalogItem {
   return {

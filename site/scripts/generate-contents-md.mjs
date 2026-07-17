@@ -240,7 +240,7 @@ const siteFolders = {
     title: "Planner catalog API",
     why: "Catalog panel, bridges, ingest — not the live canvas document host (see project/catalog/).",
     contains: ["ingest/", "CatalogPanel.tsx", "catalogStore.ts", "catalogBlockBridge.ts"],
-    see: ["scripts/ingest-planner-catalog.ts", "features/planner/project/catalog/README.md"],
+    see: ["scripts/ingest-planner-catalog.ts", "features/planner/catalog/README.md"],
   },
   "features/planner/cloud-store": {
     title: "Planner cloud persistence",

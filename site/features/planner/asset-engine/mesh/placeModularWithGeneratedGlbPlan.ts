@@ -27,12 +27,12 @@ import {
   writeGeneratedGlbToPublic,
   type WriteGeneratedGlbToPublicOptions,
 } from "@/features/planner/asset-engine/mesh/writeGeneratedGlbToPublic";
-import type { PlacementOptions } from "@/features/planner/project/catalog/placementAction";
+import type { PlacementOptions } from "@/features/planner/catalog/placementAction";
 import type {
   PlannerCatalogItem,
   PlannerCatalogVariant,
-} from "@/features/planner/project/catalog/catalogTypes";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+} from "@/features/planner/catalog/catalogTypes";
+import type { PlannerProject } from "@/features/planner/model/types";
 
 export type PlaceModularWithGeneratedGlbPlanOptions = {
   /** Catalog variant (default null). */
@@ -69,7 +69,7 @@ export async function placeModularWithGeneratedGlbPlan(
   position: { x: number; y: number },
   options?: PlaceModularWithGeneratedGlbPlanOptions,
 ): Promise<PlaceModularWithGeneratedGlbPlanResult> {
-  const writeToPublic = options?.writeToPublic !== false;
+  const writeToPublic = options?.writeToPublic === true;
   const writeOpts: WriteGeneratedGlbToPublicOptions | undefined =
     options?.publicRoot !== undefined
       ? { publicRoot: options.publicRoot }

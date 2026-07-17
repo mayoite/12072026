@@ -6,7 +6,7 @@ import {
   disposeAndRemoveObject,
 } from "@/features/planner/3d/createSceneObjectFromNode";
 import type { PlannerSceneNode } from "@/features/planner/3d/buildPlannerSceneNodes";
-import { defaultCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
+import { defaultCabinetV0Options } from "@/features/planner/catalog/modularCabinetV0";
 
 function boxNode(overrides: Partial<PlannerSceneNode> = {}): PlannerSceneNode {
   return {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { PlannerPersistenceError } from "@/features/planner/project/persistence/persistenceErrors";
+import { PlannerPersistenceError } from "@/features/planner/persistence/persistenceErrors";
 
 
 // ---------------------------------------------------------------------------

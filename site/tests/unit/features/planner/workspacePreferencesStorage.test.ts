@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it } from "vitest";
 
-import { DEFAULT_PLANNER_WORKSPACE_PREFERENCES } from "@/features/planner/project/store/workspacePreferences";
+import { DEFAULT_PLANNER_WORKSPACE_PREFERENCES } from "@/features/planner/store/workspacePreferences";
 import {
   patchPlannerWorkspacePreferences,
   PLANNER_WORKSPACE_PREFS_STORAGE_KEY,
   readPlannerWorkspacePreferencesFromStorage,
-} from "@/features/planner/project/store/workspacePreferencesStorage";
+} from "@/features/planner/store/workspacePreferencesStorage";
 
 describe("workspacePreferencesStorage", () => {
   afterEach(() => {

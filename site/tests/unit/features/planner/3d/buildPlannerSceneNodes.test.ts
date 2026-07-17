@@ -3,7 +3,7 @@ import {
   buildPlannerSceneNodes,
   mmToMeters,
 } from "@/features/planner/3d/buildPlannerSceneNodes";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+import type { PlannerProject } from "@/features/planner/model/types";
 
 function projectWith(
   floor: Partial<PlannerProject["floors"][number]> & { id: string },

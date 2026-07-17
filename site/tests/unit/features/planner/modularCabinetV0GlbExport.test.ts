@@ -13,13 +13,13 @@ import {
   defaultCabinetV0Options,
   generateCabinetV0Footprint,
   generateCabinetV0Mesh,
-} from "@/features/planner/project/catalog/modularCabinetV0";
+} from "@/features/planner/catalog/modularCabinetV0";
 import {
   buildModularCabinetV0GlbPlan,
   buildModularCabinetV0PartPlans,
   exportModularCabinetV0ToGeneratedAssetPath,
   modularCabinetV0GeneratedRelativePath,
-} from "@/features/planner/project/catalog/modularCabinetV0GlbExport";
+} from "@/features/planner/catalog/modularCabinetV0GlbExport";
 
 const MM = 0.001;
 

@@ -14,7 +14,7 @@ import {
 } from "node:fs";
 import path from "node:path";
 
-import { versionedDescriptorPath } from "@/features/planner/project/catalog/svg/descriptorPointer";
+import { versionedDescriptorPath } from "@/features/planner/catalog/svg/descriptorPointer";
 
 export const DESCRIPTOR_ARCHIVE_RETENTION = 5;
 

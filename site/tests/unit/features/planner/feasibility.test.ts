@@ -1,19 +1,19 @@
 import { describe, expect, it } from "vitest";
 
-import { convertLegacyRectScene } from "@/features/planner/project/shared/document/legacyProject";
-import { snapDrawingPoint } from "@/features/planner/project/lib/geometry/snapping";
-import { createPlannerProject } from "@/features/planner/project/model/project";
+import { convertLegacyRectScene } from "@/features/planner/shared/document/legacyProject";
+import { snapDrawingPoint } from "@/features/planner/lib/geometry/snapping";
+import { createPlannerProject } from "@/features/planner/model/project";
 import {
   displayValueToMm,
   formatFeetAndInches,
   parseFeetAndInches,
-} from "@/features/planner/project/model/units";
-import { addPlannerWall } from "@/features/planner/project/model/actions/walls";
+} from "@/features/planner/model/units";
+import { addPlannerWall } from "@/features/planner/model/actions/walls";
 import {
   exportPlannerProjectJson,
   importPlannerProjectJson,
-} from "@/features/planner/project/persistence/projectJson";
-import { createPlannerGuestProjectRepository } from "@/features/planner/project/persistence/guestProjectRepository";
+} from "@/features/planner/persistence/projectJson";
+import { createPlannerGuestProjectRepository } from "@/features/planner/persistence/guestProjectRepository";
 
 function ids(...values: string[]) {
   let index = 0;

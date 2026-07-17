@@ -20,9 +20,9 @@ describe("CanvasToolRail", () => {
 
     expect(screen.getByTestId("canvas-tool-select")).toBeInTheDocument();
     expect(screen.getByTestId("canvas-tool-wall")).toBeInTheDocument();
+    expect(screen.getByTestId("canvas-tool-room")).toBeInTheDocument();
     expect(screen.getByTestId("canvas-tool-opening")).toBeInTheDocument();
     expect(screen.getByTestId("canvas-tool-placement")).toBeInTheDocument();
-    expect(screen.queryByTestId("canvas-tool-room")).toBeNull();
     expect(screen.queryByTestId("canvas-tool-dimension")).toBeNull();
   });
 });

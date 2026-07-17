@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 
-import { freezeFreshDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import { freezeFreshDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import { resolveBlockDescriptorsDir } from "@/lib/paths/sitePackageRoot";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");

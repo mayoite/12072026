@@ -19,7 +19,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { SetStateAction } from "react";
 import { useRouter } from "next/navigation";
 
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import { descriptorToFormState } from "../form/svgEditorFormAdapters";
 import type { SvgEditorFormState } from "../form/svgEditorFormState";
 import { uploadAssetToSupabase } from "../publish/uploadAsset";

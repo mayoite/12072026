@@ -7,7 +7,7 @@ import * as THREE from "three";
 import {
   createWorkstationConfigV0,
   workstationFootprintMm,
-} from "@/features/planner/project/catalog/workstationSystemV0";
+} from "@/features/planner/catalog/workstationSystemV0";
 import {
   WORKTOP_THICKNESS_MM,
   PANEL_HEIGHT_MM,
@@ -16,7 +16,7 @@ import {
   generateWorkstationV0Mesh,
   generateWorkstationV0MeshPlan,
   workstationOptionsFromConfig,
-} from "@/features/planner/project/catalog/workstationMeshV0";
+} from "@/features/planner/catalog/workstationMeshV0";
 
 const MM = 0.001;
 

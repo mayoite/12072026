@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { AdminSvgEditorEditView } from "@/features/admin/svg-editor/views/AdminSvgEditorEditView";
 import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/newBlockDescriptorStub";
-import { tryLoad, type BlockDescriptor } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { tryLoad, type BlockDescriptor } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import { readSvgArtifactStatus } from "@/features/admin/svg-editor/publish/svgArtifactStatus.server";
 import { readLifecycleManifest, resolveCatalogLifecycle } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
 import { publishSvgEditorAction } from "@/features/admin/svg-editor/publish/publishSvgEditorAction";

@@ -19,7 +19,7 @@ import {
   sortInventoryRows,
   type SvgInventoryRow,
 } from "@/features/admin/svg-editor/lifecycle/svgInventoryFilter";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 vi.mock("next/link", () => ({
   default: ({

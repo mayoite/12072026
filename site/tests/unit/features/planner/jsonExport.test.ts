@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { createPlannerProject, createRectangularRoomProject, createPlannerSceneEnvelope } from "@/features/planner/project/model/project";
-import { exportToJson, envelopeToJsonString } from "@/features/planner/project/shared/export/jsonExport";
+import { createPlannerProject, createRectangularRoomProject, createPlannerSceneEnvelope } from "@/features/planner/model/project";
+import { exportToJson, envelopeToJsonString } from "@/features/planner/shared/export/jsonExport";
 import {
   importFromJson,
   parseJsonToEnvelope,
   validateEnvelopeStructure,
   DEFAULT_IMPORT_LIMITS,
   recoverFromErrors,
-} from "@/features/planner/project/shared/export/jsonImport";
+} from "@/features/planner/shared/export/jsonImport";
 import { isEntityUuid } from "@/features/planner/lib/newEntityId";
 
 function ids(...values: string[]) {

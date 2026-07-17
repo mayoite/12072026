@@ -10,7 +10,7 @@ import {
   readThreeThemeColor,
   resolvePaintColor,
   themeColorRef,
-} from "@/features/planner/project/shared/readThemeColor";
+} from "@/features/planner/shared/readThemeColor";
 
 afterEach(() => {
   document.documentElement.style.removeProperty("--text-inverse-body");

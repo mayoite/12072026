@@ -10,7 +10,7 @@ import {
   releaseWorkstationFamilyVersion,
   type WorkstationMigrationChoice,
 } from "./workstationFamilyRelease";
-import { WORKSTATION_V0_DEFAULT_HEIGHT_MM, WORKSTATION_V0_SIZE_GRID } from "@/features/planner/project/catalog/workstationSystemV0";
+import { WORKSTATION_V0_DEFAULT_HEIGHT_MM, WORKSTATION_V0_SIZE_GRID } from "@/features/planner/catalog/workstationSystemV0";
 
 export type WorkstationAuthorDraft = {
   readonly familySlug: string;

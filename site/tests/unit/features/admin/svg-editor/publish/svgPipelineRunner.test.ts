@@ -51,7 +51,7 @@ import { createHash } from "node:crypto";
 import {
   computeBlockDescriptorChecksum,
   BLOCK_DESCRIPTOR_SCHEMA_VERSION,
-} from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/svg/svgTypes";
 
 import {
   runSvgPipeline,

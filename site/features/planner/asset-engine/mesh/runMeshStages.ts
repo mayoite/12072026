@@ -5,13 +5,13 @@
 
 import {
   resolveFurniture2DFootprint,
-} from "@/features/planner/project/catalog/parametricBuilder";
+} from "@/features/planner/catalog/parametricBuilder";
 import {
   defaultCabinetV0Options,
   generateCabinetV0Mesh,
   type ModularCabinetV0Options,
-} from "@/features/planner/project/catalog/modularCabinetV0";
-import { buildModularCabinetV0GlbPlan } from "@/features/planner/project/catalog/modularCabinetV0GlbExport";
+} from "@/features/planner/catalog/modularCabinetV0";
+import { buildModularCabinetV0GlbPlan } from "@/features/planner/catalog/modularCabinetV0GlbExport";
 import { exportModularCabinetV0GlbBinary } from "./exportModularGlbBinary";
 
 export interface MeshStagesOk {

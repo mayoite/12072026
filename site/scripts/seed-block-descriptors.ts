@@ -10,8 +10,8 @@ import { resolveBlockDescriptorsDir } from "../lib/paths/sitePackageRoot";
 import {
   clearLoaderCache,
   loadAll,
-} from "../features/planner/project/catalog/svg/svgBlockDescriptorLoader";
-import { freezeFreshDescriptor } from "../features/planner/project/catalog/svg/svgTypes";
+} from "../features/planner/catalog/svg/svgBlockDescriptorLoader";
+import { freezeFreshDescriptor } from "../features/planner/catalog/svg/svgTypes";
 
 type SeedInput = {
   readonly id: string;

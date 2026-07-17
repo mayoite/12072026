@@ -1,22 +1,22 @@
 import { describe, expect, it } from "vitest";
 
-import { defaultCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
+import { defaultCabinetV0Options } from "@/features/planner/catalog/modularCabinetV0";
 import {
   addFurniture,
   addWall,
   updateFurniture,
-} from "@/features/planner/project/model/operations/pureActions";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+} from "@/features/planner/model/operations/pureActions";
+import { createPlannerProject } from "@/features/planner/model/project";
+import type { PlannerProject } from "@/features/planner/model/types";
 import {
   envelopeToJsonString,
   exportToJson,
-} from "@/features/planner/project/shared/export/jsonExport";
-import { importFromJson } from "@/features/planner/project/shared/export/jsonImport";
+} from "@/features/planner/shared/export/jsonExport";
+import { importFromJson } from "@/features/planner/shared/export/jsonImport";
 import {
   exportPlannerProjectJson,
   importPlannerProjectJson,
-} from "@/features/planner/project/persistence/projectJson";
+} from "@/features/planner/persistence/projectJson";
 
 function ids(...values: string[]) {
   let index = 0;

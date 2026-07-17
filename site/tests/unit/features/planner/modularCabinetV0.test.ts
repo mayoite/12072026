@@ -8,7 +8,7 @@ import {
   defaultCabinetV0Options,
   generateCabinetV0Footprint,
   generateCabinetV0Mesh,
-} from "@/features/planner/project/catalog/modularCabinetV0";
+} from "@/features/planner/catalog/modularCabinetV0";
 
 const MM = 0.001;
 

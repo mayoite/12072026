@@ -7,7 +7,7 @@ import type {
   SetStateAction,
 } from "react";
 
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 import { descriptorToFormState } from "../../form/svgEditorFormAdapters";
 import type { SvgEditorFormState } from "../../form/svgEditorFormState";

@@ -5,9 +5,9 @@
 import { describe, expect, it } from "vitest";
 
 import { buildPlannerSceneNodes } from "@/features/planner/3d/buildPlannerSceneNodes";
-import { addFurniture } from "@/features/planner/project/model/operations/pureActions";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import { degreesToRadians } from "@/features/planner/project/model/units";
+import { addFurniture } from "@/features/planner/model/operations/pureActions";
+import { createPlannerProject } from "@/features/planner/model/project";
+import { degreesToRadians } from "@/features/planner/model/units";
 
 function ids(...values: string[]) {
   let index = 0;

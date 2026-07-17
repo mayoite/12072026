@@ -10,7 +10,7 @@
 
 import { Armchair, Bed, Briefcase, Car, CookingPot, Couch, ForkKnife, House, Image, Lightbulb, Plant, Ruler, Shower, Tree, type Icon, type IconProps } from "@phosphor-icons/react";
 
-import type { InventoryIconName } from "@/features/planner/project/catalog/inventory/inventoryTaxonomy";
+import type { InventoryIconName } from "@/features/planner/catalog/inventory/inventoryTaxonomy";
 
 const INVENTORY_ICON_GLYPHS: Record<InventoryIconName, Icon> = {
   armchair: Armchair,

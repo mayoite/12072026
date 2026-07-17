@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest";
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
 import {
   filterBuyerFacingCatalogItems,
   formatCatalogFootprintCm,
   isInternalCatalogItem,
   prioritizeOfficeSystemsBrowse,
-} from "@/features/planner/project/catalog/catalogBuyerVisibility";
+} from "@/features/planner/catalog/catalogBuyerVisibility";
 import {
   inventoryCategoriesForProduct,
   inventoryRoomGroupsForProduct,
-} from "@/features/planner/project/catalog/inventory/inventoryTaxonomy";
+} from "@/features/planner/catalog/inventory/inventoryTaxonomy";
 import { PLANNER_DEMO_CATALOG_ITEMS } from "@/features/planner/editor/demoCatalogItems";
 
 function minimalItem(

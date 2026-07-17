@@ -4,13 +4,13 @@
  * Canvas draw path: svgPlanSymbolCache.test.ts + PlannerCanvasStage.
  */
 import { describe, expect, it } from "vitest";
-import { placeCatalogItemInProject } from "@/features/planner/project/catalog/placementAction";
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+import { placeCatalogItemInProject } from "@/features/planner/catalog/placementAction";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
+import type { PlannerProject } from "@/features/planner/model/types";
 import {
   buildSvgCatalogPublicUrl,
   isSvgAssetUrl,
-} from "@/features/planner/project/catalog/svg/svgPreviewAssets";
+} from "@/features/planner/catalog/svg/svgPreviewAssets";
 
 function emptyProject(id = "s7-proj"): PlannerProject {
   return {

@@ -5,11 +5,11 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { exportModularAndWrite } from "@/features/planner/asset-engine";
 import * as exportBinary from "@/features/planner/asset-engine/mesh/exportModularGlbBinary";
 import type { ModularGlbBinaryResult } from "@/features/planner/asset-engine/mesh/exportModularGlbBinary";
-import { defaultCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
+import { defaultCabinetV0Options } from "@/features/planner/catalog/modularCabinetV0";
 import {
   buildModularCabinetV0GlbPlan,
   modularCabinetV0GeneratedRelativePath,
-} from "@/features/planner/project/catalog/modularCabinetV0GlbExport";
+} from "@/features/planner/catalog/modularCabinetV0GlbExport";
 import {
   GENERATED_GLB_PATH_MARKER,
   isSystemGeneratedGlbUrl,

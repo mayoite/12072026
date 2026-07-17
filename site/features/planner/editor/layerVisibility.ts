@@ -1,4 +1,4 @@
-import type { PlannerFloor } from "@/features/planner/project/model/types";
+import type { PlannerFloor } from "@/features/planner/model/types";
 
 /** Layer categories aligned with donor LayersPanel.svelte */
 export type PlannerLayerCategory =

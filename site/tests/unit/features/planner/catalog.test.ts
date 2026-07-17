@@ -33,8 +33,8 @@ import {
   displayDimensions,
   buildAccessibleName,
   validateDimensions,
-} from "@/features/planner/project/catalog/unitConversion";
-import type { PlannerCatalogDimensions, PlannerCatalogCategory } from "@/features/planner/project/catalog/catalogTypes";
+} from "@/features/planner/catalog/unitConversion";
+import type { PlannerCatalogDimensions, PlannerCatalogCategory } from "@/features/planner/catalog/catalogTypes";
 
 describe("03-CAT-03: Unit Conversion", () => {
   describe("canonicalMmFromCatalogCm", () => {
@@ -185,7 +185,7 @@ import {
   isValidStyleTag,
   normalizeAssemblyType,
   buildShortName,
-} from "@/features/planner/project/catalog/catalogTaxonomy";
+} from "@/features/planner/catalog/catalogTaxonomy";
 
 describe("03-CAT-02: Taxonomy", () => {
   describe("CANONICAL_TAXONOMY", () => {
@@ -339,7 +339,7 @@ import {
   resolveAssetUrl,
   addAllowedOrigin,
   getAllowedOrigins,
-} from "@/features/planner/project/catalog/assetValidation";
+} from "@/features/planner/catalog/assetValidation";
 
 describe("03-CAT-05: Asset Validation", () => {
   describe("validateAssetUrl", () => {
@@ -457,7 +457,7 @@ import {
   buildImageFallback,
   buildMeshFallback,
   buildTextureFallback,
-} from "@/features/planner/project/catalog/fallbackGeometry";
+} from "@/features/planner/catalog/fallbackGeometry";
 
 describe("03-CAT-06a: Fallback Geometry", () => {
   const dims: PlannerCatalogDimensions = { widthMm: 1200, depthMm: 600, heightMm: 750 };
@@ -558,11 +558,11 @@ import {
   apiPlace,
   verifyPlacementIdentity,
   placeCatalogItemInProject,
-} from "@/features/planner/project/catalog/placementAction";
-import type { PlannerCatalogItem, PlannerCatalogVariant } from "@/features/planner/project/catalog/catalogTypes";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+} from "@/features/planner/catalog/placementAction";
+import type { PlannerCatalogItem, PlannerCatalogVariant } from "@/features/planner/catalog/catalogTypes";
+import type { PlannerProject } from "@/features/planner/model/types";
 import { isEntityUuid } from "@/features/planner/lib/newEntityId";
-import { createPlannerProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/model/project";
 
 describe("03-CAT-08: Placement Action", () => {
   // Helper to create a minimal catalog item for testing
@@ -875,7 +875,7 @@ import {
   getFavoritesByCategory,
   migrateRecentItemsSchema,
   migrateFavoritesSchema,
-} from "@/features/planner/project/catalog/recentFavorites";
+} from "@/features/planner/catalog/recentFavorites";
 
 // Mock localStorage
 const store: Record<string, string> = {};
@@ -1098,7 +1098,7 @@ describe("03-CAT-07: Recent/Favorites Edge Cases", () => {
 // 03-CAT-06b: Catalog Client
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-import { PlannerCatalogClient } from "@/features/planner/project/catalog/catalogClient";
+import { PlannerCatalogClient } from "@/features/planner/catalog/catalogClient";
 
 describe("03-CAT-06b: Catalog Client", () => {
   function makeItem(overrides: Partial<PlannerCatalogItem> & { id: string; sku: string }): PlannerCatalogItem {
@@ -1629,7 +1629,7 @@ import {
   resolveAvailabilityStatus,
   type PlannerManagedProductInput,
   type ConfiguratorProductInput,
-} from "@/features/planner/project/catalog/catalogMapping";
+} from "@/features/planner/catalog/catalogMapping";
 
 describe("03-CAT-04: Catalog Mapping", () => {
   describe("mapAdminCategoryToCanonical", () => {

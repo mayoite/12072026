@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 
 vi.mock("server-only", () => ({}));
 import { vi } from "vitest";
-import { compileSvgBlockV1 } from "@/features/planner/project/catalog/svg/svgCompiler.server";
-import { sanitizeAndOptimizeSvg } from "@/features/planner/project/catalog/svg/svgServerSanitizer";
+import { compileSvgBlockV1 } from "@/features/planner/catalog/svg/svgCompiler.server";
+import { sanitizeAndOptimizeSvg } from "@/features/planner/catalog/svg/svgServerSanitizer";
 
 const definition = {
   schemaVersion: 1, typeId: "door-basic", name: "Door", category: "Doors",

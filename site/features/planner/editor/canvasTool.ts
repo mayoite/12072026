@@ -74,7 +74,7 @@ export const CANVAS_TOOL_LABELS: Record<PlannerTool, string> = {
 export const CANVAS_TOOL_GUIDANCE: Record<PlannerTool, string> = {
   select: "Click an object to inspect it. Delete removes the selection.",
   pan: "Drag to move the drawing. Release Space to restore the armed tool.",
-  room: "Room outline is deferred — use Wall segments or Starter room for now.",
+  room: "Enter exact width, depth, and wall thickness to create a closed room.",
   wall: "Press and drag to draw a wall segment; release to commit.",
   opening: "Click a wall to add a door opening.",
   dimension: "Dimension annotations are deferred — measure via properties for now.",
@@ -96,7 +96,7 @@ export const CANVAS_TOOL_REQUIREMENT: Record<PlannerTool, ToolRequirementTier> =
   placement: "live",
   door: "live",
   window: "live",
-  room: "deferred",
+  room: "live",
   dimension: "deferred",
   text: "deferred",
 };
@@ -106,13 +106,14 @@ export const RAIL_NAV_TOOLS: readonly PlannerTool[] = ["select", "pan"];
 
 /** Live draw tools on the RAC rail (geometry works on Fabric today). */
 export const RAIL_DRAW_TOOLS: readonly PlannerTool[] = [
+  "room",
   "wall",
   "opening",
   "placement",
 ];
 
 /** Deferred tools — labelled "Coming soon" on the rail, not peers with live draw tools. */
-export const RAIL_DEFERRED_TOOLS: readonly PlannerTool[] = ["room", "dimension"];
+export const RAIL_DEFERRED_TOOLS: readonly PlannerTool[] = ["dimension"];
 
 /** Full rail order (nav + draw + deferred). Palette tool list must match this + keyboard extras. */
 export const CANVAS_TOOLS: PlannerTool[] = [
@@ -139,7 +140,7 @@ export const LIVE_GEOMETRY_TOOLS: readonly PlannerTool[] = (
 
 /**
  * Map UI tool → Fabric pointer path.
- * Room/dimension/text are deferred: arm as select so clicks do not fake geometry.
+ * Room opens an exact-input overlay. Dimension/text remain non-pointer tools.
  */
 export function runtimeToolFor(tool: PlannerTool): CanvasRuntimeTool {
   if (tool === "opening" || tool === "door") return "door";

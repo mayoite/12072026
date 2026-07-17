@@ -4,7 +4,7 @@
  * Do not implement production legs until these fail for missing feature, then GREEN.
  */
 import { describe, expect, it } from "vitest";
-import { createWorkstationConfigV0 } from "@/features/planner/project/catalog/workstationSystemV0";
+import { createWorkstationConfigV0 } from "@/features/planner/catalog/workstationSystemV0";
 import {
   WORKTOP_THICKNESS_MM,
   countWorkstationV0Parts,
@@ -12,7 +12,7 @@ import {
   generateWorkstationV0MeshPlan,
   type WorkstationV0MeshPartPlan,
   type WorkstationV0MeshPlan,
-} from "@/features/planner/project/catalog/workstationMeshV0";
+} from "@/features/planner/catalog/workstationMeshV0";
 
 /** Target leg cross-section band (mm). Production may export LEG_SECTION_MM later. */
 const LEG_SECTION_MIN_MM = 40;

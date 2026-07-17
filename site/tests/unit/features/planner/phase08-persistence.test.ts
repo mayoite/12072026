@@ -29,12 +29,12 @@ import {
   readPersistedRaw,
 } from "@/features/admin/svg-editor/storage/persistBlockDescriptor";
 import { verifyDualRead } from "@/features/admin/svg-editor/storage/dualReadHarness";
-import * as descriptorPointer from "@/features/planner/project/catalog/svg/descriptorPointer";
+import * as descriptorPointer from "@/features/planner/catalog/svg/descriptorPointer";
 import {
   BLOCK_DESCRIPTOR_SCHEMA_VERSION,
   computeBlockDescriptorChecksum,
-} from "@/features/planner/project/catalog/svg/svgTypes";
-import { clearLoaderCache, tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+} from "@/features/planner/catalog/svg/svgTypes";
+import { clearLoaderCache, tryLoad } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 
 const VALID_UUID = "11111111-1114-4111-8111-111111111111";
 

@@ -68,7 +68,7 @@
   "_phase07_auth_matrix": {
     "_status": "phase-07 planner guest/member/admin permission matrix",
     "_canonical": "site/features/planner/model/plannerPermissions.ts",
-    "_commandRegistry": "site/features/planner/project/lib/commands/plannerAccessContext.ts",
+    "_commandRegistry": "site/features/planner/lib/commands/plannerAccessContext.ts",
     "_apiAuth": "site/lib/api/withAuth.ts + site/app/api/admin/_lib/server.ts requireAdminSession",
     "_guestAllowedActions": ["view", "select"],
     "_guestBlockedActions": ["persist", "import", "export", "publish", "share"],
@@ -79,7 +79,7 @@
   "_phase08_persistence": {
     "_status": "phase-08 versioned JSON-on-disk persistence",
     "_writer": "site/features/admin/svg-editor/persistBlockDescriptor.ts",
-    "_loader": "site/features/planner/project/catalog/svg/svgBlockDescriptorLoader.ts",
+    "_loader": "site/features/planner/catalog/svg/svgBlockDescriptorLoader.ts",
     "_layout": "{slug}.{n}.json + {slug}.latest.json pointer + legacy {slug}.json mirror",
     "_lock": "O_EXCL {slug}.lock, 30s timeout → 409.lock_busy",
     "_errors": ["422.version_mismatch", "409.hash_mismatch", "409.lock_busy"],

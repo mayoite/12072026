@@ -5,7 +5,7 @@
 import { appendFileSync, copyFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 
-import { BLOCK_DESCRIPTORS_DIR_DEFAULT } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { BLOCK_DESCRIPTORS_DIR_DEFAULT } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import { ADMIN_CATALOG_OPS_DIR_DEFAULT } from "@/lib/paths/adminCatalogOps";
 
 export type DescriptorAuditAction =

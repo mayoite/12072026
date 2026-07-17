@@ -10,7 +10,7 @@ import {
   validateUpload,
   formatFileSize,
   revokeObjectUrl,
-} from "@/features/planner/project/shared/export/uploadUtils";
+} from "@/features/planner/shared/export/uploadUtils";
 
 const PNG_BASE64 =
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";

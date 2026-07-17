@@ -11,7 +11,7 @@ vi.mock("@/features/planner/editor/CommandPalette", () => ({
 vi.mock("@/features/planner/editor/LayersPanel", () => ({
   LayersPanel: () => <div data-testid="layers" />,
 }));
-vi.mock("@/features/planner/project/canvas-stage", () => ({
+vi.mock("@/features/planner/canvas", () => ({
   PlannerCanvasStage: ({ children }: { children?: React.ReactNode }) => (
     <div data-testid="canvas-stage">{children}</div>
   ),
@@ -30,12 +30,12 @@ const catalogHook = {
   retry: vi.fn(),
 };
 
-vi.mock("@/features/planner/project/catalog/usePlannerWorkspaceCatalog", () => ({
+vi.mock("@/features/planner/catalog/usePlannerWorkspaceCatalog", () => ({
   usePlannerWorkspaceCatalog: () => catalogHook,
   usePlannerSvgCatalog: () => catalogHook,
 }));
 
-vi.mock("@/features/planner/project/persistence/usePlannerWorkspaceAutosave", () => ({
+vi.mock("@/features/planner/persistence/usePlannerWorkspaceAutosave", () => ({
   usePlannerWorkspaceAutosave: () => ({
     status: "idle",
     isModified: false,

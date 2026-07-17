@@ -6,7 +6,7 @@
  * Full schema still runs on the server via freezeFreshDescriptor.
  */
 
-import { BLOCK_DESCRIPTOR_SLUG_REGEX } from "@/features/planner/project/catalog/svg/svgTypes";
+import { BLOCK_DESCRIPTOR_SLUG_REGEX } from "@/features/planner/catalog/svg/svgTypes";
 import type { FieldIssue, SvgEditorFormState } from "./svgEditorFormState";
 
 function positiveMm(value: number, path: string, label: string): FieldIssue | null {

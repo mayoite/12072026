@@ -4,15 +4,17 @@ import {
   MIN_WALL_SEGMENT_MM,
   shouldCommitWallSegment,
   wallSegmentLengthMm,
+  wallSegmentAngleDegrees,
+  exactWallEndPoint,
 } from "@/features/planner/canvas/wallDrawGeometry";
 import { CANVAS_TOOL_GUIDANCE } from "@/features/planner/editor/canvasTool";
-import { addPlannerWall } from "@/features/planner/project/model/actions/walls";
+import { addPlannerWall } from "@/features/planner/model/actions/walls";
 import {
   createPlannerProject,
   createRectangularRoomProject,
-} from "@/features/planner/project/model/project";
-import { executePlannerCommand } from "@/features/planner/project/lib/commands/plannerCommand";
-import { createPlannerHistory } from "@/features/planner/project/store/history";
+} from "@/features/planner/model/project";
+import { executePlannerCommand } from "@/features/planner/lib/commands/plannerCommand";
+import { createPlannerHistory } from "@/features/planner/store/history";
 import { summarizeFloorMetrics } from "@/features/planner/editor/workspacePlanMetrics";
 
 function ids(...values: string[]) {
@@ -28,6 +30,13 @@ describe("wallDrawGeometry", () => {
     );
     expect(shouldCommitWallSegment(start, { x: 0, y: 0 })).toBe(false);
     expect(wallSegmentLengthMm(start, { x: 3, y: 4 })).toBe(5);
+  });
+
+  it("resolves exact length and angle into a canonical endpoint", () => {
+    const end = exactWallEndPoint({ x: 100, y: 200 }, 3000, 90);
+    expect(end.x).toBeCloseTo(100, 8);
+    expect(end.y).toBeCloseTo(3200, 8);
+    expect(wallSegmentAngleDegrees({ x: 100, y: 200 }, { x: 100, y: 3200 })).toBe(90);
   });
 
   it("accepts segments at or above the minimum mm gate", () => {
@@ -92,6 +101,29 @@ describe("addPlannerWall Δ walls (seed room → draw)", () => {
     expect(next.floors[0].walls.at(-1)?.start).toEqual({ x: 500, y: 500 });
     expect(next.floors[0].walls.at(-1)?.end).toEqual({ x: 3500, y: 500 });
     expect(summarizeFloorMetrics(next.floors[0]).walls).toBe(before + 1);
+  });
+
+  it("rejects zero-length and direction-insensitive duplicate walls", () => {
+    const seed = createRectangularRoomProject({
+      name: "Duplicate guard",
+      widthMm: 5000,
+      depthMm: 4000,
+    });
+    const first = seed.floors[0]!.walls[0]!;
+    const zero = addPlannerWall(
+      seed,
+      { start: { x: 200, y: 200 }, end: { x: 200, y: 200 } },
+      () => "zero-wall",
+    );
+    const duplicate = addPlannerWall(
+      seed,
+      { start: first.end, end: first.start },
+      () => "duplicate-wall",
+    );
+
+    expect(zero).toBe(seed);
+    expect(duplicate).toBe(seed);
+    expect(seed.floors[0]!.walls).toHaveLength(4);
   });
 
   it("routes through document.update so workspace history records the Δ", () => {

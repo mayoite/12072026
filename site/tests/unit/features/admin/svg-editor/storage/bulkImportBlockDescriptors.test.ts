@@ -14,7 +14,7 @@ import {
   previewBulkImport,
 } from "@/features/admin/svg-editor/storage/bulkImportBlockDescriptors";
 import { readLifecycleManifest } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
-import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { tryLoad } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 
 let workDir: string;
 

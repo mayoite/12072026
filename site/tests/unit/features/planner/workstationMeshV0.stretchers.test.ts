@@ -3,14 +3,14 @@
  * Legs already landed; stretchers connect posts under worktops (not photoreal).
  */
 import { describe, expect, it } from "vitest";
-import { createWorkstationConfigV0 } from "@/features/planner/project/catalog/workstationSystemV0";
+import { createWorkstationConfigV0 } from "@/features/planner/catalog/workstationSystemV0";
 import {
   WORKTOP_THICKNESS_MM,
   generateWorkstationV0Mesh,
   generateWorkstationV0MeshPlan,
   type WorkstationV0MeshPartPlan,
   type WorkstationV0MeshPlan,
-} from "@/features/planner/project/catalog/workstationMeshV0";
+} from "@/features/planner/catalog/workstationMeshV0";
 
 function stretchersOf(plan: WorkstationV0MeshPlan): WorkstationV0MeshPartPlan[] {
   return plan.parts.filter((p) => p.name.startsWith("stretcher-"));

@@ -9,14 +9,14 @@ import {
   PRODUCT_CATALOG_POLICY,
   assertProductAssetsStayOffGit,
   listCdnEligibleRuntimeAssets,
-} from "@/features/planner/project/cleanup/assetClassification";
+} from "@/features/planner/cleanup/assetClassification";
 import {
   FORBIDDEN_GRAPH_IDS,
   PRODUCTION_IMPORT_GRAPH,
   fabricRetirementBlocked,
   plannerHybridRoutes,
   routesStillOnFabricStack,
-} from "@/features/planner/project/cleanup/importGraphProof";
+} from "@/features/planner/cleanup/importGraphProof";
 
 vi.mock("@/lib/auth/plannerSession", () => ({
   getOptionalPlannerUser: vi.fn(async () => null),

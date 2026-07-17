@@ -6,7 +6,7 @@ import {
 import type {
   PlannerFurnitureItem,
   PlannerProject,
-} from "@/features/planner/project/model/types";
+} from "@/features/planner/model/types";
 
 function sampleProject(
   furnitureOverrides?: PlannerFurnitureItem[],

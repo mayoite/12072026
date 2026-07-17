@@ -39,7 +39,7 @@ import {
   type PipelineDescriptor,
 } from "@/scripts/generate-svg/pipelineCore";
 
-import { sanitizeSvg } from "@/features/planner/project/catalog/svg/svgSanitizer";
+import { sanitizeSvg } from "@/features/planner/catalog/svg/svgSanitizer";
 
 // ── Path helpers ──────────────────────────────────────────────────────────────
 

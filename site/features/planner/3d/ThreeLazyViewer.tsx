@@ -7,9 +7,9 @@
 
 import React, { lazy, Suspense } from "react";
 import type { CSSProperties, ReactNode } from "react";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+import type { PlannerProject } from "@/features/planner/model/types";
 import styles from "./threeLazyViewer.module.css";
-import { readThreeThemeColor } from "@/features/planner/project/shared/readThemeColor";
+import { readThreeThemeColor } from "@/features/planner/shared/readThemeColor";
 import { PLANNER_ORBIT_DEFAULT_ENABLED } from "./orbitDefaults";
 
 export {

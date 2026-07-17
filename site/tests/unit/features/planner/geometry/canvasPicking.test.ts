@@ -7,12 +7,12 @@ import {
   pickWallAtPoint,
   pickWallWithPosition,
   pointInPolygon,
-} from "@/features/planner/project/lib/geometry/canvasPicking";
+} from "@/features/planner/lib/geometry/canvasPicking";
 import type {
   PlannerFurnitureItem,
   PlannerPoint,
   PlannerWall,
-} from "@/features/planner/project/model/types";
+} from "@/features/planner/model/types";
 
 const WALL_DEFAULTS = {
   thickness: 100,

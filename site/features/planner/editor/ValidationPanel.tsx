@@ -2,18 +2,19 @@
 
 import { useCallback } from "react";
 import type { ValidationResult } from "@/features/planner/lib/validation/runValidation";
+import type { ValidationIssue } from "@/features/planner/lib/validation/types";
 import styles from "./validation-panel.module.css";
 
 export interface ValidationPanelProps {
   result: ValidationResult;
-  onFocusIssue?: (focusMm: { x: number; y: number }) => void;
+  onFocusIssue?: (issue: ValidationIssue) => void;
 }
 
 export function ValidationPanel({ result, onFocusIssue }: ValidationPanelProps) {
   const handleFocus = useCallback(
-    (focusMm: { x: number; y: number } | undefined) => {
-      if (!focusMm || !onFocusIssue) return;
-      onFocusIssue(focusMm);
+    (issue: ValidationIssue) => {
+      if (!onFocusIssue) return;
+      onFocusIssue(issue);
     },
     [onFocusIssue],
   );
@@ -61,26 +62,26 @@ export function ValidationPanel({ result, onFocusIssue }: ValidationPanelProps) 
               className={styles.issueRow}
               role="listitem"
               data-severity={issue.severity}
-              data-has-focus={issue.focusMm && onFocusIssue ? "true" : "false"}
-              onClick={() => handleFocus(issue.focusMm)}
+              data-has-focus={onFocusIssue ? "true" : "false"}
+              onClick={() => handleFocus(issue)}
               onKeyDown={(e) => {
-                if ((e.key === "Enter" || e.key === " ") && issue.focusMm) {
+                if ((e.key === "Enter" || e.key === " ") && onFocusIssue) {
                   e.preventDefault();
-                  handleFocus(issue.focusMm);
+                  handleFocus(issue);
                 }
               }}
-              tabIndex={issue.focusMm && onFocusIssue ? 0 : undefined}
+              tabIndex={onFocusIssue ? 0 : undefined}
             >
               <div className={styles.issueMessage}>{issue.message}</div>
               <div className={styles.issueMeta}>
                 <span>{issue.ruleId}</span>
-                {issue.focusMm && onFocusIssue ? (
+                {onFocusIssue ? (
                   <button
                     type="button"
                     className={styles.focusBtn}
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleFocus(issue.focusMm);
+                      handleFocus(issue);
                     }}
                   >
                     Focus

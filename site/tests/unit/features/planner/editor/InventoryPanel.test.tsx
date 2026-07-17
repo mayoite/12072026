@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen, within } from "@testing-library/rea
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { InventoryPanel } from "@/features/planner/editor/InventoryPanel";
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
 
 const catalogHook = {
   items: [],
@@ -14,7 +14,7 @@ const catalogHook = {
   retry: vi.fn(),
 };
 
-vi.mock("@/features/planner/project/catalog/usePlannerWorkspaceCatalog", () => ({
+vi.mock("@/features/planner/catalog/usePlannerWorkspaceCatalog", () => ({
   usePlannerWorkspaceCatalog: () => catalogHook,
   usePlannerSvgCatalog: () => catalogHook,
 }));

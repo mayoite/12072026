@@ -3,15 +3,15 @@ import { describe, expect, it } from "vitest";
 import {
   placeWorkstationConfigOnProject,
   placeWorkstationInstancesOnProject,
-} from "@/features/planner/project/catalog/placementAction";
+} from "@/features/planner/catalog/placementAction";
 import {
   createWorkstationConfigV0,
   layoutWorkstationInstances,
   workstationConfigKey,
   workstationFootprintMm,
-} from "@/features/planner/project/catalog/workstationSystemV0";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+} from "@/features/planner/catalog/workstationSystemV0";
+import { createPlannerProject } from "@/features/planner/model/project";
+import type { PlannerProject } from "@/features/planner/model/types";
 
 function ids(...values: string[]) {
   let index = 0;

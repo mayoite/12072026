@@ -1,14 +1,13 @@
 /**
  * Suggested layout apply — archive fabric runtime removed.
- * Prefer WorkspaceAiBridge / planner project apply paths.
+ * Live apply must go through WorkspaceAiBridge / project apply paths.
+ * This module remains only as a hard fail-closed guard for legacy callers.
  */
 import type { SuggestedLayoutJson } from "./types";
 import { validateLayoutSchema } from "./aiStatus";
 
 /**
- * Apply is not wired to the live workspace host.
- * Callers must use project apply / WorkspaceAiBridge instead.
- * Invalid layouts fail closed; valid layouts throw so silent no-ops cannot look like success.
+ * @deprecated Use WorkspaceAiBridge.applyLayout. Always fails closed.
  */
 export function applySuggestedLayout(_editor?: null, layout?: SuggestedLayoutJson): void {
   if (!layout) {
@@ -26,6 +25,7 @@ export function applySuggestedLayout(_editor?: null, layout?: SuggestedLayoutJso
   );
 }
 
+/** @deprecated Archive shape builder — always empty. */
 export function buildShapesFromSuggestedLayout(_layout?: SuggestedLayoutJson): unknown[] {
   return [];
 }

@@ -2,8 +2,9 @@
 
 /**
  * Live 2-D planner stage (Fabric.js). Sole production plan canvas.
- * Mounted as `PlannerCanvasStage` from `project/canvas-stage` (re-export). Build tools/walls here.
+ * Live host mounts this as `PlannerCanvasStage` via `features/planner/canvas`. Build tools/walls here.
  */
+
 
 import {
   forwardRef,
@@ -12,6 +13,7 @@ import {
   useImperativeHandle,
   useRef,
   useState,
+  type FormEvent,
   type WheelEvent as ReactWheelEvent,
 } from "react";
 import { Canvas, Line, type FabricObject, type ModifiedEvent, type TPointerEventInfo } from "fabric";
@@ -21,20 +23,28 @@ import type { PlannerLayerVisibility } from "@/features/planner/editor/layerVisi
 import type { WorkspaceCanvasContext } from "@/features/planner/editor/useWorkspaceCanvas";
 import {
   projectToScreen,
+  buildSegmentSnapTargets,
   screenToProject,
   snapDrawingPoint,
   zoomTransformAt,
   type CanvasTransform,
   type SnapKind,
-} from "@/features/planner/project/lib/geometry/snapping";
+} from "@/features/planner/lib/geometry/snapping";
 import {
   PLANNER_STAGE_GRID_MM,
   plannerGridOverlayStyle,
 } from "./fabricStageGridOverlay";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import type { PlannerFloor, PlannerPoint, PlannerWall } from "@/features/planner/project/model/types";
-import { resolvePaintColor } from "@/features/planner/project/shared/readThemeColor";
-import { PLANNER_COLOR_TOKENS } from "@/features/planner/project/shared/themeColorTokens";
+import { createPlannerProject } from "@/features/planner/model/project";
+import type { PlannerFloor, PlannerPoint, PlannerWall } from "@/features/planner/model/types";
+import type { PlannerDisplayUnit } from "@/features/planner/model/types";
+import {
+  formatAngleDisplay,
+  formatLengthInput,
+  formatLengthDisplay,
+  parseLengthInput,
+} from "@/features/planner/model/units";
+import { resolvePaintColor } from "@/features/planner/shared/readThemeColor";
+import { PLANNER_COLOR_TOKENS } from "@/features/planner/shared/themeColorTokens";
 import type {
   CanvasStatusSnapshot,
   PlannerCanvasStageHandle,
@@ -54,9 +64,12 @@ import {
 } from "./fabricSelection";
 import { createFabricFurnitureSymbol } from "./fabricBlock2D";
 import {
+  exactWallEndPoint,
   shouldCommitWallSegment,
+  wallSegmentAngleDegrees,
   wallSegmentLengthMm,
 } from "./wallDrawGeometry";
+import { installPlannerFabricExtensions } from "./installPlannerFabricExtensions";
 import styles from "./plannerFabricStage.module.css";
 
 type CanvasEntityType = FabricCanvasEntityType;
@@ -91,12 +104,17 @@ export type PlannerFabricStageProps = {
   snapEnabled?: boolean;
   gridMm?: number;
   onPlaceAtPoint?: (point: PlannerPoint) => void;
-  onWallDrawn?: (start: PlannerPoint, end: PlannerPoint) => void;
+  onWallDrawn?: (
+    start: PlannerPoint,
+    end: PlannerPoint,
+    input?: { thicknessMm?: number },
+  ) => void;
   /** kind restored: door vs window (opening tool defaults to door). */
   onOpeningPlaced?: (wallId: string, position: number, kind: "door" | "window") => void;
   onSelectionChange?: (selection: { type: CanvasEntityType; id: string } | null) => void;
   onStatusChange?: (status: CanvasStatusSnapshot) => void;
   onFurnitureModified?: (update: FurnitureDocumentPoseUpdate) => void;
+  displayUnit?: PlannerDisplayUnit;
 };
 
 type PanSession = {
@@ -110,14 +128,6 @@ function hostPoint(host: HTMLElement, clientX: number, clientY: number): Planner
   return { x: clientX - rect.left, y: clientY - rect.top };
 }
 
-function wallEndpoints(walls: ReadonlyArray<PlannerWall>): PlannerPoint[] {
-  const points: PlannerPoint[] = [];
-  for (const wall of walls) {
-    points.push(wall.start, wall.end);
-  }
-  return points;
-}
-
 function snapProjectPoint(input: {
   raw: PlannerPoint;
   start: PlannerPoint | null;
@@ -125,6 +135,7 @@ function snapProjectPoint(input: {
   transform: CanvasTransform;
   snapEnabled: boolean;
   gridMm: number;
+  orthogonal?: boolean;
 }): { point: PlannerPoint; kind: SnapKind } {
   if (!input.snapEnabled) {
     return { point: input.raw, kind: "none" };
@@ -132,10 +143,12 @@ function snapProjectPoint(input: {
   const snapped = snapDrawingPoint({
     raw: input.raw,
     start: input.start,
-    endpoints: wallEndpoints(input.walls),
+    endpoints: [],
+    endpointTargets: buildSegmentSnapTargets(input.walls, input.raw, input.start),
     zoom: input.transform.scale,
     suppress: false,
     gridMm: input.gridMm,
+    angleIncrementDegrees: input.orthogonal ? 90 : 45,
   });
   return { point: snapped.point, kind: snapped.kind };
 }
@@ -195,6 +208,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       onSelectionChange,
       onStatusChange,
       onFurnitureModified,
+      displayUnit = "mm",
     },
     ref,
   ) {
@@ -203,6 +217,19 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     const fabricRef = useRef<Canvas | null>(null);
     const [transform, setTransform] = useState<CanvasTransform>(DEFAULT_FABRIC_STAGE_TRANSFORM);
     const [svgPaintEpoch, setSvgPaintEpoch] = useState(0);
+    const [wallReadout, setWallReadout] = useState<{
+      x: number;
+      y: number;
+      lengthMm: number;
+      angleDegrees: number;
+      snapKind: SnapKind;
+    } | null>(null);
+    const [exactLength, setExactLength] = useState("");
+    const [exactAngle, setExactAngle] = useState("0");
+    const [exactThickness, setExactThickness] = useState(() =>
+      formatLengthInput(150, displayUnit),
+    );
+    const [exactError, setExactError] = useState<string | null>(null);
     const transformRef = useRef(transform);
     const activeToolRef = useRef(activeTool);
     const rebuildingRef = useRef(false);
@@ -218,8 +245,57 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     const gridEnabledRef = useRef(gridEnabled);
     const snapEnabledRef = useRef(snapEnabled);
     const gridMmRef = useRef(gridMm);
+    const displayUnitRef = useRef(displayUnit);
+    const exactThicknessRef = useRef(exactThickness);
     const wallDrawRef = useRef<{ start: PlannerPoint; pointerId: number } | null>(null);
     const previewLineRef = useRef<Line | null>(null);
+
+    const clearWallSession = useCallback(() => {
+      wallDrawRef.current = null;
+      setWallReadout(null);
+      setExactError(null);
+      const preview = previewLineRef.current;
+      if (preview) {
+        fabricRef.current?.remove(preview);
+        previewLineRef.current = null;
+        fabricRef.current?.requestRenderAll();
+      }
+    }, []);
+
+    const commitExactWall = useCallback(
+      (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const session = wallDrawRef.current;
+        if (!session) return;
+        const lengthMm = parseLengthInput(exactLength, displayUnit);
+        const thicknessMm = parseLengthInput(exactThickness, displayUnit);
+        const angleDegrees = Number(exactAngle);
+        if (
+          lengthMm === null ||
+          lengthMm < 10 ||
+          thicknessMm === null ||
+          thicknessMm < 50 ||
+          thicknessMm > 1000 ||
+          !Number.isFinite(angleDegrees)
+        ) {
+          setExactError("Enter a wall length, angle, and thickness between 50–1000 mm.");
+          return;
+        }
+        const end = exactWallEndPoint(session.start, lengthMm, angleDegrees);
+        onWallDrawnRef.current?.(session.start, end, { thicknessMm });
+        // Continue the chain from the committed endpoint (Escape still cancels).
+        wallDrawRef.current = { start: end, pointerId: session.pointerId };
+        setExactLength("");
+        setExactError(null);
+        setWallReadout(null);
+        emitStatusRef.current(transformRef.current, "wall");
+      },
+      [displayUnit, exactAngle, exactLength, exactThickness],
+    );
+
+    useEffect(() => {
+      setExactThickness(formatLengthInput(150, displayUnit));
+    }, [displayUnit]);
 
     useEffect(() => {
       transformRef.current = transform;
@@ -273,6 +349,14 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       gridMmRef.current = gridMm;
     }, [gridMm]);
 
+    useEffect(() => {
+      displayUnitRef.current = displayUnit;
+    }, [displayUnit]);
+
+    useEffect(() => {
+      exactThicknessRef.current = exactThickness;
+    }, [exactThickness]);
+
     const emitStatus = useCallback(
       (nextTransform: CanvasTransform, tool: PlannerTool) => {
         onStatusChangeRef.current?.({
@@ -308,13 +392,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           return true;
         },
         cancel: () => {
-          wallDrawRef.current = null;
-          const preview = previewLineRef.current;
-          if (preview) {
-            fabricRef.current?.remove(preview);
-            previewLineRef.current = null;
-            fabricRef.current?.requestRenderAll();
-          }
+          clearWallSession();
         },
         commit: () => {
           const session = wallDrawRef.current;
@@ -327,8 +405,21 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           );
           if (shouldCommitWallSegment(session.start, end)) {
             onWallDrawnRef.current?.(session.start, end);
+            const endScreen = projectToScreen(end, transformRef.current);
+            wallDrawRef.current = { start: end, pointerId: session.pointerId };
+            preview.set({
+              x1: endScreen.x,
+              y1: endScreen.y,
+              x2: endScreen.x,
+              y2: endScreen.y,
+            });
+            preview.setCoords();
+            setWallReadout(null);
+            canvas.requestRenderAll();
+            return;
           }
           wallDrawRef.current = null;
+          setWallReadout(null);
           canvas.remove(preview);
           previewLineRef.current = null;
           canvas.requestRenderAll();
@@ -351,7 +442,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           }));
         },
       }),
-      [workspaceCanvas],
+      [clearWallSession, workspaceCanvas],
     );
 
     useEffect(() => {
@@ -368,9 +459,14 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         // Prefer pointer events so Playwright/Chromium drag gestures do not
         // enter HTML5 drag mode mid wall stroke.
         enablePointerEvents: true,
+        // Fabric 7 defaults fire middle/right clicks; wall tools are left-only.
+        fireRightClick: false,
+        fireMiddleClick: false,
+        stopContextMenu: true,
         backgroundColor: fabricBackgroundPaint(gridEnabledRef.current),
       });
       fabricRef.current = canvas;
+      const fabricExtensions = installPlannerFabricExtensions(canvas);
       // Scene-aware E2E helpers (firstFurnitureCenter) read this hook.
       (
         window as unknown as { __plannerFabricView?: Canvas }
@@ -395,10 +491,11 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           previewLineRef.current = null;
         }
         wallDrawRef.current = null;
+        setWallReadout(null);
         canvas.requestRenderAll();
       };
 
-      const commitWallAt = (clientX: number, clientY: number) => {
+      const commitWallAt = (clientX: number, clientY: number, orthogonal = false) => {
         const wallSession = wallDrawRef.current;
         const preview = previewLineRef.current;
         if (!wallSession) return;
@@ -412,18 +509,28 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           transform: transformRef.current,
           snapEnabled: snapEnabledRef.current,
           gridMm: gridMmRef.current,
+          orthogonal,
         });
         const end = snappedEnd.point;
         if (shouldCommitWallSegment(wallSession.start, end)) {
-          onWallDrawnRef.current?.(wallSession.start, end);
+          const thicknessMm =
+            parseLengthInput(exactThicknessRef.current, displayUnitRef.current) ?? 150;
+          onWallDrawnRef.current?.(wallSession.start, end, { thicknessMm });
+          const endScreen = projectToScreen(end, transformRef.current);
+          wallDrawRef.current = { start: end, pointerId: wallSession.pointerId };
+          if (preview) {
+            preview.set({
+              x1: endScreen.x,
+              y1: endScreen.y,
+              x2: endScreen.x,
+              y2: endScreen.y,
+            });
+            preview.setCoords();
+          }
+          setWallReadout(null);
+          canvas.requestRenderAll();
+          emitStatusRef.current(transformRef.current, "wall");
         }
-        if (preview) {
-          canvas.remove(preview);
-          previewLineRef.current = null;
-        }
-        wallDrawRef.current = null;
-        canvas.requestRenderAll();
-        emitStatusRef.current(transformRef.current, "wall");
       };
 
       const startWallAt = (clientX: number, clientY: number, pointerId: number) => {
@@ -458,10 +565,20 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         canvas.add(preview);
         previewLineRef.current = preview;
         wallDrawRef.current = { start, pointerId };
+        setExactLength(formatLengthInput(0, displayUnitRef.current));
+        setExactAngle("0");
+        setExactError(null);
+        setWallReadout({
+          x: startScreen.x,
+          y: startScreen.y,
+          lengthMm: 0,
+          angleDegrees: 0,
+          snapKind: snappedStart.kind,
+        });
         emitStatusRef.current(transformRef.current, "wall");
       };
 
-      const updateWallAt = (clientX: number, clientY: number) => {
+      const updateWallAt = (clientX: number, clientY: number, orthogonal = false) => {
         const wallSession = wallDrawRef.current;
         const preview = previewLineRef.current;
         if (!wallSession || !preview) return;
@@ -475,10 +592,29 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           transform: transformRef.current,
           snapEnabled: snapEnabledRef.current,
           gridMm: gridMmRef.current,
+          orthogonal,
         });
         const end = snappedEnd.point;
         const endScreen = projectToScreen(end, transformRef.current);
         preview.set({ x2: endScreen.x, y2: endScreen.y });
+        setWallReadout({
+          x: endScreen.x,
+          y: endScreen.y,
+          lengthMm: wallSegmentLengthMm(wallSession.start, end),
+          angleDegrees:
+            (Math.atan2(end.y - wallSession.start.y, end.x - wallSession.start.x) * 180) /
+            Math.PI,
+          snapKind: snappedEnd.kind,
+        });
+        setExactLength(
+          formatLengthInput(
+            wallSegmentLengthMm(wallSession.start, end),
+            displayUnitRef.current,
+          ),
+        );
+        setExactAngle(
+          String(Number(wallSegmentAngleDegrees(wallSession.start, end).toFixed(1))),
+        );
         onStatusChangeRef.current?.({
           snapKind: snappedEnd.kind,
           activeTool: "wall",
@@ -524,6 +660,12 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
 
       const handleHostPointerDown = (event: PointerEvent | MouseEvent) => {
         if (event.button !== 0) return;
+        if (
+          event.target instanceof Element &&
+          event.target.closest("[data-wall-input]")
+        ) {
+          return;
+        }
         const uiTool = activeToolRef.current;
         const tool = runtimeToolFor(uiTool);
         const pointerId = pointerIdOf(event);
@@ -538,6 +680,11 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         if (tool === "wall") {
           event.preventDefault();
           event.stopPropagation();
+          if (wallDrawRef.current) {
+            updateWallAt(event.clientX, event.clientY, event.shiftKey);
+            commitWallAt(event.clientX, event.clientY, event.shiftKey);
+            return;
+          }
           startWallAt(event.clientX, event.clientY, pointerId);
           if ("pointerId" in event) {
             try {
@@ -586,7 +733,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
 
       const handleHostPointerMove = (event: PointerEvent | MouseEvent) => {
         if (wallDrawRef.current) {
-          updateWallAt(event.clientX, event.clientY);
+          updateWallAt(event.clientX, event.clientY, event.shiftKey);
           return;
         }
         const session = panSessionRef.current;
@@ -604,8 +751,14 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       };
 
       const handleHostPointerUp = (event: PointerEvent | MouseEvent) => {
+        if (
+          event.target instanceof Element &&
+          event.target.closest("[data-wall-input]")
+        ) {
+          return;
+        }
         if (wallDrawRef.current) {
-          commitWallAt(event.clientX, event.clientY);
+          commitWallAt(event.clientX, event.clientY, event.shiftKey);
           if ("pointerId" in event) {
             try {
               if (host.hasPointerCapture(event.pointerId)) {
@@ -634,8 +787,14 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       // Window backup: if pointerup is lost on the host (HTML5 drag residual),
       // still commit any open wall session from the last known client point.
       const handleWindowPointerUp = (event: PointerEvent | MouseEvent) => {
+        if (
+          event.target instanceof Element &&
+          event.target.closest("[data-wall-input]")
+        ) {
+          return;
+        }
         if (!wallDrawRef.current) return;
-        commitWallAt(event.clientX, event.clientY);
+        commitWallAt(event.clientX, event.clientY, event.shiftKey);
       };
 
       const handleFabricSelectDown = (opt: TPointerEventInfo) => {
@@ -748,6 +907,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         window.removeEventListener("mouseup", handleWindowPointerUp);
         upperEl?.removeEventListener("dragstart", blockDragStart);
         clearWallPreview();
+        fabricExtensions.dispose();
         observer.disconnect();
         canvas.dispose();
         fabricRef.current = null;
@@ -817,36 +977,74 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       for (const door of activeFloor.doors) {
         const wall = activeFloor.walls.find((item) => item.id === door.wallId);
         if (!wall) continue;
+        const wallLength = Math.hypot(
+          wall.end.x - wall.start.x,
+          wall.end.y - wall.start.y,
+        );
+        if (wallLength === 0) continue;
+        const unit = {
+          x: (wall.end.x - wall.start.x) / wallLength,
+          y: (wall.end.y - wall.start.y) / wallLength,
+        };
         const point = {
           x: wall.start.x + (wall.end.x - wall.start.x) * door.position,
           y: wall.start.y + (wall.end.y - wall.start.y) * door.position,
         };
-        const screen = projectToScreen(point, transform);
-        const marker = new Line([screen.x - 8, screen.y - 8, screen.x + 8, screen.y + 8], {
-          stroke: "#b45309",
-          strokeWidth: 3,
-          selectable: false,
-          evented: false,
+        const halfWidth = door.width / 2;
+        const start = projectToScreen(
+          { x: point.x - unit.x * halfWidth, y: point.y - unit.y * halfWidth },
+          transform,
+        );
+        const end = projectToScreen(
+          { x: point.x + unit.x * halfWidth, y: point.y + unit.y * halfWidth },
+          transform,
+        );
+        const marker = new Line([start.x, start.y, end.x, end.y], {
+          stroke: resolveStageColor(PLANNER_COLOR_TOKENS.doorFill, "#b45309"),
+          strokeWidth: 7,
+          selectable: interactive,
+          evented: interactive,
           objectCaching: false,
         });
+        writeCanvasEntityType(marker, "door");
+        writeFurnitureEntityId(marker, door.id);
         canvas.add(marker);
       }
 
       for (const window of activeFloor.windows) {
         const wall = activeFloor.walls.find((item) => item.id === window.wallId);
         if (!wall) continue;
+        const wallLength = Math.hypot(
+          wall.end.x - wall.start.x,
+          wall.end.y - wall.start.y,
+        );
+        if (wallLength === 0) continue;
+        const unit = {
+          x: (wall.end.x - wall.start.x) / wallLength,
+          y: (wall.end.y - wall.start.y) / wallLength,
+        };
         const point = {
           x: wall.start.x + (wall.end.x - wall.start.x) * window.position,
           y: wall.start.y + (wall.end.y - wall.start.y) * window.position,
         };
-        const screen = projectToScreen(point, transform);
-        const marker = new Line([screen.x - 8, screen.y + 8, screen.x + 8, screen.y - 8], {
-          stroke: "#0369a1",
-          strokeWidth: 3,
-          selectable: false,
-          evented: false,
+        const halfWidth = window.width / 2;
+        const start = projectToScreen(
+          { x: point.x - unit.x * halfWidth, y: point.y - unit.y * halfWidth },
+          transform,
+        );
+        const end = projectToScreen(
+          { x: point.x + unit.x * halfWidth, y: point.y + unit.y * halfWidth },
+          transform,
+        );
+        const marker = new Line([start.x, start.y, end.x, end.y], {
+          stroke: resolveStageColor(PLANNER_COLOR_TOKENS.windowStroke, "#0369a1"),
+          strokeWidth: 7,
+          selectable: interactive,
+          evented: interactive,
           objectCaching: false,
         });
+        writeCanvasEntityType(marker, "window");
+        writeFurnitureEntityId(marker, window.id);
         canvas.add(marker);
       }
 
@@ -913,6 +1111,53 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           />
         ) : null}
         <canvas ref={lowerCanvasRef} className={styles.canvasHost} />
+        {wallReadout ? (
+          <form
+            className={styles.wallReadout}
+            style={{ left: wallReadout.x, top: wallReadout.y }}
+            data-snap-kind={wallReadout.snapKind}
+            data-wall-input="true"
+            aria-label="Exact wall input"
+            onSubmit={commitExactWall}
+          >
+            <label>
+              <span>Length</span>
+              <input
+                value={exactLength}
+                onChange={(event) => setExactLength(event.target.value)}
+                aria-label={`Wall length (${displayUnit})`}
+                inputMode="decimal"
+              />
+            </label>
+            <label>
+              <span>Angle</span>
+              <input
+                value={exactAngle}
+                onChange={(event) => setExactAngle(event.target.value)}
+                aria-label="Wall angle (degrees)"
+                inputMode="decimal"
+              />
+            </label>
+            <label>
+              <span>Wall</span>
+              <input
+                value={exactThickness}
+                onChange={(event) => setExactThickness(event.target.value)}
+                aria-label={`Wall thickness (${displayUnit})`}
+                inputMode="decimal"
+              />
+            </label>
+            <button type="submit">Commit</button>
+            {wallReadout.snapKind !== "none" ? (
+              <span>Snap: {wallReadout.snapKind}</span>
+            ) : null}
+            <span className={styles.wallReadoutLive} aria-live="polite">
+              {formatLengthDisplay(wallReadout.lengthMm, displayUnit)} ·{" "}
+              {formatAngleDisplay(wallReadout.angleDegrees)}
+            </span>
+            {exactError ? <span className={styles.wallReadoutError} role="alert">{exactError}</span> : null}
+          </form>
+        ) : null}
       </div>
     );
   },

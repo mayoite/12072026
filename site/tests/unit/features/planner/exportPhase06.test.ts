@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest";
 
-import { createRectangularRoomProject } from "@/features/planner/project/model/project";
+import { createRectangularRoomProject } from "@/features/planner/model/project";
 import {
   buildExportFilename,
   isSupportedExportFormat,
   preflightPlannerExport,
   SUPPORTED_EXPORT_FORMATS,
-} from "@/features/planner/project/shared/export/exportPreflight";
+} from "@/features/planner/shared/export/exportPreflight";
 import {
   formatMeasurement,
   getFloorBounds,
-} from "@/features/planner/project/shared/export/exportUtils";
+} from "@/features/planner/shared/export/exportUtils";
 
 function ids(...values: string[]) {
   let index = 0;

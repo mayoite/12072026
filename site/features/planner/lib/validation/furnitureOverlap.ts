@@ -1,25 +1,80 @@
 /**
- * P14 — furniture overlap rule (TDD stub).
- * Detects when two placed items' footprints intersect.
+ * Furniture overlap rule — rotation-aware OBB intersection (SAT).
  */
 import type { PlacedFurniture, ValidationIssue } from "./types";
 
+type Point = { x: number; y: number };
+
+function furnitureCorners(item: PlacedFurniture): readonly Point[] {
+  const radians = ((item.rotationDeg ?? 0) * Math.PI) / 180;
+  const cos = Math.cos(radians);
+  const sin = Math.sin(radians);
+  const halfWidth = item.widthMm / 2;
+  const halfDepth = item.depthMm / 2;
+  const locals: readonly Point[] = [
+    { x: -halfWidth, y: -halfDepth },
+    { x: halfWidth, y: -halfDepth },
+    { x: halfWidth, y: halfDepth },
+    { x: -halfWidth, y: halfDepth },
+  ];
+  return locals.map((local) => ({
+    x: item.xMm + local.x * cos - local.y * sin,
+    y: item.yMm + local.x * sin + local.y * cos,
+  }));
+}
+
+function projectOntoAxis(corners: readonly Point[], axis: Point): { min: number; max: number } {
+  let min = Number.POSITIVE_INFINITY;
+  let max = Number.NEGATIVE_INFINITY;
+  for (const corner of corners) {
+    const projection = corner.x * axis.x + corner.y * axis.y;
+    if (projection < min) min = projection;
+    if (projection > max) max = projection;
+  }
+  return { min, max };
+}
+
+function axesFromCorners(corners: readonly Point[]): Point[] {
+  const axes: Point[] = [];
+  for (let index = 0; index < corners.length; index += 1) {
+    const current = corners[index];
+    const next = corners[(index + 1) % corners.length];
+    if (!current || !next) continue;
+    const edgeX = next.x - current.x;
+    const edgeY = next.y - current.y;
+    const length = Math.hypot(edgeX, edgeY);
+    if (length < 1e-9) continue;
+    // Outward normal of the edge.
+    axes.push({ x: -edgeY / length, y: edgeX / length });
+  }
+  return axes;
+}
+
+function intervalsOverlap(
+  left: { min: number; max: number },
+  right: { min: number; max: number },
+): boolean {
+  return left.max >= right.min && right.max >= left.min;
+}
+
 /** @internal exported for unit tests */
 export function aabbsOverlap(a: PlacedFurniture, b: PlacedFurniture): boolean {
-  // TODO(P14): rotate-aware OBB intersection; axis-aligned stub for now.
-  const halfAw = a.widthMm / 2;
-  const halfAh = a.depthMm / 2;
-  const halfBw = b.widthMm / 2;
-  const halfBh = b.depthMm / 2;
+  const cornersA = furnitureCorners(a);
+  const cornersB = furnitureCorners(b);
+  const axes = [...axesFromCorners(cornersA), ...axesFromCorners(cornersB)];
 
-  const overlapX = Math.abs(a.xMm - b.xMm) < halfAw + halfBw;
-  const overlapY = Math.abs(a.yMm - b.yMm) < halfAh + halfBh;
-  return overlapX && overlapY;
+  for (const axis of axes) {
+    const projectionA = projectOntoAxis(cornersA, axis);
+    const projectionB = projectOntoAxis(cornersB, axis);
+    if (!intervalsOverlap(projectionA, projectionB)) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
  * Returns validation issues for every overlapping furniture pair.
- * Stub: not yet integrated with workspace document or live revalidation.
  */
 export function detectFurnitureOverlaps(
   furniture: readonly PlacedFurniture[],

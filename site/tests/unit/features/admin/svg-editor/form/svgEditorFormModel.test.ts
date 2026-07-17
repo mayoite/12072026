@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   BLOCK_DESCRIPTOR_VARIANTS,
   MountPlaneSchema,
-} from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/svg/svgTypes";
 import {
   MOUNT_PLANE_OPTIONS,
   SOURCE_PROVENANCE_OPTIONS,

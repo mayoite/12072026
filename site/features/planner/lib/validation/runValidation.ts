@@ -3,7 +3,7 @@ import type {
   PlacedFurniture,
 } from "./types";
 import { detectFurnitureOverlaps } from "./furnitureOverlap";
-import type { PlannerFloor, PlannerFurnitureItem } from "@/features/planner/project/model/types";
+import type { PlannerFloor, PlannerFurnitureItem } from "@/features/planner/model/types";
 
 function toPlacedFurniture(item: PlannerFurnitureItem): PlacedFurniture {
   return {

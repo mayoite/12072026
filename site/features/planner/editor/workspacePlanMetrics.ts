@@ -1,5 +1,9 @@
-import type { PlannerFloor } from "@/features/planner/project/model/types";
-import { parseWorkstationConfigKey } from "@/features/planner/project/catalog/workstationSystemV0";
+import type { PlannerFloor } from "@/features/planner/model/types";
+import { parseWorkstationConfigKey } from "@/features/planner/catalog/workstationSystemV0";
+import {
+  buildWallGraph,
+  findEnclosedRooms,
+} from "@/features/planner/lib/geometry/wallGraph";
 
 export type WorkspacePlanMetrics = {
   objects: number;
@@ -12,6 +16,8 @@ export type WorkspacePlanMetrics = {
   boqReady: boolean;
   /** Number of hard validation errors blocking BOQ readiness. */
   validationErrors: number;
+  /** True only when wall centreline geometry contains a closed polygon. */
+  closedRoom: boolean;
   /** Bounding dimensions of wall endpoints on the active floor. */
   planWidthMm?: number;
   planDepthMm?: number;
@@ -43,6 +49,7 @@ export function summarizeFloorMetrics(
       floorLabel: "Floor 1",
       boqReady: false,
       validationErrors: 0,
+      closedRoom: false,
     };
   }
 
@@ -59,6 +66,7 @@ export function summarizeFloorMetrics(
     floor.columns.length;
 
   const boqReady = furniture > 0 && validationErrors === 0;
+  const closedRoom = findEnclosedRooms(buildWallGraph(floor.walls)).length > 0;
   const wallPoints = floor.walls.flatMap((wall) => [wall.start, wall.end]);
   const planWidthMm = wallPoints.length
     ? Math.max(...wallPoints.map((point) => point.x)) -
@@ -77,6 +85,7 @@ export function summarizeFloorMetrics(
     floorLabel: floor.name,
     boqReady,
     validationErrors,
+    closedRoom,
     ...(planWidthMm !== undefined ? { planWidthMm } : {}),
     ...(planDepthMm !== undefined ? { planDepthMm } : {}),
   };

@@ -1,21 +1,21 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { convertLegacyRectScene } from "@/features/planner/project/shared/document/legacyProject";
-import { parsePlannerProject, parsePlannerSceneEnvelope } from "@/features/planner/project/shared/document/projectParser";
-import { feasibilityCommands, getFeasibilityCommand } from "@/features/planner/project/lib/commands/registry";
+import { convertLegacyRectScene } from "@/features/planner/shared/document/legacyProject";
+import { parsePlannerProject, parsePlannerSceneEnvelope } from "@/features/planner/shared/document/projectParser";
+import { feasibilityCommands, getFeasibilityCommand } from "@/features/planner/lib/commands/registry";
 import {
   projectToScreen,
   screenToProject,
   snapDrawingPoint,
   zoomTransformAt,
-} from "@/features/planner/project/lib/geometry/snapping";
-import { assertPlannerProject, inspectPlannerProject } from "@/features/planner/project/model/invariants";
+} from "@/features/planner/lib/geometry/snapping";
+import { assertPlannerProject, inspectPlannerProject } from "@/features/planner/model/invariants";
 import {
   createPlannerProject,
   createPlannerSceneEnvelope,
   createRectangularRoomProject,
-} from "@/features/planner/project/model/project";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+} from "@/features/planner/model/project";
+import type { PlannerProject } from "@/features/planner/model/types";
 import {
   boundsMmToPlannerCm,
   boundsplannerCmToMm,
@@ -26,15 +26,15 @@ import {
   normalizeDegrees,
   plannerCmToMm,
   parseFeetAndInches,
-} from "@/features/planner/project/model/units";
-import { addPlannerFurniture, rotatePlannerFurniture } from "@/features/planner/project/model/actions/furniture";
-import { addPlannerDoor, addPlannerWindow } from "@/features/planner/project/model/actions/openings";
+} from "@/features/planner/model/units";
+import { addPlannerFurniture, rotatePlannerFurniture } from "@/features/planner/model/actions/furniture";
+import { addPlannerDoor, addPlannerWindow } from "@/features/planner/model/actions/openings";
 import {
   applyPlannerProjectAction,
   applyPlannerProjectTransaction,
   movePlannerEntity,
-} from "@/features/planner/project/model/actions/projectActions";
-import { addPlannerWall } from "@/features/planner/project/model/actions/walls";
+} from "@/features/planner/model/actions/projectActions";
+import { addPlannerWall } from "@/features/planner/model/actions/walls";
 import {
   beginPlannerDrag,
   commitPlannerDrag,
@@ -43,7 +43,7 @@ import {
   dispatchPlannerTransaction,
   redoPlannerAction,
   undoPlannerAction,
-} from "@/features/planner/project/store/history";
+} from "@/features/planner/store/history";
 
 function ids(...values: string[]) {
   let index = 0;
@@ -195,7 +195,7 @@ describe("operations, invariants, and history", () => {
     const project = room();
     const door = { wallId: "wall-1", position: 0.5, width: 900, height: 2100, type: "single" as const, swingDirection: "left" as const, flipSide: false };
     const withDoor = addPlannerDoor(project, door, ids("door"));
-    const window = { wallId: "wall-1", position: 0.4, width: 1000, height: 1200, sillHeight: 900, type: "fixed" as const };
+    const window = { wallId: "wall-1", position: 0.8, width: 1000, height: 1200, sillHeight: 900, type: "fixed" as const };
     expect(addPlannerWindow(withDoor, window, ids("window")).floors[0].windows).toHaveLength(1);
     for (const invalid of [
       { ...door, wallId: "missing" },

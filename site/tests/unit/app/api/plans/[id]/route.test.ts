@@ -69,6 +69,13 @@ describe("app/api/plans/[id]/route.ts", () => {
     expect(body.error.message).toBe("Plan not found");
   });
 
+  it("GET scopes load to the authenticated owner (blocks enumeration)", async () => {
+    vi.mocked(loadPlannerDocumentFromStore).mockResolvedValue(null);
+    const res = await GET(new NextRequest("http://localhost/api/plans/plan-1"), routeContext);
+    expect(res.status).toBe(404);
+    expect(loadPlannerDocumentFromStore).toHaveBeenCalledWith("plan-1", "user-1");
+  });
+
   it("GET returns document when found", async () => {
     vi.mocked(loadPlannerDocumentFromStore).mockResolvedValue({ id: "plan-1" } as never);
     const res = await GET(new NextRequest("http://localhost/api/plans/plan-1"), routeContext);

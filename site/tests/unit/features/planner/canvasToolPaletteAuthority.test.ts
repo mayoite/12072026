@@ -23,7 +23,7 @@ import {
   buildPaletteCommands,
   runPaletteCommand,
   type PaletteCommandHandlers,
-} from "@/features/planner/project/lib/commands/paletteCommands";
+} from "@/features/planner/lib/commands/paletteCommands";
 
 const LIVE_TOOLS: readonly PlannerTool[] = [
   "select",

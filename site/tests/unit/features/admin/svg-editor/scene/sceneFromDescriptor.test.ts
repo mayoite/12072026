@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { sceneFromDescriptor } from "@/features/admin/svg-editor/scene/sceneFromDescriptor";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 function fixed(partial: Partial<BlockDescriptor> = {}): BlockDescriptor {
   return {

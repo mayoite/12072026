@@ -18,11 +18,11 @@ import {
   BLOCK_DESCRIPTOR_SLUG_REGEX,
   computeBlockDescriptorChecksum,
   type BlockDescriptorVariant,
-} from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/svg/svgTypes";
 import {
   BLOCK_DESCRIPTORS_DIR_DEFAULT,
   tryLoad,
-} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+} from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import {
   persistBlockDescriptor,
   unlinkBlockDescriptor,

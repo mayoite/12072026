@@ -12,12 +12,12 @@ import {
   takePendingWorkstationConfig,
   toggleConfiguratorModule,
   type WorkstationConfiguratorDraftV0,
-} from "@/features/planner/project/catalog/workstationConfiguratorV0";
+} from "@/features/planner/catalog/workstationConfiguratorV0";
 import {
   WORKSTATION_V0_SIZE_GRID,
   createWorkstationConfigV0,
   workstationConfigKey,
-} from "@/features/planner/project/catalog/workstationSystemV0";
+} from "@/features/planner/catalog/workstationSystemV0";
 
 describe("workstationConfiguratorV0", () => {
   it("default draft resolves to linear with desk+pedestal+panel", () => {

@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { placeWorkstationInstancesOnProject } from "@/features/planner/project/catalog/placementAction";
-import { summarizeWorkstationBoqV0 } from "@/features/planner/project/catalog/workstationBoqV0";
+import { placeWorkstationInstancesOnProject } from "@/features/planner/catalog/placementAction";
+import { summarizeWorkstationBoqV0 } from "@/features/planner/catalog/workstationBoqV0";
 import {
   createWorkstationConfigV0,
-} from "@/features/planner/project/catalog/workstationSystemV0";
-import { createPlannerProject } from "@/features/planner/project/model/project";
+} from "@/features/planner/catalog/workstationSystemV0";
+import { createPlannerProject } from "@/features/planner/model/project";
 
 function ids(...values: string[]) {
   let index = 0;

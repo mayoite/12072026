@@ -4,8 +4,8 @@ import {
   assertDescriptorPublishable,
   buildReleasedProductFromPublish,
 } from "@/features/admin/svg-editor/publish/releasedCatalogPublishGate";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
-import { BLOCK_DESCRIPTOR_SCHEMA_VERSION } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
+import { BLOCK_DESCRIPTOR_SCHEMA_VERSION } from "@/features/planner/catalog/svg/svgTypes";
 
 const base = {
   schemaVersion: BLOCK_DESCRIPTOR_SCHEMA_VERSION,

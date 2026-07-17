@@ -4,7 +4,7 @@ import {
   toggleLayerVisibility,
   summarizeFloorLayers,
 } from "@/features/planner/editor/layerVisibility";
-import type { PlannerFloor } from "@/features/planner/project/model/types";
+import type { PlannerFloor } from "@/features/planner/model/types";
 
 function emptyFloor(overrides: Partial<PlannerFloor> = {}): PlannerFloor {
   return {

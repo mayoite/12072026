@@ -3,7 +3,7 @@
  * Pure functions only. No catalog I/O.
  */
 
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import type { CatalogLifecycleState } from "./catalogLifecycle.shared";
 import type { SvgArtifactStatus } from "../publish/svgArtifactStatus.server";
 

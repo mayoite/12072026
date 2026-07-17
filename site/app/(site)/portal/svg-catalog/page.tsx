@@ -17,7 +17,7 @@ import { loadBuyerVisibleDescriptors } from "@/features/admin/svg-editor/lifecyc
 import {
   buildBlockThumbPngUrl,
   buildSvgCatalogPublicUrl,
-} from "@/features/planner/project/catalog/svg/svgPreviewAssets";
+} from "@/features/planner/catalog/svg/svgPreviewAssets";
 import { SvgCatalogGrid } from "./SvgCatalogGrid";
 
 function resolveSvgPublicUrl(slug: string): string | undefined {

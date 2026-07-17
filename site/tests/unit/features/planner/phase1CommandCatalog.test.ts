@@ -3,19 +3,19 @@ import { describe, expect, it } from "vitest";
 import {
   executePlannerCommand,
   type PlannerCommand,
-} from "@/features/planner/project/lib/commands/plannerCommand";
-import { rankCatalogItems, toPlannerCatalogCollection } from "@/features/planner/project/catalog/catalogSearch";
+} from "@/features/planner/lib/commands/plannerCommand";
+import { rankCatalogItems, toPlannerCatalogCollection } from "@/features/planner/catalog/catalogSearch";
 import {
   clickToPlace,
   dragToPlace,
   validatePlannerPlacementPayload,
-} from "@/features/planner/project/catalog/placementAction";
+} from "@/features/planner/catalog/placementAction";
 import { PLANNER_DEMO_CATALOG_ITEMS } from "@/features/planner/editor/demoCatalogItems";
-import { createPlannerHistory } from "@/features/planner/project/store/history";
-import { createPlannerSelection } from "@/features/planner/project/store/selection";
-import { exportPlannerProjectJson, importPlannerProjectJson } from "@/features/planner/project/persistence/projectJson";
-import { createPlannerProject } from "@/features/planner/project/model/project";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+import { createPlannerHistory } from "@/features/planner/store/history";
+import { createPlannerSelection } from "@/features/planner/store/selection";
+import { exportPlannerProjectJson, importPlannerProjectJson } from "@/features/planner/persistence/projectJson";
+import { createPlannerProject } from "@/features/planner/model/project";
+import type { PlannerProject } from "@/features/planner/model/types";
 
 function projectWithFurniture(locked: boolean): PlannerProject {
   const project = createPlannerProject({

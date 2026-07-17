@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { shouldPlaceModularWithGeneratedGlb } from "@/features/planner/asset-engine/mesh/shouldPlaceModularWithGeneratedGlb";
-import { MODULAR_CABINET_V0_CATALOG_ID } from "@/features/planner/project/catalog/placementAction";
+import { MODULAR_CABINET_V0_CATALOG_ID } from "@/features/planner/catalog/placementAction";
 
 describe("shouldPlaceModularWithGeneratedGlb", () => {
   it("is true for cabinet-v0 id", () => {

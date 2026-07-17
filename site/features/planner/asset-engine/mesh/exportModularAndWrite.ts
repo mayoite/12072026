@@ -11,8 +11,8 @@ import {
   type WriteGeneratedGlbToPublicOptions,
   type WriteGeneratedGlbToPublicResult,
 } from "./writeGeneratedGlbToPublic";
-import type { ModularCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
-import type { ModularCabinetV0GlbPlan } from "@/features/planner/project/catalog/modularCabinetV0GlbExport";
+import type { ModularCabinetV0Options } from "@/features/planner/catalog/modularCabinetV0";
+import type { ModularCabinetV0GlbPlan } from "@/features/planner/catalog/modularCabinetV0GlbExport";
 
 export type ExportModularAndWriteOk = {
   readonly ok: true;

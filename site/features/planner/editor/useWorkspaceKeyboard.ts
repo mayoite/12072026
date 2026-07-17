@@ -58,6 +58,8 @@ export interface WorkspaceKeyboardHandlers {
   endTemporaryPan?: () => void;
   deleteSelection?: () => void;
   duplicateSelection?: () => void;
+  /** Arrow-key nudge for selected furniture (mm). Shift = fine step. */
+  nudgeSelection?: (dxMm: number, dyMm: number) => void;
   enabled?: boolean;
 }
 
@@ -115,6 +117,23 @@ export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void 
       if ((event.key === "Delete" || event.key === "Backspace") && !mod) {
         event.preventDefault();
         handlers.deleteSelection?.();
+        return;
+      }
+
+      if (
+        handlers.nudgeSelection &&
+        !mod &&
+        (event.key === "ArrowLeft" ||
+          event.key === "ArrowRight" ||
+          event.key === "ArrowUp" ||
+          event.key === "ArrowDown")
+      ) {
+        event.preventDefault();
+        const step = event.shiftKey ? 10 : 100;
+        if (event.key === "ArrowLeft") handlers.nudgeSelection(-step, 0);
+        else if (event.key === "ArrowRight") handlers.nudgeSelection(step, 0);
+        else if (event.key === "ArrowUp") handlers.nudgeSelection(0, -step);
+        else handlers.nudgeSelection(0, step);
         return;
       }
 

@@ -4,7 +4,7 @@ import type {
   PublishedRevisionV1,
   SvgBlockDefinitionV1,
 } from "./contracts/svgBlockSchemas";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import type { ReleasedCatalogProductV1 } from "@/features/admin/catalog/releasedCatalogContract";
 
 export type SvgArtifactKind = "descriptor" | "svg" | "png" | "thumbnail";

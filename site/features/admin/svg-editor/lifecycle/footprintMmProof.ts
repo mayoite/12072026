@@ -2,7 +2,7 @@
  * Admin P01 — verify descriptor mm geometry aligns with viewBox footprint.
  */
 
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 export type FootprintProof = {
   readonly slug: string;

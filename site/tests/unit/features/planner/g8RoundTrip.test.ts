@@ -25,22 +25,22 @@ import {
   loadGeneratedGlbObject,
   type GltfUrlLoader,
 } from "@/features/planner/3d/loadGeneratedGlbObject";
-import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/project/catalog/modularCabinetV0GlbExport";
-import { defaultCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
+import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/catalog/modularCabinetV0GlbExport";
+import { defaultCabinetV0Options } from "@/features/planner/catalog/modularCabinetV0";
 import {
   addFurniture,
   updateFurniture,
-} from "@/features/planner/project/model/operations/pureActions";
-import { createPlannerProject } from "@/features/planner/project/model/project";
+} from "@/features/planner/model/operations/pureActions";
+import { createPlannerProject } from "@/features/planner/model/project";
 import type {
   PlannerFurnitureItem,
   PlannerProject,
-} from "@/features/planner/project/model/types";
+} from "@/features/planner/model/types";
 import {
   exportPlannerProjectJson,
   importPlannerProjectJson,
-} from "@/features/planner/project/persistence/projectJson";
-import { parsePlannerProject } from "@/features/planner/project/shared/document/projectParser";
+} from "@/features/planner/persistence/projectJson";
+import { parsePlannerProject } from "@/features/planner/shared/document/projectParser";
 import type { PlannerSceneNode } from "@/features/planner/3d/buildPlannerSceneNodes";
 
 function ids(...values: string[]) {

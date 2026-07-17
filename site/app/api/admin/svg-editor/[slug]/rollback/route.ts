@@ -9,7 +9,7 @@ import { withAuth } from "@/features/shared/api/withAuth";
 import { success } from "@/features/shared/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import { rollbackDescriptorToVersion } from "@/features/admin/svg-editor/lifecycle/rollbackDescriptorVersion";
-import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { tryLoad } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
 
 type RouteContext = {

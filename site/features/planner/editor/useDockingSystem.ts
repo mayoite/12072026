@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useState, type Dispatch, type SetStateAction } from "react";
 
-import { parsePlannerWorkspacePreferences } from "@/features/planner/project/store/workspacePreferences";
+import { parsePlannerWorkspacePreferences } from "@/features/planner/store/workspacePreferences";
 import {
   patchPlannerWorkspacePreferences,
   PLANNER_WORKSPACE_PREFS_STORAGE_KEY,
-} from "@/features/planner/project/store/workspacePreferencesStorage";
+} from "@/features/planner/store/workspacePreferencesStorage";
 
 import {
   buildLayoutPreset,

@@ -56,5 +56,10 @@ async function handleSketchToPlan(req: NextRequest): Promise<NextResponse> {
 
 export const POST = withAuth(
   async (req) => handleSketchToPlan(req as NextRequest),
-  { role: "member", rateLimitScope: "planner-sketch-to-plan", rateLimit: 6 },
+  {
+    role: "guest",
+    rateLimitScope: "planner-sketch-to-plan",
+    rateLimit: 6,
+    requireCsrf: true,
+  },
 );

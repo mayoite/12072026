@@ -6,7 +6,7 @@
  *   node scripts/ws-v0-visual-smoke.mjs
  *   node scripts/ws-v0-visual-smoke.mjs --out D:/OandO07072026/results/planner/full-workflow-demo-2026-07-10
  *
- * LOCKED CONSTANTS — must match site/features/planner/project/catalog/workstationMeshV0.ts
+ * LOCKED CONSTANTS — must match site/features/planner/catalog/workstationMeshV0.ts
  * (and pedestal/plan layout from workstationSystemV0). Unit suites re-prove plan geometry.
  */
 
@@ -388,7 +388,7 @@ export async function runWsV0VisualSmoke(targetOutDir = outDir) {
       STRETCHER_HEIGHT_FRAC,
     },
     constantsSource:
-      "site/features/planner/project/catalog/workstationMeshV0.ts (must match)",
+      "site/features/planner/catalog/workstationMeshV0.ts (must match)",
     outDir: targetOutDir,
     source:
       "scripts/ws-v0-visual-smoke.mjs (plan formulas; no designer GLB / browser)",

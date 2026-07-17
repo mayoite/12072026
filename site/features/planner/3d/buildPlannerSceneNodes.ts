@@ -13,8 +13,8 @@ import type {
   PlannerModularCabinetV0Options,
   PlannerProject,
   PlannerWorkstationV0Options,
-} from "@/features/planner/project/model/types";
-import { degreesToRadians } from "@/features/planner/project/model/units";
+} from "@/features/planner/model/types";
+import { degreesToRadians } from "@/features/planner/model/units";
 
 export type PlannerSceneNodeKind = "wall" | "furniture";
 

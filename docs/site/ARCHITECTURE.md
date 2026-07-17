@@ -15,7 +15,7 @@ Feature maps: `features.md`. Tests: `tests.md`. Live routes: `route-classificati
 | Site product listing / filters | `lib/catalog/site/` (facade) → `lib/catalog/` (logic) |
 | Planner guest/member workspace UI | `app/planner/` → `features/planner/editor/`, `canvas/`, `3d/`, **`project/`** |
 | Planner document / canvas state | **`features/planner/project/`** (`model/`, `store/`, `persistence/`, `catalog/`) |
-| Planner save / review persistence API | `features/planner/cloud-store/` + `project/persistence/` |
+| Planner save / review persistence API | `features/planner/cloud-store/` + `features/planner/persistence/` |
 | Admin SVG editor, publish, lifecycle | **`features/admin/svg-editor/`** |
 | Admin shell / dashboard chrome | `features/admin/` page views + `features/admin/ui/` |
 | Admin route page | `app/admin/` — import from `features/admin/` |
@@ -74,7 +74,7 @@ Detail maps: **`features.md`**.
 |---|---|---|
 | Marketing products | `lib/catalog/` + Products DB | `catalog_products` |
 | Site page access | `lib/catalog/site/` | Facade over `lib/catalog/` |
-| Planner placement | `features/planner/catalog-api/`, `project/catalog/` | Released inventory consumer |
+| Planner placement | `features/planner/catalog-api/`, `features/planner/catalog/` | Released inventory consumer |
 | SVG symbols | `inventory/descriptors/`, `public/svg-catalog/` | Disk (live); versions as `{slug}.{n}.json` |
 
 Publish: `features/admin/svg-editor/`. Path helper: `resolveBlockDescriptorsDir()` → `inventory/descriptors`.

@@ -18,7 +18,7 @@ import {
   type BlockDescriptorConfigurable,
   type BlockDescriptorParametric,
   type BlockDescriptorVariant,
-} from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/svg/svgTypes";
 
 import type {
   SvgEditorFormState,

@@ -9,16 +9,16 @@ import type { PlannerSceneNode } from "@/features/planner/3d/buildPlannerSceneNo
 import {
   countCabinetV0Parts,
   defaultCabinetV0Options,
-} from "@/features/planner/project/catalog/modularCabinetV0";
+} from "@/features/planner/catalog/modularCabinetV0";
 import {
   countWorkstationV0Parts,
   workstationOptionsFromConfig,
-} from "@/features/planner/project/catalog/workstationMeshV0";
+} from "@/features/planner/catalog/workstationMeshV0";
 import {
   createWorkstationConfigV0,
   workstationConfigKey,
   workstationFootprintMm,
-} from "@/features/planner/project/catalog/workstationSystemV0";
+} from "@/features/planner/catalog/workstationSystemV0";
 
 function modularNode(
   overrides: Partial<PlannerSceneNode> = {},

@@ -18,7 +18,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useRef, useState, type KeyboardEvent } from "react";
 
-import { buildBlockThumbSrcSet } from "@/features/planner/project/catalog/svg/svgPreviewAssets";
+import { buildBlockThumbSrcSet } from "@/features/planner/catalog/svg/svgPreviewAssets";
 
 export interface SvgCatalogCard {
   readonly slug: string;

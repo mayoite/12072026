@@ -1,6 +1,8 @@
 "use client";
 
 import type { ValidationResult } from "@/features/planner/lib/validation/runValidation";
+import type { ValidationIssue } from "@/features/planner/lib/validation/types";
+import { ValidationPanel } from "./ValidationPanel";
 
 import styles from "./review-quote-panel.module.css";
 
@@ -10,6 +12,7 @@ type ReviewQuotePanelProps = {
   workstationSeats: number;
   onDownloadBoq: () => void;
   onAddWorkstationsToQuote: () => void;
+  onFocusIssue?: (issue: ValidationIssue) => void;
 };
 
 export function ReviewQuotePanel({
@@ -18,6 +21,7 @@ export function ReviewQuotePanel({
   workstationSeats,
   onDownloadBoq,
   onAddWorkstationsToQuote,
+  onFocusIssue,
 }: ReviewQuotePanelProps) {
   const hasBlockingErrors = validation.errors > 0;
   const canDownloadBoq = furnitureCount > 0 && !hasBlockingErrors;
@@ -57,17 +61,7 @@ export function ReviewQuotePanel({
           </div>
         </dl>
 
-        {validation.issues.length > 0 ? (
-          <div className={styles.issues} role="list" aria-label="Validation results">
-            {validation.issues.map((issue) => (
-              <p key={issue.id} className={styles.issue} data-severity={issue.severity} role="listitem">
-                {issue.message}
-              </p>
-            ))}
-          </div>
-        ) : (
-          <p className={styles.clear}>No validation issues. Your layout is ready for a BOQ.</p>
-        )}
+        <ValidationPanel result={validation} onFocusIssue={onFocusIssue} />
 
         <div className={styles.actions}>
           <button type="button" className={styles.primaryAction} disabled={!canDownloadBoq} onClick={onDownloadBoq}>

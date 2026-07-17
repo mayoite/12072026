@@ -1,4 +1,4 @@
-import type { PlannerFloor, PlannerFurnitureItem } from "@/features/planner/project/model/types";
+import type { PlannerFloor, PlannerFurnitureItem } from "@/features/planner/model/types";
 
 import type { CanvasFurnitureKind, CanvasPlacementSummary } from "./types";
 

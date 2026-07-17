@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useDoorWindowPlacement } from "@/features/planner/editor/useDoorWindowPlacement";
-import { createPlannerProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/model/project";
 
 describe("useDoorWindowPlacement", () => {
   it("exposes placement mode API with project", () => {

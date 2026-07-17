@@ -27,7 +27,7 @@ import {
   toPlannerDescriptorErrorHttp,
   type BlockDescriptor,
   type PlannerDescriptorError,
-} from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/svg/svgTypes";
 
 // ── Fixture builder ────────────────────────────────────────────────────────
 

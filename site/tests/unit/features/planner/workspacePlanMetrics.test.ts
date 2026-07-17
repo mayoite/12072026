@@ -4,8 +4,8 @@ import { summarizeFloorMetrics } from "@/features/planner/editor/workspacePlanMe
 import {
   createWorkstationConfigV0,
   workstationConfigKey,
-} from "@/features/planner/project/catalog/workstationSystemV0";
-import type { PlannerFloor } from "@/features/planner/project/model/types";
+} from "@/features/planner/catalog/workstationSystemV0";
+import type { PlannerFloor } from "@/features/planner/model/types";
 
 function emptyFloor(overrides: Partial<PlannerFloor> = {}): PlannerFloor {
   return {
@@ -121,6 +121,7 @@ describe("summarizeFloorMetrics walls / objects / label (status honesty)", () =>
       floorLabel: "Floor 1",
       boqReady: false,
       validationErrors: 0,
+      closedRoom: false,
     });
   });
 

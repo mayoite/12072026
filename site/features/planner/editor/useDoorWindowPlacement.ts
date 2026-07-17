@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import type { PlannerDoor, PlannerProject, PlannerWindow } from "@/features/planner/project/model/types";
-import { removeDoor, removeWindow, updateDoor, updateWindow } from "@/features/planner/project/model/operations/pureActions";
+import type { PlannerDoor, PlannerProject, PlannerWindow } from "@/features/planner/model/types";
+import { removeDoor, removeWindow, updateDoor, updateWindow } from "@/features/planner/model/operations/pureActions";
 
 export type DoorType = PlannerDoor["type"];
 export type WindowType = PlannerWindow["type"];

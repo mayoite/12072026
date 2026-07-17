@@ -15,7 +15,7 @@ import {
   getPlannerViewerControlProps,
 } from "@/features/planner/3d/orbitDefaults";
 import { ThreeViewerInner } from "@/features/planner/3d/ThreeViewerInner";
-import { normalizeDegrees } from "@/features/planner/project/model/units";
+import { normalizeDegrees } from "@/features/planner/model/units";
 
 const {
   renderCalls,

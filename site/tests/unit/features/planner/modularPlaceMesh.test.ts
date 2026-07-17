@@ -4,14 +4,14 @@ import {
   modularOptionsFromCatalogItem,
   placeCatalogItemInProject,
   resolveFurnitureGeometryMode,
-} from "@/features/planner/project/catalog/placementAction";
-import { countCabinetV0Parts } from "@/features/planner/project/catalog/modularCabinetV0";
-import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
-import type { PlannerProject } from "@/features/planner/project/model/types";
+} from "@/features/planner/catalog/placementAction";
+import { countCabinetV0Parts } from "@/features/planner/catalog/modularCabinetV0";
+import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
+import type { PlannerProject } from "@/features/planner/model/types";
 import { buildPlannerSceneNodes } from "@/features/planner/3d/buildPlannerSceneNodes";
 import { createSceneObjectFromNode } from "@/features/planner/3d/createSceneObjectFromNode";
 import { getDemoCatalogItemById } from "@/features/planner/editor/demoCatalogItems";
-import { parsePlannerProject } from "@/features/planner/project/shared/document/projectParser";
+import { parsePlannerProject } from "@/features/planner/shared/document/projectParser";
 
 function emptyProject(): PlannerProject {
   return {

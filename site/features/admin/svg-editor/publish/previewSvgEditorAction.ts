@@ -19,8 +19,8 @@
 import {
   tryLoad,
   type BlockDescriptor,
-} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
-import { freezeFreshDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+} from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
+import { freezeFreshDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import { compileSvgForPublish } from "@/features/planner/asset-engine/svg/compileSvgForPublish";
 import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/newBlockDescriptorStub";
 import { formStateToDescriptorInput } from "@/features/admin/svg-editor/form/svgEditorFormAdapters";

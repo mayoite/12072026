@@ -24,7 +24,7 @@ import {
   SVG_EDITOR_FIELDS,
   SVG_EDITOR_FIELD_GROUP_LABEL,
 } from "@/features/admin/svg-editor/form/svgEditorFormModel";
-import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 function row(
   partial: Partial<BlockDescriptor> & Pick<BlockDescriptor, "slug" | "variant">,

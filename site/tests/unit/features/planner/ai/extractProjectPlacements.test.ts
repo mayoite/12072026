@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { extractProjectPlacements } from "@/features/planner/ai/extractProjectPlacements";
-import type { PlannerFloor } from "@/features/planner/project/model/types";
+import type { PlannerFloor } from "@/features/planner/model/types";
 
 function floor(
   furniture: PlannerFloor["furniture"],
