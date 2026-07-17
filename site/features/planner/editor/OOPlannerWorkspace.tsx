@@ -125,7 +125,7 @@ import { applySketchWallObjects } from "@/features/planner/ai/applySketchWallObj
 import {
   getSketchRecoveryMessage,
   type SketchToPlanResponse,
-} from "@/features/planner/ai/sketchToPlan";
+} from "@/features/planner/ai/sketchToPlanShared";
 import { browserApiFetch } from "@/lib/api/browserApi";
 import { readPlannerApiError } from "@/features/planner/lib/plannerApiError";
 import { readFloorPlanImageFile } from "@/features/planner/lib/floorPlanImageImport";
@@ -1487,7 +1487,8 @@ export function OOPlannerWorkspace({
         return;
       }
 
-      // Systems v0 workstation BOQ — qty + footprint + INR list + GST.
+      // Specialty systems-v0 workstation dump only. Customer BOQ / quote / handoff
+      // use buildPlannerFurnitureBoq (see boq-json / boq-csv / quote / boq-pdf).
       if (format === "workstation-boq") {
         const summary = summarizeWorkstationBoqV0(workspaceCanvas.project);
         if (summary.totalInstances === 0) {
@@ -1502,7 +1503,7 @@ export function OOPlannerWorkspace({
         const filename = `${slug}-workstation-boq-v0.json`;
         downloadWorkstationBoqJSON(summary, filename);
         setWorkspaceMessage(
-          `Exported workstation BOQ: ${summary.totalSeats} seats · ${summary.lines.length} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST`,
+          `Exported specialty workstation BOQ (not the full furniture BOQ): ${summary.totalSeats} seats · ${summary.lines.length} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST (demo list — not approved commercial)`,
         );
         return;
       }
@@ -1617,9 +1618,18 @@ export function OOPlannerWorkspace({
   );
 
   const handleSendToOando = useCallback(
-    async (contact: HandoffContactDraft) => {
+    async (
+      contact: HandoffContactDraft,
+      options: { confirmDemoPricing: true },
+    ) => {
       if (guestMode) {
         setWorkspaceMessage("Sign in as a member to send the BOQ to Oando.");
+        return;
+      }
+      if (options.confirmDemoPricing !== true) {
+        setWorkspaceMessage(
+          "Confirm that demo list prices are not approved commercial quotes before sending.",
+        );
         return;
       }
       if (validationResult.errors > 0) {
@@ -1655,7 +1665,8 @@ export function OOPlannerWorkspace({
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
             idempotencyKey,
-            confirmDemoPricing: true,
+            // Only the Review checkbox can set this true — never invent confirmation.
+            confirmDemoPricing: options.confirmDemoPricing,
             contact: {
               name: contact.name.trim(),
               company: contact.company.trim() || undefined,

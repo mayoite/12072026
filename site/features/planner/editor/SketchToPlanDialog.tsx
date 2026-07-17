@@ -6,7 +6,7 @@ import type { SketchRecoveryReason } from "@/features/shared/api/schemas";
 import {
   getSketchRecoveryMessage,
   type SketchToPlanResponse,
-} from "@/features/planner/ai/sketchToPlan";
+} from "@/features/planner/ai/sketchToPlanShared";
 
 import styles from "./sketch-to-plan-dialog.module.css";
 
