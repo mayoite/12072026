@@ -21,6 +21,22 @@ describe("routeChromeRules", () => {
     });
   });
 
+  it("still hides chrome on CAD and post-auth workspaces only", () => {
+    for (const path of [
+      "/planner/guest",
+      "/planner/canvas",
+      "/dashboard",
+      "/portal",
+      "/admin",
+      "/access",
+    ]) {
+      expect(resolveRouteChromeMode(path)).toEqual({
+        header: "hidden",
+        footer: "hidden",
+      });
+    }
+  });
+
   it("shows login footer tools only on login routes", () => {
     expect(resolveRouteChromeMode("/login")).toEqual({ header: "hidden", footer: "login-tools" });
     expect(resolveRouteChromeMode("/login?next=%2Fdashboard")).toEqual({

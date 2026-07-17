@@ -1,4 +1,5 @@
-const DEFAULT_REDIRECT = "/choose-product";
+/** Post-sign-in default: member hub (not guest chooser, not Portal shim). */
+const DEFAULT_REDIRECT = "/dashboard";
 
 /**
  * Restrict post-login / access redirects to same-origin relative paths only.

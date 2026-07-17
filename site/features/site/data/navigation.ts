@@ -18,8 +18,8 @@ export const SITE_NAV_LINKS = [
   { label: "About", href: "/about" },
   { label: "Sustainability", href: "/sustainability", headerSlot: "more" as const },
   { label: "Contact", href: "/contact" },
-  { label: "Portal", href: "/portal", headerSlot: "more" as const },
-  { label: "Sign in", href: "/access", headerSlot: "more" as const },
+  // Portal is a shim — not marketing nav. Sign-in is not a toolbar item:
+  // AccessForm offers sign-in + guest; post-login lands on dashboard via `next`.
 ] as const;
 
 export type SiteNavLink = (typeof SITE_NAV_LINKS)[number];
@@ -64,8 +64,7 @@ export const SITE_NAV_SEARCH_FALLBACK_LINKS = [
   { href: "/products", label: "All Products" },
   { href: "/solutions", label: "Solutions" },
   { href: "/projects", label: "Projects" },
-  { href: PRODUCT_SUITE.planner.routes.landing, label: "Planner" },
-  { href: PRODUCT_SUITE.shared.routes.access, label: "Workspace access" },
+  { href: PRODUCT_SUITE.planner.routes.guestChooser, label: "Planner" },
   { href: "/portfolio", label: "Portfolio" },
   { href: "/contact", label: "Contact" },
 ] as const;
@@ -102,7 +101,8 @@ export const SITE_FOOTER_NAV = buildFooterNav([
     links: [
       { href: "/products", label: "All Products" },
       { href: "/solutions", label: "Solutions" },
-      { href: PRODUCT_SUITE.planner.routes.landing, label: "Planner" },
+      { href: PRODUCT_SUITE.planner.routes.guestChooser, label: "Planner" },
+      // Member hub after sign-in only — not Admin, not Portal shim.
       { href: PRODUCT_SUITE.shared.routes.dashboard, label: "Member dashboard" },
     ],
   },

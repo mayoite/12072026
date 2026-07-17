@@ -104,8 +104,6 @@ describe("SITE_NAV_LINKS", () => {
       "Portfolio",
       "Trusted",
       "Sustainability",
-      "Portal",
-      "Sign in",
     ]);
     expect(
       SITE_HEADER_PRIMARY_LINKS.length + SITE_HEADER_MORE_LINKS.length,
@@ -236,6 +234,22 @@ describe("SITE_FOOTER_NAV", () => {
     const labels = SITE_FOOTER_NAV.flatMap((section) => section.links.map((link) => link.label));
     expect(hrefs.some((href) => /^\/admin(\/|$)/i.test(href))).toBe(false);
     expect(labels.some((label) => label.trim().toLowerCase() === "admin")).toBe(false);
+  });
+
+  it("never links public nav or footer to Portal or bare Sign in", () => {
+    const hrefs = [
+      ...SITE_NAV_LINKS.map((l) => l.href),
+      ...SITE_FOOTER_NAV.flatMap((s) => s.links.map((l) => l.href)),
+      ...SITE_NAV_SEARCH_FALLBACK_LINKS.map((l) => l.href),
+    ];
+    const labels = [
+      ...SITE_NAV_LINKS.map((l) => l.label),
+      ...SITE_FOOTER_NAV.flatMap((s) => s.links.map((l) => l.label)),
+      ...SITE_NAV_SEARCH_FALLBACK_LINKS.map((l) => l.label),
+    ];
+    expect(hrefs.some((h) => /^\/portal(\/|$|\?)/i.test(h))).toBe(false);
+    expect(labels.some((l) => /^portal$/i.test(l.trim()))).toBe(false);
+    expect(labels.some((l) => /^sign in$/i.test(l.trim()))).toBe(false);
   });
 });
 
