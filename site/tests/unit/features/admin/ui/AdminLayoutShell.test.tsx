@@ -48,6 +48,16 @@ describe("AdminLayoutShell (name-mirror)", () => {
       "href",
       "/planner/guest",
     );
+    // Topbar external links stay secondary chrome (not in-page primary)
+    expect(screen.getByTestId("admin-topbar-actions")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "View site" })).toHaveAttribute(
+      "data-topbar-action",
+      "secondary",
+    );
+    expect(screen.getByRole("link", { name: "Open planner" })).toHaveAttribute(
+      "data-topbar-action",
+      "external",
+    );
     // Planner-package topbar on ecru (not dark brand bar).
     const topbar = screen.getByTestId("admin-topbar");
     expect(topbar).toHaveAttribute("data-admin-topbar");

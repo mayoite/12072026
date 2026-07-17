@@ -65,6 +65,24 @@ export function phoneAuthoringBlockedMessage(): string {
   );
 }
 
+export function phoneBulkImportBlockedMessage(): string {
+  return (
+    adminPhoneCapabilities().find((c) => c.capability === "bulk-import")
+      ?.declaration ?? "Bulk import unsupported on phone."
+  );
+}
+
+/**
+ * Compact operator notice for SVG inventory (ADM-MOB-01 + ADM-MOB-02).
+ * List review is supported; studio + bulk need desktop.
+ */
+export function phoneSvgListReviewNotice(): string {
+  return (
+    "Phone: inventory review only. Open the SVG studio and bulk import on desktop " +
+    `(width ≥ ${ADMIN_PHONE_MAX_WIDTH_REM}rem).`
+  );
+}
+
 /** Markup + CSS contract for catalog / inventory phone lists (AF-06). */
 export function phoneListLayoutMode(): "cards-priority" {
   return "cards-priority";
@@ -81,3 +99,17 @@ export const ADMIN_CATALOG_PHONE_CELL_LABELS = [
 
 export type AdminCatalogPhoneCellLabel =
   (typeof ADMIN_CATALOG_PHONE_CELL_LABELS)[number];
+
+/** Cell labels required on SVG inventory phone cards (ADM-MOB-03 / AF-06). */
+export const ADMIN_SVG_PHONE_CELL_LABELS = [
+  "Preview",
+  "Product",
+  "Size",
+  "Lifecycle",
+  "Symbol",
+  "Updated",
+  "Actions",
+] as const;
+
+export type AdminSvgPhoneCellLabel =
+  (typeof ADMIN_SVG_PHONE_CELL_LABELS)[number];

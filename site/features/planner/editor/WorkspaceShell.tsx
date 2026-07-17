@@ -516,16 +516,24 @@ export function WorkspaceShell({
         )}
       </div>
 
-      {/* Status bar — customer/operator language (no internal viewport jargon) */}
-      <footer className={`${styles.status} pw-status-bar`} aria-label="Plan status">
+      {/* Status bar — plan metrics + tool track only. Save lives solely in TopBar. */}
+      <footer
+        className={`${styles.status} pw-status-bar`}
+        aria-label="Plan status"
+        data-save-authority="topbar"
+      >
         {planMetrics ? (
-          <div className={styles.statusMetrics}>
-            <span>{planMetrics.objects} objects</span>
-            <span className={styles.statusSecondaryMetric}>{planMetrics.walls} walls</span>
-            <span className={styles.statusSecondaryMetric}>{planMetrics.furniture} furniture</span>
-            {planMetrics.workstationSeats > 0 ? (
-              <span className={styles.statusSecondaryMetric}>{planMetrics.workstationSeats} seats</span>
-            ) : null}
+          <div className={styles.statusMetrics} data-testid="planner-status-metrics">
+            <span>
+              {planMetrics.objects} objects
+              {planMetrics.walls > 0 ? ` · ${planMetrics.walls} walls` : ""}
+              {planMetrics.furniture > 0
+                ? ` · ${planMetrics.furniture} furniture`
+                : ""}
+              {planMetrics.workstationSeats > 0
+                ? ` · ${planMetrics.workstationSeats} seats`
+                : ""}
+            </span>
             <span
               className={
                 planMetrics.validationErrors > 0
@@ -542,28 +550,14 @@ export function WorkspaceShell({
                   ? "Quote ready"
                   : "Add furniture for quote"}
             </span>
-            <span className={styles.statusSecondaryMetric}>{planMetrics.floorLabel}</span>
+            {planMetrics.floorLabel ? (
+              <span className={styles.statusSecondaryMetric}>{planMetrics.floorLabel}</span>
+            ) : null}
           </div>
         ) : null}
-        <div className={styles.statusLeft}>
-          {statusLeft ?? (
-            <>
-              <span className={styles.statusItem}>Canvas ready</span>
-              <span className={styles.statusItem}>Zoom 100%</span>
-            </>
-          )}
-        </div>
-        <div className={styles.statusRight}>
-          {statusRight ?? (
-            <span className={styles.statusItem} data-viewport-tier={viewportTier}>
-              {viewportTier === "desktop"
-                ? "Wide layout"
-                : viewportTier === "tablet"
-                  ? "Medium layout"
-                  : "Phone layout"}
-            </span>
-          )}
-        </div>
+        {/* No fake "Canvas ready" / layout-tier defaults — parent supplies real tool track. */}
+        <div className={styles.statusLeft}>{statusLeft ?? null}</div>
+        <div className={styles.statusRight}>{statusRight ?? null}</div>
       </footer>
     </div>
     </WorkspaceChromeProvider>

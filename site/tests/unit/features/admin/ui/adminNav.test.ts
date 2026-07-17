@@ -95,6 +95,12 @@ describe("adminNav", () => {
     expect(quotesKpi?.hint).toMatch(/Browser demo/i);
     const svgKpi = ADMIN_HUB_KPIS.find((k) => k.label === "SVG symbols");
     expect(svgKpi?.hint).not.toMatch(/pipeline/i);
+    expect(svgKpi?.hint).toMatch(/disk/i);
+
+    const catalog = ADMIN_NAV_GROUPS.find((g) => g.title === "Catalog");
+    const svgNav = catalog?.items.find((i) => i.href === "/admin/svg-editor");
+    expect(svgNav?.description).toMatch(/disk/i);
+    expect(svgNav?.description).toMatch(/live authority/i);
   });
 
   it("lists system routes", () => {

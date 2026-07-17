@@ -183,8 +183,19 @@ export default function AdminLayoutShell({
               )}
             </div>
 
-            <div className="shell-admin-topbar__actions">
-              <Link href="/" className="shell-admin-header-link" aria-label="View site">
+            <div
+              className="shell-admin-topbar__actions"
+              data-testid="admin-topbar-actions"
+              role="group"
+              aria-label="External links"
+            >
+              {/* Secondary chrome — product work stays in-page (ADM-SHELL-02) */}
+              <Link
+                href="/"
+                className="shell-admin-header-link"
+                aria-label="View site"
+                data-topbar-action="secondary"
+              >
                 <span className="shell-admin-header-link__label">View site</span>
                 <ArrowUpRight size={14} aria-hidden />
               </Link>
@@ -192,6 +203,7 @@ export default function AdminLayoutShell({
                 href="/planner/guest"
                 className="shell-admin-header-cta"
                 aria-label="Open planner"
+                data-topbar-action="external"
               >
                 <span className="shell-admin-header-cta__label">Open planner</span>
                 <ExternalLink size={14} aria-hidden />

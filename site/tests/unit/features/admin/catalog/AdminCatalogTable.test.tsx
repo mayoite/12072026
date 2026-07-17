@@ -143,7 +143,23 @@ describe("AdminCatalogTable", () => {
       expect(button.textContent?.replace(/\s+/g, " ").trim().length).toBeGreaterThan(0);
       // Visible label text, not aria-only
       expect(button.textContent).toMatch(/Edit|Hide|Show|Delete/i);
+      // No shell-level primary on rows
+      expect(button).not.toHaveClass("admin-btn--primary");
     }
+
+    // Clear primary vs secondary vs destructive hierarchy
+    expect(screen.getByTestId("admin-catalog-edit-1")).toHaveAttribute(
+      "data-row-action",
+      "primary",
+    );
+    expect(screen.getByTestId("admin-catalog-toggle-1")).toHaveAttribute(
+      "data-row-action",
+      "secondary",
+    );
+    expect(screen.getByTestId("admin-catalog-delete-1")).toHaveAttribute(
+      "data-row-action",
+      "destructive",
+    );
   });
 
   it("AF-06 unit: locked CSS enforces cards-priority labels and ≥44px actions", () => {

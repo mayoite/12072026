@@ -76,6 +76,13 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
     const advanced = screen.getByTestId("admin-svg-advanced-import");
     expect(advanced).not.toHaveAttribute("open");
     expect(advanced).toHaveTextContent(/bulk import/i);
+    // ADM-MOB-02: phone authoring / bulk declared before work
+    expect(screen.getByTestId("admin-svg-phone-review-notice")).toHaveTextContent(
+      /inventory review only/i,
+    );
+    expect(screen.getByTestId("admin-svg-bulk-phone-notice")).toHaveTextContent(
+      /unsupported on phone/i,
+    );
   });
 
   it("AF-05/AF-13: primary journey is symbol authoring; bulk stays advanced; no internal jargon", () => {

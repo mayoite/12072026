@@ -19,6 +19,11 @@ import {
   sortInventoryRows,
   type SvgInventoryRow,
 } from "@/features/admin/svg-editor/lifecycle/svgInventoryFilter";
+import {
+  ADMIN_PHONE_MIN_TAP_PX,
+  ADMIN_SVG_PHONE_CELL_LABELS,
+  phoneListLayoutMode,
+} from "@/features/admin/ui/adminMobileReview";
 import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 
 vi.mock("next/link", () => ({
@@ -228,8 +233,22 @@ describe("ADM-LIST-02/03 list view rows and actions", () => {
       "aria-label",
       "Edit side-table-001 in SVG studio",
     );
+    expect(edit).toHaveTextContent(/Edit/i);
+    expect(edit).toHaveAttribute("data-row-action", "primary");
+    expect(edit).toHaveAttribute(
+      "data-min-tap-px",
+      String(ADMIN_PHONE_MIN_TAP_PX),
+    );
+    expect(edit).toHaveClass("admin-btn--outline");
+    expect(edit).not.toHaveClass("admin-btn--primary");
     const retire = screen.getByTestId("admin-svg-retire-side-table-001");
     expect(retire).toHaveAttribute("aria-label", "Retire side-table-001");
+    expect(retire).toHaveClass("admin-svg-inventory-actions__retire");
+    expect(retire).toHaveAttribute("data-row-action", "destructive");
+    expect(retire).toHaveAttribute(
+      "data-min-tap-px",
+      String(ADMIN_PHONE_MIN_TAP_PX),
+    );
 
     // Status chips use intentional title case, not raw enum tokens
     const lifecycleBadges = document.querySelectorAll(
@@ -250,6 +269,7 @@ describe("ADM-LIST-02/03 list view rows and actions", () => {
     ).toHaveTextContent(/^Missing$/);
 
     // Phone-oriented card markup present for CSS cards-priority layout
+    expect(phoneListLayoutMode()).toBe("cards-priority");
     expect(
       screen.getByTestId("admin-svg-inventory-table"),
     ).toHaveAttribute("data-phone-layout", "cards-priority");
@@ -259,13 +279,17 @@ describe("ADM-LIST-02/03 list view rows and actions", () => {
       ),
     ).not.toBeNull();
 
-    // Edit is labeled (not icon-only); retire has accessible name
-    expect(screen.getByTestId("admin-svg-edit-side-table-001")).toHaveTextContent(
-      /Edit/i,
+    // ADM-MOB-03: every phone card cell label is present
+    for (const label of ADMIN_SVG_PHONE_CELL_LABELS) {
+      expect(
+        document.querySelector(`td[data-label="${label}"]`),
+      ).not.toBeNull();
+    }
+
+    // ADM-MOB-02 phone review notice on list
+    expect(screen.getByTestId("admin-svg-phone-review-notice")).toHaveTextContent(
+      /desktop/i,
     );
-    expect(
-      screen.getByTestId("admin-svg-retire-side-table-001"),
-    ).toHaveClass("admin-svg-inventory-actions__retire");
 
     // Advanced bulk stays demoted (closed details)
     const advanced = screen.getByTestId("admin-svg-advanced-import");

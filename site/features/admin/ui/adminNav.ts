@@ -95,7 +95,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
       {
         href: "/admin/svg-editor",
         label: "SVG symbols",
-        description: "Draw, preview, and publish 2D symbols",
+        description: "Inventory + studio · publish to disk (live authority)",
         icon: PenSquare,
       },
       {
@@ -220,7 +220,7 @@ export const ADMIN_HUB_KPIS: ReadonlyArray<{
   {
     label: "SVG symbols",
     href: "/admin/svg-editor",
-    hint: "Draw and publish symbols",
+    hint: "Review inventory · publish to disk",
     tone: "success",
   },
 ];

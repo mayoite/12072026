@@ -98,6 +98,34 @@ describe("WorkspaceShell", () => {
     expect(screen.getByText("Quote ready")).toBeInTheDocument();
     expect(screen.queryByText(/BOQ/i)).not.toBeInTheDocument();
     expect(screen.getByText("Ground")).toBeInTheDocument();
+    // Dense single metrics line (not sprawling secondary spans for every count).
+    expect(screen.getByTestId("planner-status-metrics")).toHaveTextContent(
+      /3 objects · 2 walls · 1 furniture/,
+    );
+  });
+
+  it("status bar has no fake defaults and no second save chrome (TopBar is sole authority)", () => {
+    render(
+      <WorkspaceShell
+        projectName="Honest status"
+        saveStatus="saved"
+        saveStatusLabel="Saved locally"
+        isLocalSaved
+      >
+        <div>canvas</div>
+      </WorkspaceShell>,
+    );
+
+    const statusBar = document.querySelector(".pw-status-bar");
+    expect(statusBar).not.toBeNull();
+    expect(statusBar).toHaveAttribute("data-save-authority", "topbar");
+    // No placeholder noise when parent omits tool track.
+    expect(screen.queryByText("Canvas ready")).not.toBeInTheDocument();
+    expect(screen.queryByText("Zoom 100%")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Wide layout|Medium layout|Phone layout/i)).not.toBeInTheDocument();
+    // Save pill once in TopBar only — not duplicated in status bar.
+    expect(screen.getAllByTestId("open3d-save-status")).toHaveLength(1);
+    expect(statusBar?.textContent ?? "").not.toMatch(/Saved locally|Ready \(local\)/i);
   });
 
   it("floating panel is distinct from docked (Floating badge + data-state)", () => {

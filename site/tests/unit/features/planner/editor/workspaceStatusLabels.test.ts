@@ -67,4 +67,48 @@ describe("workspaceStatusLabels", () => {
     });
     expect(guestSaved).toBe("Draft saved locally");
   });
+
+  it("cloud idle says account readiness — not local — when cloudEnabled", () => {
+    expect(
+      plannerSaveStatusLabel({
+        status: "idle",
+        storage: "cloud",
+        lastSavedAt: null,
+        cloudEnabled: true,
+        guestMode: false,
+      }),
+    ).toBe("Ready (account)");
+    expect(
+      plannerSaveStatusBarLabel({
+        status: "idle",
+        storage: "cloud",
+        lastSavedAt: null,
+        cloudEnabled: true,
+        guestMode: false,
+      }),
+    ).toBe("Account");
+  });
+
+  it("bar and full labels prefix Offline without hiding local state", () => {
+    expect(
+      plannerSaveStatusLabel({
+        status: "saved",
+        storage: "local",
+        lastSavedAt: null,
+        cloudEnabled: false,
+        guestMode: false,
+        isOffline: true,
+      }),
+    ).toBe("Offline · Saved locally");
+    expect(
+      plannerSaveStatusBarLabel({
+        status: "saved",
+        storage: "local",
+        lastSavedAt: null,
+        cloudEnabled: false,
+        guestMode: false,
+        isOffline: true,
+      }),
+    ).toBe("Offline · Saved local");
+  });
 });

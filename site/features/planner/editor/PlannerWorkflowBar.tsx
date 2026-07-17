@@ -22,6 +22,8 @@ type PlannerWorkflowBarProps = {
 
 /**
  * Customer workflow steps — completion is derived from the plan, never faked.
+ * Dense chrome: only surface "Done" when complete; incomplete stays in aria only
+ * so the step bar does not fight the status strip with dual Incomplete essays.
  */
 export function PlannerWorkflowBar({
   currentStep,
@@ -45,10 +47,12 @@ export function PlannerWorkflowBar({
       className={`${styles.workflowBar} pw-step-bar`}
       aria-label="Planner workflow"
       data-current={currentStep}
+      data-density="compact"
     >
       <ol className={styles.workflowSteps}>
         {PLANNER_STEPS.map((step, index) => {
           const active = step === currentStep;
+          const done = completion[step] === "complete";
           return (
             <li key={step} className={styles.workflowStep}>
               <button
@@ -65,9 +69,9 @@ export function PlannerWorkflowBar({
                 <span className={styles.workflowCopy}>
                   <strong>{PLANNER_STEP_LABELS[step]}</strong>
                   <small>{PLANNER_STEP_DETAILS[step]}</small>
-                  <span className={styles.workflowCompletion}>
-                    {completion[step] === "complete" ? "Complete" : "Incomplete"}
-                  </span>
+                  {done ? (
+                    <span className={styles.workflowCompletion}>Done</span>
+                  ) : null}
                 </span>
               </button>
             </li>

@@ -18,6 +18,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { PencilSimple as Pencil, Plus } from "@phosphor-icons/react";
 
 import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
+import {
+  ADMIN_PHONE_MIN_TAP_PX,
+  phoneBulkImportBlockedMessage,
+  phoneListLayoutMode,
+  phoneSvgListReviewNotice,
+} from "@/features/admin/ui/adminMobileReview";
 import { apiPath, browserApiFetch } from "@/lib/api/browserApi";
 import type { CatalogLifecycleManifest, CatalogLifecycleState } from "../lifecycle/catalogLifecycle.shared";
 import { resolveCatalogLifecycle } from "../lifecycle/catalogLifecycle.shared";
@@ -43,6 +49,9 @@ import {
   type InventorySortKey,
   type SvgInventoryRow,
 } from "../lifecycle/svgInventoryFilter";
+
+const phoneLayout = phoneListLayoutMode();
+const minTapPx = String(ADMIN_PHONE_MIN_TAP_PX);
 
 const VARIANT_LABEL: Readonly<Record<BlockDescriptor["variant"], string>> = {
   fixed: "Fixed",
@@ -373,12 +382,22 @@ export function AdminSvgEditorListView({
             href="/admin/svg-editor/new"
             className="admin-btn admin-btn--primary"
             data-testid="admin-shell-primary-action"
+            data-min-tap-px={minTapPx}
           >
             <Plus size={16} aria-hidden />
             New SVG symbol
           </Link>
         </div>
       </header>
+
+      {/* ADM-MOB-01/02: list review OK on phone; studio + bulk need desktop */}
+      <p
+        className="admin-page__meta"
+        data-testid="admin-svg-phone-review-notice"
+        role="note"
+      >
+        {phoneSvgListReviewNotice()}
+      </p>
 
       {/* Status band: intentional chips + family mix (not three dashboard cards) */}
       <div
@@ -713,12 +732,12 @@ export function AdminSvgEditorListView({
             <>
               <div
                 className="admin-table-wrap admin-svg-inventory-table-wrap"
-                data-phone-layout="cards-priority"
+                data-phone-layout={phoneLayout}
               >
                 <table
                   className="admin-table admin-svg-inventory-table"
                   data-testid="admin-svg-inventory-table"
-                  data-phone-layout="cards-priority"
+                  data-phone-layout={phoneLayout}
                 >
                   <caption className="sr-only">
                     SVG product symbols grouped by family: preview, product
@@ -846,12 +865,16 @@ export function AdminSvgEditorListView({
                                 className="admin-svg-inventory-actions"
                                 role="group"
                                 aria-label={`Actions for ${d.slug}`}
+                                data-testid={`admin-svg-row-actions-${d.slug}`}
                               >
+                                {/* Row primary (outline — never competes with header New) */}
                                 <Link
                                   href={`/admin/svg-editor/${d.slug}`}
                                   className="admin-btn admin-btn--outline admin-svg-inventory-actions__edit"
                                   aria-label={`Edit ${d.slug} in SVG studio`}
                                   data-testid={`admin-svg-edit-${d.slug}`}
+                                  data-row-action="primary"
+                                  data-min-tap-px={minTapPx}
                                 >
                                   <Pencil size={16} aria-hidden />
                                   Edit
@@ -865,7 +888,10 @@ export function AdminSvgEditorListView({
                                       void setLifecycle(d.slug, "retired")
                                     }
                                     aria-label={`Retire ${d.slug}`}
+                                    title="Lifecycle · remove from live catalog"
                                     data-testid={`admin-svg-retire-${d.slug}`}
+                                    data-row-action="destructive"
+                                    data-min-tap-px={minTapPx}
                                   >
                                     Retire
                                   </button>
@@ -878,7 +904,10 @@ export function AdminSvgEditorListView({
                                       void setLifecycle(d.slug, "live")
                                     }
                                     aria-label={`Restore ${d.slug} to live`}
+                                    title="Lifecycle · restore to live catalog"
                                     data-testid={`admin-svg-restore-${d.slug}`}
+                                    data-row-action="secondary"
+                                    data-min-tap-px={minTapPx}
                                   >
                                     Restore
                                   </button>
@@ -949,6 +978,13 @@ export function AdminSvgEditorListView({
                 Migration tool only — paste spreadsheet rows, preview, then apply.
                 Day-to-day work uses Search and New SVG symbol above. Not required
                 for authoring.
+              </p>
+              <p
+                className="admin-page__meta"
+                data-testid="admin-svg-bulk-phone-notice"
+                role="note"
+              >
+                {phoneBulkImportBlockedMessage()}
               </p>
               <AdminSvgBulkImportPanel />
             </div>

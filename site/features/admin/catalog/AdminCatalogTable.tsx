@@ -141,11 +141,13 @@ export function AdminCatalogTable({
                       className="admin-catalog-row-actions"
                       data-testid={`admin-catalog-row-actions-${String(id)}`}
                     >
+                      {/* Row primary: Edit (outline — never competes with header Add) */}
                       <button
                         type="button"
-                        className="admin-btn admin-btn--outline"
+                        className="admin-btn admin-btn--outline admin-catalog-row-actions__edit"
                         onClick={() => onEdit(item)}
                         aria-label={`Edit ${name}`}
+                        data-row-action="primary"
                         data-min-tap-px={minTapPx}
                         data-testid={`admin-catalog-edit-${String(id)}`}
                       >
@@ -154,7 +156,7 @@ export function AdminCatalogTable({
                       </button>
                       <button
                         type="button"
-                        className="admin-btn admin-btn--outline"
+                        className="admin-btn admin-btn--outline admin-catalog-row-actions__secondary"
                         title={isActive ? "Hide from Planner" : "Show in Planner"}
                         aria-label={
                           isActive
@@ -163,6 +165,7 @@ export function AdminCatalogTable({
                         }
                         disabled={readOnly || busy || !item.id}
                         onClick={() => void onToggleVisible(item)}
+                        data-row-action="secondary"
                         data-min-tap-px={minTapPx}
                         data-testid={`admin-catalog-toggle-${String(id)}`}
                       >
@@ -179,10 +182,12 @@ export function AdminCatalogTable({
                       </button>
                       <button
                         type="button"
-                        className="admin-btn admin-btn--outline"
+                        className="admin-btn admin-btn--outline admin-catalog-row-actions__destructive"
                         aria-label={`Delete ${name}`}
+                        title="Destructive · permanently remove this product"
                         disabled={readOnly || busy || !item.id}
                         onClick={() => void onDelete(item)}
+                        data-row-action="destructive"
                         data-min-tap-px={minTapPx}
                         data-testid={`admin-catalog-delete-${String(id)}`}
                       >
