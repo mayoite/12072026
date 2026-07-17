@@ -48,12 +48,12 @@ describe("plannerDockPresets", () => {
     localStorage.clear();
   });
 
-  it("default preset keeps a canvas-first dock and leaves layers available on demand", () => {
+  it("default preset keeps a canvas-first dock without customer layers", () => {
     const api = createFakeApi();
     applyPlannerDockPreset(api as never, "default");
     const ids = api.addPanel.mock.calls.map((c) => c[0].id);
     expect(ids).toEqual(["canvas", "tools"]);
-    expect(PLANNER_DOCK_MODULE_IDS).toContain("layers");
+    expect(PLANNER_DOCK_MODULE_IDS).not.toContain("layers");
 
     const tools = api.addPanel.mock.calls.find(([options]) => options.id === "tools")?.[0] as
       | {
@@ -99,11 +99,11 @@ describe("plannerDockPresets", () => {
     expect(api.getPanel("tools")?.api.setActive).toHaveBeenCalled();
   });
 
-  it("ensurePlannerDockPanel re-adds a closed module", () => {
+  it("ensurePlannerDockPanel re-adds a closed customer module", () => {
     const api = createFakeApi();
     applyPlannerDockPreset(api as never, "canvas");
-    ensurePlannerDockPanel(api as never, "layers");
-    expect(api.getPanel("layers")).toBeTruthy();
+    ensurePlannerDockPanel(api as never, "properties");
+    expect(api.getPanel("properties")).toBeTruthy();
   });
 
   it("persists and restores layout JSON", () => {

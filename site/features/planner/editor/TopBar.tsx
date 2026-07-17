@@ -113,7 +113,7 @@ export interface TopBarProps {
   onApplyLayoutPreset?: (presetId: LayoutPresetId) => void;
   onResetLayout?: () => void;
   /** Slim chrome: open a Dockview module by id. */
-  onShowDockPanel?: (panelId: "inventory" | "tools" | "properties" | "layers") => void;
+  onShowDockPanel?: (panelId: "inventory" | "tools" | "properties") => void;
   /**
    * slim = Dockview owns modules; TopBar is brand + history + view + save + Layout/overflow.
    * full = legacy chrome packs + desktop Grid/Snap strip.
@@ -489,11 +489,11 @@ export function TopBar({
             className={styles.btn}
             data-active={isBottomPanelOpen ? "true" : undefined}
             aria-pressed={isBottomPanelOpen}
-            aria-label="Toggle layers panel"
+            aria-label="Toggle details panel"
             onPress={onToggleBottomPanel}
           >
             <Stack size={18} aria-hidden />
-            <span className={styles.mobilePanelLabel}>Layers</span>
+            <span className={styles.mobilePanelLabel}>Details</span>
           </Button>
         )}
 
@@ -578,10 +578,10 @@ export function TopBar({
             {onImport ? (
               <Button
                 className={styles.btn}
-                aria-label="Import sketch or plan file"
+                aria-label="Import Planner JSON file"
                 onPress={onImport}
               >
-                Import
+                Import plan
               </Button>
             ) : null}
             {showGuestActions && (

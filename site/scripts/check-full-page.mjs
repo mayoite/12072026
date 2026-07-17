@@ -211,7 +211,7 @@ await Promise.race([
 
 if (await projectName.isVisible().catch(() => false)) {
   await projectName.fill("Full page audit");
-  await page.getByRole("button", { name: /Start placing furniture/i }).click();
+  await page.getByRole("button", { name: /Open planner/i }).click();
   report.onboarding.setupSubmitted = true;
   await page.waitForTimeout(1000);
 } else {

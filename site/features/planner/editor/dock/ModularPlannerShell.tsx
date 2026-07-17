@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useId, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 
 import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
 import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
@@ -44,10 +44,11 @@ export interface ModularPlannerShellProps {
   storage?: PlannerPersistStorage;
   cloudEnabled?: boolean;
   inventory: ReactNode;
-  /** Optional task assistant. Rendered as an overlay, never as a dock. */
+  /** Optional assistant. It is an overlay action, not a dock panel. */
   assistant?: ReactNode;
+  /** Step-three validation and commercial handoff. It reuses the properties dock slot. */
+  review?: ReactNode;
   properties: ReactNode;
-  layers: ReactNode;
   /** Main plan stage (Fabric / 3D). Tools rail is separate. */
   children: ReactNode;
   activeTool: PlannerTool;
@@ -153,8 +154,8 @@ export function ModularPlannerShell({
   cloudEnabled,
   inventory,
   assistant,
+  review,
   properties,
-  layers,
   children,
   activeTool,
   onToolChange,
@@ -196,6 +197,11 @@ export function ModularPlannerShell({
   const plannerStep = usePlannerWorkspaceStore((state) => state.plannerStep);
   const setPlannerStep = usePlannerWorkspaceStore((state) => state.setPlannerStep);
 
+  useEffect(() => {
+    setPlannerStep("draw");
+    clearPersistedDockLayout();
+  }, [setPlannerStep]);
+
   const resolvedLocalSaved = isLocalSaved ?? isSynced;
   const topBarSaveStatusProps = {
     isSynced: resolvedLocalSaved,
@@ -226,7 +232,7 @@ export function ModularPlannerShell({
   );
 
   const showDockPanel = useCallback(
-    (panelId: "inventory" | "tools" | "properties" | "layers") => {
+    (panelId: "inventory" | "tools" | "properties") => {
       const api = dockApiRef.current;
       if (!api) return;
       ensurePlannerDockPanel(api, panelId);
@@ -243,16 +249,10 @@ export function ModularPlannerShell({
     () => ({
       canvas: children,
       inventory,
-      properties: properties ?? (
+      properties: (plannerStep === "review" ? review : properties) ?? (
         <div className={styles.dockEmptyHint}>
           <strong>Nothing selected</strong>
           <span>Select a wall, opening, or catalog item to edit its dimensions and placement.</span>
-        </div>
-      ),
-      layers: layers ?? (
-        <div className={styles.dockEmptyHint}>
-          <strong>No floor layers</strong>
-          <span>Layers appear as plan elements are added.</span>
         </div>
       ),
       tools: showTools ? (
@@ -277,10 +277,11 @@ export function ModularPlannerShell({
       activeTool,
       children,
       inventory,
-      layers,
       onToolChange,
       onZoomReset,
+      plannerStep,
       properties,
+      review,
       showTools,
       gridEnabled,
       snapEnabled,
@@ -305,7 +306,6 @@ export function ModularPlannerShell({
         cloudEnabled={cloudEnabled}
         leftPanel={slots.inventory}
         rightPanel={slots.properties}
-        bottomPanel={slots.layers}
         onViewModeChange={onViewModeChange}
         onFloorChange={onFloorChange}
         onProjectNameChange={onProjectNameChange}

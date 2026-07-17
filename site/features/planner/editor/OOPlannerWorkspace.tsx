@@ -73,9 +73,9 @@ import { useQuoteCart } from "@/lib/store/quoteCart";
 import { usePlannerSvgCatalog } from "@/features/planner/project/catalog/usePlannerWorkspaceCatalog";
 import { CommandPalette } from "./CommandPalette";
 import { CommandsPaletteTrigger } from "./CommandsPaletteTrigger";
-import { LayersPanel } from "./LayersPanel";
 import workspaceStyles from "./workspace.module.css";
 import { PropertiesPanel } from "./PropertiesPanel";
+import { ReviewQuotePanel } from "./ReviewQuotePanel";
 import {
   describePlannerRedoLabel,
   describePlannerUndoLabel,
@@ -110,7 +110,6 @@ import {
 } from "./workspaceStatusLabels";
 import { summarizeFloorMetrics } from "./workspacePlanMetrics";
 import { useValidation } from "./useValidation";
-import { ValidationPanel } from "./ValidationPanel";
 import { alignEntities, distributeEntities, type PositionedEntity } from "@/features/planner/lib/geometry/alignDistribute";
 import type { PlannerDisplayUnit, PlannerPoint } from "@/features/planner/project/model/types";
 import { formatLengthDisplay } from "@/features/planner/project/model/units";
@@ -221,7 +220,7 @@ export function OOPlannerWorkspace({
   const [displayUnit, setDisplayUnit] = useState<PlannerDisplayUnit>(
     DEFAULT_PLANNER_WORKSPACE_PREFERENCES.units,
   );
-  const [layerVisibility, setLayerVisibility] = useState<PlannerLayerVisibility>(
+  const [layerVisibility] = useState<PlannerLayerVisibility>(
     DEFAULT_LAYER_VISIBILITY,
   );
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -232,7 +231,6 @@ export function OOPlannerWorkspace({
     useState<WorkstationConfigV0 | null>(null);
   /** Consume-once arm — state alone races on double pointer-up before re-render. */
   const pendingWorkstationConfigRef = useRef<WorkstationConfigV0 | null>(null);
-  const [showValidation, setShowValidation] = useState(false);
   const [canvasStatus, setCanvasStatus] = useState<CanvasStatusSnapshot | null>(
     null,
   );
@@ -308,13 +306,6 @@ export function OOPlannerWorkspace({
     ) ?? workspaceCanvas.project.floors[0];
 
   const validationResult = useValidation(activeFloor);
-  const handleFocusIssue = useCallback(
-    (focusMm: { x: number; y: number }) => {
-      canvasRef.current?.focusOnPoint(focusMm.x, focusMm.y);
-    },
-    [],
-  );
-
   const workspaceSelection = workspaceCanvas.selection;
   const multiSelection = useMemo(() => {
     const selection = workspaceSelection;
@@ -1279,6 +1270,15 @@ export function OOPlannerWorkspace({
             panelFill
           />
         }
+        review={
+          <ReviewQuotePanel
+            validation={validationResult}
+            furnitureCount={planMetrics.furniture}
+            workstationSeats={planMetrics.workstationSeats}
+            onDownloadBoq={() => handleExport("boq-csv")}
+            onAddWorkstationsToQuote={() => handleExport("quote")}
+          />
+        }
         properties={
           selectedEntity || multiSelection ? (
             <PropertiesPanel
@@ -1296,48 +1296,6 @@ export function OOPlannerWorkspace({
                     workspaceCanvas.setSelection({ type: "none", ids: [] }),
                 }}
             />
-          ) : null
-        }
-        layers={
-          activeFloor ? (
-            <div className={workspaceStyles.bottomPanelWrapper}>
-              <div className={workspaceStyles.bottomTabBar}>
-                <button
-                  type="button"
-                  className={workspaceStyles.bottomTab}
-                  data-active={!showValidation}
-                  onClick={() => setShowValidation(false)}
-                >
-                  Layers
-                </button>
-                <button
-                  type="button"
-                  className={workspaceStyles.bottomTab}
-                  data-active={showValidation}
-                  onClick={() => setShowValidation(true)}
-                >
-                  Validation
-                  {validationResult.issues.length > 0
-                    ? ` (${validationResult.issues.length})`
-                    : ""}
-                </button>
-              </div>
-              <div className={workspaceStyles.bottomTabContent}>
-                {showValidation ? (
-                  <ValidationPanel
-                    result={validationResult}
-                    onFocusIssue={handleFocusIssue}
-                  />
-                ) : (
-                  <LayersPanel
-                    floor={activeFloor}
-                    visibility={layerVisibility}
-                    onVisibilityChange={setLayerVisibility}
-                    showHeader={false}
-                  />
-                )}
-              </div>
-            </div>
           ) : null
         }
         planMetrics={planMetrics}
@@ -1406,15 +1364,13 @@ export function OOPlannerWorkspace({
               </span>
             )}
             {validationResult.issues.length > 0 ? (
-              <button
-                type="button"
+              <span
                 className={`open3d-status-pill open3d-status-pill--accent ${workspaceStyles.validationPill}`}
-                onClick={() => setShowValidation((v) => !v)}
               >
                 {validationResult.errors > 0
                   ? `${validationResult.errors} error${validationResult.errors > 1 ? "s" : ""}`
                   : `${validationResult.issues.length} issue${validationResult.issues.length > 1 ? "s" : ""}`}
-              </button>
+              </span>
             ) : null}
           </div>
         }
@@ -1486,12 +1442,9 @@ export function OOPlannerWorkspace({
                   <button type="button" onClick={handleStartPlaceWorkstation}>
                     Place workstation
                   </button>
-                  {/* Guest TopBar has no Import — keep empty-state CTAs honest. */}
-                  {!guestMode ? (
-                    <button type="button" onClick={handleImportClick}>
-                      Import plan
-                    </button>
-                  ) : null}
+                  <button type="button" onClick={handleImportClick}>
+                    Import plan
+                  </button>
                 </div>
               </section>
             )}

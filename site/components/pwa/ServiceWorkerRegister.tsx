@@ -10,9 +10,21 @@ export function ServiceWorkerRegister() {
   useEffect(() => {
     if (
       typeof window === "undefined" ||
-      !("serviceWorker" in navigator) ||
-      process.env.NODE_ENV !== "production"
+      !("serviceWorker" in navigator)
     ) {
+      return;
+    }
+
+    if (process.env.NODE_ENV !== "production") {
+      const getRegistrations = navigator.serviceWorker.getRegistrations;
+      if (typeof getRegistrations === "function") {
+        void getRegistrations
+          .call(navigator.serviceWorker)
+          .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+          .catch((error: unknown) => {
+            console.warn("[sw] development cleanup failed:", error);
+          });
+      }
       return;
     }
 

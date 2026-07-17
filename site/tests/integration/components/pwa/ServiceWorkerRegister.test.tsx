@@ -36,6 +36,24 @@ describe("ServiceWorkerRegister", () => {
     expect(removeEventListenerSpy).not.toHaveBeenCalledWith("load", expect.any(Function));
   });
 
+  it("removes inherited service workers in development", async () => {
+    process.env.NODE_ENV = "development";
+    const unregisterMock = vi.fn().mockResolvedValue(true);
+    const getRegistrationsMock = vi.fn().mockResolvedValue([{ unregister: unregisterMock }]);
+    vi.stubGlobal("navigator", {
+      ...navigator,
+      serviceWorker: { getRegistrations: getRegistrationsMock, register: registerMock },
+    });
+
+    render(<ServiceWorkerRegister />);
+
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(getRegistrationsMock).toHaveBeenCalledOnce();
+    expect(unregisterMock).toHaveBeenCalledOnce();
+    expect(registerMock).not.toHaveBeenCalled();
+  });
+
   it("registers the service worker on window load when in production", () => {
     process.env.NODE_ENV = "production";
     render(<ServiceWorkerRegister />);

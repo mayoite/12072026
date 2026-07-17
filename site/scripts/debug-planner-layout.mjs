@@ -23,7 +23,7 @@ export async function runPlannerLayoutDebug(deps = {}) {
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport });
   await page.goto(url, { waitUntil: "domcontentloaded", timeout: 120000 });
-  const start = page.getByRole("button", { name: /start placing furniture/i });
+  const start = page.getByRole("button", { name: /open planner/i });
   if ((await start.count()) > 0) {
     await start.waitFor({ state: "visible", timeout: 60000 });
     await start.click();

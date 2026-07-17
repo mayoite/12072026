@@ -55,7 +55,7 @@ async function enterGuestWorkspace(page) {
   ]);
   if (await setup.isVisible().catch(() => false)) {
     await page.getByLabel("Project name").fill("P06 symbols inventory");
-    await page.getByRole("button", { name: /Start placing furniture/i }).click();
+    await page.getByRole("button", { name: /Open planner/i }).click();
   }
   const scratch = page.getByRole("button", { name: /Start from Scratch/i });
   if (await scratch.isVisible({ timeout: 10_000 }).catch(() => false)) {

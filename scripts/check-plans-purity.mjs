@@ -29,7 +29,7 @@ for (const entry of fs.readdirSync(planRoot, { withFileTypes: true })) {
 const markdown = collect(planRoot).filter((file) => file.endsWith(".md"));
 for (const required of [
   "README.md",
-  "Planner/CHECKLIST.md",
+  "Planner/FINISH-PLAN.md",
   "Planner/FEATURES.md",
   "Admin/FEATURES.md",
   "Site/FEATURES.md",
@@ -38,10 +38,10 @@ for (const required of [
 }
 
 const checklists = markdown.filter((file) => file.endsWith("CHECKLIST.md"));
-if (checklists.length !== 1 || checklists[0] !== "Planner/CHECKLIST.md") {
-  violations.push("Planner/CHECKLIST.md must be the only active checklist");
+if (checklists.length !== 0) {
+  violations.push("stale CHECKLIST.md found; Planner/FINISH-PLAN.md is the active execution plan");
 }
-for (const file of checklists) {
+for (const file of ["Planner/FINISH-PLAN.md"]) {
   const text = fs.readFileSync(path.join(planRoot, file), "utf8");
   if (/\[x\]/i.test(text)) violations.push(`checked item: plan/${file}`);
 }

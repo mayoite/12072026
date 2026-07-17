@@ -15,7 +15,7 @@ import {
 describe("verify-catalog-svg (name-mirror)", () => {
   it("locks guest URL and catalog selectors", () => {
     expect(CATALOG_SVG_GUEST_URL).toContain("/planner/guest");
-    expect(START_PLACING_RE.test("Start placing furniture")).toBe(true);
+    expect(START_PLACING_RE.test("Open planner")).toBe(true);
     expect(CATALOG_SELECTOR).toBe(".pw-catalog");
     expect(PREVIEW_SVG_SELECTOR).toContain("svg");
   });

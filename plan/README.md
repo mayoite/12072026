@@ -1,10 +1,10 @@
 # Current execution
 
-Planner workspace refinement is the only active plan.
+Planner finish is the only active plan.
 
 | Purpose | File |
 |---|---|
-| Current work | `Planner/CHECKLIST.md` |
+| Current work | `Planner/FINISH-PLAN.md` |
 | Planner code map | `Planner/FEATURES.md` |
 | Admin code map | `Admin/FEATURES.md` |
 | Site code map | `Site/FEATURES.md` |

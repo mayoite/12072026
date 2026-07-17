@@ -6,7 +6,6 @@ export type PlannerDockSlotId =
   | "canvas"
   | "inventory"
   | "properties"
-  | "layers"
   | "tools";
 
 export type PlannerDockSlots = Record<PlannerDockSlotId, ReactNode>;

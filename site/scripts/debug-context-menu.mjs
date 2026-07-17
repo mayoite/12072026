@@ -41,7 +41,7 @@ export async function runContextMenuDebug(deps = {}) {
 
   if (await projectNameInput.isVisible().catch(() => false)) {
     await projectNameInput.fill("Context menu test");
-    await page.getByRole("button", { name: /Start placing furniture/i }).click();
+    await page.getByRole("button", { name: /Open planner/i }).click();
     await page.waitForTimeout(1000);
   }
 

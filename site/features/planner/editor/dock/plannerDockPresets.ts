@@ -14,8 +14,7 @@ export type PlannerDockPanelId =
   | "canvas"
   | "inventory"
   | "tools"
-  | "properties"
-  | "layers";
+  | "properties";
 
 const PANEL_META: Record<
   PlannerDockPanelId,
@@ -25,14 +24,12 @@ const PANEL_META: Record<
   inventory: { id: "inventory", component: "inventory", title: "Inventory" },
   tools: { id: "tools", component: "tools", title: "Tools" },
   properties: { id: "properties", component: "properties", title: "Properties" },
-  layers: { id: "layers", component: "layers", title: "Layers" },
 };
 
 export const PLANNER_DOCK_MODULE_IDS: Exclude<PlannerDockPanelId, "canvas">[] = [
   "inventory",
   "tools",
   "properties",
-  "layers",
 ];
 
 const PLANNER_DOCK_PANEL_IDS = new Set<PlannerDockPanelId>([
@@ -130,13 +127,6 @@ export function ensurePlannerDockPanel(
         initialWidth: 268,
       });
       return;
-    case "layers":
-      api.addPanel({
-        ...meta,
-        position: { direction: "below", referencePanel: "canvas" },
-        initialHeight: 160,
-      });
-      return;
     default: {
       const _exhaustive: never = panelId;
       return _exhaustive;
@@ -145,8 +135,8 @@ export function ensurePlannerDockPanel(
 }
 
 /**
- * Build a canvas-first CAD default. Context panels stay available from Panels
- * without permanently reducing the drawing area.
+ * Build customer workflow layouts. Dockview remains the layout engine, but
+ * customer Planner does not expose a generic panel manager.
  */
 export function applyPlannerDockPreset(
   api: DockviewApi,
@@ -194,10 +184,6 @@ export function applyPlannerDockPreset(
       api.addPanel({
         ...PANEL_META.properties,
         floating: { width: 288, height: 400, x: 450, y: 64 },
-      });
-      api.addPanel({
-        ...PANEL_META.layers,
-        floating: { width: 480, height: 180, x: 120, y: 500 },
       });
       return;
 

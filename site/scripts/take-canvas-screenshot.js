@@ -16,7 +16,7 @@ const path = require('path');
     await page.fill('#project-setup-name', 'My Test Project');
     
     console.log("Waiting for setup gate button...");
-    const button = page.locator('button:has-text("Start placing furniture")');
+    const button = page.getByRole('button', { name: /Open planner/i });
     await button.waitFor({ state: 'visible', timeout: 5000 });
     
     console.log("Clicking the setup gate button...");

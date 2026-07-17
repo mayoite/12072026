@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const CATALOG_SVG_GUEST_URL = "http://localhost:3000/planner/guest/";
-export const START_PLACING_RE = /start placing furniture/i;
+export const START_PLACING_RE = /open planner/i;
 export const CATALOG_SELECTOR = ".pw-catalog";
 export const PREVIEW_SVG_SELECTOR = ".pw-catalog-block-preview svg";
 

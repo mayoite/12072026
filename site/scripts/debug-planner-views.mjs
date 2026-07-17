@@ -39,7 +39,7 @@ export async function runPlannerViewsDebug(deps = {}) {
   });
   await page.waitForTimeout(2000);
 
-  const start = page.getByRole("button", { name: /start placing furniture/i });
+  const start = page.getByRole("button", { name: /open planner/i });
   await start.waitFor({ state: "visible", timeout: 60000 });
   await start.click();
   await page.waitForSelector(".pw-workspace", { timeout: 60000 });

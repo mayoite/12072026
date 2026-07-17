@@ -5,7 +5,7 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 | Doc | Role |
 |---|---|
 | This file | Current code map and known gaps |
-| `CHECKLIST.md` | Required work and fresh verification status |
+| `FINISH-PLAN.md` | Required work and fresh verification status |
 | `docs/architecture/06-UI-BENCHMARK.md` | Planner UI acceptance contract |
 | `docs/architecture/08-DATABASE-SVG-CONTRACT.md` | Target database SVG contract |
 
@@ -133,4 +133,4 @@ Not a customer phase. Disk still supplies the live SVG bytes. Both Admin publish
 
 ## Reference (not truth)
 
-`CHECKLIST.md` · `docs/architecture/06-UI-BENCHMARK.md` · `docs/architecture/08-DATABASE-SVG-CONTRACT.md`
+`FINISH-PLAN.md` · `docs/architecture/06-UI-BENCHMARK.md` · `docs/architecture/08-DATABASE-SVG-CONTRACT.md`

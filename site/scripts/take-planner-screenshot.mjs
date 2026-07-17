@@ -9,7 +9,7 @@ export const PLANNER_SCREENSHOT_VIEWPORT = { width: 1440, height: 900 };
 export const PLANNER_GUEST_PATH = "/planner/guest";
 export const PLANNER_SCREENSHOT_FILENAME = "planner-guest-left-panel.png";
 export const WORKSPACE_SELECTOR = ".pw-workspace, .fcw-workspace";
-export const START_PLACING_RE = /start placing furniture/i;
+export const START_PLACING_RE = /open planner/i;
 export const OPEN_LIBRARY_RE = /open library panel/i;
 
 export function resolveScreenshotOutDir(repoRoot = resolveRepoRootFromCwd()) {

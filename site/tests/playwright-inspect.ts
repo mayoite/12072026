@@ -32,7 +32,7 @@ async function main() {
   if (await setupHeading.isVisible()) {
     console.log("Setup gate is visible, completing setup...");
     await page.getByLabel("Project name").fill("Fresh Guest Workspace");
-    await page.getByRole("button", { name: /Start placing furniture/i }).click();
+    await page.getByRole("button", { name: /Open planner/i }).click();
   }
 
   console.log("Waiting for .pw-topbar to be visible...");

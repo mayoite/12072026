@@ -1,6 +1,7 @@
 // Oando Platform service worker — offline caching for critical assets
-const CACHE_NAME = "oando-platform-v1";
+const CACHE_NAME = "oando-platform-v2";
 const OFFLINE_URL = "/offline";
+const IS_LOCAL_DEVELOPMENT = ["localhost", "127.0.0.1", "::1"].includes(self.location.hostname);
 
 const PRECACHE_URLS = [
   "/",
@@ -32,6 +33,9 @@ self.addEventListener("fetch", (event) => {
 
   // Skip cross-origin requests and API routes
   if (url.origin !== self.location.origin || url.pathname.startsWith("/api/")) return;
+
+  // Next development chunks have stable names. They must never be cache-first.
+  if (IS_LOCAL_DEVELOPMENT) return;
 
   // Network-first for navigation requests (so users get fresh HTML when online)
   if (request.mode === "navigate") {

@@ -59,7 +59,7 @@ async function main() {
   try {
     if (await setup.isVisible({ timeout: 8_000 })) {
       await page.getByLabel("Project name").fill("W3 chrome eyes");
-      await page.getByRole("button", { name: /Start placing furniture/i }).click();
+      await page.getByRole("button", { name: /Open planner/i }).click();
     }
   } catch {
     /* already in workspace */

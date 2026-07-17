@@ -26,7 +26,7 @@ describe("take-planner-screenshot (name-mirror)", () => {
       "http://localhost:3000/planner/guest",
     );
     expect(PLANNER_SCREENSHOT_VIEWPORT).toEqual({ width: 1440, height: 900 });
-    expect(START_PLACING_RE.test("Start placing furniture")).toBe(true);
+    expect(START_PLACING_RE.test("Open planner")).toBe(true);
     expect(OPEN_LIBRARY_RE.test("Open library panel")).toBe(true);
     expect(WORKSPACE_SELECTOR).toContain(".pw-workspace");
     const outDir = resolveScreenshotOutDir("E:/repo");

@@ -64,8 +64,8 @@ async function enterGuestCanvas(page) {
   if (await setupHeading.isVisible({ timeout: 15_000 }).catch(() => false)) {
     await page.getByLabel("Project name").fill("Canvas UX verify");
     await page
-      .getByRole("button", { name: /Start placing furniture/i })
-      .click({ force: true });
+      .getByRole("button", { name: /Open planner/i })
+      .click();
   }
 
   await page.locator(".pw-topbar").waitFor({ timeout: 60_000 }).catch(() => {});

@@ -203,7 +203,7 @@ try {
 
   if (setupVisible) {
     await projectNameInput.fill("Canvas audit");
-    await page.getByRole("button", { name: /Start placing furniture/i }).click();
+    await page.getByRole("button", { name: /Open planner/i }).click();
     report.onboarding.projectName = "Canvas audit";
     report.onboarding.submitted = true;
     await page.waitForTimeout(1000);

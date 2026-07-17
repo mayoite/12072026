@@ -359,9 +359,9 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
             type="submit"
             className="btn-primary typ-cta mt-auto inline-flex gap-2 px-6 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-primary)]"
             disabled={!isHydrated}
-            aria-label={isHydrated ? "Start placing furniture" : "Preparing workspace"}
+            aria-label={isHydrated ? "Open planner" : "Preparing workspace"}
           >
-            {isHydrated ? "Start placing furniture" : "Preparing workspace..."}
+            {isHydrated ? "Open planner" : "Preparing workspace..."}
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </button>
         </form>

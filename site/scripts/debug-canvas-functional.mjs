@@ -28,7 +28,7 @@ export async function runCanvasFunctionalDebug(deps = {}) {
   page.on("pageerror", (e) => logs.push(`PAGE: ${e.message}`));
 
   await page.goto(url, { timeout: 90000 });
-  const start = page.getByRole("button", { name: /start placing furniture/i });
+  const start = page.getByRole("button", { name: /open planner/i });
   if ((await start.count()) > 0) {
     await start.click();
     await page.waitForSelector(".pw-workspace", { timeout: 60000 });

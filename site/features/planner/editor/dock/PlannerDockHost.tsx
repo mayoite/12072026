@@ -16,8 +16,6 @@ import type { LayoutPresetId } from "../workspaceLayout";
 import {
   applyPlannerDockPreset,
   ensurePlannerDockPanel,
-  persistDockLayout,
-  tryRestoreDockLayout,
   type PlannerDockPanelId,
 } from "./plannerDockPresets";
 import {
@@ -43,9 +41,6 @@ function InventoryPanel(_props: IDockviewPanelProps) {
 function PropertiesPanel(_props: IDockviewPanelProps) {
   return <SlotPanel slot="properties" />;
 }
-function LayersPanel(_props: IDockviewPanelProps) {
-  return <SlotPanel slot="layers" />;
-}
 function ToolsPanel(_props: IDockviewPanelProps) {
   return <SlotPanel slot="tools" />;
 }
@@ -58,7 +53,6 @@ const DOCK_COMPONENTS = {
   canvas: CanvasPanel,
   inventory: InventoryPanel,
   properties: PropertiesPanel,
-  layers: LayersPanel,
   tools: ToolsPanel,
 };
 
@@ -74,13 +68,10 @@ export interface PlannerDockHostProps {
 
 function seedLayout(api: DockviewApi, layoutPresetId: LayoutPresetId | "custom"): void {
   if (api.panels.length > 0) return;
-  const restored = tryRestoreDockLayout(api);
-  if (!restored || api.panels.length === 0) {
-    applyPlannerDockPreset(
-      api,
-      layoutPresetId === "custom" ? "default" : layoutPresetId,
-    );
-  }
+  applyPlannerDockPreset(
+    api,
+    layoutPresetId === "custom" ? "default" : layoutPresetId,
+  );
 }
 
 /**
@@ -96,14 +87,6 @@ export function PlannerDockHost({
 }: PlannerDockHostProps) {
   const apiRef = useRef<DockviewApi | null>(null);
   const disposablesRef = useRef<Disposable[]>([]);
-  const persistTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const schedulePersist = useCallback(() => {
-    const api = apiRef.current;
-    if (!api) return;
-    if (persistTimer.current) clearTimeout(persistTimer.current);
-    persistTimer.current = setTimeout(() => persistDockLayout(api), 400);
-  }, []);
 
   const onReady = useCallback(
     (event: DockviewReadyEvent) => {
@@ -122,26 +105,22 @@ export function PlannerDockHost({
           if (removed.id === "canvas") {
             ensurePlannerDockPanel(event.api, "canvas");
           }
-          schedulePersist();
         }),
-        event.api.onDidLayoutChange(() => schedulePersist()),
       );
     },
-    [layoutPresetId, onApiReady, schedulePersist],
+    [layoutPresetId, onApiReady],
   );
 
   useEffect(() => {
     const api = apiRef.current;
     if (!api || layoutPresetId === "custom") return;
     applyPlannerDockPreset(api, layoutPresetId);
-    persistDockLayout(api);
   }, [layoutPresetId, layoutEpoch]);
 
   useEffect(() => {
     return () => {
       for (const d of disposablesRef.current) d.dispose();
       disposablesRef.current = [];
-      if (persistTimer.current) clearTimeout(persistTimer.current);
     };
   }, []);
 

@@ -26,7 +26,7 @@
 
 ## Layout
 
-- Current execution lives in `plan/Planner/CHECKLIST.md`.
+- Current execution lives in `plan/Planner/FINISH-PLAN.md`.
 - Verified code maps live in `plan/Admin/FEATURES.md`, `plan/Planner/FEATURES.md`, and `plan/Site/FEATURES.md`.
 - No work is deferred to a later decision bucket.
 - Product and architecture facts live in `docs/`.

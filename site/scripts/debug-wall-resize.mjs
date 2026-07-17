@@ -21,7 +21,7 @@ export async function runWallResizeDebug(deps = {}) {
   const page = await browser.newPage({ viewport });
 
   await page.goto(url, { timeout: 90000 });
-  const start = page.getByRole("button", { name: /start placing furniture/i });
+  const start = page.getByRole("button", { name: /open planner/i });
   if ((await start.count()) > 0) {
     await start.click();
     await page.waitForSelector(".pw-workspace", { timeout: 60000 });

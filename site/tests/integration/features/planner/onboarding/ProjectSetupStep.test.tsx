@@ -28,7 +28,7 @@ describe("ProjectSetupStep", () => {
 
     await waitFor(() =>
       expect(
-        screen.getByRole("button", { name: /start placing furniture/i }),
+        screen.getByRole("button", { name: /open planner/i }),
       ).toBeEnabled(),
     );
   });
@@ -52,14 +52,14 @@ describe("ProjectSetupStep", () => {
 
     await waitFor(() =>
       expect(
-        screen.getByRole("button", { name: /start placing furniture/i }),
+        screen.getByRole("button", { name: /open planner/i }),
       ).toBeEnabled(),
     );
 
     fireEvent.change(screen.getByLabelText("Project name"), {
       target: { value: "Hydrated planner" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /start placing furniture/i }));
+    fireEvent.click(screen.getByRole("button", { name: /open planner/i }));
 
     await waitFor(() => expect(projectSetupMod.applyProjectSetup).toHaveBeenCalledTimes(1));
     expect(onComplete).toHaveBeenCalledTimes(1);

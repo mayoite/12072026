@@ -101,7 +101,7 @@ export async function completePlannerSetupGate(
     await nameInput.fill(projectName);
 
     const submit = page.getByRole("button", {
-      name: /Start placing furniture|Preparing workspace/i,
+      name: /Open planner|Preparing workspace/i,
     });
     await expect(submit).toBeEnabled({ timeout: 60_000 });
     await submit.click({ force: true });

@@ -64,7 +64,7 @@ describe("ProjectSetupGate", () => {
     expect(screen.getByRole("radio", { name: /Scratch/i })).toBeChecked();
     expect(screen.getByRole("radio", { name: /Import or trace/i })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Start placing furniture" }));
+    fireEvent.click(screen.getByRole("button", { name: "Open planner" }));
 
     expect(screen.getByTestId("canvas-child")).toBeInTheDocument();
     expect(localStorage.getItem(projectSetupStorageKey(true, "one-step-plan"))).toBe("true");

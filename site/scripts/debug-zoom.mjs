@@ -33,7 +33,7 @@ export async function runZoomDebug(deps = {}) {
     waitUntil: "domcontentloaded",
     timeout: 120000,
   });
-  const start = page.getByRole("button", { name: /start placing furniture/i });
+  const start = page.getByRole("button", { name: /open planner/i });
   if (await start.isVisible().catch(() => false)) {
     await page.locator("#project-setup-name").fill("zoom test");
     await start.click();
