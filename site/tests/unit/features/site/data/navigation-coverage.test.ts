@@ -219,6 +219,7 @@ describe("SITE_FOOTER_NAV", () => {
       "Solutions",
       "Projects",
       "Planner",
+      "Planner help",
       "Member dashboard",
     ]);
     const company = SITE_FOOTER_NAV.find((section) => section.heading === "Company");
