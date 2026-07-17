@@ -25,6 +25,10 @@ import {
   phoneSvgListReviewNotice,
 } from "@/features/admin/ui/adminMobileReview";
 import { apiPath, browserApiFetch } from "@/lib/api/browserApi";
+import {
+  formatSvgDualWriteListSourceMeta,
+  type SvgPublishDualWriteMode,
+} from "@/features/admin/svg-editor/publish/svgPublishDualWriteMode";
 import type { CatalogLifecycleManifest, CatalogLifecycleState } from "../lifecycle/catalogLifecycle.shared";
 import { resolveCatalogLifecycle } from "../lifecycle/catalogLifecycle.shared";
 import { AdminSvgBulkImportPanel } from "./AdminSvgBulkImportPanel";
@@ -142,6 +146,12 @@ export interface AdminSvgEditorListViewProps {
   readonly refreshedAtLabel: string;
   readonly artifactStatuses: Readonly<Record<string, SvgArtifactStatus>>;
   readonly lifecycleManifest: CatalogLifecycleManifest;
+  /**
+   * Server-resolved dual-write readiness mode (mode string only).
+   * Default `skipped_no_db` for client unit tests without a page probe.
+   * `enabled` is not cutover — disk remains live authority.
+   */
+  readonly dualWriteMode?: SvgPublishDualWriteMode;
 }
 
 function artifactLabel(state: SvgArtifactStatus["state"]): string {
@@ -176,6 +186,7 @@ export function AdminSvgEditorListView({
   refreshedAtLabel,
   artifactStatuses,
   lifecycleManifest,
+  dualWriteMode = "skipped_no_db",
 }: AdminSvgEditorListViewProps) {
   const [lifecycleBusySlug, setLifecycleBusySlug] = useState<string | null>(null);
   const [query, setQuery] = useState("");
@@ -371,8 +382,8 @@ export function AdminSvgEditorListView({
             canvas. You do not need to edit source files by hand.
           </p>
           <p className="admin-page__meta" data-testid="admin-shell-source">
-            Live authority: on-disk inventory (descriptors + svg-catalog) ·
-            Products DB dual-write optional · refreshed{" "}
+            Live authority: on-disk inventory (descriptors + svg-catalog) ·{" "}
+            {formatSvgDualWriteListSourceMeta(dualWriteMode)} · refreshed{" "}
             <time dateTime={refreshedAtLabel}>{refreshedAtLabel}</time>
           </p>
         </div>

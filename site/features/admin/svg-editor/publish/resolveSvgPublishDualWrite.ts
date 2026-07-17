@@ -25,6 +25,7 @@
 
 import { ImmutableSvgRevisionRepository } from "@/features/admin/svg-editor/svgRevisionRepository.server";
 import { DrizzleSvgRevisionPersistence } from "@/features/admin/svg-editor/storage/drizzleSvgPersistence.server";
+import type { SvgPublishDualWriteMode } from "@/features/admin/svg-editor/publish/svgPublishDualWriteMode";
 import {
   isProductsDatabaseConfigured,
   resolveProductsDatabaseUrl,
@@ -37,11 +38,8 @@ import {
 } from "@/lib/storage/r2Catalog";
 import postgres from "postgres";
 
-export type SvgPublishDualWriteMode =
-  | "enabled"
-  | "skipped_no_db"
-  | "skipped_r2_unavailable"
-  | "skipped_schema_missing";
+export type { SvgPublishDualWriteMode } from "@/features/admin/svg-editor/publish/svgPublishDualWriteMode";
+export { formatSvgDualWriteListSourceMeta } from "@/features/admin/svg-editor/publish/svgPublishDualWriteMode";
 
 export type SvgPublishArtifactStore = {
   putText: typeof writeR2ObjectText;

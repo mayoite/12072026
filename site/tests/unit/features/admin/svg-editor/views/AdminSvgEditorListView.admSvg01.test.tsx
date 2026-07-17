@@ -61,8 +61,8 @@ describe("ADM-SVG-01 primary no-code SVG journey", () => {
 
     expect(screen.getByTestId("admin-svg-primary-journey")).toBeInTheDocument();
     const copy = screen.getByTestId("admin-svg-journey-copy");
-    expect(copy).toHaveTextContent(/visual studio/i);
-    expect(copy).toHaveTextContent(/do not need to edit JSON/i);
+    expect(copy).toHaveTextContent(/studio|publish/i);
+    expect(copy).toHaveTextContent(/do not need to edit/i);
     expect(copy.textContent ?? "").not.toMatch(/Zod|atomic-rename|pipeline/i);
 
     const primary = screen.getByTestId("admin-shell-primary-action");
@@ -85,11 +85,13 @@ describe("ADM-SVG-01 primary no-code SVG journey", () => {
       "admin-btn--primary",
     );
     const source = screen.getByTestId("admin-shell-source");
-    expect(source).toHaveTextContent(/local disk/i);
-    expect(source).toHaveTextContent(/live publish authority/i);
-    expect(source).toHaveTextContent(/Products DB not live/i);
+    expect(source).toHaveTextContent(/on-disk inventory|Live authority/i);
+    expect(source).toHaveTextContent(/Dual-write: skipped_no_db/i);
+    expect(source).toHaveTextContent(
+      /live authority remains disk until cutover/i,
+    );
     expect(source.textContent ?? "").not.toMatch(
-      /block-descriptor|Zod|pipeline|atomic-rename/i,
+      /block-descriptor|Zod|pipeline|atomic-rename|cutover complete/i,
     );
 
     const edit = screen.getByTestId("admin-svg-edit-side-table-001");

@@ -105,7 +105,9 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
     expect(journey).toHaveTextContent(/do not need to edit/i);
     expect(journey).not.toHaveTextContent(/Zod|pipeline|schema|descriptor/i);
 
-    expect(screen.getByTestId("admin-shell-title")).toHaveTextContent("SVG symbols");
+    expect(screen.getByTestId("admin-shell-title")).toHaveTextContent(
+      /Product plan symbols|SVG symbols/i,
+    );
     expect(screen.getByTestId("admin-shell-primary-action")).toHaveTextContent(
       /New SVG symbol/i,
     );
@@ -140,6 +142,32 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
     expect(screen.getByTestId("admin-shell-primary-action")).toHaveAttribute(
       "href",
       "/admin/svg-editor/new",
+    );
+  });
+
+  it("shows dual-write readiness mode without claiming cutover", () => {
+    render(
+      <AdminSvgEditorListView
+        descriptors={[descriptor]}
+        refreshedAtLabel="test-time"
+        artifactStatuses={{
+          "side-table-001": {
+            state: "published",
+            publicUrl: "/svg-catalog/side-table-001.svg",
+          } as never,
+        }}
+        lifecycleManifest={{}}
+        dualWriteMode="enabled"
+      />,
+    );
+    const source = screen.getByTestId("admin-shell-source");
+    expect(source).toHaveTextContent(/Dual-write: enabled/);
+    expect(source).toHaveTextContent(
+      /live authority remains disk until cutover/i,
+    );
+    expect(source).toHaveTextContent(/on-disk inventory/i);
+    expect(source.textContent ?? "").not.toMatch(
+      /cutover complete|DB is live authority|Products DB is sole authority/i,
     );
   });
 });

@@ -149,6 +149,12 @@ describe("ADM-SHELL-01 list page landmarks", () => {
     expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
       /live authority|descriptors|svg-catalog/i,
     );
+    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
+      /Dual-write: skipped_no_db/i,
+    );
+    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
+      /live authority remains disk until cutover/i,
+    );
     expect(screen.getByTestId("admin-shell-state")).toHaveTextContent(/published/i);
     expect(screen.getByTestId("admin-shell-primary-action")).toHaveTextContent(
       /New SVG symbol/i,

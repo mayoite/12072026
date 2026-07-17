@@ -1,7 +1,12 @@
 # Active Blockers and Failures
 
-- DB-SVG cutover (authority). Live default is still **disk** (`inventory/descriptors/`, `public/svg-catalog/`). Lifecycle audit remains filesystem (`results/admin/catalog-ops/`). Dual-write injects when Products DB is configured, R2 ListObjects succeeds, **and** the DB-SVG-05 pointer column exists (`planner_managed_products.published_svg_revision_id`). Missing column → mode `skipped_schema_missing` (disk-only; no hard dual-write crash). When dual-write is **enabled**, publish uploads honest immutable artifacts to R2 and writes DB revision + product pointer via `DrizzleSvgRevisionPersistence` (0 matching products ok; >1 fail-closed). **Enabled dual-write ≠ cutover.** Do **not** set `SVG_RELEASE_AUTHORITY=db` until one production dual-write publish is proven.
+- **DB-SVG cutover (authority).** Live release authority remains **disk** (`inventory/descriptors/`, `public/svg-catalog/`). Lifecycle audit remains filesystem (`results/admin/catalog-ops/`). **Enabled dual-write ≠ cutover.**
 
-  **2026-07-18 schema fix (owner env):** Applied `20260716100000_add_published_svg_revision_id.sql` via `pnpm --filter oando-site run db:apply` to Products DB. Verified: column + migration history present (`scripts/db_verify_published_svg_pointer.ts`). Dual-write gate now probes the column before inject.
+  **Applied 2026-07-18:** Products DB pointer migration `20260716100000_add_published_svg_revision_id.sql` (`planner_managed_products.published_svg_revision_id`) via `pnpm --filter oando-site run db:apply`. Verified with `scripts/db_verify_published_svg_pointer.ts`. Dual-write resolve soft-skips when column missing (`skipped_schema_missing`).
 
-  **Still OPEN for full cutover:** (1) one real dual-write Admin publish of an inventory product with R2 + DB revision + pointer, (2) Planner `svg-blocks` read of revision API bytes without disk-only reliance, (3) then optional `SVG_RELEASE_AUTHORITY=db`. Contract `DB-SVG-01`…`20` remains open until that proof. Prior report: `agent-reports/2026-07-17-fail0-w2.md`.
+  **OPEN (numbered):**
+  1. One real Admin dual-write publish of an inventory product (disk + R2 artifacts + DB revision + product pointer; 0 products ok; >1 reject).
+  2. Planner `svg-blocks` / revision API serves committed R2 bytes without disk-only reliance for that product.
+  3. Only after (1)–(2): optional `SVG_RELEASE_AUTHORITY=db`, then re-prove no silent disk override.
+
+  **Do not set `SVG_RELEASE_AUTHORITY=db` until (1) and (2) are proven.** Contract `DB-SVG-01`…`20` stays open. Detail: `agent-reports/2026-07-18-db-svg-residual.md`. Prior: `agent-reports/2026-07-17-fail0-w2.md`.
