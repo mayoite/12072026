@@ -1015,7 +1015,8 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       const handleOpeningMoving = (event: {
         target?: FabricObject;
         pointer?: { x: number; y: number };
-        e?: { clientX?: number; clientY?: number };
+        /** Fabric may pass MouseEvent, PointerEvent, or TouchEvent. */
+        e?: Event;
       }) => {
         if (rebuildingRef.current) return;
         const target = event.target;
@@ -1031,12 +1032,20 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         };
         if (event.pointer) {
           pointerScreen = { x: event.pointer.x, y: event.pointer.y };
-        } else if (
-          event.e &&
-          typeof event.e.clientX === "number" &&
-          typeof event.e.clientY === "number"
-        ) {
-          pointerScreen = hostPoint(host, event.e.clientX, event.e.clientY);
+        } else if (event.e) {
+          const pe = event.e;
+          if (
+            "clientX" in pe &&
+            "clientY" in pe &&
+            typeof (pe as { clientX?: unknown }).clientX === "number" &&
+            typeof (pe as { clientY?: unknown }).clientY === "number"
+          ) {
+            pointerScreen = hostPoint(
+              host,
+              (pe as { clientX: number }).clientX,
+              (pe as { clientY: number }).clientY,
+            );
+          }
         }
         constrainOpeningTargetToHostWall(target, kind, entityId, pointerScreen);
       };

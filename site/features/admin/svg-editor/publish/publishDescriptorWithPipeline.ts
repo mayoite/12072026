@@ -153,8 +153,12 @@ export type PublishDescriptorWithPipelineDeps = {
 const DEFAULT_DEPS: Required<
   Omit<
     PublishDescriptorWithPipelineDeps,
-    "readReleasedSnapshot" | "dbRepository" | "actorId" | "reason"
+    | "readReleasedSnapshot"
+    | "dbRepository"
+    | "actorId"
+    | "reason"
     | "artifactStore"
+    | "rasterizePng"
   >
 > & {
   readonly readReleasedSnapshot: (
