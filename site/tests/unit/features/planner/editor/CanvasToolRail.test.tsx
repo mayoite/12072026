@@ -55,6 +55,9 @@ describe("CanvasToolRail", () => {
     expect(rail).toHaveAttribute("data-mobile-chrome", "bottom");
     expect(rail).toHaveAttribute("data-orientation", "horizontal");
     expect(rail).toHaveAttribute("data-dock-managed", "true");
+    // One dense rail only — no stacked second strip
+    expect(rail).toHaveAttribute("data-rail-density", "single-dense");
+    expect(screen.getAllByTestId("canvas-tool-rail")).toHaveLength(1);
   });
 
   it("declares ≥44px tap floor on live tool and view controls (UI-MOB-03)", () => {

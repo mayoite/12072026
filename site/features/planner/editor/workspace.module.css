@@ -1914,15 +1914,31 @@
 /* Phone shell: deliberate two-row top bar (brand + save/panels | view/tools).
  * UI-MOB-01/02/03: compact chrome, canvas share, ≥44px frequent targets.
  * Never reintroduce brand / center / actions as three full-width stacks — that
- * ate ~34% of viewport height and left canvas ~41% (UI-MOB benchmark FAIL). */
+ * ate ~34% of viewport height and left canvas ~41% (UI-MOB benchmark FAIL).
+ *
+ * STRONG-W2 phone top chrome height budget (390 CSS width, 16px root):
+ *   --ws-phone-topbar-row-h = 2.75rem (44px touch floor)
+ *   2 rows × 44px = 88px
+ *   pad-block 2 × space-1 (0.25rem) = 8px
+ *   row-gap 0.25rem = 4px
+ *   border-bottom 1px
+ *   total ≈ 101px ≤ 7rem (112px) target band
+ * Before (benchmark): header ~289px / 34% viewport. After: ≤112px / ~13%.
+ * Canvas row is minmax(0, 1fr) so leftover height grows the plan stage. */
 @media (width < 48rem) {
   .shell {
     --ws-mobile-panel-inline-size: min(
       calc(100% - var(--space-4)),
       var(--planner-panel-width-mobile-max)
     );
+    /* Header auto (capped) | workspace flexes | status auto */
     grid-template-rows: auto minmax(0, 1fr) auto;
     overflow-x: hidden;
+    /* Phone top chrome budget tokens (unit-asserted; 7rem = 112px @ 16px) */
+    --ws-phone-topbar-row-h: var(--planner-touch-target, 2.75rem);
+    --ws-phone-topbar-gap: 0.25rem;
+    --ws-phone-topbar-pad-block: var(--space-1);
+    --ws-phone-topbar-max-h: 7rem; /* 112px hard band without notch safe-area */
   }
 
   /* Beat legacy locked `.planner-workspace .pw-topbar` one-row grid.
@@ -1931,19 +1947,26 @@
   .header,
   .header[data-phone-layout="two-row"] {
     min-height: 0;
-    max-height: none;
+    /* Hard cap: two touch rows + pad + gap ≤ 112px (+ safe-area top on notched devices) */
+    max-height: calc(
+      var(--ws-phone-topbar-max-h, 7rem) + var(--planner-safe-top, 0px)
+    );
     padding:
-      calc(var(--space-1) + var(--planner-safe-top))
+      calc(var(--ws-phone-topbar-pad-block, var(--space-1)) + var(--planner-safe-top))
       calc(var(--space-2) + var(--planner-safe-right))
-      var(--space-1)
+      var(--ws-phone-topbar-pad-block, var(--space-1))
       calc(var(--space-2) + var(--planner-safe-left));
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-rows: auto auto;
+    grid-template-rows:
+      minmax(0, var(--ws-phone-topbar-row-h, 2.75rem))
+      minmax(0, var(--ws-phone-topbar-row-h, 2.75rem));
     grid-template-areas:
       "brand actions"
       "center center";
-    gap: 0.25rem var(--space-1);
+    gap: var(--ws-phone-topbar-gap, 0.25rem) var(--space-1);
     overflow-x: hidden;
+    overflow-y: hidden;
+    box-sizing: border-box;
     /* Cap chrome so two rows stay tight on 390×844 (UI-MOB-01) */
     --ws-control-h: var(--planner-touch-target, 2.75rem);
   }
@@ -1952,21 +1975,26 @@
   .brand[data-phone-row="primary"] {
     grid-area: brand;
     min-width: 0;
+    max-height: var(--ws-phone-topbar-row-h, 2.75rem);
     gap: var(--space-1);
+    align-self: center;
   }
 
   .center,
   .center[data-phone-row="tools"] {
     grid-area: center;
     width: 100%;
+    max-height: var(--ws-phone-topbar-row-h, 2.75rem);
     justify-self: stretch;
     justify-content: flex-start;
+    align-self: center;
     flex-wrap: nowrap;
     gap: var(--space-1);
     overflow-x: auto;
+    overflow-y: hidden;
     scrollbar-width: none;
-    /* Second row: view pack only — no wrapped desktop toolbar */
-    padding-block: 0.125rem;
+    /* Second row: 2D/3D only — floor/unit/history stay desktop */
+    padding-block: 0;
   }
 
   .actions,
@@ -1974,11 +2002,14 @@
     grid-area: actions;
     width: auto;
     max-width: 100%;
+    max-height: var(--ws-phone-topbar-row-h, 2.75rem);
     justify-content: flex-end;
     justify-self: end;
+    align-self: center;
     gap: var(--space-1);
     flex-wrap: nowrap;
     overflow-x: auto;
+    overflow-y: hidden;
     scrollbar-width: none;
   }
 
@@ -2073,29 +2104,42 @@
     justify-content: center;
   }
 
-  /* Secondary chrome: keep primary Save + panels; compress history/status */
+  /* Secondary chrome: primary tools only (Save, panels, 2D/3D, More).
+   * History / density / guest badge / floor / unit stay desktop. */
   .historyActions {
+    display: none !important;
+  }
+
+  /* Idle/saved pill steals width on row 1 — hide unless error/unsaved (honesty). */
+  .saveStatus:not([data-status="error"]):not([data-status="unsaved"]) {
     display: none;
   }
 
-  /* Prefer pill glyph over long status prose on phone */
+  /* Prefer pill glyph over long status prose when unsaved/error must show */
   .saveStatus {
     max-width: 5.5rem;
     font-size: 0.5625rem;
     padding: 0 var(--space-1);
-    min-height: 1.75rem;
+    min-height: 1.5rem;
+    max-height: var(--ws-phone-topbar-row-h, 2.75rem);
   }
 
   /* Error must stay visible — never hide failed save on phone */
-  .saveStatus[data-status="error"] {
-    max-width: 8rem;
+  .saveStatus[data-status="error"],
+  .saveStatus[data-status="unsaved"] {
+    max-width: 7rem;
     display: inline-flex;
-    min-height: var(--planner-touch-target, 2.75rem);
+    min-height: 1.75rem;
   }
 
-  /* Guest badge is redundant next to local save pill on phone */
+  /* Guest badge is redundant next to local save wording on phone */
   .brandSub {
-    display: none;
+    display: none !important;
+  }
+
+  /* Density lives in desktop prefs only */
+  .header [data-testid="planner-density-toggle"] {
+    display: none !important;
   }
 
   /* File pack: slim uses More; full mode still tappable but no wrap sprawl */
@@ -2106,6 +2150,7 @@
   .fileActions .btn {
     min-height: var(--planner-touch-target, 2.75rem);
     min-width: var(--planner-touch-target, 2.75rem);
+    max-height: var(--ws-phone-topbar-row-h, 2.75rem);
   }
 
   .panelBackdrop {
@@ -2164,18 +2209,21 @@
 
   .status {
     padding:
-      var(--space-1)
+      0.125rem
       calc(var(--space-2) + var(--planner-safe-right))
-      calc(var(--space-1) + var(--planner-safe-bottom))
+      calc(0.125rem + var(--planner-safe-bottom))
       calc(var(--space-2) + var(--planner-safe-left));
-    font-size: 0.6875rem;
+    font-size: 0.625rem;
+    min-height: 1.5rem;
+    max-height: 2rem;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     overflow-x: hidden;
     overflow-y: hidden;
     flex-wrap: nowrap;
-    gap: var(--space-2);
+    gap: var(--space-1);
     -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
   }
 
   .statusMetrics,
@@ -2214,12 +2262,34 @@
     display: none;
   }
 
-  /* Bottom tool chrome denser targets on phone portrait. */
+  /* One dense bottom tool rail only — does not stack a second strip.
+   * max-height keeps rail from stealing canvas (UI-MOB-02 canvas ≥60%). */
   .mobileBottomChrome {
-    min-height: calc(var(--planner-touch-target, 2.75rem) + var(--space-2));
+    flex: 0 0 auto;
+    min-height: var(--planner-touch-target, 2.75rem);
+    max-height: calc(var(--planner-touch-target, 2.75rem) + var(--space-2));
+    box-sizing: border-box;
+  }
+
+  /* Workspace middle row grows: flex 1 / min-height 0 chain into canvas */
+  .workspace {
+    min-height: 0;
+    flex: 1 1 0%;
+  }
+
+  .canvas {
+    min-height: 0;
+    flex: 1 1 0%;
+  }
+
+  .mobileCanvasStack {
+    min-height: 0;
+    flex: 1 1 0%;
   }
 
   .mobileCanvasStage {
+    /* Prefer ≥60dvh canvas when shell height allows (UI-MOB-02); flex grows rest */
+    flex: 1 1 0%;
     min-height: min(60dvh, 100%);
   }
 }
@@ -2256,13 +2326,8 @@
   }
 }
 
-/* Narrow phones (~375px): strip non-essential chrome; keep Save + panel toggles */
+/* Narrow phones (~375px): tighter brand + save CTA; error/unsaved pill rules above. */
 @media (width <= 23.4375rem) {
-  /* Hide idle/saved status text to free space; error/unsaved stay via rules above */
-  .saveStatus:not([data-status="error"]):not([data-status="unsaved"]) {
-    display: none;
-  }
-
   .btn {
     padding-inline: var(--space-2);
     font-size: 0.75rem;

@@ -53,9 +53,42 @@ describe("WorkspaceShell", () => {
     );
     const topbar = screen.getByTestId("planner-topbar");
     expect(topbar).toHaveAttribute("data-chrome-mode", "slim");
+    expect(topbar).toHaveAttribute("data-phone-topbar-max-px", "112");
     expect(
       document.querySelector("[data-chrome-mode='slim']"),
     ).not.toBeNull();
+  });
+
+  it("marks small viewport for phone canvas grow (flex middle row)", async () => {
+    const previousWidth = window.innerWidth;
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 390,
+    });
+    try {
+      const { container } = render(
+        <WorkspaceShell projectName="Phone grow" chromeMode="slim">
+          <div data-testid="phone-canvas-child">canvas</div>
+        </WorkspaceShell>,
+      );
+      await waitFor(() => {
+        expect(container.querySelector("[data-viewport='small']")).not.toBeNull();
+      });
+      const shell = container.querySelector("[data-phone-canvas-grow='true']");
+      expect(shell).not.toBeNull();
+      expect(shell).toHaveAttribute("data-chrome-mode", "slim");
+      // Middle workspace + canvas classes exist for min-height:0 flex chain
+      expect(workspaceStyles.workspace.length).toBeGreaterThan(0);
+      expect(workspaceStyles.canvas.length).toBeGreaterThan(0);
+      expect(workspaceStyles.shell.length).toBeGreaterThan(0);
+    } finally {
+      // Restore so later desktop panel tests do not inherit phone tier.
+      Object.defineProperty(window, "innerWidth", {
+        configurable: true,
+        value: previousWidth >= 1024 ? previousWidth : 1280,
+      });
+      cleanup();
+    }
   });
 
   it("left panel title is Inventory (aligned with TopBar toggle)", () => {
@@ -109,7 +142,7 @@ describe("WorkspaceShell", () => {
       <WorkspaceShell
         projectName="Honest status"
         saveStatus="saved"
-        saveStatusLabel="Saved locally"
+        saveStatusLabel="Saved local"
         isLocalSaved
       >
         <div>canvas</div>
@@ -125,7 +158,10 @@ describe("WorkspaceShell", () => {
     expect(screen.queryByText(/Wide layout|Medium layout|Phone layout/i)).not.toBeInTheDocument();
     // Save pill once in TopBar only — not duplicated in status bar.
     expect(screen.getAllByTestId("open3d-save-status")).toHaveLength(1);
-    expect(statusBar?.textContent ?? "").not.toMatch(/Saved locally|Ready \(local\)/i);
+    // Status bar must not compete with TopBar save verbs / short status.
+    expect(statusBar?.textContent ?? "").not.toMatch(
+      /Saved local|Ready · local|Saving…|Unsaved|Save draft/i,
+    );
   });
 
   it("floating panel is distinct from docked (Floating badge + data-state)", () => {

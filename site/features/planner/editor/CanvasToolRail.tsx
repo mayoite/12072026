@@ -559,6 +559,8 @@ export function CanvasToolRail({
       data-dock-managed={dockManaged ? "true" : undefined}
       data-pinned={pinned ? "true" : undefined}
       data-mobile-chrome={dockManaged && isMobile ? "bottom" : undefined}
+      /* Phone: one horizontal dense rail under canvas (max-height via .mobileBottomChrome) */
+      data-rail-density={dockManaged && isMobile ? "single-dense" : undefined}
       style={
         !pinned && !dockManaged && isFloating
           ? ({
