@@ -20,9 +20,14 @@ import { isDbSvgReleaseAuthority } from "@/features/admin/svg-editor/publish/svg
 
 /**
  * Load buyer-visible descriptors from the Products DB when configured.
- * Prefer DB rows + product published SVG revision pointer (immutable R2 path).
- * Fall back to disk inventory only when authority is disk and DB is empty/unconfigured.
- * When SVG_RELEASE_AUTHORITY=db: never silent-disk override (DB-SVG-16).
+ *
+ * Disk authority (default):
+ * - Start from full disk inventory (migration / partial dual-write safe).
+ * - Overlay `publishedSvgRevisionId` from Products DB when a dual-written row exists.
+ * - Partial dual-write of 1 SKU must not hide the other ~19 disk plan symbols.
+ *
+ * DB authority (`SVG_RELEASE_AUTHORITY=db`):
+ * - Return only usable DB rows (never silent disk override — DB-SVG-16).
  */
 function isUsableDescriptor(value: unknown): value is BlockDescriptor {
   if (!value || typeof value !== "object") return false;
@@ -140,16 +145,39 @@ export async function loadBuyerVisibleDescriptorsWithDb(): Promise<
           descriptor !== null,
       );
 
-    // Empty usable DB during cutover: if rows exist but none are usable, fail
-    // closed (no silent disk override of corrupt DB). Empty table → disk migration
-    // only while authority remains disk.
-    if (fromDb.length === 0) {
-      if (dbAuthority || rows.length > 0) return [];
-      return loadBuyerVisibleDescriptors();
+    if (dbAuthority) {
+      // Cutover mode: only immutable DB catalog (empty if unusable).
+      return fromDb;
     }
-    return fromDb;
+
+    // Disk authority + partial dual-write: merge disk inventory with revision pointers.
+    const disk = loadBuyerVisibleDescriptors();
+    const bySlug = new Map<string, BlockDescriptor | PlannerSvgCatalogDescriptor>();
+    for (const d of disk) {
+      const slug = typeof d.slug === "string" ? d.slug : "";
+      if (slug) bySlug.set(slug, d);
+    }
+    for (const dbRow of fromDb) {
+      const existing = bySlug.get(dbRow.slug);
+      if (existing && "geometry" in existing) {
+        bySlug.set(dbRow.slug, {
+          ...existing,
+          ...(dbRow.publishedSvgRevisionId
+            ? { publishedSvgRevisionId: dbRow.publishedSvgRevisionId }
+            : {}),
+          // Prefer DB geometry when present (authoritative dual-write body).
+          geometry: dbRow.geometry ?? (existing as BlockDescriptor).geometry,
+          id: dbRow.id || (existing as BlockDescriptor).id,
+          sku: dbRow.sku ?? (existing as BlockDescriptor).sku,
+        } as PlannerSvgCatalogDescriptor);
+      } else {
+        bySlug.set(dbRow.slug, dbRow);
+      }
+    }
+    return Array.from(bySlug.values());
   } catch {
-    // DB configured but unreachable: fail closed for buyer catalog (no silent disk).
-    return [];
+    // DB configured but unreachable: under disk authority keep disk catalog;
+    // under db authority fail closed (empty).
+    return isDbSvgReleaseAuthority() ? [] : loadBuyerVisibleDescriptors();
   }
 }

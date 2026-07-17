@@ -142,8 +142,45 @@ describe("loadBuyerVisibleDescriptorsWithDb", () => {
     expect(loadBuyerVisibleDescriptors).not.toHaveBeenCalled();
   });
 
+  it("disk authority merges DB revision pointer with disk inventory (partial dual-write)", async () => {
+    isProductsDatabaseConfigured.mockReturnValue(true);
+    loadBuyerVisibleDescriptors.mockReturnValue([
+      {
+        id: "disk-desk",
+        slug: "desk-linear-1200-001",
+        geometry: { widthMm: 1200, depthMm: 600, heightMm: 750 },
+      },
+      { slug: "disk-only" },
+    ]);
+    const dbDescriptor = {
+      id: "db-desk-id",
+      slug: "desk-linear-1200-001",
+      geometry: { widthMm: 1200, depthMm: 600, heightMm: 750 },
+    };
+    execute.mockResolvedValue([
+      {
+        slug: "desk-linear-1200-001",
+        descriptor: dbDescriptor,
+        publishedSvgRevisionId: "desk-linear-1200-001-r-abc123def4567890ab",
+      },
+    ]);
+
+    const { loadBuyerVisibleDescriptorsWithDb } = await loadModule();
+    const rows = await loadBuyerVisibleDescriptorsWithDb();
+
+    expect(loadBuyerVisibleDescriptors).toHaveBeenCalled();
+    const desk = rows.find(
+      (r) => "slug" in r && r.slug === "desk-linear-1200-001",
+    ) as { publishedSvgRevisionId?: string; slug: string };
+    expect(desk?.publishedSvgRevisionId).toBe(
+      "desk-linear-1200-001-r-abc123def4567890ab",
+    );
+    expect(rows.some((r) => "slug" in r && r.slug === "disk-only")).toBe(true);
+  });
+
   it("awaits and returns configured Products DB descriptors with revision pointer", async () => {
     isProductsDatabaseConfigured.mockReturnValue(true);
+    loadBuyerVisibleDescriptors.mockReturnValue([]);
     const dbDescriptor = {
       id: "db-only-id",
       slug: "db-only",
@@ -166,11 +203,12 @@ describe("loadBuyerVisibleDescriptorsWithDb", () => {
         publishedSvgRevisionId: "db-only-r-abc123def4567890ab",
       },
     ]);
-    expect(loadBuyerVisibleDescriptors).not.toHaveBeenCalled();
+    expect(loadBuyerVisibleDescriptors).toHaveBeenCalled();
   });
 
   it("strictly adapts legacy SVG definitions written before the descriptor cutover", async () => {
     isProductsDatabaseConfigured.mockReturnValue(true);
+    loadBuyerVisibleDescriptors.mockReturnValue([]);
     execute.mockResolvedValue([
       {
         slug: "legacy-desk",
@@ -192,8 +230,9 @@ describe("loadBuyerVisibleDescriptorsWithDb", () => {
     ]);
   });
 
-  it("rejects a legacy definition whose identity differs from the DB row", async () => {
+  it("rejects a legacy definition whose identity differs from the DB row (disk authority keeps disk)", async () => {
     isProductsDatabaseConfigured.mockReturnValue(true);
+    loadBuyerVisibleDescriptors.mockReturnValue([{ slug: "disk-kept" }]);
     execute.mockResolvedValue([
       {
         slug: "trusted-row",
@@ -208,12 +247,15 @@ describe("loadBuyerVisibleDescriptorsWithDb", () => {
     ]);
 
     const { loadBuyerVisibleDescriptorsWithDb } = await loadModule();
-    await expect(loadBuyerVisibleDescriptorsWithDb()).resolves.toEqual([]);
-    expect(loadBuyerVisibleDescriptors).not.toHaveBeenCalled();
+    await expect(loadBuyerVisibleDescriptorsWithDb()).resolves.toEqual([
+      { slug: "disk-kept" },
+    ]);
+    expect(loadBuyerVisibleDescriptors).toHaveBeenCalled();
   });
 
-  it("fail-closed: corrupt DB rows do not fall back to disk", async () => {
+  it("disk authority: corrupt DB rows still keep disk inventory (merge)", async () => {
     isProductsDatabaseConfigured.mockReturnValue(true);
+    loadBuyerVisibleDescriptors.mockReturnValue([{ slug: "disk-only" }]);
     execute.mockResolvedValue([
       {
         slug: "broken",
@@ -224,7 +266,7 @@ describe("loadBuyerVisibleDescriptorsWithDb", () => {
 
     const { loadBuyerVisibleDescriptorsWithDb } = await loadModule();
     const rows = await loadBuyerVisibleDescriptorsWithDb();
-    expect(rows).toEqual([]);
-    expect(loadBuyerVisibleDescriptors).not.toHaveBeenCalled();
+    expect(rows).toEqual([{ slug: "disk-only" }]);
+    expect(loadBuyerVisibleDescriptors).toHaveBeenCalled();
   });
 });
