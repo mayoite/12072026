@@ -7,7 +7,14 @@
 
 **Full typecheck / lint / test / release:gate are not green.**
 
-Plan trio and layout/purity/health exist. Typegen race was improved; full `tsc` still fails on product typing residual (e.g. Planner fabric). Without exit-0 typecheck + lint + test + build/`release:gate`, “stack healthy” is false.
+## Fixed (CI install)
+
+**pnpm/action-setup “Multiple versions of pnpm specified”** — workflows had both `version: 11.13.0` and root `packageManager: pnpm@11.13.0+sha512…`. Action treats those as two pins. Fix: drop explicit `version` in all workflows; Corepack uses `package.json` only.
+
+## Still open
+
+- Product typing residual (`PlannerFabricStage` TS2345; `publishDescriptorWithPipeline` DEFAULT_DEPS omit list if still failing)
+- Full unit / build / a11y / coverage in `release:gate`
 
 ## Why open
 

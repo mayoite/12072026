@@ -18,9 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Prefer root package.json packageManager only — do not also pass "version"
+      # (action treats 11.13.0 vs pnpm@11.13.0+sha512… as multiple versions).
       - uses: pnpm/action-setup@v4
-        with:
-          version: 11.13.0
 
       - uses: actions/setup-node@v4
         with:

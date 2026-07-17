@@ -23,9 +23,9 @@ jobs:
         with:
           node-version: "24"
 
+      # Prefer root package.json packageManager only — do not also pass "version"
+      # (action treats 11.13.0 vs pnpm@11.13.0+sha512… as multiple versions).
       - uses: pnpm/action-setup@v4
-        with:
-          version: 11.13.0
 
       - name: Install PostgreSQL client (pg_dump 17)
         run: |

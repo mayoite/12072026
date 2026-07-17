@@ -42,6 +42,7 @@ Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 | GET | `/api/dev/auth-bypass-status` |
 | POST | `/api/filter` |
 | POST | `/api/generate-alt` |
+| GET | `/api/health` |
 | POST | `/api/log-error` |
 | GET | `/api/nav-categories` |
 | GET, POST | `/api/nav-search` |

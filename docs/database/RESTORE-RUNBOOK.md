@@ -39,7 +39,7 @@ Secrets:
   (or alias pair `CLOUDFLARE_ACCESS_KEY_ID` + `CLOUDFLARE_SECRET_ACCESS_KEY`)
 - `CLOUDFLARE_R2_CATALOG_BUCKET`
 
-Workflow: [`.github/workflows/supabase-backup-r2.yml`](../../.github/workflows/supabase-backup-r2.yml) (daily 02:15 UTC). Requires Node 24, pnpm 11.9, PostgreSQL client 17 on the runner.
+Workflow: [`.github/workflows/supabase-backup-r2.yml`](../../.github/workflows/supabase-backup-r2.yml) (daily 02:15 UTC). Requires Node 24, pnpm from root `packageManager` (11.13.0), PostgreSQL client 17 on the runner.
 
 Manual run: **Actions → Supabase backup to R2 → Run workflow** (or `gh workflow run supabase-backup-r2.yml`).
 

@@ -11,8 +11,8 @@
 | S3 | Viewport overflow 6-level marketing | **RUNNING** |
 | S4 | A11y Playwright smoke | **PASS** (public) |
 | S5 | Contact form + customer-query API | **PASS** (unit; SF-09 live OPEN) |
-| S6 | Site→Planner entry continuity | **RUNNING** |
-| S7 | Product catalog discovery | **RUNNING** |
+| S6 | Site→Planner entry continuity | **PASS** (unit) |
+| S7 | Product catalog discovery | **PASS** (unit; live catalog inventory OPEN) |
 | S8 | i18n parity | **PASS** |
 | S9 | Analytics + consent | **PASS** (unit) |
 | S10 | Full site unit suite + layout gates | **RUNNING** |
@@ -20,6 +20,64 @@
 **Report rule:** update **this file only** under your `## S#` section. No new dated pile. Commands + exits required. Fix FAIL in OWN paths.
 
 Parent will not cancel without owner ask.
+
+## S7 — Product catalog discovery
+
+**Status:** **PASS** (unit + OWN code honesty). Live inventory “has released products” remains **OPEN** (env/data; not a unit FAIL).  
+**OWN:** `app/(site)/products/**`, `lib/catalog/site/**`, `components/home/CategoryGrid.tsx` (products hub), related unit tests; SEO product JSON-LD builders used by PDP.
+
+### Commands
+
+| Command | Exit | Result |
+|---------|------|--------|
+| `pnpm --filter oando-site exec vitest run "tests/unit/app/(site)/products" "tests/unit/lib/catalog/site" "tests/unit/features/site/data/seo.test.ts" "tests/unit/features/site/data/siteSeoAcceptance.test.ts" "tests/unit/components/home/CategoryGrid.test.tsx"` | **0** | **25 files / 219 tests** PASS |
+| `pnpm --filter oando-site exec vitest run "tests/unit/app/api/products/filter/route.test.ts"` | **0** | **3/3** PASS |
+| `pnpm run check:layout` | **0** | `check-repo-layout OK — no forbidden site/ paths` |
+
+### Behavior verified (unit)
+
+| Rule | Proof |
+|------|--------|
+| Empty catalog / offline | `CategoryPageView` offline copy; `CategoryGrid` status panel when no categories |
+| Empty category (no published products) | Filter grid heading: “No products are published in this category yet” |
+| Filter empty | “No products match this filter set” + clear actions |
+| Filter API error | `role="alert"` + “We couldn't load this category” when request fails and list empty |
+| Unknown product / category metadata | hard `notFound()` (no soft empty metadata) |
+| JSON-LD = visible fields only | `buildProductJsonLd` has no `offers` / InStock; PDP test asserts visible name/description and rejects demo numeric price in LD |
+| No demo list price as commercial authority | Facets use `metadata.priceRange` bands only (`budget\|mid\|premium\|luxury`); removed numeric INR bucket invent from fallback facets; cards use quote CTA not list price |
+
+### FAIL fixed (OWN)
+
+1. **`FilterGrid.helpers.buildFallbackFacets`** — facets were built from invented numeric buckets (`Under 5,000` …) then filtered against real `PRICE_RANGES` (`budget|mid|premium|luxury`), so **price facets always collapsed to `[]`** on fallback path. Also treated optional numeric `price` as commercial signal.  
+   **Fix:** facets from `product.metadata.priceRange` only (same contract as `/api/products/filter`). Dropped `FlatProduct.price`.
+2. **Dishonest tests** — helpers/components tests mocked currency labels as if they were production `PRICE_RANGES`.  
+   **Fix:** assert real bands; add empty price-band case.
+3. **Missing empty-state unit coverage** — filter empty / category empty / error paths untested.  
+   **Fix:** three `FilterGridInner` cases.
+4. **Products hub silent empty** — `CategoryGrid` with zero categories rendered blank cards area (soft empty).  
+   **Fix:** honest offline/unavailable status panel + unit test.
+
+### Residual OPEN (not unit FAIL)
+
+1. **Live discovery PASS (COMPLETION-CONTRACT empty-catalog rule)** — unit cannot prove target env has ≥1 released category with products. `PRODUCTS_DATABASE_URL` is set in `.env.local`; runtime uses DB → R2 snapshot → local index. Browser inventory probe / owner fixture env still required for release discovery PASS.
+2. **Browser PDP/category matrix** — JSON-LD + empty states proved in unit; live HTML crawl of production/staging not this agent’s run.
+3. **`pricingFallback` / `pricingBandSuffix` copy** — still unused in UI (cards show quote CTA, not bands). Harmless; not commercial authority invent.
+
+### Not claimed
+
+- Production catalog completeness or soft-404 content depth for every category slug.
+- Planner demo list prices (out of OWN; planner handoff already labels demo list as non-commercial).
+
+### Files touched
+
+- `site/app/(site)/products/[category]/FilterGrid.helpers.ts`
+- `site/components/home/CategoryGrid.tsx`
+- `site/tests/unit/app/(site)/products/[category]/FilterGrid.helpers.test.ts`
+- `site/tests/unit/app/(site)/products/[category]/FilterGridInner.test.tsx`
+- `site/tests/unit/app/(site)/products/[category]/FilterGrid.components.test.tsx`
+- `site/tests/unit/app/(site)/products/[category]/[product]/page.test.tsx`
+- `site/tests/unit/components/home/CategoryGrid.test.tsx`
+- `agent-reports/SITE.md` (this section)
 
 ## S1 — SEO robots / sitemap / classification + host probe
 
@@ -377,5 +435,78 @@ Unit files run:
 - `site/tests/unit/app/api/customer-queries/route.test.ts`
 - `site/tests/unit/components/contact/CustomerQueryForm.test.tsx`
 - `site/tests/unit/components/shared/ContactTeaser.test.tsx`
+- `agent-reports/SITE.md` (this section)
+
+## S6 — Site→Planner entry continuity
+
+**Status:** **PASS** (unit). Browser Site→PDP→guest param survival remains OPEN (SF-08 browser).  
+**OWN:** `lib/analytics/plannerEntry*`, `PlannerLaunchLink` / entry CTAs, choose-product, conversion continuity tests; fixed guest/canvas redirects that stripped Site params.
+
+### Commands
+
+| Command | Exit | Result |
+|---------|------|--------|
+| `pnpm --filter oando-site exec vitest run` (11 continuity files below) | **0** | **66/66** PASS |
+| `pnpm run check:layout` | **0** | `check-repo-layout OK — no forbidden site/ paths` |
+| Browser `site-navigation-smoke` / live PDP→guest | **skipped** | Optional; no entry-param assert in that spec; unit closes Site exit + guest id-redirect continuity |
+
+Unit/integration files run:
+
+- `tests/unit/lib/analytics/plannerEntry.test.ts` (7)
+- `tests/unit/components/ui/PlannerLaunchLink.test.tsx` (3) **new**
+- `tests/unit/components/ui/TrackedLink.test.tsx` (4)
+- `tests/unit/features/shared/entry/ChooseProductPage.test.tsx` (3)
+- `tests/integration/features/shared/entry/ChooseProductPage.test.tsx` (3)
+- `tests/unit/app/(site)/choose-product/page.test.tsx` (3)
+- `tests/unit/app/(site)/products/[category]/[product]/ProductViewer.test.tsx` (8; SF-08 Design-in-Planner href)
+- `tests/unit/app/planner/(workspace)/guest/page.test.tsx` (10; keep site* on id mint)
+- `tests/unit/app/planner/(workspace)/canvas/page.test.tsx` (8; unauth bounce keeps site*)
+- `tests/unit/lib/analytics/siteEvents.test.ts` (8; PLANNER_ENTRY queue+flush)
+- `tests/unit/lib/analytics/conversionContract.test.ts` (9)
+
+### Behavior verified
+
+| Rule | Proof |
+|------|--------|
+| SSR-safe entry href | `buildPlannerEntryHref` / `PlannerLaunchLink` / `TrackedLink` stamp `siteProduct` / `siteCategory` / `siteSource`; no cookie `utm_*` in rendered href |
+| Click attribution | Click path calls `handlePlannerEntryNavigation` with `includeAttribution` href |
+| choose-product | Guest → `/planner/guest?siteSource=…`; member → `/planner/canvas?siteSource=…` |
+| PDP Design in Planner | ProductViewer href includes `siteProduct=super-chair`, `siteCategory=seating`, `siteSource` path |
+| PLANNER_ENTRY conversion | Queues pre-consent with launch event; flushes after accept (shared with S9) |
+| Guest draft id redirect | Bare `/planner/guest` with Site params no longer drops them when minting `id=` |
+| Canvas unauth bounce | `/planner/canvas?siteProduct=…` → guest keeps continuity params |
+
+### FAIL fixed (broken continuity)
+
+**Bug:** Site stamped `siteProduct` / `siteCategory` / `siteSource` (and optional utm) on launch links, but guest route always did:
+
+`redirect(\`/planner/guest/?id=${newEntityId()}\`)`
+
+…and canvas unauth did `redirect("/planner/guest/")` — both **wiped Site exit identity** before the workspace loaded. Unit hrefs looked green; handoff was not.
+
+**Fix:**
+
+1. `plannerEntry.ts` — `PLANNER_ENTRY_QUERY_KEYS`, `pickPlannerEntrySearchParams`, `buildGuestPlannerDraftRedirectHref`, `buildGuestPlannerEntryHref`.
+2. `app/planner/(workspace)/guest/page.tsx` — draft id redirect preserves continuity keys.
+3. `app/planner/(workspace)/canvas/page.tsx` — unauth → guest preserves continuity keys.
+4. Tests — helpers, guest/canvas redirects, `PlannerLaunchLink` name-mirror, ProductViewer SF-08, choose-product `siteSource`.
+
+### Residual OPEN
+
+1. **SF-08 browser** — real browser products → PDP → guest URL still has `siteProduct` after client navigation; not run this session.
+2. **Planner import of `siteProduct`** — reading params into catalog placement is **Planner track** (FEATURES honesty); Site exit + URL survival is closed in unit.
+3. **site-navigation-smoke** — does not assert planner entry query continuity; optional browser not used.
+
+### Files touched
+
+- `site/lib/analytics/plannerEntry.ts`
+- `site/app/planner/(workspace)/guest/page.tsx`
+- `site/app/planner/(workspace)/canvas/page.tsx`
+- `site/tests/unit/lib/analytics/plannerEntry.test.ts`
+- `site/tests/unit/components/ui/PlannerLaunchLink.test.tsx` (**new**)
+- `site/tests/unit/app/planner/(workspace)/guest/page.test.tsx`
+- `site/tests/unit/app/planner/(workspace)/canvas/page.test.tsx`
+- `site/tests/unit/app/(site)/products/[category]/[product]/ProductViewer.test.tsx`
+- `site/tests/integration/features/shared/entry/ChooseProductPage.test.tsx`
 - `agent-reports/SITE.md` (this section)
 
