@@ -4,6 +4,10 @@ import { setCatalogLifecycle } from "@/features/admin/svg-editor/lifecycle/catal
 import { appendDescriptorAudit } from "@/features/admin/svg-editor/storage/descriptorAuditLog";
 import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 
+const { revalidatePath } = vi.hoisted(() => ({ revalidatePath: vi.fn() }));
+
+vi.mock("next/cache", () => ({ revalidatePath }));
+
 vi.mock("@/features/shared/api/withAuth", async () => {
   const { error: errorFn } = await import("@/features/shared/api/apiResponse");
   const { ApiError: AE, toApiError: toAE } = await import(
@@ -103,6 +107,11 @@ describe("app/api/admin/svg-editor/[slug]/lifecycle/route.ts", () => {
         slug: "desk-a",
         action: "approve",
       }),
+    );
+    expect(revalidatePath).toHaveBeenCalledWith("/admin/svg-editor");
+    expect(revalidatePath).toHaveBeenCalledWith("/admin/svg-editor/desk-a");
+    expect(revalidatePath).toHaveBeenCalledWith(
+      "/api/planner/catalog/svg-blocks",
     );
   });
 });

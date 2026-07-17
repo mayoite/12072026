@@ -1052,7 +1052,11 @@
 /* Floating state — distinct from docked (elevated chrome + drag affordance) */
 .panel[data-state="floating"] {
   position: absolute;
-  z-index: var(--ws-z-floating);
+  left: var(--pw-panel-x);
+  top: var(--pw-panel-y);
+  width: var(--pw-panel-width);
+  height: var(--pw-panel-height);
+  z-index: var(--pw-panel-z, var(--ws-z-floating));
   box-shadow: var(--ws-shadow-float);
   border: 1px solid var(--ws-panel-border);
   border-radius: var(--radius-md, 0.375rem);
@@ -1067,6 +1071,8 @@
 }
 
 .panel[data-state="docked"] {
+  width: var(--pw-panel-width);
+  height: var(--pw-panel-height);
   border-radius: 0;
   outline: none;
 }
@@ -1487,6 +1493,18 @@
   position: relative;
 }
 
+.dropdownPopover {
+  z-index: var(--planner-z-floating);
+  min-width: 12rem;
+  max-width: min(22rem, calc(100vw - var(--space-6)));
+  overflow: hidden;
+  border: 1px solid var(--planner-border-default);
+  border-radius: var(--radius-lg);
+  background: var(--planner-surface-panel);
+  box-shadow: var(--planner-shadow-floating);
+  color: var(--planner-text-secondary);
+}
+
 .menuDismissLayer {
   position: fixed;
   inset: 0;
@@ -1494,16 +1512,15 @@
 }
 
 .dropdownMenu {
-  position: absolute;
-  top: calc(100% + var(--space-2));
-  right: 0;
-  z-index: var(--ws-z-floating);
-  min-width: 11rem;
+  position: static;
+  width: 100%;
+  min-width: 12rem;
+  max-height: min(26rem, calc(100dvh - var(--space-12)));
+  margin: 0;
   padding: var(--space-2);
-  border: 1px solid var(--ws-panel-border);
-  border-radius: var(--radius-sm);
-  background: var(--ws-panel-bg);
-  box-shadow: var(--ws-shadow-float);
+  overflow-y: auto;
+  outline: none;
+  list-style: none;
 }
 
 .dropdownItem {
@@ -1516,13 +1533,14 @@
   font-size: 0.8125rem;
   font-weight: 500;
   text-align: left;
-  color: var(--ws-text-secondary);
+  color: var(--planner-text-secondary);
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
-.dropdownItem:hover {
-  background: var(--surface-soft);
+.dropdownItem:hover,
+.dropdownItem[data-focused] {
+  background: var(--planner-surface-subtle);
 }
 
 .dropdownItem:focus-visible {
@@ -1531,7 +1549,7 @@
 }
 
 .dropdownItem[data-selected="true"] {
-  background: var(--ws-accent);
+  background: var(--planner-accent);
   color: var(--text-inverse);
 }
 

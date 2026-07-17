@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useId, useRef, type ReactNode } from "react";
-import { Z } from "@/lib/z-index";
 import styles from "./bottom-sheet.module.css";
 
 interface BottomSheetProps {
@@ -76,9 +75,8 @@ export function BottomSheet({
     <>
       <button
         type="button"
-        className={styles.backdrop}
+        className={`${styles.backdrop} pw-bottom-sheet-backdrop`}
         data-open={open ? "true" : "false"}
-        style={{ zIndex: Z.panel - 1 }}
         aria-label="Close bottom sheet"
         aria-hidden={!open}
         tabIndex={open ? 0 : -1}
@@ -86,9 +84,8 @@ export function BottomSheet({
       />
       <section
         ref={dialogRef}
-        className={styles.sheet}
+        className={`${styles.sheet} pw-bottom-sheet`}
         data-open={open ? "true" : "false"}
-        style={{ zIndex: Z.panel }}
         role="dialog"
         aria-modal="true"
         aria-hidden={!open}

@@ -4,6 +4,12 @@ import {
   type CanvasTransform,
 } from "@/features/planner/project/lib/geometry/snapping";
 
+export type PlannerGridOverlayStyle = CSSProperties & {
+  "--planner-grid-size-px": string;
+  "--planner-grid-offset-x": string;
+  "--planner-grid-offset-y": string;
+};
+
 /** Default plan grid spacing (mm) — matches snapDrawingPoint default. */
 export const PLANNER_STAGE_GRID_MM = 100;
 
@@ -19,13 +25,13 @@ function positiveMod(value: number, modulus: number): number {
 export function plannerGridOverlayStyle(
   transform: CanvasTransform,
   gridMm: number = PLANNER_STAGE_GRID_MM,
-): CSSProperties {
+): PlannerGridOverlayStyle {
   const sizePx = Math.max(4, gridMm * transform.scale);
   const offsetX = positiveMod(-transform.origin.x * transform.scale, sizePx);
   const offsetY = positiveMod(-transform.origin.y * transform.scale, sizePx);
   return {
-    ["--planner-grid-size-px" as string]: `${sizePx}px`,
-    ["--planner-grid-offset-x" as string]: `${offsetX}px`,
-    ["--planner-grid-offset-y" as string]: `${offsetY}px`,
+    "--planner-grid-size-px": `${sizePx}px`,
+    "--planner-grid-offset-x": `${offsetX}px`,
+    "--planner-grid-offset-y": `${offsetY}px`,
   };
 }

@@ -88,3 +88,119 @@ canvas:focus-visible {
   text-align: left;
   white-space: nowrap;
 }
+
+/* Catalog previews and drag feedback. Runtime geometry arrives as CSS variables. */
+.planner-workspace .pw-catalog-family-header {
+  grid-column: 1 / -1;
+  padding: var(--space-2) var(--space-1) var(--space-1);
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-muted);
+  font-size: var(--type-label-size);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--type-letter-label);
+  text-transform: uppercase;
+}
+
+.planner-workspace .pw-catalog-family-header[data-separated="true"] {
+  margin-top: var(--space-3);
+}
+
+.planner-workspace .pw-catalog-block-preview,
+.planner-workspace .pw-catalog-block-fallback {
+  width: var(--pw-catalog-preview-width);
+  height: var(--pw-catalog-preview-height);
+  flex: 0 0 auto;
+}
+
+.planner-workspace .pw-catalog-block-preview {
+  display: grid;
+  place-items: center;
+}
+
+.planner-workspace .pw-catalog-block-preview > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.planner-workspace .pw-catalog-block-fallback {
+  border-color: var(--block-surface-stroke);
+  background: color-mix(in srgb, var(--block-surface) 72%, transparent);
+}
+
+.planner-workspace .pw-drop-ghost {
+  position: fixed;
+  left: var(--pw-drop-x);
+  top: var(--pw-drop-y);
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  place-items: center;
+  gap: var(--space-1);
+  width: calc(var(--pw-drop-preview-width) + var(--space-5));
+  height: calc(var(--pw-drop-preview-height) + 1.75rem);
+  padding: var(--space-2);
+  border: 1px dashed color-mix(in srgb, var(--color-primary) 58%, var(--border-soft));
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--surface-panel) 92%, transparent);
+  box-shadow: var(--shadow-float);
+  color: var(--text-strong);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: var(--z-planner-floating-pack);
+}
+
+.planner-workspace .pw-drop-ghost[data-valid="false"] {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.planner-workspace .pw-drop-ghost-preview {
+  display: grid;
+  width: var(--pw-drop-preview-width);
+  height: var(--pw-drop-preview-height);
+  place-items: center;
+}
+
+.planner-workspace .pw-drop-ghost-label {
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-size: var(--type-tiny-size);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--type-leading-label);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.planner-workspace .pw-drop-flash {
+  position: fixed;
+  left: var(--pw-drop-flash-x);
+  top: var(--pw-drop-flash-y);
+  width: var(--space-8);
+  height: var(--space-8);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-full);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: var(--z-planner-floating-pack);
+  animation: pw-drop-flash var(--motion-base) var(--ease-out) both;
+}
+
+@keyframes pw-drop-flash {
+  from {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.45);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .planner-workspace .pw-drop-flash {
+    animation: none;
+    opacity: 0;
+  }
+}

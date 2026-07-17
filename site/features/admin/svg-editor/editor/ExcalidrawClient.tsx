@@ -141,12 +141,17 @@ export default function ExcalidrawClient({
           excalidrawAPI={(api) => setExcalidrawAPI(api as ExcalidrawAPI)}
           initialData={initialData}
           onChange={handleChange}
+          name="Oando SVG symbol"
+          theme="light"
+          objectsSnapModeEnabled
           UIOptions={{
             canvasActions: {
-              export: false,
-              loadScene: false,
+              changeViewBackgroundColor: false,
+              export: { saveFileToDisk: true },
+              loadScene: true,
               saveToActiveFile: false,
-              saveAsImage: false,
+              saveAsImage: true,
+              toggleTheme: false,
             },
           }}
         >
@@ -157,9 +162,11 @@ export default function ExcalidrawClient({
             </Sidebar>
           )}
           <MainMenu>
+            <MainMenu.DefaultItems.LoadScene />
+            <MainMenu.DefaultItems.Export />
+            <MainMenu.Separator />
             <MainMenu.DefaultItems.ClearCanvas />
-            <MainMenu.DefaultItems.ToggleTheme />
-            <MainMenu.DefaultItems.ChangeCanvasBackground />
+            <MainMenu.DefaultItems.CommandPalette />
           </MainMenu>
           <WelcomeScreen>
             <WelcomeScreen.Hints.MenuHint />

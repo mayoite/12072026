@@ -8,7 +8,6 @@
 import { Chat as MessageSquare, X, Sparkle as Sparkles } from "@phosphor-icons/react";
 
 import { AiAdvisorChatPane } from "./AiAdvisorChatPane";
-import { Z } from "@/lib/z-index";
 
 interface LayoutSuggestion {
   type: "placement" | "rearrange" | "template";
@@ -28,7 +27,6 @@ export function AiAdvisorChat({ onApplySuggestion, isOpen = false, onClose }: Ai
   return (
     <div
       className="pw-drawer pw-ai-floating-chat bottom-4 right-4 h-[30rem] max-h-[calc(100vh-2rem)] w-80 rounded-xl"
-      style={{ zIndex: Z.toolbar }}
       role="dialog"
       aria-label="AI Layout Advisor"
     >

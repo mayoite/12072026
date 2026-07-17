@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
+import { ArrowsOut, GridFour, Magnet } from "@phosphor-icons/react";
+import { Button, ToggleButton, Toolbar } from "react-aria-components";
 import {
   metersToPixels,
   pixelsToMeters,
@@ -52,12 +54,16 @@ export function DimensionPanel({
   });
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(true);
+  const [gridEnabled, setGridEnabled] = useState(false);
+  const [snapEnabled, setSnapEnabled] = useState(true);
 
   // ── Sync from Excalidraw selection ──────────────────────────────────────
   const syncFromAPI = useCallback(() => {
     if (!excalidrawAPI) return;
 
     const appState = excalidrawAPI.getAppState();
+    setGridEnabled(Boolean(appState.gridModeEnabled));
+    setSnapEnabled(Boolean(appState.objectsSnapModeEnabled));
     const elements = excalidrawAPI.getSceneElements() ?? [];
     const ids: Record<string, boolean> = appState.selectedElementIds ?? {};
     const selectedIds = Object.keys(ids).filter((id) => ids[id]);
@@ -169,10 +175,79 @@ export function DimensionPanel({
     [handleApply]
   );
 
+  const updateCanvasOption = useCallback(
+    (option: "gridModeEnabled" | "objectsSnapModeEnabled", enabled: boolean) => {
+      if (!excalidrawAPI) return;
+      excalidrawAPI.updateScene({
+        appState: {
+          ...excalidrawAPI.getAppState(),
+          [option]: enabled,
+        },
+      });
+      if (option === "gridModeEnabled") setGridEnabled(enabled);
+      else setSnapEnabled(enabled);
+    },
+    [excalidrawAPI],
+  );
+
+  const fitDrawing = useCallback(() => {
+    if (!excalidrawAPI) return;
+    const elements = excalidrawAPI.getSceneElements();
+    if (elements.length === 0) return;
+    excalidrawAPI.scrollToContent(elements, {
+      fitToViewport: true,
+      viewportZoomFactor: 0.72,
+      animate: true,
+    });
+  }, [excalidrawAPI]);
+
+  const canvasToolbar = (
+    <Toolbar
+      aria-label="Canvas view controls"
+      className="admin-svg-dimension-panel__toolbar"
+      orientation="horizontal"
+    >
+      <ToggleButton
+        aria-label="Show grid"
+        className="admin-svg-dimension-panel__tool"
+        isDisabled={!excalidrawAPI}
+        isSelected={gridEnabled}
+        onChange={(selected) =>
+          updateCanvasOption("gridModeEnabled", selected)
+        }
+      >
+        <GridFour size={15} aria-hidden />
+        Grid
+      </ToggleButton>
+      <ToggleButton
+        aria-label="Snap objects"
+        className="admin-svg-dimension-panel__tool"
+        isDisabled={!excalidrawAPI}
+        isSelected={snapEnabled}
+        onChange={(selected) =>
+          updateCanvasOption("objectsSnapModeEnabled", selected)
+        }
+      >
+        <Magnet size={15} aria-hidden />
+        Snap
+      </ToggleButton>
+      <Button
+        aria-label="Fit drawing to canvas"
+        className="admin-svg-dimension-panel__tool"
+        isDisabled={!excalidrawAPI}
+        onPress={fitDrawing}
+      >
+        <ArrowsOut size={15} aria-hidden />
+        Fit
+      </Button>
+    </Toolbar>
+  );
+
   if (disabled) {
     return (
-      <div className="admin-svg-dimension-panel" data-empty="true" role="status">
-        <span className="admin-svg-dimension-panel__hint">
+      <div className="admin-svg-dimension-panel" data-empty="true">
+        {canvasToolbar}
+        <span className="admin-svg-dimension-panel__hint" role="status">
           Dimensions: select one rectangle to edit
         </span>
       </div>
@@ -181,6 +256,7 @@ export function DimensionPanel({
 
   return (
     <div className="admin-svg-dimension-panel" onKeyDown={onKeyDown}>
+      {canvasToolbar}
       <div className="admin-svg-dimension-panel__unit-toggle">
         <button
           className="admin-svg-dimension-panel__toggle"

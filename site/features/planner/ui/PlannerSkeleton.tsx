@@ -30,14 +30,7 @@ export function PlannerSkeleton() {
         </div>
 
         <div className="relative min-h-0 flex-1 bg-[color:var(--surface-canvas,var(--surface-soft))]">
-          <div
-            className="absolute inset-0 opacity-30"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle, var(--text-muted) 0.0625rem, transparent 0.0625rem)",
-              backgroundSize: "1.5rem 1.5rem",
-            }}
-          />
+          <div className="planner-skeleton__grid absolute inset-0 opacity-30" />
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="flex flex-col items-center gap-3">
               <div className="planner-skeleton__shimmer h-16 w-16 rounded-xl" />
@@ -59,26 +52,6 @@ export function PlannerSkeleton() {
         <div className="planner-skeleton__shimmer h-10 rounded-lg" />
       </div>
 
-      <style jsx>{`
-        .planner-skeleton__shimmer {
-          background: linear-gradient(
-            90deg,
-            var(--surface-soft, #f3f4f6) 25%,
-            var(--border-soft, #e5e7eb) 50%,
-            var(--surface-soft, #f3f4f6) 75%
-          );
-          background-size: 200% 100%;
-          animation: planner-skeleton-shimmer 1.5s infinite ease-in-out;
-        }
-        @keyframes planner-skeleton-shimmer {
-          0% {
-            background-position: 200% 0;
-          }
-          100% {
-            background-position: -200% 0;
-          }
-        }
-      `}</style>
     </div>
   );
 }

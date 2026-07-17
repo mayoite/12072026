@@ -28,6 +28,7 @@ export function DescriptorRevisionPanel({ slug }: Props) {
   const [loading, setLoading] = useState(true);
   const [busyVersion, setBusyVersion] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [showAll, setShowAll] = useState(false);
 
   const load = useCallback(async () => {
     if (slug === "new-block" || !slug) {
@@ -89,9 +90,22 @@ export function DescriptorRevisionPanel({ slug }: Props) {
     [load, slug],
   );
 
+  const visibleRevisions = showAll ? revisions : revisions.slice(0, 6);
+  const visibleAudit = showAll ? audit : audit.slice(0, 5);
+
   return (
-    <section className="admin-panel" aria-label="Revision history">
-      <div className="admin-panel__header">Revision history</div>
+    <details
+      className="admin-panel admin-svg-engine-shell__panel"
+      aria-label="Revision history"
+    >
+      <summary className="admin-panel__header">
+        Revision history
+        {!loading && revisions.length > 0 ? (
+          <span className="admin-badge admin-badge--compact">
+            {revisions.length}
+          </span>
+        ) : null}
+      </summary>
       <div className="admin-panel__body">
         <p className="admin-page__meta">
           Prior releases you can restore. Rollback re-publishes that revision as a new
@@ -105,7 +119,7 @@ export function DescriptorRevisionPanel({ slug }: Props) {
           <p className="admin-table__secondary">No prior releases recorded yet.</p>
         ) : (
           <ul className="admin-table__secondary admin-list-roomy">
-            {revisions.map((revision) => (
+            {visibleRevisions.map((revision) => (
               <li key={revision.version} className="admin-inline-row">
                 <span>
                   v{revision.version}
@@ -132,6 +146,16 @@ export function DescriptorRevisionPanel({ slug }: Props) {
             ))}
           </ul>
         )}
+        {revisions.length > 6 ? (
+          <button
+            type="button"
+            className="admin-btn admin-btn--outline admin-btn--compact"
+            aria-expanded={showAll}
+            onClick={() => setShowAll((current) => !current)}
+          >
+            {showAll ? "Show recent only" : `Show all ${revisions.length} releases`}
+          </button>
+        ) : null}
         {feedback ? (
           <p className="admin-page__meta admin-feedback" role="status">
             {feedback}
@@ -141,7 +165,7 @@ export function DescriptorRevisionPanel({ slug }: Props) {
           <div className="admin-section-top">
             <h3 className="admin-table__primary">Recent activity</h3>
             <ul className="admin-table__secondary admin-list-compact">
-              {audit.map((entry) => (
+              {visibleAudit.map((entry) => (
                 <li key={`${entry.at}-${entry.action}`}>
                   <code>{entry.at}</code> · {entry.action}
                 </li>
@@ -150,6 +174,6 @@ export function DescriptorRevisionPanel({ slug }: Props) {
           </div>
         ) : null}
       </div>
-    </section>
+    </details>
   );
 }

@@ -25,7 +25,7 @@ function fixedForm() {
 }
 
 describe("AdminSvgDetailsRail", () => {
-  it("renders product details open when advancedOpen is true", () => {
+  it("keeps product details visible before revision history", () => {
     render(
       <AdminSvgDetailsRail
         slug="new-block"
@@ -49,10 +49,16 @@ describe("AdminSvgDetailsRail", () => {
     expect(screen.getByTestId("mock-revision-panel")).toHaveTextContent(
       "new-block",
     );
-    expect(screen.getByText("Product details").closest("details")).toHaveAttribute(
-      "open",
+    const details = screen.getByRole("region", { name: "Product details" });
+    expect(details).toHaveAttribute(
+      "data-attention",
+      "true",
     );
     expect(screen.getByTestId("mock-svg-editor-form")).toBeInTheDocument();
+    expect(
+      details.compareDocumentPosition(screen.getByTestId("mock-revision-panel")) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
     expect(screen.getByText("3D model (optional)")).toBeInTheDocument();
   });
 

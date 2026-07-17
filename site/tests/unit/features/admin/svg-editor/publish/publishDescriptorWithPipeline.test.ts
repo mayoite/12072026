@@ -670,7 +670,9 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
 
     expect(result.success).toBe(false);
     if (result.success) return;
-    expect(result.error).toContain("R2 unavailable");
+    expect(result.error).toBe(
+      "500.storage: Immutable artifact upload failed. R2 unavailable",
+    );
     expect(publish).not.toHaveBeenCalled();
     expect(persistRollback).toHaveBeenCalledOnce();
     expect(pipelineRollback).toHaveBeenCalledOnce();

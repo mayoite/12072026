@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
-import { BLOCK_STYLE, blockToSvg } from "@/lib/catalog/blocks2d";
+import { useMemo, type CSSProperties } from "react";
+import { blockToSvg } from "@/lib/catalog/blocks2d";
 import { sanitizeInlineSvg } from "@/lib/security/sanitize";
 import { resolveCatalogItemBlock2D } from "@/features/planner/catalog-api/catalogBlockBridge";
 import type { CatalogItem } from "@/features/planner/catalog-api/catalogTypes";
@@ -15,6 +15,11 @@ const PREVIEW_RENDER_SCALE = 2;
 interface CatalogBlockPreviewProps {
   item: CatalogItem;
 }
+
+type CatalogPreviewStyle = CSSProperties & {
+  "--pw-catalog-preview-width": string;
+  "--pw-catalog-preview-height": string;
+};
 
 function previewDimensions(footprintL: number, footprintD: number): { w: number; h: number } {
   const aspect = footprintL / Math.max(1, footprintD);
@@ -53,13 +58,11 @@ export function CatalogBlockPreview({ item }: CatalogBlockPreviewProps) {
     return (
       <div
         aria-hidden
-        className="rounded-sm border shadow-inner"
+        className="pw-catalog-block-fallback rounded-sm border shadow-inner"
         style={{
-          width: Math.min(item.widthMm * 0.12, 40),
-          height: Math.min(item.heightMm * 0.12, 24),
-          borderColor: BLOCK_STYLE.surfaceStroke,
-          background: `color-mix(in srgb, ${BLOCK_STYLE.surface} 72%, transparent)`,
-        }}
+          "--pw-catalog-preview-width": `${Math.min(item.widthMm * 0.12, 40)}px`,
+          "--pw-catalog-preview-height": `${Math.min(item.heightMm * 0.12, 24)}px`,
+        } as CatalogPreviewStyle}
       />
     );
   }
@@ -67,7 +70,10 @@ export function CatalogBlockPreview({ item }: CatalogBlockPreviewProps) {
   return (
     <div
       className="pw-catalog-block-preview"
-      style={{ width: previewW, height: previewH }}
+      style={{
+        "--pw-catalog-preview-width": `${previewW}px`,
+        "--pw-catalog-preview-height": `${previewH}px`,
+      } as CatalogPreviewStyle}
       aria-hidden
       dangerouslySetInnerHTML={{ __html: sanitizeInlineSvg(previewSvg) }}
     />

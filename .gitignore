@@ -5,6 +5,7 @@ site/block-descriptors/_archive/
 site/block-descriptors/*.*.json
 
 node_modules/
+.turbo/
 # Hoisted at repo root (.npmrc node-linker=hoisted) � never install-only under site/
 site/node_modules/
 tech-docs-generator/node_modules/

@@ -10,6 +10,7 @@
 
 "use server";
 
+import { revalidatePath } from "next/cache";
 import {
   tryLoad,
   type BlockDescriptor,
@@ -105,6 +106,9 @@ export async function publishSvgEditorAction(
       action: "publish",
       detail: { checksum: published.descriptor.checksum, lifecycle: "draft" },
     });
+    revalidatePath("/admin/svg-editor");
+    revalidatePath(`/admin/svg-editor/${published.descriptor.slug}`);
+    revalidatePath("/api/planner/catalog/svg-blocks");
   }
   return published;
 }

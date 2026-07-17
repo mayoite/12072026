@@ -73,6 +73,14 @@ interface ResizeState {
   startHeight: number;
 }
 
+type PanelGeometryStyle = CSSProperties & {
+  "--pw-panel-x"?: string;
+  "--pw-panel-y"?: string;
+  "--pw-panel-width"?: string;
+  "--pw-panel-height": string;
+  "--pw-panel-z"?: string;
+};
+
 const DRAG_UNDOCK_THRESHOLD_PX = 8;
 
 export function PanelContainer({
@@ -297,18 +305,18 @@ export function PanelContainer({
   const isFloating = state === "floating";
   const isDocked = state === "docked";
 
-  const panelStyle: CSSProperties = isFloating
+  const panelStyle: PanelGeometryStyle = isFloating
     ? {
-        position: "absolute",
-        left: x,
-        top: y,
-        width,
-        height,
-        zIndex,
+        "--pw-panel-x": `${x}px`,
+        "--pw-panel-y": `${y}px`,
+        "--pw-panel-width": `${width}px`,
+        "--pw-panel-height": `${height}px`,
+        "--pw-panel-z": String(zIndex),
       }
     : {
-        width: id === "bottom" ? "100%" : responsiveOverlay ? undefined : width,
-        height: id === "bottom" ? height : "100%",
+        "--pw-panel-width":
+          id === "bottom" ? "100%" : responsiveOverlay ? undefined : `${width}px`,
+        "--pw-panel-height": id === "bottom" ? `${height}px` : "100%",
       };
 
   /** Canvas-facing edge when docked (follows dockEdge, not panel id). */

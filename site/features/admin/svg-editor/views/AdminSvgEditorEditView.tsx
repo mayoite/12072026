@@ -306,7 +306,9 @@ export function AdminSvgEditorEditView({
     footprintAligned: footprintProof.aligned,
     coreFieldIssuesCount: coreFieldIssues.length,
     onPublishAction,
-    refreshRoute: () => router.refresh(),
+    refreshRoute: (publishedSlug) => {
+      router.replace(`/admin/svg-editor/${encodeURIComponent(publishedSlug)}`);
+    },
   });
 
   const canConvertToGlb = form.variant === "fixed" && compiledSvg !== null;

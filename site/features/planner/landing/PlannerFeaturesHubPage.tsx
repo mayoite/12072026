@@ -12,7 +12,6 @@ import {
 } from "@/components/home/layout";
 import { RouteCtaBand } from "@/components/shared/RouteCtaBand";
 import { MOTION_EASE } from "@/lib/helpers/motion";
-import { Z } from "@/lib/z-index";
 import { PlannerBreadcrumbs } from "./PlannerBreadcrumbs";
 import { PlannerHeroDemo } from "./PlannerHeroDemo";
 import { PLANNER_FEATURE_PAGES } from "./plannerFeaturePages";
@@ -40,7 +39,7 @@ export function PlannerFeaturesHubPage() {
           <div className="pfp-hero-overlay" />
         </div>
 
-        <div className="home-shell-xl" style={{ zIndex: Z.canvasOverlay }}>
+        <div className="home-shell-xl">
           <div className="pfp-hero-shell">
             <PlannerBreadcrumbs
               items={[{ label: "Planner", href: "/planner/" }, { label: "Features" }]}

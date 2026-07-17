@@ -3,6 +3,7 @@
  */
 
 import type { NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 
 import { withAuth } from "@/features/shared/api/withAuth";
 import { success } from "@/features/shared/api/apiResponse";
@@ -50,6 +51,9 @@ async function handleLifecyclePatch(
     action: state === "live" ? "approve" : "lifecycle_change",
     detail: { state },
   });
+  revalidatePath("/admin/svg-editor");
+  revalidatePath(`/admin/svg-editor/${slug}`);
+  revalidatePath("/api/planner/catalog/svg-blocks");
 
   return success({ slug, lifecycle: entry });
 }

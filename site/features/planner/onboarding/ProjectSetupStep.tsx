@@ -31,7 +31,6 @@ import {
 } from "@/features/planner/ai/spaceSuggest";
 import { PLANNER_MAX_CANVAS_MM, PLANNER_MAX_CANVAS_METERS } from "@/features/planner/lib/canvasBounds";
 import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
-import { Z } from "@/lib/z-index";
 
 
 
@@ -147,10 +146,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
   };
 
   return (
-    <div
-      className="planner-setup-overlay bg-[color:var(--surface-inverse)]/88 backdrop-blur-sm"
-      style={{ zIndex: Z.panel }}
-    >
+    <div className="planner-setup-overlay bg-[color:var(--surface-inverse)]/88 backdrop-blur-sm">
       <div className="grid max-w-5xl rounded-[var(--radius-xl)] border border-[color:var(--border-soft)] bg-[color:var(--surface-panel-strong)] shadow-[var(--shadow-soft)] lg:grid-cols-[1fr_1.05fr]">
         <aside className="flex flex-col gap-8 border-b border-[color:var(--border-soft)] bg-[color:var(--surface-accent-wash)] p-8 lg:border-b-0 lg:border-r">
           <div>

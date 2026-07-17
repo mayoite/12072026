@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { render, waitFor } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import type { ReactNode } from "react";
 import type { ExcalidrawProps } from "@excalidraw/excalidraw/types";
 import ExcalidrawClient from "@/features/admin/svg-editor/editor/ExcalidrawClient";
@@ -40,17 +40,17 @@ vi.mock("@excalidraw/excalidraw", () => {
     },
   });
   const MainMenu = Object.assign(MainMenuRoot, {
+    Separator: () => <div data-testid="mock-menu-separator" />,
     DefaultItems: {
+      LoadScene: () => <div data-testid="mock-load-scene" />,
+      Export: () => <div data-testid="mock-export" />,
       ClearCanvas: () => <div data-testid="mock-clear-canvas" />,
-      ToggleTheme: () => <div data-testid="mock-toggle-theme" />,
-      ChangeCanvasBackground: () => <div data-testid="mock-canvas-background" />,
+      CommandPalette: () => <div data-testid="mock-command-palette" />,
     },
   });
-
   return {
     Excalidraw: (props: ExcalidrawProps) => {
       lastExcalidrawPropsRef.current = props;
-      props.excalidrawAPI?.({} as never);
       return <div data-testid="mock-excalidraw">{props.children}</div>;
     },
     MainMenu,
@@ -98,6 +98,15 @@ describe("ExcalidrawClient", () => {
       scrollToContent: true,
     });
     expect(document.body.textContent).toContain("Inspector");
+    expect(lastExcalidrawPropsRef.current?.theme).toBe("light");
+    expect(lastExcalidrawPropsRef.current?.objectsSnapModeEnabled).toBe(true);
+    expect(lastExcalidrawPropsRef.current?.UIOptions).toMatchObject({
+      canvasActions: {
+        loadScene: true,
+        saveAsImage: true,
+        toggleTheme: false,
+      },
+    });
   });
 
   it("builds legacy SVG image initial data when only svg is provided", () => {
@@ -157,11 +166,12 @@ describe("ExcalidrawClient", () => {
     expect(onChange).toBeTypeOf("function");
 
     onChange?.([{ id: "shape-1" }] as never, { zoom: 1 } as never, {} as never);
-    await vi.advanceTimersByTimeAsync(300);
-
-    await waitFor(() => {
-      expect(onDocument).toHaveBeenCalledWith("<svg>rendered</svg>", [{ id: "shape-1" }]);
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
     });
+    expect(onDocument).toHaveBeenCalledWith("<svg>rendered</svg>", [
+      { id: "shape-1" },
+    ]);
   });
 
   it("forwards export failures to the error callback", async () => {
@@ -179,10 +189,9 @@ describe("ExcalidrawClient", () => {
     );
 
     lastExcalidrawPropsRef.current?.onChange?.([] as never, {} as never, {} as never);
-    await vi.advanceTimersByTimeAsync(300);
-
-    await waitFor(() => {
-      expect(onError).toHaveBeenCalledWith("export failed");
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
     });
+    expect(onError).toHaveBeenCalledWith("export failed");
   });
 });

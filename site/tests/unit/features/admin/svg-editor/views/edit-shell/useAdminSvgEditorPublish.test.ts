@@ -201,7 +201,7 @@ describe("useAdminSvgEditorPublish", () => {
       }),
     );
     expect(setLifecycle).toHaveBeenCalledWith("live");
-    expect(refreshRoute).toHaveBeenCalled();
+    expect(refreshRoute).toHaveBeenCalledWith(descriptor.slug);
     expect(result.current.approving).toBe(false);
   });
 
@@ -336,7 +336,7 @@ describe("useAdminSvgEditorPublish", () => {
     expect(setPublishedFormSignature).toHaveBeenCalled();
     expect(result.current.feedback.successMessage).toMatch(/Published/);
     expect(result.current.feedback.publishedSlug).toBe("published-slug");
-    expect(refreshRoute).toHaveBeenCalled();
+    expect(refreshRoute).toHaveBeenCalledWith("published-slug");
   });
 
   it("surfaces network exceptions as publish failure", async () => {

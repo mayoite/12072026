@@ -5,6 +5,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
   type MouseEvent as ReactMouseEvent,
   type ReactNode,
 } from "react";
@@ -13,6 +14,11 @@ import type { ChromePackId, ChromePackPlacement } from "./workspaceLayout";
 import styles from "./workspace.module.css";
 
 const TEAR_THRESHOLD = 8;
+
+type FloatingChromePackStyle = CSSProperties & {
+  "--pw-chrome-pack-x": string;
+  "--pw-chrome-pack-y": string;
+};
 
 export interface ChromePackFrameProps {
   packId: ChromePackId;
@@ -145,18 +151,16 @@ export function ChromePackFrame({
 
   return (
     <div
-      className={styles.chromePack}
+      className={`${styles.chromePack} pw-chrome-pack`}
       data-pack={packId}
       data-placement={placement}
       data-dragging={dragging ? "true" : undefined}
       style={
         isFloating
-          ? {
-              position: "fixed",
-              left: x,
-              top: y,
-              zIndex: 140,
-            }
+          ? ({
+              "--pw-chrome-pack-x": `${x}px`,
+              "--pw-chrome-pack-y": `${y}px`,
+            } as FloatingChromePackStyle)
           : undefined
       }
       data-testid={`chrome-pack-${packId}`}

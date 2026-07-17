@@ -86,7 +86,7 @@ interface UseAdminSvgEditorPublishArgs {
   readonly onPublishAction?: (
     data: SvgEditorFormState,
   ) => Promise<PublishDescriptorResult>;
-  readonly refreshRoute: () => void;
+  readonly refreshRoute: (publishedSlug: string) => void;
 }
 
 function nowStampLabel(): string {
@@ -175,7 +175,7 @@ export function useAdminSvgEditorPublish({
       );
       if (!response.ok) return;
       setLifecycle("live");
-      refreshRoute();
+      refreshRoute(slug);
     } finally {
       setApproving(false);
     }
@@ -334,7 +334,7 @@ export function useAdminSvgEditorPublish({
         successMessage: publishSuccessMessage(publishedSlug, nowStampLabel()),
         publishedSlug,
       });
-      refreshRoute();
+      refreshRoute(publishedSlug);
     } catch (networkError) {
       const message =
         networkError instanceof Error

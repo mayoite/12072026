@@ -27,7 +27,7 @@ describe("app/api/admin/themes/route.ts", () => {
     expect(body.source).toBe("starter");
     expect(body.themes.length).toBe(PLANNER_THEME_PACKS.length);
     expect(body.themes[0].name).toBe("premium-light");
-    expect(body.themes[0].tokens).toBeTruthy();
+    expect(body.themes[0].tokens).toEqual(PLANNER_THEME_PACKS[0].tokens);
     expect(body.themes[0].tokenCount).toBeGreaterThan(0);
   });
 

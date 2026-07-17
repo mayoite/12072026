@@ -162,9 +162,9 @@ describe("AdminSvgEditorShell", () => {
     );
   });
 
-  it("opens product details when form is dirty", () => {
+  it("keeps product details visible and marks dirty drafts for attention", () => {
     render(<AdminSvgEditorShell {...shellProps({ formDirty: true })} />);
-    const advanced = screen.getByText("Product details").closest("details");
-    expect(advanced).toHaveAttribute("open");
+    const productDetails = screen.getByText("Product details").closest("section");
+    expect(productDetails).toHaveAttribute("data-attention", "true");
   });
 });

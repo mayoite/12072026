@@ -189,7 +189,13 @@ export function SvgEditorForm({
         const id = `svgfield-${field.path}`;
         const issue = issueByPath.get(field.path);
         return (
-          <div className="admin-field" key={field.path} data-field={field.path} data-group={field.group}>
+          <div
+            className="admin-field"
+            key={field.path}
+            data-field={field.path}
+            data-field-kind={field.kind}
+            data-group={field.group}
+          >
             {["text", "number", "select"].includes(field.kind) ? (
               <label className="admin-field__label" htmlFor={id}>
                 {field.label}

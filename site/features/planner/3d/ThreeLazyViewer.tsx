@@ -6,7 +6,7 @@
  */
 
 import React, { lazy, Suspense } from "react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { PlannerProject } from "@/features/planner/project/model/types";
 import styles from "./threeLazyViewer.module.css";
 import { readThreeThemeColor } from "@/features/planner/project/shared/readThemeColor";
@@ -75,6 +75,10 @@ export interface Lazy3DViewerProps {
   /** Background color */
   backgroundColor?: string; // prefer semantic via readThreeThemeColor
 }
+
+type ThreeViewerSurfaceStyle = CSSProperties & {
+  "--pw-three-viewer-background": string;
+};
 
 // Lazy-loaded 3D viewer component
 // In production, this would import from a real Three.js component
@@ -164,9 +168,11 @@ export function Lazy3DViewer(props: Lazy3DViewerProps): React.JSX.Element {
   })();
   return (
     <div
-      className={`${styles.viewerRoot} ${className || ""}`}
+      className={`${styles.viewerRoot} pw-three-viewer ${className || ""}`}
       data-testid="planner-3d-canvas"
-      style={{ backgroundColor: resolvedBg }}
+      style={{
+        "--pw-three-viewer-background": resolvedBg,
+      } as ThreeViewerSurfaceStyle}
     >
       <ViewerErrorBoundary onError={onError}>
         <Suspense fallback={<ViewerLoadingFallback message={loadingMessage} />}>

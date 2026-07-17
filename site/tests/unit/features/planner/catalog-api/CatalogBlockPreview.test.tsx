@@ -8,7 +8,6 @@ vi.mock("@/features/planner/catalog-api/catalogBlockBridge", () => ({
 }));
 
 vi.mock("@/lib/catalog/blocks2d", () => ({
-  BLOCK_STYLE: { surfaceStroke: "#333", surface: "#ccc" },
   blockToSvg: vi.fn(() => '<svg width="10" height="10"></svg>'),
 }));
 
@@ -35,8 +34,8 @@ describe("CatalogBlockPreview", () => {
     expect(fallback).not.toBeNull();
     expect(fallback?.className).toMatch(/rounded-sm/);
     const style = (fallback as HTMLElement).style;
-    expect(Number.parseFloat(style.width)).toBeGreaterThan(0);
-    expect(Number.parseFloat(style.height)).toBeGreaterThan(0);
+    expect(Number.parseFloat(style.getPropertyValue("--pw-catalog-preview-width"))).toBeGreaterThan(0);
+    expect(Number.parseFloat(style.getPropertyValue("--pw-catalog-preview-height"))).toBeGreaterThan(0);
   });
 
   it("renders svg preview when block prims resolve", async () => {

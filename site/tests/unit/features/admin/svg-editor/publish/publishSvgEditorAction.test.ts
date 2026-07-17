@@ -15,9 +15,12 @@ import { descriptorToFormState } from "@/features/admin/svg-editor/form/svgEdito
 import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 import type { SvgEditorFormState } from "@/features/admin/svg-editor/form/svgEditorFormState";
 
-const { publishDescriptorWithPipeline } = vi.hoisted(() => ({
+const { publishDescriptorWithPipeline, revalidatePath } = vi.hoisted(() => ({
   publishDescriptorWithPipeline: vi.fn(),
+  revalidatePath: vi.fn(),
 }));
+
+vi.mock("next/cache", () => ({ revalidatePath }));
 
 vi.mock("@/features/admin/svg-editor/publish/publishDescriptorWithPipeline", () => ({
   publishDescriptorWithPipeline,
@@ -68,6 +71,7 @@ function existingFormState(slug: string): SvgEditorFormState {
 describe("publishSvgEditorAction", () => {
   beforeEach(() => {
     publishDescriptorWithPipeline.mockReset();
+    revalidatePath.mockReset();
     publishDescriptorWithPipeline.mockResolvedValue({
       success: true,
       descriptor: {
@@ -103,6 +107,13 @@ describe("publishSvgEditorAction", () => {
     if (deps) {
       expect(deps).toHaveProperty("dbRepository");
     }
+    expect(revalidatePath).toHaveBeenCalledWith("/admin/svg-editor");
+    expect(revalidatePath).toHaveBeenCalledWith(
+      "/admin/svg-editor/mock-published",
+    );
+    expect(revalidatePath).toHaveBeenCalledWith(
+      "/api/planner/catalog/svg-blocks",
+    );
   });
 
   it("missing slug returns not found and does not call the pipeline", async () => {
@@ -114,6 +125,7 @@ describe("publishSvgEditorAction", () => {
 
     expect(result).toEqual({ success: false, error: "not found" });
     expect(publishDescriptorWithPipeline).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
   });
 
   it("valid side-table-001 loads the descriptor and publishes via pipeline", async () => {

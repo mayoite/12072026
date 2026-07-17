@@ -310,17 +310,7 @@ export function CatalogPanel({
                     className="pw-catalog-family-header"
                     role="heading"
                     aria-level={2}
-                    style={{
-                      gridColumn: "1 / -1",
-                      fontSize: "0.75rem",
-                      fontWeight: 600,
-                      letterSpacing: "0.05em",
-                      textTransform: "uppercase",
-                      color: "var(--text-muted)",
-                      padding: "var(--space-2) var(--space-1) var(--space-1)",
-                      borderBottom: "1px solid var(--border-soft)",
-                      marginTop: idx > 0 ? "var(--space-3)" : 0,
-                    }}
+                    data-separated={idx > 0 ? "true" : undefined}
                   >
                     {currFamily}
                   </div>,

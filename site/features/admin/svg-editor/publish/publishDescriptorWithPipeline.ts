@@ -447,28 +447,52 @@ export async function publishDescriptorWithPipeline(
   // DB-SVG-01..05 minimal cutover: when DB publish is enabled, DB failure must
   // fail the overall publish so disk cannot silently become the authority.
   if (deps.dbRepository) {
-    try {
-      const compiledSvgChecksum = sha256Utf8(compile.svg);
-      const definitionChecksum = descriptor.checksum;
-      const definitionVersion = persistResult.version;
-      const releasedForDatabase = buildReleasedProductFromPublish({
-        descriptor,
-        svgMarkup: compile.svg,
-        revisionId,
-        definitionVersion,
-        publishedAt,
-        availability: "available",
-      });
-      if (!releasedForDatabase.ok) {
-        throw new Error(releasedForDatabase.error);
-      }
-      if (!deps.artifactStore) {
-        throw new Error("Immutable SVG artifact storage is not configured.");
-      }
+    const compiledSvgChecksum = sha256Utf8(compile.svg);
+    const definitionChecksum = descriptor.checksum;
+    const definitionVersion = persistResult.version;
+    const releasedForDatabase = buildReleasedProductFromPublish({
+      descriptor,
+      svgMarkup: compile.svg,
+      revisionId,
+      definitionVersion,
+      publishedAt,
+      availability: "available",
+    });
+    if (!releasedForDatabase.ok) {
+      const recoveryErrors = runAllBestEffort(
+        persistResult.rollback,
+        pipeline.rollback,
+        persistResult.cleanup,
+        pipeline.cleanup,
+      );
+      return {
+        success: false,
+        error: withRecoveryErrors(
+          `500.db: Released product mapping failed. ${releasedForDatabase.error}`,
+          recoveryErrors,
+        ),
+      };
+    }
 
-      const descriptorStorageKey =
-        `svg-revisions/${revisionId}/descriptor.json`;
-      const svgStorageKey = `svg-revisions/${revisionId}/symbol.svg`;
+    if (!deps.artifactStore) {
+      const recoveryErrors = runAllBestEffort(
+        persistResult.rollback,
+        pipeline.rollback,
+        persistResult.cleanup,
+        pipeline.cleanup,
+      );
+      return {
+        success: false,
+        error: withRecoveryErrors(
+          "500.storage: Immutable SVG artifact storage is not configured.",
+          recoveryErrors,
+        ),
+      };
+    }
+
+    const descriptorStorageKey = `svg-revisions/${revisionId}/descriptor.json`;
+    const svgStorageKey = `svg-revisions/${revisionId}/symbol.svg`;
+    try {
       await Promise.all([
         deps.artifactStore.putText(
           descriptorStorageKey,
@@ -481,7 +505,25 @@ export async function publishDescriptorWithPipeline(
           "image/svg+xml",
         ),
       ]);
+    } catch (storageError) {
+      const details =
+        storageError instanceof Error ? storageError.message : String(storageError);
+      const recoveryErrors = runAllBestEffort(
+        persistResult.rollback,
+        pipeline.rollback,
+        persistResult.cleanup,
+        pipeline.cleanup,
+      );
+      return {
+        success: false,
+        error: withRecoveryErrors(
+          `500.storage: Immutable artifact upload failed. ${details}`,
+          recoveryErrors,
+        ),
+      };
+    }
 
+    try {
       await deps.dbRepository.publish(
         {
           schemaVersion: 1,

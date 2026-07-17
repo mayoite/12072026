@@ -61,11 +61,10 @@ export default async function RootLayout({
         <NextIntlClientProvider locale={locale} messages={messages}>
           <MaintenanceBanner />
           {children}
-          {/* Without this, window.va is undefined and all siteEvents no-op. */}
-          <SiteAnalytics />
+          {/* Vercel owns these endpoints. Local production smoke tests do not. */}
+          {process.env.VERCEL === "1" ? <SiteAnalytics /> : null}
         </NextIntlClientProvider>
       </body>
     </html>
   );
 }
-

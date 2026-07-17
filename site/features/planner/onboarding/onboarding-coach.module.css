@@ -7,6 +7,20 @@
 
 .spotlight {
   position: fixed;
+  left: var(--pw-coach-left);
+  top: var(--pw-coach-top);
+  width: var(--pw-coach-width);
+  height: var(--pw-coach-height);
+  border-radius: var(--radius-xl);
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 var(--radius-full) var(--scrim-black-20);
+  pointer-events: none;
+  transition:
+    left var(--planner-motion-panel) var(--planner-motion-easing),
+    top var(--planner-motion-panel) var(--planner-motion-easing),
+    width var(--planner-motion-panel) var(--planner-motion-easing),
+    height var(--planner-motion-panel) var(--planner-motion-easing);
 }
 
 .dialog {
@@ -25,8 +39,38 @@
   padding: 0 var(--space-6) var(--space-6);
 }
 
+.progress {
+  display: block;
+  width: 100%;
+  height: var(--space-1);
+  border: 0;
+  border-radius: 0;
+  appearance: none;
+  overflow: hidden;
+  background: var(--surface-soft);
+}
+
+.progress::-webkit-progress-bar {
+  background: var(--surface-soft);
+}
+
+.progress::-webkit-progress-value {
+  background: var(--color-primary);
+  transition: width var(--planner-motion-panel) var(--planner-motion-easing);
+}
+
+.progress::-moz-progress-bar {
+  background: var(--color-primary);
+  transition: width var(--planner-motion-panel) var(--planner-motion-easing);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .spotlight {
+    transition: none;
+  }
+
+  .progress::-webkit-progress-value,
+  .progress::-moz-progress-bar {
     transition: none;
   }
 }

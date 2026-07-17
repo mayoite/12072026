@@ -389,7 +389,7 @@ export function TopBar({
                   {activeFloorName}
                   <CaretDown size={12} weight="bold" aria-hidden />
                 </Button>
-                <Popover placement="bottom start">
+                <Popover placement="bottom start" className={styles.dropdownPopover}>
                   <Menu
                     className={styles.dropdownMenu}
                     selectionMode="single"
@@ -415,7 +415,7 @@ export function TopBar({
                 {displayUnit}
                 <CaretDown size={12} weight="bold" aria-hidden />
               </Button>
-              <Popover placement="bottom start">
+              <Popover placement="bottom start" className={styles.dropdownPopover}>
                 <Menu
                   className={styles.dropdownMenu}
                   selectionMode="single"
@@ -592,7 +592,7 @@ export function TopBar({
                   Export
                   <CaretDown size={12} weight="bold" aria-hidden />
                 </Button>
-                <Popover placement="bottom end">
+                <Popover placement="bottom end" className={styles.dropdownPopover}>
                   <Menu
                     className={styles.dropdownMenu}
                     onAction={(key) => onExport?.(key as string)}
@@ -622,7 +622,7 @@ export function TopBar({
                     Import
                     <CaretDown size={12} weight="bold" aria-hidden />
                   </Button>
-                  <Popover placement="bottom end">
+                  <Popover placement="bottom end" className={styles.dropdownPopover}>
                     <Menu
                       className={styles.dropdownMenu}
                       onAction={(key) => {
@@ -644,7 +644,7 @@ export function TopBar({
                     Export
                     <CaretDown size={12} weight="bold" aria-hidden />
                   </Button>
-                  <Popover placement="bottom end">
+                  <Popover placement="bottom end" className={styles.dropdownPopover}>
                     <Menu
                       className={styles.dropdownMenu}
                       onAction={(key) => onExport?.(key as string)}
@@ -674,7 +674,7 @@ export function TopBar({
           </div>,
         )}
 
-        {wrapPack(
+        {chromeMode === "full" ? wrapPack(
           "prefs",
           "Density",
           <Button
@@ -685,7 +685,7 @@ export function TopBar({
           >
             Density
           </Button>,
-        )}
+        ) : null}
 
         {wrapPack(
           "layout",
@@ -699,7 +699,7 @@ export function TopBar({
               Panels
               <CaretDown size={12} weight="bold" aria-hidden />
             </Button>
-            <Popover placement="bottom end">
+            <Popover placement="bottom end" className={styles.dropdownPopover}>
               <Menu
                 className={styles.dropdownMenu}
                 onAction={(key) => {
@@ -710,6 +710,10 @@ export function TopBar({
                   }
                   if (keyStr === "reset") {
                     onResetLayout?.();
+                    return;
+                  }
+                  if (keyStr === "toggle:density") {
+                    onToggleDensity?.();
                     return;
                   }
                   if (keyStr.startsWith("show:")) {
@@ -741,6 +745,11 @@ export function TopBar({
                 <MenuItem id="reset" className={styles.dropdownItem}>
                   Reset layout
                 </MenuItem>
+                {chromeMode === "slim" ? (
+                  <MenuItem id="toggle:density" className={styles.dropdownItem}>
+                    {density === "touch" ? "Use compact controls" : "Use touch controls"}
+                  </MenuItem>
+                ) : null}
                 {onShowDockPanel ? (
                   <>
                     <MenuItem id="show:inventory" className={styles.dropdownItem}>

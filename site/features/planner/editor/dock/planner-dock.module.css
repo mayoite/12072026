@@ -81,11 +81,24 @@
     transparent
   );
   --dv-floating-box-shadow: var(--planner-shadow-floating);
+  --dv-floating-group-border: 1px solid var(--planner-border-default);
+  --dv-floating-titlebar-height: 2rem;
+  --dv-floating-titlebar-background-color: color-mix(
+    in srgb,
+    var(--planner-surface-panel) 94%,
+    var(--planner-surface-subtle)
+  );
+  --dv-floating-titlebar-border-bottom: 1px solid var(--planner-border-default);
   --dv-overlay-z-index: 120;
 }
 
 .host :global(.dv-groupview) {
   border: 1px solid var(--planner-border-default);
+}
+
+.host :global(.dv-resize-container) {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
 }
 
 .host :global(.dv-tabs-and-actions-container) {

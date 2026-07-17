@@ -223,6 +223,60 @@
 .admin-svg-engine-shell__rail--details {
   grid-area: details;
   border-left: 1px solid var(--border-soft);
+  container-type: inline-size;
+}
+
+/* Product inspector: pair compact parameters without crushing rich editors. */
+.admin-svg-engine-shell__rail--details .admin-svg-form {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.admin-svg-engine-shell__rail--details .admin-svg-form .admin-panel__body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.admin-svg-engine-shell__rail--details .admin-svg-form .admin-field {
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.admin-svg-engine-shell__rail--details
+  .admin-svg-form
+  .admin-field:is(
+    [data-field-kind="multiselect"],
+    [data-field-kind="tokenRows"],
+    [data-field-kind="stringList"],
+    [data-field-kind="objectArray"]
+  ) {
+  grid-column: 1 / -1;
+}
+
+.admin-svg-engine-shell__rail--details .admin-object-array__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.625rem;
+}
+
+.admin-svg-engine-shell__rail--details .admin-object-array__field {
+  min-width: 0;
+}
+
+.admin-svg-engine-shell__rail--details .admin-object-array__actions {
+  grid-column: 1 / -1;
+}
+
+@container (max-width: 17rem) {
+  .admin-svg-engine-shell__rail--details .admin-svg-form .admin-panel__body,
+  .admin-svg-engine-shell__rail--details .admin-object-array__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-svg-engine-shell__rail--details .admin-object-array__actions {
+    grid-column: 1;
+  }
 }
 
 .admin-svg-engine-shell__rail > * {
@@ -358,6 +412,52 @@
   font-size: 0.82rem;
 }
 
+.admin-svg-dimension-panel__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding-inline-end: 0.75rem;
+  border-inline-end: 1px solid var(--border-soft);
+}
+
+.admin-svg-dimension-panel__tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  min-height: 2rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 650;
+}
+
+.admin-svg-dimension-panel__tool:hover:not([data-disabled]) {
+  border-color: var(--border-soft);
+  background: var(--surface-muted);
+  color: var(--text-strong);
+}
+
+.admin-svg-dimension-panel__tool[data-selected] {
+  border-color: color-mix(in srgb, var(--color-primary) 35%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface-raised));
+  color: var(--color-primary);
+}
+
+.admin-svg-dimension-panel__tool[data-focus-visible] {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.admin-svg-dimension-panel__tool[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .admin-svg-dimension-panel__unit-toggle {
   display: flex;
   gap: 4px;
@@ -443,7 +543,7 @@
 }
 
 .admin-svg-dimension-panel[data-empty="true"] {
-  min-height: 2.25rem;
+  min-height: 2.75rem;
   padding-block: 0.35rem;
 }
 

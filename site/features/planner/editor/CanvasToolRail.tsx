@@ -5,6 +5,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
   type MouseEvent as ReactMouseEvent,
 } from "react";
 import {
@@ -220,6 +221,16 @@ function ToolGroup({
 }
 
 type RailModuleId = "nav" | "draw" | "deferred" | "view";
+
+type FloatingToolModuleStyle = CSSProperties & {
+  "--pw-tool-module-x": string;
+  "--pw-tool-module-y": string;
+};
+
+type FloatingToolRailStyle = CSSProperties & {
+  "--pw-tool-rail-x": string;
+  "--pw-tool-rail-y": string;
+};
 
 /**
  * RAC canvas tool rail — dockable left/top, floatable, optional split modules.
@@ -453,17 +464,15 @@ export function CanvasToolRail({
           const body = (
             <div
               key={group.id}
-              className={styles.railModule}
+              className={`${styles.railModule} pw-tool-rail-module`}
               data-module={group.id}
               data-split={splitFloating ? "true" : undefined}
               style={
                 splitFloating
-                  ? {
-                      position: "fixed",
-                      left: splitPos.x,
-                      top: splitPos.y,
-                      zIndex: 130,
-                    }
+                  ? ({
+                      "--pw-tool-module-x": `${splitPos.x}px`,
+                      "--pw-tool-module-y": `${splitPos.y}px`,
+                    } as FloatingToolModuleStyle)
                   : undefined
               }
             >
@@ -534,22 +543,11 @@ export function CanvasToolRail({
       data-split={rail.splitGroups ? "true" : undefined}
       data-dock-managed={dockManaged ? "true" : undefined}
       style={
-        dockManaged
-          ? {
-              width: "100%",
-              minWidth: 0,
-              borderRight: "none",
-            }
-          : isFloating
-          ? {
-              position: "absolute",
-              left: rail.x,
-              top: rail.y,
-              height: orientation === "horizontal" ? "auto" : "min(70vh, 28rem)",
-              width: orientation === "horizontal" ? "auto" : undefined,
-              maxHeight: orientation === "horizontal" ? "none" : "70vh",
-              zIndex: 120,
-            }
+        !dockManaged && isFloating
+          ? ({
+              "--pw-tool-rail-x": `${rail.x}px`,
+              "--pw-tool-rail-y": `${rail.y}px`,
+            } as FloatingToolRailStyle)
           : undefined
       }
     >

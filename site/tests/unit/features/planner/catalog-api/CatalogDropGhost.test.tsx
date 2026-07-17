@@ -28,10 +28,11 @@ describe("CatalogDropGhost", () => {
     const ghost = container.querySelector(".pw-drop-ghost");
     expect(ghost).not.toBeNull();
     expect(ghost?.getAttribute("data-valid")).toBe("true");
-    expect((ghost as HTMLElement).style.left).toBe("50px");
-    expect((ghost as HTMLElement).style.top).toBe("80px");
-    expect((ghost as HTMLElement).style.width).toBe("80px");
-    expect((ghost as HTMLElement).style.height).toBe("68px");
+    const style = (ghost as HTMLElement).style;
+    expect(style.getPropertyValue("--pw-drop-x")).toBe("50px");
+    expect(style.getPropertyValue("--pw-drop-y")).toBe("80px");
+    expect(style.getPropertyValue("--pw-drop-preview-width")).toBe("60px");
+    expect(style.getPropertyValue("--pw-drop-preview-height")).toBe("40px");
     expect(screen.getByText("Task Desk")).toBeInTheDocument();
     expect(screen.getByTestId("block-preview")).toBeInTheDocument();
   });

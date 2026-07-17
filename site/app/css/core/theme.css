@@ -339,6 +339,16 @@
   --ease-in: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
 
+  /* ── Shared layer scale ── */
+  --z-canvas: 0;
+  --z-canvas-overlay: 10;
+  --z-toolbar: 50;
+  --z-sidebar: 60;
+  --z-panel: 70;
+  --z-modal: 80;
+  --z-toast: 90;
+  --z-tooltip: 100;
+
   /* ── Breakpoints ── */
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;

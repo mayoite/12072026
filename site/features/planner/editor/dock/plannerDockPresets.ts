@@ -2,7 +2,7 @@ import type { DockviewApi } from "dockview-react";
 
 import type { LayoutPresetId } from "../workspaceLayout";
 
-export const PLANNER_DOCKVIEW_STORAGE_KEY = "planner-dockview-layout-v4";
+export const PLANNER_DOCKVIEW_STORAGE_KEY = "planner-dockview-layout-v5";
 
 export type PlannerDockPanelId =
   | "canvas"

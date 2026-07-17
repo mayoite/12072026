@@ -21,5 +21,16 @@ describe("SvgEditorForm", () => {
     );
     expect(screen.getByTestId("admin-svg-form")).toBeInTheDocument();
     expect(screen.getByTestId("admin-form-group-identity")).toBeInTheDocument();
+    expect(document.querySelector('[data-field="slug"]')).toHaveAttribute(
+      "data-field-kind",
+      "text",
+    );
+    expect(
+      document.querySelector('[data-field="geometry.widthMm"]'),
+    ).toHaveAttribute("data-field-kind", "number");
+    expect(document.querySelector('[data-field="mounting"]')).toHaveAttribute(
+      "data-field-kind",
+      "multiselect",
+    );
   });
 });

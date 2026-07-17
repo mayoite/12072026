@@ -8,7 +8,8 @@ describe("CatalogDropFlash", () => {
     const el = container.querySelector(".pw-drop-flash");
     expect(el).not.toBeNull();
     expect(el?.getAttribute("aria-hidden")).toBe("true");
-    expect((el as HTMLElement).style.left).toBe("120px");
-    expect((el as HTMLElement).style.top).toBe("40px");
+    const style = (el as HTMLElement).style;
+    expect(style.getPropertyValue("--pw-drop-flash-x")).toBe("120px");
+    expect(style.getPropertyValue("--pw-drop-flash-y")).toBe("40px");
   });
 });

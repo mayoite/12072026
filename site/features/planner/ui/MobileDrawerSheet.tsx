@@ -2,7 +2,6 @@
 
 import { Drawer } from "vaul";
 import type { ReactNode } from "react";
-import { Z } from "@/lib/z-index";
 
 interface MobileDrawerSheetProps {
   open: boolean;
@@ -30,12 +29,10 @@ export function MobileDrawerSheet({
       <Drawer.Trigger asChild>{trigger}</Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay
-          className="bg-[color:var(--overlay-inverse-35)] backdrop-blur-sm"
-          style={{ zIndex: Z.panel }}
+          className="pw-mobile-drawer-overlay bg-[color:var(--overlay-inverse-35)] backdrop-blur-sm"
         />
         <Drawer.Content
-          className="bottom-0 left-0 right-0 bg-panel border-t border-theme-soft rounded-t-[1.6rem] shadow-theme-float backdrop-blur-xl"
-          style={{ maxHeight: "85svh", zIndex: Z.panel }}
+          className="pw-mobile-drawer-content bottom-0 left-0 right-0 bg-panel border-t border-theme-soft rounded-t-[1.6rem] shadow-theme-float backdrop-blur-xl"
           aria-label={title}
         >
           {/* Drag handle */}
@@ -51,7 +48,7 @@ export function MobileDrawerSheet({
           </div>
 
           {/* Scrollable content */}
-          <div className="overscroll-contain">
+          <div className="pw-mobile-drawer-scroll overscroll-contain">
             {children}
           </div>
         </Drawer.Content>

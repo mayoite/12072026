@@ -3,8 +3,6 @@
 import { TooltipTrigger, Tooltip as RAC_Tooltip } from "react-aria-components";
 import type { ReactElement } from "react";
 
-import { Z } from "@/lib/z-index";
-
 export type TooltipSide = "top" | "right" | "bottom" | "left";
 
 interface TooltipProps {
@@ -26,8 +24,7 @@ export function Tooltip({
       <RAC_Tooltip
         placement={side}
         offset={8}
-        className="md:block animate-in fade-in-0 zoom-in-95 rounded bg-inverse px-2 py-1.5 text-xs"
-        style={{ zIndex: Z.tooltip }}
+        className="pw-layer-tooltip md:block animate-in fade-in-0 zoom-in-95 rounded bg-inverse px-2 py-1.5 text-xs"
       >
         <span className="inline-flex gap-2">
           <span>{content}</span>

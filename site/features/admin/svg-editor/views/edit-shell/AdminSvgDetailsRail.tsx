@@ -72,21 +72,19 @@ export function AdminSvgDetailsRail({
       data-testid="admin-svg-details-rail"
       tabIndex={0}
     >
-      <div>
-        <DescriptorRevisionPanel slug={slug} />
-      </div>
-      <details
+      <section
+        aria-label="Product details"
         className="admin-panel admin-svg-engine-shell__panel admin-svg-engine-shell__advanced"
-        open={advancedOpen}
+        data-attention={advancedOpen ? "true" : "false"}
       >
-        <summary className="admin-panel__header">
+        <div className="admin-panel__header">
           Product details
           {issueCount > 0 ? (
             <span className="admin-badge admin-badge--warn admin-badge--compact admin-svg-engine-shell__issue-count">
               {issueCount} {issueCount === 1 ? "issue" : "issues"}
             </span>
           ) : null}
-        </summary>
+        </div>
         <div className="admin-panel__body">
           <p className="admin-page__meta">
             Identity, SKU, and catalog fields. Symbol geometry for publish comes from
@@ -100,7 +98,9 @@ export function AdminSvgDetailsRail({
             onChange={onFormChange}
           />
         </div>
-      </details>
+      </section>
+
+      <DescriptorRevisionPanel slug={slug} />
 
       <details className="admin-panel admin-svg-engine-shell__panel">
         <summary className="admin-panel__header">3D model (optional)</summary>

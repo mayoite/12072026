@@ -347,3 +347,72 @@
   margin-left: auto;
   color: var(--color-primary);
 }
+
+/* Compact planner suite illustration. */
+.home-planner-graphic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  overflow: hidden;
+}
+
+.home-planner-graphic__svg {
+  display: block;
+}
+
+.home-planner-graphic__room {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: home-planner-room-in var(--motion-slow) var(--ease-standard) both;
+}
+
+.home-planner-graphic__room--delay {
+  animation-delay: 120ms;
+}
+
+.home-planner-graphic__room--delay-2 {
+  animation-delay: 240ms;
+}
+
+.home-planner-graphic__dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: home-planner-dot-in var(--motion-base) var(--ease-standard) both;
+}
+
+.home-planner-graphic__dot--2 { animation-delay: 150ms; }
+.home-planner-graphic__dot--3 { animation-delay: 300ms; }
+.home-planner-graphic__dot--4 { animation-delay: 450ms; }
+.home-planner-graphic__dot--5 { animation-delay: 600ms; }
+
+@keyframes home-planner-room-in {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes home-planner-dot-in {
+  from {
+    opacity: 0;
+    transform: scale(0.45);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-planner-graphic__room,
+  .home-planner-graphic__dot {
+    animation: none;
+  }
+}

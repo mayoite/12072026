@@ -69,8 +69,7 @@ export function PlannerLayoutGraphic({ className = "" }: { className?: string })
             cx={cx}
             cy="84"
             r="4"
-            className="home-planner-graphic__dot"
-            style={{ animationDelay: `${index * 0.15}s` }}
+            className={`home-planner-graphic__dot home-planner-graphic__dot--${index + 1}`}
             fill="currentColor"
             fillOpacity="0.45"
           />

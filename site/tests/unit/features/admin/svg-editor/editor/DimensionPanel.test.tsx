@@ -21,9 +21,12 @@ function makeApi(overrides?: {
   return {
     getAppState: vi.fn(() => ({
       selectedElementIds: overrides?.selectedElementIds ?? { "rect-1": true },
+      gridModeEnabled: false,
+      objectsSnapModeEnabled: true,
     })),
     getSceneElements: vi.fn(() => elements),
     updateScene: vi.fn(),
+    scrollToContent: vi.fn(),
   } as unknown as ExcalidrawAPI;
 }
 
@@ -50,6 +53,29 @@ describe("DimensionPanel", () => {
     ).toBeInTheDocument();
     expect(screen.queryByLabelText("Width in meters")).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Apply dimensions to selected rectangle")).not.toBeInTheDocument();
+    expect(screen.getByRole("toolbar", { name: "Canvas view controls" })).toBeInTheDocument();
+  });
+
+  it("exposes direct grid, snap, and fit controls", async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const api = makeApi();
+    render(<DimensionPanel excalidrawAPI={api} />);
+
+    await act(async () => {
+      vi.advanceTimersByTime(300);
+    });
+
+    await user.click(screen.getByRole("button", { name: "Show grid" }));
+    await user.click(screen.getByRole("button", { name: "Snap objects" }));
+    await user.click(screen.getByRole("button", { name: "Fit drawing to canvas" }));
+
+    expect(api.updateScene).toHaveBeenCalledWith({
+      appState: expect.objectContaining({ gridModeEnabled: true }),
+    });
+    expect(api.updateScene).toHaveBeenCalledWith({
+      appState: expect.objectContaining({ objectsSnapModeEnabled: false }),
+    });
+    expect(api.scrollToContent).toHaveBeenCalled();
   });
 
   it("syncs metric dimensions from a selected rectangle", async () => {

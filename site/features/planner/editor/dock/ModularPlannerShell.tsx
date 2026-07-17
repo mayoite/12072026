@@ -126,7 +126,7 @@ export function ModularPlannerShell({
   const isMobile = useIsMobile();
   const dockApiRef = useRef<DockviewApi | null>(null);
   const [layoutPresetId, setLayoutPresetId] = useState<LayoutPresetId | "custom">(
-    "custom",
+    "default",
   );
   const [layoutEpoch, setLayoutEpoch] = useState(0);
 

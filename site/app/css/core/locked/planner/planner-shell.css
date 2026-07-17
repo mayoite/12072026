@@ -42,6 +42,15 @@
   --z-planner-topbar-mobile: 80;
   --z-planner-modal: 999;
   --z-planner-toast: 9999;
+  --z-planner-canvas: var(--z-canvas);
+  --z-planner-canvas-overlay: var(--z-canvas-overlay);
+  --z-planner-toolbar: var(--z-toolbar);
+  --z-planner-sidebar: var(--z-sidebar);
+  --z-planner-dialog: var(--z-panel);
+  --z-planner-tooltip: var(--z-tooltip);
+  --z-planner-floating-rail: 120;
+  --z-planner-floating-module: 130;
+  --z-planner-floating-pack: 140;
   /* Touch target — WCAG 2.5.5 minimum (44px) */
   --pw-touch-target: 2.75rem;
   /* Legacy planner component tokens (--planner-*) mapped to site theme */
@@ -83,6 +92,154 @@
 
 .planner-workspace .pw-shell[data-offline="true"] {
   --pw-topbar-h: 5.5rem;
+}
+
+/* Shared Planner layers. Keep stacking policy in CSS, not component markup. */
+.planner-workspace .pw-layer-canvas {
+  z-index: var(--z-planner-canvas);
+}
+
+.planner-workspace .pw-layer-canvas-overlay {
+  z-index: var(--z-planner-canvas-overlay);
+}
+
+.planner-workspace .pw-layer-toolbar {
+  z-index: var(--z-planner-toolbar);
+}
+
+.planner-workspace .pw-layer-sidebar {
+  z-index: var(--z-planner-sidebar);
+}
+
+.planner-workspace .pw-layer-dialog {
+  z-index: var(--z-planner-dialog);
+}
+
+.planner-workspace .pw-layer-dialog-backdrop {
+  z-index: calc(var(--z-planner-dialog) - 1);
+}
+
+.planner-workspace .pw-layer-tooltip {
+  z-index: var(--z-planner-tooltip);
+}
+
+/* Dynamic editor geometry enters through custom properties only. */
+.planner-workspace .pw-tool-rail[data-floating="true"] {
+  position: absolute;
+  left: var(--pw-tool-rail-x);
+  top: var(--pw-tool-rail-y);
+  width: auto;
+  height: min(70vh, 28rem);
+  max-height: 70vh;
+  z-index: var(--z-planner-floating-rail);
+}
+
+.planner-workspace .pw-tool-rail[data-floating="true"][data-orientation="horizontal"] {
+  width: auto;
+  height: auto;
+  max-height: none;
+}
+
+.planner-workspace .pw-tool-rail-module[data-split="true"] {
+  position: fixed;
+  left: var(--pw-tool-module-x);
+  top: var(--pw-tool-module-y);
+  z-index: var(--z-planner-floating-module);
+}
+
+.planner-workspace .pw-chrome-pack[data-placement="floating"] {
+  position: fixed;
+  left: var(--pw-chrome-pack-x);
+  top: var(--pw-chrome-pack-y);
+  z-index: var(--z-planner-floating-pack);
+}
+
+/* Loading state uses the same canvas language as the live editor. */
+.planner-workspace .planner-skeleton__grid {
+  background-image: radial-gradient(
+    circle,
+    var(--text-muted) 0.0625rem,
+    transparent 0.0625rem
+  );
+  background-size: 1.5rem 1.5rem;
+}
+
+.planner-workspace .planner-skeleton__shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--surface-soft) 25%,
+    var(--border-soft) 50%,
+    var(--surface-soft) 75%
+  );
+  background-size: 200% 100%;
+  animation: planner-skeleton-shimmer 1.5s infinite ease-in-out;
+}
+
+@keyframes planner-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Portalled mobile and assistant surfaces. */
+.planner-workspace .pw-mobile-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-planner-dialog) - 1);
+}
+
+.planner-workspace .pw-mobile-drawer-content {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  max-height: 85svh;
+  overflow: hidden;
+  z-index: var(--z-planner-dialog);
+}
+
+.planner-workspace .pw-mobile-drawer-scroll {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.planner-workspace .pw-bottom-sheet-backdrop {
+  z-index: calc(var(--z-planner-dialog) - 1);
+}
+
+.planner-workspace .pw-bottom-sheet {
+  z-index: var(--z-planner-dialog);
+}
+
+.planner-workspace .pw-ai-floating-chat {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+  background: var(--surface-panel);
+  box-shadow: var(--shadow-float);
+  z-index: var(--z-planner-toolbar);
+}
+
+.planner-workspace .pw-ai-floating-chat .pw-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.planner-workspace .pw-ai-floating-chat .pw-drawer-header > div {
+  display: flex;
+  align-items: center;
+}
+
+.planner-workspace .pw-three-viewer {
+  background-color: var(--pw-three-viewer-background, var(--surface-panel));
 }
 
 @media (width < theme(--breakpoint-md)) {
@@ -732,13 +889,24 @@
 }
 
 .planner-setup-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
   overflow-y: auto;
   overscroll-behavior: contain;
+  z-index: var(--z-planner-dialog);
   padding:
     calc(var(--space-4) + env(safe-area-inset-top, 0px))
     calc(var(--space-4) + env(safe-area-inset-right, 0px))
     calc(var(--space-4) + env(safe-area-inset-bottom, 0px))
     calc(var(--space-4) + env(safe-area-inset-left, 0px));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .planner-workspace .planner-skeleton__shimmer {
+    animation: none;
+  }
 }
 
 .planner-setup-overlay > div {

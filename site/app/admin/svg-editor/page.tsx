@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AdminSvgEditorListPage() {
-  const descriptors = loadAll();
+  const descriptors = loadAll({ forceReload: true });
   const refreshedAtLabel = new Date().toISOString();
   const artifactStatuses = readSvgArtifactStatuses(
     descriptors.map((descriptor) => descriptor.slug),

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, type CSSProperties } from "react";
 import { X, CaretRight as ChevronRight, CaretLeft as ChevronLeft, Lightbulb, Sparkle as Sparkles, Armchair, ArrowsOutCardinal as Move, MagnifyingGlassPlus as ZoomIn } from "@phosphor-icons/react";
 import { BottomSheet } from "@/features/planner/ui/BottomSheet";
 import { useIsMobile } from "@/features/planner/hooks/useIsMobile";
@@ -21,6 +21,13 @@ interface OnboardingCoachProps {
   steps: CoachStep[];
   respectDismissal?: boolean;
 }
+
+type SpotlightStyle = CSSProperties & {
+  "--pw-coach-left": string;
+  "--pw-coach-top": string;
+  "--pw-coach-width": string;
+  "--pw-coach-height": string;
+};
 
 export function OnboardingCoach({
   plannerType,
@@ -124,16 +131,14 @@ export function OnboardingCoach({
   const mobileStepIndex = Math.min(currentStep, mobileSteps.length - 1);
   const mobileStep = mobileSteps[mobileStepIndex];
   const mobileLast = mobileStepIndex === mobileSteps.length - 1;
-  const progress = ((currentStep + 1) / steps.length) * 100;
   const pad = 8;
   const spotlightStyle = displaySpotlight
-    ? {
-        boxShadow: `0 0 0 var(--radius-full) var(--scrim-black-20)`,
-        left: displaySpotlight.left - pad,
-        top: displaySpotlight.top - pad,
-        width: displaySpotlight.width + pad * 2,
-        height: displaySpotlight.height + pad * 2,
-      }
+    ? ({
+        "--pw-coach-left": `${displaySpotlight.left - pad}px`,
+        "--pw-coach-top": `${displaySpotlight.top - pad}px`,
+        "--pw-coach-width": `${displaySpotlight.width + pad * 2}px`,
+        "--pw-coach-height": `${displaySpotlight.height + pad * 2}px`,
+      } as SpotlightStyle)
     : undefined;
 
   if (isMobile) {
@@ -182,7 +187,7 @@ export function OnboardingCoach({
     <div className={styles.overlay} aria-hidden={false}>
       {displaySpotlight ? (
         <div
-          className={`${styles.spotlight} rounded-xl pointer-events-none ring-2 ring-[var(--color-primary)] ring-offset-2 ring-offset-transparent transition-all duration-300`}
+          className={styles.spotlight}
           style={spotlightStyle}
           aria-hidden
         />
@@ -199,12 +204,12 @@ export function OnboardingCoach({
           }
         }}
       >
-        <div className="h-1 bg-muted">
-          <div
-            className="transition-all duration-300 bg-primary"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
+        <progress
+          className={styles.progress}
+          max={steps.length}
+          value={currentStep + 1}
+          aria-label={`Onboarding step ${currentStep + 1} of ${steps.length}`}
+        />
 
         <div className="px-5 py-4">
           <div className="flex items-start gap-3">
