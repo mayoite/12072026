@@ -203,6 +203,12 @@ export function AdvancedFilterGridInner({
   }, [updateFilters]);
 
   const activeCount = countActiveFilters(effectiveFilters);
+  const isEmptyCategory =
+    !isInitialFilteredLoad &&
+    navigableProducts.length === 0 &&
+    allProducts === 0 &&
+    activeCount === 0 &&
+    !error;
   const compareHref = compareQuery
     ? `/compare?items=${encodeURIComponent(compareQuery)}`
     : "/compare";
@@ -216,6 +222,8 @@ export function AdvancedFilterGridInner({
       : FILTER_GRID_COPY.compareIdleLabelShort;
   const shouldUseContentVisibility = navigableProducts.length >= 20;
   const gridIntrinsicBlockSizePx = Math.max(3200, navigableProducts.length * 420);
+  const productGridClassName =
+    "grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-3 2xl:grid-cols-4";
 
   useEffect(() => {
     if (!drawerOpen) {
@@ -398,6 +406,50 @@ export function AdvancedFilterGridInner({
     </aside>
   );
 
+  const emptyCategoryPanel = (
+    <div
+      role="status"
+      className="scheme-panel scheme-border rounded-2xl border px-5 py-8 text-center sm:px-6 sm:py-10"
+    >
+      <h2 className="home-heading text-balance">
+        {CATEGORY_ROUTE_COPY.emptyCategoryTitle}
+      </h2>
+      <p className="page-copy text-body mx-auto mt-4 max-w-lg">
+        {CATEGORY_ROUTE_COPY.emptyCategoryDescription}
+      </p>
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <Link
+          href="/products"
+          className="btn-primary min-h-11"
+          onClick={() =>
+            trackSiteCtaClick({
+              href: "/products",
+              pathname,
+              surface: "category-empty",
+              label: "browse-all-categories",
+            })
+          }
+        >
+          {CATEGORY_ROUTE_COPY.emptyCategoryPrimaryCta}
+        </Link>
+        <Link
+          href="/contact"
+          className="btn-outline min-h-11"
+          onClick={() =>
+            trackSiteCtaClick({
+              href: "/contact",
+              pathname,
+              surface: "category-empty",
+              label: "contact-availability",
+            })
+          }
+        >
+          {CATEGORY_ROUTE_COPY.emptyCategorySecondaryCta}
+        </Link>
+      </div>
+    </div>
+  );
+
   return (
     <section className="catalog-lane home-shell-xl pb-10 pt-2 md:pb-12 md:pt-6">
       <header className="catalog-page-header mb-6 max-w-3xl border-b border-theme-soft pb-5 md:mb-10 md:pb-8">
@@ -413,6 +465,9 @@ export function AdvancedFilterGridInner({
         ) : null}
       </header>
 
+      {isEmptyCategory ? (
+        emptyCategoryPanel
+      ) : (
       <div className="grid gap-6 lg:grid-cols-[15rem_minmax(0,1fr)] xl:grid-cols-[16.5rem_minmax(0,1fr)]">
         <div className="hidden lg:block">
           <div className="scheme-panel scheme-border sticky top-24 rounded-2xl border shadow-theme-panel">
@@ -464,7 +519,7 @@ export function AdvancedFilterGridInner({
           </div>
 
           {isInitialFilteredLoad ? (
-            <div className="grid grid-cols-1 gap-4 min-[520px]:grid-cols-2 min-[520px]:gap-4 sm:gap-5 xl:grid-cols-3 2xl:grid-cols-4">
+            <div className={productGridClassName}>
               {Array.from({ length: 6 }).map((_, index) => (
                 <div
                   key={index}
@@ -475,7 +530,7 @@ export function AdvancedFilterGridInner({
           ) : navigableProducts.length === 0 && error ? (
             <div
               role="alert"
-              className="scheme-panel scheme-border rounded-2xl border px-6 py-10 text-center"
+              className="scheme-panel scheme-border rounded-2xl border px-5 py-8 text-center sm:px-6 sm:py-10"
             >
               <h2 className="home-heading text-balance">{CATEGORY_ROUTE_COPY.errorTitle}</h2>
               <p className="page-copy text-body mt-4 max-w-lg mx-auto">
@@ -483,29 +538,40 @@ export function AdvancedFilterGridInner({
               </p>
             </div>
           ) : navigableProducts.length === 0 && activeCount > 0 ? (
-            <div className="scheme-panel scheme-border rounded-2xl border px-6 py-10 text-center">
+            <div className="scheme-panel scheme-border rounded-2xl border px-5 py-8 text-center sm:px-6 sm:py-10">
               <h2 className="home-heading text-balance">{CATEGORY_ROUTE_COPY.emptyTitle}</h2>
               <p className="page-copy text-body mt-4 max-w-lg mx-auto">
                 {CATEGORY_ROUTE_COPY.emptyDescription}
               </p>
-              <button
-                type="button"
-                onClick={clearAll}
-                className="btn-outline mt-5"
-              >
-                {CATEGORY_ROUTE_COPY.clearFiltersCta}
-              </button>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={clearAll}
+                  className="btn-primary min-h-11"
+                >
+                  {CATEGORY_ROUTE_COPY.emptyPrimaryCta}
+                </button>
+                <Link
+                  href="/products"
+                  className="btn-outline min-h-11"
+                  onClick={() =>
+                    trackSiteCtaClick({
+                      href: "/products",
+                      pathname,
+                      surface: "category-filter-empty",
+                      label: "browse-all-categories",
+                    })
+                  }
+                >
+                  {CATEGORY_ROUTE_COPY.emptySecondaryCta}
+                </Link>
+              </div>
             </div>
           ) : navigableProducts.length === 0 ? (
-            <div className="scheme-panel scheme-border rounded-2xl border px-6 py-10 text-center">
-              <h2 className="home-heading text-balance">{CATEGORY_ROUTE_COPY.emptyCategoryTitle}</h2>
-              <p className="page-copy text-body mt-4 max-w-lg mx-auto">
-                {CATEGORY_ROUTE_COPY.emptyCategoryDescription}
-              </p>
-            </div>
+            emptyCategoryPanel
           ) : (
             <div
-              className="grid grid-cols-1 gap-4 min-[520px]:grid-cols-2 min-[520px]:gap-4 sm:gap-5 xl:grid-cols-3 2xl:grid-cols-4"
+              className={productGridClassName}
               style={
                 shouldUseContentVisibility
                   ? {
@@ -534,8 +600,9 @@ export function AdvancedFilterGridInner({
           ) : null}
         </div>
       </div>
+      )}
 
-      {drawerOpen ? (
+      {drawerOpen && !isEmptyCategory ? (
         <>
           <div
             className="fixed inset-0 z-40 bg-scrim lg:hidden"

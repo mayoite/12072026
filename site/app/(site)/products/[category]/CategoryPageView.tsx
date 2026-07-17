@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -18,10 +19,13 @@ import { FilterGrid } from "./FilterGrid";
 
 const BASE_URL = SITE_URL;
 
+const PRODUCT_GRID_CLASS =
+  "grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-3 2xl:grid-cols-4";
+
 function GridSkeleton() {
   return (
     <div className="home-shell-xl py-8 md:py-10">
-      <div className="grid grid-cols-1 gap-4 min-[520px]:grid-cols-2 min-[520px]:gap-4 sm:gap-5 xl:grid-cols-3 2xl:grid-cols-4">
+      <div className={PRODUCT_GRID_CLASS}>
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
@@ -39,10 +43,24 @@ export async function CategoryPageView({ categoryId }: { categoryId: string }) {
 
   if (requestedCatalog.length === 0) {
     return (
-      <div className="site-error flex min-h-screen flex-col items-center justify-center p-8 text-center">
-        <h1 className="mb-4 text-2xl font-light text-strong">{CATEGORY_ROUTE_COPY.offlineTitle}</h1>
-        <p className="mb-8 max-w-md text-muted">{CATEGORY_ROUTE_COPY.offlineDescription}</p>
-      </div>
+      <HomeCatalogLayout>
+        <section className="catalog-lane home-shell-xl py-10 text-center md:py-14">
+          <h1 className="home-heading text-balance">
+            {CATEGORY_ROUTE_COPY.offlineTitle}
+          </h1>
+          <p className="page-copy text-body mx-auto mt-4 max-w-md">
+            {CATEGORY_ROUTE_COPY.offlineDescription}
+          </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <Link href="/contact" className="btn-primary min-h-11">
+              {CATEGORY_ROUTE_COPY.offlinePrimaryCta}
+            </Link>
+            <Link href="/" className="btn-outline min-h-11">
+              {CATEGORY_ROUTE_COPY.offlineSecondaryCta}
+            </Link>
+          </div>
+        </section>
+      </HomeCatalogLayout>
     );
   }
 

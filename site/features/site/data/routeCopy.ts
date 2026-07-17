@@ -1126,12 +1126,16 @@ export const CATEGORY_ROUTE_COPY = {
   emptyCategoryTitle: "No products are published in this category yet",
   emptyCategoryDescription:
     "This category has no published products right now. Browse other categories or contact us for current availability.",
+  emptyCategoryPrimaryCta: "Browse all categories",
+  emptyCategorySecondaryCta: "Contact us",
   errorTitle: "We couldn't load this category",
   errorDescription:
     "Something went wrong loading these products. Please refresh the page or try again shortly.",
   offlineTitle: "Workspace product catalog temporarily unavailable",
   offlineDescription:
     "Product data is temporarily unavailable while the catalog reconnects. Please try again shortly.",
+  offlinePrimaryCta: "Contact us",
+  offlineSecondaryCta: "Back to home",
 } as const;
 
 export const COMPARE_ROUTE_COPY = {

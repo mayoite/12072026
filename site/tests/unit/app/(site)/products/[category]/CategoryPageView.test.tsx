@@ -38,6 +38,8 @@ vi.mock('@/features/site/data/routeCopy', () => ({
   CATEGORY_ROUTE_COPY: {
     offlineTitle: 'Offline',
     offlineDescription: 'Offline description',
+    offlinePrimaryCta: 'Contact us',
+    offlineSecondaryCta: 'Back to home',
     metadataSuffix: 'Suffix',
   },
 }));
@@ -57,6 +59,16 @@ describe('CategoryPageView', () => {
 
     expect(screen.getByText('Offline')).toBeInTheDocument();
     expect(screen.getByText('Offline description')).toBeInTheDocument();
+    // Keep site catalog chrome — do not drop into a bare full-screen error shell.
+    expect(screen.getByTestId('home-marketing-layout')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Contact us' })).toHaveAttribute(
+      'href',
+      '/contact',
+    );
+    expect(screen.getByRole('link', { name: 'Back to home' })).toHaveAttribute(
+      'href',
+      '/',
+    );
   });
 
   it('calls notFound if category is not found in catalog', async () => {

@@ -123,9 +123,13 @@ vi.mock('@/features/site/data/routeCopy', () => ({
     filterFallbackMessage: 'Live filter sync is temporarily unavailable.',
     emptyTitle: 'No products match this filter set',
     emptyDescription: 'Clear filters, adjust your search, or return to the full category list.',
+    emptyPrimaryCta: 'Clear all filters',
+    emptySecondaryCta: 'Browse all categories',
     emptyCategoryTitle: 'No products are published in this category yet',
     emptyCategoryDescription:
       'This category has no published products right now. Browse other categories or contact us for current availability.',
+    emptyCategoryPrimaryCta: 'Browse all categories',
+    emptyCategorySecondaryCta: 'Contact us',
     errorTitle: "We couldn't load this category",
     errorDescription: 'Something went wrong loading these products.',
     clearFiltersCta: 'Clear all',
@@ -231,20 +235,31 @@ describe('AdvancedFilterGridInner', () => {
       error: null,
     });
 
-    const emptyCategory = { name: 'Empty Series', products: [] };
+    const emptyCategory = { name: 'Workstations', products: [] };
     render(
       <AdvancedFilterGridInner
         category={emptyCategory as any}
-        categoryId="empty-series"
+        categoryId="workstations"
       />,
     );
 
+    expect(
+      screen.getByRole('heading', { name: 'Workstations' }),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole('heading', { name: 'No products are published in this category yet' }),
     ).toBeInTheDocument();
     expect(
       screen.getByText(/no published products right now/i),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Browse all categories' }),
+    ).toHaveAttribute('href', '/products');
+    expect(
+      screen.getByRole('link', { name: 'Contact us' }),
+    ).toHaveAttribute('href', '/contact');
+    // Dead filter chrome stays off when the category itself is empty.
+    expect(screen.queryByRole('button', { name: /filters/i })).not.toBeInTheDocument();
     expect(screen.queryByTestId('product-card-1')).not.toBeInTheDocument();
   });
 
@@ -283,7 +298,13 @@ describe('AdvancedFilterGridInner', () => {
     expect(
       screen.getByRole('heading', { name: 'No products match this filter set' }),
     ).toBeInTheDocument();
-    // Chip bar and empty-state both expose clear actions.
+    expect(
+      screen.getByRole('button', { name: 'Clear all filters' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Browse all categories' }),
+    ).toHaveAttribute('href', '/products');
+    // Chip bar still exposes its own clear control.
     expect(screen.getAllByRole('button', { name: 'Clear all' }).length).toBeGreaterThanOrEqual(1);
   });
 

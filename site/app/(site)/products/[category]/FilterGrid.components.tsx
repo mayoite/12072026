@@ -261,8 +261,8 @@ export function ProductCard({
               loading="lazy"
               width={1200}
               height={900}
-              sizes="(max-width: 768px) 100vw, (max-width: 75rem) 50vw, 33vw"
-              className="h-full w-full scale-[1.08] object-contain p-2 transition-transform duration-500 group-hover:scale-[1.13] sm:p-3"
+              sizes="(max-width: 639px) 50vw, (max-width: 75rem) 50vw, (max-width: 96rem) 33vw, 25vw"
+              className="h-full w-full scale-[1.08] object-contain p-1.5 transition-transform duration-500 group-hover:scale-[1.13] sm:p-3"
               onError={() =>
                 setImgIndex((current) =>
                   current + 1 < imageCandidates.length ? current + 1 : current,
