@@ -597,6 +597,7 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
 
   it("dual-write: invokes dbRepository.publish after disk commit and still succeeds", async () => {
     const publish = vi.fn(async () => undefined);
+    const putText = vi.fn(async () => undefined);
     const result = await publishDescriptorWithPipeline(validDescriptor, {
       parsePayload: () => ({ ok: true, value: validDescriptor }),
       compileSvg: async () => compileOk(),
@@ -608,6 +609,7 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
         load: async () => null,
         updateProductPointer: vi.fn(async () => undefined),
       } as never,
+      artifactStore: { putText },
     });
     expect(result.success).toBe(true);
     expect(publish).toHaveBeenCalledOnce();
@@ -629,6 +631,49 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
         expect.objectContaining({ kind: "descriptor" }),
       ]),
     );
+    const revisionId = revision?.revisionId as string;
+    expect(putText).toHaveBeenCalledTimes(2);
+    expect(putText).toHaveBeenCalledWith(
+      `svg-revisions/${revisionId}/symbol.svg`,
+      compileOk().svg,
+      "image/svg+xml",
+    );
+    expect(artifacts).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: "svg",
+          storageKey: `svg-revisions/${revisionId}/symbol.svg`,
+        }),
+      ]),
+    );
+  });
+
+  it("fails closed and rolls back when immutable artifact upload fails", async () => {
+    const publish = vi.fn(async () => undefined);
+    const persistRollback = vi.fn();
+    const pipelineRollback = vi.fn();
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => compileOk(),
+      runPipeline: async () => ({ ...pipelineOk(), rollback: pipelineRollback }),
+      persist: () => ({ ...persistOk(), rollback: persistRollback }),
+      dbRepository: {
+        publish,
+        load: async () => null,
+      } as never,
+      artifactStore: {
+        putText: async () => {
+          throw new Error("R2 unavailable");
+        },
+      },
+    });
+
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error).toContain("R2 unavailable");
+    expect(publish).not.toHaveBeenCalled();
+    expect(persistRollback).toHaveBeenCalledOnce();
+    expect(pipelineRollback).toHaveBeenCalledOnce();
   });
 
   it("DB-SVG-08: unchanged immutable DB revision is a no-op before disk writes", async () => {
@@ -671,6 +716,7 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
           artifacts: [],
         }),
       } as never,
+      artifactStore: { putText: vi.fn(async () => undefined) },
     });
 
     expect(result).toMatchObject({ success: true, idempotent: true });
@@ -701,6 +747,7 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
         },
         load: async () => null,
       } as never,
+      artifactStore: { putText: vi.fn(async () => undefined) },
     });
     expect(result.success).toBe(false);
     if (result.success) return;

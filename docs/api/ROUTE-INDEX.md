@@ -2,7 +2,7 @@
 
 **Source of truth:** `site/app/api/**/route.ts`
 
-Generated from route handlers on 2026-07-16.
+Generated from route handlers on 2026-07-17.
 
 Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 
@@ -48,6 +48,7 @@ Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 | POST | `/api/planner/ai-advisor` |
 | GET | `/api/planner/catalog/configurator` |
 | GET | `/api/planner/catalog/svg-blocks` |
+| GET | `/api/planner/catalog/svg/[revisionId]` |
 | GET | `/api/planner/catalog` |
 | POST | `/api/planner/generated-glb` |
 | POST | `/api/planner/handoff` |

@@ -24,6 +24,7 @@ import { publishDescriptorWithPipeline } from "@/features/admin/svg-editor/publi
 import { DrizzleSvgRevisionPersistence } from "@/features/admin/svg-editor/storage/drizzleSvgPersistence.server";
 import { ImmutableSvgRevisionRepository } from "@/features/admin/svg-editor/svgRevisionRepository.server";
 import { isProductsDatabaseConfigured } from "@/platform/drizzle/databaseUrls";
+import { writeR2ObjectText } from "@/lib/storage/r2Catalog";
 import { buildBlockThumbPngUrl } from "@/features/planner/project/catalog/svg/svgPreviewAssets";
 import {
   toPlannerDescriptorErrorHttp,
@@ -89,6 +90,9 @@ async function handleSvgEditorPost(req: NextRequest, actorId: string) {
       : undefined;
   const published = await publishDescriptorWithPipeline(payload, {
     dbRepository,
+    artifactStore: dbRepository
+      ? { putText: writeR2ObjectText }
+      : undefined,
     actorId,
   });
   if (!published.success) {

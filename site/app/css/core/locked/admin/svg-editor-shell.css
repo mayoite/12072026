@@ -107,6 +107,10 @@
   flex-shrink: 0;
 }
 
+.admin-svg-engine-shell__action-label-short {
+  display: none;
+}
+
 /* Primary stands alone; secondary quieter; reset demoted (ADM-SHELL-02) */
 .admin-svg-engine-shell__action-publish {
   font-weight: 700;
@@ -438,6 +442,11 @@
   font-style: italic;
 }
 
+.admin-svg-dimension-panel[data-empty="true"] {
+  min-height: 2.25rem;
+  padding-block: 0.35rem;
+}
+
 .admin-svg-dimension-labels {
   position: absolute;
   inset: 0;
@@ -524,20 +533,19 @@
   }
 
   .admin-svg-engine-shell__identity {
-    flex: 1 1 100%;
+    flex: 1 1 12rem;
   }
 
   .admin-svg-engine-shell__source {
-    white-space: normal;
+    display: none;
   }
 
   .admin-svg-engine-shell__state-pills {
-    max-width: none;
-    width: 100%;
+    display: none;
   }
 
   .admin-svg-engine-shell__actions {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     width: 100%;
     justify-content: stretch;
     gap: 8px;
@@ -548,15 +556,27 @@
   }
 
   .admin-svg-engine-shell__action-publish {
-    flex: 1 1 100%;
+    flex: 1 1 0;
     justify-content: center;
-    order: -1; /* primary first on phone */
   }
 
   .admin-svg-engine-shell__action-approve,
   .admin-svg-engine-shell__action-reset {
-    flex: 1 1 calc(50% - 4px);
+    flex: 1 1 0;
     justify-content: center;
+  }
+
+  .admin-svg-engine-shell__actions .admin-btn {
+    min-width: 0;
+    padding-inline: 0.55rem;
+  }
+
+  .admin-svg-engine-shell__action-label-long {
+    display: none;
+  }
+
+  .admin-svg-engine-shell__action-label-short {
+    display: inline;
   }
 
   .admin-svg-engine-shell__status-band {
@@ -566,8 +586,13 @@
 
   .admin-svg-engine-shell__status-ready {
     margin-inline-start: 0;
-    width: 100%;
+    width: auto;
     text-align: center;
+  }
+
+  .admin-svg-engine-shell__status-detail,
+  .admin-svg-engine-shell__status-sep {
+    display: none;
   }
 
   .admin-svg-engine-shell__rail {
@@ -590,6 +615,45 @@
 
   .admin-svg-engine-shell__stage {
     min-height: 20rem;
+  }
+
+  /* Excalidraw's selected-shape inspector is a large in-canvas island.
+   * Give it a lower workspace so color controls never cover the product. */
+  .admin-svg-engine-shell__stage:has(
+      .App-mobile-menu [data-testid^="color-top-pick-"]
+    ) {
+    min-height: 42rem;
+  }
+
+  .admin-svg-excalidraw-canvas .excalidraw .App-bottom-bar > .Island {
+    height: auto;
+    min-height: 0;
+  }
+
+  .admin-svg-excalidraw-canvas .excalidraw .App-mobile-menu {
+    flex: 0 1 15rem;
+    max-height: 15rem;
+    overflow-y: auto;
+  }
+
+  /* Treat the detailed/custom color picker as a bottom inspector. Radix
+   * otherwise centers it directly over the selected product. */
+  .admin-svg-excalidraw-canvas
+    .excalidraw--mobile
+    > div:has(> .focus-visible-none .color-picker-content.properties-content) {
+    position: fixed !important;
+    inset: auto auto calc(1rem + env(safe-area-inset-bottom, 0px)) 50% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .admin-svg-excalidraw-canvas
+    .excalidraw--mobile
+    .focus-visible-none:has(.color-picker-content.properties-content) {
+    position: relative !important;
+    inset: auto !important;
+    transform: none !important;
+    max-height: 18rem;
+    overflow-y: auto;
   }
 
   .admin-svg-engine-feedback__item {

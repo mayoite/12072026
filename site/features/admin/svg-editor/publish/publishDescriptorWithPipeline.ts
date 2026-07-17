@@ -101,6 +101,10 @@ export type PublishDescriptorWithPipelineDeps = {
    * rollback so DB-configured environments are not disk-authoritative.
    */
   readonly dbRepository?: ImmutableSvgRevisionRepository;
+  /** Immutable object storage used by DB-backed releases. */
+  readonly artifactStore?: {
+    putText(key: string, body: string, contentType: string): Promise<void>;
+  };
   /** Authenticated admin actor recorded on immutable database revisions. */
   readonly actorId?: string;
   /** Human-readable publication reason recorded with the revision. */
@@ -111,6 +115,7 @@ const DEFAULT_DEPS: Required<
   Omit<
     PublishDescriptorWithPipelineDeps,
     "readReleasedSnapshot" | "dbRepository" | "actorId" | "reason"
+    | "artifactStore"
   >
 > & {
   readonly readReleasedSnapshot: (
@@ -457,6 +462,26 @@ export async function publishDescriptorWithPipeline(
       if (!releasedForDatabase.ok) {
         throw new Error(releasedForDatabase.error);
       }
+      if (!deps.artifactStore) {
+        throw new Error("Immutable SVG artifact storage is not configured.");
+      }
+
+      const descriptorStorageKey =
+        `svg-revisions/${revisionId}/descriptor.json`;
+      const svgStorageKey = `svg-revisions/${revisionId}/symbol.svg`;
+      await Promise.all([
+        deps.artifactStore.putText(
+          descriptorStorageKey,
+          `${JSON.stringify(descriptor)}\n`,
+          "application/json",
+        ),
+        deps.artifactStore.putText(
+          svgStorageKey,
+          compile.svg,
+          "image/svg+xml",
+        ),
+      ]);
+
       await deps.dbRepository.publish(
         {
           schemaVersion: 1,
@@ -485,13 +510,13 @@ export async function publishDescriptorWithPipeline(
             revisionId,
             kind: "descriptor",
             checksum: definitionChecksum,
-            storageKey: `descriptors/${descriptor.slug}/${descriptor.slug}.json`,
+            storageKey: descriptorStorageKey,
           },
           {
             revisionId,
             kind: "svg",
             checksum: compiledSvgChecksum,
-            storageKey: `svg-catalog/${descriptor.slug}.svg`,
+            storageKey: svgStorageKey,
           },
         ],
         descriptor,

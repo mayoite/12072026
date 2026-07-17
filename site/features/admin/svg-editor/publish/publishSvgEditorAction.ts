@@ -24,6 +24,7 @@ import { compileSvgForPublish } from "@/features/planner/asset-engine/svg/compil
 import { DrizzleSvgRevisionPersistence } from "@/features/admin/svg-editor/storage/drizzleSvgPersistence.server";
 import { ImmutableSvgRevisionRepository } from "@/features/admin/svg-editor/svgRevisionRepository.server";
 import { isProductsDatabaseConfigured } from "@/platform/drizzle/databaseUrls";
+import { writeR2ObjectText } from "@/lib/storage/r2Catalog";
 import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/newBlockDescriptorStub";
 import { setCatalogLifecycle } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
 import { appendDescriptorAudit } from "@/features/admin/svg-editor/storage/descriptorAuditLog";
@@ -90,6 +91,9 @@ export async function publishSvgEditorAction(
 
   const published = await publishDescriptorWithPipeline(input, {
     dbRepository,
+    artifactStore: dbRepository
+      ? { putText: writeR2ObjectText }
+      : undefined,
     compileSvg,
     actorId,
   });

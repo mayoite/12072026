@@ -544,6 +544,35 @@
   }
 }
 
+/* A narrow dock becomes a true CAD rail. Keep this after density rules. */
+@container (width < 10rem) {
+  .rail[data-dock-managed="true"] {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    max-height: 100%;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: var(--space-1);
+    border-right: 1px solid var(--border-soft);
+    border-bottom: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .rail[data-dock-managed="true"] .group,
+  .rail[data-dock-managed="true"] .railModule {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .rail[data-dock-managed="true"] .divider {
+    width: 1.5rem;
+    height: 1px;
+    margin: var(--space-1) 0;
+  }
+}
+
 @media (forced-colors: active) {
   .toolFace {
     border-color: ButtonBorder;

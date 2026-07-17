@@ -1,6 +1,6 @@
 # Live route classification
 
-*Generated: 2026-07-16 — `node scripts/generate-route-classification.mjs`*
+*Generated: 2026-07-17 — `node scripts/generate-route-classification.mjs`*
 
 Canonical planner surface is **`/planner/**`** (`app/planner/`). Legacy `/oando-planner/**` and `/buddy-planner/**` redirect via `config/build/next.config.js`.
 
@@ -47,7 +47,6 @@ Canonical planner surface is **`/planner/**`** (`app/planner/`). Legacy `/oando-
 - `/projects` → `app/(site)/projects/page.tsx`
 - `/quote-cart` → `app/(site)/quote-cart/page.tsx`
 - `/refund-and-return-policy` → `app/(site)/refund-and-return-policy/page.tsx`
-- `/repo-store` → retired (next.config redirect → `/`)
 - `/service` → `app/(site)/service/page.tsx`
 - `/showrooms` → `app/(site)/showrooms/page.tsx`
 - `/social` → `app/(site)/social/page.tsx`
@@ -55,7 +54,8 @@ Canonical planner surface is **`/planner/**`** (`app/planner/`). Legacy `/oando-
 - `/solutions` → `app/(site)/solutions/page.tsx`
 - `/support-ivr` → `app/(site)/support-ivr/page.tsx`
 - `/sustainability` → `app/(site)/sustainability/page.tsx`
-- … +5 more site routes
+- `/templates` → `app/(site)/templates/page.tsx`
+- … +4 more site routes
 
 ## Admin / CRM / Ops
 
@@ -112,7 +112,7 @@ Canonical planner surface is **`/planner/**`** (`app/planner/`). Legacy `/oando-
 - `/api/csrf` → `app/api/csrf/route.ts`
 - `/api/customer-queries/manage` → `app/api/customer-queries/manage/route.ts`
 - `/api/customer-queries` → `app/api/customer-queries/route.ts`
-- … +23 more API routes
+- … +24 more API routes
 
 ## Legacy redirects (301)
 

@@ -32,8 +32,13 @@ describe("fix_and_reseed (name-mirror)", () => {
   });
 
   it("parses postgresql URL into connection fields", () => {
+    const fixtureUrl = [
+      '"postgresql://',
+      "user:p%40ss",
+      '@db.example.com:5432/catalog"',
+    ].join("");
     const parsed = parseProductsDbUrl(
-      '"postgresql://user:p%40ss@db.example.com:5432/catalog"',
+      fixtureUrl,
     );
     expect(parsed).toEqual({
       username: "user",

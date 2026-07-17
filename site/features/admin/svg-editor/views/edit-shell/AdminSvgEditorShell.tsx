@@ -120,13 +120,19 @@ export function AdminSvgEditorShell({
         <span aria-hidden className="admin-svg-engine-shell__status-sep">
           ·
         </span>
-        <span data-testid="admin-svg-studio-status-footprint">
+        <span
+          className="admin-svg-engine-shell__status-detail"
+          data-testid="admin-svg-studio-status-footprint"
+        >
           {stageMeta.footprint}
         </span>
         <span aria-hidden className="admin-svg-engine-shell__status-sep">
           ·
         </span>
-        <span data-testid="admin-svg-studio-status-revision">
+        <span
+          className="admin-svg-engine-shell__status-detail"
+          data-testid="admin-svg-studio-status-revision"
+        >
           {stageMeta.revision}
         </span>
         {canPublish ? (

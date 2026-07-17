@@ -28,6 +28,7 @@ import {
   MenuItem,
   MenuTrigger,
   Popover,
+  Toolbar,
   ToggleButton,
   ToggleButtonGroup,
 } from "react-aria-components";
@@ -42,6 +43,7 @@ import {
   type PlannerTool,
 } from "./canvasTool";
 import { useWorkspaceChrome } from "./workspaceChromeContext";
+import { useIsMobile } from "@/features/planner/hooks/useIsMobile";
 import {
   clamp,
   DEFAULT_RAIL_LAYOUT,
@@ -199,6 +201,7 @@ function ToolGroup({
       className={styles.group}
       data-orientation={orientation}
       aria-label={label}
+      orientation={orientation}
       selectionMode="single"
       disallowEmptySelection={selectedKeys.length > 0}
       selectedKeys={selectedKeys}
@@ -233,6 +236,7 @@ export function CanvasToolRail({
   dockManaged = false,
 }: CanvasToolRailProps) {
   const chrome = useWorkspaceChrome();
+  const isMobile = useIsMobile();
   const [localRail, setLocalRail] = useState<RailLayoutConfig>(DEFAULT_RAIL_LAYOUT);
   const rail = chrome?.rail ?? localRail;
 
@@ -286,9 +290,11 @@ export function CanvasToolRail({
   } | null>(null);
 
   const isFloating = rail.state === "floating";
-  // Dockview TOOLS panel: always a horizontal toolbar strip (not a tall vertical rail).
+  // Dockview is a vertical CAD rail on wide screens and a horizontal strip on phones.
   const orientation: "vertical" | "horizontal" = dockManaged
-    ? "horizontal"
+    ? isMobile
+      ? "horizontal"
+      : "vertical"
     : rail.state === "docked" && rail.edge === "top"
       ? "horizontal"
       : rail.orientation;
@@ -514,9 +520,10 @@ export function CanvasToolRail({
   };
 
   return (
-    <nav
+    <Toolbar
       className={`${styles.rail} pw-tool-rail`}
       aria-label="Canvas tools"
+      orientation={orientation}
       data-testid="canvas-tool-rail"
       data-rac-toolbar="true"
       data-dock-state={rail.state}
@@ -675,6 +682,6 @@ export function CanvasToolRail({
           </div>
         </>
       ) : null}
-    </nav>
+    </Toolbar>
   );
 }

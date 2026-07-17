@@ -501,12 +501,12 @@ export function WorkspaceShell({
       {/* Status bar — customer/operator language (no internal viewport jargon) */}
       <footer className={`${styles.status} pw-status-bar`} aria-label="Plan status">
         {planMetrics ? (
-          <>
+          <div className={styles.statusMetrics}>
             <span>{planMetrics.objects} objects</span>
-            <span>{planMetrics.walls} walls</span>
-            <span>{planMetrics.furniture} furniture</span>
+            <span className={styles.statusSecondaryMetric}>{planMetrics.walls} walls</span>
+            <span className={styles.statusSecondaryMetric}>{planMetrics.furniture} furniture</span>
             {planMetrics.workstationSeats > 0 ? (
-              <span>{planMetrics.workstationSeats} seats</span>
+              <span className={styles.statusSecondaryMetric}>{planMetrics.workstationSeats} seats</span>
             ) : null}
             <span
               className={
@@ -524,8 +524,8 @@ export function WorkspaceShell({
                   ? "Quote ready"
                   : "Add furniture for quote"}
             </span>
-            <span>{planMetrics.floorLabel}</span>
-          </>
+            <span className={styles.statusSecondaryMetric}>{planMetrics.floorLabel}</span>
+          </div>
         ) : null}
         <div className={styles.statusLeft}>
           {statusLeft ?? (

@@ -9,7 +9,7 @@ export function sanitizeNextPath(
   value: string | null | undefined,
   fallback = DEFAULT_REDIRECT,
 ): string {
-  if (value == null || typeof value !== "string") {
+  if (value === null || value === undefined || typeof value !== "string") {
     return fallback;
   }
 
@@ -35,13 +35,18 @@ export function sanitizeNextPath(
   }
 
   // Protocol-relative, backslash, scheme, or userinfo tricks.
+  const hasControlCharacter = Array.from(path).some((character) => {
+    const code = character.charCodeAt(0);
+    return code <= 0x1f || code === 0x7f;
+  });
+
   if (
     path.startsWith("//") ||
     path.startsWith("/\\") ||
     path.includes("\\") ||
     path.includes("://") ||
     path.includes("@") ||
-    /[\u0000-\u001f\u007f]/.test(path)
+    hasControlCharacter
   ) {
     return fallback;
   }

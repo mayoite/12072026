@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import ProjectsView from '@/features/crm/ProjectsView';
-import { useCrmStore } from '@/features/crm/stores/crmStore';
 
 const mockProjects = [
   { id: '1', name: 'Project Alpha', clientId: 'c1', status: 'active' as const, notes: 'Brief for alpha', planIds: ['p1'], createdAt: '2026-06-25T00:00:00Z', updatedAt: '2026-06-26T00:00:00Z' },
@@ -126,4 +125,3 @@ describe('ProjectsView Component', () => {
     mockStoreState.projects = previous;
   });
 });
-

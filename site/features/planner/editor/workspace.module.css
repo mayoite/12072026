@@ -1846,14 +1846,15 @@
       calc(var(--space-1) + var(--planner-safe-bottom))
       calc(var(--space-2) + var(--planner-safe-left));
     font-size: 0.6875rem;
-    overflow-x: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    overflow-x: hidden;
     overflow-y: hidden;
     flex-wrap: nowrap;
     gap: var(--space-2);
     -webkit-overflow-scrolling: touch;
   }
 
-  .status > span,
   .statusMetrics,
   .statusLeft,
   .statusRight {
@@ -1862,11 +1863,9 @@
   }
 
   .statusRight {
-    position: sticky;
-    right: calc(var(--space-2) + var(--planner-safe-right));
+    position: static;
     z-index: 1;
-    padding-left: var(--space-2);
-    background: var(--ws-status-bg);
+    padding-left: 0;
   }
 
   .statusLeft,
@@ -1875,11 +1874,21 @@
   }
 
   .statusLeft {
-    min-width: 0;
+    display: none;
   }
 
   .statusRight {
     min-width: max-content;
+  }
+
+  .statusMetrics {
+    min-width: 0;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  .statusSecondaryMetric {
+    display: none;
   }
 }
 

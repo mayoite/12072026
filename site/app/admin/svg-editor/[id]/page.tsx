@@ -31,8 +31,10 @@ export default async function AdminSvgEditorDetailPage({ params }: { params: Pro
       ? descriptor.generatedAt < 1e12
         ? descriptor.generatedAt * 1000
         : descriptor.generatedAt
-      : Date.now();
-  const updatedAtLabel = new Date(generatedAtMs).toLocaleString();
+      : null;
+  const updatedAtLabel = generatedAtMs === null
+    ? "Not published"
+    : new Date(generatedAtMs).toLocaleString();
 
   // If descriptor has excalidrawElements, they will be loaded automatically into FormState via descriptorToFormState
 

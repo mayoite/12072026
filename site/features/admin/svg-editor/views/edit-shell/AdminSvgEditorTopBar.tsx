@@ -195,8 +195,10 @@ export function AdminSvgEditorTopBar({
               : "No unpublished changes to discard"
           }
           data-testid="admin-shell-destructive-reset"
+          aria-label="Reset draft"
         >
-          Reset draft
+          <span className="admin-svg-engine-shell__action-label-long">Reset draft</span>
+          <span className="admin-svg-engine-shell__action-label-short" aria-hidden="true">Reset</span>
         </button>
         <button
           type="button"
@@ -205,11 +207,13 @@ export function AdminSvgEditorTopBar({
           disabled={approveDisabled}
           title={approveTitle}
           data-testid="admin-shell-secondary-approve"
+          aria-label="Approve for buyers"
         >
           {approving ? (
             <Loader2 size={14} className="animate-spin" aria-hidden />
           ) : null}
-          Approve for buyers
+          <span className="admin-svg-engine-shell__action-label-long">Approve for buyers</span>
+          <span className="admin-svg-engine-shell__action-label-short" aria-hidden="true">Approve</span>
         </button>
         <button
           type="button"

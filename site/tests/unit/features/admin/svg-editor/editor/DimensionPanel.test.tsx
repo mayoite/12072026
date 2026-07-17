@@ -37,7 +37,7 @@ describe("DimensionPanel", () => {
     vi.useRealTimers();
   });
 
-  it("shows hint and disabled inputs with no selection", async () => {
+  it("shows only a compact hint with no selection", async () => {
     const api = makeApi({ selectedElementIds: {} });
     render(<DimensionPanel excalidrawAPI={api} />);
 
@@ -46,10 +46,10 @@ describe("DimensionPanel", () => {
     });
 
     expect(
-      screen.getByText(/Select a rectangle to set dimensions/i),
+      screen.getByText(/Dimensions: select one rectangle to edit/i),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText("Width in meters")).toBeDisabled();
-    expect(screen.getByLabelText("Apply dimensions to selected rectangle")).toBeDisabled();
+    expect(screen.queryByLabelText("Width in meters")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Apply dimensions to selected rectangle")).not.toBeInTheDocument();
   });
 
   it("syncs metric dimensions from a selected rectangle", async () => {
@@ -134,10 +134,41 @@ describe("DimensionPanel", () => {
     expect(call.elements[0].height).toBe(metersToPixels(2));
   });
 
+  it("does not overwrite an active dimension input while polling", async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const api = makeApi({
+      elements: [{ id: "rect-1", type: "rectangle", width: 120, height: 60 }],
+    });
+    render(<DimensionPanel excalidrawAPI={api} />);
+
+    await act(async () => {
+      vi.advanceTimersByTime(300);
+    });
+
+    const width = screen.getByLabelText("Width in meters");
+    await user.clear(width);
+    await user.type(width, "1.3");
+
+    await act(async () => {
+      vi.advanceTimersByTime(500);
+    });
+
+    expect(width).toHaveValue(1.3);
+
+    await user.click(
+      screen.getByLabelText("Apply dimensions to selected rectangle"),
+    );
+
+    const call = vi.mocked(api.updateScene).mock.calls[0]?.[0] as {
+      elements: Array<{ width: number; height: number }>;
+    };
+    expect(call.elements[0].width).toBe(metersToPixels(1.3));
+  });
+
   it("does nothing when api is null", () => {
     render(<DimensionPanel excalidrawAPI={null} />);
     expect(
-      screen.getByText(/Select a rectangle to set dimensions/i),
+      screen.getByText(/Dimensions: select one rectangle to edit/i),
     ).toBeInTheDocument();
   });
 });

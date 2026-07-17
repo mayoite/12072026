@@ -78,6 +78,17 @@ export function DimensionPanel({
     setDisabled(false);
     setSelectedId(el.id);
 
+    // Keep polling selection state, but never overwrite a value while the user
+    // is actively editing it. The next poll after blur refreshes from canvas.
+    const focusedElement =
+      typeof document === "undefined" ? null : document.activeElement;
+    if (
+      focusedElement instanceof HTMLInputElement &&
+      focusedElement.closest(".admin-svg-dimension-panel")
+    ) {
+      return;
+    }
+
     // Populate inputs from the element's current pixel dimensions
     if (unit === "metric") {
       setMetric({
@@ -157,6 +168,16 @@ export function DimensionPanel({
     },
     [handleApply]
   );
+
+  if (disabled) {
+    return (
+      <div className="admin-svg-dimension-panel" data-empty="true" role="status">
+        <span className="admin-svg-dimension-panel__hint">
+          Dimensions: select one rectangle to edit
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-svg-dimension-panel" onKeyDown={onKeyDown}>
@@ -277,11 +298,6 @@ export function DimensionPanel({
         Apply
       </button>
 
-      {disabled && (
-        <span className="admin-svg-dimension-panel__hint">
-          Select a rectangle to set dimensions
-        </span>
-      )}
     </div>
   );
 }

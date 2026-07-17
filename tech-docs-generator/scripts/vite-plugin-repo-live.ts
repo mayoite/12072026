@@ -14,7 +14,7 @@ async function publishDocsAndData(repoRoot: string) {
 
 function reportGenerationError(server: ViteDevServer, error: unknown) {
   const message = error instanceof Error ? error.message : String(error)
-  const stack = error instanceof Error ? error.stack : undefined
+  const stack = error instanceof Error ? (error.stack ?? message) : message
   server.config.logger.error(`[oando-repo-live] ${message}`)
   server.ws.send({
     type: 'error',

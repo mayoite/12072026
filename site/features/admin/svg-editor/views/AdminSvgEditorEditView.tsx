@@ -173,15 +173,28 @@ export function AdminSvgEditorEditView({
     null,
   );
   const studioDocumentRef = useRef<AdminSvgStudioDocument>(studioScene);
+  const studioInitializedRef = useRef(false);
 
   const handleStudioDocumentChange = useCallback((svg: string, excalidrawElements: unknown) => {
     const activeCount = countActiveExcalidrawElements(excalidrawElements);
-    updateDraftForm((prev) => ({
-      ...prev,
-      excalidrawElements,
-    }));
-
     studioDocumentRef.current = { svg, excalidrawElements };
+    if (!studioInitializedRef.current) {
+      studioInitializedRef.current = true;
+      const initializedForm = {
+        ...formRef.current,
+        excalidrawElements,
+      };
+      formRef.current = initializedForm;
+      setForm(initializedForm);
+      setPublishedForm(initializedForm);
+      setPublishedFormSignature(JSON.stringify(initializedForm));
+    } else {
+      updateDraftForm((prev) => ({
+        ...prev,
+        excalidrawElements,
+      }));
+    }
+
     // Ignore empty / deleted-only scenes so publish stays blocked.
     setExcalidrawSvg(activeCount > 0 ? svg : "");
   }, [updateDraftForm]);
@@ -319,6 +332,7 @@ export function AdminSvgEditorEditView({
 
   const canPublish =
     Boolean(onPublishAction) &&
+    (formDirty || artifactStatus.state !== "published") &&
     !feedback.submitting &&
     !previewPending &&
     preview?.ok === true &&

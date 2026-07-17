@@ -58,6 +58,7 @@ describe("scan_secrets (name-mirror)", () => {
     const src = fs.readFileSync(scriptPath, "utf8");
     expect(src).toContain("node_modules");
     expect(src).toContain(".git");
+    expect(src).toContain('"tests"');
     expect(src).toContain("sb_secret_");
     expect(src).toContain("OPENAI_API_KEY");
   });

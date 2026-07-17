@@ -34,7 +34,7 @@ describe('env.server', () => {
     // Force Zod validation failure by passing a non-string or we can use another trick.
     // Zod's safeParse will validate the object. Let's set process.env to something invalid.
     // E.g. we can set OPENAI_API_KEY to an array or another type that doesn't parse as string
-    process.env.OPENAI_API_KEY = [] as any;
+    process.env.OPENAI_API_KEY = [] as unknown as string;
 
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 

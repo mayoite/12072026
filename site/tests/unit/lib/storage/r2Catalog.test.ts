@@ -13,10 +13,17 @@ const GetObjectCommand = vi.fn(function MockGetObjectCommand(
 ) {
   this.input = input;
 });
+const PutObjectCommand = vi.fn(function MockPutObjectCommand(
+  this: { input: unknown },
+  input: unknown,
+) {
+  this.input = input;
+});
 
 vi.mock("@aws-sdk/client-s3", () => ({
   S3Client,
   GetObjectCommand,
+  PutObjectCommand,
 }));
 
 describe("r2Catalog", () => {
@@ -28,6 +35,7 @@ describe("r2Catalog", () => {
     send.mockReset();
     S3Client.mockClear();
     GetObjectCommand.mockClear();
+    PutObjectCommand.mockClear();
     process.env = { ...originalEnv };
     process.argv = [...originalArgv];
     delete process.env.CLOUDFLARE_R2_CATALOG_BUCKET;
@@ -90,6 +98,7 @@ describe("r2Catalog", () => {
   it("maps content types by object key extension", async () => {
     const { contentTypeForKey } = await import("@/lib/storage/r2Catalog");
     expect(contentTypeForKey("a.JSON")).toBe("application/json");
+    expect(contentTypeForKey("a.svg")).toBe("image/svg+xml");
     expect(contentTypeForKey("a.jpg")).toBe("image/jpeg");
     expect(contentTypeForKey("a.jpeg")).toBe("image/jpeg");
     expect(contentTypeForKey("a.png")).toBe("image/png");
@@ -147,5 +156,25 @@ describe("r2Catalog", () => {
 
     const { readR2ObjectText } = await import("@/lib/storage/r2Catalog");
     await expect(readR2ObjectText("missing.json")).resolves.toBeNull();
+  });
+
+  it("writes immutable objects with explicit content metadata", async () => {
+    process.env.CLOUDFLARE_S3_URL = "https://example.r2.cloudflarestorage.com";
+    process.env.CLOUDFLARE_R2_ACCESS_KEY_ID = "key";
+    process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY = "secret";
+    send.mockResolvedValue({});
+
+    const { writeR2ObjectText } = await import("@/lib/storage/r2Catalog");
+    await writeR2ObjectText("svg-revisions/r1/symbol.svg", "<svg/>");
+
+    expect(PutObjectCommand).toHaveBeenCalledWith(
+      expect.objectContaining({
+        Bucket: "oando-asset-cdn",
+        Key: "svg-revisions/r1/symbol.svg",
+        Body: "<svg/>",
+        ContentType: "image/svg+xml",
+        CacheControl: "public, max-age=31536000, immutable",
+      }),
+    );
   });
 });

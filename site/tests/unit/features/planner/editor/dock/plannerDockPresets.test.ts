@@ -56,13 +56,13 @@ describe("plannerDockPresets", () => {
     const tools = api.addPanel.mock.calls.find(([options]) => options.id === "tools")?.[0] as
       | {
           position?: { direction: string; referencePanel: string };
-          initialHeight?: number;
+          initialWidth?: number;
         }
       | undefined;
     expect(tools).toEqual(
       expect.objectContaining({
-        position: { direction: "above", referencePanel: "canvas" },
-        initialHeight: 80,
+        position: { direction: "left", referencePanel: "canvas" },
+        initialWidth: 76,
       }),
     );
   });

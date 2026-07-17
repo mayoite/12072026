@@ -48,8 +48,9 @@ describe("CanvasToolRail RAC upgrade + a11y", () => {
     const openingBtn = screen.getByRole("radio", { name: openingName });
     expect(openingBtn).toHaveAttribute("aria-checked", "true");
 
-    const rail = screen.getByRole("navigation", { name: "Canvas tools" });
+    const rail = screen.getByRole("toolbar", { name: "Canvas tools" });
     expect(rail).toHaveAttribute("data-rac-toolbar", "true");
+    expect(rail).toHaveAttribute("aria-orientation", "vertical");
     expect(within(rail).getByRole("radio", { name: openingName })).toBe(openingBtn);
   });
 

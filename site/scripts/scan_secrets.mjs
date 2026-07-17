@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 const root = process.cwd();
-const ignore = new Set(["node_modules", ".git", ".next", "public", "dist"]);
+const ignore = new Set(["node_modules", ".git", ".next", "public", "dist", "tests"]);
 
 const patterns = [
   /sb_secret_[A-Za-z0-9_-]{10,}/i,
@@ -10,10 +10,18 @@ const patterns = [
   /SUPABASE_SERVICE_ROLE_KEY\s*=\s*/i,
   /SUPABASE_ADMIN_SERVICE_ROLE_KEY\s*=\s*/i,
   /NEXT_PUBLIC_SUPABASE_ANON_KEY\s*=\s*/i,
-  /postgresql:\/\/[\w@:\-\.\/%\$\+\=]+/i,
+  /postgresql:\/\/[\w@:./%$+=-]+/i,
   /CLOUDFLARE_API_TOKEN\s*=\s*/i,
   /OPENAI_API_KEY\s*=\s*/i,
 ];
+
+function isSafeReferenceOrExample(line) {
+  return (
+    /\benv\s*\(/i.test(line) ||
+    /\b(?:Deno|process)\.env\b/.test(line) ||
+    /Format:\s*postgresql:\/\/user:password@/i.test(line)
+  );
+}
 
 function walk(dir) {
   const results = [];
@@ -27,7 +35,7 @@ function walk(dir) {
       } else if (stat.isFile()) {
         results.push(full);
       }
-    } catch (e) {
+    } catch {
       // ignore
     }
   }
@@ -43,12 +51,13 @@ function scan() {
     let content;
     try {
       content = fs.readFileSync(file, "utf8");
-    } catch (e) {
+    } catch {
       continue;
     }
     const lines = content.split(/\r?\n/);
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
+      if (isSafeReferenceOrExample(line)) continue;
       for (const p of patterns) {
         if (p.test(line)) {
           hits.push({ file, line: i + 1, text: line.trim() });

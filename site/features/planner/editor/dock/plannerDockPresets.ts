@@ -2,7 +2,7 @@ import type { DockviewApi } from "dockview-react";
 
 import type { LayoutPresetId } from "../workspaceLayout";
 
-export const PLANNER_DOCKVIEW_STORAGE_KEY = "planner-dockview-layout-v3";
+export const PLANNER_DOCKVIEW_STORAGE_KEY = "planner-dockview-layout-v4";
 
 export type PlannerDockPanelId =
   | "canvas"
@@ -73,11 +73,11 @@ export function ensurePlannerDockPanel(
       api.addPanel({
         ...meta,
         position: {
-          direction: "above",
+          direction: "left",
           referencePanel: "canvas",
         },
-        initialHeight: 80,
-        minimumHeight: 72,
+        initialWidth: 76,
+        minimumWidth: 68,
       });
       return;
     case "properties":
@@ -121,9 +121,9 @@ export function applyPlannerDockPreset(
       });
       api.addPanel({
         ...PANEL_META.tools,
-        position: { direction: "above", referencePanel: "canvas" },
-        initialHeight: 80,
-        minimumHeight: 72,
+        position: { direction: "left", referencePanel: "canvas" },
+        initialWidth: 76,
+        minimumWidth: 68,
       });
       return;
 
@@ -160,9 +160,9 @@ export function applyPlannerDockPreset(
       addCanvas(api);
       api.addPanel({
         ...PANEL_META.tools,
-        position: { direction: "above", referencePanel: "canvas" },
-        initialHeight: 80,
-        minimumHeight: 72,
+        position: { direction: "left", referencePanel: "canvas" },
+        initialWidth: 76,
+        minimumWidth: 68,
       });
       return;
   }

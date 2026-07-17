@@ -50,7 +50,7 @@ const CONSOLE_IGNORE = [
   /Should have a queue/i,
   // Dev-only: stale chunk hashes while `next dev` recompiles during long suites.
   /ChunkLoadError: Failed to load chunk/i,
-  /Failed to load chunk \/\_next\/static\/chunks\//i,
+  /Failed to load chunk \/_next\/static\/chunks\//i,
 ];
 
 function isBenignConsoleError(text: string): boolean {

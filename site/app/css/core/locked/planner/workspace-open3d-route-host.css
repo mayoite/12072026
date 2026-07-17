@@ -482,3 +482,13 @@ body.planner-workspace #main-content,
 .open3d-palette-trigger__short {
   display: none;
 }
+
+@media (width < 48rem) {
+  .open3d-palette-trigger__long {
+    display: none;
+  }
+
+  .open3d-palette-trigger__short {
+    display: inline;
+  }
+}

@@ -3,6 +3,7 @@ import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/
 
 const insertMock = vi.fn();
 const selectMock = vi.fn();
+const transactionMock = vi.fn();
 
 vi.mock("server-only", () => ({}));
 
@@ -10,6 +11,7 @@ vi.mock("@/platform/drizzle/productsDb", () => ({
   productsDb: {
     insert: (...args: unknown[]) => insertMock(...args),
     select: (...args: unknown[]) => selectMock(...args),
+    transaction: (...args: unknown[]) => transactionMock(...args),
   },
 }));
 
@@ -23,6 +25,10 @@ vi.mock("@/platform/drizzle/schema/catalog", () => ({
   blockDescriptors: {
     slug: "slug",
     currentVersion: "currentVersion",
+  },
+  plannerManagedProducts: {
+    id: "id",
+    plannerSourceSlug: "plannerSourceSlug",
   },
 }));
 
@@ -48,6 +54,86 @@ describe("DrizzleSvgRevisionPersistence", () => {
     expect(typeof instance.insertRevision).toBe("function");
     expect(typeof instance.insertArtifacts).toBe("function");
     expect(typeof instance.loadRevision).toBe("function");
+    expect(typeof instance.publishRelease).toBe("function");
+  });
+
+  it("publishRelease commits revision, descriptor, artifacts, and pointer in one transaction", async () => {
+    const insertedValues: unknown[] = [];
+    const updatedValues: unknown[] = [];
+    const transactionInsert = vi.fn(() => ({
+      values: vi.fn((payload: unknown) => {
+        insertedValues.push(payload);
+        return {
+          onConflictDoUpdate: vi.fn(async () => undefined),
+        };
+      }),
+    }));
+    const transactionUpdate = vi.fn(() => ({
+      set: vi.fn((payload: unknown) => {
+        updatedValues.push(payload);
+        return {
+          where: vi.fn(() => ({
+            returning: vi.fn(async () => [{ id: "product-1" }]),
+          })),
+        };
+      }),
+    }));
+    transactionMock.mockImplementation(async (operation: (transaction: unknown) => Promise<void>) =>
+      operation({ insert: transactionInsert, update: transactionUpdate }),
+    );
+
+    const { DrizzleSvgRevisionPersistence } = await import(
+      "@/features/admin/svg-editor/storage/drizzleSvgPersistence.server"
+    );
+    const store = new DrizzleSvgRevisionPersistence();
+    const liveDescriptor = {
+      ...makeNewBlockDescriptorStub(),
+      slug: "desk",
+    };
+
+    await store.publishRelease(
+      {
+        schemaVersion: 1,
+        revisionId: "desk-r-1234567890abcdef1234",
+        definitionTypeId: "desk",
+        definitionVersion: 3,
+        compilerVersion: "v1",
+        sourceRevision: 2,
+        artifactChecksums: {
+          descriptor: "a".repeat(64),
+          svg: "b".repeat(64),
+          png: "b".repeat(64),
+          thumbnails: {},
+        },
+        validation: { valid: true, diagnostics: [] },
+        actorId: "admin-1",
+        publishedAt: "2026-07-16T00:00:00.000Z",
+        reason: "publish",
+      },
+      {
+        typeId: "desk",
+        lifecycle: { status: "published" },
+      } as never,
+      [
+        {
+          revisionId: "desk-r-1234567890abcdef1234",
+          kind: "svg",
+          checksum: "b".repeat(64),
+          storageKey: "svg-catalog/desk.svg",
+        },
+      ],
+      liveDescriptor,
+      {} as never,
+      "desk",
+    );
+
+    expect(transactionMock).toHaveBeenCalledTimes(1);
+    expect(transactionInsert).toHaveBeenCalledTimes(3);
+    expect(transactionUpdate).toHaveBeenCalledTimes(1);
+    expect(insertedValues).toHaveLength(3);
+    expect(updatedValues[0]).toMatchObject({
+      publishedSvgRevisionId: "desk-r-1234567890abcdef1234",
+    });
   });
 
   it("insertRevision writes revision + upserts block_descriptors with checksum", async () => {

@@ -58,6 +58,13 @@ function formatDate(value: string): string {
 
 const tokenStorageKey = "customer_queries_admin_token";
 
+function consumeLegacyAdminToken(): string {
+  if (typeof window === "undefined") return "";
+  const token = window.localStorage.getItem(tokenStorageKey) || "";
+  window.localStorage.removeItem(tokenStorageKey);
+  return token;
+}
+
 function formatApiError(value: unknown, fallback: string): string {
   if (typeof value === "string" && value.trim().length > 0) {
     return value;
@@ -119,14 +126,8 @@ async function patchCustomerQuery(
 }
 
 export default function CustomerQueriesOpsPageView({ embedded = false }: { embedded?: boolean }) {
-  const [adminTokenInput, setAdminTokenInput] = useState(() => {
-    if (typeof window === "undefined") return "";
-    return window.localStorage.getItem(tokenStorageKey) || "";
-  });
-  const [adminToken, setAdminToken] = useState(() => {
-    if (typeof window === "undefined") return "";
-    return window.localStorage.getItem(tokenStorageKey) || "";
-  });
+  const [adminToken, setAdminToken] = useState(consumeLegacyAdminToken);
+  const [adminTokenInput, setAdminTokenInput] = useState(adminToken);
   const [statusFilter, setStatusFilter] = useState<"all" | QueryStatus>("all");
   const [items, setItems] = useState<CustomerQuery[]>([]);
   const [drafts, setDrafts] = useState<DraftById>({});
@@ -251,10 +252,8 @@ export default function CustomerQueriesOpsPageView({ embedded = false }: { embed
   function applyToken() {
     const token = adminTokenInput.trim();
     setAdminToken(token);
-    if (token) {
-      window.localStorage.setItem(tokenStorageKey, token);
-    } else {
-      window.localStorage.removeItem(tokenStorageKey);
+    window.localStorage.removeItem(tokenStorageKey);
+    if (!token) {
       setItems([]);
       setLastUpdatedAt(null);
       setHasLoadedOnce(false);
@@ -338,6 +337,9 @@ export default function CustomerQueriesOpsPageView({ embedded = false }: { embed
                 placeholder="Paste CUSTOMER_QUERIES_ADMIN_TOKEN or use admin session"
                 className="admin-field__control"
               />
+              <span className="admin-page__meta">
+                Kept in memory for this tab only. Never stored in the browser.
+              </span>
             </label>
           </div>
           <div className="flex items-end">

@@ -141,7 +141,7 @@ describe("CustomerQueriesOpsPageView", () => {
     expect(screen.getByText("Not synced yet")).toBeInTheDocument();
   });
 
-  it("applies and clears the admin token from storage", async () => {
+  it("applies the admin token without persisting it", async () => {
     const fetchSpy = vi.spyOn(global, "fetch").mockImplementation((input) => {
       if (typeof input === "string" && input.startsWith("/api/customer-queries/manage?")) {
         return okJson({ items: [] });
@@ -158,9 +158,7 @@ describe("CustomerQueriesOpsPageView", () => {
     fireEvent.click(screen.getByRole("button", { name: "Apply token" }));
 
     await waitFor(() =>
-      expect(window.localStorage.getItem("customer_queries_admin_token")).toBe(
-        "fresh-token",
-      ),
+      expect(window.localStorage.getItem("customer_queries_admin_token")).toBeNull(),
     );
     expect(await screen.findByText("No queries yet")).toBeInTheDocument();
 

@@ -1,4 +1,4 @@
-import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 export const DEFAULT_CATALOG_BUCKET = "oando-asset-cdn";
 
@@ -71,6 +71,7 @@ export function createR2CatalogClient(): S3Client {
 export function contentTypeForKey(key: string): string {
   const lower = key.toLowerCase();
   if (lower.endsWith(".json")) return "application/json";
+  if (lower.endsWith(".svg")) return "image/svg+xml";
   if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
   if (lower.endsWith(".png")) return "image/png";
   if (lower.endsWith(".webp")) return "image/webp";
@@ -93,4 +94,22 @@ export async function readR2ObjectText(key: string, bucket = resolveCatalogBucke
   } catch {
     return null;
   }
+}
+
+export async function writeR2ObjectText(
+  key: string,
+  body: string,
+  contentType = contentTypeForKey(key),
+  bucket = resolveCatalogBucketName(),
+): Promise<void> {
+  const client = createR2CatalogClient();
+  await client.send(
+    new PutObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      Body: body,
+      ContentType: contentType,
+      CacheControl: "public, max-age=31536000, immutable",
+    }),
+  );
 }

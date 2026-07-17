@@ -193,7 +193,7 @@ async function placeChaiseSvg(page: Page): Promise<void> {
     el.click();
   });
   const placeTool = page
-    .getByRole("navigation", { name: "Canvas tools" })
+    .getByRole("toolbar", { name: "Canvas tools" })
     .getByRole("radio", { name: /^Place/ });
   await expect(placeTool).toBeChecked({ timeout: 8_000 });
 

@@ -139,6 +139,27 @@ function applyMaintenanceHeader(response: NextResponse) {
   return response;
 }
 
+function applySecurityHeaders(response: NextResponse, pathname: string) {
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("X-Frame-Options", "SAMEORIGIN");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=(self)");
+  response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+  response.headers.set("Content-Security-Policy", buildContentSecurityPolicy(pathname));
+  return response;
+}
+
+function finalizeResponse(
+  response: NextResponse,
+  pathname: string,
+  maintenanceReadonly: boolean,
+) {
+  const finalized = maintenanceReadonly
+    ? applyMaintenanceHeader(response)
+    : response;
+  return applySecurityHeaders(finalized, pathname);
+}
+
 /**
  * NEXT.JS 16 PROXY
  * Must be named 'proxy' and placed at the root of the project.
@@ -152,14 +173,14 @@ export async function proxy(request: NextRequest) {
       const url = request.nextUrl.clone();
       url.pathname = "/offline";
       url.searchParams.set("reason", "maintenance");
-      return applyMaintenanceHeader(NextResponse.redirect(url));
+      return finalizeResponse(NextResponse.redirect(url), pathname, true);
     }
 
     if (
       WRITE_METHODS.has(request.method) &&
       BLOCKED_WRITE_API_PREFIXES.some((prefix) => pathname.startsWith(prefix))
     ) {
-      return applyMaintenanceHeader(
+      return finalizeResponse(
         NextResponse.json(
           { error: "Service temporarily in read-only maintenance mode." },
           {
@@ -167,6 +188,8 @@ export async function proxy(request: NextRequest) {
             headers: { "Retry-After": "300" },
           },
         ),
+        pathname,
+        true,
       );
     }
   }
@@ -186,9 +209,11 @@ export async function proxy(request: NextRequest) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/access";
     redirectUrl.search = `?next=${encodeURIComponent(`${pathname}${search}`)}`;
-    return maintenanceReadonly
-      ? applyMaintenanceHeader(NextResponse.redirect(redirectUrl))
-      : NextResponse.redirect(redirectUrl);
+    return finalizeResponse(
+      NextResponse.redirect(redirectUrl),
+      pathname,
+      maintenanceReadonly,
+    );
   }
 
   // STRICT GUEST ENFORCEMENT — /planner/guest (legacy planner URLs 301 here first)
@@ -216,7 +241,7 @@ export async function proxy(request: NextRequest) {
         },
         { status: 403 },
       );
-      return maintenanceReadonly ? applyMaintenanceHeader(response) : response;
+      return finalizeResponse(response, pathname, maintenanceReadonly);
     }
   }
 
@@ -227,14 +252,7 @@ export async function proxy(request: NextRequest) {
   const response = NextResponse.next({ request });
 
   // ── Security Headers ──────────────────────────────────────────────────────
-  response.headers.set("X-Content-Type-Options", "nosniff");
-  response.headers.set("X-Frame-Options", "SAMEORIGIN");
-  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-  response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=(self)");
-  response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
-  response.headers.set("Content-Security-Policy", buildContentSecurityPolicy(pathname));
-
-  return maintenanceReadonly ? applyMaintenanceHeader(response) : response;
+  return finalizeResponse(response, pathname, maintenanceReadonly);
 }
 
 export const config = {

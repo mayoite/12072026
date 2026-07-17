@@ -26,12 +26,13 @@ import {
   buildBlockThumbPngUrl,
   buildBlockThumbSrcSet,
 } from "@/features/planner/project/catalog/svg/svgPreviewAssets";
+import { sanitizeInlineSvg } from "@/lib/security/sanitize";
 
 function readInlineSvg(slug: string): string | null {
   const p = path.join(resolvePublicDir(), "svg-catalog", `${slug}.svg`);
   if (!existsSync(p)) return null;
   try {
-    return readFileSync(p, "utf8");
+    return sanitizeInlineSvg(readFileSync(p, "utf8"));
   } catch {
     return null;
   }

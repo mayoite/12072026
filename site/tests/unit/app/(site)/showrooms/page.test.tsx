@@ -19,7 +19,7 @@ vi.mock("@/features/site/data/routeCopy", () => ({
 }));
 
 vi.mock("@/features/site/data/homepage", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@/features/site/data/homepage")>();
+  const actual = await importOriginal<Record<string, unknown>>();
   return {
     ...actual,
     DEFAULT_HERO_FALLBACK: "/images/hero/dmrc-hero.webp",

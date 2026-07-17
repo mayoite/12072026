@@ -175,6 +175,9 @@ describe('proxy.ts', () => {
       const response = await proxy(request as unknown as NextRequest);
       expect(response.status).toBe(307);
       expect(response.headers.get('location')).toContain('/access');
+      expect(response.headers.get('X-Content-Type-Options')).toBe('nosniff');
+      expect(response.headers.get('X-Frame-Options')).toBe('SAMEORIGIN');
+      expect(response.headers.get('Content-Security-Policy')).toContain("default-src 'self'");
     });
 
     it('should allow unauthenticated users on public /portal/svg-catalog (Phase 05)', async () => {
@@ -230,6 +233,7 @@ describe('proxy.ts', () => {
       request.cookies.set(PLANNER_GUEST_COOKIE, 'true');
       const response = await proxy(request as unknown as NextRequest);
       expect(response.status).toBe(403);
+      expect(response.headers.get('X-Content-Type-Options')).toBe('nosniff');
     });
   });
 });

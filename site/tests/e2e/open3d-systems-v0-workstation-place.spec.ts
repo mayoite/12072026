@@ -47,7 +47,7 @@ async function placementAutoSelectCue(page: Page): Promise<{
   ok: boolean;
 }> {
   const selectBtn = page
-    .getByRole("navigation", { name: "Canvas tools" })
+    .getByRole("toolbar", { name: "Canvas tools" })
     .getByRole("button", { name: /^Select\b/i });
   const selectActive =
     (await selectBtn.getAttribute("aria-pressed").catch(() => null)) === "true";

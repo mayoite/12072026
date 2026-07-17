@@ -17,7 +17,6 @@ vi.mock("@/features/admin/svg-editor/lifecycle/catalogLifecycle", () => ({
 
 vi.mock("next/image", () => ({
   default: (p: { alt?: string; src?: string; className?: string }) => (
-    // eslint-disable-next-line @next/next/no-img-element -- unit mock
     <img alt={p.alt ?? ""} src={typeof p.src === "string" ? p.src : ""} className={p.className} data-testid="thumb" />
   ),
 }));
