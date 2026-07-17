@@ -82,10 +82,11 @@ describe('tech docs package contract', () => {
   })
 
   it('documents the current tech docs development command', () => {
-    const start = readSource(path.join(repoRoot, 'START.md'))
+    // Canonical runbook is Readme.md (START.md was retired).
+    const readme = readSource(path.join(repoRoot, 'Readme.md'))
 
-    expect(start).toContain('pnpm run tech-docs:dev')
-    expect(start).not.toContain('pnpm run dev:tech-stack')
+    expect(readme).toContain('pnpm run tech-docs:dev')
+    expect(readme).not.toContain('pnpm run dev:tech-stack')
   })
 
   it('uses transactional generation and build publication commands', () => {
@@ -100,8 +101,9 @@ describe('tech docs package contract', () => {
       'node ../node_modules/vitest/vitest.mjs run --coverage',
     )
     expect(packageJson.scripts?.check).toBe('node scripts/check.mjs')
+    // Full generate publishes data/docs so Vite can resolve JSON imports in clean CI.
     expect(packageJson.scripts?.build).toBe(
-      'node scripts/generate-all.mjs --stage-only && vite build && node scripts/publish-all.mjs',
+      'node scripts/generate-all.mjs && vite build && node scripts/publish-all.mjs --surfaces=site',
     )
     expect(packageJson.scripts?.gate).toBe('node scripts/gate.mjs')
     // No --max-old-space-size caps in scripts (heap unbounded by package scripts).

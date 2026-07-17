@@ -894,8 +894,8 @@ function buildCoverageMatrix(model, { repoRoot = defaultRepoRoot } = {}) {
       (model.docsHealth ?? []).some((entry) => entry.category === 'root-doc')
         ? record('docs-health.root-docs', 'code-proven', firstEvidenceFromNormalized(model.docsHealth.filter((entry) => entry.category === 'root-doc')))
         : record('docs-health.root-docs', 'unknown-gap', firstEvidence([], 'Docs health root docs')),
-      (model.docsHealth ?? []).some((entry) => entry.sourcePath === 'START.md' || entry.sourcePath === 'OPERATIONS_RUNBOOK.md')
-        ? record('docs-health.runbooks', 'code-proven', firstEvidenceFromNormalized(model.docsHealth.filter((entry) => ['START.md', 'OPERATIONS_RUNBOOK.md'].includes(entry.sourcePath))))
+      (model.docsHealth ?? []).some((entry) => entry.sourcePath === 'Readme.md' || entry.sourcePath === 'OPERATIONS_RUNBOOK.md')
+        ? record('docs-health.runbooks', 'code-proven', firstEvidenceFromNormalized(model.docsHealth.filter((entry) => ['Readme.md', 'OPERATIONS_RUNBOOK.md'].includes(entry.sourcePath))))
         : record('docs-health.runbooks', 'unknown-gap', firstEvidence([], 'Docs health runbooks')),
       (model.docsHealth ?? []).some((entry) => entry.sourcePath === 'Failures.md')
         ? record('docs-health.failures-log', 'code-proven', firstEvidenceFromNormalized(model.docsHealth.filter((entry) => entry.sourcePath === 'Failures.md')))

@@ -92,7 +92,7 @@ export const sourcePolicy = {
   'docs-health': {
     precedence: [
       { sourceKind: 'readme-doc', label: 'Readme.md', mode: 'operational-doc' },
-      { sourceKind: 'runbook-doc', label: 'START.md / OPERATIONS_RUNBOOK.md', mode: 'operational-doc' },
+      { sourceKind: 'runbook-doc', label: 'Readme.md / OPERATIONS_RUNBOOK.md', mode: 'operational-doc' },
       { sourceKind: 'plan-pack', label: 'plans/**', mode: 'plan-contract' },
       { sourceKind: 'architecture-doc', label: 'docs/architecture/**', mode: 'reference-doc' },
       { sourceKind: 'api-doc', label: 'docs/api/**', mode: 'reference-doc' },

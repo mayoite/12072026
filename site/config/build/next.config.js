@@ -302,6 +302,8 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ["@phosphor-icons/react", "framer-motion", "three", "@react-three/fiber", "@react-three/drei"], // PERF-FIX: tree-shake heavy deps
   },
+  // Native binary packages — do not bundle into Turbopack/webpack graph.
+  serverExternalPackages: ["@resvg/resvg-js", "sharp"],
   typescript: {
     ignoreBuildErrors: false, // PERF-FIX: enforce type safety at build time
   },
@@ -319,8 +321,9 @@ const nextConfig = {
     }
     return config;
   },
-  // Prefer site package.json "dev": next dev --webpack (turbo optional via dev:turbo).
+  // Prefer site package.json "dev"/"build": --webpack (turbo optional via dev:turbo).
   // turbopack.root at monorepo root indexes huge node_modules — memory risk.
+  // @resvg/resvg-js is not placeable in Turbopack ESM chunks (native binding).
   turbopack: {
     root: findRepoRoot(/* turbopackIgnore: true */ __dirname),
   },

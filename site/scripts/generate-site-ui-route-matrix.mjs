@@ -82,7 +82,11 @@ function detectCopySource(source) {
 }
 
 function detectSignals(routePath, layoutRoot, source) {
-  const isRedirect = /\bredirect\s*\(/.test(source) && !/<[A-Z]/.test(source.split("redirect")[0].slice(-80));
+  // permanentRedirect() and redirect() both count as redirect-only shells.
+  const redirectCallMatch = source.match(/\b(?:permanentRedirect|redirect)\s*\(/);
+  const isRedirect =
+    Boolean(redirectCallMatch) &&
+    !/<[A-Z]/.test(source.slice(0, redirectCallMatch.index).slice(-80));
   const featureDelegated = /@\/features\//.test(source) && countMatches(source, /home-section--/g) === 0;
 
   const hasMarketingLayout = /<HomeMarketingLayout\b/.test(source);
@@ -143,7 +147,12 @@ function detectSignals(routePath, layoutRoot, source) {
   let dialect = "other";
   if (routePath === "/") dialect = "homepage";
   else if (layoutRoot === "offline") dialect = "offline";
-  else if (isRedirect && !/<[A-Z][A-Za-z]+/.test(source.replace(/redirect\s*\([^)]*\)/g, ""))) {
+  else if (
+    isRedirect &&
+    !/<[A-Z][A-Za-z]+/.test(
+      source.replace(/(?:permanentRedirect|redirect)\s*\([^)]*\)/g, ""),
+    )
+  ) {
     dialect = "redirect";
   } else if (featureDelegated && layoutRoot === "planner") dialect = "feature-delegated";
   else if (isWorkspace) dialect = "workspace";

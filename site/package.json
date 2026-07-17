@@ -7,7 +7,7 @@
     "dev": "next dev --webpack",
     "dev:webpack": "next dev --webpack",
     "dev:turbo": "next dev --turbo",
-    "build": "next build && node scripts/prepare-standalone.cjs",
+    "build": "next build --webpack && node scripts/prepare-standalone.cjs",
     "start": "node scripts/startStandalone.cjs",
     "gate": "npm run release:gate:fast",
     "gate:full": "npm run release:gate",

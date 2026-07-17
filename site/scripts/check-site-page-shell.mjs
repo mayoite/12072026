@@ -99,6 +99,11 @@ function main() {
 
     const source = collectPageSources(siteRoot, pagePath);
 
+    // Redirect-only pages never render a marketing shell (next/navigation).
+    if (/\b(?:permanentRedirect|redirect)\s*\(/.test(source) && !SHELL_LAYOUT_RE.test(source)) {
+      continue;
+    }
+
     if (row.dialect === "scheme-page") {
       failures.push({ path: row.path, issue: "matrix dialect=scheme-page (migration backlog)" });
     }

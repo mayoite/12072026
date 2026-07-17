@@ -19,7 +19,7 @@ import {
 } from "@/platform/supabase/adminServer";
 import { PLANNER_THEME_PACKS } from "@/lib/theme/plannerThemePacks";
 
-export type ThemeRow = {
+type ThemeRow = {
   id: string;
   name: string;
   is_active: boolean;

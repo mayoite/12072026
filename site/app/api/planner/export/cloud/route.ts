@@ -8,6 +8,10 @@ import { NextResponse } from "next/server";
 
 import { withAuth } from "@/features/shared/api/withAuth";
 import { publishPlannerExportToSupabase } from "@/features/shared/catalog/catalogAssetStorage.server";
+import {
+  normalizePlannerExportContentType,
+  PLANNER_CLOUD_EXPORT_CONTENT_TYPES,
+} from "@/features/planner/export/plannerCloudExportContentType";
 
 type CloudExportBody = {
   planId?: string;
@@ -15,33 +19,6 @@ type CloudExportBody = {
   contentType?: string;
   body?: string;
 };
-
-/** Allowlisted export MIME types (reject text/html and other XSS vectors). */
-export const PLANNER_CLOUD_EXPORT_CONTENT_TYPES = [
-  "application/json",
-  "text/plain",
-  "text/csv",
-  "application/csv",
-] as const;
-
-export type PlannerCloudExportContentType =
-  (typeof PLANNER_CLOUD_EXPORT_CONTENT_TYPES)[number];
-
-const ALLOWED_EXPORT_CONTENT_TYPES = new Set<string>(PLANNER_CLOUD_EXPORT_CONTENT_TYPES);
-
-export function normalizePlannerExportContentType(
-  raw: string | undefined | null,
-): PlannerCloudExportContentType | null {
-  if (raw === undefined || raw === null || !raw.trim()) {
-    return "application/json";
-  }
-  // Strip parameters (e.g. charset) and normalize.
-  const base = raw.split(";")[0]?.trim().toLowerCase() ?? "";
-  if (!ALLOWED_EXPORT_CONTENT_TYPES.has(base)) {
-    return null;
-  }
-  return base as PlannerCloudExportContentType;
-}
 
 export const POST = withAuth(
   async (req: NextRequest, auth) => {

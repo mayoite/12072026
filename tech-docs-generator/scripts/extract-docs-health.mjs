@@ -10,7 +10,6 @@ const defaultRepoRoot = path.resolve(scriptDir, '..', '..')
 const ROOT_DOCS = [
   'AGENTS.md',
   'Readme.md',
-  'START.md',
   'testing-handbook.md',
   'OPERATIONS_RUNBOOK.md',
   'Failures.md',

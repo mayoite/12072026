@@ -15,7 +15,7 @@ import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 
 export const dynamic = "force-dynamic";
 
-export interface FlatProduct extends CompatProduct {
+interface FlatProduct extends CompatProduct {
   seriesId: string;
   seriesName: string;
   altText: string;

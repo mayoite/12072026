@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 
 import { describe, expect, it, vi } from "vitest";
 
-import { buildPublishedSvgResponse } from "@/app/api/planner/catalog/svg/[revisionId]/route";
+import { buildPublishedSvgResponse } from "@/features/planner/catalog-api/buildPublishedSvgResponse.server";
 
 const SVG = '<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10"/></svg>';
 const CHECKSUM = createHash("sha256").update(SVG, "utf8").digest("hex");

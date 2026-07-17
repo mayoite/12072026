@@ -20,11 +20,11 @@ vi.mock("@/features/shared/catalog/catalogAssetStorage.server", () => ({
     publishPlannerExportToSupabase(...args),
 }));
 
+import { POST } from "@/app/api/planner/export/cloud/route";
 import {
-  POST,
   normalizePlannerExportContentType,
   PLANNER_CLOUD_EXPORT_CONTENT_TYPES,
-} from "@/app/api/planner/export/cloud/route";
+} from "@/features/planner/export/plannerCloudExportContentType";
 
 function makeReq(body: Record<string, unknown>) {
   return new NextRequest("http://localhost/api/planner/export/cloud", {
