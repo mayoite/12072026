@@ -400,8 +400,9 @@
   --color-block-chair-hover: var(--color-dark-midnight-blue-300);
   --color-block-chair-active: var(--color-bronze-400);
 
-  --color-canvas-bg: var(--color-dark-midnight-blue-950);
-  --color-canvas-grid: var(--color-dark-midnight-blue-900);
+  /* Default site canvas tokens; planner workspace overrides to CAD paper. */
+  --color-canvas-bg: #f4f4f0;
+  --color-canvas-grid: #c4c4bc;
 
   /* ── Planner legacy aliases (buddy / auth / tailwind utilities) ── */
   --color-surface: var(--surface-page);
@@ -425,7 +426,7 @@
   --color-blueprint-line: var(--color-primary);
 }
 
-/* Planner: keep primary as interactive accent, but preserve warm ecru paper + bronze soft. */
+/* Planner: chrome can theme; drawing canvas stays CAD light paper. */
 body.planner-workspace {
   --color-accent: var(--color-primary);
   --color-accent-hover: var(--color-primary-hover);
@@ -440,6 +441,21 @@ body.planner-workspace {
     var(--color-bronze-300) 16%,
     var(--color-ecru-100)
   );
+  /* Model-space paper (not inverted with html.dark). */
+  --planner-surface-canvas: #f4f4f0;
+  --planner-grid-minor: #c4c4bc;
+  --planner-grid-major: #8f8f86;
+  --color-canvas-bg: #f4f4f0;
+  --color-canvas-grid: #c4c4bc;
+}
+
+/* Dark chrome must not paint the plan black — CAD stays light paper. */
+html.dark body.planner-workspace {
+  --planner-surface-canvas: #f4f4f0;
+  --planner-grid-minor: #c4c4bc;
+  --planner-grid-major: #8f8f86;
+  --color-canvas-bg: #f4f4f0;
+  --color-canvas-grid: #c4c4bc;
 }
 
 /* Admin console: same warm paper stack as brand (not cool white-only). */
@@ -514,6 +530,7 @@ html.dark {
   --color-block-chair: var(--color-dark-midnight-blue-400);
   --color-block-chair-hover: var(--color-dark-midnight-blue-350);
 
-  --color-canvas-bg: var(--color-dark-midnight-blue-950);
-  --color-canvas-grid: var(--color-dark-midnight-blue-850);
+  /* Dark UI theme still uses light CAD paper for any non-workspace canvas consumers. */
+  --color-canvas-bg: #f4f4f0;
+  --color-canvas-grid: #c4c4bc;
 }

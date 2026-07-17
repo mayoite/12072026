@@ -72,13 +72,83 @@ describe("InventoryPanel", () => {
       />,
     );
 
-    const card = screen.getByText("UI Desk").closest("article");
+    const card = screen.getByText("Planner UI Desk").closest("article");
     expect(card).not.toBeNull();
-    expect(within(card as HTMLElement).getByText("DESK-UI-001")).toBeInTheDocument();
-    expect(within(card as HTMLElement).getByText(/140/i)).toBeInTheDocument();
+    const cardEl = card as HTMLElement;
+    expect(within(cardEl).getByText("DESK-UI-001")).toBeInTheDocument();
+    expect(within(cardEl).getByText(/140/i)).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /Place — Add UI Desk to canvas/i }),
+      within(cardEl).getByRole("button", { name: /Place — Add UI Desk to canvas/i }),
     ).toBeInTheDocument();
+  });
+
+  it("clamps product names to two lines and exposes full name via title", () => {
+    const longName =
+      "Executive Height-Adjustable Linear Workstation with Cable Management and Side Return";
+    render(
+      <InventoryPanel
+        catalogItems={[
+          sampleItem({
+            name: longName,
+            shortName: "Exec WS",
+          }),
+        ]}
+        catalogStatus="ready"
+        isLoading={false}
+        officeSystemsInventory={false}
+      />,
+    );
+
+    const nameEl = document.querySelector(
+      '[data-catalog-item] [data-field="name"]',
+    );
+    expect(nameEl).not.toBeNull();
+    expect(nameEl).toHaveAttribute("title", longName);
+    expect(nameEl?.textContent).toBe(longName);
+    // CSS module class carries 2-line clamp (line-clamp: 2 / -webkit-line-clamp: 2)
+    const className = (nameEl as HTMLElement).className;
+    expect(className).toMatch(/itemName/);
+    // Product truth line present without opening details
+    const truth = document.querySelector('[data-field="product-truth"]');
+    expect(truth).not.toBeNull();
+    expect(within(truth as HTMLElement).getByText("DESK-UI-001")).toBeInTheDocument();
+    expect(
+      document.querySelector('[data-field="dimensions"]'),
+    ).not.toBeNull();
+  });
+
+  it("renders exactly one primary Place control per catalog row", () => {
+    render(
+      <InventoryPanel
+        catalogItems={[
+          sampleItem({ id: "a", sku: "A-1", name: "Alpha Desk", shortName: "Alpha" }),
+          sampleItem({ id: "b", sku: "B-1", name: "Beta Desk", shortName: "Beta" }),
+        ]}
+        catalogStatus="ready"
+        isLoading={false}
+        officeSystemsInventory={false}
+      />,
+    );
+
+    const cards = document.querySelectorAll("article[data-catalog-name]");
+    expect(cards.length).toBe(2);
+    for (const card of Array.from(cards)) {
+      const placeButtons = within(card as HTMLElement).getAllByRole("button", {
+        name: /Place —/i,
+      });
+      expect(placeButtons).toHaveLength(1);
+      expect(placeButtons[0]).toHaveAttribute("data-action", "place");
+      // Compare is secondary, not a second Place CTA
+      const compare = within(card as HTMLElement).getByRole("button", {
+        name: /to compare/i,
+      });
+      expect(compare).toHaveAttribute("data-action", "compare");
+      expect(compare.textContent).not.toMatch(/Place/i);
+    }
+    // Global: one Place primary per item, not duplicated chrome
+    expect(
+      screen.getAllByRole("button", { name: /Place —/i }),
+    ).toHaveLength(2);
   });
 
   it("shows honest empty state for search with no matches", () => {
@@ -238,7 +308,7 @@ describe("InventoryPanel", () => {
       />,
     );
 
-    const card = screen.getByText("UI Desk").closest("article");
+    const card = screen.getByText("Planner UI Desk").closest("article");
     expect(card).not.toBeNull();
     expect(
       within(card as HTMLElement).getByText("Premium Linear"),

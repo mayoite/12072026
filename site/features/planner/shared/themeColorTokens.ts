@@ -13,7 +13,8 @@ export const PLANNER_COLOR_TOKENS = {
   furnitureStroke: "--border-strong",
   titleText: "--text-heading",
   subtitleText: "--text-muted",
-  exportBackground: "--surface-page",
+  /** CAD paper — not --surface-page (dark theme made exports/canvas black). */
+  exportBackground: "--planner-surface-canvas",
   columnDefault: "--border-muted",
   textAnnotation: "--text-body",
   importWall: "--text-body",

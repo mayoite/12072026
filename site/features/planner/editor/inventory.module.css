@@ -449,15 +449,15 @@
   background: var(--inv-panel-bg);
 }
 
-/* Tool-row cards — not shopping tiles */
+/* Tool-row cards — product truth first; one primary Place */
 .itemCard {
   position: relative;
   display: grid;
-  grid-template-columns: var(--inv-thumb) minmax(0, 1fr) min-content;
-  align-items: center;
-  gap: 0.35rem 0.4rem;
+  grid-template-columns: var(--inv-thumb) minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0.35rem 0.45rem;
   min-height: calc(var(--inv-thumb) + 0.5rem);
-  padding: 0.35rem var(--inv-chrome-pad-x);
+  padding: 0.4rem var(--inv-chrome-pad-x);
   border: none;
   border-radius: 0;
   border-bottom: 1px solid color-mix(in srgb, var(--inv-panel-border) 70%, transparent);
@@ -526,23 +526,48 @@
 .itemInfo {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.15rem;
   min-width: 0;
   overflow: hidden;
   justify-content: center;
+  padding-block: 0.05rem;
 }
 
+/* 2-line clamp — never silent single-line ellipsis without title full name */
 .itemName {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--inv-text-primary);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  line-height: 1.25;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--inv-text-primary);
+  line-height: 1.3;
+  max-height: calc(1.3em * 2);
 }
 
+/* Product truth (SKU · dims) — always one visible line */
 .itemMeta {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.35rem;
+  row-gap: 0.05rem;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.itemMeta > * {
+  display: inline;
+  max-width: 100%;
+}
+
+/* Family / variant — secondary to product truth */
+.itemMetaSecondary {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -553,14 +578,8 @@
   line-height: 1.25;
 }
 
-.itemMeta > * {
-  display: inline;
-  max-width: 100%;
-}
-
-/* SKU · dims · category on one dense line when width allows */
 .itemSku + .itemDimensions::before,
-.itemDimensions + .itemCategory::before {
+.itemMetaSecondary .itemCategory + .itemCategory::before {
   content: "·";
   margin-inline-end: 0.35rem;
   color: var(--inv-text-muted);
@@ -568,7 +587,7 @@
 }
 
 .itemSku {
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
@@ -580,9 +599,10 @@
 }
 
 .itemDimensions {
-  font-size: 0.625rem;
-  color: var(--inv-text-muted);
-  line-height: 1.2;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--inv-text-secondary);
+  line-height: 1.25;
   font-variant-numeric: tabular-nums;
 }
 
@@ -595,7 +615,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 6rem;
+  max-width: 7rem;
 }
 
 .itemAvailability {
@@ -611,31 +631,76 @@
   color: color-mix(in srgb, var(--color-error-red) 65%, var(--inv-text-muted));
 }
 
-/* Compact Place — tool action, not storefront CTA */
+/* Actions column: one primary Place + de-emphasized Compare */
+.itemActions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.15rem;
+  flex-shrink: 0;
+  min-width: 3.25rem;
+  align-self: center;
+}
+
+/* Sole primary row action */
 .placeAction {
   flex-shrink: 0;
-  align-self: center;
-  min-height: 1.5rem;
-  padding: 0.15rem 0.45rem;
-  border: 1px solid var(--inv-panel-border);
+  min-height: 1.75rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--inv-accent);
   border-radius: var(--inv-radius-sm);
-  background: var(--inv-panel-bg);
+  background: var(--inv-accent-subtle);
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--inv-accent);
   cursor: pointer;
   line-height: 1.2;
   white-space: nowrap;
-  transition: background-color 0.12s ease, border-color 0.12s ease;
+  transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
   scroll-margin-block: 0.5rem;
 }
 
 .placeAction:hover {
-  background: var(--inv-accent-subtle);
+  background: var(--inv-accent);
+  color: var(--text-inverse);
   border-color: var(--inv-accent);
 }
 
 .placeAction:focus-visible {
+  outline: none;
+  box-shadow: var(--inv-focus-ring);
+}
+
+/* Secondary compare — not a second full-row CTA chip */
+.compareAction {
+  flex-shrink: 0;
+  min-height: 1.25rem;
+  padding: 0.05rem 0.35rem;
+  border: none;
+  border-radius: var(--inv-radius-sm);
+  background: transparent;
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: var(--inv-text-muted);
+  cursor: pointer;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-align: center;
+  transition: color 0.12s ease, background-color 0.12s ease;
+}
+
+.compareAction:hover {
+  color: var(--inv-text-secondary);
+  background: var(--inv-surface-soft);
+}
+
+.compareActionActive {
+  color: var(--inv-accent);
+  font-weight: 600;
+}
+
+.compareAction:focus-visible {
   outline: none;
   box-shadow: var(--inv-focus-ring);
 }
@@ -778,13 +843,6 @@
   overflow: visible;
 }
 
-.compareToggleChip {
-  grid-column: 1 / -1;
-  justify-self: start;
-  min-height: 1.25rem;
-  font-size: 0.625rem;
-}
-
 .emptyAction {
   padding: 0.3rem 0.6rem;
   border: 1px solid var(--inv-panel-border);
@@ -826,7 +884,7 @@
   background: var(--inv-text-muted);
 }
 
-/* Touch / phone sheet: larger hit targets, keep list density pattern */
+/* Touch / phone sheet: readable density, 44px Place primary */
 @media (width < 48rem) {
   .panel {
     --inv-chrome-pad-x: 0.6rem;
@@ -845,8 +903,7 @@
   .filterChip,
   .categoryButton,
   .subCategoryButton,
-  .emptyAction,
-  .placeAction {
+  .emptyAction {
     min-height: var(--planner-touch-target, 2.75rem);
   }
 
@@ -856,18 +913,40 @@
   }
 
   .itemCard {
-    min-height: calc(var(--planner-touch-target, 2.75rem) + 0.25rem);
-    gap: 0.5rem;
-    padding-block: 0.45rem;
+    min-height: calc(var(--planner-touch-target, 2.75rem) + 0.35rem);
+    gap: 0.45rem 0.5rem;
+    padding-block: 0.5rem;
+    align-items: start;
   }
 
   .itemName {
     font-size: 0.8125rem;
+    line-height: 1.35;
+    max-height: calc(1.35em * 2);
   }
 
-  .placeAction {
-    padding: 0.35rem 0.65rem;
+  .itemSku,
+  .itemDimensions {
     font-size: 0.75rem;
+  }
+
+  .itemActions {
+    min-width: 3.5rem;
+    gap: 0.2rem;
+  }
+
+  /* WCAG 2.5.5 floor: 44px Place */
+  .placeAction {
+    min-height: 2.75rem; /* 44px */
+    min-width: 2.75rem;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.8125rem;
+  }
+
+  .compareAction {
+    min-height: 1.75rem;
+    font-size: 0.6875rem;
+    padding: 0.15rem 0.4rem;
   }
 
   .favoriteButton {
@@ -892,7 +971,8 @@
 
   .itemCard,
   .filterChip,
-  .placeAction {
+  .placeAction,
+  .compareAction {
     transition: none;
   }
 }

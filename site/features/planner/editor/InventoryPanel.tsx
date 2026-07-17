@@ -1149,38 +1149,32 @@ export const InventoryPanel = memo(function InventoryPanel({
                               )}
                             </div>
                             <div className={styles.itemInfo}>
+                              {/* Product name: 2-line clamp; title always exposes full name. */}
                               <span
                                 className={styles.itemName}
-                                title={listMeta.fullName || listMeta.name}
+                                data-field="name"
+                                title={listMeta.fullName}
                               >
-                                {listMeta.name}
+                                {listMeta.fullName}
                               </span>
-                              <span className={styles.itemMeta}>
+                              {/* Product truth line — SKU + footprint visible without details. */}
+                              <span
+                                className={styles.itemMeta}
+                                data-field="product-truth"
+                              >
                                 {listMeta.sku ? (
                                   <span
                                     className={styles.itemSku}
+                                    data-field="sku"
                                     title={`SKU ${listMeta.sku}`}
                                   >
                                     {listMeta.sku}
                                   </span>
                                 ) : null}
                                 <span
-                                  className={styles.itemCategory}
-                                  data-field="family"
-                                  title={`Family ${listMeta.family}`}
+                                  className={styles.itemDimensions}
+                                  data-field="dimensions"
                                 >
-                                  {listMeta.family}
-                                </span>
-                                {listMeta.variant ? (
-                                  <span
-                                    className={styles.itemCategory}
-                                    data-field="variant"
-                                    title={`Variant ${listMeta.variant}`}
-                                  >
-                                    {listMeta.variant}
-                                  </span>
-                                ) : null}
-                                <span className={styles.itemDimensions}>
                                   {formatCatalogFootprint(
                                     listMeta.dimsMm.widthMm ?? item.dimensions.widthMm,
                                     listMeta.dimsMm.depthMm ?? item.dimensions.depthMm,
@@ -1188,6 +1182,31 @@ export const InventoryPanel = memo(function InventoryPanel({
                                   )}
                                 </span>
                               </span>
+                              {(listMeta.family || listMeta.variant) ? (
+                                <span
+                                  className={styles.itemMetaSecondary}
+                                  data-field="family-variant"
+                                >
+                                  {listMeta.family ? (
+                                    <span
+                                      className={styles.itemCategory}
+                                      data-field="family"
+                                      title={`Family ${listMeta.family}`}
+                                    >
+                                      {listMeta.family}
+                                    </span>
+                                  ) : null}
+                                  {listMeta.variant ? (
+                                    <span
+                                      className={styles.itemCategory}
+                                      data-field="variant"
+                                      title={`Variant ${listMeta.variant}`}
+                                    >
+                                      {listMeta.variant}
+                                    </span>
+                                  ) : null}
+                                </span>
+                              ) : null}
                               {item.availability && item.availability !== "in-stock" ? (
                                 <span
                                   className={styles.itemAvailability}
@@ -1205,29 +1224,57 @@ export const InventoryPanel = memo(function InventoryPanel({
                                 </span>
                               ) : null}
                             </div>
-                            <button
-                              type="button"
-                              className={styles.placeAction}
-                              aria-label={`Place — Add ${item.shortName} to canvas`}
-                              title={`Arm place: click the plan to drop ${item.shortName}`}
-                              onClick={(event) => {
-                                event.preventDefault();
-                                event.stopPropagation();
-                                onItemPlace?.(item.id, null, { x: 0, y: 0 });
-                                setCollections((current) =>
-                                  addInventoryRecent(
-                                    current,
-                                    item.id,
-                                    new Date().toISOString(),
-                                  ),
-                                );
-                              }}
-                            >
-                              Place
-                            </button>
+                            {/* One primary Place; Compare is secondary (not a second CTA row). */}
+                            <div className={styles.itemActions}>
+                              <button
+                                type="button"
+                                className={styles.placeAction}
+                                data-action="place"
+                                aria-label={`Place — Add ${item.shortName} to canvas`}
+                                title={`Arm place: click the plan to drop ${item.shortName}`}
+                                onClick={(event) => {
+                                  event.preventDefault();
+                                  event.stopPropagation();
+                                  onItemPlace?.(item.id, null, { x: 0, y: 0 });
+                                  setCollections((current) =>
+                                    addInventoryRecent(
+                                      current,
+                                      item.id,
+                                      new Date().toISOString(),
+                                    ),
+                                  );
+                                }}
+                              >
+                                Place
+                              </button>
+                              <button
+                                type="button"
+                                className={`${styles.compareAction} ${inCompare ? styles.compareActionActive : ""}`}
+                                data-action="compare"
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  handleCompareToggle(item.id);
+                                  setCompareOpen(true);
+                                }}
+                                aria-pressed={inCompare ? "true" : "false"}
+                                aria-label={
+                                  inCompare
+                                    ? `Remove ${item.shortName} from compare`
+                                    : `Add ${item.shortName} to compare`
+                                }
+                                title={
+                                  inCompare
+                                    ? "In compare shortlist — click to remove"
+                                    : "Add to compare shortlist"
+                                }
+                              >
+                                {inCompare ? "Comparing" : "Compare"}
+                              </button>
+                            </div>
                             <button
                               type="button"
                               className={`${styles.favoriteButton} ${isInventoryFavorite(collections, item.id) ? styles.favoriteButtonActive : ""}`}
+                              data-action="favorite"
                               onClick={(event) => {
                                 event.stopPropagation();
                                 handleFavoriteToggle(item.id);
@@ -1246,23 +1293,6 @@ export const InventoryPanel = memo(function InventoryPanel({
                               <FavoriteIcon
                                 filled={isInventoryFavorite(collections, item.id)}
                               />
-                            </button>
-                            <button
-                              type="button"
-                              className={`${styles.filterChip} ${styles.compareToggleChip} ${inCompare ? styles.filterChipActive : ""}`}
-                              onClick={(event) => {
-                                event.stopPropagation();
-                                handleCompareToggle(item.id);
-                                setCompareOpen(true);
-                              }}
-                              aria-pressed={inCompare ? "true" : "false"}
-                              aria-label={
-                                inCompare
-                                  ? `Remove ${item.shortName} from compare`
-                                  : `Add ${item.shortName} to compare`
-                              }
-                            >
-                              {inCompare ? "In compare" : "Compare"}
                             </button>
                           </article>
                         </li>

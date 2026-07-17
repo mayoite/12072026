@@ -64,26 +64,29 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  /* Minor + major (every 5) lines so the grid reads on light canvas */
+  /*
+   * CAD-style grid on light paper: major every 5 cells (stronger), minor faint grey.
+   * Do not use --text-body (dark-theme text washes out or inverts the grid).
+   */
   background-image:
     linear-gradient(
       to right,
-      color-mix(in srgb, var(--text-body) 55%, transparent) 1px,
+      var(--planner-grid-major, #8f8f86) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      color-mix(in srgb, var(--text-body) 55%, transparent) 1px,
+      var(--planner-grid-major, #8f8f86) 1px,
       transparent 1px
     ),
     linear-gradient(
       to right,
-      color-mix(in srgb, var(--text-muted) 28%, transparent) 1px,
+      var(--planner-grid-minor, #c4c4bc) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      color-mix(in srgb, var(--text-muted) 28%, transparent) 1px,
+      var(--planner-grid-minor, #c4c4bc) 1px,
       transparent 1px
     );
   background-size:

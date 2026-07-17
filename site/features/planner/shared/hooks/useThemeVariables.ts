@@ -45,8 +45,8 @@ export function useThemeVariables() {
       blockChair: getVar('--color-block-chair', 'var(--color-dark-midnight-blue-400)'),
       blockChairHover: getVar('--color-block-chair-hover', 'var(--color-dark-midnight-blue-350)'),
       blockChairActive: getVar('--color-block-chair-active', 'var(--color-bronze-400)'),
-      canvasBg: getVar('--color-canvas-bg', 'var(--color-dark-midnight-blue-950)'),
-      canvasGrid: getVar('--color-canvas-grid', 'var(--color-dark-midnight-blue-900)'),
+      canvasBg: getVar('--color-canvas-bg', '#f4f4f0'),
+      canvasGrid: getVar('--color-canvas-grid', '#c4c4bc'),
     };
   }, []);
 }

@@ -210,7 +210,8 @@ function snapProjectPoint(input: {
  * Theme token → paint string for walls/background.
  * Literal hex/rgb pass through so furniture multiprim contrast is not destroyed.
  */
-const STAGE_BG_FALLBACK = "#f8fafc";
+/** CAD model-space paper (light); never inherit dark chrome. */
+const STAGE_BG_FALLBACK = "#f4f4f0";
 
 function resolveStageColor(token: string, fallback: string): string {
   if (!token) return fallback;
