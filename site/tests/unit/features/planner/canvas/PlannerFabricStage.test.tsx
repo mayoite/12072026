@@ -46,7 +46,7 @@ vi.mock("fabric", () => ({
   FabricObject: class {},
 }));
 
-vi.mock("fabric/extensions", () => ({
+vi.mock("@/features/planner/canvas/fabricAligningGuidelines", () => ({
   AligningGuidelines: vi.fn(function MockAligningGuidelines(this: {
     dispose: ReturnType<typeof vi.fn>;
   }) {

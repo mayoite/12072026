@@ -3,21 +3,17 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 
 import type { PlannerAccessContext } from "@/features/planner/lib/commands/plannerAccessContext";
-import type { PlannerDisplayUnit } from "@/features/planner/model/types";
+import type { PlannerDisplayUnit, PlannerFloor } from "@/features/planner/model/types";
 import type { PlannerSaveStatus } from "@/features/planner/persistence/usePlannerWorkspaceAutosave";
 import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
 import { cn } from "@/lib/utils";
 
 import { CanvasToolRail } from "../CanvasToolRail";
 import type { PlannerTool } from "../canvasTool";
-import {
-  PLANNER_STEPS,
-  PLANNER_STEP_DETAILS,
-  PLANNER_STEP_LABELS,
-  derivePlannerStepCompletion,
-  plannerForwardWarning,
-  type PlannerStep,
-} from "../plannerStep";
+import { LayersPanel } from "../LayersPanel";
+import type { PlannerLayerVisibility } from "../layerVisibility";
+import type { PlannerStep } from "../plannerStep";
+import { PlannerWorkflowBar } from "../PlannerWorkflowBar";
 import { TopBar } from "../TopBar";
 import type { LayoutPresetId } from "../workspaceLayout";
 import type { PlannerPersistStorage } from "../workspaceStatusLabels";
@@ -86,6 +82,10 @@ export interface ModularPlannerShellProps {
   showTools?: boolean;
   /** When true, ensure the properties dock is visible. */
   hasSelection?: boolean;
+  /** Active floor for the Layers panel (optional until wired). */
+  layersFloor?: PlannerFloor | null;
+  layerVisibility?: PlannerLayerVisibility;
+  onLayerVisibilityChange?: (next: PlannerLayerVisibility) => void;
 }
 
 const STEP_PRESET: Record<PlannerStep, LayoutPresetId> = {
@@ -93,83 +93,6 @@ const STEP_PRESET: Record<PlannerStep, LayoutPresetId> = {
   place: "catalog",
   review: "review",
 };
-
-function PlannerWorkflowBar({
-  currentStep,
-  onStepChange,
-  onOpenAssistant,
-  planMetrics,
-}: {
-  currentStep: PlannerStep;
-  onStepChange: (step: PlannerStep) => void;
-  onOpenAssistant?: () => void;
-  planMetrics?: WorkspacePlanMetrics;
-}) {
-  const completion = useMemo(
-    () => derivePlannerStepCompletion(planMetrics),
-    [planMetrics],
-  );
-  const [warning, setWarning] = useState<string | null>(null);
-
-  useEffect(() => {
-    setWarning(plannerForwardWarning(currentStep, completion));
-  }, [completion, currentStep]);
-
-  const changeStep = (step: PlannerStep) => {
-    setWarning(plannerForwardWarning(step, completion));
-    onStepChange(step);
-  };
-
-  return (
-    <nav
-      className={`${styles.workflowBar} pw-step-bar`}
-      aria-label="Planner workflow"
-      data-current={currentStep}
-    >
-      <ol className={styles.workflowSteps}>
-        {PLANNER_STEPS.map((step, index) => {
-          const active = step === currentStep;
-          return (
-            <li key={step} className={styles.workflowStep}>
-              <button
-                type="button"
-                className={`${styles.workflowButton} pw-step-bar__btn`}
-                data-step={step}
-                data-active={active ? "true" : undefined}
-                data-completion={completion[step]}
-                aria-current={active ? "step" : undefined}
-                aria-label={`${index + 1}. ${PLANNER_STEP_LABELS[step]}. ${completion[step]}. ${PLANNER_STEP_DETAILS[step]}`}
-                onClick={() => changeStep(step)}
-              >
-                <span className={styles.workflowNumber}>{index + 1}</span>
-                <span className={styles.workflowCopy}>
-                  <strong>{PLANNER_STEP_LABELS[step]}</strong>
-                  <small>{PLANNER_STEP_DETAILS[step]}</small>
-                  <span className={styles.workflowCompletion}>
-                    {completion[step] === "complete" ? "Complete" : "Incomplete"}
-                  </span>
-                </span>
-              </button>
-            </li>
-          );
-        })}
-      </ol>
-      {onOpenAssistant ? (
-        <button type="button" className={styles.workflowAssist} onClick={onOpenAssistant}>
-          AI assist
-        </button>
-      ) : null}
-      <p
-        className={styles.workflowWarning}
-        role="status"
-        aria-live="polite"
-        hidden={!warning}
-      >
-        {warning}
-      </p>
-    </nav>
-  );
-}
 
 /**
  * Slim TopBar + Dockview modular panels (dockview-react).
@@ -224,6 +147,9 @@ export function ModularPlannerShell({
   planMetrics,
   showTools = true,
   hasSelection = false,
+  layersFloor = null,
+  layerVisibility,
+  onLayerVisibilityChange,
 }: ModularPlannerShellProps) {
   const id = useId();
   const isMobile = useIsMobile();
@@ -233,6 +159,7 @@ export function ModularPlannerShell({
   );
   const [layoutEpoch, setLayoutEpoch] = useState(0);
   const [assistantOpen, setAssistantOpen] = useState(false);
+  const [layersOpen, setLayersOpen] = useState(false);
   const plannerStep = usePlannerWorkspaceStore((state) => state.plannerStep);
   const setPlannerStep = usePlannerWorkspaceStore((state) => state.setPlannerStep);
 
@@ -291,7 +218,7 @@ export function ModularPlannerShell({
 
   const slots: PlannerDockSlots = useMemo(
     () => ({
-      canvas: children,
+      canvas: <div className={styles.planCanvasInset}>{children}</div>,
       inventory,
       properties: (plannerStep === "review" ? review : properties) ?? (
         <div className={styles.dockEmptyHint}>
@@ -300,16 +227,10 @@ export function ModularPlannerShell({
         </div>
       ),
       tools: showTools ? (
-        <CanvasToolRail
-          activeTool={activeTool}
-          onToolChange={onToolChange}
-          onZoomReset={onZoomReset}
-          gridEnabled={gridEnabled}
-          snapEnabled={snapEnabled}
-          onToggleGrid={onToggleGrid}
-          onToggleSnap={onToggleSnap}
-          dockManaged
-        />
+        <div className={styles.dockEmptyHint}>
+          <strong>Tools live on the plan</strong>
+          <span>Drawing tools sit on the left rail. Open Inventory or Properties from the top bar when needed.</span>
+        </div>
       ) : (
         <div className={styles.dockEmptyHint}>
           <strong>2D tools paused</strong>
@@ -318,19 +239,12 @@ export function ModularPlannerShell({
       ),
     }),
     [
-      activeTool,
       children,
       inventory,
-      onToolChange,
-      onZoomReset,
       plannerStep,
       properties,
       review,
       showTools,
-      gridEnabled,
-      snapEnabled,
-      onToggleGrid,
-      onToggleSnap,
     ],
   );
 
@@ -466,6 +380,12 @@ export function ModularPlannerShell({
         onShowDockPanel={showDockPanel}
         chromeMode="slim"
         isOffline={isOffline}
+        isBottomPanelOpen={layersOpen}
+        onToggleBottomPanel={
+          layersFloor && layerVisibility && onLayerVisibilityChange
+            ? () => setLayersOpen((open) => !open)
+            : undefined
+        }
         {...topBarSaveStatusProps}
       />
 
@@ -476,25 +396,48 @@ export function ModularPlannerShell({
           onOpenAssistant={assistant ? () => setAssistantOpen(true) : undefined}
           planMetrics={planMetrics}
         />
-        <div className={styles.dockStage}>
-          <PlannerDockHost
-            slots={slots}
-            layoutPresetId={layoutPresetId}
-            layoutEpoch={layoutEpoch}
-            onApiReady={handleDockApiReady}
-          />
-          {assistantOpen && assistant ? (
-            <aside className={styles.assistantOverlay} aria-label="AI assistant panel">
-              <button
-                type="button"
-                className={styles.assistantClose}
-                onClick={() => setAssistantOpen(false)}
-              >
-                Close AI assist
-              </button>
-              {assistant}
-            </aside>
+        <div className={styles.dockWithRail} data-testid="planner-canvas-stage">
+          {showTools ? (
+            <CanvasToolRail
+              activeTool={activeTool}
+              onToolChange={onToolChange}
+              onZoomReset={onZoomReset}
+              gridEnabled={gridEnabled}
+              snapEnabled={snapEnabled}
+              onToggleGrid={onToggleGrid}
+              onToggleSnap={onToggleSnap}
+              pinned
+            />
           ) : null}
+          <div className={styles.dockStage}>
+            <PlannerDockHost
+              slots={slots}
+              layoutPresetId={layoutPresetId}
+              layoutEpoch={layoutEpoch}
+              onApiReady={handleDockApiReady}
+            />
+            {layersOpen && layersFloor && layerVisibility && onLayerVisibilityChange ? (
+              <aside className={styles.layersOverlay} aria-label="Layers">
+                <LayersPanel
+                  floor={layersFloor}
+                  visibility={layerVisibility}
+                  onVisibilityChange={onLayerVisibilityChange}
+                />
+              </aside>
+            ) : null}
+            {assistantOpen && assistant ? (
+              <aside className={styles.assistantOverlay} aria-label="AI assistant panel">
+                <button
+                  type="button"
+                  className={styles.assistantClose}
+                  onClick={() => setAssistantOpen(false)}
+                >
+                  Close AI assist
+                </button>
+                {assistant}
+              </aside>
+            ) : null}
+          </div>
         </div>
       </div>
 

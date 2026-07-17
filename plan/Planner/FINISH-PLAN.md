@@ -150,8 +150,8 @@ Current position: P1 PASS. P2–P15 partial/in progress. Exit gates remain open 
 | P0 | PARTIAL | Selector, route-test, current-source, and browser-hang work passes. Isolation and service-worker proof remain. |
 | P1 | PASS | Guest identity, reload recovery, member-owner scoping, and entry-state matrix (unit + browser new/resume/malformed/two-UUID isolation) pass. |
 | P2 | PARTIAL | Wall centreline/thickness/start/end/joins contract defined (`wallContract.ts`). Remaining: fail-visibly on unsupported versions; preserve unknown safe data when schema permits. |
-| P3 | PARTIAL | Three-step shell, completion labels, forward warnings, AI overlay, Import/Sketch/Save/Export, selection→properties, and layout reset are wired. Canvas % floors and save-authority remain. |
-| P4 | IN PROGRESS | Connected chains, corner joining, room closure, and zero/duplicate guards pass unit proofs. Exact input, snaps, openings, dimensions, and editing remain. |
+| P3 | PARTIAL | Canvas-first Dockview (plan fills; RAC rail overlays canvas; Inventory/Properties on demand). Workflow bar compacted. TopBar phone density and save-authority remain. |
+| P4 | IN PROGRESS | Chains/joins/rooms, exact L/A/thickness, snaps+marker, Enter→exact, openings place/overlap guards (unit). Remaining: orthogonal toggle, grips, persistent dimensions, drag-reposition openings, browser proof. |
 | P5 | PARTIAL | TopBar Sketch-to-Plan + preview/accept/reject wired; sketch-to-plan is guest+CSRF; legacy `project-sketch` returns 410. Underlay calibrate and dual-path cleanup remain. |
 | P6 | PARTIAL | Placement/config live; Fabric AligningGuidelines on for furniture edge/center; wall/object distance guides, exact spacing, row-array remain thin. |
 | P7 | PARTIAL | One document drives 2D/3D. `POST /api/planner/generated-glb` returns 501 `not_configured` (no `site/public` write). Blob/object-storage path still needed. |
@@ -327,21 +327,21 @@ Exit gate:
 - [PASS] Support automatic corner joining.
 - [PASS] Support clean room closure.
 - [PASS] Prevent duplicate and zero-length walls.
-- [ ] Support direct wall length input while drawing.
-- [ ] Support direct wall angle input while drawing.
-- [ ] Support wall thickness input.
+- [PASS] Support direct wall length input while drawing.
+- [PASS] Support direct wall angle input while drawing.
+- [PASS] Support wall thickness input.
 - [ ] Support orthogonal lock.
-- [ ] Support grid snap.
-- [ ] Support endpoint, midpoint, intersection, perpendicular, and nearest snaps.
-- [ ] Show snap markers and snap names.
-- [ ] Show live length and angle next to the pointer.
-- [ ] Allow Tab or an equivalent action to move between numeric fields.
-- [ ] Support Escape to cancel the active operation.
-- [ ] Support Enter to commit exact values.
-- [ ] Add doors and windows only to valid host walls.
-- [ ] Snap and rotate openings with host walls.
-- [ ] Support exact opening width and wall offset.
-- [ ] Prevent invalid or overlapping openings.
+- [PASS] Support grid snap.
+- [PASS] Support endpoint, midpoint, intersection, perpendicular, and nearest snaps.
+- [PASS] Show snap markers and snap names.
+- [PASS] Show live length and angle next to the pointer.
+- [PASS] Allow Tab or an equivalent action to move between numeric fields.
+- [PASS] Support Escape to cancel the active operation.
+- [PASS] Support Enter to commit exact values.
+- [PASS] Add doors and windows only to valid host walls (unit: `openingPlacement.ts` + Fabric host pick tolerance; browser OPEN).
+- [PASS] Snap and rotate openings with host walls (unit: clamped along-wall placement + aligned preview/render; drag reposition OPEN).
+- [PASS] Support exact opening width and wall offset (unit: `PropertiesPanel` → `updatePlannerOpening`; no numeric entry during placement tool).
+- [PASS] Prevent invalid or overlapping openings (unit: resolver + `assertOpening` same-wall overlap/end margin; browser OPEN).
 - [ ] Support wall selection grips.
 - [ ] Support endpoint editing without corrupting connected geometry.
 - [ ] Implement persistent linear dimensions.

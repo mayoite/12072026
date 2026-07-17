@@ -39,6 +39,28 @@
   box-sizing: border-box;
 }
 
+/* Dock + pinned left column — never float over the plan. */
+.rail[data-pinned="true"] {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  width: var(--ws-rail-w, var(--planner-tool-rail-width, 3.25rem));
+  min-width: var(--ws-rail-w, var(--planner-tool-rail-width, 3.25rem));
+  height: auto;
+  max-height: none;
+  align-self: stretch;
+  border-right: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+
+.rail[data-pinned="true"] .railChrome {
+  display: none;
+}
+
 /* Modular dock TOOLS slot — compact horizontal toolbar, not a tall left rail */
 .rail[data-dock-managed="true"] {
   width: 100%;

@@ -92,6 +92,8 @@ export interface CanvasToolRailProps {
   disabled?: boolean;
   /** When true, Dockview owns float/dock — hide local layout chrome. */
   dockManaged?: boolean;
+  /** Lock as a fixed left column (modular shell). Ignores float/tear-off. */
+  pinned?: boolean;
 }
 
 function ToolToggle({
@@ -245,6 +247,7 @@ export function CanvasToolRail({
   onToggleSnap,
   disabled = false,
   dockManaged = false,
+  pinned = false,
 }: CanvasToolRailProps) {
   const chrome = useWorkspaceChrome();
   const isMobile = useIsMobile();
@@ -253,6 +256,7 @@ export function CanvasToolRail({
 
   const setRail = useCallback(
     (patch: Partial<RailLayoutConfig>) => {
+      if (pinned) return;
       if (chrome?.setRailLayout) {
         chrome.setRailLayout(patch);
         return;
@@ -267,7 +271,7 @@ export function CanvasToolRail({
         return next;
       });
     },
-    [chrome],
+    [chrome, pinned],
   );
 
   useEffect(() => {
@@ -300,16 +304,19 @@ export function CanvasToolRail({
     originY: number;
   } | null>(null);
 
-  const isFloating = rail.state === "floating";
+  const isFloating = !pinned && !dockManaged && rail.state === "floating";
   // Dockview is a vertical CAD rail on wide screens and a horizontal strip on phones.
-  const orientation: "vertical" | "horizontal" = dockManaged
-    ? isMobile
-      ? "horizontal"
-      : "vertical"
-    : rail.state === "docked" && rail.edge === "top"
-      ? "horizontal"
-      : rail.orientation;
-  const dockedTop = !dockManaged && rail.state === "docked" && rail.edge === "top";
+  const orientation: "vertical" | "horizontal" = pinned
+    ? "vertical"
+    : dockManaged
+      ? isMobile
+        ? "horizontal"
+        : "vertical"
+      : rail.state === "docked" && rail.edge === "top"
+        ? "horizontal"
+        : rail.orientation;
+  const dockedTop = !pinned && !dockManaged && rail.state === "docked" && rail.edge === "top";
+  const hideRailChrome = pinned || dockManaged;
 
   const dockLeft = useCallback(() => {
     setRail({
@@ -537,15 +544,16 @@ export function CanvasToolRail({
       orientation={orientation}
       data-testid="canvas-tool-rail"
       data-rac-toolbar="true"
-      data-dock-state={rail.state}
-      data-dock-edge={rail.edge}
+      data-dock-state={pinned ? "docked" : rail.state}
+      data-dock-edge={pinned ? "left" : rail.edge}
       data-orientation={orientation}
       data-floating={isFloating ? "true" : undefined}
       data-docked-top={dockedTop ? "true" : undefined}
       data-split={rail.splitGroups ? "true" : undefined}
       data-dock-managed={dockManaged ? "true" : undefined}
+      data-pinned={pinned ? "true" : undefined}
       style={
-        !dockManaged && isFloating
+        !pinned && !dockManaged && isFloating
           ? ({
               "--pw-tool-rail-x": `${rail.x}px`,
               "--pw-tool-rail-y": `${rail.y}px`,
@@ -553,7 +561,7 @@ export function CanvasToolRail({
           : undefined
       }
     >
-      {!dockManaged ? (
+      {!hideRailChrome ? (
       <div
         className={styles.railChrome}
         data-floating={isFloating ? "true" : undefined}

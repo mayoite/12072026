@@ -48,32 +48,19 @@ describe("plannerDockPresets", () => {
     localStorage.clear();
   });
 
-  it("default preset keeps a canvas-first dock without customer layers", () => {
+  it("default preset is canvas-only (tools overlay the plan, not a dock column)", () => {
     const api = createFakeApi();
     applyPlannerDockPreset(api as never, "default");
     const ids = api.addPanel.mock.calls.map((c) => c[0].id);
-    expect(ids).toEqual(["canvas", "tools"]);
+    expect(ids).toEqual(["canvas"]);
     expect(PLANNER_DOCK_MODULE_IDS).not.toContain("layers");
-
-    const tools = api.addPanel.mock.calls.find(([options]) => options.id === "tools")?.[0] as
-      | {
-          position?: { direction: string; referencePanel: string };
-          initialWidth?: number;
-        }
-      | undefined;
-    expect(tools).toEqual(
-      expect.objectContaining({
-        position: { direction: "left", referencePanel: "canvas" },
-        initialWidth: 76,
-      }),
-    );
   });
 
-  it("canvas preset keeps plan + floating tools only", () => {
+  it("canvas preset is canvas-only", () => {
     const api = createFakeApi();
     applyPlannerDockPreset(api as never, "canvas");
     const ids = api.addPanel.mock.calls.map((c) => c[0].id);
-    expect(ids).toEqual(["canvas", "tools"]);
+    expect(ids).toEqual(["canvas"]);
   });
 
   it("catalog preset keeps inventory and canvas without drawing tools", () => {
@@ -92,13 +79,27 @@ describe("plannerDockPresets", () => {
 
   it("ensurePlannerDockPanel activates existing panel", () => {
     const api = createFakeApi();
-    applyPlannerDockPreset(api as never, "default");
+    applyPlannerDockPreset(api as never, "catalog");
     const before = api.addPanel.mock.calls.length;
-    ensurePlannerDockPanel(api as never, "tools");
+    ensurePlannerDockPanel(api as never, "inventory");
     expect(api.addPanel.mock.calls.length).toBe(before);
-    expect(api.getPanel("tools")?.api.setActive).toHaveBeenCalled();
+    expect(api.getPanel("inventory")?.api.setActive).toHaveBeenCalled();
   });
 
+  it("ensurePlannerDockPanel can open a narrow tools column when requested", () => {
+    const api = createFakeApi();
+    applyPlannerDockPreset(api as never, "default");
+    ensurePlannerDockPanel(api as never, "tools");
+    const tools = api.addPanel.mock.calls.find(([options]) => options.id === "tools")?.[0] as
+      | { maximumWidth?: number; initialWidth?: number }
+      | undefined;
+    expect(tools).toEqual(
+      expect.objectContaining({
+        initialWidth: 72,
+        maximumWidth: 96,
+      }),
+    );
+  });
   it("ensurePlannerDockPanel re-adds a closed customer module", () => {
     const api = createFakeApi();
     applyPlannerDockPreset(api as never, "canvas");

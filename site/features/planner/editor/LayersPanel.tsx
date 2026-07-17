@@ -1,9 +1,8 @@
 "use client";
 
 /**
- * Customer Layers panel — not mounted in the live ModularPlannerShell host.
- * Internal `layerVisibility` still drives canvas show/hide defaults.
- * Kept for unit coverage until P15 removes dead docking chrome.
+ * Customer Layers panel — visibility toggles for walls/furniture/openings.
+ * Opened from TopBar (Layers) in ModularPlannerShell.
  */
 
 import { useCallback, memo } from "react";

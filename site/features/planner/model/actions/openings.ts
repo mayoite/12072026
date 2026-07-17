@@ -1,3 +1,9 @@
+import {
+  OPENING_END_MARGIN_MM,
+  OPENING_GAP_MM,
+  openingSpanFromNormalized,
+  openingSpansOverlap,
+} from "@/features/planner/lib/geometry/openingPlacement";
 import type { PlannerDoor, PlannerProject, PlannerWindow } from "../types";
 import type { PlannerIdFactory } from "../project";
 import { applyPlannerProjectAction, activeFloorOrThrow } from "./projectActions";
@@ -10,22 +16,19 @@ function assertOpening(project: PlannerProject, wallId: string, position: number
   if (!Number.isFinite(width) || width <= 0) throw new Error("Opening width must be positive.");
   const wallLength = Math.hypot(wall.end.x - wall.start.x, wall.end.y - wall.start.y);
   if (width >= wallLength) throw new Error("Opening width must be shorter than its wall.");
-  const center = position * wallLength;
-  const start = center - width / 2;
-  const end = center + width / 2;
-  if (start < 0 || end > wallLength) {
+  const span = openingSpanFromNormalized(wallLength, position, width);
+  if (span.start < OPENING_END_MARGIN_MM || span.end > wallLength - OPENING_END_MARGIN_MM) {
     throw new Error("Opening must fit fully within its host wall.");
   }
   const existing = [
-    ...floor.doors.map((item) => ({ position: item.position, width: item.width })),
-    ...floor.windows.map((item) => ({ position: item.position, width: item.width })),
+    ...floor.doors
+      .filter((item) => item.wallId === wallId)
+      .map((item) => openingSpanFromNormalized(wallLength, item.position, item.width)),
+    ...floor.windows
+      .filter((item) => item.wallId === wallId)
+      .map((item) => openingSpanFromNormalized(wallLength, item.position, item.width)),
   ];
-  const overlaps = existing.some((item) => {
-    const itemCenter = item.position * wallLength;
-    const itemStart = itemCenter - item.width / 2;
-    const itemEnd = itemCenter + item.width / 2;
-    return start < itemEnd && end > itemStart;
-  });
+  const overlaps = existing.some((item) => openingSpansOverlap(span, item, OPENING_GAP_MM));
   if (overlaps) throw new Error("Opening overlaps another opening on this wall.");
 }
 

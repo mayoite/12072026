@@ -75,7 +75,7 @@ export const CANVAS_TOOL_GUIDANCE: Record<PlannerTool, string> = {
   select: "Click an object to inspect it. Delete removes the selection.",
   pan: "Drag to move the drawing. Release Space to restore the armed tool.",
   room: "Enter exact width, depth, and wall thickness to create a closed room.",
-  wall: "Press and drag to draw a wall segment; release to commit.",
+  wall: "Press and drag to draw a wall; Shift = orthogonal; Enter commits length/angle/thickness.",
   opening: "Click a wall to add a door opening.",
   dimension: "Dimension annotations are deferred — measure via properties for now.",
   placement: "Choose a catalogue item, then click the canvas to place it.",

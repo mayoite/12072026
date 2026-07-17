@@ -498,11 +498,11 @@ export function TopBar({
             className={styles.btn}
             data-active={isBottomPanelOpen ? "true" : undefined}
             aria-pressed={isBottomPanelOpen}
-            aria-label="Toggle details panel"
+            aria-label={isBottomPanelOpen ? "Hide layers" : "Show layers"}
             onPress={onToggleBottomPanel}
           >
             <Stack size={18} aria-hidden />
-            <span className={styles.mobilePanelLabel}>Details</span>
+            <span className={styles.mobilePanelLabel}>Layers</span>
           </Button>
         )}
 

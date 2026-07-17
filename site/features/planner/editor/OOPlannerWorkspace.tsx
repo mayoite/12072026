@@ -47,6 +47,12 @@ import {
   addPlannerWindow,
   updatePlannerOpening,
 } from "@/features/planner/model/actions/openings";
+import {
+  DEFAULT_DOOR_WIDTH_MM,
+  DEFAULT_WINDOW_WIDTH_MM,
+  openingPlacementRejectMessage,
+  type OpeningPlacementRejectReason,
+} from "@/features/planner/lib/geometry/openingPlacement";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
 import type { PlannerProject } from "@/features/planner/model/types";
 import { preflightPlannerExport } from "@/features/planner/shared/export/exportPreflight";
@@ -246,7 +252,7 @@ export function OOPlannerWorkspace({
   const [displayUnit, setDisplayUnit] = useState<PlannerDisplayUnit>(
     DEFAULT_PLANNER_WORKSPACE_PREFERENCES.units,
   );
-  const [layerVisibility] = useState<PlannerLayerVisibility>(
+  const [layerVisibility, setLayerVisibility] = useState<PlannerLayerVisibility>(
     DEFAULT_LAYER_VISIBILITY,
   );
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -555,7 +561,7 @@ export function OOPlannerWorkspace({
             {
               wallId,
               position,
-              width: 1200,
+              width: DEFAULT_WINDOW_WIDTH_MM,
               height: 1200,
               sillHeight: 900,
               type: "standard",
@@ -570,7 +576,7 @@ export function OOPlannerWorkspace({
             {
               wallId,
               position,
-              width: 900,
+              width: DEFAULT_DOOR_WIDTH_MM,
               height: 2100,
               type: "single",
               swingDirection: "left",
@@ -592,6 +598,10 @@ export function OOPlannerWorkspace({
     },
     [workspaceCanvas],
   );
+
+  const handleOpeningRejected = useCallback((reason: OpeningPlacementRejectReason) => {
+    setWorkspaceMessage(openingPlacementRejectMessage(reason));
+  }, []);
 
   const handleFurnitureModified = useCallback(
     (update: { entityId: string; position: PlannerPoint; rotation: number }) => {
@@ -1537,6 +1547,9 @@ export function OOPlannerWorkspace({
         onZoomReset={() => canvasRef.current?.fitToView()}
         showTools={viewMode === "2d"}
         hasSelection={Boolean(selectedEntity || multiSelection)}
+        layersFloor={activeFloor ?? null}
+        layerVisibility={layerVisibility}
+        onLayerVisibilityChange={setLayerVisibility}
         inventory={
           <WorkspaceLeftPanel
             catalogItems={catalog.items}
@@ -1680,6 +1693,7 @@ export function OOPlannerWorkspace({
               onPlaceAtPoint={handlePlaceAtPoint}
               onWallDrawn={handleWallDrawn}
               onOpeningPlaced={handleOpeningPlaced}
+              onOpeningRejected={handleOpeningRejected}
               onSelectionChange={handleCanvasSelection}
               onFurnitureModified={handleFurnitureModified}
               onStatusChange={setCanvasStatus}

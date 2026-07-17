@@ -1,7 +1,7 @@
 /**
  * Fabric bundled extensions wired for the live planner stage.
  */
-import { AligningGuidelines } from "fabric/extensions";
+import { AligningGuidelines } from "./fabricAligningGuidelines";
 import type { Canvas } from "fabric";
 import { PLANNER_COLOR_TOKENS } from "@/features/planner/shared/themeColorTokens";
 import { resolvePaintColor } from "@/features/planner/shared/readThemeColor";

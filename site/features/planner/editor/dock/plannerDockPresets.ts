@@ -3,7 +3,7 @@ import type { DockviewApi } from "dockview-react";
 import type { LayoutPresetId } from "../workspaceLayout";
 
 export const PLANNER_DOCKVIEW_STORAGE_KEY = "planner-dockview-layout";
-export const PLANNER_DOCKVIEW_SCHEMA_VERSION = 2;
+export const PLANNER_DOCKVIEW_SCHEMA_VERSION = 3;
 
 const LEGACY_DOCKVIEW_STORAGE_KEYS = [
   "planner-dockview-layout-v4",
@@ -116,8 +116,9 @@ export function ensurePlannerDockPanel(
           direction: "left",
           referencePanel: "canvas",
         },
-        initialWidth: 76,
-        minimumWidth: 68,
+        initialWidth: 72,
+        minimumWidth: 64,
+        maximumWidth: 96,
       });
       return;
     case "properties":
@@ -165,10 +166,6 @@ export function applyPlannerDockPreset(
 
     case "canvas":
       addCanvas(api);
-      api.addPanel({
-        ...PANEL_META.tools,
-        floating: { width: 72, height: 420, x: 16, y: 72 },
-      });
       return;
 
     case "floating":
@@ -178,10 +175,6 @@ export function applyPlannerDockPreset(
         floating: { width: 320, height: 440, x: 24, y: 64 },
       });
       api.addPanel({
-        ...PANEL_META.tools,
-        floating: { width: 72, height: 400, x: 360, y: 64 },
-      });
-      api.addPanel({
         ...PANEL_META.properties,
         floating: { width: 288, height: 400, x: 450, y: 64 },
       });
@@ -189,13 +182,8 @@ export function applyPlannerDockPreset(
 
     case "default":
     default:
+      // Canvas-first: drawing tools overlay the plan (not a Dockview TOOLS column).
       addCanvas(api);
-      api.addPanel({
-        ...PANEL_META.tools,
-        position: { direction: "left", referencePanel: "canvas" },
-        initialWidth: 76,
-        minimumWidth: 68,
-      });
       return;
   }
 }

@@ -70,27 +70,23 @@ import {
   wallSegmentLengthMm,
 } from "./wallDrawGeometry";
 import { installPlannerFabricExtensions } from "./installPlannerFabricExtensions";
+import {
+  clearWallSnapMarker,
+  createWallSnapMarkerHandle,
+  syncWallSnapMarker,
+} from "./wallSnapMarker";
+import {
+  defaultOpeningWidthMm,
+  openingLineEndpointsMm,
+  resolveOpeningPlacementAtPoint,
+  type OpeningPlacementRejectReason,
+} from "@/features/planner/lib/geometry/openingPlacement";
 import styles from "./plannerFabricStage.module.css";
 
 type CanvasEntityType = FabricCanvasEntityType;
 
-function nearestWall(
-  point: PlannerPoint,
-  walls: ReadonlyArray<PlannerWall>,
-): { wallId: string; position: number; distance: number } | null {
-  let best: { wallId: string; position: number; distance: number } | null = null;
-  for (const wall of walls) {
-    const dx = wall.end.x - wall.start.x;
-    const dy = wall.end.y - wall.start.y;
-    const lengthSquared = dx * dx + dy * dy;
-    if (lengthSquared <= 0) continue;
-    const raw = ((point.x - wall.start.x) * dx + (point.y - wall.start.y) * dy) / lengthSquared;
-    const position = Math.min(1, Math.max(0, raw));
-    const nearest = { x: wall.start.x + dx * position, y: wall.start.y + dy * position };
-    const distance = Math.hypot(point.x - nearest.x, point.y - nearest.y);
-    if (!best || distance < best.distance) best = { wallId: wall.id, position, distance };
-  }
-  return best;
+function openingKindFromTool(tool: string): "door" | "window" {
+  return tool === "window" ? "window" : "door";
 }
 
 export type PlannerFabricStageProps = {
@@ -111,6 +107,7 @@ export type PlannerFabricStageProps = {
   ) => void;
   /** kind restored: door vs window (opening tool defaults to door). */
   onOpeningPlaced?: (wallId: string, position: number, kind: "door" | "window") => void;
+  onOpeningRejected?: (reason: OpeningPlacementRejectReason) => void;
   onSelectionChange?: (selection: { type: CanvasEntityType; id: string } | null) => void;
   onStatusChange?: (status: CanvasStatusSnapshot) => void;
   onFurnitureModified?: (update: FurnitureDocumentPoseUpdate) => void;
@@ -205,6 +202,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       onPlaceAtPoint,
       onWallDrawn,
       onOpeningPlaced,
+      onOpeningRejected,
       onSelectionChange,
       onStatusChange,
       onFurnitureModified,
@@ -238,6 +236,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     const onPlaceRef = useRef(onPlaceAtPoint);
     const onWallDrawnRef = useRef(onWallDrawn);
     const onOpeningPlacedRef = useRef(onOpeningPlaced);
+    const onOpeningRejectedRef = useRef(onOpeningRejected);
     const onSelectionRef = useRef(onSelectionChange);
     const onStatusChangeRef = useRef(onStatusChange);
     const pendingPlaceRef = useRef(pendingCatalogPlacement);
@@ -249,48 +248,72 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     const exactThicknessRef = useRef(exactThickness);
     const wallDrawRef = useRef<{ start: PlannerPoint; pointerId: number } | null>(null);
     const previewLineRef = useRef<Line | null>(null);
+    const openingPreviewLineRef = useRef<Line | null>(null);
+    const snapMarkerHandleRef = useRef(createWallSnapMarkerHandle());
 
     const clearWallSession = useCallback(() => {
       wallDrawRef.current = null;
       setWallReadout(null);
       setExactError(null);
+      const canvas = fabricRef.current;
+      clearWallSnapMarker(canvas, snapMarkerHandleRef.current);
       const preview = previewLineRef.current;
       if (preview) {
-        fabricRef.current?.remove(preview);
+        canvas?.remove(preview);
         previewLineRef.current = null;
-        fabricRef.current?.requestRenderAll();
       }
+      canvas?.requestRenderAll();
     }, []);
+
+    /** Form submit and workspace Enter share this path (typed length/angle/thickness). */
+    const commitExactWallValues = useCallback((): boolean => {
+      const session = wallDrawRef.current;
+      if (!session) return false;
+      const lengthMm = parseLengthInput(exactLength, displayUnit);
+      const thicknessMm = parseLengthInput(exactThickness, displayUnit);
+      const angleDegrees = Number(exactAngle);
+      if (
+        lengthMm === null ||
+        lengthMm < 10 ||
+        thicknessMm === null ||
+        thicknessMm < 50 ||
+        thicknessMm > 1000 ||
+        !Number.isFinite(angleDegrees)
+      ) {
+        setExactError("Enter a wall length, angle, and thickness between 50–1000 mm.");
+        return false;
+      }
+      const end = exactWallEndPoint(session.start, lengthMm, angleDegrees);
+      onWallDrawnRef.current?.(session.start, end, { thicknessMm });
+      // Continue the chain from the committed endpoint (Escape still cancels).
+      wallDrawRef.current = { start: end, pointerId: session.pointerId };
+      const canvas = fabricRef.current;
+      const preview = previewLineRef.current;
+      if (canvas && preview) {
+        const endScreen = projectToScreen(end, transformRef.current);
+        preview.set({
+          x1: endScreen.x,
+          y1: endScreen.y,
+          x2: endScreen.x,
+          y2: endScreen.y,
+        });
+        preview.setCoords();
+        clearWallSnapMarker(canvas, snapMarkerHandleRef.current);
+        canvas.requestRenderAll();
+      }
+      setExactLength("");
+      setExactError(null);
+      setWallReadout(null);
+      emitStatusRef.current(transformRef.current, "wall");
+      return true;
+    }, [displayUnit, exactAngle, exactLength, exactThickness]);
 
     const commitExactWall = useCallback(
       (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const session = wallDrawRef.current;
-        if (!session) return;
-        const lengthMm = parseLengthInput(exactLength, displayUnit);
-        const thicknessMm = parseLengthInput(exactThickness, displayUnit);
-        const angleDegrees = Number(exactAngle);
-        if (
-          lengthMm === null ||
-          lengthMm < 10 ||
-          thicknessMm === null ||
-          thicknessMm < 50 ||
-          thicknessMm > 1000 ||
-          !Number.isFinite(angleDegrees)
-        ) {
-          setExactError("Enter a wall length, angle, and thickness between 50–1000 mm.");
-          return;
-        }
-        const end = exactWallEndPoint(session.start, lengthMm, angleDegrees);
-        onWallDrawnRef.current?.(session.start, end, { thicknessMm });
-        // Continue the chain from the committed endpoint (Escape still cancels).
-        wallDrawRef.current = { start: end, pointerId: session.pointerId };
-        setExactLength("");
-        setExactError(null);
-        setWallReadout(null);
-        emitStatusRef.current(transformRef.current, "wall");
+        commitExactWallValues();
       },
-      [displayUnit, exactAngle, exactLength, exactThickness],
+      [commitExactWallValues],
     );
 
     useEffect(() => {
@@ -320,6 +343,10 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     useEffect(() => {
       onOpeningPlacedRef.current = onOpeningPlaced;
     }, [onOpeningPlaced]);
+
+    useEffect(() => {
+      onOpeningRejectedRef.current = onOpeningRejected;
+    }, [onOpeningRejected]);
 
     useEffect(() => {
       activeFloorRef.current = activeFloor;
@@ -356,6 +383,19 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     useEffect(() => {
       exactThicknessRef.current = exactThickness;
     }, [exactThickness]);
+
+    useEffect(() => {
+      const tool = runtimeToolFor(activeTool);
+      if (tool !== "door" && tool !== "window" && tool !== "opening") {
+        const canvas = fabricRef.current;
+        const preview = openingPreviewLineRef.current;
+        if (canvas && preview) {
+          canvas.remove(preview);
+          openingPreviewLineRef.current = null;
+          canvas.requestRenderAll();
+        }
+      }
+    }, [activeTool]);
 
     const emitStatus = useCallback(
       (nextTransform: CanvasTransform, tool: PlannerTool) => {
@@ -395,34 +435,9 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           clearWallSession();
         },
         commit: () => {
-          const session = wallDrawRef.current;
-          const canvas = fabricRef.current;
-          const preview = previewLineRef.current;
-          if (!session || !canvas || !preview) return;
-          const end = screenToProject(
-            { x: preview.x2 ?? 0, y: preview.y2 ?? 0 },
-            transformRef.current,
-          );
-          if (shouldCommitWallSegment(session.start, end)) {
-            onWallDrawnRef.current?.(session.start, end);
-            const endScreen = projectToScreen(end, transformRef.current);
-            wallDrawRef.current = { start: end, pointerId: session.pointerId };
-            preview.set({
-              x1: endScreen.x,
-              y1: endScreen.y,
-              x2: endScreen.x,
-              y2: endScreen.y,
-            });
-            preview.setCoords();
-            setWallReadout(null);
-            canvas.requestRenderAll();
-            return;
-          }
-          wallDrawRef.current = null;
-          setWallReadout(null);
-          canvas.remove(preview);
-          previewLineRef.current = null;
-          canvas.requestRenderAll();
+          // Enter matches the draw form: typed length/angle/thickness (fields track the pointer).
+          if (!wallDrawRef.current || !previewLineRef.current) return;
+          commitExactWallValues();
         },
         resetZoom: () => setTransform(DEFAULT_FABRIC_STAGE_TRANSFORM),
         fitToView: () => setTransform(DEFAULT_FABRIC_STAGE_TRANSFORM),
@@ -442,7 +457,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           }));
         },
       }),
-      [clearWallSession, workspaceCanvas],
+      [clearWallSession, commitExactWallValues, workspaceCanvas],
     );
 
     useEffect(() => {
@@ -484,12 +499,90 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       };
       upperEl?.addEventListener("dragstart", blockDragStart);
 
+      const clearOpeningPreview = () => {
+        const preview = openingPreviewLineRef.current;
+        if (preview) {
+          canvas.remove(preview);
+          openingPreviewLineRef.current = null;
+          canvas.requestRenderAll();
+        }
+      };
+
+      const syncOpeningPreview = (clientX: number, clientY: number) => {
+        const uiTool = activeToolRef.current;
+        const tool = runtimeToolFor(uiTool);
+        if (tool !== "door" && tool !== "window" && tool !== "opening") {
+          clearOpeningPreview();
+          return;
+        }
+        const floor = activeFloorRef.current;
+        if (!floor || floor.walls.length === 0) {
+          clearOpeningPreview();
+          return;
+        }
+        const screen = hostPoint(host, clientX, clientY);
+        const projectPoint = screenToProject(screen, transformRef.current);
+        const kind = openingKindFromTool(tool);
+        const widthMm = defaultOpeningWidthMm(kind);
+        const resolved = resolveOpeningPlacementAtPoint(
+          projectPoint,
+          floor.walls,
+          widthMm,
+          floor.doors,
+          floor.windows,
+        );
+        if ("rejected" in resolved) {
+          clearOpeningPreview();
+          return;
+        }
+        const wall = floor.walls.find((item) => item.id === resolved.wallId);
+        if (!wall) {
+          clearOpeningPreview();
+          return;
+        }
+        const endpoints = openingLineEndpointsMm(wall, resolved.position, widthMm);
+        const startScreen = projectToScreen(endpoints.start, transformRef.current);
+        const endScreen = projectToScreen(endpoints.end, transformRef.current);
+        const strokeToken =
+          kind === "window"
+            ? PLANNER_COLOR_TOKENS.windowStroke
+            : PLANNER_COLOR_TOKENS.doorFill;
+        const stroke = resolveStageColor(
+          strokeToken,
+          kind === "window" ? "#0369a1" : "#b45309",
+        );
+        let preview = openingPreviewLineRef.current;
+        if (!preview) {
+          preview = new Line([startScreen.x, startScreen.y, endScreen.x, endScreen.y], {
+            stroke,
+            strokeWidth: 5,
+            selectable: false,
+            evented: false,
+            objectCaching: false,
+            opacity: 0.65,
+          });
+          canvas.add(preview);
+          openingPreviewLineRef.current = preview;
+        } else {
+          preview.set({
+            x1: startScreen.x,
+            y1: startScreen.y,
+            x2: endScreen.x,
+            y2: endScreen.y,
+            stroke,
+          });
+          preview.setCoords();
+        }
+        canvas.requestRenderAll();
+      };
+
       const clearWallPreview = () => {
         const preview = previewLineRef.current;
         if (preview) {
           canvas.remove(preview);
           previewLineRef.current = null;
         }
+        clearWallSnapMarker(canvas, snapMarkerHandleRef.current);
         wallDrawRef.current = null;
         setWallReadout(null);
         canvas.requestRenderAll();
@@ -575,6 +668,13 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           angleDegrees: 0,
           snapKind: snappedStart.kind,
         });
+        syncWallSnapMarker({
+          canvas,
+          handle: snapMarkerHandleRef.current,
+          screen: startScreen,
+          kind: snappedStart.kind,
+          stroke: resolveStageColor(PLANNER_COLOR_TOKENS.alignGuide, "#2563eb"),
+        });
         emitStatusRef.current(transformRef.current, "wall");
       };
 
@@ -597,6 +697,13 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         const end = snappedEnd.point;
         const endScreen = projectToScreen(end, transformRef.current);
         preview.set({ x2: endScreen.x, y2: endScreen.y });
+        syncWallSnapMarker({
+          canvas,
+          handle: snapMarkerHandleRef.current,
+          screen: endScreen,
+          kind: snappedEnd.kind,
+          stroke: resolveStageColor(PLANNER_COLOR_TOKENS.alignGuide, "#2563eb"),
+        });
         setWallReadout({
           x: endScreen.x,
           y: endScreen.y,
@@ -702,14 +809,22 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           event.preventDefault();
           event.stopPropagation();
           const screen = hostPoint(host, event.clientX, event.clientY);
-          const hit = nearestWall(
+          const kind = openingKindFromTool(tool);
+          const widthMm = defaultOpeningWidthMm(kind);
+          const resolved = resolveOpeningPlacementAtPoint(
             screenToProject(screen, transformRef.current),
             floor.walls,
+            widthMm,
+            floor.doors,
+            floor.windows,
           );
-          if (hit && hit.distance <= 240) {
-            const kind = tool === "window" ? "window" : "door";
-            onOpeningPlacedRef.current(hit.wallId, hit.position, kind);
+          if ("rejected" in resolved) {
+            onOpeningRejectedRef.current?.(resolved.reason);
+            clearOpeningPreview();
+            return;
           }
+          onOpeningPlacedRef.current(resolved.wallId, resolved.position, kind);
+          clearOpeningPreview();
           return;
         }
 
@@ -736,6 +851,13 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           updateWallAt(event.clientX, event.clientY, event.shiftKey);
           return;
         }
+        const uiTool = activeToolRef.current;
+        const tool = runtimeToolFor(uiTool);
+        if (tool === "door" || tool === "window" || tool === "opening") {
+          syncOpeningPreview(event.clientX, event.clientY);
+          return;
+        }
+        clearOpeningPreview();
         const session = panSessionRef.current;
         if (!session || session.pointerId !== pointerIdOf(event)) return;
         const screen = hostPoint(host, event.clientX, event.clientY);
@@ -907,6 +1029,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         window.removeEventListener("mouseup", handleWindowPointerUp);
         upperEl?.removeEventListener("dragstart", blockDragStart);
         clearWallPreview();
+        clearOpeningPreview();
         fabricExtensions.dispose();
         observer.disconnect();
         canvas.dispose();
@@ -929,6 +1052,9 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       // stroke is not wiped mid-drag (HTML5 drag residual / status re-render).
       const livePreview = previewLineRef.current;
       canvas.clear();
+      // clear() drops the snap glyph; drop the stale handle so the next move recreates it.
+      snapMarkerHandleRef.current.marker = null;
+      snapMarkerHandleRef.current.kind = "none";
       canvas.backgroundColor = fabricBackgroundPaint(gridEnabledRef.current);
 
       const showWalls = layerVisibility?.walls !== false;

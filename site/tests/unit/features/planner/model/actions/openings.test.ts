@@ -38,7 +38,7 @@ describe("openings actions", () => {
       p,
       {
         wallId,
-        position: 0.8,
+        position: 0.72,
         width: 1200,
         height: 1200,
         sillHeight: 900,
@@ -103,5 +103,48 @@ describe("openings actions", () => {
         ids("window-overhang"),
       ),
     ).toThrow(/fit fully/i);
+  });
+
+  it("allows openings at the same normalized position on different walls", () => {
+    let p = createPlannerProject({ idFactory: ids("floor", "project") });
+    p = addPlannerWall(
+      p,
+      { start: { x: 0, y: 0 }, end: { x: 4000, y: 0 } },
+      ids("wall-a"),
+    );
+    p = addPlannerWall(
+      p,
+      { start: { x: 0, y: 2000 }, end: { x: 4000, y: 2000 } },
+      ids("wall-b"),
+    );
+    const wallA = p.floors[0]!.walls[0]!.id;
+    const wallB = p.floors[0]!.walls[1]!.id;
+    p = addPlannerDoor(
+      p,
+      {
+        wallId: wallA,
+        position: 0.5,
+        width: 900,
+        height: 2100,
+        type: "single",
+        swingDirection: "left",
+        flipSide: false,
+      },
+      ids("door-a"),
+    );
+    p = addPlannerWindow(
+      p,
+      {
+        wallId: wallB,
+        position: 0.5,
+        width: 1200,
+        height: 1200,
+        sillHeight: 900,
+        type: "fixed",
+      },
+      ids("window-b"),
+    );
+    expect(p.floors[0]!.doors).toHaveLength(1);
+    expect(p.floors[0]!.windows).toHaveLength(1);
   });
 });

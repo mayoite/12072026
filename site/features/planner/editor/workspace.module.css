@@ -519,14 +519,48 @@
   overflow: hidden;
 }
 
-/* Dock host fills the space below the customer workflow. */
+/* Dock host fills the space below the customer workflow — with gutters. */
+.dockWithRail {
+  position: relative;
+  display: flex;
+  flex: 1 1 0%;
+  flex-direction: row;
+  align-items: stretch;
+  gap: var(--space-2);
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  padding: 0 var(--space-2) var(--space-2);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.dockWithRail > :global(.pw-tool-rail) {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  flex: 0 0 auto;
+  height: auto;
+  max-height: none;
+  align-self: stretch;
+  z-index: 5;
+  transform: none !important;
+  box-shadow: none;
+}
+
 .dockStage {
   position: relative;
   flex: 1 1 0%;
   min-height: 0;
   min-width: 0;
   height: 100%;
-  width: 100%;
+  width: auto;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--ws-panel-border);
+  background: var(--planner-surface-canvas, var(--ws-panel-bg));
 }
 
 .dockStage > * {
@@ -536,15 +570,55 @@
   min-height: 0;
 }
 
+/* Soft inset so plan grid is not flush against dock tabs / properties. */
+.planCanvasInset {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--space-2);
+  box-sizing: border-box;
+  background: var(--planner-surface-canvas, var(--surface-page));
+}
+
+.planCanvasInset > * {
+  flex: 1 1 0%;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--ws-panel-border);
+  background: var(--planner-surface-canvas, var(--surface-page));
+}
+
+.layersOverlay {
+  position: absolute;
+  z-index: calc(var(--ws-z-floating, 80) + 1);
+  left: var(--space-2);
+  bottom: var(--space-2);
+  width: min(18rem, calc(100% - var(--space-4)));
+  max-height: min(22rem, calc(100% - var(--space-4)));
+  overflow: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--ws-panel-border);
+  background: var(--ws-panel-bg);
+  box-shadow: var(--ws-shadow-float);
+}
+
 .workflowBar {
   position: relative;
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
   flex: 0 0 auto;
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-1) var(--space-3);
   background: var(--ws-panel-bg);
   border-bottom: 1px solid var(--ws-panel-border);
+  min-height: 0;
 }
 
 .workflowWarning {
@@ -705,8 +779,8 @@
   align-items: center;
   gap: var(--space-2);
   width: 100%;
-  min-height: 3rem;
-  padding: var(--space-2) var(--space-3);
+  min-height: 2.5rem;
+  padding: var(--space-1) var(--space-2);
   text-align: left;
   color: var(--ws-text-secondary);
   background: transparent;
@@ -771,6 +845,23 @@
 
 .workflowButton[data-completion="complete"] .workflowCompletion {
   color: var(--success-text, var(--ws-accent));
+}
+
+@media (width < 48rem) {
+  .workflowCopy small,
+  .workflowCompletion {
+    display: none;
+  }
+
+  .workflowButton {
+    min-height: 2.25rem;
+    padding: var(--space-1);
+  }
+
+  .workflowAssist {
+    min-height: 2.25rem;
+    padding: var(--space-1) var(--space-2);
+  }
 }
 
 .mobileCanvasStack {

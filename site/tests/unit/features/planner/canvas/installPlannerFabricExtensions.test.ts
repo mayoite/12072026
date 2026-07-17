@@ -11,7 +11,7 @@ const { AligningGuidelinesCtor, disposeMock } = vi.hoisted(() => {
   return { AligningGuidelinesCtor, disposeMock };
 });
 
-vi.mock("fabric/extensions", () => ({
+vi.mock("@/features/planner/canvas/fabricAligningGuidelines", () => ({
   AligningGuidelines: AligningGuidelinesCtor,
 }));
 
