@@ -5,7 +5,7 @@ import {
   trackConversionEvent,
   CONVERSION_EVENTS,
 } from "@/lib/analytics/conversionContract";
-import { hasAnalyticsConsent } from "@/lib/consent";
+import { hasAnalyticsConsent, hasConsentChoice } from "@/lib/consent";
 import {
   buildPlannerEntryCampaign,
   isPlannerEntryHref,
@@ -20,8 +20,11 @@ import { sendAnalyticsEvent } from "@/lib/analytics/emitTransport";
 export function emitSiteEvent(eventName: string, payload: SiteEventPayload) {
   if (typeof window === "undefined") return;
   if (!hasAnalyticsConsent()) {
+    // Queue only while consent is undecided. Reject → drop (no analytics).
     // Queue until accept so first-page CTA/page_view are not lost forever.
-    enqueueSiteEvent(eventName, payload);
+    if (!hasConsentChoice()) {
+      enqueueSiteEvent(eventName, payload);
+    }
     return;
   }
   const ok = sendAnalyticsEvent(eventName, payload);

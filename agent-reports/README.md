@@ -1,38 +1,16 @@
-# Agent reports — one file per track
+# Agent reports — one blockers file per module
 
-| Track | File |
-|-------|------|
-| **Planner** | [PLANNER.md](./PLANNER.md) |
-| **Admin** | [ADMIN.md](./ADMIN.md) |
-| **Site** | [SITE.md](./SITE.md) |
-| **Tech stack** | [TECH-STACK.md](./TECH-STACK.md) |
+| Module | File | Primary blocker |
+|--------|------|-----------------|
+| **Planner** | [PLANNER.md](./PLANNER.md) | Browser commercial-loop acceptance |
+| **Admin** | [ADMIN.md](./ADMIN.md) | DB-SVG cutover (disk still live) |
+| **Site** | [SITE.md](./SITE.md) | Production SEO re-probe |
+| **Tech stack** | [TECH-STACK.md](./TECH-STACK.md) | Full typecheck/lint/test/release:gate not green |
 
-Update track files in place. Short slice reports: `YYYY-MM-DD-*.md`.
+No dated slice dumps. Update these four in place only.  
+Repo active cutover detail: `../Failures.md`.
 
-**Rule:** parent does **not** cancel agents without owner ask.
+## Active: Site full acceptance (10 agents)
 
-## Wave 2026-07-17 — 15 agents
-
-| ID | Track | Scope | Slice |
-|----|--------|--------|--------|
-| P-W1 | Planner | Underlay calibrate + import residual (P5) | `2026-07-17-pw1-underlay.md` |
-| P-W2 | Planner | Mobile shell / a11y nudge (P3/P14) | `2026-07-17-pw2-shell-a11y.md` |
-| P-W3 | Planner | Sync conflict UI (P13) | `2026-07-17-pw3-conflict.md` |
-| A-W1 | Admin | SVG publish isolation residual (A2) | `2026-07-17-aw1-svg-publish.md` |
-| A-W2 | Admin | AF-06 phone catalog UX | `2026-07-17-aw2-phone-catalog.md` |
-| A-W3 | Admin | AF-07 price book UX | `2026-07-17-aw3-price-book.md` |
-| S-W1 | Site | SF-01 heading a11y | `2026-07-17-sw1-heading-a11y.md` |
-| S-W2 | Site | SF-02 titles + host SEO honesty | `2026-07-17-sw2-titles-seo.md` |
-| S-W3 | Site | Contact + consent residual (S3) | `2026-07-17-sw3-contact.md` |
-| T-W1 | TechStack | CI pnpm pin → 11.13.0 (TF-02) | `2026-07-17-tw1-ci-pnpm.md` |
-| T-W2 | TechStack | Typecheck race / TF-07 honesty | `2026-07-17-tw2-typecheck.md` |
-| T-W3 | TechStack | T3 dep audit / dead-dep | `2026-07-17-tw3-deps.md` |
-| X-W1 | Cross | CSRF mutation matrix sample | `2026-07-17-xw1-csrf.md` |
-| X-W2 | Cross | Failures.md + DB-SVG honesty only | `2026-07-17-xw2-failures.md` |
-| X-W3 | Cross | Gate commands real exits (layout/purity/health) | `2026-07-17-xw3-gates.md` |
-
-Status: **RUNNING**.
-
-## Owner rule (2026-07-17)
-
-**When implementation is done, agents must TEST** — focused vitest (and layout if they touched plans/layout). Report command + exit 0/FAIL. No PASS claim without exits.
+S1 SEO · S2 routes · S3 viewports · S4 a11y · S5 contact · S6 Planner entry · S7 catalog · S8 i18n · S9 analytics · S10 unit gates.  
+All write into **SITE.md** only. Parent does not cancel without owner ask.

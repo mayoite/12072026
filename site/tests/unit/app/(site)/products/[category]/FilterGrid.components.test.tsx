@@ -278,7 +278,7 @@ describe('FilterGrid.components', () => {
       query: 'ergonomic',
       series: 'Aero',
       subcategory: ['Task', 'Executive'],
-      priceRange: ['10,000-20,000'],
+      priceRange: ['mid'],
       material: ['Mesh'],
       hasHeadrest: true,
       isHeightAdjustable: true,
@@ -305,7 +305,7 @@ describe('FilterGrid.components', () => {
       expect(screen.getByText('Series: Aero')).toBeInTheDocument();
       expect(screen.getByText('Subcategory: Task')).toBeInTheDocument();
       expect(screen.getByText('Subcategory: Executive')).toBeInTheDocument();
-      expect(screen.getByText('Price: 10,000-20,000')).toBeInTheDocument();
+      expect(screen.getByText('Price: mid')).toBeInTheDocument();
       expect(screen.getByText('Mesh')).toBeInTheDocument();
       expect(screen.getByText('With headrest')).toBeInTheDocument();
       expect(screen.getByText('Height adjustable')).toBeInTheDocument();

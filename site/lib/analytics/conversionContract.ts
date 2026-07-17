@@ -1,5 +1,5 @@
 import { emitSiteEvent, type SiteEventPayload } from "@/lib/analytics/siteEvents";
-import { hasAnalyticsConsent } from "@/lib/consent";
+import { hasAnalyticsConsent, hasConsentChoice } from "@/lib/consent";
 
 export const CONVERSION_EVENTS = {
   PAGE_VIEW: "page_view",
@@ -124,8 +124,18 @@ export function trackConversionEvent<K extends ConversionEventName>(
   fields: ConversionEventMap[K],
 ): void {
   if (typeof window === "undefined") return;
-  // Consent before dedupe so a pre-accept page_view does not burn the TTL slot.
-  if (!hasAnalyticsConsent()) return;
+
+  const filtered = filterEventPrivacy(fields as unknown as Record<string, unknown>);
+
+  // No emit before accept. Queue only while choice is still open so first-page
+  // PAGE_VIEW / PLANNER_ENTRY survive Accept (SiteConversionTracker does not re-fire).
+  // Do not burn dedupe TTL pre-consent.
+  if (!hasAnalyticsConsent()) {
+    if (!hasConsentChoice()) {
+      emitSiteEvent(name, filtered as SiteEventPayload);
+    }
+    return;
+  }
 
   if (DEDUPE_EVENTS.has(name)) {
     const key = `${name}:${dedupeKeyFor(name, fields as unknown as Record<string, unknown>)}`;
@@ -139,7 +149,6 @@ export function trackConversionEvent<K extends ConversionEventName>(
     DEDUPE_KEYS.add(key);
   }
 
-  const filtered = filterEventPrivacy(fields as unknown as Record<string, unknown>);
   emitSiteEvent(name, filtered as SiteEventPayload);
 }
 

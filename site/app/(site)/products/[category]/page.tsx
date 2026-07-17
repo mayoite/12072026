@@ -30,7 +30,13 @@ export async function generateMetadata({
   const category = requestedCatalog.find(
     (c: CompatCategory) => c.id === canonicalCategoryId,
   );
-  if (!category) return {};
+  // Empty catalog = offline shell (noindex). Known-missing slug = hard 404 (no soft metadata).
+  if (requestedCatalog.length === 0) {
+    return { robots: { index: false, follow: false } };
+  }
+  if (!category) {
+    notFound();
+  }
   const displayName = getCatalogCategoryLabel(canonicalCategoryId, category.name);
   const displayDescription = getCatalogCategoryDescription(
     canonicalCategoryId,

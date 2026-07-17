@@ -26,11 +26,12 @@ function isLoadedImage(entry: CacheEntry | undefined): entry is HTMLImageElement
   );
 }
 
-/** True when URL looks like a plan-catalog SVG asset. */
+/** True when URL looks like a plan-catalog SVG asset (disk or DB revision API). */
 export function isPublishedSvgPlanUrl(url: string | undefined | null): boolean {
   if (!url) return false;
   const path = url.split("?")[0]?.split("#")[0] ?? "";
-  return path.toLowerCase().endsWith(".svg");
+  if (path.toLowerCase().endsWith(".svg")) return true;
+  return /^\/api\/planner\/catalog\/svg\/[a-z][a-z0-9-]{1,127}$/i.test(path);
 }
 
 /**

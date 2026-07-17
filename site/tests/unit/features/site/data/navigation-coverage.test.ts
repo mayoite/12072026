@@ -239,6 +239,34 @@ describe("SITE_FOOTER_NAV", () => {
   });
 });
 
+describe("public nav data never exposes Admin", () => {
+  const isAdminHref = (href: string) => /^\/admin(\/|$)/i.test(href);
+  const isAdminLabel = (label: string) => label.trim().toLowerCase() === "admin";
+
+  it("header primary + more + CTAs + featured + search fallbacks stay Admin-free", () => {
+    const navHrefs = [
+      ...SITE_NAV_LINKS.map((l) => l.href),
+      ...SITE_HEADER_PRIMARY_LINKS.map((l) => l.href),
+      ...SITE_HEADER_MORE_LINKS.map((l) => l.href),
+      ...SITE_CTA_LINKS.map((l) => l.href),
+      ...SITE_NAV_FEATURED_CARDS.map((c) => c.href),
+      ...SITE_NAV_SEARCH_FALLBACK_LINKS.map((l) => l.href),
+      ...SITE_FOOTER_NAV.flatMap((s) => s.links.map((l) => l.href)),
+    ];
+    const navLabels = [
+      ...SITE_NAV_LINKS.map((l) => l.label),
+      ...SITE_CTA_LINKS.map((l) => l.label),
+      ...SITE_NAV_FEATURED_CARDS.map((c) => c.title),
+      ...SITE_NAV_SEARCH_FALLBACK_LINKS.map((l) => l.label),
+      ...SITE_FOOTER_NAV.flatMap((s) => s.links.map((l) => l.label)),
+    ];
+
+    expect(navHrefs.some(isAdminHref)).toBe(false);
+    expect(navLabels.some(isAdminLabel)).toBe(false);
+  });
+});
+
+
 // Coverage extras for 0% modules (site-data + lib/catalog/site). These execute top-level + pure fns.
 describe("site-data and catalog feature coverage (for statements)", () => {
   it("exercises site-data brand, clientLogos, contact, fallbacks, hero, homepage, marketing", () => {

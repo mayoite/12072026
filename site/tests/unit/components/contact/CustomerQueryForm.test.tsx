@@ -40,12 +40,12 @@ describe("CustomerQueryForm Component", () => {
   it("renders labeled fields with initial empty state", () => {
     render(<CustomerQueryForm />);
 
-    expect(screen.getByLabelText(/Name/i)).toHaveValue("");
-    expect(screen.getByLabelText(/Company/i)).toHaveValue("");
-    expect(screen.getByLabelText(/Email/i)).toHaveValue("");
+    expect(screen.getByLabelText(/^Name/i)).toHaveValue("");
+    expect(screen.getByLabelText(/^Company$/i)).toHaveValue("");
+    expect(screen.getByLabelText(/^Email$/i)).toHaveValue("");
     expect(screen.getByLabelText(/Phone/i)).toHaveValue("");
     expect(screen.getByLabelText(/Preferred Contact/i)).toHaveValue("any");
-    expect(screen.getByLabelText(/Message/i)).toHaveValue("");
+    expect(screen.getByLabelText(/^Message/i)).toHaveValue("");
     expect(screen.getByTestId("contact-form-consent")).not.toBeChecked();
     expect(screen.getByTestId("contact-form-submit")).toBeDisabled();
   });
@@ -67,6 +67,11 @@ describe("CustomerQueryForm Component", () => {
       "href",
       "/privacy",
     );
+    // Honeypot is present but excluded from the accessibility tree.
+    const honeypot = screen.getByTestId("contact-form-honeypot");
+    expect(honeypot).toHaveAttribute("name", "website");
+    expect(honeypot).toHaveAttribute("tabIndex", "-1");
+    expect(honeypot).toHaveAttribute("autocomplete", "off");
   });
 
   it("validates required fields and consent before submitting", () => {
@@ -134,6 +139,7 @@ describe("CustomerQueryForm Component", () => {
       message: "I need a workstation",
       source: "website-contact",
       sourcePath: "/contact",
+      website: "",
     });
 
     expect(trackContactSubmission).toHaveBeenCalledWith({
@@ -286,5 +292,88 @@ describe("CustomerQueryForm Component", () => {
       source: "website-contact",
       status: "error",
     });
+  });
+
+  it("treats honest honeypot success envelope as success (no error alert)", async () => {
+    const fetchMock = vi.mocked(fetch);
+    fetchMock.mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        success: true,
+        queryId: "submitted",
+        createdAt: "2026-01-01T00:00:00Z",
+        followUp: { email: null, whatsapp: null },
+      }),
+    } as Response);
+
+    render(<CustomerQueryForm />);
+    fillRequiredFields();
+    fireEvent.change(screen.getByTestId("contact-form-honeypot"), {
+      target: { value: "http://spam.example" },
+    });
+    fireEvent.click(screen.getByTestId("contact-form-submit"));
+
+    await waitFor(() => {
+      expect(screen.getByRole("status")).toHaveTextContent(/Query submitted/i);
+      expect(screen.getByText("submitted")).toBeInTheDocument();
+    });
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+
+    const body = JSON.parse(
+      (fetchMock.mock.calls[0]?.[1] as RequestInit).body as string,
+    ) as Record<string, unknown>;
+    expect(body.website).toBe("http://spam.example");
+  });
+
+  it("surfaces rate-limit envelope message from API", async () => {
+    const fetchMock = vi.mocked(fetch);
+    fetchMock.mockResolvedValue({
+      ok: false,
+      json: async () => ({
+        success: false,
+        error: {
+          code: "RATE_LIMIT_EXCEEDED",
+          message: "Too many submissions. Please try again after some time.",
+        },
+      }),
+    } as Response);
+
+    render(<CustomerQueryForm />);
+    fillRequiredFields();
+    fireEvent.click(screen.getByTestId("contact-form-submit"));
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toHaveTextContent(
+        "Too many submissions. Please try again after some time.",
+      );
+    });
+  });
+
+  it("accepts success:true live envelope shape with followUp", async () => {
+    const fetchMock = vi.mocked(fetch);
+    fetchMock.mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        success: true,
+        queryId: "query-live-1",
+        createdAt: "2026-07-17T00:00:00Z",
+        followUp: {
+          email: "mailto:buyer@example.com?subject=Query%20query-live-1",
+          whatsapp: null,
+        },
+      }),
+    } as Response);
+
+    render(<CustomerQueryForm />);
+    fillRequiredFields();
+    fireEvent.click(screen.getByTestId("contact-form-submit"));
+
+    await waitFor(() => {
+      expect(screen.getByRole("status")).toHaveTextContent("query-live-1");
+    });
+    expect(screen.getByRole("link", { name: "Reply by Email" })).toHaveAttribute(
+      "href",
+      "mailto:buyer@example.com?subject=Query%20query-live-1",
+    );
   });
 });

@@ -95,12 +95,27 @@ Marketing products and managed Planner products use the Products database.
 Released SVG authoring is still disk-authoritative.
 Live SVG descriptors are under `site/inventory/descriptors/`.
 Live SVG bytes are under `site/public/svg-catalog/`.
-The public SVG catalog now excludes entries without a valid published SVG artifact.
+Dual-write injects only when Products DB is configured and R2 ListObjects succeeds.
+Dead R2 at the resolve gate skips dual-write without rolling back disk.
+Dual-write payload remains incomplete — **not** cutover.
+Planner `svg-blocks` is DB-aware with disk fallback; artifact-byte authority is target-only.
 
 Products database plus immutable R2 artifacts is the target authority.
-That cutover is incomplete.
 See [08-DATABASE-SVG-CONTRACT.md](08-DATABASE-SVG-CONTRACT.md).
 Active release blockers remain in [Failures.md](../../Failures.md).
+
+## BOQ handoff runtime
+
+Member Review posts `POST /api/planner/handoff` (CSRF, rate limit, member auth, idempotency).
+When admin CRM env is present, rows insert into `customer_queries` with source `planner-handoff`.
+Optional staff email uses Resend (`RESEND_API_KEY`, `STAFF_NOTIFY_EMAIL`).
+Demo list prices stay labeled. Browser commercial journey remains an acceptance requirement.
+
+## AI chain (site services)
+
+Site AI paths use **Gemini and/or OpenRouter** (primary + backup keys when set).
+`OPENAI_API_KEY` is not required for the locked stack path.
+Provider keys stay server-side.
 
 ## Security boundaries
 
@@ -115,12 +130,14 @@ It retries only responses explicitly marked as CSRF rejections.
 Public APIs remain rate limited.
 Database authorization remains server-side.
 Admin publication remains a privileged server operation.
+`DEV_AUTH_BYPASS` is local/non-production only and is not deploy auth proof.
 
 ## Styling and accessibility
 
 The shared CSS tree is `site/app/css/`.
-Semantic tokens are defined in the core theme.
+Semantic tokens are defined in the core theme (ecru paper stack for light surfaces).
 Planner surface CSS lives in `site/app/css/core/locked/planner/`.
+Admin shell CSS lives in `site/app/css/core/locked/admin/` (ecru topbar package aligned with Planner).
 Isolated Planner CSS modules are allowed by the repository contract.
 
 React Aria owns keyboard and focus behavior for Planner controls.

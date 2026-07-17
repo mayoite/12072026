@@ -1,15 +1,18 @@
 # Product data flow
 
-## Live path — disk SVG (2026-07)
+## Live path — disk SVG (2026-07-17)
 
 1. Admin edits in SVG studio (`site/features/admin/svg-editor/`).
-2. Validate + compile in `publishDescriptorWithPipeline.ts`.
-3. SVG bytes → `site/public/svg-catalog/`; descriptor JSON → `site/inventory/descriptors/` (`{slug}.json` / `{slug}.{n}.json` / `{slug}.latest.json`).
-4. Lifecycle/audit → `results/admin/catalog-ops/` when configured.
-5. Both publish entrypoints contain a best-effort Products DB adapter behind `PRODUCTS_DATABASE_URL`, but the SVG tables have no released migration yet. This path is not production authority; failures are logged and disk wins.
-6. The Planner `svg-blocks` route contains an awaited DB-read adapter with disk fallback. Treat it as pre-cutover code until the schema migration and isolated database verification close `DB-SVG-01..05`. `Block2D` remains the loading/missing-SVG fallback.
-
-Both publish paths behave the same way: DB dual-write is a best-effort stub, so failed compile/write keeps the prior on-disk release and disk stays the real authority.
+2. Validate + compile in `publishDescriptorWithPipeline.ts` (S1–S3). Fail-closed on compile fail.
+3. S4: SVG bytes → `site/public/svg-catalog/`; descriptor JSON → `site/inventory/descriptors/` (`{slug}.{n}.json` + `.latest.json`).
+4. Lifecycle/audit → `results/admin/catalog-ops/` when configured (filesystem, not Products DB).
+5. Dual-write resolve (`resolveSvgPublishDualWriteDeps`):
+   - `skipped_no_db` — no Products DB URL
+   - `skipped_r2_unavailable` — DB set, R2 ListObjects fail (disk publish not rolled back at resolve)
+   - `enabled` — DB + R2 probe ok → inject repository + artifact put
+6. When dual-write **enabled**, payload is still **stub/incomplete** (not full revision authority). Disk remains live authority.
+7. Optional best-effort Supabase catalog mirror after disk success; mirror failure must not undo disk.
+8. Planner `svg-blocks`: DB-aware read of usable descriptors when configured, **disk fallback**. Not revision artifact-byte authority. `Block2D` = load/missing fallback only.
 
 ## Target path — Products DB
 
@@ -24,20 +27,22 @@ Failed compile/upload/transaction leaves prior publication intact. Upload is not
 
 ## Customer planning
 
-Guest/member route → one normalized document for canvas, 3D, save, export → placed products keep catalog identity/options → save failure never shows success → reload restores document.
+Guest/member route → one normalized document for canvas, 3D, save, export → placed products keep catalog identity/options → save failure never shows success → reload restores document. Guest IndexedDB keys scoped by plan UUID.
 
 ## BOQ handoff
 
-Placed catalog products → stable product/option IDs → branded JSON/CSV/PDF → customer review → submit to Oando destination → store revision, BOQ hash, consent, status → retry with idempotency key. No commercial pricing without approved authority.
+Placed catalog products → stable product/option IDs → branded JSON/CSV/PDF → customer review → **Send to Oando** (`POST /api/planner/handoff`) → insert `customer_queries` (source `planner-handoff`) when admin CRM client env present → optional staff email via Resend → idempotency key + CSRF + rate limit. Demo list prices labeled; no commercial authority without approved price book.
+
+Env names (values never in docs): `NEXT_ADMIN_SUPABASE_URL`, `SUPABASE_ADMIN_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `STAFF_NOTIFY_EMAIL`.
 
 ## Storage authority
 
-| Layer | Target role | Live (2026-07) |
+| Layer | Target role | Live (2026-07-17) |
 |---|---|---|
-| Products DB | Release identity + pointer | Marketing + managed catalog only for SVG |
-| R2 artifacts | Immutable SVG bytes | Planned |
-| Disk descriptors | Migration/fixtures | **Live SVG authority** |
-| R2 catalog snapshot | Degraded read only | Active fallback |
+| Products DB | Release identity + pointer | Marketing + managed catalog; SVG dual-write optional stub |
+| R2 artifacts | Immutable SVG bytes | Dual-write put when probe ok; not release authority yet |
+| Disk descriptors + svg-catalog | Migration/fixtures after cutover | **Live SVG authority** |
+| Lifecycle filesystem | — | `results/admin/catalog-ops/` |
 | Admin drafts | Private | Private |
 
-Contract: `08-DATABASE-SVG-CONTRACT.md`.
+Contract: `08-DATABASE-SVG-CONTRACT.md`. Active blocker: `../../Failures.md`.

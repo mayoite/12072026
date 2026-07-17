@@ -174,6 +174,25 @@ export async function writeR2ObjectText(
   );
 }
 
+/** Binary immutable artifacts (PNG masters/thumbnails) for dual-write cutover path. */
+export async function writeR2ObjectBytes(
+  key: string,
+  body: Uint8Array | Buffer,
+  contentType = contentTypeForKey(key),
+  bucket = resolveCatalogBucketName(),
+): Promise<void> {
+  const client = createR2CatalogClient();
+  await client.send(
+    new PutObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      Body: body,
+      ContentType: contentType,
+      CacheControl: "public, max-age=31536000, immutable",
+    }),
+  );
+}
+
 /** Cached probe so publish paths do not hit R2 on every request. */
 const R2_PROBE_TTL_MS = 60_000;
 let r2ProbeCache: { at: number; ok: boolean; reason?: string } | null = null;

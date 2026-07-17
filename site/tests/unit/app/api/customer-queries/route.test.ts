@@ -94,7 +94,7 @@ describe("app/api/customer-queries/route.ts", () => {
     expect(mockSupabase.from).toHaveBeenCalledWith("customer_queries");
   });
 
-  it("returns honeypot success without persisting", async () => {
+  it("returns honest honeypot success without persisting (same envelope as real insert)", async () => {
     const res = await POST(
       createReq({
         name: "Bot",
@@ -107,6 +107,57 @@ describe("app/api/customer-queries/route.ts", () => {
     const body = await res.json();
     expect(body.success).toBe(true);
     expect(body.queryId).toBe("submitted");
+    expect(typeof body.createdAt).toBe("string");
+    // Same top-level shape clients expect after a real insert — no tell for bots.
+    expect(body.followUp).toEqual({ email: null, whatsapp: null });
     expect(mockSupabase.from).not.toHaveBeenCalled();
+  });
+
+  it("accepts empty website honeypot and persists the query", async () => {
+    const res = await POST(
+      createReq({
+        name: "Alex",
+        message: "Need desks",
+        email: "user@example.com",
+        website: "   ",
+      }),
+    );
+    expect(res.status).toBe(201);
+    expect(mockSupabase.from).toHaveBeenCalledWith("customer_queries");
+  });
+
+  it("returns structured envelope on rate limit with human message", async () => {
+    vi.mocked(rateLimit).mockResolvedValue({ success: false, reset: 1_700_000_000 });
+    const res = await POST(
+      createReq({ name: "A", message: "Hi", email: "a@b.com" }),
+    );
+    const body = await res.json();
+    expect(res.status).toBe(429);
+    expect(body).toMatchObject({
+      success: false,
+      error: {
+        code: API_ERROR_CODES.RATE_LIMIT_EXCEEDED,
+        message: "Too many submissions. Please try again after some time.",
+      },
+    });
+  });
+
+  it("returns DATABASE_ERROR envelope when insert fails", async () => {
+    mockSupabase.single.mockResolvedValue({
+      data: null,
+      error: { message: "relation missing" },
+    });
+    const res = await POST(
+      createReq({
+        name: "Alex",
+        message: "Need chairs",
+        email: "user@example.com",
+      }),
+    );
+    expect(res.status).toBe(500);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe(API_ERROR_CODES.DATABASE_ERROR);
+    expect(body.error.message).toBe("Unable to save query right now.");
   });
 });

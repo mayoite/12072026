@@ -220,4 +220,32 @@ describe("route-contract.json", () => {
       expect(value, `blank path at ${trail}`).not.toMatch(/^\s*$/);
     }
   });
+
+  it("planner legacy redirects target unified /planner paths", () => {
+    const contract = JSON.parse(
+      fs.readFileSync(contractPath, "utf8"),
+    ) as JsonObject;
+    const planner = contract.planner as JsonObject;
+    const legacy = planner._legacyRedirects as JsonObject;
+    expect(legacy["oando-planner"]).toBe("/planner");
+    expect(legacy["buddy-planner"]).toBe("/planner/canvas");
+    expect(legacy["planner-fabric"]).toBe("/planner/canvas");
+    expect(legacy["planner-open3d"]).toBe("/planner/canvas");
+    // Admin CRM/ops are protected destinations, not public marketing nav
+    expect(legacy.crm).toBe("/admin/crm");
+    expect(legacy.ops).toBe("/admin/customer-queries");
+  });
+
+  it("protectedPrefixes includes admin and excludes public marketing roots", () => {
+    const contract = JSON.parse(
+      fs.readFileSync(contractPath, "utf8"),
+    ) as JsonObject;
+    const prefixes = contract.protectedPrefixes as string[];
+    expect(prefixes).toContain("/admin");
+    expect(prefixes).toContain("/dashboard");
+    expect(prefixes).toContain("/portal");
+    expect(prefixes).not.toContain("/products");
+    expect(prefixes).not.toContain("/solutions");
+    expect(prefixes).not.toContain("/");
+  });
 });

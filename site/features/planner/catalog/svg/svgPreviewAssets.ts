@@ -30,6 +30,20 @@ export function buildSvgCatalogPublicUrl(slug: string): string {
 }
 
 /**
+ * Immutable published SVG served from Products DB pointer + R2 artifact bytes.
+ * Prefer this over disk `/svg-catalog/{slug}.svg` when a revision id is known.
+ */
+export function buildPublishedSvgApiUrl(revisionId: string): string {
+  const id = revisionId.trim();
+  return `/api/planner/catalog/svg/${id}`;
+}
+
+export function isPublishedSvgApiUrl(url: string): boolean {
+  const path = url.split("?")[0]?.split("#")[0] ?? "";
+  return /^\/api\/planner\/catalog\/svg\/[a-z][a-z0-9-]{1,127}$/i.test(path);
+}
+
+/**
  * Supabase Storage mirror path (Admin publish best-effort upload).
  * Prefer disk `/svg-catalog/` for live paint; use this for CDN / cross-env import.
  */

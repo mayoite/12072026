@@ -26,15 +26,22 @@ They may exist as migration inputs or test fixtures.
 
 They must not silently override database truth.
 
-## Current gap
+## Current gap (live 2026-07-17)
 
-The product catalog already reads `planner_managed_products` from the Products database.
+| Surface | Live truth |
+|---|---|
+| Marketing / managed catalog | Products DB (`catalog_products`, `planner_managed_products`) |
+| Admin publish write | **Disk** (`inventory/descriptors/`, `public/svg-catalog/`) |
+| Dual-write inject | Only when Products DB configured **and** R2 ListObjects succeeds |
+| Dual-write payload | When enabled: real descriptor + SVG + PNG artifacts + checksums + product pointer path; **still not** sole release authority |
+| Dead R2 at resolve | Skips dual-write; does **not** roll back disk publish at that gate |
+| Lifecycle / audit | Filesystem `results/admin/catalog-ops/` |
+| Planner `svg-blocks` | DB-aware descriptors when configured; **disk fallback**; not artifact-byte authority |
+| Published SVG gate | Still disk |
 
-The SVG-block route is DB-aware with disk fallback; the published SVG gate and live Admin publish still use disk.
+That is a split authority. It must be removed before cutover PASS.
 
-That is a split authority.
-
-It must be removed.
+**Enabled dual-write ≠ cutover.** Active blocker wording: `../../Failures.md`. Acceptance IDs in this contract remain open until proven.
 
 ## Ownership
 

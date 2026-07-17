@@ -66,12 +66,18 @@ export async function POST(req: NextRequest) {
 
   const payload = await parsePayload(req);
 
+  // Honeypot: bots that fill `website` get a fake success with the same
+  // envelope shape as a real insert so clients (and scrapers) cannot tell.
   const honeypot = normalizeText(payload.website, 120);
   if (honeypot) {
     return success(
       {
         queryId: "submitted",
         createdAt: new Date().toISOString(),
+        followUp: {
+          email: null,
+          whatsapp: null,
+        },
       },
       201,
     );

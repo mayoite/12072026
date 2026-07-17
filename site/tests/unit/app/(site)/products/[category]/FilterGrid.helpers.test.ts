@@ -11,10 +11,7 @@ import {
   flattenCategoryProducts,
   buildFallbackFacets,
 } from '@/app/(site)/products/[category]/FilterGrid.helpers';
-
-vi.mock('@/lib/catalog/site/filters', () => ({
-  PRICE_RANGES: ['Under 5,000', '5,000-10,000', '10,000-20,000', '20,000+'],
-}));
+import { PRICE_RANGES } from '@/lib/catalog/site/filters';
 
 vi.mock('@/lib/catalog/site/traits', () => ({
   hasVerifiedHeadrest: vi.fn(() => false),
@@ -124,18 +121,34 @@ describe('FilterGrid.helpers', () => {
   });
 
   describe('buildFallbackFacets', () => {
-    it('builds facets', () => {
+    it('builds facets from metadata.priceRange bands only (no numeric list prices)', () => {
       const products = [
-        { seriesName: 'S1', metadata: { subcategory: 'SC1', isStackable: true }, price: 15000, specs: { materials: ['Metal'] } },
-        { seriesName: 'S2', metadata: { subcategory: 'SC1', bifmaCertified: true }, price: 25000 }
+        {
+          seriesName: 'S1',
+          metadata: { subcategory: 'SC1', isStackable: true, priceRange: 'mid' },
+          specs: { materials: ['Metal'] },
+        },
+        {
+          seriesName: 'S2',
+          metadata: { subcategory: 'SC1', bifmaCertified: true, priceRange: 'luxury' },
+        },
+        {
+          seriesName: 'S3',
+          // Numeric list price must never become a facet or commercial claim.
+          metadata: { subcategory: 'SC2' },
+          price: 15000,
+        },
       ] as any[];
       const facets = buildFallbackFacets('desks', products);
-      
-      expect(facets.series).toEqual(['S1', 'S2']);
-      expect(facets.subcategory).toEqual(['SC1']);
+
+      expect(PRICE_RANGES).toEqual(['budget', 'mid', 'premium', 'luxury']);
+      expect(facets.series).toEqual(['S1', 'S2', 'S3']);
+      expect(facets.subcategory).toEqual(['SC1', 'SC2']);
       expect(facets.material).toEqual(['Metal']);
-      expect(facets.priceRange).toContain('10,000-20,000');
-      expect(facets.priceRange).toContain('20,000+');
+      expect(facets.priceRange).toEqual(['mid', 'luxury']);
+      expect(facets.priceRange).not.toContain('Under 5,000');
+      expect(facets.priceRange).not.toContain('10,000-20,000');
+      expect(facets.priceRange).not.toContain('20,000+');
       expect(facets.featureAvailability.isStackable).toBe(true);
       expect(facets.featureAvailability.bifmaCertified).toBe(true);
     });
@@ -143,6 +156,13 @@ describe('FilterGrid.helpers', () => {
     it('omits series facets for seating', () => {
       const facets = buildFallbackFacets('seating', [] as any[]);
       expect(facets.series).toEqual([]);
+    });
+
+    it('returns empty price facets when no product has a released price band', () => {
+      const facets = buildFallbackFacets('desks', [
+        { seriesName: 'S1', metadata: { subcategory: 'SC1' } },
+      ] as any[]);
+      expect(facets.priceRange).toEqual([]);
     });
   });
 });

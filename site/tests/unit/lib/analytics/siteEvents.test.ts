@@ -17,7 +17,11 @@ import {
   _trackQuoteCartAdded,
   _trackContactSubmission,
 } from "@/lib/analytics/siteEvents";
-import { CONSENT_ACCEPTED, CONSENT_COOKIE } from "@/lib/consent";
+import {
+  CONSENT_ACCEPTED,
+  CONSENT_COOKIE,
+  CONSENT_REJECTED,
+} from "@/lib/consent";
 import { clearConversionDedupe } from "@/lib/analytics/conversionContract";
 import {
   _clearSiteEventQueueForTests,
@@ -44,7 +48,7 @@ describe("siteEvents", () => {
     _clearSiteEventQueueForTests();
   });
 
-  it("queues when analytics consent is missing (does not drop forever)", () => {
+  it("CTA: no emit before consent; queues until accept", () => {
     document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; path=/`;
     trackSiteCtaClick({
       href: "/contact",
@@ -53,7 +57,75 @@ describe("siteEvents", () => {
       surface: "hero",
     });
     expect(mockTrack).not.toHaveBeenCalled();
-    expect(_queuedSiteEventCountForTests()).toBeGreaterThan(0);
+    expect(_queuedSiteEventCountForTests()).toBe(1);
+
+    document.cookie = `${CONSENT_COOKIE}=${CONSENT_ACCEPTED}; path=/`;
+    flushAnalyticsAfterConsent();
+    expect(mockTrack).toHaveBeenCalledWith("contact_cta_clicked", {
+      href: "/contact",
+      label: "Contact",
+      pathname: "/home",
+      surface: "hero",
+    });
+  });
+
+  it("PAGE_VIEW: no emit before consent; queues until accept", () => {
+    document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; path=/`;
+    trackSitePageView({ pathname: "/about", locale: "en" });
+    expect(mockTrack).not.toHaveBeenCalled();
+    expect(_queuedSiteEventCountForTests()).toBe(1);
+
+    document.cookie = `${CONSENT_COOKIE}=${CONSENT_ACCEPTED}; path=/`;
+    flushAnalyticsAfterConsent();
+    expect(mockTrack).toHaveBeenCalledWith(
+      "page_view",
+      expect.objectContaining({ pathname: "/about", locale: "en" }),
+    );
+  });
+
+  it("PLANNER_ENTRY: no emit before consent; queues launch + entry until accept", () => {
+    document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; path=/`;
+    trackPlannerLaunchClicked({
+      sourcePage: "/home",
+      surface: "hero",
+      productSlug: "chair",
+      categoryId: "seating",
+    });
+    expect(mockTrack).not.toHaveBeenCalled();
+    // planner_launch_clicked + planner_entry
+    expect(_queuedSiteEventCountForTests()).toBe(2);
+
+    document.cookie = `${CONSENT_COOKIE}=${CONSENT_ACCEPTED}; path=/`;
+    flushAnalyticsAfterConsent();
+    expect(mockTrack).toHaveBeenCalledWith(
+      "planner_launch_clicked",
+      expect.objectContaining({
+        pathname: "/home",
+        surface: "hero",
+        productSlug: "chair",
+        categoryId: "seating",
+      }),
+    );
+    expect(mockTrack).toHaveBeenCalledWith(
+      "planner_entry",
+      expect.objectContaining({
+        sourcePage: "/home",
+        locale: "en",
+      }),
+    );
+  });
+
+  it("does not queue after reject", () => {
+    document.cookie = `${CONSENT_COOKIE}=${CONSENT_REJECTED}; path=/`;
+    trackSiteCtaClick({
+      href: "/contact",
+      label: "Contact",
+      pathname: "/home",
+      surface: "hero",
+    });
+    trackSitePageView({ pathname: "/about", locale: "en" });
+    expect(mockTrack).not.toHaveBeenCalled();
+    expect(_queuedSiteEventCountForTests()).toBe(0);
   });
 
   it("emits events correctly based on href category", () => {

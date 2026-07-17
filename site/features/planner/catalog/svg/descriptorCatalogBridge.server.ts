@@ -6,7 +6,10 @@ import {
 } from "../catalogLabelUtils";
 import type { PlannerCatalogItem } from "../catalogTypes";
 import { buildShortName } from "../catalogTaxonomy";
-import { buildSvgCatalogPublicUrl } from "./svgPreviewAssets";
+import {
+  buildPublishedSvgApiUrl,
+  buildSvgCatalogPublicUrl,
+} from "./svgPreviewAssets";
 import type { BlockDescriptor } from "./svgTypes";
 
 export interface PlannerSvgCatalogDescriptor {
@@ -20,6 +23,8 @@ export interface PlannerSvgCatalogDescriptor {
     readonly depthMm: number;
     readonly heightMm: number;
   };
+  /** Products DB pointer — prefer immutable revision API over disk catalog. */
+  readonly publishedSvgRevisionId?: string;
 }
 
 type MappableDescriptor = BlockDescriptor | PlannerSvgCatalogDescriptor;
@@ -48,7 +53,15 @@ export function mapDescriptorToCatalogItem(
       : typeof descriptor.id === "string" && descriptor.id.trim() !== ""
         ? descriptor.id
         : "unknown";
-  const svgUrl = buildSvgCatalogPublicUrl(slug);
+  const revisionId =
+    "publishedSvgRevisionId" in descriptor &&
+    typeof descriptor.publishedSvgRevisionId === "string"
+      ? descriptor.publishedSvgRevisionId.trim()
+      : "";
+  const svgUrl =
+    revisionId && /^[a-z][a-z0-9-]{1,127}$/i.test(revisionId)
+      ? buildPublishedSvgApiUrl(revisionId)
+      : buildSvgCatalogPublicUrl(slug);
   const preferredName = "name" in descriptor ? descriptor.name : undefined;
   const descriptorTags = "tags" in descriptor ? descriptor.tags : undefined;
   const displayName =

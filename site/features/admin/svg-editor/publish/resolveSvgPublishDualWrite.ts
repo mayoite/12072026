@@ -13,8 +13,9 @@
  * - `enabled` — DB + R2 ready; inject repository + R2 putText.
  *
  * Honesty:
- * - `enabled` is not cutover. Dual-write payloads may still be stub/incomplete.
- * - Do not treat DB rows as release authority (see Failures.md DB-SVG-01…16).
+ * - `enabled` is not cutover. Disk remains live release authority until Failures.md cutover closes.
+ * - Dual-write uploads real descriptor + SVG + PNG (checksum-matched); product pointer when product exists.
+ * - Do not treat DB rows as sole release authority while disk gate still wins.
  * - `r2Probe` is diagnostic only; never invent ok without a real probe result.
  */
 
@@ -23,6 +24,7 @@ import { DrizzleSvgRevisionPersistence } from "@/features/admin/svg-editor/stora
 import { isProductsDatabaseConfigured } from "@/platform/drizzle/databaseUrls";
 import {
   probeR2CatalogAccess,
+  writeR2ObjectBytes,
   writeR2ObjectText,
   type R2CatalogProbeResult,
 } from "@/lib/storage/r2Catalog";
@@ -32,9 +34,14 @@ export type SvgPublishDualWriteMode =
   | "skipped_no_db"
   | "skipped_r2_unavailable";
 
+export type SvgPublishArtifactStore = {
+  putText: typeof writeR2ObjectText;
+  putBytes: typeof writeR2ObjectBytes;
+};
+
 export type SvgPublishDualWriteDeps = {
   dbRepository: ImmutableSvgRevisionRepository | undefined;
-  artifactStore: { putText: typeof writeR2ObjectText } | undefined;
+  artifactStore: SvgPublishArtifactStore | undefined;
   mode: SvgPublishDualWriteMode;
   /** Present when Products DB is configured and an R2 probe ran. */
   r2Probe?: R2CatalogProbeResult;
@@ -67,7 +74,10 @@ export async function resolveSvgPublishDualWriteDeps(options?: {
   );
   return {
     dbRepository,
-    artifactStore: { putText: writeR2ObjectText },
+    artifactStore: {
+      putText: writeR2ObjectText,
+      putBytes: writeR2ObjectBytes,
+    },
     mode: "enabled",
     r2Probe,
   };

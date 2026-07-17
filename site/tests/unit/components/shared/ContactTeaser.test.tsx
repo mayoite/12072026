@@ -1,3 +1,4 @@
+import type React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { ContactTeaser } from '@/components/shared/ContactTeaser';
@@ -27,8 +28,14 @@ vi.mock('@phosphor-icons/react', () => ({
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    form: ({ children, ...props }: any) => <form {...props}>{children}</form>,
+    div: ({
+      children,
+      ...props
+    }: React.PropsWithChildren<Record<string, unknown>>) => <div {...props}>{children}</div>,
+    form: ({
+      children,
+      ...props
+    }: React.PropsWithChildren<Record<string, unknown>>) => <form {...props}>{children}</form>,
   },
 }));
 
@@ -144,6 +151,7 @@ describe('ContactTeaser Component', () => {
           preferredContact: 'phone',
           source: 'homepage-quick-brief',
           sourcePath: mockPathname,
+          website: '',
         }),
       });
     });
@@ -205,6 +213,77 @@ describe('ContactTeaser Component', () => {
       label: 'WhatsApp',
       pathname: mockPathname,
       surface: 'contact-teaser',
+    });
+  });
+
+  it('includes honeypot field and treats honest success envelope as success', async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        success: true,
+        queryId: 'submitted',
+        followUp: { email: null, whatsapp: null },
+      }),
+    });
+
+    render(<ContactTeaser />);
+
+    const honeypot = screen.getByTestId('contact-teaser-honeypot');
+    expect(honeypot).toHaveAttribute('name', 'website');
+    expect(honeypot).toHaveAttribute('tabIndex', '-1');
+
+    fireEvent.change(screen.getByLabelText(/^Name/i), { target: { value: 'Bot' } });
+    fireEvent.change(screen.getByLabelText(/^City/i), { target: { value: 'Spam' } });
+    fireEvent.change(screen.getByLabelText(/^Email/i), { target: { value: 'bot@evil.com' } });
+    fireEvent.change(screen.getByPlaceholderText(/Team size, scope, or timeline/i), {
+      target: { value: 'spam brief' },
+    });
+    fireEvent.change(honeypot, { target: { value: 'http://spam.example' } });
+    fireEvent.click(screen.getByTestId('contact-teaser-consent'));
+    fireEvent.click(screen.getByRole('button', { name: /Send Brief/i }));
+
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalled();
+    });
+    const body = JSON.parse(
+      (mockFetch.mock.calls[0]?.[1] as RequestInit).body as string,
+    ) as Record<string, unknown>;
+    expect(body.website).toBe('http://spam.example');
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Brief received. Our team will contact you shortly.'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('surfaces nested rate-limit error envelope message', async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      json: async () => ({
+        success: false,
+        error: {
+          code: 'RATE_LIMIT_EXCEEDED',
+          message: 'Too many submissions. Please try again after some time.',
+        },
+      }),
+    });
+
+    render(<ContactTeaser />);
+
+    fireEvent.change(screen.getByLabelText(/^Name/i), { target: { value: 'Ayush' } });
+    fireEvent.change(screen.getByLabelText(/^City/i), { target: { value: 'Patna' } });
+    fireEvent.change(screen.getByLabelText(/^Phone/i), { target: { value: '+91 8888888888' } });
+    fireEvent.change(screen.getByPlaceholderText(/Team size, scope, or timeline/i), {
+      target: { value: 'Need desks.' },
+    });
+    fireEvent.click(screen.getByTestId('contact-teaser-consent'));
+    fireEvent.click(screen.getByRole('button', { name: /Send Brief/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'Too many submissions. Please try again after some time.',
+      );
     });
   });
 });

@@ -18,6 +18,7 @@ export type {
 
 import { buildProductJsonLd as buildProductJsonLdCore } from "@/features/site/data/seo";
 import type { ProductJsonLdInput } from "@/features/site/data/seo";
+import { SITE_URL } from "@/lib/siteUrl";
 
 /** Prefer `(siteUrl, input)`. Single-object form kept for older call sites. */
 export function buildProductJsonLd(
@@ -31,11 +32,12 @@ export function buildProductJsonLd(
     return buildProductJsonLdCore(siteUrlOrData, input);
   }
   const data = siteUrlOrData;
-  let origin = "https://oando.co.in";
+  // Same production/env origin as robots, sitemap, and page metadata — never invent a host.
+  let origin = SITE_URL;
   try {
     origin = new URL(data.url).origin;
   } catch {
-    // keep default
+    // keep SITE_URL default
   }
   return buildProductJsonLdCore(origin, data);
 }

@@ -128,7 +128,10 @@ export async function generateMetadata({
   );
   const product = productResolution.row;
 
-  if (!product) return {};
+  // Unknown product must hard-404 — empty metadata is a soft-404 SEO risk.
+  if (!product) {
+    notFound();
+  }
   const resolvedCategoryId = resolveRequestedCategoryId(
     product as CategoryResolutionRow,
     categoryId,

@@ -47,6 +47,8 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
   const pathname = usePathname();
   const [form, setForm] = useState<FormState>(initialState);
   const [consent, setConsent] = useState(false);
+  /** Honeypot — must stay empty for humans. Bots that fill it get a silent fake success. */
+  const [website, setWebsite] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState<SubmitResult | null>(null);
@@ -102,6 +104,7 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          website,
           requirement: contextCopy?.requirement,
           source: contextCopy ? `website-contact-${source}` : "website-contact",
           sourcePath,
@@ -109,10 +112,15 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
       });
 
       const json = (await response.json()) as
-        | { queryId?: string; followUp?: SubmitResult["followUp"] }
+        | {
+            success?: boolean;
+            queryId?: string;
+            followUp?: SubmitResult["followUp"] | null;
+          }
         | undefined;
 
-      if (!response.ok || !json?.queryId || !json.followUp) {
+      const followUp = json?.followUp;
+      if (!response.ok || !json?.queryId || !followUp) {
         trackContactSubmission({
           pathname,
           surface: "contact-page-form",
@@ -129,8 +137,9 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
         source: contextCopy ? `website-contact-${source}` : "website-contact",
         status: "success",
       });
-      setResult({ queryId: json.queryId, followUp: json.followUp });
+      setResult({ queryId: json.queryId, followUp });
       setForm(initialState);
+      setWebsite("");
       setConsent(false);
     } catch {
       trackContactSubmission({
@@ -170,6 +179,20 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
         Fields marked <span className="font-semibold text-primary">*</span> are required. Share
         either email or phone and we will respond within 1 business day.
       </p>
+      {/* Honeypot: hidden from humans; bots that autofill "website" are silently accepted without DB write. */}
+      <div className="sr-only" aria-hidden="true">
+        <label htmlFor="contact-website">Leave blank</label>
+        <input
+          id="contact-website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={website}
+          onChange={(event) => setWebsite(event.target.value)}
+          data-testid="contact-form-honeypot"
+        />
+      </div>
       <div className="contact-page-form__field">
         <label htmlFor="name" className="contact-form-label">
           Name <span className="text-primary">*</span>

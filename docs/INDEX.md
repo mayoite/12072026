@@ -2,7 +2,7 @@
 
 **Budget: ≤23 live files under `docs/`.** Process → `Agents/`. Execution → `plan/`. Commands → `Readme.md`.
 
-Start: `architecture/README.md` (vision + **current vs target** table). Live SVG = disk; target = Products DB (`08-DATABASE-SVG-CONTRACT.md`).
+Start: `architecture/README.md` (vision + **current vs target** table). Live SVG = disk; dual-write optional stub when DB+R2 ready ≠ cutover; target = Products DB (`08-DATABASE-SVG-CONTRACT.md`). Active cutover: `../Failures.md`. One blockers file per track: `../agent-reports/{PLANNER,ADMIN,SITE,TECH-STACK}.md`.
 
 ## Architecture (12)
 

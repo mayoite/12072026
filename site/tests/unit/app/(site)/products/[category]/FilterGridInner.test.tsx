@@ -92,7 +92,7 @@ vi.mock('@/app/(site)/products/[category]/FilterGrid.helpers', () => ({
     series: ['Aero', 'Zephyr'],
     subcategory: ['Task', 'Executive'],
     material: ['Mesh', 'Leather'],
-    priceRange: ['Under 5,000', '10,000-20,000'],
+    priceRange: ['budget', 'mid'],
     ecoMin: { min: 0, max: 10 },
     featureAvailability: {
       hasHeadrest: true,
@@ -104,6 +104,32 @@ vi.mock('@/app/(site)/products/[category]/FilterGrid.helpers', () => ({
   flattenCategoryProducts: (cat: any) => cat.products || [],
   getProductRouteKey: (p: any) => p.slug || p.id || '',
   useDebouncedValue: (val: any) => val,
+}));
+
+vi.mock('@/features/site/data/routeCopy', () => ({
+  CATEGORY_ROUTE_COPY: {
+    categoryKicker: 'Product category',
+    browseAllCta: 'Browse all categories',
+    resourceDeskCta: 'Open Resource Desk',
+    compareIdleLabel: 'Select up to 4 products to compare',
+    compareIdleLabelShort: 'Compare',
+    compareActiveLabelShort: 'Compare ({count})',
+    compareActiveLabel: 'Compare {count} selected',
+    filterSummaryTitle: 'Filter the current category',
+    filterSummaryDescription: 'Use filters',
+    resultsSummaryLabel: '{shown} of {total} products',
+    drawerResultsCta: 'View {count} results',
+    drawerResultsHint: 'Filters update the current category only.',
+    filterFallbackMessage: 'Live filter sync is temporarily unavailable.',
+    emptyTitle: 'No products match this filter set',
+    emptyDescription: 'Clear filters, adjust your search, or return to the full category list.',
+    emptyCategoryTitle: 'No products are published in this category yet',
+    emptyCategoryDescription:
+      'This category has no published products right now. Browse other categories or contact us for current availability.',
+    errorTitle: "We couldn't load this category",
+    errorDescription: 'Something went wrong loading these products.',
+    clearFiltersCta: 'Clear all',
+  },
 }));
 
 describe('AdvancedFilterGridInner', () => {
@@ -157,7 +183,7 @@ describe('AdvancedFilterGridInner', () => {
           series: ['Aero'],
           subcategory: ['Task'],
           material: ['Mesh'],
-          priceRange: ['Under 5,000'],
+          priceRange: ['mid'],
           ecoMin: { min: 0, max: 10 },
           featureAvailability: {
             hasHeadrest: true,
@@ -179,6 +205,109 @@ describe('AdvancedFilterGridInner', () => {
 
     expect(screen.getByTestId('product-card-10')).toBeInTheDocument();
     expect(screen.queryByTestId('product-card-1')).not.toBeInTheDocument();
+  });
+
+  it('shows honest empty-category state when no products are published', () => {
+    (useQuery as any).mockReturnValue({
+      data: {
+        products: [],
+        facets: {
+          series: [],
+          subcategory: [],
+          material: [],
+          priceRange: [],
+          ecoMin: { min: 0, max: 10 },
+          featureAvailability: {
+            hasHeadrest: false,
+            isHeightAdjustable: false,
+            bifmaCertified: false,
+            isStackable: false,
+          },
+        },
+        meta: { catalogTotal: 0 },
+      },
+      isLoading: false,
+      isFetching: false,
+      error: null,
+    });
+
+    const emptyCategory = { name: 'Empty Series', products: [] };
+    render(
+      <AdvancedFilterGridInner
+        category={emptyCategory as any}
+        categoryId="empty-series"
+      />,
+    );
+
+    expect(
+      screen.getByRole('heading', { name: 'No products are published in this category yet' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/no published products right now/i),
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId('product-card-1')).not.toBeInTheDocument();
+  });
+
+  it('shows honest filter-empty state with clear action when filters exclude all products', () => {
+    mockSearchParams = new URLSearchParams('q=zzz-no-match');
+    (useQuery as any).mockReturnValue({
+      data: {
+        products: [],
+        facets: {
+          series: [],
+          subcategory: [],
+          material: [],
+          priceRange: [],
+          ecoMin: { min: 0, max: 10 },
+          featureAvailability: {
+            hasHeadrest: false,
+            isHeightAdjustable: false,
+            bifmaCertified: false,
+            isStackable: false,
+          },
+        },
+        meta: { catalogTotal: 2 },
+      },
+      isLoading: false,
+      isFetching: false,
+      error: null,
+    });
+
+    render(
+      <AdvancedFilterGridInner
+        category={dummyCategory as any}
+        categoryId="office-chairs"
+      />,
+    );
+
+    expect(
+      screen.getByRole('heading', { name: 'No products match this filter set' }),
+    ).toBeInTheDocument();
+    // Chip bar and empty-state both expose clear actions.
+    expect(screen.getAllByRole('button', { name: 'Clear all' }).length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('shows honest error state when the filter request fails and no products remain', () => {
+    mockSearchParams = new URLSearchParams('q=fail');
+    (useQuery as any).mockReturnValue({
+      data: null,
+      isLoading: false,
+      isFetching: false,
+      error: new Error('Filter request failed: 500'),
+    });
+
+    const emptyCategory = { name: 'Broken', products: [] };
+    render(
+      <AdvancedFilterGridInner
+        category={emptyCategory as any}
+        categoryId="broken"
+      />,
+    );
+
+    expect(
+      screen.getByRole('heading', { name: "We couldn't load this category" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toBeInTheDocument();
   });
 
   it('handles search input change and triggers navigation updates', () => {

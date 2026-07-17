@@ -608,18 +608,22 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
   it("dual-write: invokes dbRepository.publish after disk commit and still succeeds", async () => {
     const publish = vi.fn(async () => undefined);
     const putText = vi.fn(async () => undefined);
+    const putBytes = vi.fn(async () => undefined);
+    const pngBuf = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+    const pngChecksum = "d".repeat(64);
     const result = await publishDescriptorWithPipeline(validDescriptor, {
       parsePayload: () => ({ ok: true, value: validDescriptor }),
       compileSvg: async () => compileOk(),
       runPipeline: async () => pipelineOk(),
       persist: () => persistOk(),
       actorId: "admin-42",
+      rasterizePng: () => ({ png: pngBuf, checksum: pngChecksum }),
       dbRepository: {
         publish,
         load: async () => null,
         updateProductPointer: vi.fn(async () => undefined),
       } as never,
-      artifactStore: { putText },
+      artifactStore: { putText, putBytes },
     });
     expect(result.success).toBe(true);
     expect(publish).toHaveBeenCalledOnce();
@@ -629,6 +633,10 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
       reason: "publish",
       actorId: "admin-42",
       revisionId: expect.stringMatching(/^test-block-r-[a-f0-9]{20}$/),
+      artifactChecksums: expect.objectContaining({
+        png: pngChecksum,
+        svg: sha256Utf8(compileOk().svg),
+      }),
     });
     expect(definition).toMatchObject({ typeId: "test-block" });
     expect(definition).toMatchObject({
@@ -639,6 +647,7 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
       expect.arrayContaining([
         expect.objectContaining({ kind: "svg" }),
         expect.objectContaining({ kind: "descriptor" }),
+        expect.objectContaining({ kind: "png", checksum: pngChecksum }),
       ]),
     );
     const revisionId = revision?.revisionId as string;
@@ -648,11 +657,20 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
       compileOk().svg,
       "image/svg+xml",
     );
+    expect(putBytes).toHaveBeenCalledWith(
+      `svg-revisions/${revisionId}/master.png`,
+      pngBuf,
+      "image/png",
+    );
     expect(artifacts).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           kind: "svg",
           storageKey: `svg-revisions/${revisionId}/symbol.svg`,
+        }),
+        expect.objectContaining({
+          kind: "png",
+          storageKey: `svg-revisions/${revisionId}/master.png`,
         }),
       ]),
     );
@@ -667,6 +685,7 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
       compileSvg: async () => compileOk(),
       runPipeline: async () => ({ ...pipelineOk(), rollback: pipelineRollback }),
       persist: () => ({ ...persistOk(), rollback: persistRollback }),
+      rasterizePng: () => ({ png: Buffer.from([1]), checksum: "e".repeat(64) }),
       dbRepository: {
         publish,
         load: async () => null,
@@ -675,6 +694,7 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
         putText: async () => {
           throw new Error("R2 unavailable");
         },
+        putBytes: vi.fn(async () => undefined),
       },
     });
 
@@ -753,13 +773,17 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
         ...persistOk(),
         rollback: persistRollback,
       }),
+      rasterizePng: () => ({ png: Buffer.from([2]), checksum: "f".repeat(64) }),
       dbRepository: {
         publish: async () => {
           throw new Error("db down");
         },
         load: async () => null,
       } as never,
-      artifactStore: { putText: vi.fn(async () => undefined) },
+      artifactStore: {
+        putText: vi.fn(async () => undefined),
+        putBytes: vi.fn(async () => undefined),
+      },
     });
     expect(result.success).toBe(false);
     if (result.success) return;

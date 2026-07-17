@@ -60,6 +60,16 @@ describe("getRouteClassification resolution", () => {
     );
   });
 
+  it("prefers static segment patterns over fully dynamic peers", () => {
+    // /products/category/seating must not be mis-read as /products/[category]/[product]
+    expect(getRouteClassification("/products/category/seating")?.route).toBe(
+      "/products/category/[slug]",
+    );
+    expect(getRouteClassification("/products/seating/chair-x")?.route).toBe(
+      "/products/[category]/[product]",
+    );
+  });
+
   it("classifies resolved routes honestly", () => {
     expect(getRouteClassification("/catalog")?.classification).toBe("redirect");
     expect(getRouteClassification("/login")?.classification).toBe("protected");
@@ -70,6 +80,23 @@ describe("getRouteClassification resolution", () => {
     expect(getRouteClassification("/tracking")?.indexable).toBe(false);
     expect(getRouteClassification("/news")?.classification).toBe("redirect");
     expect(getRouteClassification("/gallery")?.classification).toBe("redirect");
+  });
+
+  it("classifies legacy products/category alias as non-indexable redirect", () => {
+    const meta = getRouteClassification("/products/category/seating");
+    expect(meta?.route).toBe("/products/category/[slug]");
+    expect(meta?.classification).toBe("redirect");
+    expect(meta?.indexable).toBe(false);
+  });
+
+  it("marks every classified redirect route non-indexable", () => {
+    const redirects = SITE_ROUTE_CLASSIFICATION.filter(
+      (meta) => meta.classification === "redirect",
+    );
+    expect(redirects.length).toBeGreaterThan(0);
+    for (const meta of redirects) {
+      expect(meta.indexable, meta.route).toBe(false);
+    }
   });
 
   it("ignores query strings when matching", () => {

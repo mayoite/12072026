@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import CategoryPage, { generateMetadata, generateStaticParams } from '@/app/(site)/products/[category]/page';
 import { notFound, redirect } from 'next/navigation';
 import { fetchCategoryIdsLive } from '@/lib/catalog/sources';
+import { getCatalog } from '@/lib/catalog/site/getProducts';
 
 // Mock next/navigation
 vi.mock('next/navigation', () => ({
@@ -67,9 +68,18 @@ describe('Category Page Route Handler', () => {
   });
 
   describe('generateMetadata', () => {
-    it('returns empty object if category does not exist', async () => {
-      const meta = await generateMetadata({ params: Promise.resolve({ category: 'non-existent' }) });
-      expect(meta).toEqual({});
+    it('hard-404s unknown categories instead of soft empty metadata', async () => {
+      await expect(
+        generateMetadata({ params: Promise.resolve({ category: 'non-existent' }) }),
+      ).rejects.toThrow('NOT_FOUND');
+      expect(notFound).toHaveBeenCalled();
+    });
+
+    it('returns noindex robots when catalog is offline/empty', async () => {
+      vi.mocked(getCatalog).mockResolvedValueOnce([]);
+      const meta = await generateMetadata({ params: Promise.resolve({ category: 'seating' }) });
+      expect(meta).toEqual({ robots: { index: false, follow: false } });
+      expect(notFound).not.toHaveBeenCalled();
     });
 
     it('returns built page metadata if category exists', async () => {

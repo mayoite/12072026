@@ -2,7 +2,8 @@
  * GET /api/planner/catalog/svg-blocks
  *
  * Public read of published SVG block descriptors for the planner inventory.
- * Bridges on-disk inventory/descriptors/ to client-side catalog hydration.
+ * Prefer Products DB descriptors + revision API paint URLs when dual-write has
+ * set product pointers; disk `/svg-catalog` remains migration fallback.
  */
 
 import type { NextRequest } from "next/server";
@@ -13,6 +14,16 @@ import { mapDescriptorsToCatalogItems } from "@/features/planner/catalog/svg/des
 import { filterBuyerFacingCatalogItems } from "@/features/planner/catalog/catalogBuyerVisibility";
 import { loadBuyerVisibleDescriptorsWithDb } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server";
 import { readSvgArtifactStatus } from "@/features/admin/svg-editor/publish/svgArtifactStatus.server";
+import { isPublishedSvgApiUrl } from "@/features/planner/catalog/svg/svgPreviewAssets";
+
+function isBuyerPublishedCatalogItem(item: {
+  readonly slug: string;
+  readonly assets?: { readonly previewImageUrl?: string };
+}): boolean {
+  const preview = item.assets?.previewImageUrl?.trim() ?? "";
+  if (preview && isPublishedSvgApiUrl(preview)) return true;
+  return readSvgArtifactStatus(item.slug).state === "published";
+}
 
 export async function GET(req: NextRequest) {
   const rateError = await enforcePublicApiRateLimit(
@@ -25,7 +36,7 @@ export async function GET(req: NextRequest) {
   const descriptors = await loadBuyerVisibleDescriptorsWithDb();
   const items = filterBuyerFacingCatalogItems(
     mapDescriptorsToCatalogItems(descriptors),
-  ).filter((item) => readSvgArtifactStatus(item.slug).state === "published");
+  ).filter(isBuyerPublishedCatalogItem);
 
   return success({
     items,

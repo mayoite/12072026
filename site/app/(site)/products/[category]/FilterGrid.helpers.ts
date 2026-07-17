@@ -19,7 +19,6 @@ export interface FlatProduct extends Product {
   seriesId: string;
   seriesName: string;
   altText?: string;
-  price?: number;
 }
 
 export interface FilterResponse {
@@ -230,21 +229,14 @@ export function buildFallbackFacets(
     .map((product) => product.metadata?.sustainabilityScore)
     .filter((score): score is number => typeof score === "number" && Number.isFinite(score));
 
-  const priceRangeSet = new Set<string>();
+  // Facets use metadata.priceRange bands only (budget|mid|premium|luxury).
+  // Never invent numeric list prices as commercial authority.
   let hasHeadrestCount = 0;
   let heightAdjCount = 0;
   let bifmaCount = 0;
   let stackableCount = 0;
 
   for (const product of products) {
-    const price = product.price ?? 0;
-    if (price > 0) {
-      if (price < 5000) priceRangeSet.add("Under 5,000");
-      else if (price < 10000) priceRangeSet.add("5,000-10,000");
-      else if (price < 20000) priceRangeSet.add("10,000-20,000");
-      else priceRangeSet.add("20,000+");
-    }
-
     if (hasVerifiedHeadrest(product)) hasHeadrestCount += 1;
     if (hasVerifiedHeightAdjustable(product)) heightAdjCount += 1;
     if (product.metadata?.bifmaCertified) bifmaCount += 1;
@@ -257,7 +249,9 @@ export function buildFallbackFacets(
       : uniqueSorted(products.map((product) => product.seriesName)),
     subcategory: uniqueSorted(subcategoryValues),
     material: uniqueSorted(materialValues),
-    priceRange: PRICE_RANGES.filter((range) => priceRangeSet.has(range)),
+    priceRange: PRICE_RANGES.filter((range) =>
+      products.some((product) => product.metadata?.priceRange === range),
+    ),
     ecoMin: {
       min: ecoScores.length > 0 ? Math.min(...ecoScores) : 0,
       max: ecoScores.length > 0 ? Math.max(...ecoScores) : 10,

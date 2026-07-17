@@ -10,8 +10,8 @@
  * - ADM-PUB-03 / dual-write: success only after compile + S4 + persist; failures roll back.
  * - Optional `dbRepository` / `artifactStore` are injected only when Products DB is
  *   configured **and** R2 is reachable (`resolveSvgPublishDualWriteDeps`). Dead R2 must
- *   not roll back a successful disk publish. Dual-write may still use stub revision
- *   payloads — do not treat DB as release authority until DB-SVG cutover is proven.
+ *   not roll back a successful disk publish. Dual-write uploads real descriptor + SVG +
+ *   PNG (honest checksums). Disk remains live release authority until cutover is proven.
  * - DB-SVG-07: prior SVG/descriptor restored when post-pipeline persist fails.
  * - DB-SVG-08: unchanged released SVG + descriptor short-circuits (no partial rewrite).
  *
@@ -19,6 +19,8 @@
  */
 
 import { createHash } from "node:crypto";
+
+import { Resvg } from "@resvg/resvg-js";
 
 import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import type { PlannerDescriptorError, PlannerResult } from "@/features/planner/catalog/svg/svgTypes";
@@ -40,6 +42,25 @@ import {
 } from "@/features/admin/svg-editor/publish/releasedCatalogPublishGate";
 import type { ImmutableSvgRevisionRepository } from "@/features/admin/svg-editor/svgRevisionRepository.server";
 import type { SvgBlockDefinitionV1 } from "@/features/admin/svg-editor/contracts/svgBlockSchemas";
+import { SVG_RASTER_MASTER_WIDTH } from "@/features/planner/catalog/svg/svgPreviewAssets";
+
+/** Rasterize published SVG to PNG with honest SHA-256 (no SVG-hash stub). */
+export function rasterizePublishedSvgPng(svgMarkup: string): {
+  readonly png: Buffer;
+  readonly checksum: string;
+} {
+  const png = Buffer.from(
+    new Resvg(svgMarkup, {
+      fitTo: { mode: "width", value: SVG_RASTER_MASTER_WIDTH },
+    })
+      .render()
+      .asPng(),
+  );
+  return {
+    png,
+    checksum: createHash("sha256").update(png).digest("hex"),
+  };
+}
 
 export type PublishDescriptorSuccess = {
   readonly success: true;
@@ -109,6 +130,19 @@ export type PublishDescriptorWithPipelineDeps = {
   /** Immutable object storage used by DB-backed releases. */
   readonly artifactStore?: {
     putText(key: string, body: string, contentType: string): Promise<void>;
+    putBytes?(
+      key: string,
+      body: Uint8Array | Buffer,
+      contentType: string,
+    ): Promise<void>;
+  };
+  /**
+   * Optional PNG raster for dual-write tests. Production uses
+   * {@link rasterizePublishedSvgPng}.
+   */
+  readonly rasterizePng?: (svgMarkup: string) => {
+    readonly png: Buffer;
+    readonly checksum: string;
   };
   /** Authenticated admin actor recorded on immutable database revisions. */
   readonly actorId?: string;
@@ -497,6 +531,45 @@ export async function publishDescriptorWithPipeline(
 
     const descriptorStorageKey = `svg-revisions/${revisionId}/descriptor.json`;
     const svgStorageKey = `svg-revisions/${revisionId}/symbol.svg`;
+    const pngStorageKey = `svg-revisions/${revisionId}/master.png`;
+
+    let pngArtifact: { readonly png: Buffer; readonly checksum: string };
+    try {
+      pngArtifact = (deps.rasterizePng ?? rasterizePublishedSvgPng)(compile.svg);
+    } catch (rasterError) {
+      const details =
+        rasterError instanceof Error ? rasterError.message : String(rasterError);
+      const recoveryErrors = runAllBestEffort(
+        persistResult.rollback,
+        pipeline.rollback,
+        persistResult.cleanup,
+        pipeline.cleanup,
+      );
+      return {
+        success: false,
+        error: withRecoveryErrors(
+          `500.storage: PNG rasterization failed. ${details}`,
+          recoveryErrors,
+        ),
+      };
+    }
+
+    if (!deps.artifactStore.putBytes) {
+      const recoveryErrors = runAllBestEffort(
+        persistResult.rollback,
+        pipeline.rollback,
+        persistResult.cleanup,
+        pipeline.cleanup,
+      );
+      return {
+        success: false,
+        error: withRecoveryErrors(
+          "500.storage: Immutable binary artifact storage (putBytes) is not configured.",
+          recoveryErrors,
+        ),
+      };
+    }
+
     try {
       await Promise.all([
         deps.artifactStore.putText(
@@ -508,6 +581,11 @@ export async function publishDescriptorWithPipeline(
           svgStorageKey,
           compile.svg,
           "image/svg+xml",
+        ),
+        deps.artifactStore.putBytes(
+          pngStorageKey,
+          pngArtifact.png,
+          "image/png",
         ),
       ]);
     } catch (storageError) {
@@ -540,7 +618,7 @@ export async function publishDescriptorWithPipeline(
           artifactChecksums: {
             descriptor: definitionChecksum,
             svg: compiledSvgChecksum,
-            png: compiledSvgChecksum,
+            png: pngArtifact.checksum,
             thumbnails: {},
           },
           validation: {
@@ -564,6 +642,12 @@ export async function publishDescriptorWithPipeline(
             kind: "svg",
             checksum: compiledSvgChecksum,
             storageKey: svgStorageKey,
+          },
+          {
+            revisionId,
+            kind: "png",
+            checksum: pngArtifact.checksum,
+            storageKey: pngStorageKey,
           },
         ],
         descriptor,

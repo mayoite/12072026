@@ -1,10 +1,6 @@
-import { redirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 
+/** Legacy alias — hard permanent redirect (mirrors next.config permanent: true → 308). */
 export default function BrochurePage() {
-  redirect("/downloads");
-  return (
-    <main>
-      <h1 className="text-3xl font-semibold">Brochure</h1>
-    </main>
-  );
+  permanentRedirect("/downloads");
 }

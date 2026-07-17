@@ -1,5 +1,5 @@
 import type { StatsSource } from "@/lib/types/businessStats";
-import { hasAnalyticsConsent } from "@/lib/consent";
+import { hasAnalyticsConsent, hasConsentChoice } from "@/lib/consent";
 import { sendAnalyticsEvent } from "@/lib/analytics/emitTransport";
 import { enqueueSiteEvent } from "@/lib/analytics/eventQueue";
 
@@ -10,7 +10,9 @@ type KpiPayload = Record<string, string | number | boolean | null>;
 function emitEvent(eventName: string, payload: KpiPayload) {
   if (typeof window === "undefined") return;
   if (!hasAnalyticsConsent()) {
-    enqueueSiteEvent(eventName, payload);
+    if (!hasConsentChoice()) {
+      enqueueSiteEvent(eventName, payload);
+    }
     return;
   }
   if (!sendAnalyticsEvent(eventName, payload)) {

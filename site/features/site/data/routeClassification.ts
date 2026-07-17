@@ -70,13 +70,15 @@ export const SITE_ROUTE_CLASSIFICATION: SiteRouteMeta[] = [
   },
   {
     route: "/products/category/[slug]",
-    classification: "public",
+    classification: "redirect",
     audience: "Public visitor / buyer",
-    intent: "Curated category landing page",
-    owner: "Marketing",
-    canonicalUrl: canonicalFor("/products/category/[slug]"),
-    primaryAction: "Browse category products",
-    indexable: true,
+    intent: "Legacy category alias → /products/:category/ (or hard 404 if slug unknown)",
+    owner: "Site",
+    canonicalUrl: canonicalFor("/products/[category]"),
+    primaryAction: "Redirect to canonical category",
+    indexable: false,
+    notes:
+      "next.config permanent redirect + page permanentRedirect/notFound; never indexable shell.",
   },
   {
     route: "/solutions",
@@ -532,9 +534,21 @@ function patternMatches(pattern: string, path: string): boolean {
   return true;
 }
 
-const SORTED_CLASSIFICATION: SiteRouteMeta[] = [...SITE_ROUTE_CLASSIFICATION].sort(
-  (a, b) => segmentize(b.route).length - segmentize(a.route).length,
-);
+/** Count static (non-dynamic) segments — higher = more specific pattern. */
+function staticSegmentCount(pattern: string): number {
+  return segmentize(pattern).filter((segment) => !isDynamicSegment(segment)).length;
+}
+
+/**
+ * Prefer longer paths, then more static segments so
+ * `/products/category/[slug]` wins over `/products/[category]/[product]`
+ * for `/products/category/seating`.
+ */
+const SORTED_CLASSIFICATION: SiteRouteMeta[] = [...SITE_ROUTE_CLASSIFICATION].sort((a, b) => {
+  const lengthDelta = segmentize(b.route).length - segmentize(a.route).length;
+  if (lengthDelta !== 0) return lengthDelta;
+  return staticSegmentCount(b.route) - staticSegmentCount(a.route);
+});
 
 export function getRouteClassification(route: string): SiteRouteMeta | undefined {
   const normalized = route.split("?")[0] ?? route;

@@ -1,8 +1,13 @@
 import "server-only";
 
+import { eq } from "drizzle-orm";
+
 import { productsDb } from "@/platform/drizzle/productsDb";
 import { isProductsDatabaseConfigured } from "@/platform/drizzle/databaseUrls";
-import { blockDescriptors } from "@/platform/drizzle/schema/catalog";
+import {
+  blockDescriptors,
+  plannerManagedProducts,
+} from "@/platform/drizzle/schema/catalog";
 import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import type { PlannerSvgCatalogDescriptor } from "@/features/planner/catalog/svg/descriptorCatalogBridge.server";
 import { SvgBlockDefinitionV1Schema } from "@/features/admin/svg-editor/contracts/svgBlockSchemas";
@@ -13,8 +18,9 @@ import {
 } from "./catalogLifecycle";
 
 /**
- * Load buyer-visible descriptors from the Products DB when configured,
- * falling back to disk-based inventory/descriptors/ otherwise.
+ * Load buyer-visible descriptors from the Products DB when configured.
+ * Prefer DB rows + product published SVG revision pointer (immutable R2 path).
+ * Fall back to disk inventory only when DB is not configured or returns no rows.
  */
 function isUsableDescriptor(value: unknown): value is BlockDescriptor {
   if (!value || typeof value !== "object") return false;
@@ -35,9 +41,20 @@ function finitePositive(value: number): boolean {
   return Number.isFinite(value) && value > 0;
 }
 
-function toPlannerCatalogDescriptor(
-  row: { readonly slug: string; readonly descriptor: unknown },
-): PlannerSvgCatalogDescriptor | null {
+function toPlannerCatalogDescriptor(row: {
+  readonly slug: string;
+  readonly descriptor: unknown;
+  readonly publishedSvgRevisionId?: string | null;
+}): PlannerSvgCatalogDescriptor | null {
+  const revisionId =
+    typeof row.publishedSvgRevisionId === "string"
+      ? row.publishedSvgRevisionId.trim()
+      : "";
+  const revisionField =
+    revisionId && /^[a-z][a-z0-9-]{1,127}$/i.test(revisionId)
+      ? { publishedSvgRevisionId: revisionId }
+      : {};
+
   if (isUsableDescriptor(row.descriptor)) {
     if (row.descriptor.slug !== row.slug) return null;
     const { geometry } = row.descriptor;
@@ -56,6 +73,7 @@ function toPlannerCatalogDescriptor(
       slug: row.slug,
       sku: row.descriptor.sku,
       geometry,
+      ...revisionField,
     };
   }
 
@@ -75,6 +93,7 @@ function toPlannerCatalogDescriptor(
       depthMm: definition.physicalDimensionsMm.depth,
       heightMm: definition.physicalDimensionsMm.height,
     },
+    ...revisionField,
   };
 }
 
@@ -86,10 +105,23 @@ export async function loadBuyerVisibleDescriptorsWithDb(): Promise<
   }
 
   try {
-    const rows = await productsDb.select().from(blockDescriptors).execute() as {
+    const rows = (await productsDb
+      .select({
+        slug: blockDescriptors.slug,
+        descriptor: blockDescriptors.descriptor,
+        publishedSvgRevisionId: plannerManagedProducts.publishedSvgRevisionId,
+      })
+      .from(blockDescriptors)
+      .leftJoin(
+        plannerManagedProducts,
+        eq(plannerManagedProducts.plannerSourceSlug, blockDescriptors.slug),
+      )
+      .execute()) as {
       slug: string;
       descriptor: unknown;
+      publishedSvgRevisionId?: string | null;
     }[];
+
     if (!rows || rows.length === 0) {
       return loadBuyerVisibleDescriptors();
     }
@@ -98,14 +130,19 @@ export async function loadBuyerVisibleDescriptorsWithDb(): Promise<
     const fromDb = rows
       .filter((row) => isBuyerVisibleSlug(row.slug, manifest))
       .map(toPlannerCatalogDescriptor)
-      .filter((descriptor): descriptor is PlannerSvgCatalogDescriptor => descriptor !== null);
+      .filter(
+        (descriptor): descriptor is PlannerSvgCatalogDescriptor =>
+          descriptor !== null,
+      );
 
-    // Empty DB during cutover may still fall back to disk; stub/corrupt rows must not.
+    // Empty usable DB during cutover: if rows exist but none are usable, fail
+    // closed (no silent disk override of corrupt DB). Empty table → disk migration.
     if (fromDb.length === 0) {
       return rows.length > 0 ? [] : loadBuyerVisibleDescriptors();
     }
     return fromDb;
   } catch {
+    // DB configured but unreachable: fail closed for buyer catalog (no silent disk).
     return [];
   }
 }

@@ -19,6 +19,8 @@ export function ContactTeaser() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [brief, setBrief] = useState("");
+  /** Honeypot — must stay empty for humans. Bots that fill it get a silent fake success. */
+  const [website, setWebsite] = useState("");
   const [consent, setConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState<{
@@ -75,6 +77,7 @@ export function ContactTeaser() {
       preferredContact,
       source: "homepage-quick-brief",
       sourcePath: window.location.pathname,
+      website,
     };
 
     setIsSubmitting(true);
@@ -96,6 +99,7 @@ export function ContactTeaser() {
       setPhone("");
       setEmail("");
       setBrief("");
+      setWebsite("");
       setConsent(false);
       trackContactSubmission({
         pathname: window.location.pathname,
@@ -143,6 +147,20 @@ export function ContactTeaser() {
               onSubmit={handleSubmit}
               {...fadeUp(16, 0.14)}
             >
+              {/* Honeypot: hidden from humans; bots that autofill "website" are silently accepted without DB write. */}
+              <div className="sr-only" aria-hidden="true">
+                <label htmlFor="contact-teaser-website">Leave blank</label>
+                <input
+                  id="contact-teaser-website"
+                  name="website"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={website}
+                  onChange={(event) => setWebsite(event.target.value)}
+                  data-testid="contact-teaser-honeypot"
+                />
+              </div>
               <div className="contact-teaser__mini-grid grid grid-cols-1 gap-2 md:grid-cols-2">
                 <label className="contact-teaser__field" htmlFor="contact-teaser-name">
                   <span className="contact-teaser__field-label typ-body-sm text-muted">Name</span>

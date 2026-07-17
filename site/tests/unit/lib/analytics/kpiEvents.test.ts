@@ -11,8 +11,15 @@ import {
   trackKpiMismatchDetected,
   compareKpiField,
 } from "@/lib/analytics/kpiEvents";
-import { CONSENT_ACCEPTED, CONSENT_COOKIE } from "@/lib/consent";
-import { _clearSiteEventQueueForTests } from "@/lib/analytics/eventQueue";
+import {
+  CONSENT_ACCEPTED,
+  CONSENT_COOKIE,
+  CONSENT_REJECTED,
+} from "@/lib/consent";
+import {
+  _clearSiteEventQueueForTests,
+  _queuedSiteEventCountForTests,
+} from "@/lib/analytics/eventQueue";
 
 describe("kpiEvents", () => {
   beforeEach(() => {
@@ -36,6 +43,14 @@ describe("kpiEvents", () => {
     document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; path=/`;
     trackKpiRendered({ asOfDate: "2026-06-26", source: "supabase" });
     expect(mockTrack).not.toHaveBeenCalled();
+    expect(_queuedSiteEventCountForTests()).toBe(1);
+  });
+
+  it("does not emit or queue when consent is rejected", () => {
+    document.cookie = `${CONSENT_COOKIE}=${CONSENT_REJECTED}; path=/`;
+    trackKpiRendered({ asOfDate: "2026-06-26", source: "supabase" });
+    expect(mockTrack).not.toHaveBeenCalled();
+    expect(_queuedSiteEventCountForTests()).toBe(0);
   });
 
   it("calls track when trackKpiRendered is called", () => {

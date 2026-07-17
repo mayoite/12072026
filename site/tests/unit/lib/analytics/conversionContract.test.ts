@@ -13,8 +13,16 @@ import {
   clearConversionDedupe,
   type ConversionEventName,
 } from "@/lib/analytics/conversionContract";
-import { CONSENT_ACCEPTED, CONSENT_COOKIE } from "@/lib/consent";
-import { _clearSiteEventQueueForTests } from "@/lib/analytics/eventQueue";
+import {
+  CONSENT_ACCEPTED,
+  CONSENT_COOKIE,
+  CONSENT_REJECTED,
+} from "@/lib/consent";
+import {
+  _clearSiteEventQueueForTests,
+  _queuedSiteEventCountForTests,
+  flushSiteEventQueue,
+} from "@/lib/analytics/eventQueue";
 
 describe("conversionContract", () => {
   beforeEach(() => {
@@ -37,16 +45,65 @@ describe("conversionContract", () => {
     _clearSiteEventQueueForTests();
   });
 
-  it("does not emit or burn dedupe when consent is missing", () => {
+  it("queues PAGE_VIEW without emit or dedupe burn when consent is undecided", () => {
     document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; path=/`;
     const fields = { pathname: "/home", locale: "en" };
 
     trackConversionEvent(CONVERSION_EVENTS.PAGE_VIEW, fields);
     expect(mockTrack).not.toHaveBeenCalled();
+    expect(_queuedSiteEventCountForTests()).toBe(1);
 
     document.cookie = `${CONSENT_COOKIE}=${CONSENT_ACCEPTED}; path=/`;
+    // Pre-consent call must not burn TTL — post-accept emit still works.
+    clearConversionDedupe();
+    _clearSiteEventQueueForTests();
     trackConversionEvent(CONVERSION_EVENTS.PAGE_VIEW, fields);
     expect(mockTrack).toHaveBeenCalledTimes(1);
+  });
+
+  it("flushes queued PAGE_VIEW after accept without re-tracking", () => {
+    document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; path=/`;
+    trackConversionEvent(CONVERSION_EVENTS.PAGE_VIEW, {
+      pathname: "/products",
+      locale: "en",
+    });
+    expect(mockTrack).not.toHaveBeenCalled();
+
+    document.cookie = `${CONSENT_COOKIE}=${CONSENT_ACCEPTED}; path=/`;
+    expect(flushSiteEventQueue()).toBe(1);
+    expect(mockTrack).toHaveBeenCalledWith(CONVERSION_EVENTS.PAGE_VIEW, {
+      pathname: "/products",
+      locale: "en",
+    });
+  });
+
+  it("queues PLANNER_ENTRY until accept", () => {
+    document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; path=/`;
+    trackConversionEvent(CONVERSION_EVENTS.PLANNER_ENTRY, {
+      sourcePage: "/home",
+      locale: "en",
+      campaign: "surface:hero",
+    });
+    expect(mockTrack).not.toHaveBeenCalled();
+    expect(_queuedSiteEventCountForTests()).toBe(1);
+
+    document.cookie = `${CONSENT_COOKIE}=${CONSENT_ACCEPTED}; path=/`;
+    expect(flushSiteEventQueue()).toBe(1);
+    expect(mockTrack).toHaveBeenCalledWith(CONVERSION_EVENTS.PLANNER_ENTRY, {
+      sourcePage: "/home",
+      locale: "en",
+      campaign: "surface:hero",
+    });
+  });
+
+  it("does not queue conversion events after reject", () => {
+    document.cookie = `${CONSENT_COOKIE}=${CONSENT_REJECTED}; path=/`;
+    trackConversionEvent(CONVERSION_EVENTS.PAGE_VIEW, {
+      pathname: "/home",
+      locale: "en",
+    });
+    expect(mockTrack).not.toHaveBeenCalled();
+    expect(_queuedSiteEventCountForTests()).toBe(0);
   });
 
   it("dedupes PAGE_VIEW within TTL and does not double-emit", () => {

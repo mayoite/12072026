@@ -11,6 +11,7 @@ vi.mock("@/platform/drizzle/databaseUrls", () => ({
 vi.mock("@/lib/storage/r2Catalog", () => ({
   probeR2CatalogAccess: (opts?: { force?: boolean }) => probeR2CatalogAccess(opts),
   writeR2ObjectText: vi.fn(),
+  writeR2ObjectBytes: vi.fn(),
 }));
 
 vi.mock("@/features/admin/svg-editor/storage/drizzleSvgPersistence.server", () => ({
@@ -78,6 +79,7 @@ describe("resolveSvgPublishDualWriteDeps", () => {
     expect(deps.dbRepository).toBeDefined();
     expect(deps.artifactStore).toBeDefined();
     expect(deps.artifactStore?.putText).toBeTypeOf("function");
+    expect(deps.artifactStore?.putBytes).toBeTypeOf("function");
     expect(deps.r2Probe).toEqual({ ok: true, source: "cloudflare-r2" });
   });
 
