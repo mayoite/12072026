@@ -6,7 +6,7 @@ import {
   buildSketchPlanFabricDraft,
   requestSketchToPlan,
   SketchConversionError,
-} from "@/features/planner/ai/sketchToPlan";
+} from "@/features/planner/ai/sketchToPlan.server";
 
 const mockCreate = vi.hoisted(() => vi.fn());
 

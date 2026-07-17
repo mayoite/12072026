@@ -11,7 +11,7 @@ import {
   classifySketchConversionError,
   buildSketchPlanFabricDraft,
   SketchConversionError,
-} from "@/features/planner/ai/sketchToPlan";
+} from "@/features/planner/ai/sketchToPlan.server";
 
 describe("root ai advisor config", () => {
   it("exposes planner id and welcome / chip helpers", () => {

@@ -9,7 +9,7 @@ vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (handler: (req: NextRequest) => Promise<Response>) => handler,
 }));
 
-vi.mock("@/features/planner/ai/sketchToPlan", () => ({
+vi.mock("@/features/planner/ai/sketchToPlan.server", () => ({
   requestSketchToPlan,
   classifySketchConversionError,
   getSketchRecoveryMessage,

@@ -9,7 +9,7 @@ import {
   classifySketchConversionError,
   buildSketchPlanFabricDraft,
   SketchConversionError,
-} from "@/features/planner/ai/sketchToPlan";
+} from "@/features/planner/ai/sketchToPlan.server";
 import { exportToJson, envelopeToJsonString } from "@/features/planner/shared/export/jsonExport";
 
 describe("jsonExport module", () => {

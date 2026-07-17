@@ -39,7 +39,7 @@ import {
   classifySketchConversionError,
   buildSketchPlanFabricDraft,
   SketchConversionError,
-} from "@/features/planner/ai/sketchToPlan";
+} from "@/features/planner/ai/sketchToPlan.server";
 
 import { buildSvgFixtureGallery } from "@/features/planner/catalog/svg/svgFixtureGallery";
 

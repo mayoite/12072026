@@ -14,7 +14,7 @@ import {
   classifySketchConversionError,
   requestSketchToPlan,
   getSketchRecoveryMessage,
-} from "@/features/planner/ai/sketchToPlan";
+} from "@/features/planner/ai/sketchToPlan.server";
 
 async function handleSketchToPlan(req: NextRequest): Promise<NextResponse> {
   const rawBody = await req.json().catch(() => null);
