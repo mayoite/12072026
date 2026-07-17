@@ -207,6 +207,9 @@ export function AdminPriceBookPageView({
           </p>
           <p className="admin-page__meta" data-testid="admin-shell-source">
             Book ID: <code>{bookId}</code>
+            {" · "}
+            Source: admin price-book service (DB when configured; filesystem seed
+            fallback). Not the marketing product catalog.
           </p>
           <p
             className="admin-page__meta"

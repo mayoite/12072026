@@ -2,6 +2,7 @@
  * Name-mirror coverage for lib/analytics/seo.
  */
 import { describe, expect, it, vi } from "vitest";
+import { SITE_BRAND as FEATURES_SITE_BRAND } from "@/features/site/data/brand";
 
 vi.mock("@/features/site/data/seo", () => ({
   buildBreadcrumbJsonLd: vi.fn(() => ({ "@type": "BreadcrumbList" })),
@@ -23,12 +24,14 @@ import {
 } from "@/lib/analytics/seo";
 
 describe("SITE_BRAND", () => {
-  it("exports stable public brand strings and default OG image", () => {
+  it("re-exports the single features/site brand authority (no dual copy)", () => {
+    expect(SITE_BRAND).toBe(FEATURES_SITE_BRAND);
     expect(SITE_BRAND.companyName).toBe("One&Only");
     expect(SITE_BRAND.titleSuffix).toBe("One&Only");
     expect(SITE_BRAND.siteName).toBe("One&Only");
     expect(SITE_BRAND.defaultTitle).toContain("One&Only");
-    expect(SITE_BRAND.description.length).toBeGreaterThan(20);
+    expect(SITE_BRAND.description).toMatch(/Ranchi/i);
+    expect(SITE_BRAND.localBusinessDescription).toMatch(/Steelcase/i);
     expect(SITE_BRAND.ogImage.startsWith("/images/")).toBe(true);
   });
 });

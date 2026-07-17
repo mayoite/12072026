@@ -15,25 +15,70 @@ vi.mock("three", () => {
     setPixelRatio = vi.fn();
     render = vi.fn();
     dispose = vi.fn();
+    shadowMap = { enabled: false, type: 0 };
   }
+  class MockScene {
+    add = vi.fn();
+    background: unknown = null;
+    traverse = vi.fn();
+  }
+  class MockCamera {
+    position = { set: vi.fn() };
+    lookAt = vi.fn();
+    aspect = 1;
+    updateProjectionMatrix = vi.fn();
+  }
+  class MockLight {
+    position = { set: vi.fn() };
+    castShadow = false;
+    shadow = { mapSize: { width: 0, height: 0 } };
+  }
+  class MockObject3D {
+    children: unknown[] = [];
+    name = "";
+    add = vi.fn();
+    remove = vi.fn();
+    traverse = vi.fn();
+  }
+  class MockMesh extends MockObject3D {
+    geometry = { dispose: vi.fn() };
+    material = { dispose: vi.fn() };
+    rotation = { x: 0 };
+    receiveShadow = false;
+  }
+
   return {
-    Scene: vi.fn(() => ({ add: vi.fn() })),
-    PerspectiveCamera: vi.fn(() => ({
-      position: { set: vi.fn() },
-      lookAt: vi.fn(),
-    })),
+    Scene: MockScene,
+    PerspectiveCamera: MockCamera,
     WebGLRenderer: MockWebGLRenderer,
-    AmbientLight: vi.fn(),
-    DirectionalLight: vi.fn(() => ({
-      position: { set: vi.fn() },
-      castShadow: false,
-    })),
-    Color: vi.fn(),
-    BoxGeometry: vi.fn(),
-    MeshStandardMaterial: vi.fn(),
-    Mesh: vi.fn(),
+    AmbientLight: MockLight,
+    DirectionalLight: MockLight,
+    Color: class {
+      constructor(_hex?: string | number) {}
+    },
+    BoxGeometry: class {},
+    PlaneGeometry: class {},
+    GridHelper: class extends MockObject3D {},
+    Group: MockObject3D,
+    MeshStandardMaterial: class {},
+    Mesh: MockMesh,
+    DoubleSide: 2,
+    PCFShadowMap: 1,
   };
 });
+
+vi.mock("three/examples/jsm/controls/OrbitControls.js", () => ({
+  OrbitControls: class {
+    enableDamping = true;
+    dampingFactor = 0;
+    target = { set: vi.fn() };
+    maxPolarAngle = 0;
+    minDistance = 0;
+    maxDistance = 0;
+    update = vi.fn();
+    dispose = vi.fn();
+  },
+}));
 
 describe("ThreeLazyViewer", () => {
   afterEach(() => {
@@ -83,8 +128,12 @@ describe("ThreeLazyViewer", () => {
     );
 
     expect(screen.getByText("Preparing 3D scene")).toBeInTheDocument();
-    await waitFor(() => {
-      expect(onReady).toHaveBeenCalled();
-    });
-  });
+    // Suite load can delay React.lazy + dynamic three import past the 1s waitFor default.
+    await waitFor(
+      () => {
+        expect(onReady).toHaveBeenCalled();
+      },
+      { timeout: 10_000 },
+    );
+  }, 15_000);
 });

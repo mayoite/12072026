@@ -7,6 +7,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type KeyboardEvent,
   type MouseEvent,
   memo,
@@ -959,22 +960,14 @@ export const InventoryPanel = memo(function InventoryPanel({
             <div
               role="table"
               aria-label="Compare selected products"
-              style={{
-                display: "grid",
-                gap: "0.25rem",
-                padding: "0.35rem 0.5rem",
-                fontSize: "0.6875rem",
-              }}
+              className={styles.compareTable}
+              style={
+                {
+                  "--inv-compare-cols": String(compareTable.names.length),
+                } as CSSProperties
+              }
             >
-              <div
-                role="row"
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: `minmax(4rem, auto) repeat(${compareTable.names.length}, minmax(0, 1fr))`,
-                  gap: "0.35rem",
-                  fontWeight: 600,
-                }}
-              >
+              <div role="row" className={styles.compareHeaderRow}>
                 <div role="columnheader" />
                 {compareTable.names.map((name, index) => (
                   <div key={compareTable.itemIds[index]} role="columnheader">
@@ -983,15 +976,7 @@ export const InventoryPanel = memo(function InventoryPanel({
                 ))}
               </div>
               {compareTable.attributes.map((row) => (
-                <div
-                  key={row.key}
-                  role="row"
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: `minmax(4rem, auto) repeat(${row.values.length}, minmax(0, 1fr))`,
-                    gap: "0.35rem",
-                  }}
-                >
+                <div key={row.key} role="row" className={styles.compareRow}>
                   <div role="rowheader">{row.label}</div>
                   {row.values.map((value, index) => (
                     <div
@@ -1005,7 +990,7 @@ export const InventoryPanel = memo(function InventoryPanel({
               ))}
             </div>
           ) : (
-            <p className={styles.emptyHint} style={{ padding: "0.35rem 0.5rem" }}>
+            <p className={styles.emptyHintPadded}>
               Select at least two products to compare (up to{" "}
               {PLANNER_CATALOG_COMPARE_MAX}).
             </p>
@@ -1092,7 +1077,7 @@ export const InventoryPanel = memo(function InventoryPanel({
                       </span>
                     </span>
                   </div>
-                  <ul className={styles.itemGrid} style={{ flex: "none", overflow: "visible" }}>
+                  <ul className={styles.itemGridStatic}>
                     {group.items.map((item) => {
                       const index = orderedItems.findIndex(
                         (entry) => entry.id === item.id,
@@ -1264,13 +1249,7 @@ export const InventoryPanel = memo(function InventoryPanel({
                             </button>
                             <button
                               type="button"
-                              className={`${styles.filterChip} ${inCompare ? styles.filterChipActive : ""}`}
-                              style={{
-                                gridColumn: "1 / -1",
-                                justifySelf: "start",
-                                minHeight: "1.25rem",
-                                fontSize: "0.625rem",
-                              }}
+                              className={`${styles.filterChip} ${styles.compareToggleChip} ${inCompare ? styles.filterChipActive : ""}`}
                               onClick={(event) => {
                                 event.stopPropagation();
                                 handleCompareToggle(item.id);

@@ -4,7 +4,6 @@ import { SUSTAINABILITY_PAGE_COPY } from "@/features/site/data/routeCopy";
 
 vi.mock("next/image", () => ({
   default: (props: { alt?: string }) => (
-    // eslint-disable-next-line @next/next/no-img-element
     <img alt={props.alt ?? ""} data-testid="mock-next-image" />
   ),
 }));

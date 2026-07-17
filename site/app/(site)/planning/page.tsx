@@ -6,20 +6,15 @@ import { RouteCtaBand } from "@/components/shared/RouteCtaBand";
 import { SectionIntro } from "@/components/shared/SectionIntro";
 import { TrackedLink } from "@/components/ui/TrackedLink";
 import { DEFAULT_HERO_FALLBACK } from "@/features/site/data/homepage";
-import { buildPageMetadata } from "@/features/site/data/seo";
 import {
   PLANNING_PAGE_COPY,
   PLANNING_PAGE_DELIVERABLES,
   PLANNING_PAGE_STEPS,
 } from "@/features/site/data/routeCopy";
-import { SITE_URL } from "@/lib/siteUrl";
+import { PLANNING_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
-export const metadata: Metadata = buildPageMetadata(SITE_URL, {
-  title: PLANNING_PAGE_COPY.heroTitle,
-  description: PLANNING_PAGE_COPY.heroSubtitle,
-  path: "/planning",
-  image: DEFAULT_HERO_FALLBACK,
-});
+/** Registry owns title/description/canonical — keep page aligned with SITE-SEO-01. */
+export const metadata: Metadata = PLANNING_PAGE_METADATA;
 
 export default function PlanningPage() {
   return (

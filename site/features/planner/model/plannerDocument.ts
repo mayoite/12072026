@@ -841,7 +841,54 @@ function collectZodIssues(error: z.ZodError): string[] {
   });
 }
 
+/**
+ * Detect an explicit unsupported planner document schemaVersion.
+ * Missing version is not unsupported (legacy payloads default to v1).
+ * Used by import and draft load so unsupported future versions fail visibly
+ * instead of being silently salvaged into a blank/current-version document.
+ */
+export function describeUnsupportedPlannerSchemaVersion(input: unknown): string | null {
+  if (!input || typeof input !== "object" || Array.isArray(input)) return null;
+
+  const record = input as Record<string, unknown>;
+  const candidates: Array<{ path: string; value: unknown }> = [
+    { path: "schemaVersion", value: record.schemaVersion },
+    { path: "schema_version", value: record.schema_version },
+  ];
+
+  const nested = record.document;
+  if (nested && typeof nested === "object" && !Array.isArray(nested)) {
+    const nestedRecord = nested as Record<string, unknown>;
+    candidates.push(
+      { path: "document.schemaVersion", value: nestedRecord.schemaVersion },
+      { path: "document.schema_version", value: nestedRecord.schema_version },
+    );
+  }
+
+  for (const { path, value } of candidates) {
+    if (value === undefined || value === null) continue;
+    if (value === PLANNER_DOCUMENT_SCHEMA_VERSION) continue;
+    return `${path}: unsupported schema version ${String(value)}; expected ${PLANNER_DOCUMENT_SCHEMA_VERSION}`;
+  }
+
+  return null;
+}
+
 export function parsePlannerDocumentImport(input: unknown): PlannerDocumentImportResult {
+  const unsupported = describeUnsupportedPlannerSchemaVersion(input);
+  if (unsupported) {
+    logPlannerSchemaValidationFailure(
+      "parsePlannerDocumentImport(unsupported-schema)",
+      new Error(unsupported),
+      input,
+      { unsupportedSchema: true },
+    );
+    return {
+      ok: false,
+      errors: [unsupported],
+    };
+  }
+
   const envelope = plannerDocumentImportEnvelopeSchema.safeParse(input);
   if (envelope.success) {
     return { ok: true, source: "envelope", document: normalizePlannerDocument(envelope.data.document), errors: [] };

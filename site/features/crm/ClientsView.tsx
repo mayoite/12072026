@@ -122,13 +122,14 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="shell-workspace-eyebrow text-[0.6875rem] font-semibold uppercase tracking-[0.26em]">
-                CRM & Customer Relations
+                CRM demo · browser only
               </p>
               <h1 className="mt-2 text-3xl font-semibold tracking-tight text-strong">
                 Client Directory
               </h1>
               <p className="shell-workspace-muted mt-2 text-sm leading-6">
-                Manage client contact cards, project associations, and notes.
+                Contact cards and project links stored in this browser only — not a
+                production CRM.
               </p>
             </div>
 

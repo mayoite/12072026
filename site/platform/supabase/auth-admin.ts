@@ -20,7 +20,7 @@ function getEnv(name: string): string {
  *       templates, users.
  *
  * Use this for any server route that touches user-scoped or CRM-ish data.
- * For catalog data use createSupabaseAdminClient() in lib/supabaseAdmin.ts.
+ * For catalog data use createSupabaseAdminClient() in @/platform/supabase/supabaseAdmin.
  */
 export function createSupabaseAuthAdminClient() {
   const supabaseUrl = process.env.NEXT_ADMIN_SUPABASE_URL?.trim() ?? "";

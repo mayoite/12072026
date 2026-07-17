@@ -43,9 +43,11 @@ import {
   assertDescriptorPublishable,
   buildReleasedProductFromPublish,
 } from "@/features/admin/svg-editor/publish/releasedCatalogPublishGate";
+import { getDbReleaseAuthorityDualWriteBlockError } from "@/features/admin/svg-editor/publish/svgReleaseAuthority";
 import type { ImmutableSvgRevisionRepository } from "@/features/admin/svg-editor/svgRevisionRepository.server";
 import type { SvgBlockDefinitionV1 } from "@/features/admin/svg-editor/contracts/svgBlockSchemas";
 import { SVG_RASTER_MASTER_WIDTH } from "@/features/planner/catalog/svg/svgPreviewAssets";
+import { isProductsDatabaseConfigured } from "@/platform/drizzle/databaseUrls";
 
 /** Rasterize published SVG to PNG with honest SHA-256 (no SVG-hash stub). */
 export function rasterizePublishedSvgPng(svgMarkup: string): {
@@ -338,6 +340,16 @@ export async function publishDescriptorWithPipeline(
     deps.readReleasedSnapshot ?? DEFAULT_DEPS.readReleasedSnapshot;
   const actorId = deps.actorId?.trim() || "system";
   const reason = deps.reason?.trim() || "publish";
+
+  // Shared fail-closed gate for server action + POST /api/admin/svg-editor.
+  // When SVG_RELEASE_AUTHORITY=db, disk-only publish is not a silent override.
+  const dbAuthorityBlock = getDbReleaseAuthorityDualWriteBlockError({
+    dualWriteReady: Boolean(deps.dbRepository && deps.artifactStore),
+    productsDbConfigured: isProductsDatabaseConfigured(),
+  });
+  if (dbAuthorityBlock) {
+    return { success: false, error: dbAuthorityBlock };
+  }
 
   const parsed = parsePayload(descriptorInput);
   if (!parsed.ok) {

@@ -58,7 +58,7 @@ describe("useCrmStore Zustand Store", () => {
       expect(client?.company).toBe("Nexus Tech");
     });
 
-    it("deletes client and sets associated projects clientId to none", () => {
+    it("deletes client and sets associated projects and quotes clientId to none", () => {
       const store = useCrmStore.getState();
       store.deleteClient("client-1");
 
@@ -68,6 +68,9 @@ describe("useCrmStore Zustand Store", () => {
 
       const project = updatedState.projects.find((p) => p.id === "project-1");
       expect(project?.clientId).toBe("none");
+
+      const quote = updatedState.quotes.find((q) => q.id === "quote-1");
+      expect(quote?.clientId).toBe("none");
     });
   });
 

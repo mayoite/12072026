@@ -4,6 +4,9 @@
  *
  * Complements scripts/audit-api-route-safety.mjs with focused source asserts
  * on admin ops, planner handoff, and site form mutators (unit/static proof).
+ *
+ * AF-14: admin mutators are discovered under app/api/admin so new routes
+ * cannot skip the matrix by omission from a hand list.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -13,11 +16,49 @@ import { describe, expect, it } from "vitest";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../..");
 const apiRoot = path.join(siteRoot, "app", "api");
+const adminApiRoot = path.join(apiRoot, "admin");
+
+const MUTATING = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 
 function readRoute(...segments: string[]): string {
   const file = path.join(apiRoot, ...segments, "route.ts");
   expect(fs.existsSync(file), `missing ${file}`).toBe(true);
   return fs.readFileSync(file, "utf8");
+}
+
+function walkRouteFiles(dir: string, files: string[] = []): string[] {
+  if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) return files;
+  for (const entry of fs.readdirSync(dir)) {
+    const full = path.join(dir, entry);
+    if (fs.statSync(full).isDirectory()) {
+      walkRouteFiles(full, files);
+    } else if (entry === "route.ts" || entry === "route.js") {
+      files.push(full);
+    }
+  }
+  return files;
+}
+
+function toApiPath(absFile: string): string {
+  return path
+    .relative(apiRoot, absFile)
+    .replaceAll("\\", "/")
+    .replace(/\/route\.(ts|js)$/, "");
+}
+
+function extractExportedMethods(source: string): string[] {
+  const methods = new Set<string>();
+  for (const m of source.matchAll(
+    /\bexport\s+(?:async\s+)?function\s+(GET|POST|PUT|PATCH|DELETE)\b/g,
+  )) {
+    methods.add(m[1]);
+  }
+  for (const m of source.matchAll(
+    /\bexport\s+const\s+(GET|POST|PUT|PATCH|DELETE)\s*=/g,
+  )) {
+    methods.add(m[1]);
+  }
+  return [...methods];
 }
 
 function hasCsrf(source: string): boolean {
@@ -44,31 +85,135 @@ function hasRejectionHeader(source: string): boolean {
   );
 }
 
+function hasAdminAuthGate(source: string): boolean {
+  return (
+    /withAuth\s*[<(]/.test(source) ||
+    /requireAdminSession\s*\(/.test(source) ||
+    /role\s*:\s*["']admin["']/.test(source)
+  );
+}
+
+/**
+ * For withAuth exports, each mutating method must either use requireCsrf:true
+ * on that export (or file-level withAuth CSRF) or manual validateCsrfRequest.
+ * Manual function exports must call validateCsrfRequest in the same file.
+ */
+function mutatingMethodHasCsrf(source: string, method: string): boolean {
+  const withAuthExport = new RegExp(
+    `export\\s+const\\s+${method}\\s*=\\s*withAuth`,
+  );
+  if (withAuthExport.test(source)) {
+    // Prefer per-export options; accept file-level requireCsrf:true (withAuth pattern).
+    return /requireCsrf\s*:\s*true/.test(source);
+  }
+
+  const fnExport = new RegExp(
+    `export\\s+(?:async\\s+)?function\\s+${method}\\b`,
+  );
+  if (fnExport.test(source)) {
+    return /validateCsrfRequest\s*\(/.test(source);
+  }
+
+  return hasCsrf(source);
+}
+
+type AdminMutatorRow = {
+  apiPath: string;
+  methods: string[];
+  source: string;
+};
+
+function discoverAdminMutators(): AdminMutatorRow[] {
+  const files = walkRouteFiles(adminApiRoot);
+  const rows: AdminMutatorRow[] = [];
+  for (const file of files) {
+    const source = fs.readFileSync(file, "utf8");
+    const methods = extractExportedMethods(source).filter((m) => MUTATING.has(m));
+    if (methods.length === 0) continue;
+    rows.push({ apiPath: toApiPath(file), methods, source });
+  }
+  return rows.sort((a, b) => a.apiPath.localeCompare(b.apiPath));
+}
+
 describe("mutation route CSRF + rate-limit matrix (static)", () => {
-  describe("admin ops mutators", () => {
+  describe("AF-14 admin mutators (auto-discovered)", () => {
+    const adminMutators = discoverAdminMutators();
+
+    it("discovers every known admin mutation surface", () => {
+      const paths = adminMutators.map((r) => r.apiPath);
+      // Catalog managers + ops + pricing + svg-editor lifecycle (full AF-14 surface)
+      for (const required of [
+        "admin/plans",
+        "admin/plans/[id]",
+        "admin/themes/publish",
+        "admin/features",
+        "admin/price-books/[bookId]/action",
+        "admin/catalog",
+        "admin/catalog/[id]",
+        "admin/catalogs/[type]",
+        "admin/catalogs/[type]/[id]",
+        "admin/planner-catalog",
+        "admin/configurator-catalog/[id]",
+        "admin/svg-editor",
+        "admin/svg-editor/bulk-import",
+        "admin/svg-editor/[slug]/lifecycle",
+        "admin/svg-editor/[slug]/rollback",
+      ]) {
+        expect(paths, `missing mutator ${required}`).toContain(required);
+      }
+      expect(adminMutators.length).toBeGreaterThanOrEqual(15);
+    });
+
+    it.each(
+      discoverAdminMutators().map((row) => [row.apiPath, row] as const),
+    )("%s has CSRF + rate limit + admin gate + rejection hygiene", (_apiPath, row) => {
+      const { source, methods } = row as AdminMutatorRow;
+      expect(methods.length).toBeGreaterThan(0);
+      expect(hasCsrf(source)).toBe(true);
+      expect(hasRateLimit(source)).toBe(true);
+      expect(hasRejectionHeader(source)).toBe(true);
+      expect(hasAdminAuthGate(source)).toBe(true);
+      for (const method of methods) {
+        expect(
+          mutatingMethodHasCsrf(source, method),
+          `${row.apiPath} ${method} missing CSRF`,
+        ).toBe(true);
+      }
+      if (/Invalid or missing CSRF token/i.test(source)) {
+        expect(source).not.toMatch(
+          /API_ERROR_CODES\.(INVALID_INPUT|INSUFFICIENT_PERMISSIONS)/,
+        );
+      }
+    });
+
+    it("GET-only admin routes are not required to carry CSRF", () => {
+      const files = walkRouteFiles(adminApiRoot);
+      const getOnly: string[] = [];
+      for (const file of files) {
+        const source = fs.readFileSync(file, "utf8");
+        const methods = extractExportedMethods(source);
+        const mutators = methods.filter((m) => MUTATING.has(m));
+        if (mutators.length === 0 && methods.includes("GET")) {
+          getOnly.push(toApiPath(file));
+        }
+      }
+      // Sanity: known read surfaces exist and stay out of mutator matrix
+      expect(getOnly).toEqual(
+        expect.arrayContaining([
+          "admin/analytics",
+          "admin/price-books",
+          "admin/themes",
+        ]),
+      );
+      for (const apiPath of getOnly) {
+        const row = adminMutators.find((r) => r.apiPath === apiPath);
+        expect(row, `${apiPath} must not be classified as mutator`).toBeUndefined();
+      }
+    });
+  });
+
+  describe("admin ops mutators (named lock — residual non-admin paths)", () => {
     const adminOps: Array<{ segments: string[]; methods: RegExp }> = [
-      { segments: ["admin", "plans"], methods: /export async function (PATCH|DELETE)/ },
-      { segments: ["admin", "plans", "[id]"], methods: /export async function (PATCH|DELETE)/ },
-      { segments: ["admin", "themes", "publish"], methods: /export async function POST/ },
-      { segments: ["admin", "features"], methods: /requireCsrf:\s*true/ },
-      {
-        segments: ["admin", "price-books", "[bookId]", "action"],
-        methods: /requireCsrf:\s*true/,
-      },
-      { segments: ["admin", "svg-editor"], methods: /requireCsrf:\s*true/ },
-      // Legacy + canonical catalog mutators (F7b exclusive surfaces)
-      { segments: ["admin", "catalog"], methods: /requireCsrf:\s*true/ },
-      { segments: ["admin", "catalog", "[id]"], methods: /requireCsrf:\s*true/ },
-      { segments: ["admin", "catalogs", "[type]"], methods: /requireCsrf:\s*true/ },
-      {
-        segments: ["admin", "catalogs", "[type]", "[id]"],
-        methods: /requireCsrf:\s*true/,
-      },
-      { segments: ["admin", "planner-catalog"], methods: /requireCsrf:\s*true/ },
-      {
-        segments: ["admin", "configurator-catalog", "[id]"],
-        methods: /requireCsrf:\s*true/,
-      },
       { segments: ["customer-queries", "manage"], methods: /export async function PATCH/ },
       { segments: ["theme", "manage"], methods: /export async function POST/ },
     ];

@@ -88,6 +88,7 @@ describe("Embedded CRM chrome", () => {
     expect(
       screen.queryByRole("heading", { level: 1, name: /Projects Tracker/i }),
     ).not.toBeInTheDocument();
+    expect(screen.getByText(/in this browser/i)).toBeInTheDocument();
   });
 
   it("renders the compact clients toolbar when embedded", () => {

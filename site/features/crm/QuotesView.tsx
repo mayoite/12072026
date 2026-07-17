@@ -158,13 +158,14 @@ export default function QuotesView({ embedded = false }: { embedded?: boolean })
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="shell-workspace-eyebrow text-[0.6875rem] font-semibold uppercase tracking-[0.26em]">
-                Quotes & Deal Flow
+                CRM demo · browser only
               </p>
               <h1 className="mt-2 text-3xl font-semibold tracking-tight text-strong">
                 Deals Pipeline
               </h1>
               <p className="shell-workspace-muted mt-2 text-sm leading-6">
-                Track project quote values, approval cycles, and invoice stages.
+                Quote values and approval status stored in this browser only — not a
+                production CRM.
               </p>
             </div>
 

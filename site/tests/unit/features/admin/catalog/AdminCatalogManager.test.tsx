@@ -80,4 +80,78 @@ describe("AdminCatalogManager", () => {
       /configurator SKUs/i,
     );
   });
+
+  it("standard local-catalog source is read-only with honest fallback copy", async () => {
+    vi.mocked(browserApiFetch).mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        success: true,
+        items: [
+          {
+            id: "std-local-1",
+            name: "Local desk",
+            category: "desks",
+            is_visible: true,
+          },
+        ],
+        total: 1,
+        source: "local-catalog",
+      }),
+    } as Response);
+
+    render(
+      <AdminCatalogManager
+        title="Standard catalog"
+        description="Managed products"
+        catalogType="standard"
+      />,
+    );
+
+    expect(await screen.findByTestId("admin-shell-source")).toHaveTextContent(
+      /local-catalog/i,
+    );
+    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
+      /read-only \(local fallback/i,
+    );
+    expect(screen.getByTestId("admin-shell-state")).toHaveTextContent(/read-only/i);
+    expect(screen.getByTestId("admin-shell-primary-action")).toBeDisabled();
+    expect(
+      screen.getByText(/Read-only local catalog\. Writes are disabled/i),
+    ).toBeInTheDocument();
+  });
+
+  it("products-db source stays editable for standard catalog", async () => {
+    vi.mocked(browserApiFetch).mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        success: true,
+        items: [
+          {
+            id: "std-db-1",
+            name: "Managed desk",
+            category: "desks",
+            is_visible: true,
+          },
+        ],
+        total: 1,
+        source: "products-db",
+      }),
+    } as Response);
+
+    render(
+      <AdminCatalogManager
+        title="Standard catalog"
+        description="Managed products"
+        catalogType="standard"
+      />,
+    );
+
+    expect(await screen.findByTestId("admin-shell-source")).toHaveTextContent(
+      /products-db/i,
+    );
+    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(/· editable/i);
+    expect(screen.getByTestId("admin-shell-primary-action")).not.toBeDisabled();
+  });
 });

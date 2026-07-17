@@ -16,6 +16,11 @@ export type HandoffContactDraft = {
   notes: string;
 };
 
+/** Explicit demo-pricing confirmation from the Review checkbox (required for handoff). */
+export type HandoffSendOptions = {
+  confirmDemoPricing: true;
+};
+
 type ReviewQuotePanelProps = {
   validation: ValidationResult;
   furnitureCount: number;
@@ -27,7 +32,10 @@ type ReviewQuotePanelProps = {
   onDownloadBoqCsv: () => void;
   onDownloadBoqPdf: () => void;
   onAddAllToQuote: () => void;
-  onSendToOando: (contact: HandoffContactDraft) => void | Promise<void>;
+  onSendToOando: (
+    contact: HandoffContactDraft,
+    options: HandoffSendOptions,
+  ) => void | Promise<void>;
   onFocusIssue?: (issue: ValidationIssue) => void;
 };
 
@@ -212,7 +220,12 @@ export function ReviewQuotePanel({
                 type="button"
                 className={styles.sendAction}
                 disabled={!canSend}
-                onClick={() => void onSendToOando(contact)}
+                onClick={() => {
+                  // canSend already requires confirmDemoPricing; pass the flag so
+                  // the workspace never invents confirmation for the API.
+                  if (!confirmDemoPricing) return;
+                  void onSendToOando(contact, { confirmDemoPricing: true });
+                }}
                 aria-busy={handoffBusy}
               >
                 {handoffBusy ? "Sending…" : "Send to Oando"}

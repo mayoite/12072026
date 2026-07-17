@@ -1,5 +1,6 @@
 import {
   createPlannerDocument,
+  describeUnsupportedPlannerSchemaVersion,
   normalizePlannerDocument,
   plannerDocumentSchema,
   type PlannerDocument,
@@ -153,6 +154,17 @@ function loadPlannerDraftDocumentAtKey(
           // ignore storage removal failures
         }
         return { document: null, status: "expired", scope };
+      }
+
+      // Explicit future schemaVersion must fail visibly — never salvage into v1.
+      if (describeUnsupportedPlannerSchemaVersion(parsed.document) ||
+          describeUnsupportedPlannerSchemaVersion(parsed)) {
+        try {
+          storage.removeItem(storageKey);
+        } catch {
+          // ignore storage removal failures
+        }
+        return { document: null, status: "invalid", scope };
       }
 
       return {

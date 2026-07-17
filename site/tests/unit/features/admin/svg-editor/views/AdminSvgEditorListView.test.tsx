@@ -78,6 +78,43 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
     expect(advanced).toHaveTextContent(/bulk import/i);
   });
 
+  it("AF-05/AF-13: primary journey is symbol authoring; bulk stays advanced; no internal jargon", () => {
+    render(
+      <AdminSvgEditorListView
+        descriptors={[descriptor]}
+        refreshedAtLabel="test-time"
+        artifactStatuses={{
+          "side-table-001": {
+            state: "published",
+            publicUrl: "/svg-catalog/side-table-001.svg",
+          } as never,
+        }}
+        lifecycleManifest={{}}
+      />,
+    );
+
+    const journey = screen.getByTestId("admin-svg-journey-copy");
+    expect(journey).toHaveTextContent(/visual studio|publish/i);
+    expect(journey).toHaveTextContent(/do not need to edit/i);
+    expect(journey).not.toHaveTextContent(/Zod|pipeline|schema|descriptor/i);
+
+    expect(screen.getByTestId("admin-shell-title")).toHaveTextContent("SVG symbols");
+    expect(screen.getByTestId("admin-shell-primary-action")).toHaveTextContent(
+      /New SVG symbol/i,
+    );
+
+    const advanced = screen.getByTestId("admin-svg-advanced-import");
+    expect(advanced.tagName.toLowerCase()).toBe("details");
+    expect(advanced).not.toHaveAttribute("open");
+    expect(advanced).toHaveTextContent(/Migration tool only/i);
+    expect(advanced).toHaveTextContent(/optional/i);
+
+    const page = screen.getByTestId("admin-svg-primary-journey");
+    expect(page.textContent).not.toMatch(/\bZod\b/);
+    expect(page.textContent).not.toMatch(/atomic rename/i);
+    expect(page.textContent).not.toMatch(/schemaVersion/i);
+  });
+
   it("shows empty source inventory with primary New SVG symbol CTA", () => {
     render(
       <AdminSvgEditorListView

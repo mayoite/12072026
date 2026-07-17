@@ -23,6 +23,9 @@ describe("app/admin/crm/page.tsx", () => {
     expect(screen.getByText("CRM")).toBeInTheDocument();
     expect(screen.getByText(/localStorage demo/i)).toBeInTheDocument();
     expect(screen.getByText(/server-backed inbox/i)).toBeInTheDocument();
+    // Hub page copy must not claim a production multi-tenant CRM
+    expect(screen.getByText(/browser localStorage demo/i)).toBeInTheDocument();
+    expect(document.body.textContent).not.toMatch(/production CRM backend/i);
     expect(screen.getByTestId("crm-hub-view")).toBeInTheDocument();
     expect(screen.getByLabelText("CRM sections")).toBeInTheDocument();
   });

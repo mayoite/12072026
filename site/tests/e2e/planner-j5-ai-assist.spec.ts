@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
 import {
   getObjectCount,
@@ -7,7 +7,7 @@ import {
 
 test.describe.configure({ timeout: 90_000 });
 
-async function openAiAssist(page: import("@playwright/test").Page): Promise<void> {
+async function openAiAssist(page: Page): Promise<void> {
   const aiBtn = page.getByRole("button", { name: /^AI assist$/i });
   await expect(aiBtn).toBeVisible({ timeout: 15_000 });
   await aiBtn.click();

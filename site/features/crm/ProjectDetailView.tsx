@@ -116,13 +116,30 @@ export default function ProjectDetailView({ projectId, embedded = false }: Proje
 
   if (!project) {
     return (
-      <section className="shell-workspace-page min-h-screen">
+      <section className={embedded ? "crm-project-detail-view" : "shell-workspace-page min-h-screen"}>
         {!embedded ? <GlobalNavHeader /> : null}
-        <div className="mx-auto max-w-md space-y-4 py-20 text-center text-inverse">
-          <AlertCircle className="mx-auto h-12 w-12 text-danger" />
-          <h2 className="text-xl font-semibold">Project not found</h2>
-          <p className="shell-workspace-muted text-sm">The project you are looking for does not exist or has been deleted.</p>
-          <Link href={CRM_PROJECTS_PATH} className="btn-primary inline-block rounded-full px-6 py-2">
+        <div
+          className={
+            embedded
+              ? "admin-empty admin-panel space-y-4 py-12 text-center"
+              : "mx-auto max-w-md space-y-4 py-20 text-center text-inverse"
+          }
+        >
+          <AlertCircle className="mx-auto h-12 w-12 text-danger" aria-hidden />
+          <h2 className={embedded ? "admin-empty__title" : "text-xl font-semibold"}>
+            Project not found
+          </h2>
+          <p className={embedded ? "admin-empty__copy" : "shell-workspace-muted text-sm"}>
+            The project you are looking for does not exist or has been deleted.
+          </p>
+          <Link
+            href={CRM_PROJECTS_PATH}
+            className={
+              embedded
+                ? "admin-btn admin-btn--primary inline-block"
+                : "btn-primary inline-block rounded-full px-6 py-2"
+            }
+          >
             Back to Projects
           </Link>
         </div>
@@ -160,12 +177,42 @@ export default function ProjectDetailView({ projectId, embedded = false }: Proje
       structuralElements: [],
     };
 
-    localStorage.setItem(newKey, JSON.stringify(emptyPayload));
-    
-    // Add to project index
-    const index = JSON.parse(localStorage.getItem("planner_project_index") || "[]");
+    try {
+      localStorage.setItem(newKey, JSON.stringify(emptyPayload));
+    } catch {
+      window.alert("Could not save the new floor plan (storage full or blocked).");
+      return;
+    }
+
+    // Add to project index (tolerate corrupt index JSON)
+    type IndexEntry = { id: string; key: string; name: string };
+    let index: IndexEntry[] = [];
+    try {
+      const raw = localStorage.getItem("planner_project_index");
+      const parsed: unknown = raw ? JSON.parse(raw) : [];
+      if (Array.isArray(parsed)) {
+        for (const entry of parsed) {
+          if (!entry || typeof entry !== "object") continue;
+          const record = entry as Record<string, unknown>;
+          if (
+            typeof record.id === "string" &&
+            typeof record.key === "string" &&
+            typeof record.name === "string"
+          ) {
+            index.push({ id: record.id, key: record.key, name: record.name });
+          }
+        }
+      }
+    } catch {
+      index = [];
+    }
     index.push({ id: newId, key: nextKey(newId), name: newPlanTitle.trim() });
-    localStorage.setItem("planner_project_index", JSON.stringify(index));
+    try {
+      localStorage.setItem("planner_project_index", JSON.stringify(index));
+    } catch {
+      window.alert("Could not update the plan index (storage full or blocked).");
+      return;
+    }
 
     // Link it to the project
     assignPlanToProject(project.id, newId);
@@ -180,22 +227,40 @@ export default function ProjectDetailView({ projectId, embedded = false }: Proje
     return `planner_${id}`;
   }
 
+  const shell = embedded ? "crm-project-detail-view" : "shell-workspace-page min-h-screen";
+  const inner = embedded
+    ? "flex w-full flex-col gap-5 sm:gap-6"
+    : "mx-auto flex w-full max-w-7xl flex-col gap-8 px-6 py-8";
+
   return (
-    <section className="shell-workspace-page min-h-screen">
+    <section className={shell}>
       {!embedded ? <GlobalNavHeader /> : null}
 
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-6 py-8">
+      <div className={inner}>
         {/* Back Link */}
         <div className="flex items-center gap-3">
           <Link
             href={CRM_PROJECTS_PATH}
-            className={cn("rounded-xl p-2", crmUi.softSurface, crmUi.ghostInverse)}
+            className={cn(
+              "inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl p-2",
+              crmUi.softSurface,
+              embedded ? "text-muted hover:bg-soft" : crmUi.ghostInverse,
+            )}
+            aria-label="Back to projects"
           >
-            <ArrowLeft className="h-5 w-5" />
+            <ArrowLeft className="h-5 w-5" aria-hidden />
           </Link>
-          <div>
-            <p className="shell-workspace-eyebrow text-[0.625rem] font-semibold uppercase tracking-[0.2em]">Project Detail</p>
-            <h1 className="text-2xl font-semibold text-strong">{project.name}</h1>
+          <div className="min-w-0">
+            {!embedded ? (
+              <p className="shell-workspace-eyebrow text-[0.625rem] font-semibold uppercase tracking-[0.2em]">
+                Project Detail
+              </p>
+            ) : null}
+            {embedded ? (
+              <h2 className="m-0 text-lg font-semibold text-strong">{project.name}</h2>
+            ) : (
+              <h1 className="text-2xl font-semibold text-strong">{project.name}</h1>
+            )}
           </div>
         </div>
 
@@ -272,16 +337,26 @@ export default function ProjectDetailView({ projectId, embedded = false }: Proje
               
               <div className="flex gap-2">
                 <button
+                  type="button"
                   onClick={() => setIsLinkModalOpen(true)}
-                  className="btn-outline-light px-4 py-2 text-xs font-semibold rounded-lg"
+                  className={
+                    embedded
+                      ? "admin-btn admin-btn--outline admin-btn--compact"
+                      : "btn-outline-light rounded-lg px-4 py-2 text-xs font-semibold"
+                  }
                 >
                   Link Plan
                 </button>
                 <button
+                  type="button"
                   onClick={() => setIsCreateModalOpen(true)}
-                  className="btn-primary px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-1.5"
+                  className={
+                    embedded
+                      ? "admin-btn admin-btn--primary admin-btn--compact inline-flex items-center gap-1.5"
+                      : "btn-primary flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-semibold"
+                  }
                 >
-                  <Plus className="h-4 w-4" /> Create Plan
+                  <Plus className="h-4 w-4" aria-hidden /> Create Plan
                 </button>
               </div>
             </div>

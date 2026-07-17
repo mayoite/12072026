@@ -84,6 +84,7 @@ describe("ReviewQuotePanel", () => {
         name: "Ada",
         email: "ada@example.com",
       }),
+      { confirmDemoPricing: true },
     );
   });
 
@@ -102,6 +103,7 @@ describe("ReviewQuotePanel", () => {
     await user.click(send);
     expect(props.onSendToOando).toHaveBeenCalledWith(
       expect.objectContaining({ phone: "+91 90000 00000" }),
+      { confirmDemoPricing: true },
     );
   });
 

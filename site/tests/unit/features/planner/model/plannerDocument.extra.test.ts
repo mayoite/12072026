@@ -121,6 +121,56 @@ describe("plannerDocument - additional coverage", () => {
       expect(parsed.ok).toBe(false);
       expect(parsed.errors.length).toBeGreaterThan(0);
     });
+
+    it("fails visibly on unsupported schemaVersion with an explicit message", () => {
+      const parsed = parsePlannerDocumentImport({
+        schemaVersion: 99,
+        name: "Future Plan",
+        sceneJson: {},
+      });
+      expect(parsed.ok).toBe(false);
+      expect(parsed.errors.some((e) => /unsupported schema version 99/i.test(e))).toBe(true);
+      expect(parsed.document).toBeUndefined();
+    });
+
+    it("fails visibly when nested planner-document envelope carries unsupported schemaVersion", () => {
+      const parsed = parsePlannerDocumentImport({
+        type: "planner-document",
+        schemaVersion: 1,
+        document: {
+          schemaVersion: 42,
+          name: "Nested Future",
+          sceneJson: {},
+        },
+      });
+      expect(parsed.ok).toBe(false);
+      expect(parsed.errors.some((e) => /document\.schemaVersion.*42/i.test(e))).toBe(true);
+    });
+
+    it("preserves free-form sceneJson (schema-permitted unknown-safe payload)", () => {
+      const parsed = parsePlannerDocumentImport({
+        schemaVersion: 1,
+        name: "With extras",
+        sceneJson: {
+          type: "cad-suite-planner-scene",
+          version: 1,
+          customNote: "keep-me",
+          measurement: { canonicalUnit: "mm", displayUnit: "mm" },
+          room: {
+            widthMm: 6000,
+            depthMm: 8000,
+            wallHeightMm: 2700,
+            wallThicknessMm: 150,
+            floorThicknessMm: 100,
+            originMm: { xMm: 0, yMm: 0 },
+          },
+          items: [],
+        },
+      });
+      expect(parsed.ok).toBe(true);
+      const scene = parsed.document?.sceneJson as { customNote?: string };
+      expect(scene.customNote).toBe("keep-me");
+    });
   });
 
   describe("normalizePlannerDocument edge cases", () => {

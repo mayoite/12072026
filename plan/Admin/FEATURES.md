@@ -62,7 +62,7 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 | 16 | OPEN | Disk can still be what Planner falls back to |
 | 17 | PARTIAL | `scripts/svg-disk-db-dry-run.ts` (report only; does not prove write authority) |
 | 18 | OPEN | No parity tooling before cutover |
-| 19 | PARTIAL | CSRF/rate limits on admin routes; full matrix open |
+| 19 | PARTIAL | CSRF/rate limits on admin routes; unit static matrix complete (plan-A2); browser OPEN |
 | 20 | PARTIAL | Tmp-dir unit/e2e patterns; no automated canonical hash gate |
 
 ---

@@ -837,7 +837,8 @@ export function ProductViewer({
                   surface="pdp"
                   label={PDP_ROUTE_COPY.ctas.designInPlanner}
                   productSlug={product.slug || product.id}
-                  categoryId={categoryId ?? categoryRoute}
+                  // Only a catalog category id (e.g. seating) — never categoryRoute path.
+                  categoryId={categoryId}
                   className="pdp-cta-secondary group mb-2 flex w-full items-center justify-between"
                 >
                   <span className="pdp-action-label">

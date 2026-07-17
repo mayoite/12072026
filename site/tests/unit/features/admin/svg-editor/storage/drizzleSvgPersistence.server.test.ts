@@ -3,6 +3,7 @@ import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/
 
 const insertMock = vi.fn();
 const selectMock = vi.fn();
+const updateMock = vi.fn();
 const transactionMock = vi.fn();
 
 vi.mock("server-only", () => ({}));
@@ -11,6 +12,7 @@ vi.mock("@/platform/drizzle/productsDb", () => ({
   productsDb: {
     insert: (...args: unknown[]) => insertMock(...args),
     select: (...args: unknown[]) => selectMock(...args),
+    update: (...args: unknown[]) => updateMock(...args),
     transaction: (...args: unknown[]) => transactionMock(...args),
   },
 }));
@@ -55,6 +57,52 @@ describe("DrizzleSvgRevisionPersistence", () => {
     expect(typeof instance.insertArtifacts).toBe("function");
     expect(typeof instance.loadRevision).toBe("function");
     expect(typeof instance.publishRelease).toBe("function");
+    expect(typeof instance.updateProductPointer).toBe("function");
+  });
+
+  it("updateProductPointer allows 0 or 1 matching product rows", async () => {
+    updateMock.mockReturnValue({
+      set: vi.fn(() => ({
+        where: vi.fn(() => ({
+          returning: vi.fn(async () => []),
+        })),
+      })),
+    });
+    const { DrizzleSvgRevisionPersistence } = await import(
+      "@/features/admin/svg-editor/storage/drizzleSvgPersistence.server"
+    );
+    const store = new DrizzleSvgRevisionPersistence();
+    await expect(
+      store.updateProductPointer("orphan-slug", "rev-1"),
+    ).resolves.toBeUndefined();
+
+    updateMock.mockReturnValue({
+      set: vi.fn(() => ({
+        where: vi.fn(() => ({
+          returning: vi.fn(async () => [{ id: "product-1" }]),
+        })),
+      })),
+    });
+    await expect(
+      store.updateProductPointer("desk", "rev-2"),
+    ).resolves.toBeUndefined();
+  });
+
+  it("updateProductPointer fails closed when multiple products share the source slug", async () => {
+    updateMock.mockReturnValue({
+      set: vi.fn(() => ({
+        where: vi.fn(() => ({
+          returning: vi.fn(async () => [{ id: "p1" }, { id: "p2" }]),
+        })),
+      })),
+    });
+    const { DrizzleSvgRevisionPersistence } = await import(
+      "@/features/admin/svg-editor/storage/drizzleSvgPersistence.server"
+    );
+    const store = new DrizzleSvgRevisionPersistence();
+    await expect(
+      store.updateProductPointer("dup-source", "rev-x"),
+    ).rejects.toThrow(/at most one product/);
   });
 
   it("publishRelease commits revision, descriptor, artifacts, and pointer in one transaction", async () => {

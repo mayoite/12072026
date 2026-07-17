@@ -30,10 +30,18 @@ import {
   snapshotCanonicalCatalog,
 } from "../../../../../helpers/adminCatalogIsolation";
 
+const isProductsDatabaseConfigured = vi.hoisted(() => vi.fn(() => false));
+
+vi.mock("@/platform/drizzle/databaseUrls", () => ({
+  isProductsDatabaseConfigured: () => isProductsDatabaseConfigured(),
+}));
+
 const tempDirs: string[] = [];
 
 afterEach(() => {
   for (const dir of tempDirs.splice(0)) rmSync(dir, { recursive: true, force: true });
+  delete process.env.SVG_RELEASE_AUTHORITY;
+  isProductsDatabaseConfigured.mockReturnValue(false);
 });
 
 const validDescriptor = {
@@ -888,6 +896,72 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
     expect(result.error).toContain("commit denied");
     expect(persistRollback).toHaveBeenCalledOnce();
     expect(pipelineRollback).toHaveBeenCalledOnce();
+  });
+
+  it("SVG_RELEASE_AUTHORITY=db fails closed before disk when dual-write deps missing (API path share)", async () => {
+    process.env.SVG_RELEASE_AUTHORITY = "db";
+    isProductsDatabaseConfigured.mockReturnValue(false);
+    const compileSvg = vi.fn(async () => compileOk());
+    const runPipeline = vi.fn(async () => pipelineOk());
+    const persist = vi.fn(() => persistOk());
+
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg,
+      runPipeline,
+      persist,
+    });
+
+    expect(result).toEqual({
+      success: false,
+      error: "DB release authority requires PRODUCTS_DATABASE_URL",
+    });
+    expect(compileSvg).not.toHaveBeenCalled();
+    expect(runPipeline).not.toHaveBeenCalled();
+    expect(persist).not.toHaveBeenCalled();
+  });
+
+  it("SVG_RELEASE_AUTHORITY=db fails closed when DB configured but R2 deps missing", async () => {
+    process.env.SVG_RELEASE_AUTHORITY = "db";
+    isProductsDatabaseConfigured.mockReturnValue(true);
+    const compileSvg = vi.fn(async () => compileOk());
+
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg,
+      runPipeline: async () => pipelineOk(),
+      persist: () => persistOk(),
+    });
+
+    expect(result).toEqual({
+      success: false,
+      error: "DB release authority requires reachable R2 catalog storage",
+    });
+    expect(compileSvg).not.toHaveBeenCalled();
+  });
+
+  it("SVG_RELEASE_AUTHORITY=db proceeds when dual-write deps are injected (still ≠ cutover)", async () => {
+    process.env.SVG_RELEASE_AUTHORITY = "db";
+    isProductsDatabaseConfigured.mockReturnValue(true);
+    const putText = vi.fn(async () => undefined);
+    const putBytes = vi.fn(async () => undefined);
+    const publish = vi.fn(async () => undefined);
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => compileOk(),
+      runPipeline: async () => pipelineOk(),
+      persist: () => persistOk(),
+      rasterizePng: () => ({ png: Buffer.from([9]), checksum: "b".repeat(64) }),
+      dbRepository: {
+        publish,
+        load: async () => null,
+      } as never,
+      artifactStore: { putText, putBytes },
+    });
+    expect(result.success).toBe(true);
+    expect(publish).toHaveBeenCalledOnce();
+    expect(putText).toHaveBeenCalled();
+    expect(putBytes).toHaveBeenCalled();
   });
 });
 

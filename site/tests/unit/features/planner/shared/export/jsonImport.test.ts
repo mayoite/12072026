@@ -36,4 +36,28 @@ describe("jsonImport", () => {
     const bad = importFromJson("{not-json");
     expect(bad.success).toBe(false);
   });
+
+  it("fails visibly on unsupported open3d scene envelope versions", () => {
+    const project = createRectangularRoomProject({
+      name: "Future Env",
+      widthMm: 4000,
+      depthMm: 3000,
+    });
+    const exported = exportToJson(project);
+    expect(exported.success).toBe(true);
+    const future = {
+      ...exported.envelope!,
+      version: 99,
+    };
+    const errors = validateEnvelopeStructure(future as typeof exported.envelope);
+    expect(Array.isArray(errors)).toBe(true);
+    expect(
+      (errors as Array<{ path: string; message: string }>).some(
+        (e) => e.path === "version" && /unsupported scene envelope version 99/i.test(e.message),
+      ),
+    ).toBe(true);
+    const imported = importFromJson(JSON.stringify(future));
+    expect(imported.success).toBe(false);
+    expect(imported.project).toBeNull();
+  });
 });

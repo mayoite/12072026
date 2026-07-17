@@ -73,10 +73,10 @@ Every item starts unchecked. Flip only with COMPLETION-CONTRACT proof.
 
 ### T3 — Dependency hygiene
 
-- [ ] Every direct `site` dependency has import or build role.
-- [ ] Remove or justify dead deps.
-- [ ] License check on additions.
-- [ ] No competitor packages.
+- [PARTIAL] Every direct `site` dependency has import or build role. (48/49 USED; model-viewer BUILD_ROLE CDN; 8 idle devDeps NO_IMPORT — T1 2026-07-17)
+- [PARTIAL] Remove or justify dead deps. (idle listed in `agent-reports/2026-07-17-plan-T1.md`; none removed — owner cut/keep)
+- [PASS] License check on additions. (no additions this session)
+- [PASS] No competitor packages. (package-name scan clean)
 
 **Exit:** TF-05 clear for site package.  
 **Proof:** dep audit + lockfile.
@@ -94,17 +94,19 @@ Every item starts unchecked. Flip only with COMPLETION-CONTRACT proof.
 
 ### T5 — Security and secrets
 
-- [ ] `pnpm run lint:secrets` exit 0.
-- [PASS] `.env.example` lists required names (no values).
+- [PASS] `pnpm run lint:secrets` exit 0 (T-W3 2026-07-17).
+- [PASS] `pnpm --filter oando-site run scan:secrets` exit 0 (T-W3).
+- [PASS] `pnpm --filter oando-site run launch:env` exit 0 (T-W3).
+- [PASS] `.env.example` lists required + FEATURES env names (no values); `DEV_AUTH_BYPASS` name documented T-W3.
 - [PASS] AI chain documented: Gemini + OpenRouter primary/backup; OpenAI not required.
-- [PASS] DEV_AUTH_BYPASS production-disabled path not regressed by stack changes (documented).
+- [PASS] DEV_AUTH_BYPASS production-disabled path not regressed by stack changes (`isDevAuthBypassEnabled` forces false when `NODE_ENV===production`).
 
 **Exit:** Secrets + env name contract honest.  
 **Proof:** secretlint + env table names only.
 
 ### T6 — Build and release
 
-- [ ] `pnpm run check-sharp` as required by build.
+- [PASS] `pnpm run check-sharp` exit 0 (T-W3: sharp 0.35.2 / libvips 8.18.3).
 - [ ] `pnpm run build` exit 0.
 - [ ] `pnpm run release:gate` exit 0 **or** active Failures.md waiver with owner accept.
 - [PASS] Vercel root = `site`.
@@ -116,9 +118,9 @@ Every item starts unchecked. Flip only with COMPLETION-CONTRACT proof.
 
 - [PASS] Drizzle schemas present for owned tables.
 - [PASS] R2 client uses intact S3 credential pair (names in FEATURES; preferred pair SET).
-- [PASS] Live vs target SVG authority documented: **disk live**.
+- [PASS] Live vs target SVG authority documented: **disk live** (Failures.md, Lockedfiles, `.env.example` `SVG_RELEASE_AUTHORITY`).
 - [PASS] No false claim that Products DB/R2 is SVG release authority.
-- [PASS] `GET /api/health` returns `{ ok: true }` without secrets.
+- [PASS] `GET /api/health` returns `{ ok: true }` without secrets (unit T-W3 exit 0).
 
 **Exit:** Lockedfiles persistence table matches code; Failures.md DB-SVG honest.  
 **Proof:** paths + Failures.md + health unit.
@@ -141,12 +143,12 @@ Every item starts unchecked. Flip only with COMPLETION-CONTRACT proof.
 | T0 | PASS (inventory) | Engines inventoried; CI pnpm TF-02 **PASS** (T-W1) |
 | T1 | PARTIAL | Guard + workspace; CI pin **11.13.0** (T-W1); install proof open |
 | T2 | PASS (code map) | Fabric/Three/Excalidraw monoculture mapped |
-| T3 | OPEN | Dead-dep audit not closed |
+| T3 | PARTIAL | Audit done (T1); 8 idle devDeps wait owner cut/keep; TF-05 OPEN |
 | T4 | FAIL | lint exit 1, typecheck exit 2 (Planner paths); health unit 0 |
-| T5 | PARTIAL | Env names documented; preferred R2 SET; Resend SET; OpenAI MISSING (ok) |
-| T6 | OPEN | release:gate not run for PASS |
-| T7 | PARTIAL | Health route + unit exist; DB-SVG disk authority in Failures.md |
-| T8 | PARTIAL | Plan trio + purity allowlist fixed; layout/purity 0; full docs closure open |
+| T5 | PASS (T-W3 session) | lint:secrets 0; scan:secrets 0; launch:env 0; env names cover validate-launch + env.server + FEATURES |
+| T6 | PARTIAL | check-sharp **PASS** (T-W3); build + release:gate **not** run — no stack healthy claim |
+| T7 | PASS (honesty T-W3) | Health unit 0; disk SVG authority in Failures.md + Lockedfiles + .env.example |
+| T8 | PARTIAL | Plan trio + purity; layout 0 (T-W3); full docs closure open |
 
 **Stack healthy claim:** **forbidden** until §3.1 of COMPLETION-CONTRACT is green or owner-waived in Failures.md.
 
@@ -160,18 +162,18 @@ Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**. Prefer **TF** ids in fin
 | TF-02 | pnpm pin drift (root vs CI) | packageManager 11.13.0 = CI action version | **PASS** (CI 11.13.0, T-W1) |
 | TF-03 | Node engine violated in CI image | Node ≥24 on CI | PARTIAL |
 | TF-04 | Second 2D canvas engine introduced | Fabric-only grep clean | PARTIAL |
-| TF-05 | Direct dep with no import / role | Remove or document | OPEN |
+| TF-05 | Direct dep with no import / role | Remove or document | PARTIAL (8 idle listed T1; not removed) |
 | TF-06 | `release:gate` / `gate` not green | Fresh exit 0 | OPEN |
 | TF-07 | Typecheck flakes on `.next/dev/types` | Stable tsc story | OPEN |
-| TF-08 | Secrets in tree | `lint:secrets` exit 0 | OPEN |
-| TF-09 | Env example drift | `.env.example` covers required names | PARTIAL |
-| TF-10 | DB-SVG marketed as live authority | Failures.md + Lockedfiles; disk live | PARTIAL |
+| TF-08 | Secrets in tree | `lint:secrets` exit 0 | **PASS** (T-W3: lint:secrets + scan:secrets) |
+| TF-09 | Env example drift | `.env.example` covers required names | **PASS** (T-W3: validate-launch + env.server + FEATURES incl. DEV_AUTH_BYPASS) |
+| TF-10 | DB-SVG marketed as live authority | Failures.md + Lockedfiles; disk live | **PASS** (honesty; disk still live; cutover remains open via TF-11) |
 | TF-11 | Dual-write incomplete treated as PASS | Dual-write proved or OPEN | OPEN |
 | TF-12 | Tech-docs broken / unowned | tech-docs gate or optional doc | OPEN |
-| TF-13 | Sharp / native broken on Windows | `check-sharp` + build | OPEN |
+| TF-13 | Sharp / native broken on Windows | `check-sharp` + build | PARTIAL (check-sharp PASS T-W3; build not run) |
 | TF-14 | Playwright / Vitest Windows misconfig | forks pool; paths work | PARTIAL |
 | TF-15 | Turbo cache hides real FAIL | Clean run or cache-bust | OPEN |
-| TF-16 | License / competitor package risk | Audit list; none present | OPEN |
+| TF-16 | License / competitor package risk | Audit list; none present | PARTIAL (competitor packages none; no license gate) |
 | TF-17 | i18n second framework | next-intl only | PARTIAL |
 | TF-18 | Supabase client boundary violated | No new catalog `.from()` | OPEN |
 | TF-19 | Production GLB/publish writes `site/public` | 501 / storage only | PARTIAL |

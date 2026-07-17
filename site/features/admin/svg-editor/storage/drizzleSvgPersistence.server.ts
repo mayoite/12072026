@@ -223,9 +223,18 @@ export class DrizzleSvgRevisionPersistence
 
   /** DB-SVG-05: update the published_svg_revision_id pointer on the matching product row. */
   async updateProductPointer(plannerSourceSlug: string, revisionId: string): Promise<void> {
-    await productsDb
+    // Same cardinality rule as publishRelease: 0 rows ok (unlinked inventory);
+    // >1 is ambiguous identity and fails closed.
+    const pointedProducts = await productsDb
       .update(plannerManagedProducts)
       .set({ publishedSvgRevisionId: revisionId, updatedAt: new Date() })
-      .where(eq(plannerManagedProducts.plannerSourceSlug, plannerSourceSlug));
+      .where(eq(plannerManagedProducts.plannerSourceSlug, plannerSourceSlug))
+      .returning({ id: plannerManagedProducts.id });
+
+    if (pointedProducts.length > 1) {
+      throw new Error(
+        `Expected at most one product for planner source "${plannerSourceSlug}", found ${pointedProducts.length}.`,
+      );
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { FooterLogoMarquee } from '@/components/site/FooterLogoMarquee';
 
 vi.mock('@/features/site/data/homepage', () => ({

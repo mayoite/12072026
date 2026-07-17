@@ -77,14 +77,23 @@ describe("audit-api-route-safety", () => {
 
     const byPath = Object.fromEntries(result.matrix.map((row) => [row.apiPath, row]));
 
-    // Admin ops sample (EXEC-6 + catalog mutators)
+    // Admin ops + catalog managers + svg-editor lifecycle (AF-14 full sample)
     for (const key of [
       "admin/plans",
       "admin/plans/[id]",
       "admin/themes/publish",
       "admin/features",
       "admin/svg-editor",
+      "admin/svg-editor/bulk-import",
+      "admin/svg-editor/[slug]/lifecycle",
+      "admin/svg-editor/[slug]/rollback",
       "admin/price-books/[bookId]/action",
+      "admin/catalog",
+      "admin/catalog/[id]",
+      "admin/catalogs/[type]",
+      "admin/catalogs/[type]/[id]",
+      "admin/planner-catalog",
+      "admin/configurator-catalog/[id]",
       "customer-queries/manage",
       "theme/manage",
     ]) {

@@ -121,13 +121,14 @@ export default function ProjectsView({ embedded = false }: { embedded?: boolean 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="shell-workspace-eyebrow text-[0.6875rem] font-semibold uppercase tracking-[0.26em]">
-                Project Management
+                CRM demo · browser only
               </p>
               <h1 className="mt-2 text-3xl font-semibold tracking-tight text-strong">
                 Projects Tracker
               </h1>
               <p className="shell-workspace-muted mt-2 text-sm leading-6">
-                Track active floor plans, layouts, and reviews grouped by customer accounts.
+                Floor plans and deals grouped by customer — stored in this browser only.
+                Not a production CRM.
               </p>
             </div>
 

@@ -137,11 +137,13 @@ export function WorkspaceShell({
   onRedo,
   statusLeft,
   statusRight,
-  displayUnit = "mm",
+  // Align with DEFAULT_PLANNER_WORKSPACE_PREFERENCES.units (display only; calc stays mm).
+  displayUnit = "cm",
   onDisplayUnitChange,
   fillParent = false,
   density = "compact",
   onToggleDensity,
+  // Panel ratio defaults leave ≥65% canvas (catalogue 0.17 + properties 0.17).
   gridEnabled = true,
   snapEnabled = true,
   onToggleGrid,

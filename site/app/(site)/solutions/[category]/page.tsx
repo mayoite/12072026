@@ -5,13 +5,20 @@ import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
 import { SectionIntro } from "@/components/shared/SectionIntro";
+import {
+  SOLUTION_CATEGORY_IDS,
+  type SolutionCategoryId,
+} from "@/features/site/data/routeClassification";
 import { buildPageMetadata } from "@/features/site/data/seo";
 import { SITE_URL } from "@/lib/siteUrl";
 
 /** Unknown slugs must hard-404 (no soft marketing shell). */
 export const dynamicParams = false;
 
-const SOLUTION_COPY: Record<string, { title: string; description: string }> = {
+const SOLUTION_COPY: Record<
+  SolutionCategoryId,
+  { title: string; description: string }
+> = {
   seating: {
     title: "Seating Solutions",
     description: "Ergonomic seating solutions for focused and collaborative work.",
@@ -42,14 +49,19 @@ const SOLUTION_COPY: Record<string, { title: string; description: string }> = {
   },
 };
 
+function isSolutionCategoryId(value: string): value is SolutionCategoryId {
+  return (SOLUTION_CATEGORY_IDS as readonly string[]).includes(value);
+}
+
 type SolutionsParams = Promise<{ category: string }>;
 
 function getSolutionEntry(category: string) {
+  if (!isSolutionCategoryId(category)) return undefined;
   return SOLUTION_COPY[category];
 }
 
 export function generateStaticParams() {
-  return Object.keys(SOLUTION_COPY).map((category) => ({ category }));
+  return SOLUTION_CATEGORY_IDS.map((category) => ({ category }));
 }
 
 export async function generateMetadata({

@@ -98,7 +98,7 @@ describe("AdminSvgBulkImportPanel", () => {
     });
   });
 
-  it("applies a validated batch and shows provenance feedback", async () => {
+  it("applies a validated batch and shows operator-safe success copy", async () => {
     const user = userEvent.setup();
     vi.mocked(browserApiFetch)
       .mockResolvedValueOnce({
@@ -134,11 +134,14 @@ describe("AdminSvgBulkImportPanel", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("admin-svg-bulk-import-success")).toHaveTextContent(
-        "Imported 1 descriptor(s)",
+        "Imported 1 product symbol",
       );
     });
     expect(screen.getByTestId("admin-svg-bulk-import-success")).toHaveTextContent(
       "bulk-csv-import",
+    );
+    expect(screen.getByTestId("admin-svg-bulk-import-success")).not.toHaveTextContent(
+      /descriptor|provenance/i,
     );
     expect(screen.queryByTestId("admin-svg-bulk-import-preview-result")).toBeNull();
   });

@@ -7,6 +7,8 @@ import {
   PLANNER_MARKETING_SITEMAP_PATHS,
   ROBOTS_DISALLOW_PREFIXES,
   SITE_ROUTE_CLASSIFICATION,
+  SOLUTION_CATEGORY_IDS,
+  SOLUTION_CATEGORY_SITEMAP_PATHS,
   getRouteClassification,
 } from "@/features/site/data/routeClassification";
 
@@ -72,7 +74,9 @@ describe("getRouteClassification resolution", () => {
 
   it("classifies resolved routes honestly", () => {
     expect(getRouteClassification("/catalog")?.classification).toBe("redirect");
-    expect(getRouteClassification("/login")?.classification).toBe("protected");
+    expect(getRouteClassification("/login")?.classification).toBe("redirect");
+    expect(getRouteClassification("/login")?.indexable).toBe(false);
+    expect(getRouteClassification("/login")?.canonicalUrl).toContain("/access");
     expect(getRouteClassification("/portal/guest/view/abc")?.classification).toBe(
       "protected",
     );
@@ -141,5 +145,14 @@ describe("PUBLIC_INDEXABLE_ROUTES derivation", () => {
     expect(ROBOTS_DISALLOW_PREFIXES).toContain("/quote-cart/");
     expect(ROBOTS_DISALLOW_PREFIXES).toContain("/tracking/");
     expect(ROBOTS_DISALLOW_PREFIXES).toContain("/choose-product/");
+    expect(ROBOTS_DISALLOW_PREFIXES).toContain("/login/");
+  });
+
+  it("keeps solution sitemap paths in lockstep with SOLUTION_CATEGORY_IDS", () => {
+    expect(SOLUTION_CATEGORY_SITEMAP_PATHS).toEqual(
+      SOLUTION_CATEGORY_IDS.map((id) => `/solutions/${id}`),
+    );
+    expect(SOLUTION_CATEGORY_IDS).toContain("soft-seating");
+    expect(SOLUTION_CATEGORY_IDS).toContain("education");
   });
 });

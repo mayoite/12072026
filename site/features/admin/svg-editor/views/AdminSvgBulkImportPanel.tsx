@@ -114,10 +114,11 @@ export function AdminSvgBulkImportPanel() {
           return;
         }
         const prov = payload.provenance;
+        const count = payload.imported?.length ?? 0;
         setMessage(
-          `Imported ${payload.imported?.length ?? 0} descriptor(s)` +
+          `Imported ${count} product symbol${count === 1 ? "" : "s"}` +
             (prov?.importedAt
-              ? ` · provenance ${prov.source ?? "bulk-csv-import"} at ${prov.importedAt}`
+              ? ` · from ${prov.source ?? "bulk CSV"} at ${prov.importedAt}`
               : "") +
             ". Reload to see the list.",
         );

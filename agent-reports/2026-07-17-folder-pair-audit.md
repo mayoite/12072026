@@ -11,7 +11,7 @@
 | `pnpm run check:layout` | **OK** |
 | `pnpm --filter oando-site run test:audit:hollow` | **ok** |
 | `pnpm --filter oando-site run test:audit:api-routes` | **ok** (56 routes / 37 mutators) |
-| `pnpm run typecheck` | **PASS** (after CSRF route default-arg fix) |
+| `pnpm run typecheck` | **PASS** (CSRF default-arg fix; RestrictedActionButton props fix) |
 
 Status vocabulary: **PASS** = fresh evidence in that worker scope. **OPEN** = not proven. Unit ≠ browser.
 
@@ -105,6 +105,22 @@ Status vocabulary: **PASS** = fresh evidence in that worker scope. **OPEN** = no
 
 ---
 
+## Wave 2 — remaining folders (2026-07-17 continue)
+
+| Folder | Result | Key fixes |
+|--------|--------|-----------|
+| `features/crm` | 70 unit PASS | Fake multi-user demo removed; deleteClient clears quotes; plan-index safe parse; embedded chrome |
+| `features/ops` + `shared` | 236 unit+integration PASS | Nested button hydration fix on `RestrictedActionButton` |
+| `platform` | 63 unit PASS | Clients/schema coherent; comment path fix only |
+| `i18n` | parity ok + 25 unit PASS | No exclusive defects |
+
+## Owner continue fixes (same session)
+
+| Item | Result |
+|------|--------|
+| `workspaceShell` hardcoding audit | **PASS** — InventoryPanel compare styles moved to CSS module |
+| `threeLazy` / `ThreeLazyViewer` | **PASS** — fuller three + OrbitControls mocks (was suite flake under incomplete mock) |
+
 ## Still OPEN (do not claim done)
 
 1. DB-SVG authority cutover (`Failures.md`).
@@ -113,8 +129,9 @@ Status vocabulary: **PASS** = fresh evidence in that worker scope. **OPEN** = no
 4. Full browser a11y / visual regression re-run.
 5. Catalog fallback index image quality (~32 dup paths).
 6. Orphan lib UI modules wire-or-delete owner call.
-7. `features/crm`, `features/ops`, `features/shared`, `platform/`, `i18n/`, `inventory/` — not in this 10-folder set.
-8. No commit/push (owner not asked).
+7. CRM is localStorage demo — not production CRM.
+8. `inventory/` descriptors not folder-audited as product code (canonical data).
+9. No commit/push (owner not asked).
 
 ---
 

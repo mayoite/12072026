@@ -62,6 +62,7 @@ describe("CrmHubView", () => {
     expect(screen.getByLabelText("CRM summary")).toBeInTheDocument();
     expect(screen.getByText(/Browser-only CRM demo/i)).toBeInTheDocument();
     expect(screen.getByText(/localStorage/i)).toBeInTheDocument();
+    expect(screen.getByText(/Not a production CRM/i)).toBeInTheDocument();
     expect(screen.getByText("HQ Fit-out")).toBeInTheDocument();
     expect(screen.getByText("Phase 1 quote")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /New client/i })).toHaveAttribute(

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import Page from "@/app/(site)/planning/page";
+import Page, { metadata } from "@/app/(site)/planning/page";
+import { PLANNING_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 vi.mock("@/components/home/Hero", () => ({
   Hero: () => <div data-testid="Hero" />,
@@ -35,6 +36,10 @@ vi.mock("@/components/ui/TrackedLink", () => ({
 }));
 
 describe("app/(site)/planning/page.tsx", () => {
+  it("exports registry planning metadata (SITE-SEO-01 lockstep)", () => {
+    expect(metadata).toBe(PLANNING_PAGE_METADATA);
+  });
+
   it("renders planner entry + contact paths without Admin", () => {
     render(<Page />);
     expect(screen.getByTestId("Hero")).toBeInTheDocument();

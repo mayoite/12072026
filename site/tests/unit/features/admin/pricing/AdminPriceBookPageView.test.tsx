@@ -105,6 +105,19 @@ describe("AdminPriceBookPageView", () => {
     expect(screen.getByTestId("admin-price-book-empty-retry")).toBeInTheDocument();
   });
 
+  it("honesty: source is admin price-book service, not marketing catalog", () => {
+    render(
+      <AdminPriceBookPageView
+        initialContract={FIXTURE}
+        initialRole="approver"
+      />,
+    );
+    const source = screen.getByTestId("admin-shell-source");
+    expect(source).toHaveTextContent(/admin price-book service/i);
+    expect(source).toHaveTextContent(/filesystem seed fallback/i);
+    expect(source).toHaveTextContent(/Not the marketing product catalog/i);
+  });
+
   it("AF-07 unit: primary currency display; minor units only under Advanced; activate is primary", () => {
     render(
       <AdminPriceBookPageView

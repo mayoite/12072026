@@ -76,6 +76,27 @@ describe("adminNav", () => {
     expect(CRM_QUOTES_PATH).toBe("/admin/crm/quotes");
   });
 
+  it("AF-08: CRM nav labels mark browser demo; queries stay server-backed", () => {
+    const crm = ADMIN_NAV_GROUPS.find((g) => g.title === "CRM");
+    expect(crm).toBeDefined();
+    const byHref = new Map(crm!.items.map((i) => [i.href, i]));
+    expect(byHref.get("/admin/crm")?.description).toMatch(/Browser demo/i);
+    expect(byHref.get(CRM_CLIENTS_PATH)?.description).toMatch(/Browser demo/i);
+    expect(byHref.get(CRM_PROJECTS_PATH)?.description).toMatch(/Browser demo/i);
+    expect(byHref.get(CRM_QUOTES_PATH)?.description).toMatch(/Browser demo/i);
+    expect(byHref.get("/admin/customer-queries")?.description).toMatch(
+      /Server-backed/i,
+    );
+    expect(byHref.get("/admin/customer-queries")?.description).not.toMatch(
+      /Browser demo/i,
+    );
+
+    const quotesKpi = ADMIN_HUB_KPIS.find((k) => k.label === "Quotes");
+    expect(quotesKpi?.hint).toMatch(/Browser demo/i);
+    const svgKpi = ADMIN_HUB_KPIS.find((k) => k.label === "SVG symbols");
+    expect(svgKpi?.hint).not.toMatch(/pipeline/i);
+  });
+
   it("lists system routes", () => {
     const system = ADMIN_NAV_GROUPS.find((g) => g.title === "System");
     expect(system?.items.map((i) => i.href)).toEqual([

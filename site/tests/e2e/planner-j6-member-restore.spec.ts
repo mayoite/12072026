@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import {
   enterGuestPlannerWorkspace,
   resumeGuestPlannerAfterReload,
@@ -13,7 +13,7 @@ import {
 
 test.describe.configure({ timeout: 60_000 });
 
-async function seedWall(page: import("@playwright/test").Page): Promise<number> {
+async function seedWall(page: Page): Promise<number> {
   await selectPlannerTool(page, "Wall");
   await dragOnCanvas(page, { rx: 0.25, ry: 0.4 }, { rx: 0.75, ry: 0.6 });
   const count = await getObjectCount(page);

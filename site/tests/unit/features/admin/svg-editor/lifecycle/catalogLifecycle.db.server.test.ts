@@ -94,6 +94,7 @@ const legacyDeskDefinition = {
 describe("loadBuyerVisibleDescriptorsWithDb", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    delete process.env.SVG_RELEASE_AUTHORITY;
     isProductsDatabaseConfigured.mockReturnValue(false);
     loadBuyerVisibleDescriptors.mockReturnValue([{ slug: "disk-only" }]);
     execute.mockReset();
@@ -104,6 +105,41 @@ describe("loadBuyerVisibleDescriptorsWithDb", () => {
     const rows = await loadBuyerVisibleDescriptorsWithDb();
     expect(rows).toEqual([{ slug: "disk-only" }]);
     expect(loadBuyerVisibleDescriptors).toHaveBeenCalled();
+  });
+
+  it("SVG_RELEASE_AUTHORITY=db: no disk when Products DB is not configured", async () => {
+    process.env.SVG_RELEASE_AUTHORITY = "db";
+    isProductsDatabaseConfigured.mockReturnValue(false);
+    const { loadBuyerVisibleDescriptorsWithDb } = await loadModule();
+    const rows = await loadBuyerVisibleDescriptorsWithDb();
+    expect(rows).toEqual([]);
+    expect(loadBuyerVisibleDescriptors).not.toHaveBeenCalled();
+  });
+
+  it("SVG_RELEASE_AUTHORITY=db: empty DB table does not fall back to disk", async () => {
+    process.env.SVG_RELEASE_AUTHORITY = "db";
+    isProductsDatabaseConfigured.mockReturnValue(true);
+    execute.mockResolvedValue([]);
+    const { loadBuyerVisibleDescriptorsWithDb } = await loadModule();
+    const rows = await loadBuyerVisibleDescriptorsWithDb();
+    expect(rows).toEqual([]);
+    expect(loadBuyerVisibleDescriptors).not.toHaveBeenCalled();
+  });
+
+  it("SVG_RELEASE_AUTHORITY=db: corrupt DB rows stay empty (no disk override)", async () => {
+    process.env.SVG_RELEASE_AUTHORITY = "db";
+    isProductsDatabaseConfigured.mockReturnValue(true);
+    execute.mockResolvedValue([
+      {
+        slug: "broken",
+        descriptor: { not: "valid" },
+        publishedSvgRevisionId: null,
+      },
+    ]);
+    const { loadBuyerVisibleDescriptorsWithDb } = await loadModule();
+    const rows = await loadBuyerVisibleDescriptorsWithDb();
+    expect(rows).toEqual([]);
+    expect(loadBuyerVisibleDescriptors).not.toHaveBeenCalled();
   });
 
   it("awaits and returns configured Products DB descriptors with revision pointer", async () => {

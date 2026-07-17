@@ -240,4 +240,26 @@ describe('ProductViewer Component', () => {
     expect(href).toContain('siteCategory=seating');
     expect(href).toContain('siteSource=%2Fproducts%2Fseating%2Fsuper-chair');
   });
+
+  it('Design in Planner omits siteCategory when categoryId is missing (never path)', async () => {
+    render(
+      <ProductViewer
+        product={dummyProduct}
+        categoryRoute="/products/seating"
+        categoryName="Seating"
+        productRoute="/products/seating/super-chair"
+      />,
+    );
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalled();
+    });
+
+    const launch = screen.getByRole('link', { name: /Design in Planner/i });
+    const href = launch.getAttribute('href') ?? '';
+    expect(href).toContain('siteProduct=super-chair');
+    expect(href).toContain('siteSource=%2Fproducts%2Fseating%2Fsuper-chair');
+    // Must not stamp a route path as siteCategory (SF-08 continuity).
+    expect(href).not.toContain('siteCategory=');
+    expect(href).not.toMatch(/siteCategory=%2Fproducts/);
+  });
 });

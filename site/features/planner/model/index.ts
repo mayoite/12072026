@@ -1,14 +1,23 @@
 /**
  * Portal / domain / API save document model + shared domain exports.
  *
- * Dual document types (both under this folder — do not conflate):
- * 1. `PlannerProject` + open3d `PlannerSceneEnvelope` (`types.ts` / `project.ts`)
- *    — live canvas plan geometry (`type: "open3d-floorplan-project"`).
- * 2. `PlannerDocument` + cad-suite `PlannerSceneEnvelope` (`plannerDocument.ts`)
- *    — save row / CRM / portal (`type: "cad-suite-planner-scene"` in sceneJson).
+ * Dual document + dual scene envelopes (do not conflate names):
  *
- * Prefer aliases `Open3dPlannerSceneEnvelope` and `CadSuitePlannerSceneEnvelope`.
- * Do not treat `PlannerDocument` as the plan canvas host.
+ * 1. Live canvas plan geometry
+ *    - Host: `PlannerProject` (`types.ts` / `project.ts`)
+ *    - Envelope: `Open3dPlannerSceneEnvelope` alias of open3d `PlannerSceneEnvelope`
+ *      (`type: "open3d-floorplan-project"`, `version: 1`, units mm)
+ *    - Parse: `parsePlannerSceneEnvelope` / `importFromJson` / `migrateEnvelope`
+ *
+ * 2. Portal / save / CRM document
+ *    - Host: `PlannerDocument` (`plannerDocument.ts`, `schemaVersion: 1`)
+ *    - Scene in `sceneJson`: `CadSuitePlannerSceneEnvelope` alias of cad-suite
+ *      `PlannerSceneEnvelope` (`type: "cad-suite-planner-scene"`, `version: 1`)
+ *    - Transfer wrapper: `cad-suite-planner-transfer-envelope` (`plannerEnvelope.ts`)
+ *    - Import wrapper: `type: "planner-document"` (`plannerDocumentImportEnvelopeSchema`)
+ *
+ * Prefer the aliases. Never treat `PlannerDocument` as the plan canvas host.
+ * Unsupported schema/envelope versions must fail visibly (import + migration).
  * @see features/planner/CONTENTS.md — Dual trees
  */
 
@@ -17,6 +26,7 @@ export {
   assertPlannerDocument,
   createPlannerDocument,
   createEmptyPlannerDocument,
+  describeUnsupportedPlannerSchemaVersion,
   isPlannerDocument,
   isPlannerSaveRow,
   normalizePlannerDocument,
@@ -59,6 +69,9 @@ export type {
   PlannerSceneItem,
   PlannerSceneRoom,
 } from "./plannerDocument";
+
+/** Live canvas open3d scene envelope alias (not the cad-suite portal scene). */
+export type { Open3dPlannerSceneEnvelope } from "./types";
 
 export {
   PlannerManagedProductSchema,

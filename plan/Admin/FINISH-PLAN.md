@@ -104,7 +104,7 @@ Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**. Update only with fresh e
 | AF-11 | AI SVG generate | Product decision or implement | Not implemented |
 | AF-12 | CI canonical hash gate | Automated isolation gate | OPEN |
 | AF-13 | Internal language on SVG list | Customer-safe copy | OPEN |
-| AF-14 | Full CSRF/rate matrix | All mutation routes proven | PARTIAL (ops routes EXEC-6; full matrix OPEN) |
+| AF-14 | Full CSRF/rate matrix | All mutation routes proven | PASS (unit static auto-discovery 2026-07-17 plan-A2); browser OPEN |
 | AF-15–17 | Planner consumer / artifact bytes | DB-SVG co-own | OPEN / PARTIAL |
 | AF-18 | Dual-write not cutover | Failures.md DB-SVG remains | OPEN (cutover) |
 
@@ -198,7 +198,7 @@ Exit gate: Dual-write documented; cutover remains OPEN.
 ### A11. Security matrix
 
 - [PASS] Auth unit gates (A1) — FIX-ADMIN 2026-07-17.
-- [PARTIAL] CSRF + rate limits on ops mutations touched by EXEC-6 (plans, themes publish, features, customer-queries manage). Full AF-14 matrix still open.
+- [PASS] CSRF + rate limits: all `app/api/admin/**` mutators auto-discovered in `mutation-route-safety.matrix.test.ts` + audit sample (plan-A2 2026-07-17). withAuth / enforceAdminRateLimit unit green. Browser OPEN.
 - [ ] Production-auth smoke (AF-10).
 
 ### A12–A14. Release, a11y, residual polish

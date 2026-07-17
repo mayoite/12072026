@@ -56,6 +56,17 @@ describe("CrmWorkspaceBanner", () => {
     expect(seedDemoData).toHaveBeenCalled();
   });
 
+  it("AF-08 honesty: always labels browser-only storage and denies production CRM", () => {
+    clients = [{ id: "c1" }];
+    render(<CrmWorkspaceBanner />);
+    const banner = screen.getByRole("status");
+    expect(banner).toHaveTextContent(/Browser-only CRM demo/i);
+    expect(banner).toHaveTextContent(/localStorage/i);
+    expect(banner).toHaveTextContent(/do not sync/i);
+    expect(banner).toHaveTextContent(/Not a production CRM/i);
+    expect(banner).not.toHaveTextContent(/multi-tenant|production workspace/i);
+  });
+
   it("shows export and clear when data exists", () => {
     clients = [{ id: "c1" }];
     render(<CrmWorkspaceBanner />);

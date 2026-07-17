@@ -99,7 +99,9 @@ export function validateEnvelopeStructure(
 ): ImportValidationError[] {
   const errors: ImportValidationError[] = [];
 
-  // Check type and version
+  // Check type and version (only open3d v1 is supported — future versions fail visibly)
+  const SUPPORTED_OPEN3D_SCENE_VERSION = 1;
+
   if (!envelope.type) {
     errors.push({ path: "type", message: "Missing type field", severity: "error" });
   } else if (envelope.type !== "open3d-floorplan-project") {
@@ -110,10 +112,16 @@ export function validateEnvelopeStructure(
     });
   }
 
-  if (typeof envelope.version !== "number" || envelope.version < 1) {
+  if (typeof envelope.version !== "number") {
     errors.push({
       path: "version",
       message: "Invalid or missing version",
+      severity: "error",
+    });
+  } else if (envelope.version !== SUPPORTED_OPEN3D_SCENE_VERSION) {
+    errors.push({
+      path: "version",
+      message: `Unsupported scene envelope version ${envelope.version}; expected ${SUPPORTED_OPEN3D_SCENE_VERSION}`,
       severity: "error",
     });
   }

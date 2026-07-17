@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NextRequest } from "next/server";
 import { mapDescriptorsToCatalogItems } from "@/features/planner/catalog/svg/descriptorCatalogBridge.server";
 import { loadBuyerVisibleDescriptorsWithDb } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server";
@@ -29,8 +29,13 @@ import { GET } from "@/app/api/planner/catalog/svg-blocks/route";
 describe("app/api/planner/catalog/svg-blocks/route.ts", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    delete process.env.SVG_RELEASE_AUTHORITY;
     vi.mocked(enforcePublicApiRateLimit).mockResolvedValue(null);
     vi.mocked(readSvgArtifactStatus).mockReturnValue({ state: "published" } as never);
+  });
+
+  afterEach(() => {
+    delete process.env.SVG_RELEASE_AUTHORITY;
   });
 
   it("returns rate-limit response when public limit is exceeded", async () => {
@@ -139,5 +144,61 @@ describe("app/api/planner/catalog/svg-blocks/route.ts", () => {
     expect(body.items).toEqual([]);
     expect(body.source).toBe("none");
     expect(body.total).toBe(0);
+  });
+
+  it("SVG_RELEASE_AUTHORITY=db: disk artifact status is not enough (no silent disk override)", async () => {
+    process.env.SVG_RELEASE_AUTHORITY = "db";
+    vi.mocked(loadBuyerVisibleDescriptorsWithDb).mockResolvedValue([
+      { slug: "disk-only-block" },
+    ] as never);
+    vi.mocked(mapDescriptorsToCatalogItems).mockReturnValue([
+      {
+        id: "disk-only-block",
+        slug: "disk-only-block",
+        name: "Disk Only",
+        assets: { previewImageUrl: "/svg-catalog/disk-only-block.svg" },
+      },
+    ] as never);
+    vi.mocked(readSvgArtifactStatus).mockReturnValue({ state: "published" } as never);
+
+    const res = await GET(
+      new NextRequest("http://localhost/api/planner/catalog/svg-blocks"),
+    );
+    const body = await res.json();
+
+    expect(body.items).toEqual([]);
+    expect(body.source).toBe("none");
+    expect(body.total).toBe(0);
+    // Disk status must not be consulted as release authority under db mode.
+    expect(readSvgArtifactStatus).not.toHaveBeenCalled();
+  });
+
+  it("SVG_RELEASE_AUTHORITY=db: immutable revision API URLs remain buyer-visible", async () => {
+    process.env.SVG_RELEASE_AUTHORITY = "db";
+    vi.mocked(loadBuyerVisibleDescriptorsWithDb).mockResolvedValue([
+      { slug: "db-block", publishedSvgRevisionId: "db-block-r-abc123def4567890" },
+    ] as never);
+    vi.mocked(mapDescriptorsToCatalogItems).mockReturnValue([
+      {
+        id: "db-block",
+        slug: "db-block",
+        name: "DB Block",
+        assets: {
+          previewImageUrl:
+            "/api/planner/catalog/svg/db-block-r-abc123def4567890",
+        },
+      },
+    ] as never);
+
+    const res = await GET(
+      new NextRequest("http://localhost/api/planner/catalog/svg-blocks"),
+    );
+    const body = await res.json();
+
+    expect(body.success).toBe(true);
+    expect(body.items).toHaveLength(1);
+    expect(body.items[0].slug).toBe("db-block");
+    expect(body.source).toBe("svg-blocks");
+    expect(readSvgArtifactStatus).not.toHaveBeenCalled();
   });
 });

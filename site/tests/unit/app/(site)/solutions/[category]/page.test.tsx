@@ -5,6 +5,7 @@ import SolutionsCategoryPage, {
   generateMetadata,
   dynamicParams,
 } from "@/app/(site)/solutions/[category]/page";
+import { SOLUTION_CATEGORY_IDS } from "@/features/site/data/routeClassification";
 import { notFound } from "next/navigation";
 
 vi.mock("next/navigation", () => ({
@@ -65,12 +66,12 @@ describe("SolutionsCategoryPage Route", () => {
   });
 
   describe("generateStaticParams", () => {
-    it("returns the category list", () => {
+    it("returns exactly SOLUTION_CATEGORY_IDS (sitemap lockstep)", () => {
       const params = generateStaticParams();
+      expect(params).toEqual(
+        SOLUTION_CATEGORY_IDS.map((category) => ({ category })),
+      );
       expect(params).toContainEqual({ category: "seating" });
-      expect(params).toContainEqual({ category: "workstations" });
-      expect(params).toContainEqual({ category: "tables" });
-      expect(params).toContainEqual({ category: "storages" });
       expect(params).toContainEqual({ category: "soft-seating" });
       expect(params).toContainEqual({ category: "education" });
     });

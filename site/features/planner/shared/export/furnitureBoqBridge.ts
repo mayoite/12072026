@@ -1,8 +1,11 @@
 /**
- * Single bridge from the live furniture BOQ into quote-cart + branded PDF rows.
- * Prefer this over workstation-only builders for customer-ready export.
+ * Single bridge from the live furniture BOQ into quote-cart + branded PDF + handoff.
  *
  * Canonical builder: `buildPlannerFurnitureBoq` (project document).
+ * This is the only customer-ready path for Review export / quote cart / handoff.
+ * Specialty `summarizeWorkstationBoqV0` remains for workstation-only JSON dump;
+ * `workstationBoqToQuoteCartItems` is deprecated (no live callers).
+ *
  * Legacy `buildBoq` (placed items + catalog map) remains for lightweight helpers;
  * convert furniture summaries with {@link furnitureBoqToBoqSummary} when a
  * consumer still needs the older `BoqSummary` shape.

@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import { HomepageHero } from '@/components/home/HomepageHero';
 import {
+  DEFAULT_HERO_FALLBACK,
   HOMEPAGE_HERO_IMAGES,
   joinAccessibleTitleLines,
 } from '@/features/site/data/homepage';
@@ -129,5 +130,32 @@ describe('HomepageHero Component', () => {
     });
     expect(primary).toHaveAttribute('href', hero.primaryCta.href);
     expect(secondary).toHaveAttribute('href', hero.secondaryCta.href);
+  });
+
+  it('falls back hero image to DEFAULT_HERO_FALLBACK on load error (SF-14)', () => {
+    // Slide 0 is often the same asset as DEFAULT_HERO_FALLBACK — use a later slide.
+    const nonFallback = HOMEPAGE_HERO_IMAGES.find(
+      (img) => img.src !== DEFAULT_HERO_FALLBACK,
+    );
+    expect(nonFallback).toBeDefined();
+
+    render(<HomepageHero />);
+
+    const slideIndex = HOMEPAGE_HERO_IMAGES.findIndex(
+      (img) => img.src === nonFallback!.src,
+    );
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: `Show project image ${slideIndex + 1} of ${HOMEPAGE_HERO_IMAGES.length}`,
+      }),
+    );
+
+    const img = screen.getByAltText(nonFallback!.alt);
+    expect(img).toHaveAttribute('src', nonFallback!.src);
+    fireEvent.error(img);
+    expect(screen.getByAltText(nonFallback!.alt)).toHaveAttribute(
+      'src',
+      DEFAULT_HERO_FALLBACK,
+    );
   });
 });

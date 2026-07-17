@@ -34,4 +34,21 @@ describe("operations/migration", () => {
     expect(result.project.name).toBe("Base-v2");
     expect(result.report.some((r) => r.includes("v2") || r.includes("bumped"))).toBe(true);
   });
+
+  it("fails visibly on unsupported future envelope versions", () => {
+    const project = createPlannerProject({ name: "Future" });
+    const env = createEnvelopeV1(project);
+    const future = { ...env, version: 99 as 1 };
+    const result = migrateEnvelope(future, 1);
+    expect(result.success).toBe(false);
+    expect(result.errors?.some((e) => /Unsupported scene envelope version 99/i.test(e))).toBe(true);
+  });
+
+  it("rejects validateEnvelope for unsupported versions", () => {
+    const project = createPlannerProject({ name: "BadVer" });
+    const env = { ...createEnvelopeV1(project), version: 7 };
+    const validated = validateEnvelope(env);
+    expect(validated.valid).toBe(false);
+    expect(validated.errors.some((e) => /Unsupported scene envelope version 7/i.test(e))).toBe(true);
+  });
 });

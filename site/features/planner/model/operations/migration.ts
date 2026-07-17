@@ -30,15 +30,41 @@ export function getRegisteredMigrations(): readonly MigrationRegistryEntry[] {
   return [...registry];
 }
 
+/** Supported live open3d scene envelope version. Bump only with a registered migration path. */
+export const SUPPORTED_OPEN3D_SCENE_ENVELOPE_VERSION = 1 as const;
+
 export function migrateEnvelope(
   envelope: PlannerSceneEnvelope,
-  targetVersion: number = 1,
+  targetVersion: number = SUPPORTED_OPEN3D_SCENE_ENVELOPE_VERSION,
 ): MigrationResult {
   const backup: PlannerSceneEnvelope = JSON.parse(JSON.stringify(envelope));
   const report: string[] = [];
   let currentProject = JSON.parse(JSON.stringify(envelope.project)) as PlannerProject;
 
   let currentVersion: number = envelope.version;
+
+  // Future / unknown versions must fail visibly — never silently accept.
+  if (typeof currentVersion !== "number" || !Number.isFinite(currentVersion)) {
+    return {
+      success: false,
+      project: currentProject,
+      backup,
+      report,
+      errors: [`Invalid scene envelope version: ${String(envelope.version)}`],
+    };
+  }
+
+  if (currentVersion > targetVersion) {
+    return {
+      success: false,
+      project: currentProject,
+      backup,
+      report,
+      errors: [
+        `Unsupported scene envelope version ${currentVersion}; expected ${targetVersion} or older with a migration path`,
+      ],
+    };
+  }
 
   while (currentVersion < targetVersion) {
     const next = registry.find((m) => m.fromVersion === currentVersion);
@@ -81,7 +107,7 @@ export function migrateEnvelope(
 export function createEnvelopeV1(project: PlannerProject): PlannerSceneEnvelope {
   return {
     type: "open3d-floorplan-project",
-    version: 1,
+    version: SUPPORTED_OPEN3D_SCENE_ENVELOPE_VERSION,
     units: "mm",
     displayUnit: project.displayUnit,
     source: "native-open3d",
@@ -97,7 +123,13 @@ export function validateEnvelope(envelope: unknown): { valid: boolean; errors: s
   }
   const e = envelope as Record<string, unknown>;
   if (e.type !== "open3d-floorplan-project") errors.push('Missing or invalid type: expected "open3d-floorplan-project"');
-  if (typeof e.version !== "number") errors.push("Missing or invalid version: expected number");
+  if (typeof e.version !== "number") {
+    errors.push("Missing or invalid version: expected number");
+  } else if (e.version !== SUPPORTED_OPEN3D_SCENE_ENVELOPE_VERSION) {
+    errors.push(
+      `Unsupported scene envelope version ${e.version}; expected ${SUPPORTED_OPEN3D_SCENE_ENVELOPE_VERSION}`,
+    );
+  }
   if (e.units !== "mm") errors.push('Missing or invalid units: expected "mm"');
   if (typeof e.displayUnit !== "string") errors.push("Missing or invalid displayUnit");
   if (typeof e.source !== "string") errors.push("Missing or invalid source");

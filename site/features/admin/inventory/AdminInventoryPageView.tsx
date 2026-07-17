@@ -98,7 +98,10 @@ export default function AdminInventoryPageView({ csv, generatedAt, rowCount }: P
           <p className="admin-page__eyebrow">Route inventory</p>
           <h1 className="admin-page__title">App pages &amp; APIs</h1>
           <p className="admin-page__copy">
-            Live view of <code className="text-xs">results/app-pages-inventory.csv</code> — regenerate with{" "}
+            Route and API map for operators — not the product catalog or SVG
+            symbol inventory. Live view of{" "}
+            <code className="text-xs">results/app-pages-inventory.csv</code> —
+            regenerate with{" "}
             <code className="text-xs">node scripts/generate-app-inventory-csv.mjs</code>.
           </p>
           <p className="admin-page__meta">

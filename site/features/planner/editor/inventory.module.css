@@ -746,6 +746,45 @@
   text-align: center;
 }
 
+.emptyHintPadded {
+  composes: emptyHint;
+  max-width: none;
+  padding: 0.35rem 0.5rem;
+  text-align: start;
+}
+
+/* Compare table — columns from --inv-compare-cols (set on host) */
+.compareTable {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.6875rem;
+}
+
+.compareRow {
+  display: grid;
+  grid-template-columns: minmax(4rem, auto) repeat(var(--inv-compare-cols, 1), minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.compareHeaderRow {
+  composes: compareRow;
+  font-weight: 600;
+}
+
+.itemGridStatic {
+  composes: itemGrid;
+  flex: none;
+  overflow: visible;
+}
+
+.compareToggleChip {
+  grid-column: 1 / -1;
+  justify-self: start;
+  min-height: 1.25rem;
+  font-size: 0.625rem;
+}
+
 .emptyAction {
   padding: 0.3rem 0.6rem;
   border: 1px solid var(--inv-panel-border);

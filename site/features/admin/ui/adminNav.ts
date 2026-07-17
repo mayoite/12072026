@@ -112,31 +112,31 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
       {
         href: "/admin/crm",
         label: "Hub",
-        description: "Pipeline overview and quick actions",
+        description: "Browser demo · pipeline overview",
         icon: LayoutDashboard,
       },
       {
         href: CRM_CLIENTS_PATH,
         label: "Clients",
-        description: "Contacts and companies",
+        description: "Browser demo · contacts",
         icon: Users,
       },
       {
         href: CRM_PROJECTS_PATH,
         label: "Projects",
-        description: "Deals linked to planner docs",
+        description: "Browser demo · deals and plans",
         icon: FolderKanban,
       },
       {
         href: CRM_QUOTES_PATH,
         label: "Quotes",
-        description: "Drafts, sent, approved",
+        description: "Browser demo · drafts and approvals",
         icon: FileText,
       },
       {
         href: "/admin/customer-queries",
         label: "Queries",
-        description: "Inbound contact form queue",
+        description: "Server-backed inbound queue",
         icon: Boxes,
       },
     ],
@@ -208,7 +208,7 @@ export const ADMIN_HUB_KPIS: ReadonlyArray<{
   {
     label: "Quotes",
     href: CRM_QUOTES_PATH,
-    hint: "Review drafts",
+    hint: "Browser demo drafts",
     tone: "info",
   },
   {
@@ -220,7 +220,7 @@ export const ADMIN_HUB_KPIS: ReadonlyArray<{
   {
     label: "SVG symbols",
     href: "/admin/svg-editor",
-    hint: "Publish pipeline",
+    hint: "Draw and publish symbols",
     tone: "success",
   },
 ];

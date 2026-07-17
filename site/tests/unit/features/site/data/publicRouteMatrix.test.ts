@@ -64,6 +64,7 @@ describe("public route matrix — classification honesty", () => {
       { path: "/tracking", classification: "redirect" },
       { path: "/products/category/seating", classification: "redirect" },
       { path: "/repo-store", classification: "redirect" },
+      { path: "/login", classification: "redirect" },
     ];
     for (const sample of samples) {
       const meta = getRouteClassification(sample.path);

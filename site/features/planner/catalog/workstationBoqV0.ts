@@ -1,6 +1,11 @@
 /**
  * Systems v0 — pure BOQ lines from planner project furniture (ws-v0 keys).
- * List prices (INR) + GST for quote path. Not live ERP / multi-tenant catalogs.
+ * List prices (INR) + GST. Not live ERP / multi-tenant catalogs.
+ *
+ * Live customer path (Review, branded PDF, quote cart, handoff) uses
+ * `buildPlannerFurnitureBoq` + `furnitureBoqBridge` — not this module's summary.
+ * Keep `summarizeWorkstationBoqV0` for specialty workstation-only JSON export
+ * and shared unit-price helpers consumed by the furniture BOQ builder.
  */
 
 import type { PlannerProject } from "../model/types";
@@ -127,7 +132,11 @@ function lineFromConfig(
  * Aggregate workstation furniture on the active floor (or all floors if opts.allFloors).
  * Non-ws furniture is ignored.
  */
-/** Map BOQ lines into site quote-cart rows (qty + unit price in name for v0 cart). */
+/**
+ * @deprecated Dead live caller. Quote cart uses `furnitureBoqToQuoteCartItems`
+ * from `furnitureBoqBridge` (full furniture BOQ). Kept for unit tests and any
+ * offline specialty tooling — do not wire back into Review/export menus.
+ */
 export function workstationBoqToQuoteCartItems(
   summary: WorkstationBoqSummaryV0,
 ): Array<{ id: string; name: string; qty: number }> {

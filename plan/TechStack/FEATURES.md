@@ -56,9 +56,9 @@ Repo-sourced index: **stack surface → code path → honest gap**. Live code, l
 
 | Feature | Code | Gap |
 |---|---|---|
-| Direct deps | `site/package.json` + `scripts/audit-site-deps.mjs` | **T-W3 inventory done** (2026-07-17). 48/49 deps USED; `@google/model-viewer` JUSTIFY (CDN, no npm import). Idle candidates not removed: `fast-check`, `whatwg-fetch`, `lighthouse`, `wrangler`, `prettier*`, `@types/istanbul-*`. TF-05 **OPEN** until owner cut or keep |
-| Licenses | Lockedfiles policy | No automated license gate in root scripts |
-| No competitor packages | Policy in Lockedfiles | Manual name scan **PASS** (T-W3); re-check on adds |
+| Direct deps | `site/package.json` + `scripts/audit-site-deps.mjs` | **T1 re-verified** (2026-07-17): `node scripts/audit-site-deps.mjs` → 48/49 deps USED; `@google/model-viewer` BUILD_ROLE (CDN pin, no npm import). Idle NO_IMPORT (8, not removed): `fast-check`, `whatwg-fetch`, `lighthouse`, `wrangler`, `prettier`, `prettier-plugin-tailwindcss`, `@types/istanbul-lib-report`, `@types/istanbul-reports`. Report: `agent-reports/2026-07-17-plan-T1.md`. Artifact: `results/tooling/site-dep-audit.json`. TF-05 **OPEN** until owner cut or keep |
+| Licenses | Lockedfiles policy | No automated license gate in root scripts; no adds this session |
+| No competitor packages | Policy in Lockedfiles | Package-name scan **PASS** (T1); comment-only research names not packages |
 
 ---
 
@@ -77,9 +77,10 @@ Repo-sourced index: **stack surface → code path → honest gap**. Live code, l
 
 | Feature | Code | Gap |
 |---|---|---|
-| Secrets lint | `pnpm run lint:secrets` | Fresh exit OPEN |
-| Env names (no values) | root `.env.example`, `site/lib/env.server.ts` | See env table below |
-| DEV bypass | `DEV_AUTH_BYPASS` | Must stay production-disabled (product auth tracks) |
+| Secrets lint | `pnpm run lint:secrets` + `scan:secrets` | **PASS** T-W3 2026-07-17 (exit 0 both) |
+| Env names (no values) | root `.env.example`, `site/lib/env.server.ts`, `validate-launch-env.mjs` | Cover verified T-W3; `DEV_AUTH_BYPASS` name in example |
+| Launch env | `pnpm --filter oando-site run launch:env` | **PASS** T-W3 |
+| DEV bypass | `DEV_AUTH_BYPASS` | Production-disabled in code; never production-true |
 
 ---
 
@@ -87,7 +88,7 @@ Repo-sourced index: **stack surface → code path → honest gap**. Live code, l
 
 | Feature | Code | Gap |
 |---|---|---|
-| Sharp | `pnpm run check-sharp` | Windows native OPEN until proved |
+| Sharp | `pnpm run check-sharp` | **PASS** T-W3 (0.35.2 / libvips 8.18.3); full build still OPEN |
 | Build | `pnpm run build` | Not claimed this session |
 | Release | `pnpm run release:gate` / turbo | **OPEN** — do not invent PASS |
 | Vercel root | `site` | Owner-only deploy |
@@ -102,7 +103,7 @@ Repo-sourced index: **stack surface → code path → honest gap**. Live code, l
 | Drizzle / postgres | `site/platform/drizzle/` | Products DB when `PRODUCTS_DATABASE_URL` set |
 | R2 via S3 | `site/lib/storage/r2Catalog.ts`, env aliases in `env.server.ts` | Live SVG authority is still **disk** |
 | DB-SVG dual-write | Admin publish pipeline | Dual-write optional; not release authority — see `Failures.md` |
-| Health API | `GET /api/health` → `site/app/api/health/route.ts` | Liveness only: `{ ok: true }`, no secrets |
+| Health API | `GET /api/health` → `site/app/api/health/route.ts` | Liveness only: `{ ok: true }`, no secrets; unit **PASS** T-W3 |
 
 ---
 

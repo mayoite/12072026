@@ -11,6 +11,13 @@ function csv(rows: string[]): string {
 }
 
 describe("AdminInventoryPageView", () => {
+  it("honesty: route map, not product or SVG catalog", () => {
+    render(<AdminInventoryPageView csv={HEADER} generatedAt={null} rowCount={0} />);
+    expect(screen.getByText(/Route and API map/i)).toBeInTheDocument();
+    expect(screen.getByText(/not the product catalog or SVG/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/app-pages-inventory\.csv/i).length).toBeGreaterThan(0);
+  });
+
   it("shows empty inventory message when CSV has no data rows", () => {
     render(<AdminInventoryPageView csv={HEADER} generatedAt={null} rowCount={0} />);
     expect(screen.getByText(/Inventory not generated/i)).toBeInTheDocument();

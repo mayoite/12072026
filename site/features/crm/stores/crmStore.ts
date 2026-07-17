@@ -88,6 +88,9 @@ export const useCrmStore = create<CrmStore>()(
           projects: state.projects.map((p) =>
             p.clientId === id ? { ...p, clientId: "none" } : p,
           ),
+          quotes: state.quotes.map((q) =>
+            q.clientId === id ? { ...q, clientId: "none" } : q,
+          ),
         }));
       },
 

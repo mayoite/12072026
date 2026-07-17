@@ -13,9 +13,16 @@
  *
  * Flip only after one successful production dual-write publish is proven
  * (see Failures.md + docs/architecture/08-DATABASE-SVG-CONTRACT.md).
+ *
+ * Enabled dual-write ≠ cutover. Default remains disk until Failures.md closes.
  */
 
 export type SvgReleaseAuthority = "disk" | "db";
+
+export type SvgDualWriteModeForAuthority =
+  | "enabled"
+  | "skipped_no_db"
+  | "skipped_r2_unavailable";
 
 export function getSvgReleaseAuthority(
   env: NodeJS.ProcessEnv = process.env,
@@ -31,4 +38,36 @@ export function isDbSvgReleaseAuthority(
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
   return getSvgReleaseAuthority(env) === "db";
+}
+
+/**
+ * When SVG_RELEASE_AUTHORITY=db, dual-write deps must be injected.
+ * Returns a fail-closed error string, or null when publish may proceed.
+ *
+ * Prefer `mode` from `resolveSvgPublishDualWriteDeps` at the entry gate.
+ * Pipeline uses `productsDbConfigured` when mode is unavailable.
+ */
+export function getDbReleaseAuthorityDualWriteBlockError(input: {
+  readonly dualWriteReady: boolean;
+  readonly mode?: SvgDualWriteModeForAuthority;
+  readonly productsDbConfigured?: boolean;
+  readonly env?: NodeJS.ProcessEnv;
+}): string | null {
+  if (!isDbSvgReleaseAuthority(input.env)) {
+    return null;
+  }
+  if (input.dualWriteReady) {
+    return null;
+  }
+  if (input.mode === "skipped_no_db") {
+    return "DB release authority requires PRODUCTS_DATABASE_URL";
+  }
+  if (input.mode === "skipped_r2_unavailable") {
+    return "DB release authority requires reachable R2 catalog storage";
+  }
+  if (input.productsDbConfigured === false) {
+    return "DB release authority requires PRODUCTS_DATABASE_URL";
+  }
+  // Ready=false with DB configured (or unknown) → require reachable R2.
+  return "DB release authority requires reachable R2 catalog storage";
 }

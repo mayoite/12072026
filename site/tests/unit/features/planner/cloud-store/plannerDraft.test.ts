@@ -208,6 +208,23 @@ describe("planner draft cache", () => {
     expect(resolvePlannerDraftDocument({ documentId: "bad-doc" }).status).toBe("invalid");
   });
 
+  it("reports invalid for unsupported document schemaVersion (no silent salvage)", () => {
+    const nowMs = Date.parse("2026-04-07T10:00:00.000Z");
+    vi.spyOn(Date, "now").mockReturnValue(nowMs);
+    window.localStorage.setItem(
+      "cad-suite:planner:draft:v1:doc:future-schema",
+      JSON.stringify({
+        schemaVersion: 1,
+        savedAt: "2026-04-07T10:00:00.000Z",
+        expiresAt: "2026-04-08T10:00:00.000Z",
+        document: { ...plannerDocument, schemaVersion: 99 },
+      }),
+    );
+    const result = resolvePlannerDraftDocument({ documentId: "future-schema" });
+    expect(result.status).toBe("invalid");
+    expect(result.document).toBeNull();
+  });
+
   it("reports expired when cleanup cannot remove stale envelopes", () => {
     window.localStorage.setItem(
       "cad-suite:planner:draft:v1:doc:expired-doc",

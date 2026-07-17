@@ -23,6 +23,9 @@ describe("CrmDemoBanner", () => {
     expect(
       screen.getByText(/persist in this browser only/i),
     ).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent(
+      /Do not rely on this data for\s+production workflows/i,
+    );
   });
 
   it("renders nothing when demo mode is disabled", () => {

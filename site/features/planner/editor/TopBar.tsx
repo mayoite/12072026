@@ -748,10 +748,10 @@ export function TopBar({
                         Export BOQ (CSV)
                       </MenuItem>
                       <MenuItem id="workstation-boq" className={styles.dropdownItem}>
-                        Export workstation BOQ
+                        Export workstation BOQ (specialty)
                       </MenuItem>
                       <MenuItem id="quote" className={styles.dropdownItem}>
-                        Add seats to quote cart
+                        Add furniture to quote cart
                       </MenuItem>
                       <MenuItem id="cloud-json" className={styles.dropdownItem}>
                         Save plan JSON to cloud

@@ -172,4 +172,36 @@ describe('ProjectDetailView Component', () => {
     // Should push to router canvas
     expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('/planner/canvas?id=plan-'));
   });
+
+  it('recovers from corrupt planner_project_index when creating a plan', async () => {
+    localStorage.setItem('planner_project_index', '{not-valid-json');
+    render(<ProjectDetailView projectId="proj1" />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Local Blueprint 1')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Create Plan' }));
+    fireEvent.change(screen.getByPlaceholderText('e.g. Executive Cabin Blueprint'), {
+      target: { value: 'Recovered Layout' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Create & Launch' }));
+
+    const index = JSON.parse(localStorage.getItem('planner_project_index')!);
+    expect(index).toHaveLength(1);
+    expect(index[0].name).toBe('Recovered Layout');
+    expect(mockAssignPlan).toHaveBeenCalled();
+    expect(mockPush).toHaveBeenCalled();
+  });
+
+  it('uses compact embedded chrome without GlobalNavHeader', async () => {
+    render(<ProjectDetailView projectId="proj1" embedded />);
+
+    expect(screen.queryByTestId('mock-global-nav-header')).not.toBeInTheDocument();
+    expect(screen.queryByText('Project Detail')).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { level: 2, name: 'Project Alpha' })).toBeInTheDocument();
+    });
+  });
 });

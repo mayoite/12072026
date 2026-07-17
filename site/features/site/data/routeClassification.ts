@@ -482,14 +482,15 @@ export const SITE_ROUTE_CLASSIFICATION: SiteRouteMeta[] = [
   },
   {
     route: "/login",
-    classification: "protected",
+    classification: "redirect",
     audience: "Public / returning customer",
-    intent: "Authentication entry",
+    intent: "Legacy auth alias → /access (canonical sign-in)",
     owner: "Site",
-    canonicalUrl: canonicalFor("/login"),
-    primaryAction: "Sign in",
+    canonicalUrl: canonicalFor("/access"),
+    primaryAction: "Redirect to access",
     indexable: false,
-    notes: "Auth gate; not indexable.",
+    notes:
+      "app/(site)/login/page.tsx redirects to /access?next=…; keep /login in robots disallow for bookmarks.",
   },
   {
     route: "/_not-found",
@@ -575,15 +576,25 @@ export const PLANNER_MARKETING_SITEMAP_PATHS = [
   "/planner/features/export",
 ] as const;
 
-/** Concrete solution category paths mirrored from `app/(site)/solutions/[category]/page.tsx`. */
-export const SOLUTION_CATEGORY_SITEMAP_PATHS = [
-  "/solutions/seating",
-  "/solutions/workstations",
-  "/solutions/tables",
-  "/solutions/storages",
-  "/solutions/soft-seating",
-  "/solutions/education",
+/**
+ * Solution category ids — single source for sitemap paths and
+ * `app/(site)/solutions/[category]/page.tsx` (hard-404 unknown slugs).
+ */
+export const SOLUTION_CATEGORY_IDS = [
+  "seating",
+  "workstations",
+  "tables",
+  "storages",
+  "soft-seating",
+  "education",
 ] as const;
+
+export type SolutionCategoryId = (typeof SOLUTION_CATEGORY_IDS)[number];
+
+/** Concrete solution category paths for sitemap generation. */
+export const SOLUTION_CATEGORY_SITEMAP_PATHS = SOLUTION_CATEGORY_IDS.map(
+  (id) => `/solutions/${id}` as const,
+);
 
 export const ROBOTS_DISALLOW_PREFIXES = [
   "/api/",
