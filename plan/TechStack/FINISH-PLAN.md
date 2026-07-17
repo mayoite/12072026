@@ -178,7 +178,7 @@ Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**. Prefer **TF** ids in fin
 | TF-20 | Docs budget / stack fiction | Lockedfiles + plan trio | PARTIAL |
 | TF-21 | Docs claim pnpm@11.13 but CI differs | Align pins | **PASS** (T-W1) |
 | TF-22 | Hoisted monorepo phantom deps | No undeclared app imports | OPEN |
-| TF-23 | CI logs under `site/results/` | Prefer root `results/` | OPEN |
+| TF-23 | CI logs under `site/results/` | Prefer root `results/` | PASS — workflows tee to `results/tooling` / `results/site` (90b55c74) |
 | TF-24 | Fast gate CI timeout | Job succeeds or timeout adjusted | OPEN |
 
 ## Cross-track blockers

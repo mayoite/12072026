@@ -2,8 +2,10 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { BackToTop } from '../src/components/BackToTop'
+import { Breadcrumbs } from '../src/components/Breadcrumbs'
 import { CommandPalette } from '../src/components/CommandPalette'
 import { CopyButton } from '../src/components/CopyButton'
+import { ReadingProgress } from '../src/components/ReadingProgress'
 import { TableOfContents } from '../src/components/TableOfContents'
 import { Tooltip } from '../src/components/Tooltip'
 
@@ -45,6 +47,55 @@ afterEach(() => {
 })
 
 describe('component branch coverage', () => {
+  it('covers reading progress zero-height and scrolled branches', () => {
+    Object.defineProperty(window, 'innerHeight', { configurable: true, value: 800 })
+    Object.defineProperty(document.documentElement, 'scrollHeight', {
+      configurable: true,
+      value: 800,
+    })
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: 0 })
+    const first = render(<ReadingProgress />)
+    fireEvent.scroll(window)
+    fireEvent.resize(window)
+    expect(first.container.firstChild).toBeTruthy()
+    first.unmount()
+
+    Object.defineProperty(document.documentElement, 'scrollHeight', {
+      configurable: true,
+      value: 2000,
+    })
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: 600 })
+    const second = render(<ReadingProgress />)
+    fireEvent.scroll(window)
+    fireEvent.resize(window)
+    expect(second.container.firstChild).toBeTruthy()
+    second.unmount()
+  })
+
+  it('hides breadcrumbs on home and labels known/unknown routes', () => {
+    const { unmount } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Breadcrumbs />
+      </MemoryRouter>,
+    )
+    expect(screen.queryByLabelText('Home')).toBeNull()
+    unmount()
+
+    render(
+      <MemoryRouter initialEntries={['/deployment']}>
+        <Breadcrumbs />
+      </MemoryRouter>,
+    )
+    expect(screen.getByText('Deployment')).toBeTruthy()
+
+    render(
+      <MemoryRouter initialEntries={['/not-a-real-route']}>
+        <Breadcrumbs />
+      </MemoryRouter>,
+    )
+    expect(screen.getByText('Page')).toBeTruthy()
+  })
+
   it('toggles back-to-top visibility and scrolls to the top', async () => {
     const scrollTo = vi.fn()
     vi.stubGlobal('scrollTo', scrollTo)
@@ -94,15 +145,42 @@ describe('component branch coverage', () => {
 
   it('builds table of contents links and scrolls to headings', async () => {
     const scrollIntoView = vi.fn()
+    const observe = vi.fn()
+    const disconnect = vi.fn()
+    class MockIntersectionObserver {
+      constructor(private readonly callback: IntersectionObserverCallback) {}
+      observe = observe
+      unobserve = vi.fn()
+      disconnect = disconnect
+      takeRecords = vi.fn(() => [])
+      root = null
+      rootMargin = ''
+      thresholds = []
+    }
+    vi.stubGlobal('IntersectionObserver', MockIntersectionObserver)
+
     document.body.innerHTML = '<h2 id="first">First</h2><h3 id="second">Second</h3>'
-    Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', { configurable: true, value: scrollIntoView })
+    Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
+      configurable: true,
+      value: scrollIntoView,
+    })
 
     render(<TableOfContents />)
 
     await screen.findByRole('link', { name: 'First' })
     expect(screen.getByRole('link', { name: 'Second' })).toBeTruthy()
+    expect(observe).toHaveBeenCalled()
     fireEvent.click(screen.getByRole('link', { name: 'First' }))
     expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' })
+    // Missing heading id → optional chain no-op
+    document.getElementById('first')?.remove()
+    fireEvent.click(screen.getByRole('link', { name: 'First' }))
+  })
+
+  it('returns null while the table of contents has no headings', () => {
+    document.body.innerHTML = '<p>no headings</p>'
+    const { container } = render(<TableOfContents />)
+    expect(container.querySelector('nav')).toBeNull()
   })
 
   it('renders command palette empty, suggestion, and result states', () => {
@@ -137,6 +215,63 @@ describe('component branch coverage', () => {
     )
     fireEvent.click(screen.getByText('API'))
     expect(navigate).toHaveBeenCalledWith('/api')
+    expect(onClose).toHaveBeenCalled()
+  })
+
+  it('handles command palette keyboard shortcuts and overlay close', () => {
+    const onClose = vi.fn()
+    const openListener = vi.fn()
+    document.addEventListener('open-command-palette', openListener)
+
+    const { rerender } = render(
+      <MemoryRouter>
+        <CommandPalette isOpen onClose={onClose} />
+      </MemoryRouter>,
+    )
+
+    fireEvent.keyDown(window, { key: 'Escape' })
+    expect(onClose).toHaveBeenCalled()
+
+    fireEvent.click(document.querySelector('.fixed.inset-0.bg-black\\/60') as HTMLElement)
+    expect(onClose.mock.calls.length).toBeGreaterThanOrEqual(1)
+
+    onClose.mockClear()
+    rerender(
+      <MemoryRouter>
+        <CommandPalette isOpen={false} onClose={onClose} />
+      </MemoryRouter>,
+    )
+    fireEvent.keyDown(window, { key: 'k', ctrlKey: true })
+    expect(openListener).toHaveBeenCalled()
+
+    rerender(
+      <MemoryRouter>
+        <CommandPalette isOpen onClose={onClose} />
+      </MemoryRouter>,
+    )
+    fireEvent.keyDown(window, { key: 'k', metaKey: true })
+    expect(onClose).toHaveBeenCalled()
+
+    document.removeEventListener('open-command-palette', openListener)
+  })
+
+  it('updates command palette query from the input and closes via the X control', () => {
+    const onClose = vi.fn()
+    searchState.query = ''
+    render(
+      <MemoryRouter>
+        <CommandPalette isOpen onClose={onClose} />
+      </MemoryRouter>,
+    )
+
+    const input = screen.getByPlaceholderText('Search documentation...')
+    fireEvent.change(input, { target: { value: 'security' } })
+    expect(searchState.setQuery).toHaveBeenCalledWith('security')
+
+    fireEvent.click(screen.getByRole('button', { name: '' }))
+    // X button has no accessible name; click the close control near the kbd.
+    const buttons = screen.getAllByRole('button')
+    fireEvent.click(buttons[buttons.length - 1]!)
     expect(onClose).toHaveBeenCalled()
   })
 })

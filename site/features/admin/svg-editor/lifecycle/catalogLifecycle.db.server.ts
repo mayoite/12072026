@@ -16,11 +16,13 @@ import {
   readLifecycleManifest,
   isBuyerVisibleSlug,
 } from "./catalogLifecycle";
+import { isDbSvgReleaseAuthority } from "@/features/admin/svg-editor/publish/svgReleaseAuthority";
 
 /**
  * Load buyer-visible descriptors from the Products DB when configured.
  * Prefer DB rows + product published SVG revision pointer (immutable R2 path).
- * Fall back to disk inventory only when DB is not configured or returns no rows.
+ * Fall back to disk inventory only when authority is disk and DB is empty/unconfigured.
+ * When SVG_RELEASE_AUTHORITY=db: never silent-disk override (DB-SVG-16).
  */
 function isUsableDescriptor(value: unknown): value is BlockDescriptor {
   if (!value || typeof value !== "object") return false;
@@ -100,8 +102,11 @@ function toPlannerCatalogDescriptor(row: {
 export async function loadBuyerVisibleDescriptorsWithDb(): Promise<
   Array<BlockDescriptor | PlannerSvgCatalogDescriptor>
 > {
+  const dbAuthority = isDbSvgReleaseAuthority();
+
   if (!isProductsDatabaseConfigured()) {
-    return loadBuyerVisibleDescriptors();
+    // DB authority without Products DB is an empty catalog (no disk override).
+    return dbAuthority ? [] : loadBuyerVisibleDescriptors();
   }
 
   try {
@@ -123,7 +128,7 @@ export async function loadBuyerVisibleDescriptorsWithDb(): Promise<
     }[];
 
     if (!rows || rows.length === 0) {
-      return loadBuyerVisibleDescriptors();
+      return dbAuthority ? [] : loadBuyerVisibleDescriptors();
     }
 
     const manifest = readLifecycleManifest();
@@ -136,9 +141,11 @@ export async function loadBuyerVisibleDescriptorsWithDb(): Promise<
       );
 
     // Empty usable DB during cutover: if rows exist but none are usable, fail
-    // closed (no silent disk override of corrupt DB). Empty table → disk migration.
+    // closed (no silent disk override of corrupt DB). Empty table → disk migration
+    // only while authority remains disk.
     if (fromDb.length === 0) {
-      return rows.length > 0 ? [] : loadBuyerVisibleDescriptors();
+      if (dbAuthority || rows.length > 0) return [];
+      return loadBuyerVisibleDescriptors();
     }
     return fromDb;
   } catch {

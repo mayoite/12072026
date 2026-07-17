@@ -23,6 +23,7 @@ import {
 } from "@/features/admin/svg-editor/publish/publishDescriptorWithPipeline";
 import { compileSvgForPublish } from "@/features/planner/asset-engine/svg/compileSvgForPublish";
 import { resolveSvgPublishDualWriteDeps } from "@/features/admin/svg-editor/publish/resolveSvgPublishDualWrite";
+import { isDbSvgReleaseAuthority } from "@/features/admin/svg-editor/publish/svgReleaseAuthority";
 import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/newBlockDescriptorStub";
 import { setCatalogLifecycle } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
 import { appendDescriptorAudit } from "@/features/admin/svg-editor/storage/descriptorAuditLog";
@@ -78,8 +79,18 @@ export async function publishSvgEditorAction(
   const input = formStateToDescriptorInput(descriptor, formFromEditor);
 
   // Dual-write only when Products DB is configured AND R2 is reachable.
-  // Disk remains live authority; dead R2 keys must not roll back disk publish.
+  // Disk remains live authority unless SVG_RELEASE_AUTHORITY=db (then dual-write
+  // is required and disk is not a silent override).
   const dualWrite = await resolveSvgPublishDualWriteDeps();
+  if (isDbSvgReleaseAuthority() && dualWrite.mode !== "enabled") {
+    return {
+      success: false,
+      error:
+        dualWrite.mode === "skipped_no_db"
+          ? "DB release authority requires PRODUCTS_DATABASE_URL"
+          : "DB release authority requires reachable R2 catalog storage",
+    };
+  }
 
   const compiledSvgStr = formFromEditor.compiledSvg;
   const compileSvg =

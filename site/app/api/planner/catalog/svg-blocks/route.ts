@@ -14,6 +14,7 @@ import { mapDescriptorsToCatalogItems } from "@/features/planner/catalog/svg/des
 import { filterBuyerFacingCatalogItems } from "@/features/planner/catalog/catalogBuyerVisibility";
 import { loadBuyerVisibleDescriptorsWithDb } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server";
 import { readSvgArtifactStatus } from "@/features/admin/svg-editor/publish/svgArtifactStatus.server";
+import { isDbSvgReleaseAuthority } from "@/features/admin/svg-editor/publish/svgReleaseAuthority";
 import { isPublishedSvgApiUrl } from "@/features/planner/catalog/svg/svgPreviewAssets";
 
 function isBuyerPublishedCatalogItem(item: {
@@ -22,6 +23,8 @@ function isBuyerPublishedCatalogItem(item: {
 }): boolean {
   const preview = item.assets?.previewImageUrl?.trim() ?? "";
   if (preview && isPublishedSvgApiUrl(preview)) return true;
+  // DB authority: only immutable revision API URLs count as published.
+  if (isDbSvgReleaseAuthority()) return false;
   return readSvgArtifactStatus(item.slug).state === "published";
 }
 

@@ -27,6 +27,8 @@ export default mergeConfig(
         provider: 'v8',
         reporter: ['text', 'json-summary', 'lcov'],
         include: ['src/**/*.{ts,tsx}'],
+        // Ambient types / empty barrels contribute 0% and dilute the gate.
+        exclude: ['src/types/**', 'src/vite-env.d.ts', 'src/data/domainTypes.ts'],
         reportsDirectory: path.resolve(repoRoot, 'results', 'tooling', 'tech-docs', 'coverage'),
       },
       environmentOptions: {

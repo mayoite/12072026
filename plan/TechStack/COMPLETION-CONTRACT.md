@@ -216,7 +216,7 @@ Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**.
 | TS-20 / TF-20 | Docs budget broken / stack fiction in docs | Lockedfiles matches code; plan trio present | PARTIAL |
 | TS-21 / TF-21 | Install/docs claim pnpm@11.13 but CI differs | Align pins | **PASS** (T-W1) |
 | TS-22 / TF-22 | Hoisted monorepo phantom deps | No app import of undeclared package | OPEN |
-| TF-23 | CI logs under `site/results/` | Prefer root `results/` | OPEN |
+| TF-23 | CI logs under `site/results/` | Prefer root `results/` | PASS — workflows tee to `results/tooling` / `results/site` (90b55c74) |
 | TF-24 | Fast gate CI timeout | Job succeeds or timeout adjusted with proof | OPEN |
 
 ---
