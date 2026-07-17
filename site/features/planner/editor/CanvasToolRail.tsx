@@ -120,6 +120,7 @@ function ToolToggle({
       aria-label={name}
       data-deferred={deferred ? "true" : undefined}
       data-tier={CANVAS_TOOL_REQUIREMENT[tool]}
+      data-min-tap-px="44"
       data-testid={`canvas-tool-${tool}`}
     >
       {({ isSelected, isFocusVisible }) => (
@@ -168,6 +169,7 @@ function ViewToggle({
       aria-pressed={enabled}
       onPress={onPress}
       data-selected={enabled ? "true" : undefined}
+      data-min-tap-px="44"
       data-testid={testId}
     >
       {({ isFocusVisible, isPressed }) => (

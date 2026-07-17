@@ -56,4 +56,29 @@ describe("CanvasToolRail", () => {
     expect(rail).toHaveAttribute("data-orientation", "horizontal");
     expect(rail).toHaveAttribute("data-dock-managed", "true");
   });
+
+  it("declares ≥44px tap floor on live tool and view controls (UI-MOB-03)", () => {
+    isMobileMock.mockReturnValue(true);
+    render(
+      <CanvasToolRail
+        activeTool="select"
+        onToolChange={vi.fn()}
+        dockManaged
+        gridEnabled
+        snapEnabled
+        onToggleGrid={vi.fn()}
+        onToggleSnap={vi.fn()}
+      />,
+    );
+
+    const tools = [
+      "canvas-tool-select",
+      "canvas-tool-wall",
+      "canvas-tool-room",
+      "canvas-tool-placement",
+    ];
+    for (const id of tools) {
+      expect(screen.getByTestId(id)).toHaveAttribute("data-min-tap-px", "44");
+    }
+  });
 });

@@ -1853,6 +1853,11 @@
   border-color: color-mix(in srgb, var(--ws-accent) 85%);
 }
 
+/* Phone Save (and other primary CTA) marker — size floor applied under width < 48rem */
+.phonePrimaryBtn {
+  box-sizing: border-box;
+}
+
 /* Icon placeholder */
 .icon {
   display: inline-flex;
@@ -1907,6 +1912,7 @@
 }
 
 /* Phone shell: deliberate two-row top bar (brand + save/panels | view/tools).
+ * UI-MOB-01/02/03: compact chrome, canvas share, ≥44px frequent targets.
  * Never reintroduce brand / center / actions as three full-width stacks — that
  * ate ~34% of viewport height and left canvas ~41% (UI-MOB benchmark FAIL). */
 @media (width < 48rem) {
@@ -1919,9 +1925,11 @@
     overflow-x: hidden;
   }
 
-  /* Beat legacy locked `.planner-workspace .pw-topbar` one-row grid. */
+  /* Beat legacy locked `.planner-workspace .pw-topbar` one-row grid.
+   * data-phone-layout="two-row": primary (brand|actions) + tools (center). */
   :global(body.planner-workspace) .header:global(.pw-topbar),
-  .header {
+  .header,
+  .header[data-phone-layout="two-row"] {
     min-height: 0;
     max-height: none;
     padding:
@@ -1934,16 +1942,21 @@
     grid-template-areas:
       "brand actions"
       "center center";
-    gap: var(--space-1);
+    gap: 0.25rem var(--space-1);
     overflow-x: hidden;
+    /* Cap chrome so two rows stay tight on 390×844 (UI-MOB-01) */
+    --ws-control-h: var(--planner-touch-target, 2.75rem);
   }
 
-  .brand {
+  .brand,
+  .brand[data-phone-row="primary"] {
     grid-area: brand;
     min-width: 0;
+    gap: var(--space-1);
   }
 
-  .center {
+  .center,
+  .center[data-phone-row="tools"] {
     grid-area: center;
     width: 100%;
     justify-self: stretch;
@@ -1952,9 +1965,12 @@
     gap: var(--space-1);
     overflow-x: auto;
     scrollbar-width: none;
+    /* Second row: view pack only — no wrapped desktop toolbar */
+    padding-block: 0.125rem;
   }
 
-  .actions {
+  .actions,
+  .actions[data-phone-row="primary"] {
     grid-area: actions;
     width: auto;
     max-width: 100%;
@@ -1971,7 +1987,8 @@
     display: none;
   }
 
-  .actions .actionDivider {
+  .actions .actionDivider,
+  .center .actionDivider {
     display: none;
   }
 
@@ -1982,33 +1999,78 @@
 
   .brandTitle {
     font-size: 0.8125rem;
-    max-width: 9rem;
+    max-width: 8.5rem;
   }
 
   .brandTitleInput {
-    max-width: 9rem;
+    max-width: 8.5rem;
     font-size: 0.8125rem;
+  }
+
+  /* UI-MOB-03: frequent phone actions ≥44×44 (2.75rem touch target) */
+  .btn,
+  .viewToggleBtn,
+  .mobilePanelBtn,
+  .phonePrimaryBtn,
+  .dropdownItem {
+    min-height: var(--planner-touch-target, 2.75rem); /* ≥44px */
   }
 
   .btn,
   .viewToggleBtn,
   .mobilePanelBtn,
-  .dropdownItem {
-    min-height: var(--planner-touch-target);
+  .phonePrimaryBtn {
+    min-width: var(--planner-touch-target, 2.75rem); /* ≥44px */
   }
 
-  .viewToggleBtn,
-  .mobilePanelBtn {
-    min-width: var(--planner-touch-target);
+  .phonePrimaryBtn {
+    padding-inline: var(--space-3);
+    font-weight: 600;
+  }
+
+  .viewToggle {
+    min-height: var(--planner-touch-target, 2.75rem);
+    padding: 2px;
+    box-sizing: border-box;
+  }
+
+  .viewToggleBtn {
+    min-width: var(--planner-touch-target, 2.75rem);
+    min-height: calc(var(--planner-touch-target, 2.75rem) - 4px);
+    font-size: 0.8125rem;
+    font-weight: 600;
   }
 
   .panelActionBtn {
-    width: var(--planner-touch-target);
-    height: var(--planner-touch-target);
+    width: var(--planner-touch-target, 2.75rem);
+    height: var(--planner-touch-target, 2.75rem);
   }
 
   .mobilePanelActions {
     display: inline-flex;
+    gap: var(--space-1);
+  }
+
+  /* Icon-only panel toggles on all phones — free row-1 width (labels stay in aria) */
+  .mobilePanelLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .mobilePanelBtn {
+    width: var(--planner-touch-target, 2.75rem);
+    height: var(--planner-touch-target, 2.75rem);
+    min-width: var(--planner-touch-target, 2.75rem);
+    min-height: var(--planner-touch-target, 2.75rem);
+    padding-inline: 0;
+    justify-content: center;
   }
 
   /* Secondary chrome: keep primary Save + panels; compress history/status */
@@ -2016,16 +2078,34 @@
     display: none;
   }
 
+  /* Prefer pill glyph over long status prose on phone */
   .saveStatus {
-    max-width: 6.5rem;
+    max-width: 5.5rem;
     font-size: 0.5625rem;
     padding: 0 var(--space-1);
+    min-height: 1.75rem;
   }
 
   /* Error must stay visible — never hide failed save on phone */
   .saveStatus[data-status="error"] {
     max-width: 8rem;
     display: inline-flex;
+    min-height: var(--planner-touch-target, 2.75rem);
+  }
+
+  /* Guest badge is redundant next to local save pill on phone */
+  .brandSub {
+    display: none;
+  }
+
+  /* File pack: slim uses More; full mode still tappable but no wrap sprawl */
+  .fileActions {
+    gap: var(--space-1);
+  }
+
+  .fileActions .btn {
+    min-height: var(--planner-touch-target, 2.75rem);
+    min-width: var(--planner-touch-target, 2.75rem);
   }
 
   .panelBackdrop {
@@ -2178,46 +2258,26 @@
 
 /* Narrow phones (~375px): strip non-essential chrome; keep Save + panel toggles */
 @media (width <= 23.4375rem) {
-  /* Hide idle/saved status text to free space; error status stays via rule above */
+  /* Hide idle/saved status text to free space; error/unsaved stay via rules above */
   .saveStatus:not([data-status="error"]):not([data-status="unsaved"]) {
     display: none;
   }
 
-  .brandSub {
-    display: none;
-  }
-
-  .btn,
-  .mobilePanelBtn {
+  .btn {
     padding-inline: var(--space-2);
     font-size: 0.75rem;
   }
 
   .center .btn {
     flex: 1 1 auto;
-    min-width: 0;
   }
 
   .brandTitle {
-    max-width: 7rem;
+    max-width: 6.5rem;
   }
 
-  .mobilePanelLabel {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
-  .mobilePanelBtn {
-    width: var(--planner-touch-target);
-    padding-inline: 0;
-    justify-content: center;
+  .phonePrimaryBtn {
+    padding-inline: var(--space-2);
   }
 }
 

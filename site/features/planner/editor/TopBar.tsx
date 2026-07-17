@@ -298,6 +298,9 @@ export function TopBar({
           ? "Save draft to this device"
           : "Save project";
 
+  /** WCAG / UI-MOB-03 phone floor (44px). CSS enforces via --planner-touch-target. */
+  const phoneMinTapPx = "44";
+
   return (
     <header
       className={`pw-topbar ${styles.header}`}
@@ -305,9 +308,11 @@ export function TopBar({
       data-density={density}
       data-chrome-mode={chromeMode}
       data-mobile-chrome="top"
+      data-phone-layout="two-row"
       data-testid="planner-topbar"
     >
-      <div className={styles.brand}>
+      {/* Phone row 1: identity (grid-area brand) */}
+      <div className={styles.brand} data-phone-row="primary">
         {isEditingName ? (
           <input
             ref={nameInputRef}
@@ -343,7 +348,8 @@ export function TopBar({
         ) : null}
       </div>
 
-      <div className={styles.center}>
+      {/* Phone row 2: view tools (grid-area center) — history stays desktop-only via CSS */}
+      <div className={styles.center} data-phone-row="tools">
         {wrapPack(
           "history",
           "History",
@@ -367,7 +373,7 @@ export function TopBar({
           </div>,
         )}
 
-        <span className={styles.actionDivider} aria-hidden />
+        <span className={`${styles.actionDivider} ${styles.desktopOnly}`} aria-hidden />
 
         {wrapPack(
           "view",
@@ -378,11 +384,20 @@ export function TopBar({
               value={viewMode}
               onChange={(value) => onViewModeChange?.(value as "2d" | "3d")}
               aria-label="View mode"
+              data-testid="planner-view-mode"
             >
-              <Radio className={styles.viewToggleBtn} value="2d">
+              <Radio
+                className={styles.viewToggleBtn}
+                value="2d"
+                data-min-tap-px={phoneMinTapPx}
+              >
                 2D
               </Radio>
-              <Radio className={styles.viewToggleBtn} value="3d">
+              <Radio
+                className={styles.viewToggleBtn}
+                value="3d"
+                data-min-tap-px={phoneMinTapPx}
+              >
                 3D
               </Radio>
             </RadioGroup>
@@ -442,7 +457,8 @@ export function TopBar({
         )}
       </div>
 
-      <div className={styles.actions}>
+      {/* Phone row 1: save + panels (grid-area actions) */}
+      <div className={styles.actions} data-phone-row="primary">
         <div className={styles.actionGroup} role="group" aria-label="View controls">
         {onToggleCanvasMaximized && (
           <Button
@@ -472,6 +488,8 @@ export function TopBar({
               <Button
                 className={`${styles.btn} ${styles.mobilePanelBtn}`}
                 data-active={activePanel === "left" ? "true" : undefined}
+                data-min-tap-px={phoneMinTapPx}
+                data-testid="planner-toggle-inventory"
                 aria-pressed={activePanel === "left"}
                 aria-label="Toggle inventory panel"
                 onPress={onToggleLeftPanel}
@@ -484,6 +502,8 @@ export function TopBar({
               <Button
                 className={`${styles.btn} ${styles.mobilePanelBtn}`}
                 data-active={activePanel === "right" ? "true" : undefined}
+                data-min-tap-px={phoneMinTapPx}
+                data-testid="planner-toggle-properties"
                 aria-pressed={activePanel === "right"}
                 aria-label="Toggle properties panel"
                 onPress={onToggleRightPanel}
@@ -497,8 +517,10 @@ export function TopBar({
 
         {onToggleBottomPanel && (
           <Button
-            className={styles.btn}
+            className={`${styles.btn} ${styles.mobilePanelBtn}`}
             data-active={isBottomPanelOpen ? "true" : undefined}
+            data-min-tap-px={phoneMinTapPx}
+            data-testid="planner-toggle-layers"
             aria-pressed={isBottomPanelOpen}
             aria-label={isBottomPanelOpen ? "Hide layers" : "Show layers"}
             onPress={onToggleBottomPanel}
@@ -541,7 +563,7 @@ export function TopBar({
 
         </div>
 
-        <span className={styles.actionDivider} aria-hidden />
+        <span className={`${styles.actionDivider} ${styles.desktopOnly}`} aria-hidden />
 
         <div className={styles.actionGroup} role="group" aria-label="Save status">
         <div
@@ -568,20 +590,21 @@ export function TopBar({
         </div>
 
         <Button
-          className={`${styles.btn} ${
+          className={`${styles.btn} ${styles.phonePrimaryBtn} ${
             resolvedSaveStatus === "error" ? styles.btnDanger : styles.btnPrimary
           }`}
           onPress={() => onSave?.()}
           isDisabled={resolvedSaveStatus === "saving"}
           aria-label={saveButtonAriaLabel}
           data-status={resolvedSaveStatus}
+          data-min-tap-px={phoneMinTapPx}
           data-testid="planner-save-button"
         >
           {saveButtonLabel}
         </Button>
         </div>
 
-        <span className={styles.actionDivider} aria-hidden />
+        <span className={`${styles.actionDivider} ${styles.desktopOnly}`} aria-hidden />
 
         {wrapPack(
           "file",
@@ -592,6 +615,7 @@ export function TopBar({
                 <Button
                   className={styles.btn}
                   aria-label="More plan actions"
+                  data-min-tap-px={phoneMinTapPx}
                   data-testid="planner-more-actions"
                 >
                   More
@@ -773,7 +797,7 @@ export function TopBar({
           "prefs",
           "Density",
           <Button
-            className={styles.btn}
+            className={`${styles.btn} ${styles.desktopOnly}`}
             aria-label={`Density — switch to ${density === "touch" ? "compact" : "touch"} spacing`}
             onPress={onToggleDensity}
             data-testid="planner-density-toggle"
