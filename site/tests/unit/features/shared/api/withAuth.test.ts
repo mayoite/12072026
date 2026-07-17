@@ -102,7 +102,11 @@ describe("withAuth", () => {
     );
     const body = await response.json();
     expect(response.status).toBe(401);
-    expect(body.error?.code ?? body.error).toBeTruthy();
+    const errorCode =
+      typeof body.error === "object" && body.error !== null && "code" in body.error
+        ? String((body.error as { code: unknown }).code)
+        : String(body.error ?? "");
+    expect(errorCode.length).toBeGreaterThan(0);
     expect(handler).not.toHaveBeenCalled();
   });
 

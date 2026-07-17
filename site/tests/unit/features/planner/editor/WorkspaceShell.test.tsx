@@ -37,7 +37,8 @@ describe("WorkspaceShell", () => {
     expect(shell).not.toBeNull();
     expect(shell).toHaveAttribute("data-planner-surface", "paper");
     // CSS module must own paper tokens — not a cool pure-white hard-code.
-    expect(workspaceStyles.shell).toBeTruthy();
+    expect(typeof workspaceStyles.shell).toBe("string");
+    expect(workspaceStyles.shell.length).toBeGreaterThan(0);
     expect(screen.getByTestId("planner-topbar")).toHaveAttribute(
       "data-mobile-chrome",
       "top",
