@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname, useSearchParams } from "next/navigation";
 import { ArrowRight, CompassTool, SignIn } from "@phosphor-icons/react";
 
 import { PlannerLaunchLink } from "@/components/ui/PlannerLaunchLink";
 import { DEFAULT_HERO_FALLBACK } from "@/features/site/data/homepage";
 import { PRODUCT_SUITE } from "@/features/site/data/productSuite";
+import { buildPlannerEntryHref } from "@/lib/analytics/plannerEntry";
 
 interface ChooseProductPageProps {
   guestMode: boolean;
@@ -19,9 +21,23 @@ export function ChooseProductPage({
   guestMode,
   authenticated,
 }: ChooseProductPageProps) {
-  const entryHref = guestMode || !authenticated
-    ? PLANNER.routes.guest
-    : PLANNER.routes.canvas;
+  const pathname = usePathname() || "/choose-product";
+  const searchParams = useSearchParams();
+  const siteProduct = searchParams.get("siteProduct") ?? undefined;
+  const siteCategory = searchParams.get("siteCategory") ?? undefined;
+  const siteSource = searchParams.get("siteSource") ?? pathname;
+
+  const rawEntryHref =
+    guestMode || !authenticated ? PLANNER.routes.guest : PLANNER.routes.canvas;
+  // Carry Site continuity into guest canvas after this chooser step.
+  const entryHref =
+    guestMode || !authenticated
+      ? buildPlannerEntryHref(rawEntryHref, {
+          sourcePage: siteSource,
+          productSlug: siteProduct,
+          categoryId: siteCategory,
+        })
+      : rawEntryHref;
   const landingHref = PLANNER.routes.landing;
   const sessionLabel = guestMode
     ? "Guest session"

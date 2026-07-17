@@ -109,11 +109,16 @@ export function buildGuestPlannerDraftRedirectHref(
   return `/planner/guest/?${params.toString()}`;
 }
 
-/** Member canvas without session → guest entry, keeping Site continuity params. */
+/**
+ * Member canvas without session → public guest **chooser** step first
+ * (`/choose-product?mode=guest`), keeping Site continuity params.
+ * Direct `/planner/guest?id=` deep links remain valid for resume/e2e.
+ */
 export function buildGuestPlannerEntryHref(
   searchParams?: PlannerEntrySearchParams,
 ): string {
   const params = pickPlannerEntrySearchParams(searchParams ?? {});
+  params.set("mode", "guest");
   const qs = params.toString();
-  return qs.length > 0 ? `/planner/guest/?${qs}` : "/planner/guest/";
+  return `/choose-product/?${qs}`;
 }

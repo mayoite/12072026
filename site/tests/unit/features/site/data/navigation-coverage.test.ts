@@ -69,10 +69,10 @@ describe("SITE_NAV_LINKS", () => {
     expect(match?.href).toBe("/projects");
   });
 
-  it("contains Planner page", () => {
+  it("contains Planner page as guest chooser entry", () => {
     const match = SITE_NAV_LINKS.find((l) => l.label === "Planner");
     expect(match).toBeDefined();
-    expect(match?.href).toBe("/planner");
+    expect(match?.href).toBe("/choose-product?mode=guest");
   });
 
   it("contains Solutions page", () => {
@@ -97,11 +97,11 @@ describe("SITE_NAV_LINKS", () => {
       "Solutions",
       "Projects",
       "Planner",
-      "Portfolio",
       "About",
       "Contact",
     ]);
     expect(SITE_HEADER_MORE_LINKS.map((l) => l.label)).toEqual([
+      "Portfolio",
       "Trusted",
       "Sustainability",
       "Portal",

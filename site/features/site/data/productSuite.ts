@@ -14,7 +14,10 @@ export const PRODUCT_SUITE = {
     routes: {
       landing: "/planner",
       login: "/login",
+      /** Guest canvas (after chooser). */
       guest: "/planner/guest",
+      /** Public guest entry step — marketing / nav land here first. */
+      guestChooser: "/choose-product?mode=guest",
       help: "/planner/help",
       onboarding: "/planner",
       dashboard: "/dashboard",
@@ -31,6 +34,7 @@ export const PRODUCT_SUITE = {
       landing: "/planner",
       login: "/login",
       guest: "/planner/guest",
+      guestChooser: "/choose-product?mode=guest",
       onboarding: "/planner",
       dashboard: "/dashboard",
       canvas: "/planner/canvas",

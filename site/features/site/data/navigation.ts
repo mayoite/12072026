@@ -10,8 +10,10 @@ export const SITE_NAV_LINKS = [
   { label: "Products", href: "/products", hasMega: true },
   { label: "Solutions", href: "/solutions" },
   { label: "Projects", href: "/projects" },
-  { label: "Planner", href: "/planner" },
-  { label: "Portfolio", href: "/portfolio" },
+  /** Guest entry step — choose-product, then open planner (not bare /planner/guest). */
+  { label: "Planner", href: PRODUCT_SUITE.planner.routes.guestChooser },
+  // Portfolio moved to More — one fewer primary toolbar link.
+  { label: "Portfolio", href: "/portfolio", headerSlot: "more" as const },
   { label: "Trusted", href: "/trusted-by", headerSlot: "more" as const },
   { label: "About", href: "/about" },
   { label: "Sustainability", href: "/sustainability", headerSlot: "more" as const },

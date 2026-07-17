@@ -8,6 +8,7 @@ import { ChooseProductPage } from "@/features/shared/entry/ChooseProductPage";
 
 vi.mock("next/navigation", () => ({
   usePathname: () => "/choose-product",
+  useSearchParams: () => new URLSearchParams(),
 }));
 
 describe("ChooseProductPage", () => {

@@ -106,13 +106,14 @@ describe("plannerEntry", () => {
     expect(url.searchParams.get("utm_campaign")).toBe("spring");
   });
 
-  it("builds guest bounce from canvas with or without continuity params", () => {
-    expect(buildGuestPlannerEntryHref({})).toBe("/planner/guest/");
+  it("builds guest bounce from canvas via chooser step with continuity params", () => {
+    expect(buildGuestPlannerEntryHref({})).toBe("/choose-product/?mode=guest");
     const withParams = buildGuestPlannerEntryHref({
       siteProduct: "desk",
       siteSource: "/choose-product",
     });
-    expect(withParams).toContain("/planner/guest/?");
+    expect(withParams).toContain("/choose-product/?");
+    expect(withParams).toContain("mode=guest");
     expect(withParams).toContain("siteProduct=desk");
     expect(withParams).toContain("siteSource=%2Fchoose-product");
   });

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { ChooseProductPage } from "@/features/shared/entry/ChooseProductPage";
 import { SiteWorkspaceShell } from "@/components/home/layout";
@@ -32,7 +33,9 @@ export default async function ChooseProductRoute({
 
   return (
     <SiteWorkspaceShell>
-      <ChooseProductPage guestMode={guestMode} authenticated={Boolean(user)} />
+      <Suspense fallback={<div className="min-h-[50vh]" aria-busy="true" />}>
+        <ChooseProductPage guestMode={guestMode} authenticated={Boolean(user)} />
+      </Suspense>
     </SiteWorkspaceShell>
   );
 }

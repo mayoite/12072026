@@ -17,7 +17,8 @@ export const PLANNER_HERO = {
   description: "True-scale floor plans, real catalog furniture, PDF export.",
   primaryCta: {
     label: "Start free",
-    href: "/planner/guest/",
+    /** Chooser step first — then Open guest planner → canvas. */
+    href: "/choose-product?mode=guest",
   },
   secondaryCta: {
     label: "Sign in",
