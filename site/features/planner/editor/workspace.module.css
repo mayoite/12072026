@@ -519,8 +519,9 @@
   overflow: hidden;
 }
 
-/* Dock host fills the middle grid row */
-.modularWorkspace > :first-child {
+/* Dock host fills the space below the customer workflow. */
+.dockStage {
+  position: relative;
   flex: 1 1 0%;
   min-height: 0;
   min-width: 0;
@@ -528,9 +529,140 @@
   width: 100%;
 }
 
+.dockStage > * {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.workflowBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 0 0 auto;
+  padding: var(--space-2) var(--space-4);
+  background: var(--ws-panel-bg);
+  border-bottom: 1px solid var(--ws-panel-border);
+}
+
+.workflowSteps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  max-width: 72rem;
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.workflowAssist {
+  flex: 0 0 auto;
+  min-height: var(--ws-control-h);
+  padding: var(--space-2) var(--space-3);
+  color: var(--ws-accent);
+  background: var(--ws-panel-bg);
+  border: 1px solid color-mix(in srgb, var(--ws-accent) 40%, var(--ws-panel-border));
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.assistantOverlay {
+  position: absolute;
+  z-index: var(--ws-z-floating);
+  top: var(--space-3);
+  right: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  width: min(24rem, calc(100% - var(--space-6)));
+  max-height: calc(100% - var(--space-6));
+  overflow: hidden;
+  background: var(--ws-panel-bg);
+  border: 1px solid var(--ws-panel-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--ws-shadow-float);
+}
+
+.assistantClose {
+  flex: 0 0 auto;
+  min-height: var(--ws-control-h);
+  padding: var(--space-2) var(--space-3);
+  color: var(--ws-text-primary);
+  background: var(--planner-surface-subtle);
+  border: 0;
+  border-bottom: 1px solid var(--ws-panel-border);
+  font: inherit;
+  font-weight: 700;
+  text-align: right;
+  cursor: pointer;
+}
+
+.workflowStep {
+  min-width: 0;
+}
+
+.workflowButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 3rem;
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  color: var(--ws-text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.workflowButton:hover {
+  background: var(--planner-surface-subtle);
+}
+
+.workflowButton[data-active="true"] {
+  color: var(--ws-text-primary);
+  background: color-mix(in srgb, var(--ws-accent) 9%, var(--ws-panel-bg));
+  border-color: color-mix(in srgb, var(--ws-accent) 38%, var(--ws-panel-border));
+}
+
+.workflowNumber {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-weight: 700;
+  color: var(--ws-text-secondary);
+  border: 1px solid var(--ws-panel-border);
+  border-radius: 999px;
+}
+
+.workflowButton[data-active="true"] .workflowNumber {
+  color: var(--text-inverse);
+  background: var(--ws-accent);
+  border-color: var(--ws-accent);
+}
+
+.workflowCopy {
+  display: grid;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.workflowCopy small {
+  overflow: hidden;
+  color: var(--ws-text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .mobileCanvasStack {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   width: 100%;
   height: 100%;
   min-width: 0;
@@ -1424,6 +1556,25 @@
 .dropdownItem[data-selected="true"] {
   background: var(--planner-accent);
   color: var(--text-inverse);
+}
+
+.panelMenu {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-1);
+  min-width: 18rem;
+}
+
+.panelMenuItem {
+  min-height: 2.75rem;
+  border: 1px solid var(--ws-panel-border);
+  background: var(--planner-surface-subtle);
+  font-weight: 650;
+}
+
+.panelMenuUtility {
+  grid-column: 1 / -1;
+  color: var(--ws-text-muted);
 }
 
 /* Button styles (RAC Button + native share this chrome) */

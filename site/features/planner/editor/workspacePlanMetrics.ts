@@ -12,6 +12,9 @@ export type WorkspacePlanMetrics = {
   boqReady: boolean;
   /** Number of hard validation errors blocking BOQ readiness. */
   validationErrors: number;
+  /** Bounding dimensions of wall endpoints on the active floor. */
+  planWidthMm?: number;
+  planDepthMm?: number;
 };
 
 function countWorkstationSeats(floor: PlannerFloor): number {
@@ -56,6 +59,15 @@ export function summarizeFloorMetrics(
     floor.columns.length;
 
   const boqReady = furniture > 0 && validationErrors === 0;
+  const wallPoints = floor.walls.flatMap((wall) => [wall.start, wall.end]);
+  const planWidthMm = wallPoints.length
+    ? Math.max(...wallPoints.map((point) => point.x)) -
+      Math.min(...wallPoints.map((point) => point.x))
+    : undefined;
+  const planDepthMm = wallPoints.length
+    ? Math.max(...wallPoints.map((point) => point.y)) -
+      Math.min(...wallPoints.map((point) => point.y))
+    : undefined;
 
   return {
     objects,
@@ -65,5 +77,7 @@ export function summarizeFloorMetrics(
     floorLabel: floor.name,
     boqReady,
     validationErrors,
+    ...(planWidthMm !== undefined ? { planWidthMm } : {}),
+    ...(planDepthMm !== undefined ? { planDepthMm } : {}),
   };
 }

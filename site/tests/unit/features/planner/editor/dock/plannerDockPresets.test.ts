@@ -76,6 +76,20 @@ describe("plannerDockPresets", () => {
     expect(ids).toEqual(["canvas", "tools"]);
   });
 
+  it("catalog preset keeps inventory and canvas without drawing tools", () => {
+    const api = createFakeApi();
+    applyPlannerDockPreset(api as never, "catalog");
+    const ids = api.addPanel.mock.calls.map((c) => c[0].id);
+    expect(ids).toEqual(["canvas", "inventory"]);
+  });
+
+  it("review preset keeps canvas and contextual properties without layers", () => {
+    const api = createFakeApi();
+    applyPlannerDockPreset(api as never, "review");
+    const ids = api.addPanel.mock.calls.map((c) => c[0].id);
+    expect(ids).toEqual(["canvas", "properties"]);
+  });
+
   it("ensurePlannerDockPanel activates existing panel", () => {
     const api = createFakeApi();
     applyPlannerDockPreset(api as never, "default");

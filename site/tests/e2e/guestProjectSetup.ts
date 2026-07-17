@@ -184,11 +184,13 @@ export async function enterGuestPlannerWorkspace(
   }
 
   const fabricStage = page.locator(PLANNER_FABRIC_STAGE);
+  const setupHeading = page.getByRole("heading", { name: /Set up your space/i });
 
   await Promise.race([
     page.locator(".pw-topbar").waitFor({ state: "visible", timeout: 60_000 }),
     fabricStage.waitFor({ state: "visible", timeout: 60_000 }),
-  ]).catch(() => {});
+    setupHeading.waitFor({ state: "visible", timeout: 60_000 }),
+  ]);
 
   await completePlannerSetupGate(
     page,

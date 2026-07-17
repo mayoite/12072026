@@ -10,7 +10,7 @@ export type RailOrientation = "vertical" | "horizontal";
 export type ChromePackId = "history" | "view" | "file" | "prefs" | "layout";
 export type ChromePackPlacement = "topbar" | "floating" | "overflow";
 
-export type LayoutPresetId = "default" | "catalog" | "canvas" | "floating";
+export type LayoutPresetId = "default" | "catalog" | "review" | "canvas" | "floating";
 
 export type PanelId = "left" | "right" | "bottom";
 export type PanelState = "docked" | "floating" | "collapsed";
@@ -108,6 +108,7 @@ export const DEFAULT_RAIL_LAYOUT: RailLayoutConfig = {
 export const LAYOUT_PRESET_LABELS: Record<LayoutPresetId, string> = {
   default: "Default",
   catalog: "Catalog focus",
+  review: "Review focus",
   canvas: "Canvas focus",
   floating: "Floating",
 };
@@ -146,6 +147,17 @@ export function buildLayoutPreset(presetId: LayoutPresetId): WorkspaceLayoutSnap
         ),
         rail: { ...DEFAULT_RAIL_LAYOUT, state: "docked", edge: "left", orientation: "vertical" },
         presetId: "catalog",
+      };
+    case "review":
+      return {
+        panels: {
+          left: { ...DEFAULT_PANEL_LAYOUT.left, state: "collapsed" },
+          right: { ...DEFAULT_PANEL_LAYOUT.right, state: "docked", width: 280 },
+          bottom: { ...DEFAULT_PANEL_LAYOUT.bottom, state: "collapsed" },
+        },
+        chrome: DEFAULT_CHROME_PACKS.map((p) => ({ ...p, placement: "topbar" as const })),
+        rail: { ...DEFAULT_RAIL_LAYOUT },
+        presetId: "review",
       };
     case "canvas":
       return {

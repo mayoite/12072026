@@ -23,7 +23,6 @@ import type { PlannerSaveStatus } from "@/features/planner/project/persistence/u
 import type { PanelId } from "./useDockingSystem";
 import { PlannerMenuPopover } from "@/features/planner/ui/PlannerMenuPopover";
 import {
-  LAYOUT_PRESET_LABELS,
   type ChromePackId,
   type ChromePackLayout,
   type ChromePackPlacement,
@@ -187,10 +186,6 @@ export function TopBar({
   chromePacks,
   onChromePlacement,
   onMoveChromePack,
-  layoutPresetId = "custom",
-  onApplyLayoutPreset,
-  onResetLayout,
-  onShowDockPanel,
   chromeMode = "full",
 }: TopBarProps) {
   const [isEditingName, setIsEditingName] = useState(false);
@@ -277,8 +272,6 @@ export function TopBar({
   };
 
   const overflowPacks = packs.filter((p) => p.placement === "overflow");
-  const presetIds = Object.keys(LAYOUT_PRESET_LABELS) as LayoutPresetId[];
-
   const saveButtonLabel =
     resolvedSaveStatus === "error"
       ? "Retry save"
@@ -582,6 +575,15 @@ export function TopBar({
           "file",
           "File",
           <div className={styles.fileActions} role="group" aria-label="File actions">
+            {onImport ? (
+              <Button
+                className={styles.btn}
+                aria-label="Import sketch or plan file"
+                onPress={onImport}
+              >
+                Import
+              </Button>
+            ) : null}
             {showGuestActions && (
               <MenuTrigger>
                 <Button
@@ -617,28 +619,6 @@ export function TopBar({
 
             {showPersistenceActions && (
               <>
-                <MenuTrigger>
-                  <Button className={styles.btn} aria-label="Import — open import menu">
-                    Import
-                    <CaretDown size={12} weight="bold" aria-hidden />
-                  </Button>
-                  <PlannerMenuPopover placement="bottom end">
-                    <Menu
-                      className={styles.dropdownMenu}
-                      onAction={(key) => {
-                        if (key === "file" && onImport) onImport();
-                      }}
-                    >
-                      <MenuItem id="file" className={styles.dropdownItem}>
-                        Import from file...
-                      </MenuItem>
-                      <MenuItem id="url" className={styles.dropdownItem}>
-                        Import from URL...
-                      </MenuItem>
-                    </Menu>
-                  </PlannerMenuPopover>
-                </MenuTrigger>
-
                 <MenuTrigger>
                   <Button className={styles.btn} aria-label="Export — open export menu">
                     Export
@@ -687,98 +667,15 @@ export function TopBar({
           </Button>,
         ) : null}
 
-        {wrapPack(
-          "layout",
-          "Layout",
-          <MenuTrigger>
-            <Button
-              className={`${styles.btn} ${styles.layoutTrigger}`}
-              aria-label={`Panels and layouts — ${layoutPresetId === "custom" ? "custom" : LAYOUT_PRESET_LABELS[layoutPresetId]}`}
-              data-testid="layout-presets-trigger"
-            >
-              Panels
-              <CaretDown size={12} weight="bold" aria-hidden />
-            </Button>
-            <PlannerMenuPopover placement="bottom end">
-              <Menu
-                className={styles.dropdownMenu}
-                onAction={(key) => {
-                  const keyStr = String(key);
-                  if (keyStr.startsWith("preset:")) {
-                    onApplyLayoutPreset?.(keyStr.slice("preset:".length) as LayoutPresetId);
-                    return;
-                  }
-                  if (keyStr === "reset") {
-                    onResetLayout?.();
-                    return;
-                  }
-                  if (keyStr === "toggle:density") {
-                    onToggleDensity?.();
-                    return;
-                  }
-                  if (keyStr.startsWith("show:")) {
-                    const panelId = keyStr.slice("show:".length) as
-                      | "inventory"
-                      | "tools"
-                      | "properties"
-                      | "layers";
-                    onShowDockPanel?.(panelId);
-                    return;
-                  }
-                  if (keyStr.startsWith("restore:")) {
-                    const packId = keyStr.slice("restore:".length) as ChromePackId;
-                    onChromePlacement?.(packId, "topbar");
-                  }
-                }}
-              >
-                {presetIds.map((id) => (
-                  <MenuItem
-                    key={id}
-                    id={`preset:${id}`}
-                    className={styles.dropdownItem}
-                    data-selected={layoutPresetId === id ? "true" : undefined}
-                  >
-                    {LAYOUT_PRESET_LABELS[id]}
-                    {layoutPresetId === id ? " ✓" : ""}
-                  </MenuItem>
-                ))}
-                <MenuItem id="reset" className={styles.dropdownItem}>
-                  Reset layout
-                </MenuItem>
-                {chromeMode === "slim" ? (
-                  <MenuItem id="toggle:density" className={styles.dropdownItem}>
-                    {density === "touch" ? "Use compact controls" : "Use touch controls"}
-                  </MenuItem>
-                ) : null}
-                {onShowDockPanel ? (
-                  <>
-                    <MenuItem id="show:inventory" className={styles.dropdownItem}>
-                      Open Inventory
-                    </MenuItem>
-                    <MenuItem id="show:tools" className={styles.dropdownItem}>
-                      Open Tools
-                    </MenuItem>
-                    <MenuItem id="show:properties" className={styles.dropdownItem}>
-                      Open Properties
-                    </MenuItem>
-                    <MenuItem id="show:layers" className={styles.dropdownItem}>
-                      Open Layers
-                    </MenuItem>
-                  </>
-                ) : null}
-                {overflowPacks.map((pack) => (
-                  <MenuItem
-                    key={pack.id}
-                    id={`restore:${pack.id}`}
-                    className={styles.dropdownItem}
-                  >
-                    Restore {pack.id} module
-                  </MenuItem>
-                ))}
-              </Menu>
-            </PlannerMenuPopover>
-          </MenuTrigger>,
-        )}
+        {overflowPacks.map((pack) => (
+          <Button
+            key={pack.id}
+            className={styles.btn}
+            onPress={() => onChromePlacement?.(pack.id, "topbar")}
+          >
+            Restore {pack.id}
+          </Button>
+        ))}
       </div>
     </header>
   );

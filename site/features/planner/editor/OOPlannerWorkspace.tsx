@@ -125,6 +125,7 @@ import {
   readPlannerWorkspacePreferencesFromStorage,
 } from "@/features/planner/project/store/workspacePreferencesStorage";
 import { applyLayoutToWorkspace } from "@/features/planner/ai/applyLayoutToWorkspace";
+import { AIAssistDrawer } from "@/features/planner/ai/AIAssistDrawer";
 import { extractProjectPlacements } from "@/features/planner/ai/extractProjectPlacements";
 import type { WorkspaceAiBridge } from "@/features/planner/ai/workspaceAiBridge";
 import { takePlannerStartupIntent } from "@/features/planner/onboarding/projectSetup";
@@ -1266,8 +1267,16 @@ export function OOPlannerWorkspace({
             onItemPlace={handleInventoryPlace}
             onWorkstationConfigPlace={handleWorkstationConfigPlace}
             onWorkstationConfigBatchPlace={handleWorkstationConfigBatchPlace}
-            workspaceBridge={workspaceAiBridge}
             displayUnit={displayUnit}
+          />
+        }
+        assistant={
+          <AIAssistDrawer
+            embedded
+            defaultExpanded
+            defaultTab="chat"
+            workspaceBridge={workspaceAiBridge}
+            panelFill
           />
         }
         properties={

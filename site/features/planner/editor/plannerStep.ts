@@ -8,13 +8,13 @@ export type PlannerStep = "draw" | "place" | "review";
 export const PLANNER_STEPS: PlannerStep[] = ["draw", "place", "review"];
 
 export const PLANNER_STEP_LABELS: Record<PlannerStep, string> = {
-  draw: "Draw",
-  place: "Place",
-  review: "Review",
+  draw: "Draw room",
+  place: "Place furniture",
+  review: "Review & quote",
 };
 
 export const PLANNER_STEP_DETAILS: Record<PlannerStep, string> = {
-  draw: "Walls, rooms",
-  place: "Furniture, doors, windows",
-  review: "Measurements, properties, export",
+  draw: "Walls, openings, measurements",
+  place: "Choose and position furniture",
+  review: "Check dimensions, validate, generate quote",
 };

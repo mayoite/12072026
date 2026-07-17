@@ -20,16 +20,16 @@ test.describe("Planner guest workspace — plan 06 UI bar", () => {
 
   test("loads canvas chrome and opens catalog on demand", async ({ page }) => {
     await expect(page.getByRole("group", { name: "Canvas history" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Undo", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: /^Undo(?: unavailable|: .*)?$/ })).toBeVisible();
     await expect(page.getByRole("radio", { name: "2D", exact: true })).toBeVisible();
     await expect(page.getByRole("radio", { name: "3D", exact: true })).toBeVisible();
 
     await page.getByTestId("layout-presets-trigger").click();
     const menuSurface = page.locator(".pw-planner-menu-popover");
     await expect(menuSurface).toBeVisible();
-    await menuSurface.getByRole("menuitem", { name: "Open Inventory" }).click();
+    await menuSurface.getByRole("menuitem", { name: "Inventory", exact: true }).click();
 
-    await expect(page.getByRole("searchbox", { name: /Search catalog elements/i })).toBeVisible();
+    await expect(page.getByRole("searchbox", { name: /Search inventory by name or SKU/i })).toBeVisible();
     await expect(page.locator(PLANNER_PRIMARY_CANVAS)).toBeVisible();
   });
 
@@ -70,13 +70,13 @@ test.describe("Planner guest workspace — plan 06 UI bar", () => {
     });
 
     await page.getByTestId("layout-presets-trigger").click();
-    await page.getByRole("menuitem", { name: "Open Inventory" }).click();
-    await expect(page.getByRole("searchbox", { name: /Search catalog elements/i })).toBeVisible();
+    await page.getByRole("menuitem", { name: "Inventory", exact: true }).click();
+    await expect(page.getByRole("searchbox", { name: /Search inventory by name or SKU/i })).toBeVisible();
     await expect.poll(() => missingNewBlock).toEqual([]);
   });
 
   test("catalog search filters elements", async ({ page }) => {
-    const search = page.getByLabel("Search catalog elements");
+    const search = page.getByLabel("Search inventory by name or SKU");
     await search.fill("meeting");
     await expect(page.getByRole("button", { name: /Add .* to canvas/i })).toBeVisible();
     await search.fill("zzzznotfound");
@@ -160,7 +160,7 @@ test.describe("a11y — key flows", () => {
     await enterGuestPlannerWorkspace(page);
     await waitForPlannerCanvas(page);
 
-    const search = page.getByLabel("Search catalog elements");
+    const search = page.getByLabel("Search inventory by name or SKU");
     await search.fill("meeting"); // term expected to return multiple results in seeded guest catalog
     await page.waitForTimeout(500); // allow filter
 

@@ -51,6 +51,16 @@ function writeLockAtomically(owner, pid) {
   );
 }
 
+function isProcessAlive(pid) {
+  if (!Number.isInteger(pid) || pid <= 0) return false;
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (err) {
+    return err?.code === "EPERM";
+  }
+}
+
 export function acquirePlaywrightDevLock(owner, pid = process.pid) {
   fs.mkdirSync(path.dirname(PLAYWRIGHT_DEV_LOCK_PATH), { recursive: true });
   try {
@@ -67,15 +77,16 @@ export function acquirePlaywrightDevLock(owner, pid = process.pid) {
   const age = Number.isFinite(startedMs)
     ? Date.now() - startedMs
     : PLAYWRIGHT_DEV_LOCK_STALE_MS + 1;
+  const holderIsAlive = isProcessAlive(existing?.pid);
 
-  if (age < PLAYWRIGHT_DEV_LOCK_STALE_MS) {
+  if (holderIsAlive && age < PLAYWRIGHT_DEV_LOCK_STALE_MS) {
     const error = new Error(lockHeldMessage(existing ?? {}));
     error.name = "PlaywrightDevLockError";
     throw error;
   }
 
   console.warn(
-    `[playwright-dev-lock] removing stale lock (age=${Math.round(age / 1000)}s, was=${existing?.owner ?? "?"})`,
+    `[playwright-dev-lock] removing stale lock (age=${Math.round(age / 1000)}s, alive=${holderIsAlive}, was=${existing?.owner ?? "?"})`,
   );
   try {
     fs.unlinkSync(PLAYWRIGHT_DEV_LOCK_PATH);

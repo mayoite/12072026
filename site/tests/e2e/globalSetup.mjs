@@ -2,7 +2,7 @@ import {
   acquirePlaywrightDevLock,
 } from "../../scripts/playwright-dev-lock.mjs";
 
-const LOCK_WAIT_MS = 20 * 60 * 1000;
+const LOCK_WAIT_MS = 30_000;
 const LOCK_POLL_MS = 5_000;
 
 /** Skip when parent gate runner already holds the shared dev lock. */

@@ -48,7 +48,7 @@ describe("playwright-dev-lock (name-mirror)", () => {
       PLAYWRIGHT_DEV_LOCK_PATH,
       `${JSON.stringify({
         owner: "other-owner",
-        pid: process.pid + 99999,
+        pid: process.pid,
         startedAt: new Date().toISOString(),
       })}\n`,
       { encoding: "utf8", flag: "w" },
@@ -56,5 +56,27 @@ describe("playwright-dev-lock (name-mirror)", () => {
     expect(() => acquirePlaywrightDevLock("unit-contender", process.pid)).toThrow(
       /Playwright dev lock held/,
     );
+  });
+
+  it("recovers a fresh lock whose process is dead", () => {
+    fs.mkdirSync(path.dirname(PLAYWRIGHT_DEV_LOCK_PATH), { recursive: true });
+    fs.writeFileSync(
+      PLAYWRIGHT_DEV_LOCK_PATH,
+      `${JSON.stringify({
+        owner: "dead-owner",
+        pid: 2_147_483_647,
+        startedAt: new Date().toISOString(),
+      })}\n`,
+      { encoding: "utf8", flag: "w" },
+    );
+
+    acquirePlaywrightDevLock("unit-contender", process.pid);
+
+    const lock = JSON.parse(fs.readFileSync(PLAYWRIGHT_DEV_LOCK_PATH, "utf8")) as {
+      owner: string;
+      pid: number;
+    };
+    expect(lock.owner).toBe("unit-contender");
+    expect(lock.pid).toBe(process.pid);
   });
 });

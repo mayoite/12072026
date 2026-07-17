@@ -5,10 +5,17 @@ import { useCallback, useId, useMemo, useRef, useState, type ReactNode } from "r
 import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
 import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
 import type { PlannerSaveStatus } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
+import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
 import { cn } from "@/lib/utils";
 
 import { CanvasToolRail } from "../CanvasToolRail";
 import type { PlannerTool } from "../canvasTool";
+import {
+  PLANNER_STEPS,
+  PLANNER_STEP_DETAILS,
+  PLANNER_STEP_LABELS,
+  type PlannerStep,
+} from "../plannerStep";
 import { TopBar } from "../TopBar";
 import type { LayoutPresetId } from "../workspaceLayout";
 import type { PlannerPersistStorage } from "../workspaceStatusLabels";
@@ -37,6 +44,8 @@ export interface ModularPlannerShellProps {
   storage?: PlannerPersistStorage;
   cloudEnabled?: boolean;
   inventory: ReactNode;
+  /** Optional task assistant. Rendered as an overlay, never as a dock. */
+  assistant?: ReactNode;
   properties: ReactNode;
   layers: ReactNode;
   /** Main plan stage (Fabric / 3D). Tools rail is separate. */
@@ -72,6 +81,59 @@ export interface ModularPlannerShellProps {
   showTools?: boolean;
 }
 
+const STEP_PRESET: Record<PlannerStep, LayoutPresetId> = {
+  draw: "default",
+  place: "catalog",
+  review: "review",
+};
+
+function PlannerWorkflowBar({
+  currentStep,
+  onStepChange,
+  onOpenAssistant,
+}: {
+  currentStep: PlannerStep;
+  onStepChange: (step: PlannerStep) => void;
+  onOpenAssistant?: () => void;
+}) {
+  return (
+    <nav
+      className={`${styles.workflowBar} pw-step-bar`}
+      aria-label="Planner workflow"
+      data-current={currentStep}
+    >
+      <ol className={styles.workflowSteps}>
+        {PLANNER_STEPS.map((step, index) => {
+          const active = step === currentStep;
+          return (
+            <li key={step} className={styles.workflowStep}>
+              <button
+                type="button"
+                className={`${styles.workflowButton} pw-step-bar__btn`}
+                data-step={step}
+                data-active={active ? "true" : undefined}
+                aria-current={active ? "step" : undefined}
+                onClick={() => onStepChange(step)}
+              >
+                <span className={styles.workflowNumber}>{index + 1}</span>
+                <span className={styles.workflowCopy}>
+                  <strong>{PLANNER_STEP_LABELS[step]}</strong>
+                  <small>{PLANNER_STEP_DETAILS[step]}</small>
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+      {onOpenAssistant ? (
+        <button type="button" className={styles.workflowAssist} onClick={onOpenAssistant}>
+          AI assist
+        </button>
+      ) : null}
+    </nav>
+  );
+}
+
 /**
  * Slim TopBar + Dockview modular panels (dockview-react).
  * 2D/3D split elsewhere still uses react-resizable-panels.
@@ -90,6 +152,7 @@ export function ModularPlannerShell({
   storage,
   cloudEnabled,
   inventory,
+  assistant,
   properties,
   layers,
   children,
@@ -129,6 +192,9 @@ export function ModularPlannerShell({
     "default",
   );
   const [layoutEpoch, setLayoutEpoch] = useState(0);
+  const [assistantOpen, setAssistantOpen] = useState(false);
+  const plannerStep = usePlannerWorkspaceStore((state) => state.plannerStep);
+  const setPlannerStep = usePlannerWorkspaceStore((state) => state.setPlannerStep);
 
   const resolvedLocalSaved = isLocalSaved ?? isSynced;
   const topBarSaveStatusProps = {
@@ -146,8 +212,18 @@ export function ModularPlannerShell({
   }, []);
 
   const resetLayout = useCallback(() => {
-    applyPreset("default");
-  }, [applyPreset]);
+    applyPreset(STEP_PRESET[plannerStep]);
+  }, [applyPreset, plannerStep]);
+
+  const changePlannerStep = useCallback(
+    (step: PlannerStep) => {
+      setPlannerStep(step);
+      applyPreset(STEP_PRESET[step]);
+      if (step === "draw") onToolChange("wall");
+      if (step !== "draw") onToolChange("select");
+    },
+    [applyPreset, onToolChange, setPlannerStep],
+  );
 
   const showDockPanel = useCallback(
     (panelId: "inventory" | "tools" | "properties" | "layers") => {
@@ -256,7 +332,26 @@ export function ModularPlannerShell({
         planMetrics={planMetrics}
       >
         <div className={styles.mobileCanvasStack}>
-          <div className={styles.mobileCanvasStage}>{children}</div>
+          <PlannerWorkflowBar
+            currentStep={plannerStep}
+            onStepChange={changePlannerStep}
+            onOpenAssistant={assistant ? () => setAssistantOpen(true) : undefined}
+          />
+          <div className={styles.mobileCanvasStage}>
+            {children}
+            {assistantOpen && assistant ? (
+              <aside className={styles.assistantOverlay} aria-label="AI assistant panel">
+                <button
+                  type="button"
+                  className={styles.assistantClose}
+                  onClick={() => setAssistantOpen(false)}
+                >
+                  Close AI assist
+                </button>
+                {assistant}
+              </aside>
+            ) : null}
+          </div>
           {showTools ? (
             <CanvasToolRail
               activeTool={activeTool}
@@ -326,12 +421,31 @@ export function ModularPlannerShell({
       />
 
       <div className={cn(styles.modularWorkspace, "planner-shell-main")}>
-        <PlannerDockHost
-          slots={slots}
-          layoutPresetId={layoutPresetId}
-          layoutEpoch={layoutEpoch}
-          onApiReady={handleDockApiReady}
+        <PlannerWorkflowBar
+          currentStep={plannerStep}
+          onStepChange={changePlannerStep}
+          onOpenAssistant={assistant ? () => setAssistantOpen(true) : undefined}
         />
+        <div className={styles.dockStage}>
+          <PlannerDockHost
+            slots={slots}
+            layoutPresetId={layoutPresetId}
+            layoutEpoch={layoutEpoch}
+            onApiReady={handleDockApiReady}
+          />
+          {assistantOpen && assistant ? (
+            <aside className={styles.assistantOverlay} aria-label="AI assistant panel">
+              <button
+                type="button"
+                className={styles.assistantClose}
+                onClick={() => setAssistantOpen(false)}
+              >
+                Close AI assist
+              </button>
+              {assistant}
+            </aside>
+          ) : null}
+        </div>
       </div>
 
       <footer className={cn(styles.status, "pw-status-bar")} aria-label="Plan status">

@@ -13,7 +13,9 @@ describe("plannerStep", () => {
       expect(PLANNER_STEP_LABELS[step].length).toBeGreaterThan(0);
       expect(PLANNER_STEP_DETAILS[step].length).toBeGreaterThan(3);
     }
-    expect(PLANNER_STEP_LABELS.draw).toBe("Draw");
+    expect(PLANNER_STEP_LABELS.draw).toBe("Draw room");
+    expect(PLANNER_STEP_LABELS.place).toBe("Place furniture");
+    expect(PLANNER_STEP_LABELS.review).toBe("Review & quote");
     expect(PLANNER_STEP_DETAILS.place.toLowerCase()).toMatch(/furniture|door/);
   });
 });

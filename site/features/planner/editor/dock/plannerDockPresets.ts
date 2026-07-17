@@ -3,7 +3,7 @@ import type { DockviewApi } from "dockview-react";
 import type { LayoutPresetId } from "../workspaceLayout";
 
 export const PLANNER_DOCKVIEW_STORAGE_KEY = "planner-dockview-layout";
-export const PLANNER_DOCKVIEW_SCHEMA_VERSION = 1;
+export const PLANNER_DOCKVIEW_SCHEMA_VERSION = 2;
 
 const LEGACY_DOCKVIEW_STORAGE_KEYS = [
   "planner-dockview-layout-v4",
@@ -162,11 +162,14 @@ export function applyPlannerDockPreset(
         position: { direction: "left", referencePanel: "canvas" },
         initialWidth: 360,
       });
+      return;
+
+    case "review":
+      addCanvas(api);
       api.addPanel({
-        ...PANEL_META.tools,
-        position: { direction: "left", referencePanel: "canvas" },
-        initialWidth: 76,
-        minimumWidth: 68,
+        ...PANEL_META.properties,
+        position: { direction: "right", referencePanel: "canvas" },
+        initialWidth: 280,
       });
       return;
 
