@@ -1,10 +1,17 @@
 import {
   OPENING_END_MARGIN_MM,
   OPENING_GAP_MM,
+  openingPlacementRejectMessage,
   openingSpanFromNormalized,
   openingSpansOverlap,
+  resolveOpeningRepositionOnHostWall,
 } from "@/features/planner/lib/geometry/openingPlacement";
-import type { PlannerDoor, PlannerProject, PlannerWindow } from "../types";
+import type {
+  PlannerDoor,
+  PlannerPoint,
+  PlannerProject,
+  PlannerWindow,
+} from "../types";
 import type { PlannerIdFactory } from "../project";
 import { applyPlannerProjectAction, activeFloorOrThrow } from "./projectActions";
 
@@ -98,6 +105,55 @@ export function updatePlannerOpening(
   return applyPlannerProjectAction(
     project,
     { type: "update", collection, id, updates },
+    now,
+  );
+}
+
+/**
+ * Drag/reposition an opening along its current host wall from a world-space point.
+ * Applies end-margin and same-wall overlap guards (self excluded).
+ */
+export function repositionPlannerOpening(
+  project: PlannerProject,
+  collection: "doors" | "windows",
+  id: string,
+  point: PlannerPoint,
+  now?: string,
+): PlannerProject {
+  const floor = activeFloorOrThrow(project);
+  const current =
+    collection === "doors"
+      ? floor.doors.find((item) => item.id === id)
+      : floor.windows.find((item) => item.id === id);
+  if (!current) {
+    throw new Error(
+      collection === "doors"
+        ? `Door "${id}" does not exist.`
+        : `Window "${id}" does not exist.`,
+    );
+  }
+  const wall = floor.walls.find((item) => item.id === current.wallId);
+  if (!wall) {
+    throw new Error(`Opening wall "${current.wallId}" does not exist.`);
+  }
+
+  const resolved = resolveOpeningRepositionOnHostWall(
+    point,
+    wall,
+    current.width,
+    floor.doors,
+    floor.windows,
+    { excludeId: id },
+  );
+  if ("rejected" in resolved) {
+    throw new Error(openingPlacementRejectMessage(resolved.reason));
+  }
+
+  return updatePlannerOpening(
+    project,
+    collection,
+    id,
+    { position: resolved.position },
     now,
   );
 }

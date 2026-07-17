@@ -46,6 +46,18 @@ describe("brandedPdfExport", () => {
     expect(arg.fileName).toMatch(/\.pdf$/i);
   });
 
+  it("exportBoqOnly forwards clientName into layout", async () => {
+    await exportBoqOnly("Client Plan", [], {
+      brandName: "One&Only",
+      clientName: "Acme Corp",
+    });
+    const arg = exportBoqToPdf.mock.calls[0]?.[0] as {
+      layout: { clientName?: string; preparedBy?: string };
+    };
+    expect(arg.layout.clientName).toBe("Acme Corp");
+    expect(arg.layout.preparedBy).toMatch(/One&Only/i);
+  });
+
   it("exportBrandedPdf enriches preparedBy and filename", async () => {
     await exportBrandedPdf({
       layout: {
@@ -66,5 +78,21 @@ describe("brandedPdfExport", () => {
     };
     expect(arg.layout.preparedBy).toBe("One&Only Space Planner");
     expect(arg.fileName).toMatch(/hq-floor/i);
+  });
+
+  it("exportBrandedPdf respects explicit fileName", async () => {
+    await exportBrandedPdf({
+      layout: {
+        projectName: "X",
+        roomWidthMm: 0,
+        roomDepthMm: 0,
+        unitSystem: "metric",
+        generatedAt: "2026-07-17T00:00:00.000Z",
+      },
+      rows: [],
+      fileName: "custom-boq.pdf",
+    });
+    const arg = exportBoqToPdf.mock.calls[0]?.[0] as { fileName: string };
+    expect(arg.fileName).toBe("custom-boq.pdf");
   });
 });

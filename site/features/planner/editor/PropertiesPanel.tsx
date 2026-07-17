@@ -72,8 +72,14 @@ export interface PropertiesPanelCallbacks {
   onDistributeEntities?: (axis: "x" | "y") => void;
   /** Array selection into a row-major grid (columns + gap mm). */
   onArrayEntities?: (columns: number, gapMm: number) => void;
+  /** Pack multi-select along axis with exact clear gap (mm). Furniture only. */
+  onSpaceEntities?: (axis: "x" | "y", gapMm: number) => void;
   /** Calibrate underlay image width to known millimetres. */
   onCalibrateUnderlay?: (knownWidthMm: number) => void;
+  /** Start two-click underlay scale calibration with a known segment length (mm). */
+  onStartTwoPointCalibrate?: (knownLengthMm: number) => void;
+  /** Cancel an in-progress two-click underlay calibration. */
+  onCancelTwoPointCalibrate?: () => void;
   /** Called when user clicks outside to deselect */
   onDeselect?: () => void;
 }
@@ -103,6 +109,11 @@ export interface PropertiesPanelProps {
   displayUnit?: PlannerDisplayUnit;
   /** Canonical host-wall length for door/window offset editing. */
   hostWallLengthMm?: number;
+  /**
+   * Two-point underlay calibrate session phase.
+   * When set, empty chrome explains pick progress.
+   */
+  underlayCalibratePhase?: "pick-a" | "pick-b" | null;
 }
 
 /**
@@ -160,8 +171,24 @@ export const PropertiesPanel = memo(function PropertiesPanel({
   callbacks,
   displayUnit = "mm",
   hostWallLengthMm,
+  underlayCalibratePhase = null,
 }: PropertiesPanelProps) {
   const id = useId();
+  const [knownDistanceDraft, setKnownDistanceDraft] = useState(() =>
+    formatLengthInput(5000, displayUnit),
+  );
+  const [arrayGapDraft, setArrayGapDraft] = useState("200");
+  const [exactGapDraft, setExactGapDraft] = useState("200");
+
+  const resolveKnownLengthMm = useCallback((): number | null => {
+    return parseLengthInput(knownDistanceDraft, displayUnit);
+  }, [displayUnit, knownDistanceDraft]);
+
+  const startTwoPointCalibrate = useCallback(() => {
+    const known = resolveKnownLengthMm();
+    if (known === null || known <= 0) return;
+    callbacks?.onStartTwoPointCalibrate?.(known);
+  }, [callbacks, resolveKnownLengthMm]);
 
   const isLocked = !!(
     selectedEntity &&
@@ -1042,37 +1069,105 @@ export const PropertiesPanel = memo(function PropertiesPanel({
 
             {multiSelection.type === "furniture" ? (
               <>
+                <span className={styles.multiActionLabel}>Exact spacing (mm)</span>
+                <label className={styles.multiActionLabel} htmlFor={`${id}-exact-gap`}>
+                  Clear gap
+                  <input
+                    id={`${id}-exact-gap`}
+                    className={styles.multiActionInput}
+                    type="text"
+                    inputMode="numeric"
+                    value={exactGapDraft}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      setExactGapDraft(event.target.value)
+                    }
+                    aria-label="Exact clear gap between selected furniture in millimetres"
+                  />
+                </label>
+                <div className={styles.multiActionRow}>
+                  <button
+                    type="button"
+                    className={styles.multiActionBtnWide}
+                    onClick={() => {
+                      const gap = Number.parseFloat(exactGapDraft);
+                      if (!Number.isFinite(gap) || gap < 0) return;
+                      callbacks?.onSpaceEntities?.("x", gap);
+                    }}
+                    title="Pack selection left-to-right with exact gap"
+                    aria-label="Apply exact horizontal spacing"
+                  >
+                    Space X
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.multiActionBtnWide}
+                    onClick={() => {
+                      const gap = Number.parseFloat(exactGapDraft);
+                      if (!Number.isFinite(gap) || gap < 0) return;
+                      callbacks?.onSpaceEntities?.("y", gap);
+                    }}
+                    title="Pack selection top-to-bottom with exact gap"
+                    aria-label="Apply exact vertical spacing"
+                  >
+                    Space Y
+                  </button>
+                </div>
+
                 <span className={styles.multiActionLabel}>Array / grid</span>
+                <label className={styles.multiActionLabel} htmlFor={`${id}-array-gap`}>
+                  Array gap
+                  <input
+                    id={`${id}-array-gap`}
+                    className={styles.multiActionInput}
+                    type="text"
+                    inputMode="numeric"
+                    value={arrayGapDraft}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      setArrayGapDraft(event.target.value)
+                    }
+                    aria-label="Array clear gap in millimetres"
+                  />
+                </label>
                 <div className={styles.multiActionRow}>
                   <button
                     type="button"
                     className={styles.multiActionBtn}
-                    onClick={() => callbacks?.onArrayEntities?.(multiSelection.count, 200)}
-                    title="Row array (1 column, 200 mm gap)"
-                    aria-label="Array in a single row with 200 millimetre gap"
+                    onClick={() => {
+                      const gap = Number.parseFloat(arrayGapDraft);
+                      const gapMm = Number.isFinite(gap) && gap >= 0 ? gap : 200;
+                      callbacks?.onArrayEntities?.(multiSelection.count, gapMm);
+                    }}
+                    title="Row array (all in one row, typed gap)"
+                    aria-label="Array in a single row with typed gap"
                   >
                     Row
                   </button>
                   <button
                     type="button"
                     className={styles.multiActionBtn}
-                    onClick={() =>
+                    onClick={() => {
+                      const gap = Number.parseFloat(arrayGapDraft);
+                      const gapMm = Number.isFinite(gap) && gap >= 0 ? gap : 200;
                       callbacks?.onArrayEntities?.(
                         Math.max(2, Math.ceil(Math.sqrt(multiSelection.count))),
-                        200,
-                      )
-                    }
-                    title="Grid array (~square columns, 200 mm gap)"
-                    aria-label="Array in a grid with 200 millimetre gap"
+                        gapMm,
+                      );
+                    }}
+                    title="Grid array (~square columns, typed gap)"
+                    aria-label="Array in a grid with typed gap"
                   >
                     Grid
                   </button>
                   <button
                     type="button"
                     className={styles.multiActionBtn}
-                    onClick={() => callbacks?.onArrayEntities?.(5, 400)}
-                    title="5-column array, 400 mm aisle"
-                    aria-label="Array in five columns with 400 millimetre gap"
+                    onClick={() => {
+                      const gap = Number.parseFloat(arrayGapDraft);
+                      const gapMm = Number.isFinite(gap) && gap >= 0 ? gap : 400;
+                      callbacks?.onArrayEntities?.(5, gapMm);
+                    }}
+                    title="5-column array with typed gap"
+                    aria-label="Array in five columns with typed gap"
                   >
                     5×
                   </button>
@@ -1085,12 +1180,23 @@ export const PropertiesPanel = memo(function PropertiesPanel({
     );
   }
 
+  const hasUnderlayCalibrate =
+    Boolean(callbacks?.onCalibrateUnderlay) ||
+    Boolean(callbacks?.onStartTwoPointCalibrate);
+
   // Empty state: only keep chrome when underlay calibrate is available.
-  // Live workspace collapses the properties dock when nothing is selected (PF-21).
+  // Live workspace collapses the properties dock when nothing is selected (PF-21),
+  // except when an underlay is present so scale controls stay reachable.
   if (!selectedEntity) {
-    if (!callbacks?.onCalibrateUnderlay) {
+    if (!hasUnderlayCalibrate) {
       return null;
     }
+    const pickHint =
+      underlayCalibratePhase === "pick-a"
+        ? "Click the first reference point on the underlay."
+        : underlayCalibratePhase === "pick-b"
+          ? "Click the second reference point on the underlay."
+          : null;
     return (
       <div
         className={styles.panel}
@@ -1123,28 +1229,85 @@ export const PropertiesPanel = memo(function PropertiesPanel({
             Walls, doors, windows, rooms, and furniture open contextual fields
             here.
           </p>
-          {callbacks?.onCalibrateUnderlay ? (
+          {hasUnderlayCalibrate ? (
             <div className={styles.multiActions}>
               <span className={styles.multiActionLabel}>Underlay scale</span>
+              {pickHint ? (
+                <p className={styles.emptyHint} role="status">
+                  {pickHint}
+                </p>
+              ) : null}
+              {callbacks?.onStartTwoPointCalibrate ? (
+                <label className={styles.multiActionLabel} htmlFor={`${id}-known-distance`}>
+                  Known distance
+                  <input
+                    id={`${id}-known-distance`}
+                    className={styles.multiActionInput}
+                    type="text"
+                    inputMode="decimal"
+                    value={knownDistanceDraft}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      setKnownDistanceDraft(event.target.value)
+                    }
+                    onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
+                        startTwoPointCalibrate();
+                      }
+                    }}
+                    aria-label="Known underlay segment length"
+                    disabled={underlayCalibratePhase != null}
+                  />
+                </label>
+              ) : null}
               <div className={styles.multiActionRow}>
-                <button
-                  type="button"
-                  className={styles.multiActionBtn}
-                  onClick={() => callbacks.onCalibrateUnderlay?.(10_000)}
-                  title="Map underlay width to 10 m"
-                  aria-label="Calibrate underlay width to 10 metres"
-                >
-                  10 m
-                </button>
-                <button
-                  type="button"
-                  className={styles.multiActionBtn}
-                  onClick={() => callbacks.onCalibrateUnderlay?.(5_000)}
-                  title="Map underlay width to 5 m"
-                  aria-label="Calibrate underlay width to 5 metres"
-                >
-                  5 m
-                </button>
+                {callbacks?.onCalibrateUnderlay ? (
+                  <>
+                    <button
+                      type="button"
+                      className={styles.multiActionBtnWide}
+                      onClick={() => callbacks.onCalibrateUnderlay?.(10_000)}
+                      title="Map underlay width to 10 m"
+                      aria-label="Calibrate underlay width to 10 metres"
+                      disabled={underlayCalibratePhase != null}
+                    >
+                      10 m
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.multiActionBtnWide}
+                      onClick={() => callbacks.onCalibrateUnderlay?.(5_000)}
+                      title="Map underlay width to 5 m"
+                      aria-label="Calibrate underlay width to 5 metres"
+                      disabled={underlayCalibratePhase != null}
+                    >
+                      5 m
+                    </button>
+                  </>
+                ) : null}
+                {callbacks?.onStartTwoPointCalibrate ? (
+                  underlayCalibratePhase != null ? (
+                    <button
+                      type="button"
+                      className={styles.multiActionBtnWide}
+                      onClick={() => callbacks.onCancelTwoPointCalibrate?.()}
+                      title="Cancel two-point calibration"
+                      aria-label="Cancel two-point underlay calibration"
+                    >
+                      Cancel
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className={styles.multiActionBtnWide}
+                      onClick={startTwoPointCalibrate}
+                      title="Pick two points on the underlay for the known distance"
+                      aria-label="Start two-point underlay calibration"
+                    >
+                      2-point
+                    </button>
+                  )
+                ) : null}
               </div>
             </div>
           ) : null}

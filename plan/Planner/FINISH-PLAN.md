@@ -1,4 +1,3 @@
-does it anywhere say act on your own
 # Planner world-standard completion plan
 
 Status: OPEN.
@@ -160,7 +159,7 @@ Current position: P1 PASS. P2–P15 partial/in progress. Exit gates remain open 
 | P8 | PARTIAL | Overlap + outside-room (error/overhang warning) + aisle-clearance (900 mm warning) in `runFloorValidation`. ValidationPanel in Review. Browser proof open. |
 | P9 | PARTIAL | Live BOQ is `projectFurnitureBoq` + bridges; branded PDF wired via Review `exportBoqOnly`. Dual specialty `workstationBoqV0` remains. Browser PDF download proof open. |
 | P10 | PARTIAL | Handoff delivers to customer_queries + optional staff email; workspace Send to Oando + idempotency + HANDOFF_* events. Live CRM browser proof open. |
-| P11 | PARTIAL | Export success toasts are honest; empty floors blocked; GLB explicitly unsupported. Member **Save plan JSON / BOQ CSV to cloud** via `POST /api/planner/export/cloud` (Supabase Storage). Scene GLB and Chromium download proof remain. |
+| P11 | PARTIAL | Export success toasts are honest; empty floors blocked; **no GLB menu claim** (preflight unsupported). Member **Save plan JSON / BOQ CSV to cloud** via `POST /api/planner/export/cloud` (Supabase Storage). Scene GLB implementation and Chromium download proof remain. |
 | P12 | PARTIAL | AI optional overlay; CSRF/rate-limit/degraded paths live; dead apply path no longer called from drawer. Browser failure journey open. |
 | P13 | PARTIAL | Autosave live; divergent contentHash now returns conflict (no silent overwrite); explicit keep-local/cloud choice API. Conflict UI and immutable revisions remain. |
 | P14 | PARTIAL | Arrow-key furniture nudge (Shift = 10 mm). Full keyboard commercial journey and axe proof remain. |
@@ -186,12 +185,12 @@ Fresh evidence:
 | PF-02 | A new guest URL can load an old guest draft. | PASS |
 | PF-03 | The guest route unit test fails after the redirect change. | PASS |
 | PF-04 | Onboarding tests still expect `Start placing furniture`. | PASS |
-| PF-05 | Room outline geometry is deferred. | OPEN |
-| PF-06 | Persistent dimension annotations are deferred. | OPEN |
+| PF-05 | Room outline incomplete for full acceptance. | OPEN (impl unit) | `roomOutline.ts` + `addRectangularRoom` + ExactRoomPanel unit. Remaining: wall grips UI, browser exact-room proof. |
+| PF-06 | Persistent dimensions incomplete for full acceptance. | OPEN (impl unit) | `dimensions.ts` + dimension tool + Fabric paint unit. Remaining: opening-specific dims, browser proof. |
 | PF-07 | Sketch-to-Plan has no customer UI entry. | PASS |
 | PF-08 | Sketch-to-Plan requires member auth and blocks guests. | PASS |
-| PF-09 | Planner GLB export does not exist. | FAIL |
-| PF-10 | Planner does not send a quote to Oando. | FAIL |
+| PF-09 | Planner scene GLB export. | PASS (honesty) | No export menu item claims downloadable GLB; `preflightPlannerExport("glb")` returns unsupported; no fake binary. Full scene GLB remains P11 OPEN. |
+| PF-10 | Planner does not send a quote to Oando. | PARTIAL | Workspace Send to Oando + handoff API (unit/code). Live CRM browser proof open. |
 | PF-11 | Live overlap validation is incomplete. | PASS (unit) | Overlap + room-boundary + aisle-clearance in `runFloorValidation`. Browser Review proof open. |
 | PF-12 | Step navigation is labelled but not completion-aware. | PASS |
 | PF-13 | Review and quote UI has no dedicated tests. | PASS (unit) | `ReviewQuotePanel.test.tsx`: send gating, guest block, demo confirm, BOQ/export disable on errors/empty, quote-cart wiring. Browser open. |

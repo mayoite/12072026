@@ -204,10 +204,25 @@ export async function savePlannerDocument(
         }
 
         // First save with client-chosen UUID: insert with explicit id + owner.
-        rows = await adminDb
-          .insert(plans)
-          .values({ id: documentId, ...values })
-          .returning();
+        // Concurrent same-UUID races surface as DB unique violations — rare for
+        // UUID v7; fail closed with SAVE_FAILED (no ownership takeover).
+        try {
+          rows = await adminDb
+            .insert(plans)
+            .values({ id: documentId, ...values })
+            .returning();
+        } catch (insertErr) {
+          const msg =
+            insertErr instanceof Error ? insertErr.message : String(insertErr);
+          if (/unique|duplicate|already exists/i.test(msg)) {
+            throw new PlannerPersistenceError(
+              "Plan id already exists; retry with a new id or reload",
+              "SAVE_FAILED",
+              insertErr,
+            );
+          }
+          throw insertErr;
+        }
       }
     } else {
       rows = await adminDb.insert(plans).values(values).returning();

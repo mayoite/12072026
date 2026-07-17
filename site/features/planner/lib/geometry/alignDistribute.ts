@@ -2,6 +2,11 @@ export type AlignAxis = "x" | "y";
 export type AlignAnchor = "min" | "center" | "max";
 export type DistributeAxis = "x" | "y";
 
+/**
+ * Axis-aligned entity pose for bulk layout helpers.
+ * `xMm` / `yMm` are **min edges** of the AABB (top-left in plan mm).
+ * Convert from center-origin furniture before calling; convert back after.
+ */
 export interface PositionedEntity {
   id: string;
   xMm: number;
@@ -53,6 +58,10 @@ export function alignEntities(
   });
 }
 
+/**
+ * Equalise edge-to-edge gaps between first and last (both stay fixed).
+ * Requires 3+ entities. Positions use min-edge convention.
+ */
 export function distributeEntities(
   entities: readonly PositionedEntity[],
   axis: DistributeAxis,
@@ -63,49 +72,105 @@ export function distributeEntities(
     axis === "x" ? a.xMm - b.xMm : a.yMm - b.yMm,
   );
 
-  const first = sorted[0];
-  const last = sorted[sorted.length - 1];
-  // Span from first leading edge to last trailing edge (same as extents span).
-  const firstEdge = axis === "x" ? first.xMm : first.yMm;
-  const lastEdge = axis === "x" ? last.xMm + last.widthMm : last.yMm + last.depthMm;
-  const totalSpan = lastEdge - firstEdge;
-  const totalGaps = sorted.length - 1;
+  const first = sorted[0]!;
+  const last = sorted[sorted.length - 1]!;
+  const firstLeading = axis === "x" ? first.xMm : first.yMm;
+  const lastLeading = axis === "x" ? last.xMm : last.yMm;
+  const lastSize = axis === "x" ? last.widthMm : last.depthMm;
+  const lastTrailing = lastLeading + lastSize;
+  const totalSpan = lastTrailing - firstLeading;
+  const totalSize = sorted.reduce(
+    (sum, e) => sum + (axis === "x" ? e.widthMm : e.depthMm),
+    0,
+  );
+  const free = totalSpan - totalSize;
+  const gap = free / (sorted.length - 1);
 
   const updates: EntityPositionUpdate[] = [];
-  for (let i = 0; i < sorted.length; i++) {
-    const e = sorted[i];
-    if (i === 0 || i === sorted.length - 1) {
-      // keep first and last in place
+  let leading = firstLeading;
+  for (let i = 0; i < sorted.length; i += 1) {
+    const e = sorted[i]!;
+    const size = axis === "x" ? e.widthMm : e.depthMm;
+    if (i === 0) {
+      updates.push({ id: e.id, xMm: e.xMm, yMm: e.yMm });
+      leading = firstLeading + size + gap;
+      continue;
+    }
+    if (i === sorted.length - 1) {
       updates.push({ id: e.id, xMm: e.xMm, yMm: e.yMm });
       continue;
     }
-    const size = axis === "x" ? e.widthMm : e.depthMm;
-    const newPos = firstEdge + (totalSpan / totalGaps) * i - (i > 0 ? size / 2 : 0);
     updates.push({
       id: e.id,
-      xMm: axis === "x" ? newPos : e.xMm,
-      yMm: axis === "y" ? newPos : e.yMm,
+      xMm: axis === "x" ? leading : e.xMm,
+      yMm: axis === "y" ? leading : e.yMm,
     });
+    leading = leading + size + gap;
   }
 
-  // resolve implicit centers from gaps
-  const explicitUpdates: EntityPositionUpdate[] = [];
-  const gaps = totalSpan / totalGaps;
-  for (let i = 0; i < sorted.length; i++) {
-    const e = sorted[i];
+  return updates;
+}
+
+/**
+ * Pack entities along an axis with a fixed clear gap (mm) between consecutive AABBs.
+ * First entity (min leading edge) stays fixed; others shift.
+ * Positions use min-edge convention. Requires 2+ entities.
+ */
+export function spaceEntitiesWithExactGap(
+  entities: readonly PositionedEntity[],
+  axis: DistributeAxis,
+  gapMm: number,
+): EntityPositionUpdate[] {
+  if (entities.length < 2) return [];
+
+  const gap = Math.max(0, Number.isFinite(gapMm) ? gapMm : 0);
+  const sorted = [...entities].sort((a, b) =>
+    axis === "x" ? a.xMm - b.xMm : a.yMm - b.yMm,
+  );
+
+  const updates: EntityPositionUpdate[] = [];
+  let leading = axis === "x" ? sorted[0]!.xMm : sorted[0]!.yMm;
+
+  for (let i = 0; i < sorted.length; i += 1) {
+    const e = sorted[i]!;
+    const size = axis === "x" ? e.widthMm : e.depthMm;
     if (i === 0) {
-      explicitUpdates.push({ id: e.id, xMm: e.xMm, yMm: e.yMm });
-    } else {
-      const prev = explicitUpdates[i - 1];
-      const prevEdge = axis === "x" ? prev.xMm + sorted[i - 1].widthMm : prev.yMm + sorted[i - 1].depthMm;
-      const newPos = prevEdge + gaps;
-      explicitUpdates.push({
-        id: e.id,
-        xMm: axis === "x" ? newPos : e.xMm,
-        yMm: axis === "y" ? newPos : e.yMm,
-      });
+      updates.push({ id: e.id, xMm: e.xMm, yMm: e.yMm });
+      leading = (axis === "x" ? e.xMm : e.yMm) + size + gap;
+      continue;
     }
+    updates.push({
+      id: e.id,
+      xMm: axis === "x" ? leading : e.xMm,
+      yMm: axis === "y" ? leading : e.yMm,
+    });
+    leading = leading + size + gap;
   }
 
-  return explicitUpdates;
+  return updates;
+}
+
+/** Min-edge ↔ center conversion for furniture that stores position as center. */
+export function minEdgeFromCenter(
+  cxMm: number,
+  cyMm: number,
+  widthMm: number,
+  depthMm: number,
+): { xMm: number; yMm: number } {
+  return {
+    xMm: cxMm - widthMm / 2,
+    yMm: cyMm - depthMm / 2,
+  };
+}
+
+export function centerFromMinEdge(
+  xMm: number,
+  yMm: number,
+  widthMm: number,
+  depthMm: number,
+): { cxMm: number; cyMm: number } {
+  return {
+    cxMm: xMm + widthMm / 2,
+    cyMm: yMm + depthMm / 2,
+  };
 }

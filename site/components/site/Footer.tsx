@@ -8,7 +8,6 @@ import {
   toTelHref,
 } from "@/features/site/data/contact";
 import { SITE_FOOTER_NAV, SITE_SOCIAL_LINKS } from "@/features/site/data/navigation";
-import { PRODUCT_SUITE } from "@/features/site/data/productSuite";
 
 function FacebookIcon() {
   return (
@@ -123,9 +122,6 @@ export function SiteFooter() {
             </Link>
             <Link href="/terms" prefetch={false} className={`site-footer__legal ${footerInteractiveClass}`}>
               Terms
-            </Link>
-            <Link href={PRODUCT_SUITE.admin.routes.landing} prefetch={false} className={`site-footer__legal ${footerInteractiveClass}`}>
-              Admin
             </Link>
           </div>
           <p className="site-footer__legal-copy mt-3">&copy; {currentYear} One&Only. All rights reserved.</p>

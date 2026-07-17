@@ -682,5 +682,5 @@ async function handleCatalogAdvisor(req: NextRequest): Promise<NextResponse | Re
  */
 export const POST = withAuth(
   async (req) => handleCatalogAdvisor(req as NextRequest),
-  { role: "guest", rateLimitScope: "ai-advisor", rateLimit: 5 },
+  { role: "guest", rateLimitScope: "ai-advisor", rateLimit: 5, requireCsrf: true },
 );

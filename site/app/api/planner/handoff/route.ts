@@ -7,8 +7,10 @@
  *   2. Optional Resend email to STAFF_NOTIFY_EMAIL when RESEND_API_KEY is set.
  *
  * Idempotency: client `idempotencyKey` stored in `requirement` as
- * `handoff-key:{userId}:{key}`. Lookup errors fail closed (502, no insert).
- * Replay returns the original reference without a second insert.
+ * `handoff-key:{userId}:{key}`. Lookup also accepts one-time legacy
+ * `handoff-key:{key}` when followup_notes.memberUserId matches (or is absent).
+ * Lookup errors fail closed (502, no insert). Replay returns the original
+ * reference without a second insert.
  *
  * Honest failure: missing admin DB credentials → 501 not_configured.
  */
@@ -28,6 +30,19 @@ import { notifyHandoffStaff } from "@/features/planner/shared/handoff/notifyHand
 function asTrimmedString(value: unknown, max: number): string {
   if (typeof value !== "string") return "";
   return value.trim().slice(0, max);
+}
+
+/** Best-effort owner id from CRM followup_notes JSON (handoff payload). */
+function memberIdFromFollowupNotes(notes: unknown): string | null {
+  if (typeof notes !== "string" || !notes.trim()) return null;
+  try {
+    const parsed: unknown = JSON.parse(notes);
+    if (!parsed || typeof parsed !== "object") return null;
+    const id = (parsed as { memberUserId?: unknown }).memberUserId;
+    return typeof id === "string" && id.trim() ? id.trim() : null;
+  } catch {
+    return null;
+  }
 }
 
 function parseContact(raw: unknown): PlannerHandoffContact | null {
@@ -216,7 +231,10 @@ export const POST = withAuth(
     }
 
     // Idempotent replay — fail closed on lookup error (do not insert blindly).
-    const { data: existing, error: lookupError } = await supabase
+    // Prefer user-scoped key; fall back to pre-cutover `handoff-key:{key}` when
+    // the stored memberUserId matches (or notes lack a member id).
+    const legacyRequirementKey = `${PLANNER_HANDOFF_IDEM_PREFIX}${idempotencyKey}`;
+    const { data: scopedExisting, error: scopedLookupError } = await supabase
       .from("customer_queries")
       .select("id, created_at")
       .eq("source", PLANNER_HANDOFF_SOURCE)
@@ -225,8 +243,8 @@ export const POST = withAuth(
       .limit(1)
       .maybeSingle();
 
-    if (lookupError) {
-      console.error("[handoff] idempotency lookup failed:", lookupError.message);
+    if (scopedLookupError) {
+      console.error("[handoff] idempotency lookup failed:", scopedLookupError.message);
       return Response.json(
         {
           success: false,
@@ -237,6 +255,45 @@ export const POST = withAuth(
         { status: 502 },
       );
     }
+
+    let existing = scopedExisting;
+    if (!existing?.id) {
+      const { data: legacyExisting, error: legacyLookupError } = await supabase
+        .from("customer_queries")
+        .select("id, created_at, followup_notes")
+        .eq("source", PLANNER_HANDOFF_SOURCE)
+        .eq("requirement", legacyRequirementKey)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (legacyLookupError) {
+        console.error("[handoff] legacy idempotency lookup failed:", legacyLookupError.message);
+        return Response.json(
+          {
+            success: false,
+            error: "idempotency_lookup_failed",
+            message:
+              "Unable to verify handoff idempotency right now. Your draft was not submitted; retry shortly.",
+          },
+          { status: 502 },
+        );
+      }
+
+      if (legacyExisting?.id) {
+        const notesOwner = memberIdFromFollowupNotes(
+          (legacyExisting as { followup_notes?: unknown }).followup_notes,
+        );
+        // Replay only when owner is unknown (pre-notes) or matches this member.
+        if (notesOwner === null || notesOwner === memberScope) {
+          existing = {
+            id: legacyExisting.id,
+            created_at: legacyExisting.created_at,
+          };
+        }
+      }
+    }
+
     if (existing?.id) {
       return Response.json({
         success: true,

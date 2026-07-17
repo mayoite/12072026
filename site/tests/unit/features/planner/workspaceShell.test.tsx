@@ -306,8 +306,8 @@ describe("TopBar", () => {
     fireEvent.click(screen.getByRole("menuitemradio", { name: "m" }));
     expect(onDisplayUnitChange).toHaveBeenCalledWith("m");
 
+    // Full chrome: Import is a direct button (not a nested menuitem).
     fireEvent.click(screen.getByRole("button", { name: /Import/i }));
-    fireEvent.click(screen.getByRole("menuitem", { name: /Import from file/i }));
     expect(onImport).toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole("button", { name: /Export/i }));
@@ -460,7 +460,16 @@ describe("PropertiesPanel", () => {
   });
 
   it("shows empty state and wall properties for a selection", () => {
-    const { rerender } = render(<PropertiesPanel selectedEntity={null} />);
+    // PF-21: empty selection collapses properties dock unless underlay calibrate is available.
+    const { container, rerender } = render(<PropertiesPanel selectedEntity={null} />);
+    expect(container).toBeEmptyDOMElement();
+
+    rerender(
+      <PropertiesPanel
+        selectedEntity={null}
+        callbacks={{ onCalibrateUnderlay: vi.fn() }}
+      />,
+    );
     expect(screen.getByText(/No selection/i)).toBeInTheDocument();
 
     rerender(
@@ -571,7 +580,7 @@ describe("WorkspaceShell", () => {
     expect(screen.getByText("Custom status")).toBeInTheDocument();
 
     // Layers: honest title + TopBar toggle (bottom starts collapsed).
-    const layersToggle = screen.getByRole("button", { name: "Toggle layers panel" });
+    const layersToggle = screen.getByRole("button", { name: /Show layers|Hide layers/i });
     expect(layersToggle).toHaveAttribute("aria-pressed", "false");
     fireEvent.click(layersToggle);
     expect(layersToggle).toHaveAttribute("aria-pressed", "true");
@@ -627,10 +636,11 @@ describe("WorkspaceShell", () => {
     const floating = screen.getByRole("region", { name: "Properties panel" });
     expect(floating).toHaveAttribute("data-state", "floating");
     expect(floating).toHaveAttribute("data-panel-id", "right");
-    // Floating PanelContainer style uses the docking height number (px).
-    expect(floating).toHaveStyle({ height: "400px" });
-    expect(floating.style.height).not.toBe("0px");
-    expect(floating.style.height).not.toBe("100%");
+    // Floating PanelContainer uses --pw-panel-height (not style.height).
+    expect(floating).toHaveAttribute("data-state", "floating");
+    expect(floating.style.getPropertyValue("--pw-panel-height")).toBe("400px");
+    expect(floating.style.getPropertyValue("--pw-panel-height")).not.toBe("0px");
+    expect(floating.style.getPropertyValue("--pw-panel-height")).not.toBe("100%");
   });
 });
 

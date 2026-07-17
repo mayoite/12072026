@@ -162,6 +162,61 @@
   box-shadow: var(--prop-focus-ring);
 }
 
+.multiActionBtnWide {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  height: 1.75rem;
+  padding: 0 0.5rem;
+  border: 1px solid var(--prop-panel-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--prop-text-secondary);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.multiActionBtnWide:hover:not(:disabled) {
+  background: var(--prop-surface-soft);
+  border-color: var(--border-hover);
+  color: var(--prop-text);
+}
+
+.multiActionBtnWide:focus-visible {
+  outline: none;
+  box-shadow: var(--prop-focus-ring);
+}
+
+.multiActionBtnWide:disabled,
+.multiActionBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.multiActionInput {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  height: 1.75rem;
+  padding: 0 0.5rem;
+  border: 1px solid var(--prop-panel-border);
+  border-radius: var(--radius-sm);
+  background: var(--prop-surface-page, transparent);
+  color: var(--prop-text-primary);
+  font-size: 0.75rem;
+}
+
+.multiActionInput:focus-visible {
+  outline: none;
+  box-shadow: var(--prop-focus-ring);
+}
+
+.multiActionInput:disabled {
+  opacity: 0.55;
+}
+
 /* ── Header (fixed chrome — never scrolls) ───────────────────────────────── */
 
 .header {

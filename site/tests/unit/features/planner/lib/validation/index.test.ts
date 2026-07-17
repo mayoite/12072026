@@ -4,11 +4,13 @@ import {
   aabbsOverlap,
   detectFurnitureClearance,
   detectFurnitureOutsideRoom,
+  detectFurnitureWallCollisions,
+  detectOpeningClearanceConflicts,
   runFloorValidation,
 } from "@/features/planner/lib/validation";
 
 describe("lib/validation/index barrel", () => {
-  it("re-exports overlap, clearance, boundary, and runFloorValidation", () => {
+  it("re-exports overlap, clearance, boundary, wall, opening, and runFloorValidation", () => {
     expect(
       aabbsOverlap(
         { xMm: 0, yMm: 0, widthMm: 100, depthMm: 100 },
@@ -30,7 +32,8 @@ describe("lib/validation/index barrel", () => {
 
     expect(typeof detectFurnitureClearance).toBe("function");
     expect(typeof detectFurnitureOutsideRoom).toBe("function");
+    expect(typeof detectFurnitureWallCollisions).toBe("function");
+    expect(typeof detectOpeningClearanceConflicts).toBe("function");
     expect(typeof runFloorValidation).toBe("function");
   });
 });
-

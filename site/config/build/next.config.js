@@ -77,6 +77,30 @@ const nextConfig = {
   trailingSlash: true,
   async redirects() {
     return [
+      // Hard 308/301 for crawlers — do not rely on page-level redirect() (soft 200 in dev).
+      { source: "/catalog", destination: "/downloads/", permanent: true },
+      { source: "/catalog/", destination: "/downloads/", permanent: true },
+      { source: "/brochure", destination: "/downloads/", permanent: true },
+      { source: "/brochure/", destination: "/downloads/", permanent: true },
+      { source: "/download-brochure", destination: "/downloads/", permanent: true },
+      { source: "/download-brochure/", destination: "/downloads/", permanent: true },
+      { source: "/news", destination: "/about/", permanent: true },
+      { source: "/news/", destination: "/about/", permanent: true },
+      { source: "/gallery", destination: "/portfolio/", permanent: true },
+      { source: "/gallery/", destination: "/portfolio/", permanent: true },
+      { source: "/social", destination: "/portfolio/", permanent: true },
+      { source: "/social/", destination: "/portfolio/", permanent: true },
+      { source: "/imprint", destination: "/terms/", permanent: true },
+      { source: "/imprint/", destination: "/terms/", permanent: true },
+      { source: "/support-ivr", destination: "/service/", permanent: true },
+      { source: "/support-ivr/", destination: "/service/", permanent: true },
+      { source: "/tracking", destination: "/service/", permanent: true },
+      { source: "/tracking/", destination: "/service/", permanent: true },
+      { source: "/login", destination: "/access/", permanent: true },
+      { source: "/login/", destination: "/access/", permanent: true },
+      // Legacy category alias — hard 308 (avoid soft permanentRedirect shells).
+      { source: "/products/category/:slug", destination: "/products/:slug/", permanent: true },
+      { source: "/products/category/:slug/", destination: "/products/:slug/", permanent: true },
       {
         source: "/results",
         destination: "/dashboard",
@@ -89,7 +113,7 @@ const nextConfig = {
       },
       {
         source: "/workstations/configurator",
-        destination: "/catalog",
+        destination: "/downloads/",
         permanent: true,
       },
       {

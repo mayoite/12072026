@@ -190,7 +190,11 @@ describe("POST /api/admin/svg-editor (04-ADMIN-06 + tests)", () => {
         slug: validDescriptor.slug,
         generatedAt: validDescriptor.generatedAt,
       }),
-      expect.objectContaining({ dbRepository: expect.anything() }),
+      // Dual-write repo is undefined without PRODUCTS_DATABASE_URL (disk authority).
+      expect.objectContaining({
+        actorId: expect.any(String),
+        dbRepository: undefined,
+      }),
     );
     expect(body.thumb).toMatch(/site-block-thumbs|cdn/);
   });

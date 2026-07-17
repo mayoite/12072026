@@ -71,6 +71,7 @@ describe('proxy.ts', () => {
 
     it('should allow /planner/canvas', () => {
       expect(isPlannerGuestAllowedPath('/planner/canvas')).toBe(true);
+      expect(isProtectedPath('/planner/canvas')).toBe(false);
     });
 
     it('should allow /planner', () => {

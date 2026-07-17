@@ -15,7 +15,7 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 
 **Live host:** `editor/OOPlannerWorkspace.tsx` wires canvas, catalog, export, AI, validation. Document kernel lives at planner root (`model/`, `store/`, `lib/`, `persistence/`, `catalog/`, `shared/`). Parallel trees (`catalog-api/`, `cloud-store/`) still serve APIs, portal, and legacy paths.
 
-**Execution status (mirrors `FINISH-PLAN.md`, 2026-07-17):** P0 PARTIAL · P1 PASS · P2–P9 PARTIAL · P10 PARTIAL (handoff delivery) · P11 PARTIAL (no full scene GLB **export**; modular GLB **storage** when configured) · P12 PARTIAL (bridge-only AI apply) · P13 PARTIAL (conflict dialog) · P14–P15 PARTIAL · P16–P17 OPEN.
+**Execution status (mirrors `FINISH-PLAN.md`, 2026-07-17):** P0 PARTIAL · P1 PASS · P2–P9 PARTIAL · P10 PARTIAL (handoff delivery) · P11 PARTIAL (no scene GLB menu claim / no full scene export; modular GLB **storage** when configured) · P12 PARTIAL (bridge-only AI apply) · P13 PARTIAL (conflict dialog) · P14–P15 PARTIAL · P16–P17 OPEN.
 
 ---
 
@@ -29,7 +29,7 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 | Onboarding coach | `onboarding/OnboardingCoach.tsx` | Browser proof open |
 | Guest permissions | `model/plannerPermissions.ts`, `lib/commands/plannerAccessContext.ts` | — |
 | Session / errors | `ui/PlannerSessionDialog.tsx`, `editor/PlannerErrorBoundary.tsx` | — |
-| Project document (mm) | `model/` (`types.ts`, `units.ts`, `actions/`, `operations/`) | P2 PASS: mm canonical, display units (mm/cm/m/in/ft-in), linear/angular/area/quantity precision via `PLANNER_PRECISION`, full calculation precision preserved during display rounding. Remaining: wall centreline/thickness/start/end/joins contract (FINISH-PLAN P2) |
+| Project document (mm) | `model/` (`types.ts`, `units.ts`, `actions/`, `operations/`) | P2 PARTIAL: mm canonical, display units (mm/cm/m/in/ft-in), linear/angular/area/quantity precision via `PLANNER_PRECISION`. Wall centreline/joins in `wallContract.ts`. Remaining: fail-visibly on unsupported versions; preserve unknown safe data when schema permits |
 | Conversion events | `conversionContract.ts`, `OOPlannerWorkspace` | `BOQ_GENERATED`, `HANDOFF_INTENT` / `SUCCESS` / `FAILURE` emit from Review export and Send to Oando. `PROJECT_START` / `FIRST_PLACEMENT` still open |
 | Primary BOQ | `shared/export/projectFurnitureBoq.ts` | Live Review/export/handoff path. Legacy `workstationBoqV0` specialty export remains; `shared/boq/buildBoq` unused by live host |
 | Branded PDF BOQ library | `shared/export/brandedPdfExport.ts`, `furnitureBoqBridge.ts` | Wired from Review “Download branded BOQ PDF”; demo-list pricing labeled |
@@ -44,7 +44,7 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 | Shell | `ModularPlannerShell`, `LayersPanel`, `TopBar` | Canvas-first Dockview; Layers from TopBar shows customer categories only (walls/doors/windows/furniture/rooms); 2D layer gates doors/windows |
 | Tools | `editor/canvasTool.ts`, `CanvasToolRail.tsx` | Room (exact panel), wall, opening, dimension live; text deferred |
 | 2D canvas | `canvas/PlannerFabricStage.tsx`, `canvas/installPlannerFabricExtensions.ts`, `lib/geometry/` | Fabric `AligningGuidelines` for furniture edge/center. Rooms paint as polygons; durable annotations paint as offset dim lines. Wall snaps in `lib/geometry/snapping.ts` |
-| Walls / openings | `model/wallContract.ts`, `model/actions/walls.ts`, `model/actions/openings.ts`, `lib/geometry/wallGraph.ts`, `lib/geometry/roomOutline.ts`, `lib/geometry/dimensions.ts`, `lib/geometry/orthogonal.ts`, `lib/geometry/snapping.ts`, `lib/geometry/openingPlacement.ts`, `canvas/PlannerFabricStage.tsx`, `canvas/wallSnapMarker.ts`, `editor/ExactRoomPanel.tsx`, `editor/PropertiesPanel.tsx` | P2 PASS centreline/joins. P4: exact room outline + auto wall/overall dims; sticky ortho OR Shift; dimension two-click tool; join-aware `movePlannerWallEndpointConnected` (unit). Remaining: wall grips UI, opening drag reposition, browser proof |
+| Walls / openings | `model/wallContract.ts`, `model/actions/walls.ts`, `model/actions/openings.ts`, `lib/geometry/wallGraph.ts`, `lib/geometry/roomOutline.ts`, `lib/geometry/dimensions.ts`, `lib/geometry/orthogonal.ts`, `lib/geometry/snapping.ts`, `lib/geometry/openingPlacement.ts`, `canvas/PlannerFabricStage.tsx`, `canvas/wallSnapMarker.ts`, `editor/ExactRoomPanel.tsx`, `editor/PropertiesPanel.tsx` | P2 PASS centreline/joins. P4 OPEN residual: exact room outline + auto wall/overall dims unit-landed (`roomOutline`/`dimensions`/ExactRoomPanel); sticky ortho OR Shift; dimension two-click tool; join-aware endpoint move (unit). Remaining: wall grips UI, opening drag reposition, browser proof (PF-05/PF-06) |
 | Edit / undo | `PropertiesPanel`, `alignDistribute`, `gridLayout` | Align/distribute + multi-select array (row / grid / 5-col); group/ungroup still absent; wall orthogonal sticky lock on tool rail |
 | Catalog UI | `editor/InventoryPanel.tsx`, `catalog/catalogSearch.ts`, `catalog/catalogBuyerVisibility.ts` | UI-CAT-* browser proof open |
 | Workstation config | `editor/WorkstationConfiguratorPanel.tsx`, `catalog/workstationConfiguratorV0.ts` | — |
@@ -79,7 +79,7 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 
 | Feature | Code | Gap |
 |---|---|---|
-| Export menu | `TopBar`, `OOPlannerWorkspace` | Honest export toasts; empty floors blocked; **scene GLB download still unsupported** (interchange = JSON/DXF). Generated modular GLB **upload** path live when Supabase configured |
+| Export menu | `TopBar`, `OOPlannerWorkspace` | Honest export toasts; empty floors blocked; **no GLB menu item** (preflight returns unsupported if forced). Interchange = JSON/DXF. Generated modular GLB **upload** path live when Supabase configured. Full scene GLB download still not implemented |
 | Floor plan exports | `shared/export/exportUtils.ts`, `shared/export/exportPreflight.ts` | JSON, SVG, PNG, PDF, DXF exist; success is boolean-checked |
 | BOQ exports | `shared/export/projectFurnitureBoq.ts`, `exportPlannerFurnitureBoqToCsv` | Unify parallel BOQ builders |
 | Export preflight | `shared/export/exportPreflight.ts` | Blocks empty geometry; honest GLB unsupported |

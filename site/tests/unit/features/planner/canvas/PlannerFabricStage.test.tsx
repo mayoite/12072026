@@ -38,6 +38,9 @@ const { CanvasCtor, disposeMock } = vi.hoisted(() => {
 
 vi.mock("fabric", () => ({
   Canvas: CanvasCtor,
+  Circle: vi.fn(function MockCircle(this: Record<string, unknown>, ...args: unknown[]) {
+    this.args = args;
+  }),
   Line: vi.fn(function MockLine(this: Record<string, unknown>, ...args: unknown[]) {
     this.args = args;
   }),

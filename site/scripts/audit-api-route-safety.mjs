@@ -38,9 +38,6 @@ const CSRF_OPTIONAL = new Set([
   "nav-search",
   "filter",
   "generate-alt",
-  "ai-assist",
-  "ai-advisor",
-  "ai/advisor",
   "configurator/smart-wizard",
   "audit",
 ]);

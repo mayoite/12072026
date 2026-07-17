@@ -6,7 +6,7 @@
  * `useAiAdvisor` targets `POST /api/planner/ai-advisor`. Prefer the canonical
  * planner advisor.
  *
- * Auth: guest (anonymous allowed). Rate-limited per IP.
+ * Auth: guest (anonymous allowed). CSRF required. Rate-limited per IP.
  *
  * Request body: {@link LegacyAdvisorRequestSchema} —
  *   `{ messages: [{role, content}], plannerType: "oando"|"buddy" }`.
@@ -62,5 +62,5 @@ async function handleLegacyAdvisor(req: NextRequest): Promise<NextResponse> {
 /** @deprecated Mock AI advisor. Prefer `POST /api/planner/ai-advisor`. */
 export const POST = withAuth(
   async (req) => handleLegacyAdvisor(req as NextRequest),
-  { role: "guest", rateLimitScope: "ai-advisor", rateLimit: 10 },
+  { role: "guest", rateLimitScope: "ai-advisor", rateLimit: 10, requireCsrf: true },
 );

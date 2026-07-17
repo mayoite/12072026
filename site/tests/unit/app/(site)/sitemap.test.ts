@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import sitemap from '@/app/(site)/sitemap';
+import sitemap from '@/app/sitemap';
 import * as getProducts from '@/lib/catalog/site/getProducts';
 import * as categories from '@/lib/catalog/site/categories';
 import {

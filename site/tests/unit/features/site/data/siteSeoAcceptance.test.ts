@@ -4,8 +4,8 @@
  */
 
 import { describe, expect, it } from "vitest";
-import robots from "@/app/(site)/robots";
-import sitemap from "@/app/(site)/sitemap";
+import robots from "@/app/robots";
+import sitemap from "@/app/sitemap";
 import {
   PLANNER_MARKETING_SITEMAP_PATHS,
   PUBLIC_INDEXABLE_STATIC_PATHS,

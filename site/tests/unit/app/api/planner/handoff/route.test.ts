@@ -180,6 +180,65 @@ describe("app/api/planner/handoff/route.ts", () => {
     expect(insertMock).not.toHaveBeenCalled();
   });
 
+  it("replays legacy handoff-key:{key} when scoped miss and owner matches", async () => {
+    // First maybeSingle = scoped miss; second = legacy hit.
+    maybeSingleMock
+      .mockResolvedValueOnce({ data: null, error: null })
+      .mockResolvedValueOnce({
+        data: {
+          id: "ref-legacy",
+          created_at: "2026-07-15T00:00:00.000Z",
+          followup_notes: JSON.stringify({ memberUserId: "user-1" }),
+        },
+        error: null,
+      });
+    const res = await POST(
+      new NextRequest("http://localhost/api/planner/handoff", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(validBody()),
+      }),
+    );
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.referenceId).toBe("ref-legacy");
+    expect(body.idempotentReplay).toBe(true);
+    expect(insertMock).not.toHaveBeenCalled();
+    expect(eqRequirementMock).toHaveBeenCalledWith(
+      "requirement",
+      "handoff-key:user-1:test-key-abcdef12",
+    );
+    expect(eqRequirementMock).toHaveBeenCalledWith(
+      "requirement",
+      "handoff-key:test-key-abcdef12",
+    );
+  });
+
+  it("does not replay legacy key owned by another member", async () => {
+    maybeSingleMock
+      .mockResolvedValueOnce({ data: null, error: null })
+      .mockResolvedValueOnce({
+        data: {
+          id: "ref-other",
+          created_at: "2026-07-15T00:00:00.000Z",
+          followup_notes: JSON.stringify({ memberUserId: "other-user" }),
+        },
+        error: null,
+      });
+    const res = await POST(
+      new NextRequest("http://localhost/api/planner/handoff", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(validBody()),
+      }),
+    );
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.idempotentReplay).toBe(false);
+    expect(body.referenceId).toBe("ref-1");
+    expect(insertMock).toHaveBeenCalled();
+  });
+
   it("fail-closes on idempotency lookup error without inserting", async () => {
     maybeSingleMock.mockResolvedValue({
       data: null,

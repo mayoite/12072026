@@ -45,16 +45,6 @@ vi.mock('@/features/site/data/navigation', () => ({
   ],
 }));
 
-// Mock productSuite route
-vi.mock('@/features/site/data/productSuite', () => ({
-  PRODUCT_SUITE: {
-    admin: {
-      routes: {
-        landing: '/admin-route',
-      },
-    },
-  },
-}));
 
 describe('SiteFooter Component', () => {
   it('renders logo, address details, and custom lists correctly', () => {
@@ -92,7 +82,7 @@ describe('SiteFooter Component', () => {
     expect(screen.getByRole('link', { name: 'Terms' })).toHaveAttribute('href', '/terms');
     expect(screen.getByRole('link', { name: 'Terms' })).toHaveAttribute('href', '/terms');
     expect(screen.queryByRole('link', { name: 'Imprint' })).not.toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Admin' })).toHaveAttribute('href', '/admin-route');
+    expect(screen.queryByRole('link', { name: 'Admin' })).not.toBeInTheDocument();
 
     // Current Year copy
     const currentYear = new Date().getFullYear();

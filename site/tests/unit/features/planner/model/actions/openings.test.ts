@@ -3,6 +3,7 @@ import { addPlannerWall } from "@/features/planner/model/actions/walls";
 import {
   addPlannerDoor,
   addPlannerWindow,
+  repositionPlannerOpening,
   updatePlannerOpening,
 } from "@/features/planner/model/actions/openings";
 import { createPlannerProject } from "@/features/planner/model/project";
@@ -146,5 +147,68 @@ describe("openings actions", () => {
     );
     expect(p.floors[0]!.doors).toHaveLength(1);
     expect(p.floors[0]!.windows).toHaveLength(1);
+  });
+
+  it("repositions a door along its host wall from a world point", () => {
+    let p = createPlannerProject({ idFactory: ids("floor", "project") });
+    p = addPlannerWall(
+      p,
+      { start: { x: 0, y: 0 }, end: { x: 4000, y: 0 } },
+      ids("wall-1"),
+    );
+    const wallId = p.floors[0]!.walls[0]!.id;
+    p = addPlannerDoor(
+      p,
+      {
+        wallId,
+        position: 0.25,
+        width: 900,
+        height: 2100,
+        type: "single",
+        swingDirection: "left",
+        flipSide: false,
+      },
+      ids("door-1"),
+    );
+    p = repositionPlannerOpening(p, "doors", "door-1", { x: 2800, y: 30 });
+    expect(p.floors[0]!.doors[0]!.position).toBeCloseTo(2800 / 4000, 5);
+  });
+
+  it("rejects reposition that would overlap another opening", () => {
+    let p = createPlannerProject({ idFactory: ids("floor", "project") });
+    p = addPlannerWall(
+      p,
+      { start: { x: 0, y: 0 }, end: { x: 4000, y: 0 } },
+      ids("wall-1"),
+    );
+    const wallId = p.floors[0]!.walls[0]!.id;
+    p = addPlannerDoor(
+      p,
+      {
+        wallId,
+        position: 0.25,
+        width: 900,
+        height: 2100,
+        type: "single",
+        swingDirection: "left",
+        flipSide: false,
+      },
+      ids("door-1"),
+    );
+    p = addPlannerWindow(
+      p,
+      {
+        wallId,
+        position: 0.7,
+        width: 1200,
+        height: 1200,
+        sillHeight: 900,
+        type: "fixed",
+      },
+      ids("window-1"),
+    );
+    expect(() =>
+      repositionPlannerOpening(p, "doors", "door-1", { x: 2800, y: 0 }),
+    ).toThrow(/overlap/i);
   });
 });

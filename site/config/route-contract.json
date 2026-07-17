@@ -38,12 +38,15 @@
     "/dashboard",
     "/portal",
     "/admin",
-    "/planner/canvas",
-    "/oando-planner/canvas",
-    "/oando-planner/shared",
-    "/buddy-planner/editor",
-    "/buddy-planner/t/"
+    "/crm",
+    "/ops"
   ],
+  "pageMemberGates": {
+    "_note": "Not edge-protected by proxy.ts. Page/layout enforces session (or guest cookie flow).",
+    "canvas": "/planner/canvas",
+    "gate": "getOptionalPlannerUser redirects to /planner/guest/ when no user"
+  },
+
   "_phase04_admin_routes": {
     "_status": "phase-04 admin portal svg-editor routes",
     "_auth": "withAuth(['admin']) — Phase 04 widens; pre-Phase 07 route-level reuse `site/lib/api/withAuth.ts`",
@@ -126,7 +129,8 @@
     "/planner/fabric/** and /planner/open3d/** 301 to /planner/canvas (not live entrypoints).",
     "Planner guest access: /planner/guest plus planner_guest_pass cookie on allowed paths.",
     "Canvas routes are noindex; landing and help are indexable.",
-    "Live workspace host is features/planner workspace stack (not a separate fabric package path)."
+    "Live workspace host is features/planner workspace stack (not a separate fabric package path).",
+    "Canvas is page-gated (session user), not proxy-protected; proxy only allows guest cookie on /planner/canvas."
   ],
   "support": {
     "ivr": "/support-ivr"

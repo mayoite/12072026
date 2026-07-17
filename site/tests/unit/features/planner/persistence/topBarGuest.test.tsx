@@ -59,10 +59,12 @@ describe("TopBar guest persistence gate", () => {
         accessContext="authenticated"
         projectName="Member plan"
         viewMode="2d"
+        onImport={() => undefined}
       />,
     );
 
-    expect(screen.getByRole("button", { name: /^Import/ })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /^Export/ })).toBeInTheDocument();
+    // Import renders only when onImport is wired (no orphan control).
+    expect(screen.getByRole("button", { name: /Import/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Export/i })).toBeInTheDocument();
   });
 });

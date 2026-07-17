@@ -6,7 +6,7 @@
  * callers remain; kept as a thin shim for backwards compatibility. Prefer the
  * canonical planner advisor for new integrations.
  *
- * Auth: guest (anonymous allowed). Rate-limited per IP.
+ * Auth: guest (anonymous allowed). CSRF required. Rate-limited per IP.
  *
  * Request body: {@link AiAssistRequestSchema} —
  *   `{ messages: [{role, content}] }`.
@@ -76,5 +76,5 @@ async function handleAiAssist(req: NextRequest): Promise<NextResponse> {
 /** @deprecated Generic chat proxy. Prefer `POST /api/planner/ai-advisor`. */
 export const POST = withAuth(
   async (req) => handleAiAssist(req as NextRequest),
-  { role: "guest", rateLimitScope: "ai-assist", rateLimit: 15 },
+  { role: "guest", rateLimitScope: "ai-assist", rateLimit: 15, requireCsrf: true },
 );

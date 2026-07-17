@@ -24,6 +24,47 @@ describe("PropertiesPanel", () => {
     ).toBeInTheDocument();
   });
 
+  it("starts two-point underlay calibrate with known distance", () => {
+    const onStartTwoPointCalibrate = vi.fn();
+    render(
+      <PropertiesPanel
+        selectedEntity={null}
+        displayUnit="mm"
+        callbacks={{
+          onCalibrateUnderlay: vi.fn(),
+          onStartTwoPointCalibrate,
+        }}
+      />,
+    );
+    const known = screen.getByLabelText(/known underlay segment length/i);
+    fireEvent.change(known, { target: { value: "3500" } });
+    fireEvent.click(
+      screen.getByRole("button", { name: /start two-point underlay calibration/i }),
+    );
+    expect(onStartTwoPointCalibrate).toHaveBeenCalledWith(3500);
+  });
+
+  it("cancels an active two-point calibrate session", () => {
+    const onCancelTwoPointCalibrate = vi.fn();
+    render(
+      <PropertiesPanel
+        selectedEntity={null}
+        displayUnit="mm"
+        underlayCalibratePhase="pick-a"
+        callbacks={{
+          onCalibrateUnderlay: vi.fn(),
+          onStartTwoPointCalibrate: vi.fn(),
+          onCancelTwoPointCalibrate,
+        }}
+      />,
+    );
+    expect(screen.getByText(/first reference point/i)).toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole("button", { name: /cancel two-point underlay calibration/i }),
+    );
+    expect(onCancelTwoPointCalibrate).toHaveBeenCalled();
+  });
+
   it("edits opening position as an exact host-wall offset", () => {
     const onUpdateEntity = vi.fn();
     render(

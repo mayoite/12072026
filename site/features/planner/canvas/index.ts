@@ -51,3 +51,14 @@ export {
   shouldCommitWallSegment,
   wallSegmentLengthMm,
 } from "./wallDrawGeometry";
+
+export {
+  WALL_GRIP_RADIUS_PX,
+  projectPointFromGripScreen,
+  readWallGripMeta,
+  resolveWallForEndpointGrips,
+  wallEndpointGripScreens,
+  writeWallGripMeta,
+  type WallGripEndpoint,
+  type WallGripMeta,
+} from "./wallEndpointGrips";

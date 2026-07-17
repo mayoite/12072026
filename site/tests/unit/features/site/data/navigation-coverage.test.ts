@@ -105,7 +105,7 @@ describe("SITE_NAV_LINKS", () => {
       "Trusted",
       "Sustainability",
       "Portal",
-      "Login",
+      "Sign in",
     ]);
     expect(
       SITE_HEADER_PRIMARY_LINKS.length + SITE_HEADER_MORE_LINKS.length,

@@ -74,7 +74,7 @@ Plan: `PHASES-01-02.md` (Phase 1)
 | Planner-style export menu | `AdminSvgEditorTopBar` RAC Export (SVG / descriptor JSON / Open Planner) | Aligns chrome with Planner TopBar Export pattern |
 | Undo / rollback / lock | `descriptorLock.ts`, `rollbackDescriptorVersion.ts`, `staleDraftPublishGate.ts` | **Implemented** |
 | Bulk JSON import | `AdminSvgBulkImportPanel.tsx`, `bulkImportBlockDescriptors.ts` | **Implemented** (advanced path) |
-| AI SVG generate | `app/api/admin/svg-editor/ai-generate/route.ts` | **Implemented** |
+| AI SVG generate | *(no route.ts; empty dir removed 2026-07-17)* | **Not implemented** |
 | 3D previews | `GlbExtruderPreview.tsx`, `ModelViewerPreview.tsx` | Partial |
 | `ADM-SVG-01`…`17`, shell, form, pub, a11y | Test sources in `tests/unit/features/admin/svg-editor/` | Not run in this repair |
 

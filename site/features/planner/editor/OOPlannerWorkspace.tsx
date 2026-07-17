@@ -43,7 +43,14 @@ import {
   setBackgroundImage,
   updateBackgroundImage,
 } from "@/features/planner/model/operations/pureActions";
-import { defaultUnderlayMmPerPixel } from "@/features/planner/lib/underlayCalibrate";
+import {
+  advanceUnderlayCalibratePick,
+  calibrateMmPerPixelFromImageWidth,
+  calibrateMmPerPixelFromPlanSegment,
+  defaultUnderlayMmPerPixel,
+  resolveUnderlayMmPerPixel,
+  type UnderlayCalibratePickSession,
+} from "@/features/planner/lib/underlayCalibrate";
 import { layoutGridPositions } from "@/features/planner/lib/geometry/gridLayout";
 import {
   resolveConflict,
@@ -55,7 +62,7 @@ import {
   type SyncConflictDetails,
 } from "./PlannerSyncConflictDialog";
 import { createPlannerProject } from "@/features/planner/model/project";
-import { addPlannerWall } from "@/features/planner/model/actions/walls";
+import { addPlannerWall, movePlannerWallEndpointConnected } from "@/features/planner/model/actions/walls";
 import {
   addPlannerDoor,
   addPlannerWindow,
@@ -157,7 +164,14 @@ import {
 } from "./workspaceStatusLabels";
 import { summarizeFloorMetrics } from "./workspacePlanMetrics";
 import { useValidation } from "./useValidation";
-import { alignEntities, distributeEntities, type PositionedEntity } from "@/features/planner/lib/geometry/alignDistribute";
+import {
+  alignEntities,
+  distributeEntities,
+  spaceEntitiesWithExactGap,
+  minEdgeFromCenter,
+  centerFromMinEdge,
+  type PositionedEntity,
+} from "@/features/planner/lib/geometry/alignDistribute";
 import type { PlannerDisplayUnit, PlannerPoint } from "@/features/planner/model/types";
 import { formatLengthDisplay } from "@/features/planner/model/units";
 import type { PlannerAccessContext } from "@/features/planner/lib/commands/plannerAccessContext";
@@ -278,6 +292,8 @@ export function OOPlannerWorkspace({
     return () => cancelAnimationFrame(frame);
   }, [viewMode]);
   const [activeTool, setActiveTool] = useState<PlannerTool>("select");
+  const [underlayCalibrateSession, setUnderlayCalibrateSession] =
+    useState<UnderlayCalibratePickSession | null>(null);
   const [displayUnit, setDisplayUnit] = useState<PlannerDisplayUnit>(
     DEFAULT_PLANNER_WORKSPACE_PREFERENCES.units,
   );
@@ -394,6 +410,10 @@ export function OOPlannerWorkspace({
     if (selection.type === "none" || selection.ids.length <= 1) return null;
     return { type: selection.type, count: selection.ids.length };
   }, [workspaceSelection]);
+
+  const hasUnderlay = Boolean(
+    workspaceCanvas.activeFloor.backgroundImage?.dataUrl,
+  );
 
   const selectedEntity = useMemo(() => {
     if (workspaceCanvas.selection.ids.length !== 1) return null;
@@ -575,12 +595,19 @@ export function OOPlannerWorkspace({
         setWorkspaceMessage("No underlay to calibrate. Accept a sketch first.");
         return;
       }
-      // Single-axis calibrate: set mmPerPixel so image width maps to knownLengthMm.
-      const mmPerPixel = knownLengthMm / Math.max(1, bg.imageWidthPx);
+      const mmPerPixel = calibrateMmPerPixelFromImageWidth(
+        bg.imageWidthPx,
+        knownLengthMm,
+      );
+      if (mmPerPixel === null) {
+        setWorkspaceMessage("Could not calibrate underlay.");
+        return;
+      }
       try {
         workspaceCanvas.updateProject((project) =>
           updateBackgroundImage(project, { mmPerPixel, scale: 1 }).project,
         );
+        setUnderlayCalibrateSession(null);
         setWorkspaceMessage(
           `Underlay calibrated: image width = ${knownLengthMm} mm.`,
         );
@@ -589,6 +616,83 @@ export function OOPlannerWorkspace({
       }
     },
     [workspaceCanvas],
+  );
+
+  const handleStartTwoPointCalibrate = useCallback(
+    (knownLengthMm: number) => {
+      const bg = workspaceCanvas.activeFloor.backgroundImage;
+      if (!bg?.dataUrl) {
+        setWorkspaceMessage("No underlay to calibrate. Accept a sketch first.");
+        return;
+      }
+      if (!Number.isFinite(knownLengthMm) || knownLengthMm <= 0) {
+        setWorkspaceMessage("Enter a positive known distance before picking points.");
+        return;
+      }
+      setUnderlayCalibrateSession({ phase: "pick-a", knownLengthMm });
+      setActiveTool("select");
+      armedToolRef.current = "select";
+      setWorkspaceMessage(
+        `Underlay 2-point calibrate: click first point (known ${knownLengthMm} mm).`,
+      );
+    },
+    [workspaceCanvas],
+  );
+
+  const handleCancelTwoPointCalibrate = useCallback(() => {
+    setUnderlayCalibrateSession(null);
+    setWorkspaceMessage("Underlay 2-point calibrate cancelled.");
+  }, []);
+
+  const handleUnderlayCalibratePoint = useCallback(
+    (point: { x: number; y: number }) => {
+      if (!underlayCalibrateSession) return;
+      const next = advanceUnderlayCalibratePick(underlayCalibrateSession, point);
+      if (next.kind === "need-second") {
+        setUnderlayCalibrateSession(next.session);
+        setWorkspaceMessage(
+          `Underlay 2-point calibrate: click second point (known ${next.session.knownLengthMm} mm).`,
+        );
+        return;
+      }
+
+      const bg = workspaceCanvas.activeFloor.backgroundImage;
+      if (!bg?.dataUrl) {
+        setUnderlayCalibrateSession(null);
+        setWorkspaceMessage("No underlay to calibrate.");
+        return;
+      }
+      const imageWidthPx = Math.max(1, bg.imageWidthPx ?? 1);
+      const currentMmPerPixel = resolveUnderlayMmPerPixel(imageWidthPx, bg.mmPerPixel);
+      const mmPerPixel = calibrateMmPerPixelFromPlanSegment({
+        pointA: next.pointA,
+        pointB: next.pointB,
+        knownLengthMm: next.knownLengthMm,
+        underlay: {
+          position: bg.position,
+          mmPerPixel: currentMmPerPixel,
+          scale: bg.scale,
+        },
+      });
+      setUnderlayCalibrateSession(null);
+      if (mmPerPixel === null) {
+        setWorkspaceMessage(
+          "Could not calibrate underlay — pick two distinct points on the reference.",
+        );
+        return;
+      }
+      try {
+        workspaceCanvas.updateProject((project) =>
+          updateBackgroundImage(project, { mmPerPixel, scale: 1 }).project,
+        );
+        setWorkspaceMessage(
+          `Underlay calibrated from 2 points: segment = ${next.knownLengthMm} mm.`,
+        );
+      } catch {
+        setWorkspaceMessage("Could not calibrate underlay.");
+      }
+    },
+    [underlayCalibrateSession, workspaceCanvas],
   );
 
   const handleStartTemplate = useCallback(() => {
@@ -711,6 +815,25 @@ export function OOPlannerWorkspace({
     [workspaceCanvas],
   );
 
+  const handleWallEndpointMoved = useCallback(
+    (
+      wallId: string,
+      endpoint: "start" | "end",
+      position: PlannerPoint,
+    ) => {
+      workspaceCanvas.updateProject((project) =>
+        movePlannerWallEndpointConnected(
+          project,
+          wallId,
+          endpoint,
+          position,
+          newEntityId,
+        ),
+      );
+    },
+    [workspaceCanvas],
+  );
+
   const handleDimensionPlaced = useCallback(
     (start: PlannerPoint, end: PlannerPoint) => {
       try {
@@ -778,6 +901,27 @@ export function OOPlannerWorkspace({
   const handleOpeningRejected = useCallback((reason: OpeningPlacementRejectReason) => {
     setWorkspaceMessage(openingPlacementRejectMessage(reason));
   }, []);
+
+  const handleOpeningRepositioned = useCallback(
+    (collection: "doors" | "windows", id: string, position: number) => {
+      try {
+        const next = updatePlannerOpening(
+          workspaceCanvas.project,
+          collection,
+          id,
+          { position },
+        );
+        workspaceCanvas.updateProject(() => next);
+      } catch (error) {
+        setWorkspaceMessage(
+          error instanceof Error
+            ? error.message
+            : "Opening could not be moved.",
+        );
+      }
+    },
+    [workspaceCanvas],
+  );
 
   const handleFurnitureModified = useCallback(
     (update: { entityId: string; position: PlannerPoint; rotation: number }) => {
@@ -884,31 +1028,38 @@ export function OOPlannerWorkspace({
     [workspaceCanvas],
   );
 
-  const handleAlignEntities = useCallback(
-    (axis: "x" | "y", anchor: "min" | "center" | "max") => {
-      const { selection } = workspaceCanvas;
-      if (selection.type === "none" || selection.ids.length < 2) return;
-      const entities: PositionedEntity[] = [];
-      for (const id of selection.ids) {
-        const floor = workspaceCanvas.activeFloor;
-        const item = floor.furniture.find((f) => f.id === id);
-        if (item) {
-          entities.push({
-            id: item.id,
-            xMm: item.position.x,
-            yMm: item.position.y,
-            widthMm: item.width ?? 600,
-            depthMm: item.depth ?? 600,
-          });
-        }
-      }
-      if (entities.length < 2) return;
-      const updates = alignEntities(entities, axis, anchor);
+  const collectSelectedFurnitureMinEdge = useCallback((): PositionedEntity[] => {
+    const { selection } = workspaceCanvas;
+    const floor = workspaceCanvas.activeFloor;
+    const entities: PositionedEntity[] = [];
+    for (const id of selection.ids) {
+      const item = floor.furniture.find((f) => f.id === id);
+      if (!item) continue;
+      const widthMm = item.width ?? 600;
+      const depthMm = item.depth ?? 600;
+      const min = minEdgeFromCenter(item.position.x, item.position.y, widthMm, depthMm);
+      entities.push({
+        id: item.id,
+        xMm: min.xMm,
+        yMm: min.yMm,
+        widthMm,
+        depthMm,
+      });
+    }
+    return entities;
+  }, [workspaceCanvas]);
+
+  const applyFurnitureMinEdgeUpdates = useCallback(
+    (entities: readonly PositionedEntity[], updates: readonly { id: string; xMm: number; yMm: number }[]) => {
+      const sizeById = new Map(entities.map((e) => [e.id, e]));
       workspaceCanvas.updateProject((project) => {
         let p = project;
         for (const u of updates) {
+          const ent = sizeById.get(u.id);
+          if (!ent) continue;
+          const center = centerFromMinEdge(u.xMm, u.yMm, ent.widthMm, ent.depthMm);
           p = updateEntityInProject(p, "furniture", u.id, {
-            position: { x: u.xMm, y: u.yMm },
+            position: { x: center.cxMm, y: center.cyMm },
           });
         }
         return p;
@@ -917,37 +1068,43 @@ export function OOPlannerWorkspace({
     [workspaceCanvas],
   );
 
+  const handleAlignEntities = useCallback(
+    (axis: "x" | "y", anchor: "min" | "center" | "max") => {
+      const { selection } = workspaceCanvas;
+      if (selection.type === "none" || selection.ids.length < 2) return;
+      const entities = collectSelectedFurnitureMinEdge();
+      if (entities.length < 2) return;
+      const updates = alignEntities(entities, axis, anchor);
+      applyFurnitureMinEdgeUpdates(entities, updates);
+    },
+    [applyFurnitureMinEdgeUpdates, collectSelectedFurnitureMinEdge, workspaceCanvas],
+  );
+
   const handleDistributeEntities = useCallback(
     (axis: "x" | "y") => {
       const { selection } = workspaceCanvas;
       if (selection.type === "none" || selection.ids.length < 3) return;
-      const entities: PositionedEntity[] = [];
-      for (const id of selection.ids) {
-        const floor = workspaceCanvas.activeFloor;
-        const item = floor.furniture.find((f) => f.id === id);
-        if (item) {
-          entities.push({
-            id: item.id,
-            xMm: item.position.x,
-            yMm: item.position.y,
-            widthMm: item.width ?? 600,
-            depthMm: item.depth ?? 600,
-          });
-        }
-      }
+      const entities = collectSelectedFurnitureMinEdge();
       if (entities.length < 3) return;
       const updates = distributeEntities(entities, axis);
-      workspaceCanvas.updateProject((project) => {
-        let p = project;
-        for (const u of updates) {
-          p = updateEntityInProject(p, "furniture", u.id, {
-            position: { x: u.xMm, y: u.yMm },
-          });
-        }
-        return p;
-      });
+      applyFurnitureMinEdgeUpdates(entities, updates);
     },
-    [workspaceCanvas],
+    [applyFurnitureMinEdgeUpdates, collectSelectedFurnitureMinEdge, workspaceCanvas],
+  );
+
+  const handleSpaceEntities = useCallback(
+    (axis: "x" | "y", gapMm: number) => {
+      const { selection } = workspaceCanvas;
+      if (selection.type !== "furniture" || selection.ids.length < 2) return;
+      const entities = collectSelectedFurnitureMinEdge();
+      if (entities.length < 2) return;
+      const updates = spaceEntitiesWithExactGap(entities, axis, gapMm);
+      applyFurnitureMinEdgeUpdates(entities, updates);
+      setWorkspaceMessage(
+        `Spaced ${entities.length} items · ${axis.toUpperCase()} · ${Math.round(gapMm)} mm gap`,
+      );
+    },
+    [applyFurnitureMinEdgeUpdates, collectSelectedFurnitureMinEdge, workspaceCanvas],
   );
 
   const setTool = useCallback((tool: PlannerTool) => {
@@ -1982,7 +2139,7 @@ export function OOPlannerWorkspace({
         onToolChange={setTool}
         onZoomReset={() => canvasRef.current?.fitToView()}
         showTools={viewMode === "2d"}
-        hasSelection={Boolean(selectedEntity || multiSelection)}
+        hasSelection={Boolean(selectedEntity || multiSelection || hasUnderlay || underlayCalibrateSession)}
         layersFloor={activeFloor ?? null}
         layerVisibility={layerVisibility}
         onLayerVisibilityChange={setLayerVisibility}
@@ -2023,12 +2180,13 @@ export function OOPlannerWorkspace({
           />
         }
         properties={
-          selectedEntity || multiSelection ? (
+          selectedEntity || multiSelection || hasUnderlay || underlayCalibrateSession ? (
             <PropertiesPanel
               selectedEntity={selectedEntity}
               multiSelection={multiSelection}
               displayUnit={displayUnit}
               hostWallLengthMm={selectedHostWallLengthMm}
+              underlayCalibratePhase={underlayCalibrateSession?.phase ?? null}
                 callbacks={{
                   onUpdateEntity: handleUpdateEntity,
                   onDeleteEntity: handleDeleteEntity,
@@ -2037,7 +2195,10 @@ export function OOPlannerWorkspace({
                   onAlignEntities: handleAlignEntities,
                   onDistributeEntities: handleDistributeEntities,
                   onArrayEntities: handleArrayEntities,
+                  onSpaceEntities: handleSpaceEntities,
                   onCalibrateUnderlay: handleCalibrateUnderlay,
+                  onStartTwoPointCalibrate: handleStartTwoPointCalibrate,
+                  onCancelTwoPointCalibrate: handleCancelTwoPointCalibrate,
                   onDeselect: () =>
                     workspaceCanvas.setSelection({ type: "none", ids: [] }),
                 }}
@@ -2138,10 +2299,19 @@ export function OOPlannerWorkspace({
               onPlaceAtPoint={handlePlaceAtPoint}
               onWallDrawn={handleWallDrawn}
               onDimensionPlaced={handleDimensionPlaced}
+              underlayCalibrateActive={Boolean(underlayCalibrateSession)}
+              underlayCalibrateAnchor={
+                underlayCalibrateSession?.phase === "pick-b"
+                  ? underlayCalibrateSession.pointA
+                  : null
+              }
+              onUnderlayCalibratePoint={handleUnderlayCalibratePoint}
               onOpeningPlaced={handleOpeningPlaced}
               onOpeningRejected={handleOpeningRejected}
+              onOpeningRepositioned={handleOpeningRepositioned}
               onSelectionChange={handleCanvasSelection}
               onFurnitureModified={handleFurnitureModified}
+              onWallEndpointMoved={handleWallEndpointMoved}
               onStatusChange={setCanvasStatus}
             />
             {activeTool === "room" ? (

@@ -18,6 +18,7 @@ import {
 } from "react";
 import {
   Canvas,
+  Circle,
   FabricImage,
   FabricText,
   Line,
@@ -71,6 +72,7 @@ import {
   type FurnitureDocumentPoseUpdate,
 } from "./furnitureFabricMapper";
 import {
+  readCanvasEntityType,
   selectionFromFabricTarget,
   writeCanvasEntityType,
   type FabricCanvasEntityType,
@@ -89,9 +91,25 @@ import {
   syncWallSnapMarker,
 } from "./wallSnapMarker";
 import {
+  clearDistanceGuideOverlay,
+  createDistanceGuideOverlayHandle,
+  syncDistanceGuideOverlay,
+} from "./distanceGuideOverlay";
+import type { CenteredFurnitureRect } from "@/features/planner/lib/geometry/distanceGuides";
+import {
+  projectPointFromGripScreen,
+  readWallGripMeta,
+  resolveWallForEndpointGrips,
+  wallEndpointGripScreens,
+  wallGripFabricOptions,
+  writeWallGripMeta,
+} from "./wallEndpointGrips";
+import {
   defaultOpeningWidthMm,
   openingLineEndpointsMm,
+  projectOpeningAlongHostWall,
   resolveOpeningPlacementAtPoint,
+  resolveOpeningRepositionOnHostWall,
   type OpeningPlacementRejectReason,
 } from "@/features/planner/lib/geometry/openingPlacement";
 import styles from "./plannerFabricStage.module.css";
@@ -122,12 +140,32 @@ export type PlannerFabricStageProps = {
   ) => void;
   /** Durable linear dimension: first click start, second click end. */
   onDimensionPlaced?: (start: PlannerPoint, end: PlannerPoint) => void;
+  /**
+   * When true, canvas clicks feed underlay 2-point calibrate instead of tools.
+   * Parent owns session phase; each click reports one plan-space point.
+   */
+  underlayCalibrateActive?: boolean;
+  /** Anchor for calibrate rubber-band preview (first pick). */
+  underlayCalibrateAnchor?: PlannerPoint | null;
+  onUnderlayCalibratePoint?: (point: PlannerPoint) => void;
   /** kind restored: door vs window (opening tool defaults to door). */
   onOpeningPlaced?: (wallId: string, position: number, kind: "door" | "window") => void;
   onOpeningRejected?: (reason: OpeningPlacementRejectReason) => void;
+  /** Drag-reposition commit for an existing door/window along its host wall. */
+  onOpeningRepositioned?: (
+    collection: "doors" | "windows",
+    id: string,
+    position: number,
+  ) => void;
   onSelectionChange?: (selection: { type: CanvasEntityType; id: string } | null) => void;
   onStatusChange?: (status: CanvasStatusSnapshot) => void;
   onFurnitureModified?: (update: FurnitureDocumentPoseUpdate) => void;
+  /** Join-aware wall endpoint move from selection grips (host maps to movePlannerWallEndpointConnected). */
+  onWallEndpointMoved?: (
+    wallId: string,
+    endpoint: "start" | "end",
+    position: PlannerPoint,
+  ) => void;
   displayUnit?: PlannerDisplayUnit;
 };
 
@@ -251,11 +289,16 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       onPlaceAtPoint,
       onWallDrawn,
       onDimensionPlaced,
+      underlayCalibrateActive = false,
+      underlayCalibrateAnchor = null,
+      onUnderlayCalibratePoint,
       onOpeningPlaced,
       onOpeningRejected,
+      onOpeningRepositioned,
       onSelectionChange,
       onStatusChange,
       onFurnitureModified,
+      onWallEndpointMoved,
       displayUnit = "mm",
     },
     ref,
@@ -284,11 +327,17 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     const rebuildingRef = useRef(false);
     const panSessionRef = useRef<PanSession | null>(null);
     const onModifiedRef = useRef(onFurnitureModified);
+    const onWallEndpointMovedRef = useRef(onWallEndpointMoved);
+    const [selectedWallId, setSelectedWallId] = useState<string | null>(null);
     const onPlaceRef = useRef(onPlaceAtPoint);
     const onWallDrawnRef = useRef(onWallDrawn);
     const onDimensionPlacedRef = useRef(onDimensionPlaced);
+    const onUnderlayCalibratePointRef = useRef(onUnderlayCalibratePoint);
+    const underlayCalibrateActiveRef = useRef(underlayCalibrateActive);
+    const underlayCalibrateAnchorRef = useRef(underlayCalibrateAnchor);
     const onOpeningPlacedRef = useRef(onOpeningPlaced);
     const onOpeningRejectedRef = useRef(onOpeningRejected);
+    const onOpeningRepositionedRef = useRef(onOpeningRepositioned);
     const onSelectionRef = useRef(onSelectionChange);
     const onStatusChangeRef = useRef(onStatusChange);
     const pendingPlaceRef = useRef(pendingCatalogPlacement);
@@ -304,6 +353,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     const dimPreviewLineRef = useRef<Line | null>(null);
     const openingPreviewLineRef = useRef<Line | null>(null);
     const snapMarkerHandleRef = useRef(createWallSnapMarkerHandle());
+    const distanceGuideHandleRef = useRef(createDistanceGuideOverlayHandle());
 
     const clearDimPreview = useCallback(() => {
       const canvas = fabricRef.current;
@@ -398,6 +448,21 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     }, [onFurnitureModified]);
 
     useEffect(() => {
+      onWallEndpointMovedRef.current = onWallEndpointMoved;
+    }, [onWallEndpointMoved]);
+
+    useEffect(() => {
+      const selection = workspaceCanvas?.selection;
+      if (selection?.type === "wall" && selection.ids.length === 1) {
+        setSelectedWallId(selection.ids[0] ?? null);
+        return;
+      }
+      if (selection && selection.type !== "wall") {
+        setSelectedWallId(null);
+      }
+    }, [workspaceCanvas?.selection]);
+
+    useEffect(() => {
       onPlaceRef.current = onPlaceAtPoint;
     }, [onPlaceAtPoint]);
 
@@ -410,12 +475,31 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     }, [onDimensionPlaced]);
 
     useEffect(() => {
+      onUnderlayCalibratePointRef.current = onUnderlayCalibratePoint;
+    }, [onUnderlayCalibratePoint]);
+
+    useEffect(() => {
+      underlayCalibrateActiveRef.current = underlayCalibrateActive;
+      if (!underlayCalibrateActive) {
+        clearDimPreview();
+      }
+    }, [clearDimPreview, underlayCalibrateActive]);
+
+    useEffect(() => {
+      underlayCalibrateAnchorRef.current = underlayCalibrateAnchor;
+    }, [underlayCalibrateAnchor]);
+
+    useEffect(() => {
       onOpeningPlacedRef.current = onOpeningPlaced;
     }, [onOpeningPlaced]);
 
     useEffect(() => {
       onOpeningRejectedRef.current = onOpeningRejected;
     }, [onOpeningRejected]);
+
+    useEffect(() => {
+      onOpeningRepositionedRef.current = onOpeningRepositioned;
+    }, [onOpeningRepositioned]);
 
     useEffect(() => {
       activeFloorRef.current = activeFloor;
@@ -815,12 +899,200 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         canvas.requestRenderAll();
       };
 
+      const lookupOpeningHost = (
+        kind: "door" | "window",
+        entityId: string,
+      ): {
+        wall: PlannerWall;
+        widthMm: number;
+        position: number;
+        collection: "doors" | "windows";
+      } | null => {
+        const floor = activeFloorRef.current;
+        if (!floor) return null;
+        const opening =
+          kind === "door"
+            ? floor.doors.find((item) => item.id === entityId)
+            : floor.windows.find((item) => item.id === entityId);
+        if (!opening) return null;
+        const wall = floor.walls.find((item) => item.id === opening.wallId);
+        if (!wall) return null;
+        return {
+          wall,
+          widthMm: opening.width,
+          position: opening.position,
+          collection: kind === "door" ? "doors" : "windows",
+        };
+      };
+
+      const snapOpeningTargetToDocument = (
+        target: FabricObject,
+        kind: "door" | "window",
+        entityId: string,
+      ) => {
+        const host = lookupOpeningHost(kind, entityId);
+        if (!host) return;
+        const centerMm = {
+          x:
+            host.wall.start.x +
+            (host.wall.end.x - host.wall.start.x) * host.position,
+          y:
+            host.wall.start.y +
+            (host.wall.end.y - host.wall.start.y) * host.position,
+        };
+        const centerScreen = projectToScreen(centerMm, transformRef.current);
+        target.set({
+          left: centerScreen.x,
+          top: centerScreen.y,
+          scaleX: 1,
+          scaleY: 1,
+          angle: 0,
+          skewX: 0,
+          skewY: 0,
+        });
+        target.setCoords();
+      };
+
+      const constrainOpeningTargetToHostWall = (
+        target: FabricObject,
+        kind: "door" | "window",
+        entityId: string,
+        pointerScreen: PlannerPoint,
+      ) => {
+        const host = lookupOpeningHost(kind, entityId);
+        if (!host) return;
+        const projectPoint = screenToProject(pointerScreen, transformRef.current);
+        const projected = projectOpeningAlongHostWall(
+          projectPoint,
+          host.wall,
+          host.widthMm,
+        );
+        const position =
+          "rejected" in projected ? host.position : projected.position;
+        const centerMm = {
+          x:
+            host.wall.start.x +
+            (host.wall.end.x - host.wall.start.x) * position,
+          y:
+            host.wall.start.y +
+            (host.wall.end.y - host.wall.start.y) * position,
+        };
+        const centerScreen = projectToScreen(centerMm, transformRef.current);
+        target.set({
+          left: centerScreen.x,
+          top: centerScreen.y,
+          scaleX: 1,
+          scaleY: 1,
+          angle: 0,
+          skewX: 0,
+          skewY: 0,
+        });
+        target.setCoords();
+      };
+
+      const handleOpeningMoving = (event: {
+        target?: FabricObject;
+        pointer?: { x: number; y: number };
+      }) => {
+        if (rebuildingRef.current) return;
+        const target = event.target;
+        if (!target) return;
+        const kind = readCanvasEntityType(target);
+        if (kind !== "door" && kind !== "window") return;
+        const entityId = readFurnitureEntityId(target);
+        if (!entityId) return;
+        const pointerScreen = event.pointer
+          ? { x: event.pointer.x, y: event.pointer.y }
+          : { x: target.left ?? 0, y: target.top ?? 0 };
+        constrainOpeningTargetToHostWall(target, kind, entityId, pointerScreen);
+      };
+
       const handleModified = (event: ModifiedEvent) => {
         if (rebuildingRef.current) return;
         const target = event.target as FabricObject | undefined;
         if (!target) return;
+
+        const gripMeta = readWallGripMeta(
+          target as Parameters<typeof readWallGripMeta>[0],
+        );
+        if (gripMeta) {
+          const raw = projectPointFromGripScreen(
+            { x: target.left ?? 0, y: target.top ?? 0 },
+            transformRef.current,
+          );
+          const floor = activeFloorRef.current;
+          const wall = floor?.walls.find((item) => item.id === gripMeta.wallId);
+          const anchor =
+            wall == null
+              ? null
+              : gripMeta.endpoint === "start"
+                ? wall.end
+                : wall.start;
+          const snapped = snapProjectPoint({
+            raw,
+            start: anchor,
+            walls: floor?.walls ?? [],
+            transform: transformRef.current,
+            snapEnabled: snapEnabledRef.current,
+            gridMm: gridMmRef.current,
+            orthogonal: orthogonalLockRef.current,
+          });
+          onWallEndpointMovedRef.current?.(
+            gripMeta.wallId,
+            gripMeta.endpoint,
+            snapped.point,
+          );
+          return;
+        }
+
         const entityId = readFurnitureEntityId(target);
         if (!entityId) return;
+
+        const kind = readCanvasEntityType(target);
+        if (kind === "door" || kind === "window") {
+          const host = lookupOpeningHost(kind, entityId);
+          if (!host) {
+            snapOpeningTargetToDocument(target, kind, entityId);
+            return;
+          }
+          const floor = activeFloorRef.current;
+          if (!floor) {
+            snapOpeningTargetToDocument(target, kind, entityId);
+            return;
+          }
+          const projectPoint = screenToProject(
+            { x: target.left ?? 0, y: target.top ?? 0 },
+            transformRef.current,
+          );
+          const resolved = resolveOpeningRepositionOnHostWall(
+            projectPoint,
+            host.wall,
+            host.widthMm,
+            floor.doors,
+            floor.windows,
+            { excludeId: entityId },
+          );
+          if ("rejected" in resolved) {
+            snapOpeningTargetToDocument(target, kind, entityId);
+            onOpeningRejectedRef.current?.(resolved.reason);
+            return;
+          }
+          if (Math.abs(resolved.position - host.position) < 1e-9) {
+            snapOpeningTargetToDocument(target, kind, entityId);
+            return;
+          }
+          onOpeningRepositionedRef.current?.(
+            host.collection,
+            entityId,
+            resolved.position,
+          );
+          return;
+        }
+
+        if (kind !== null && kind !== "furniture") {
+          return;
+        }
+
         const update = fabricPoseToDocumentUpdate(
           {
             entityId,
@@ -857,6 +1129,25 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         const uiTool = activeToolRef.current;
         const tool = runtimeToolFor(uiTool);
         const pointerId = pointerIdOf(event);
+
+        if (underlayCalibrateActiveRef.current && onUnderlayCalibratePointRef.current) {
+          event.preventDefault();
+          event.stopPropagation();
+          const floor = activeFloorRef.current;
+          const screen = hostPoint(host, event.clientX, event.clientY);
+          const raw = screenToProject(screen, transformRef.current);
+          const snapped = snapProjectPoint({
+            raw,
+            start: underlayCalibrateAnchorRef.current,
+            walls: floor?.walls ?? [],
+            transform: transformRef.current,
+            snapEnabled: snapEnabledRef.current,
+            gridMm: gridMmRef.current,
+            orthogonal: event.shiftKey || orthogonalLockRef.current,
+          });
+          onUnderlayCalibratePointRef.current(snapped.point);
+          return;
+        }
 
         if (pendingPlaceRef.current && onPlaceRef.current) {
           event.preventDefault();
@@ -976,6 +1267,43 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         }
         const uiTool = activeToolRef.current;
         const tool = runtimeToolFor(uiTool);
+        if (
+          underlayCalibrateActiveRef.current &&
+          underlayCalibrateAnchorRef.current
+        ) {
+          const floor = activeFloorRef.current;
+          const canvas = fabricRef.current;
+          if (!canvas) return;
+          const screen = hostPoint(host, event.clientX, event.clientY);
+          const raw = screenToProject(screen, transformRef.current);
+          const snapped = snapProjectPoint({
+            raw,
+            start: underlayCalibrateAnchorRef.current,
+            walls: floor?.walls ?? [],
+            transform: transformRef.current,
+            snapEnabled: snapEnabledRef.current,
+            gridMm: gridMmRef.current,
+            orthogonal: event.shiftKey || orthogonalLockRef.current,
+          });
+          const a = projectToScreen(
+            underlayCalibrateAnchorRef.current,
+            transformRef.current,
+          );
+          const b = projectToScreen(snapped.point, transformRef.current);
+          clearDimPreview();
+          const line = new Line([a.x, a.y, b.x, b.y], {
+            stroke: resolveStageColor(PLANNER_COLOR_TOKENS.dimensionLabel, "#64748b"),
+            strokeWidth: 1.5,
+            strokeDashArray: [4, 4],
+            selectable: false,
+            evented: false,
+            objectCaching: false,
+          });
+          canvas.add(line);
+          dimPreviewLineRef.current = line;
+          canvas.requestRenderAll();
+          return;
+        }
         if (tool === "dimension" && dimDrawRef.current) {
           const floor = activeFloorRef.current;
           const canvas = fabricRef.current;
@@ -1077,6 +1405,13 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         commitWallAt(event.clientX, event.clientY, event.shiftKey);
       };
 
+      const applyCanvasSelection = (
+        next: { type: CanvasEntityType; id: string } | null,
+      ) => {
+        setSelectedWallId(next?.type === "wall" ? next.id : null);
+        onSelectionRef.current?.(next);
+      };
+
       const handleFabricSelectDown = (opt: TPointerEventInfo) => {
         const uiTool = activeToolRef.current;
         const tool = runtimeToolFor(uiTool);
@@ -1087,21 +1422,111 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         const hit =
           (opt.target as FabricObject | undefined) ??
           canvas.findTarget(nativeEvent);
+        const gripMeta = readWallGripMeta(
+          hit as Parameters<typeof readWallGripMeta>[0],
+        );
+        if (gripMeta) {
+          applyCanvasSelection({ type: "wall", id: gripMeta.wallId });
+          return;
+        }
         const next = selectionFromFabricTarget(
           hit as Parameters<typeof selectionFromFabricTarget>[0],
         );
-        onSelectionRef.current?.(next);
+        applyCanvasSelection(next);
       };
 
       const handleSelection = () => {
         const target = canvas.getActiveObject();
+        const gripMeta = readWallGripMeta(
+          target as Parameters<typeof readWallGripMeta>[0],
+        );
+        if (gripMeta) {
+          applyCanvasSelection({ type: "wall", id: gripMeta.wallId });
+          return;
+        }
         const next = selectionFromFabricTarget(target);
-        if (next) onSelectionRef.current?.(next);
+        if (next) applyCanvasSelection(next);
       };
 
-      const handleSelectionCleared = () => onSelectionRef.current?.(null);
+      const handleSelectionCleared = () => applyCanvasSelection(null);
 
-      canvas.on("object:modified", handleModified);
+      const clearPlacementGuides = () => {
+        clearDistanceGuideOverlay(canvas, distanceGuideHandleRef.current);
+      };
+
+      const handleFurnitureDistanceGuides = (event: ModifiedEvent) => {
+        if (rebuildingRef.current) return;
+        const target = event.target as FabricObject | undefined;
+        if (!target) return;
+        // Furniture only — openings/walls grips stay on their own handlers.
+        if (readCanvasEntityType(target) !== "furniture") {
+          clearPlacementGuides();
+          return;
+        }
+        const entityId = readFurnitureEntityId(target);
+        if (!entityId) return;
+        const floor = activeFloorRef.current;
+        if (!floor) return;
+        const update = fabricPoseToDocumentUpdate(
+          {
+            entityId,
+            left: target.left ?? 0,
+            top: target.top ?? 0,
+            angle: target.angle ?? 0,
+          },
+          transformRef.current,
+        );
+        const item = floor.furniture.find((f) => f.id === entityId);
+        const widthMm = item?.width ?? 600;
+        const depthMm = item?.depth ?? 600;
+        const subject: CenteredFurnitureRect = {
+          id: entityId,
+          cxMm: update.position.x,
+          cyMm: update.position.y,
+          widthMm,
+          depthMm,
+          rotationDeg: update.rotation,
+        };
+        const neighbors: CenteredFurnitureRect[] = floor.furniture.map((f) => ({
+          id: f.id,
+          cxMm: f.position.x,
+          cyMm: f.position.y,
+          widthMm: f.width ?? 600,
+          depthMm: f.depth ?? 600,
+          rotationDeg: f.rotation,
+        }));
+        syncDistanceGuideOverlay({
+          canvas,
+          handle: distanceGuideHandleRef.current,
+          subject,
+          walls: floor.walls.map((w) => ({
+            id: w.id,
+            start: w.start,
+            end: w.end,
+            thicknessMm: w.thickness,
+          })),
+          neighbors,
+          transform: transformRef.current,
+          stroke: resolveStageColor(PLANNER_COLOR_TOKENS.alignGuide, "#2563eb"),
+          displayUnit: displayUnitRef.current,
+          maxDistanceMm: 4000,
+          maxGuides: 4,
+        });
+      };
+
+      const handleObjectMovingCombined = (event: ModifiedEvent) => {
+        handleOpeningMoving(event);
+        handleFurnitureDistanceGuides(event);
+      };
+
+      const handleObjectModifiedWithGuides = (event: ModifiedEvent) => {
+        clearPlacementGuides();
+        handleModified(event);
+      };
+
+      canvas.on("object:moving", handleObjectMovingCombined);
+      canvas.on("object:modified", handleObjectModifiedWithGuides);
+      canvas.on("mouse:up", clearPlacementGuides);
       canvas.on("mouse:down", handleFabricSelectDown);
       canvas.on("selection:created", handleSelection);
       canvas.on("selection:updated", handleSelection);
@@ -1171,7 +1596,10 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       }
 
       return () => {
-        canvas.off("object:modified", handleModified);
+        canvas.off("object:moving", handleObjectMovingCombined);
+        canvas.off("object:modified", handleObjectModifiedWithGuides);
+        canvas.off("mouse:up", clearPlacementGuides);
+        clearDistanceGuideOverlay(canvas, distanceGuideHandleRef.current);
         canvas.off("mouse:down", handleFabricSelectDown);
         canvas.off("selection:created", handleSelection);
         canvas.off("selection:updated", handleSelection);
@@ -1214,6 +1642,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       canvas.clear();
       // clear() drops the snap glyph; drop the stale handle so the next move recreates it.
       snapMarkerHandleRef.current.marker = null;
+      distanceGuideHandleRef.current.objects = [];
       snapMarkerHandleRef.current.kind = "none";
       canvas.backgroundColor = fabricBackgroundPaint(gridEnabledRef.current);
 
@@ -1314,11 +1743,55 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
             strokeWidth: 5,
             evented: activeTool === "select",
             selectable: activeTool === "select",
+            // Endpoint grips reshape walls; whole-line drag must not desync document.
+            hasControls: false,
+            lockMovementX: true,
+            lockMovementY: true,
+            lockRotation: true,
+            lockScalingX: true,
+            lockScalingY: true,
             objectCaching: false,
           });
           writeCanvasEntityType(line, "wall");
           writeFurnitureEntityId(line, wall.id);
           canvas.add(line);
+        }
+      }
+
+      // Endpoint grips for the single selected wall (select tool only).
+      if (interactive && showWalls) {
+        const workspaceSelection = workspaceCanvas?.selection;
+        const gripSelection =
+          workspaceSelection?.type === "wall"
+            ? workspaceSelection
+            : selectedWallId
+              ? { type: "wall" as const, ids: [selectedWallId] }
+              : null;
+        const gripWall = resolveWallForEndpointGrips(
+          activeFloor.walls,
+          gripSelection,
+        );
+        if (gripWall) {
+          const screens = wallEndpointGripScreens(gripWall, transform);
+          const gripStroke = resolveStageColor(
+            PLANNER_COLOR_TOKENS.alignGuide,
+            "#2563eb",
+          );
+          const gripFill = resolveStageColor(
+            PLANNER_COLOR_TOKENS.exportBackground,
+            "#ffffff",
+          );
+          for (const endpoint of ["start", "end"] as const) {
+            const grip = new Circle(
+              wallGripFabricOptions({
+                screen: screens[endpoint],
+                stroke: gripStroke,
+                fill: gripFill,
+              }),
+            );
+            writeWallGripMeta(grip, { wallId: gripWall.id, endpoint });
+            canvas.add(grip);
+          }
         }
       }
 
@@ -1421,6 +1894,13 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           strokeWidth: 7,
           selectable: interactive,
           evented: interactive,
+          hasControls: false,
+          hasBorders: true,
+          lockScalingX: true,
+          lockScalingY: true,
+          lockRotation: true,
+          lockSkewingX: true,
+          lockSkewingY: true,
           objectCaching: false,
         });
         writeCanvasEntityType(marker, "door");
@@ -1458,6 +1938,13 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           strokeWidth: 7,
           selectable: interactive,
           evented: interactive,
+          hasControls: false,
+          hasBorders: true,
+          lockScalingX: true,
+          lockScalingY: true,
+          lockRotation: true,
+          lockSkewingX: true,
+          lockSkewingY: true,
           objectCaching: false,
         });
         writeCanvasEntityType(marker, "window");
@@ -1483,7 +1970,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       canvas.skipTargetFind = !interactive;
       canvas.requestRenderAll();
       rebuildingRef.current = false;
-    }, [activeFloor, activeTool, layerVisibility, transform, svgPaintEpoch, displayUnit]);
+    }, [activeFloor, activeTool, layerVisibility, transform, svgPaintEpoch, displayUnit, selectedWallId, workspaceCanvas?.selection]);
 
     useEffect(() => {
       const canvas = fabricRef.current;

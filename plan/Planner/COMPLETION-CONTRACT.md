@@ -159,22 +159,22 @@ Update only with fresh evidence.
 | ID | Failure | Bar to clear | Status seed |
 |----|---------|--------------|-------------|
 | PF-01–04 | Guest ID / draft isolation / tests | Browser two-UUID + unit | PASS (see FINISH-PLAN) |
-| PF-05 | Room outline deferred | Exact rectangle room + closed geometry + unit | FAIL until proven |
-| PF-06 | Persistent dimensions deferred | Durable wall/room dims + zoom readable | FAIL until proven |
+| PF-05 | Room outline incomplete | Exact rectangle room + closed geometry + unit + browser | OPEN (impl unit) |
+| PF-06 | Persistent dimensions incomplete | Durable wall/room dims + zoom readable + browser | OPEN (impl unit) |
 | PF-07–08 | Sketch UI / guest auth | TopBar + guest CSRF | PASS (code); browser OPEN |
-| PF-09 | Scene GLB export | Real download or remove menu item | FAIL |
-| PF-10 | Quote to Oando | Live CRM + browser reference | PARTIAL (API PASS; browser OPEN) |
-| PF-11 | Overlap / clearance validation | Outside room + clearance + unit | OPEN/PARTIAL |
+| PF-09 | Scene GLB export honesty | Real download **or** remove menu item / honest unsupported | PASS (honesty) — no menu claim; preflight unsupported; scene export still P11 OPEN |
+| PF-10 | Quote to Oando | Live CRM + browser reference | PARTIAL (API/code PASS; browser OPEN) |
+| PF-11 | Overlap / clearance validation | Outside room + clearance + unit | PASS (unit); browser OPEN |
 | PF-12 | Step completion awareness | Step state honest | PASS |
-| PF-13 | Review & quote tests | Dedicated suite + behaviour | PARTIAL if thin |
+| PF-13 | Review & quote tests | Dedicated suite + behaviour | PASS (unit); browser OPEN |
 | PF-16–17 | Full browser / mobile | P16 matrix rows | OPEN |
 | PF-18–19 | Legacy layers / god workspace | Dead path gone; split host | OPEN |
-| PF-20 | Contradictory save state | One authoritative machine | FAIL |
-| PF-21 | Empty properties waste space | Collapse when no selection | FAIL |
+| PF-20 | Contradictory save state | One authoritative machine | PASS (code); conflict/offline browser OPEN |
+| PF-21 | Empty properties waste space | Collapse when no selection | PASS (code) |
 | PF-22 | Catalog compare weak | Family/filter/compare usable | FAIL |
-| PF-23 | Generic furniture quote path | All BOQ-eligible lines | PARTIAL if code-only |
-| PF-24–25 | Handoff call / CSRF / idempotency | Code + live CRM | PARTIAL |
-| PF-26 | Branded BOQ PDF | Live Review download | FAIL until browser |
+| PF-23 | Generic furniture quote path | All BOQ-eligible lines | PASS (unit); browser cart UI OPEN |
+| PF-24–25 | Handoff call / CSRF / idempotency | Code + live CRM | PARTIAL (code PASS; CRM browser OPEN); PF-25 revision pin open |
+| PF-26 | Branded BOQ PDF | Live Review download | PASS (code); Chromium download OPEN |
 | PF-27 | 2D/3D parity browser | Switch + reload parity | OPEN |
 | PF-28 | No site/public GLB write | 501 / storage path | PASS |
 | PF-30 | **NEW** Plan write IDOR | Owner-scoped update/delete + tests | Must stay PASS |

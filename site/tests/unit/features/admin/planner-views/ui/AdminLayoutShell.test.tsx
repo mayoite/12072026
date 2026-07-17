@@ -27,7 +27,8 @@ describe("AdminLayoutShell", () => {
     );
 
     expect(screen.getByTestId("admin-child")).toBeInTheDocument();
-    expect(screen.getByTestId("mock-logo")).toBeInTheDocument();
+    // Brand uses light + dark logo variants in the header.
+    expect(screen.getAllByTestId("mock-logo").length).toBeGreaterThanOrEqual(1);
     
     // Overview Dashboard link should be rendered
     const dashboardLinks = screen.getAllByRole("link", { name: /Dashboard/i });

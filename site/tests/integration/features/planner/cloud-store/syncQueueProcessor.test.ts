@@ -7,6 +7,7 @@ import {
   SyncQueueProcessor,
   useSyncQueueProcessor,
 } from "@/features/planner/cloud-store/syncQueueProcessor";
+import { invalidateCsrfToken } from "@/lib/api/browserApi";
 
 const userId = "550e8400-e29b-41d4-a716-446655440001";
 const document = createPlannerDocument({ name: "Offline Plan" });
@@ -29,6 +30,7 @@ function makeQueueItem(overrides: Record<string, unknown> = {}) {
 describe("syncQueueProcessor", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+    invalidateCsrfToken();
     vi.spyOn(offlineStorageModule.offlineStorage, "listSyncQueue").mockResolvedValue([]);
     vi.spyOn(offlineStorageModule.offlineStorage, "removeSyncQueueItem").mockResolvedValue(undefined);
     vi.spyOn(offlineStorageModule.offlineStorage, "updateSyncQueueItem").mockResolvedValue(undefined);
@@ -36,11 +38,26 @@ describe("syncQueueProcessor", () => {
     vi.spyOn(offlineStorageModule.offlineStorage, "listPendingPlans").mockResolvedValue([]);
     vi.spyOn(offlineStorageModule.offlineStorage, "deletePlan").mockResolvedValue(undefined);
     vi.spyOn(offlineStorageModule, "markPlanAsSynced").mockResolvedValue(undefined);
-    
-    globalThis.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ id: "remote-1" }),
-      text: async () => "",
+
+    // browserApiFetch bootstraps CSRF on mutating methods; mock both paths.
+    globalThis.fetch = vi.fn().mockImplementation(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes("/api/csrf")) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ token: "test-csrf-token" }),
+          text: async () => "",
+          headers: new Headers(),
+        } as unknown as Response;
+      }
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ id: "remote-1" }),
+        text: async () => "",
+        headers: new Headers(),
+      } as unknown as Response;
     }) as unknown as typeof fetch;
   });
 
@@ -141,13 +158,35 @@ describe("syncQueueProcessor", () => {
       makeQueueItem({ id: "delete-missing-remote", operation: "delete", document: undefined, remoteId: null }),
     ]);
     
-    let fetchCount = 0;
-    vi.mocked(globalThis.fetch).mockImplementation(async () => {
-      fetchCount++;
-      if (fetchCount === 1) {
-        return { ok: false, status: 500, text: async () => "save failed" } as unknown as Response;
+    let planFetchCount = 0;
+    vi.mocked(globalThis.fetch).mockImplementation(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes("/api/csrf")) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ token: "test-csrf-token" }),
+          text: async () => "",
+          headers: new Headers(),
+        } as unknown as Response;
       }
-      return { ok: true, json: async () => ({ id: "remote-1" }), text: async () => "" } as unknown as Response;
+      planFetchCount++;
+      if (planFetchCount === 1) {
+        return {
+          ok: false,
+          status: 500,
+          text: async () => "save failed",
+          json: async () => ({}),
+          headers: new Headers(),
+        } as unknown as Response;
+      }
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ id: "remote-1" }),
+        text: async () => "",
+        headers: new Headers(),
+      } as unknown as Response;
     });
 
     const result = await processor.processSyncQueue();
@@ -178,13 +217,50 @@ describe("syncQueueProcessor", () => {
         lastAttempt: null,
       }),
     ]);
-    vi.mocked(globalThis.fetch).mockResolvedValueOnce({
-      ok: false, status: 500, text: async () => "update failed"
-    } as unknown as Response);
+    vi.mocked(globalThis.fetch).mockImplementation(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes("/api/csrf")) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ token: "test-csrf-token" }),
+          text: async () => "",
+          headers: new Headers(),
+        } as unknown as Response;
+      }
+      return {
+        ok: false,
+        status: 500,
+        json: async () => ({}),
+        text: async () => "update failed",
+        headers: new Headers(),
+      } as unknown as Response;
+    });
 
     const itemResult = await processor.processSyncQueue();
     expect(itemResult.failed).toBe(1);
     expect(itemResult.errors[0]?.error).toMatch(/Update failed.*update failed/);
+
+    // Restore successful transport so the non-Error reject path is exercised.
+    vi.mocked(globalThis.fetch).mockImplementation(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes("/api/csrf")) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ token: "test-csrf-token" }),
+          text: async () => "",
+          headers: new Headers(),
+        } as unknown as Response;
+      }
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ id: "remote-1" }),
+        text: async () => "",
+        headers: new Headers(),
+      } as unknown as Response;
+    });
 
     vi.mocked(offlineStorageModule.offlineStorage.listSyncQueue).mockResolvedValue([
       makeQueueItem({ id: "create-ok", operation: "create" }),

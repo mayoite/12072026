@@ -8,6 +8,9 @@ import { SectionIntro } from "@/components/shared/SectionIntro";
 import { buildPageMetadata } from "@/features/site/data/seo";
 import { SITE_URL } from "@/lib/siteUrl";
 
+/** Unknown slugs must hard-404 (no soft marketing shell). */
+export const dynamicParams = false;
+
 const SOLUTION_COPY: Record<string, { title: string; description: string }> = {
   seating: {
     title: "Seating Solutions",
@@ -57,12 +60,9 @@ export async function generateMetadata({
   const { category } = await params;
   const entry = getSolutionEntry(category);
 
+  // Unknown slugs must not emit indexable generic Solutions metadata (soft-404 SEO risk).
   if (!entry) {
-    return buildPageMetadata(SITE_URL, {
-      title: "Solutions",
-      description: "Tailored furniture solutions for every industry.",
-      path: "/solutions",
-    });
+    notFound();
   }
 
   return buildPageMetadata(SITE_URL, {

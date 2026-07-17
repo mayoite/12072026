@@ -59,8 +59,8 @@ describe("planner/catalog components", () => {
     );
     const ghost = container.querySelector(".pw-drop-ghost") as HTMLElement;
     expect(ghost).not.toBeNull();
-    expect(ghost.style.left).toBe("120px");
-    expect(ghost.style.top).toBe("80px");
+    expect(ghost.style.getPropertyValue("--pw-drop-x")).toBe("120px");
+    expect(ghost.style.getPropertyValue("--pw-drop-y")).toBe("80px");
     expect(ghost.dataset.valid).toBe("true");
     expect(within(container).getByText(roomItem.shortName ?? roomItem.name)).toBeInTheDocument();
   });

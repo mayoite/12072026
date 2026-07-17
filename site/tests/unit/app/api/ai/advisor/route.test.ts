@@ -1,8 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 
+const authCapture = vi.hoisted(() => ({
+  options: null as Record<string, unknown> | null,
+}));
+
 vi.mock("@/features/shared/api/withAuth", () => ({
-  withAuth: (handler: (req: NextRequest) => Promise<Response>) => handler,
+  withAuth: (
+    handler: (req: NextRequest) => Promise<Response>,
+    options: Record<string, unknown>,
+  ) => {
+    authCapture.options = options;
+    return handler;
+  },
 }));
 
 import { POST } from "@/app/api/ai/advisor/route";
@@ -10,6 +20,12 @@ import { POST } from "@/app/api/ai/advisor/route";
 describe("app/api/ai/advisor/route.ts", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  it("requires CSRF protection on the mutating guest route", () => {
+    expect(authCapture.options).toEqual(
+      expect.objectContaining({ requireCsrf: true, role: "guest" }),
+    );
   });
 
   const createReq = (body: unknown) =>

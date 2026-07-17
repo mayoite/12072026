@@ -166,6 +166,86 @@ export function defaultOpeningWidthMm(kind: "door" | "window"): number {
   return kind === "window" ? DEFAULT_WINDOW_WIDTH_MM : DEFAULT_DOOR_WIDTH_MM;
 }
 
+/**
+ * Project a world point onto a known host wall and clamp the opening centre
+ * for end margins. Used for live drag preview. Does not check overlap.
+ * Stays on the given wall even when the pointer leaves the wall pick band.
+ */
+export function projectOpeningAlongHostWall(
+  point: PlannerPoint,
+  wall: PlannerWall,
+  openingWidthMm: number,
+): OpeningPlacementResult {
+  if (openingWidthMm <= 0 || !Number.isFinite(openingWidthMm)) {
+    return { rejected: true, reason: "wall-too-short" };
+  }
+  const length = wallLengthMm(wall);
+  if (length <= 0 || openingWidthMm >= length) {
+    return { rejected: true, reason: "wall-too-short" };
+  }
+
+  const projection = projectOntoWall(point, wall);
+  const clampedAlong = clampOpeningCenterAlongMm(
+    length,
+    projection.along,
+    openingWidthMm,
+  );
+  const half = openingWidthMm / 2;
+  const span = { start: clampedAlong - half, end: clampedAlong + half };
+
+  if (
+    span.start < OPENING_END_MARGIN_MM ||
+    span.end > length - OPENING_END_MARGIN_MM
+  ) {
+    return { rejected: true, reason: "wall-end" };
+  }
+
+  return {
+    wallId: wall.id,
+    position: clampedAlong / length,
+    angleRadians: Math.atan2(
+      wall.end.y - wall.start.y,
+      wall.end.x - wall.start.x,
+    ),
+  };
+}
+
+/**
+ * Reposition an existing opening on its host wall with end + overlap guards.
+ * Always stays on `wall` (does not re-host). Pass the moving opening as excludeId.
+ */
+export function resolveOpeningRepositionOnHostWall(
+  point: PlannerPoint,
+  wall: PlannerWall,
+  openingWidthMm: number,
+  doors: readonly PlannerDoor[],
+  windows: readonly PlannerWindow[],
+  options: { excludeId: string },
+): OpeningPlacementResult {
+  const projected = projectOpeningAlongHostWall(point, wall, openingWidthMm);
+  if ("rejected" in projected) return projected;
+
+  const length = wallLengthMm(wall);
+  const span = openingSpanFromNormalized(
+    length,
+    projected.position,
+    openingWidthMm,
+  );
+  const existing = collectOpeningSpansOnWall(
+    wall.id,
+    length,
+    doors,
+    windows,
+    options.excludeId,
+  );
+  for (const other of existing) {
+    if (openingSpansOverlap(span, other)) {
+      return { rejected: true, reason: "overlap" };
+    }
+  }
+  return projected;
+}
+
 export function resolveOpeningPlacementAtPoint(
   point: PlannerPoint,
   walls: readonly PlannerWall[],
@@ -181,7 +261,6 @@ export function resolveOpeningPlacementAtPoint(
   let best: {
     wall: PlannerWall;
     distance: number;
-    along: number;
   } | null = null;
 
   for (const wall of walls) {
@@ -194,7 +273,7 @@ export function resolveOpeningPlacementAtPoint(
     if (projection.distance > tolerance) continue;
 
     if (!best || projection.distance < best.distance) {
-      best = { wall, distance: projection.distance, along: projection.along };
+      best = { wall, distance: projection.distance };
     }
   }
 
@@ -202,43 +281,14 @@ export function resolveOpeningPlacementAtPoint(
     return { rejected: true, reason: "off-wall" };
   }
 
-  const length = wallLengthMm(best.wall);
-  const clampedAlong = clampOpeningCenterAlongMm(
-    length,
-    best.along,
+  return resolveOpeningRepositionOnHostWall(
+    point,
+    best.wall,
     openingWidthMm,
-  );
-  const half = openingWidthMm / 2;
-  const span = { start: clampedAlong - half, end: clampedAlong + half };
-
-  if (
-    span.start < OPENING_END_MARGIN_MM ||
-    span.end > length - OPENING_END_MARGIN_MM
-  ) {
-    return { rejected: true, reason: "wall-end" };
-  }
-
-  const existing = collectOpeningSpansOnWall(
-    best.wall.id,
-    length,
     doors,
     windows,
-    options?.excludeId,
+    { excludeId: options?.excludeId ?? "" },
   );
-  for (const other of existing) {
-    if (openingSpansOverlap(span, other)) {
-      return { rejected: true, reason: "overlap" };
-    }
-  }
-
-  return {
-    wallId: best.wall.id,
-    position: clampedAlong / length,
-    angleRadians: Math.atan2(
-      best.wall.end.y - best.wall.start.y,
-      best.wall.end.x - best.wall.start.x,
-    ),
-  };
 }
 
 export function openingPlacementRejectMessage(

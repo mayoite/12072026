@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import robots from '@/app/(site)/robots';
+import robots from '@/app/robots';
 import { ROBOTS_DISALLOW_PREFIXES } from '@/features/site/data/routeClassification';
 
 describe('robots.ts', () => {

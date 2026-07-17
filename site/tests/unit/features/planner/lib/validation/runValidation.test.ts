@@ -3,7 +3,10 @@ import {
   runFloorValidation,
   countBySeverity,
 } from "@/features/planner/lib/validation/runValidation";
-import type { PlannerFloor, PlannerFurnitureItem } from "@/features/planner/model/types";
+import type {
+  PlannerFloor,
+  PlannerFurnitureItem,
+} from "@/features/planner/model/types";
 import { createRectangularRoomProject } from "@/features/planner/model/project";
 
 function floorWithFurniture(items: PlannerFurnitureItem[]): PlannerFloor {
@@ -94,6 +97,49 @@ describe("runFloorValidation", () => {
       ),
     ).toBe(true);
     expect(result.warnings).toBeGreaterThanOrEqual(1);
+  });
+
+  it("detects furniture intersecting a wall as wall-collision errors", () => {
+    // South wall is y=0, thickness 150. Desk at y=50 intersects wall mass.
+    const floor = floorWithFurniture([makeItem("into-wall", 2500, 50, 600, 600)]);
+    const result = runFloorValidation(floor);
+    expect(
+      result.issues.some(
+        (i) => i.ruleId === "wall-collision" && i.severity === "error",
+      ),
+    ).toBe(true);
+    expect(result.errors).toBeGreaterThanOrEqual(1);
+  });
+
+  it("detects furniture blocking a door as opening-obstruction warnings", () => {
+    const base = floorWithFurniture([makeItem("block-door", 2500, 400, 600, 600)]);
+    const southWall = base.walls.find(
+      (w) =>
+        Math.abs(w.start.y) < 1e-6 &&
+        Math.abs(w.end.y) < 1e-6,
+    );
+    expect(southWall).toBeDefined();
+    const floor: PlannerFloor = {
+      ...base,
+      doors: [
+        {
+          id: "door-mid",
+          wallId: southWall!.id,
+          position: 0.5,
+          width: 900,
+          height: 2100,
+          type: "single",
+          swingDirection: "left",
+          flipSide: false,
+        },
+      ],
+    };
+    const result = runFloorValidation(floor);
+    expect(
+      result.issues.some(
+        (i) => i.ruleId === "opening-obstruction" && i.severity === "warning",
+      ),
+    ).toBe(true);
   });
 
   it("skips items with unknown catalogId", () => {
