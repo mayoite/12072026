@@ -86,7 +86,7 @@ jobs:
 
       - name: Upload site-ui log on failure
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: site-ui-e2e-log
           path: results/site/site-ui-e2e.log
