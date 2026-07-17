@@ -81,6 +81,34 @@ describe("PlannerCanvasRoute", () => {
     expect(host).toHaveAttribute("data-owner-id", "user-1");
   });
 
+  it("canonicalizes uppercase member plan ids to lowercase", async () => {
+    vi.mocked(getOptionalPlannerUser).mockResolvedValue({
+      id: "user-1",
+      email: "member@test.com",
+    } as never);
+    render(
+      await PlannerCanvasRoute({
+        searchParams: Promise.resolve({ id: TEST_PLAN_ID_1.toUpperCase() }),
+      }),
+    );
+    expect(screen.getByTestId("open3d-planner-route")).toHaveAttribute(
+      "data-plan-id",
+      TEST_PLAN_ID_1.toLowerCase(),
+    );
+  });
+
+  it("renders member mode without a plan id", async () => {
+    vi.mocked(getOptionalPlannerUser).mockResolvedValue({
+      id: "user-1",
+      email: "member@test.com",
+    } as never);
+    render(await PlannerCanvasRoute({ searchParams: Promise.resolve({}) }));
+    const host = screen.getByTestId("open3d-planner-route");
+    expect(host).toHaveAttribute("data-guest-mode", "false");
+    expect(host).toHaveAttribute("data-plan-id", "");
+    expect(host).toHaveAttribute("data-owner-id", "user-1");
+  });
+
   it("rejects malformed member plan ids", async () => {
     vi.mocked(getOptionalPlannerUser).mockResolvedValue({
       id: "user-1",

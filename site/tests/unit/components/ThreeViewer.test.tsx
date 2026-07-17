@@ -65,6 +65,9 @@ describe('ThreeViewer Component', () => {
     render(<ThreeViewer modelUrl="/models/chair.glb" />);
 
     expect(screen.getByTestId('mock-canvas')).toBeInTheDocument();
+    expect(
+      screen.getByRole('img', { name: 'Interactive 3D product preview' }),
+    ).toBeInTheDocument();
   });
 
   it('catches error in boundary and logs it', () => {

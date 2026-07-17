@@ -128,7 +128,7 @@ export const InventoryPanel = memo(function InventoryPanel({
   isLoading = false,
   catalogStatus = "ready",
   officeSystemsInventory = true,
-  displayUnit = "cm",
+  displayUnit = "mm",
 }: InventoryPanelProps) {
   const id = useId();
   const searchInputRef = useRef<HTMLInputElement>(null);

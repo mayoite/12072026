@@ -148,8 +148,17 @@ export function expectedStaticSitemapPaths(): readonly string[] {
   return PUBLIC_INDEXABLE_STATIC_PATHS;
 }
 
+function significantTokens(value: string): string[] {
+  return value
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((token) => token.length > 2);
+}
+
 /**
- * SITE-SEO-04 helper — product JSON-LD must equal the visible fields passed in.
+ * SITE-SEO-04 helper — product JSON-LD must be a pure projection of visible
+ * fields (no offers) and the visible name/description/url must stay coherent
+ * with each other (rejects silent field drift).
  */
 export function productJsonLdMatchesVisible(
   siteUrl: string,
@@ -161,6 +170,24 @@ export function productJsonLdMatchesVisible(
     sku?: string;
   },
 ): boolean {
+  const name = visible.name.trim();
+  const description = visible.description.trim();
+  if (!name || !description) return false;
+
+  const nameTokens = significantTokens(name);
+  if (nameTokens.length === 0) return false;
+
+  const urlLower = visible.url.toLowerCase();
+  const descLower = description.toLowerCase();
+  // Name tokens must appear in the product URL slug/path (identity drift guard).
+  if (!nameTokens.some((token) => urlLower.includes(token))) return false;
+  // Description must still relate to the product name, or be a full product blurb
+  // (rejects empty/stub drift like "drifted" while allowing category-level copy).
+  const descriptionMentionsName = nameTokens.some((token) =>
+    descLower.includes(token),
+  );
+  if (!descriptionMentionsName && description.length < 24) return false;
+
   const ld = buildProductJsonLd(siteUrl, visible);
   if (ld.name !== visible.name) return false;
   if (ld.description !== visible.description) return false;

@@ -8,6 +8,7 @@ import {
   getObjectCount,
   selectPlannerTool,
   switchPlannerStep,
+  switchPlannerViewMode,
   waitForPlannerCanvas,
   firstFurnitureCenter,
   clickAtPoint,
@@ -67,10 +68,10 @@ test.describe("Planner chrome v2", () => {
     await clickOnCanvas(page, 0.45, 0.42);
     await expectObjectCountAtLeast(page, 1);
 
-    await page.getByRole("button", { name: "3D", exact: true }).click();
+    await switchPlannerViewMode(page, "3d");
     await expect(page.locator('[data-testid="planner-3d-renderer"]')).not.toContainText("Fallback mode");
 
-    await page.getByRole("button", { name: "2D", exact: true }).click();
+    await switchPlannerViewMode(page, "2d");
     await waitForPlannerCanvas(page);
   });
 
@@ -130,10 +131,10 @@ test.describe("Planner chrome WebGL fallback", () => {
     await openWorkspace(page);
     const before = await getObjectCount(page);
 
-    await page.getByRole("button", { name: "3D", exact: true }).click();
+    await switchPlannerViewMode(page, "3d");
     await expect(page.locator('[data-testid="planner-3d-fallback"]')).toBeVisible();
 
-    await page.getByRole("button", { name: "2D", exact: true }).click();
+    await switchPlannerViewMode(page, "2d");
     await selectPlannerTool(page, "Wall");
     await dragOnCanvas(page, { rx: 0.25, ry: 0.5 }, { rx: 0.62, ry: 0.5 });
     await expectObjectCountAtLeast(page, before + 1);

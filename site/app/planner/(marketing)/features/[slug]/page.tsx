@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { PlannerFeaturePageView } from "@/features/planner/landing/PlannerFeaturePageView";
@@ -14,11 +15,12 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
+/** Only known feature slugs are static; unknown → notFound(). */
 export function generateStaticParams() {
   return PLANNER_FEATURE_PAGES.map((feature) => ({ slug: feature.slug }));
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   if (!isPlannerFeatureSlug(slug)) {
     return {};
@@ -28,6 +30,7 @@ export async function generateMetadata({ params }: PageProps) {
     title: `${feature.title} — Workspace Planner`,
     description: feature.summary,
     path: `/planner/features/${slug}`,
+    image: "/planner-og.webp",
     keywords: [feature.title, "workspace planner", "One&Only"],
   });
 }

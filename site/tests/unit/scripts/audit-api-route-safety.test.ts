@@ -116,6 +116,22 @@ describe("audit-api-route-safety", () => {
     expect(byPath.audit.csrfPresent).toBe(true);
     expect(byPath.audit.csrfCodeOk).toBe(true);
     expect(byPath.audit.rejectionHeaderOk).toBe(true);
+
+    // F4b: site AI / member helpers require CSRF (not public-form optional)
+    for (const key of [
+      "ai-advisor",
+      "ai-assist",
+      "ai/advisor",
+      "filter",
+      "generate-alt",
+      "configurator/smart-wizard",
+    ]) {
+      expect(byPath[key], `missing matrix row ${key}`).toBeDefined();
+      expect(byPath[key].csrfRequired).toBe(true);
+      expect(byPath[key].csrfPresent).toBe(true);
+      expect(byPath[key].rateLimitPresent).toBe(true);
+      expect(byPath[key].rejectionHeaderOk).toBe(true);
+    }
   });
 
   it("matrix mode prints a TSV header row", () => {

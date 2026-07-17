@@ -43,6 +43,18 @@ describe("display unit conversion (canonical mm)", () => {
     expect(parseLengthInput("1200 mm", "mm")).toBe(1200);
   });
 
+  it("honors explicit unit suffixes even when display unit differs", () => {
+    // Regression: suffix used to be stripped then value re-scaled by display unit.
+    expect(parseLengthInput("1200 mm", "cm")).toBe(1200);
+    expect(parseLengthInput("120 cm", "mm")).toBe(1200);
+    expect(parseLengthInput("1.2 m", "cm")).toBe(1200);
+    expect(parseLengthInput("2 in", "mm")).toBeCloseTo(50.8);
+    expect(parseLengthInput("1 ft", "mm")).toBeCloseTo(304.8);
+    // Bare number still uses active display unit.
+    expect(parseLengthInput("120", "cm")).toBe(1200);
+    expect(parseLengthInput("1200", "mm")).toBe(1200);
+  });
+
   it("preserves canonical sub-millimetre precision while display rounds", () => {
     expect(parseLengthInput("0.01", "in")).toBeCloseTo(0.254, 6);
     expect(parseLengthInput("0.125", "mm")).toBe(0.125);

@@ -46,6 +46,24 @@ describe("sanitize security utilities", () => {
       expect(result).toContain("<circle/>");
     });
 
+    it("removes self-closing script and foreignObject nodes", () => {
+      const svg =
+        '<svg><script src="evil.js"/><foreignObject width="1" height="1"/><circle/></svg>';
+      const result = sanitizeInlineSvg(svg);
+      expect(result).not.toContain("<script");
+      expect(result).not.toContain("foreignObject");
+      expect(result).toContain("<circle/>");
+    });
+
+    it("removes paired foreignObject hosts", () => {
+      const svg =
+        '<svg><foreignObject><body xmlns="http://www.w3.org/1999/xhtml"><script>x()</script></body></foreignObject><rect/></svg>';
+      const result = sanitizeInlineSvg(svg);
+      expect(result).not.toContain("foreignObject");
+      expect(result).not.toContain("<script");
+      expect(result).toContain("<rect/>");
+    });
+
     it("removes inline event handlers with double quotes", () => {
       const svg = '<svg><rect onclick="doBad()" /></svg>';
       const result = sanitizeInlineSvg(svg);

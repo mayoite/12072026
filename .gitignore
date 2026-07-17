@@ -140,3 +140,6 @@ mcps/
 
 # Generated SVG-Edit runtime
 site/public/vendor/svgedit/
+
+.vercel
+.env*

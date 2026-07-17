@@ -1,10 +1,15 @@
 import type { ClientBadgeData } from "@/components/ClientBadge";
 import { CLIENT_LOGO_SRC_BY_NAME } from "@/features/site/data/clientLogos";
 
+/**
+ * Display KPIs for /trusted-by. Keep aligned with SOLUTIONS_PAGE_COPY.stats
+ * and conservative floors in `BUSINESS_STATS_SAFE_DEFAULTS` (fallbacks.ts).
+ * Do not invent higher project counts than the fallback floor without a dated source.
+ */
 export const TRUSTED_BY_STATS = [
   { value: "14+", label: "Years of experience" },
   { value: "120+", label: "Projects completed" },
-  { value: "251+", label: "Corporate clients" },
+  { value: "120+", label: "Corporate clients" },
   { value: "20+", label: "Locations serviced" },
 ] as const;
 

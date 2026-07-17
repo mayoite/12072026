@@ -1,4 +1,4 @@
-﻿export type HeroCarouselSlide = {
+export type HeroCarouselSlide = {
   src: string;
   location: string;
   headline: string;
@@ -10,6 +10,10 @@
   }>;
 };
 
+/**
+ * Legacy hero carousel slides. Live homepage uses `HOMEPAGE_HERO_IMAGES` +
+ * `HOMEPAGE_HERO_CONTENT` in `homepage.ts` instead.
+ */
 export const HERO_CAROUSEL_SLIDES: HeroCarouselSlide[] = [
   {
     src: "/images/hero/titan-patna-hero.webp",
@@ -48,5 +52,3 @@ export const HERO_CAROUSEL_SLIDES: HeroCarouselSlide[] = [
     ],
   },
 ];
-
-

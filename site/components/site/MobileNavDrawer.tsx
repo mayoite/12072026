@@ -337,6 +337,7 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
                     <button
                       type="button"
                       aria-expanded={isOpen}
+                      aria-controls="mobile-nav-products-panel"
                       onClick={() =>
                         setAccordion((prev) => ({ ...prev, products: !prev.products }))
                       }
@@ -346,6 +347,7 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
                       <CaretDown
                         size={16}
                         weight="bold"
+                        aria-hidden="true"
                         className={cn(
                           "text-subtle transition-transform",
                           isOpen && "rotate-180",
@@ -354,7 +356,10 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
                     </button>
 
                     {isOpen && (
-                      <div className="mt-1 space-y-2 rounded-xl border border-soft bg-hover p-2 site-header-flyout animate-in fade-in duration-300">
+                      <div
+                        id="mobile-nav-products-panel"
+                        className="mt-1 space-y-2 rounded-xl border border-soft bg-hover p-2 site-header-flyout animate-in fade-in duration-300"
+                      >
                         <Link
                           href="/products"
                           onClick={handleClose}

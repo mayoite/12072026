@@ -1,3 +1,7 @@
+/**
+ * Legacy marketing blocks. Live homepage/category UI uses `homepage.ts` and
+ * `routeCopy.ts`. No production page currently imports this module.
+ */
 export const PRODUCT_CATEGORY_SECTION = {
   eyebrow: "Our range",
   title: "Freedom of Movement",
@@ -76,8 +80,8 @@ export const NEWS_PAGE_CONTENT = {
   eyebrow: "Latest coverage",
   title: "Updates that matter to workspace decision-makers.",
   cta: {
-    label: "Follow on social channels",
-    href: "/social",
+    label: "View project portfolio",
+    href: "/portfolio",
   },
   items: [
     {

@@ -78,7 +78,7 @@ vi.mock("next-intl", () => {
 
 vi.mock("next-intl/server", () => ({
     getTranslations: async (namespace?: string) => {
-      const t = (key: string, values?: any) => {
+      const t = (key: string, values?: Record<string, unknown>) => {
         const fullKey = namespace ? `${namespace}.${key}` : key;
         let text = fullKey as string;
         if (values) {

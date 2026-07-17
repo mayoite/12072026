@@ -408,6 +408,7 @@ export function SiteHeader() {
                         data-mega-trigger
                         aria-expanded={activeMega === link.label}
                         aria-controls="products-mega-menu"
+                        aria-haspopup="true"
                         onFocus={() => openMegaMenu(link.label)}
                         className={cn(
                           "typ-nav shell-nav-link shell-nav-link--desktop relative inline-flex items-center gap-1 whitespace-nowrap px-1.5 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary 2xl:px-2.5",
@@ -422,6 +423,7 @@ export function SiteHeader() {
                         <CaretDown
                           size={14}
                           weight="bold"
+                          aria-hidden="true"
                           className={cn(
                             "transition-transform duration-300 ease-out",
                             activeMega === link.label && "rotate-180",
@@ -479,6 +481,7 @@ export function SiteHeader() {
                     data-mega-trigger
                     aria-expanded={moreOpen}
                     aria-controls="header-more-menu"
+                    aria-haspopup="menu"
                     onFocus={openMoreMenu}
                     className={cn(
                       "typ-nav shell-nav-link shell-nav-link--desktop relative inline-flex items-center gap-1 whitespace-nowrap px-1.5 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary 2xl:px-2.5",
@@ -495,6 +498,7 @@ export function SiteHeader() {
                     <CaretDown
                       size={14}
                       weight="bold"
+                      aria-hidden="true"
                       className={cn(
                         "transition-transform duration-300 ease-out",
                         moreOpen && "rotate-180",
@@ -673,7 +677,7 @@ export function SiteHeader() {
                 }}
                 className="site-header__hamburger shell-icon-button h-11 w-11 items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
-                <List size={20} weight="bold" />
+                <List size={20} weight="bold" aria-hidden="true" />
               </button>
             </div>
           </div>

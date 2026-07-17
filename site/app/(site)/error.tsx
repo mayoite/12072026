@@ -14,7 +14,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="site-error">
+    <div className="site-error" role="alert">
       <div className="site-error__panel">
         <h1 className="site-error__title">Something went wrong</h1>
         <p className="site-error__copy">

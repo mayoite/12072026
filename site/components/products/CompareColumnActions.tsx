@@ -53,7 +53,7 @@ export function CompareColumnActions({
         aria-label={`${addLabel} ${productName}`}
         className="btn-primary inline-flex min-h-10 items-center justify-center gap-2 rounded-xl px-3 text-sm font-medium"
       >
-        <ShoppingCart className="h-4 w-4" />
+        <ShoppingCart className="h-4 w-4" aria-hidden="true" />
         {addLabel}
       </button>
     </div>

@@ -14,7 +14,10 @@
  *
  * Honesty:
  * - `enabled` is not cutover. Disk remains live release authority until Failures.md cutover closes.
- * - Dual-write uploads real descriptor + SVG + PNG (checksum-matched); product pointer when product exists.
+ * - Dual-write uploads real descriptor + SVG + PNG (checksum-matched).
+ * - Product pointer updates when a matching `planner_managed_products` row exists (0 ok; >1 fail-closed).
+ * - When mode is `enabled`, publish is fail-closed on DB/R2 errors (rolls back disk).
+ *   Dead R2 at this gate yields `skipped_r2_unavailable` so disk-only publish can succeed.
  * - Do not treat DB rows as sole release authority while disk gate still wins.
  * - `r2Probe` is diagnostic only; never invent ok without a real probe result.
  */

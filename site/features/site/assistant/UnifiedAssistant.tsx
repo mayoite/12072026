@@ -22,6 +22,7 @@ import {
   GUIDED_PLANNER_COPY,
   MOBILE_ASSISTANT_COPY,
 } from "@/features/site/data/assistant";
+import { browserApiFetch } from "@/lib/api/browserApi";
 
 type UseCase =
   | "workstations"
@@ -338,7 +339,8 @@ export function UnifiedAssistant() {
     const timeoutId = window.setTimeout(() => controller.abort(), 10_000);
 
     try {
-      const response = await fetch("/api/ai-advisor/", {
+      // browserApiFetch attaches CSRF (route requires requireCsrf) and retries on reject.
+      const response = await browserApiFetch("/api/ai-advisor/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: controller.signal,

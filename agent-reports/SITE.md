@@ -8,18 +8,86 @@
 |---|--------|--------|
 | S1 | SEO robots/sitemap/classification + host probe | **PARTIAL** |
 | S2 | Public route matrix (status, redirects, 404) | **PASS** (unit; live OPEN) |
-| S3 | Viewport overflow 6-level marketing | **RUNNING** |
+| S3 | Viewport overflow 6-level marketing | **PASS** |
 | S4 | A11y Playwright smoke | **PASS** (public) |
 | S5 | Contact form + customer-query API | **PASS** (unit; SF-09 live OPEN) |
 | S6 | Site→Planner entry continuity | **PASS** (unit) |
 | S7 | Product catalog discovery | **PASS** (unit; live catalog inventory OPEN) |
 | S8 | i18n parity | **PASS** |
 | S9 | Analytics + consent | **PASS** (unit) |
-| S10 | Full site unit suite + layout gates | **RUNNING** |
+| S10 | Full site unit suite + layout gates | **PASS** |
 
 **Report rule:** update **this file only** under your `## S#` section. No new dated pile. Commands + exits required. Fix FAIL in OWN paths.
 
 Parent will not cancel without owner ask.
+
+## S3 — Viewport overflow 6-level marketing
+
+**Status:** **PASS**  
+**OWN:** marketing H-overflow measure; fix only `site/components/home/**` + site marketing CSS if page scroll overflow found.  
+**Metric:** document `scrollWidth > clientWidth + 1` (Playwright page.evaluate). Not screenshots-only. Not old summary.
+
+### Commands
+
+| Command | Exit | Result |
+|---------|------|--------|
+| `pnpm run dev` (background) | running | Next 16.2.9 webpack Ready on `http://localhost:3000` (prior :3000 was dead mid first probe; restarted) |
+| `node results/site/perf-viewports-6level/measure.mjs` | **0** | `VERDICT=PASS`, `marketingOverflowFails: []` |
+| `pnpm run check:layout` | **0** | `check-repo-layout OK — no forbidden site/ paths` |
+
+Script: `E:\12072026\results\site\perf-viewports-6level\measure.mjs`  
+Evidence: `results/site/perf-viewports-6level/raw.json` (generatedAt `2026-07-17T15:37:35.786Z`), `summary.json`.
+
+### Viewports
+
+| Name | Size |
+|------|------|
+| 1880 | 1880×1050 |
+| 1440 | 1440×900 |
+| 1280 | 1280×800 |
+| 1024 | 1024×768 |
+| 768 | 768×1024 |
+| 440 | 440×844 |
+
+### Marketing routes (OWN claim)
+
+All **status 200**, **overflow N**, **delta 0**, console errors 0, image 4xx 0.
+
+| Route | 1880 | 1440 | 1280 | 1024 | 768 | 440 |
+|-------|------|------|------|------|-----|-----|
+| `/` | N | N | N | N | N | N |
+| `/products/` | N | N | N | N | N | N |
+| `/solutions/` | N | N | N | N | N | N |
+| `/contact/` | N | N | N | N | N | N |
+
+Nav notes: desktop `nav-ok`; ≤768 `mobile-nav-ok` on all four marketing routes.
+
+### Non-marketing (observed only; not S3 FAIL)
+
+| Route | Overflow | Notes |
+|-------|----------|--------|
+| `/planner/guest/` | N all 6 | `nav-sparse` / `mobile-nav-missing` — planner shell, out of OWN |
+| `/admin/` | N all 6 | admin chrome, out of OWN |
+
+### H-overflow fix
+
+**None required.** No page-level horizontal scroll on marketing cells (24/24 delta 0).
+
+Note: `maxElementRight` ~4.8k–8.2k on marketing pages is **marquee / w-max tracks** inside `overflow-hidden` / `overflow-x-hidden` shells (e.g. footer logo marquee, `HomeTrustStrip`). They do **not** expand `documentElement.scrollWidth`; not document H-overflow.
+
+### Residual OPEN
+
+1. Alternate phone set **390 / 360** not re-probed (mission allows 1880→440 set; that set used).
+2. Locale layout overflow spot-check (FINISH-PLAN S5) not this agent.
+3. First-pass attempt had mid-run `ERR_CONNECTION_REFUSED` when stale :3000 died — **not** used as PASS; full re-run after clean `pnpm run dev`.
+
+### Files touched
+
+- `results/site/perf-viewports-6level/raw.json` (tool output overwrite)
+- `results/site/perf-viewports-6level/summary.json` (tool output overwrite)
+- `agent-reports/SITE.md` (this section)
+
+No product CSS/component edits — nothing failed in OWN scope.
 
 ## S7 — Product catalog discovery
 
@@ -509,4 +577,59 @@ Unit/integration files run:
 - `site/tests/unit/app/(site)/products/[category]/[product]/ProductViewer.test.tsx`
 - `site/tests/integration/features/shared/entry/ChooseProductPage.test.tsx`
 - `agent-reports/SITE.md` (this section)
+
+## S10 — Full site unit suite + layout gates
+
+**Status:** **PASS** (broad Site unit + layout).  
+**OWN:** unit under `app/(site)`, `features/site`, `components/home`, `components/site`, `lib/analytics`, `app/robots`, `app/sitemap`; fix Site product code only on FAIL.
+
+### Commands
+
+| Command | Exit | Result |
+|---------|------|--------|
+| `pnpm --filter oando-site exec vitest run "tests/unit/app/(site)" "tests/unit/features/site" "tests/unit/components/home" "tests/unit/components/site" "tests/unit/lib/analytics" "tests/unit/app/robots.test.ts" "tests/unit/app/sitemap.test.ts"` | **0** (final) | **152 files / 568 tests** PASS (~90s) |
+| `pnpm run check:layout` | **0** | `check-repo-layout OK — no forbidden site/ paths` (run twice; both OK) |
+| `pnpm --filter oando-site run test:coverage:site` | **timeout** | Optional; killed at 300s — **not claimed** |
+
+### Scope paths
+
+- `tests/unit/app/(site)/**`
+- `tests/unit/features/site/**`
+- `tests/unit/components/home/**`
+- `tests/unit/components/site/**`
+- `tests/unit/lib/analytics/**`
+- `tests/unit/app/robots.test.ts`
+- `tests/unit/app/sitemap.test.ts`
+
+### Suite counts (final stable re-run)
+
+| Metric | Value |
+|--------|--------|
+| Test files | **152** passed / 152 |
+| Tests | **568** passed / 568 |
+| Duration | ~89.8s |
+| Report | `results/tests/vitest-results.json` (tool output only; not PASS proof alone) |
+
+### Intermediate noise (not residual FAIL)
+
+First broad run hit **8 FAIL** in analytics consent queue + route classification; re-run alone and final full suite: **green**. Mid-session concurrent agent edits (S2/S7/S9) explain transient red; no stable Site product FAIL remained for S10 to patch.
+
+Second full run: 1 FAIL in `FilterGridInner` multi `Clear all` query — file already used `getAllByRole`; alone + final suite: **pass**. No code change by S10.
+
+### Code changes
+
+**None.** No stable OWN FAIL after re-verify.
+
+### Residual OPEN (not claimed by S10)
+
+1. **Full monorepo `pnpm run lint`** — not run; not claimed.
+2. **Full monorepo / site `pnpm run typecheck`** — not run; planner fabric noise out of OWN unless isolated.
+3. **`pnpm run release:gate`** — not run; includes build, a11y, coverage, audits.
+4. **`test:coverage:site`** — started, timed out at 300s; coverage % **OPEN**.
+5. **Full `pnpm --filter oando-site exec vitest run` (all unit incl. planner/admin)** — not S10 scope; broad Site slice only.
+6. Live browser / production probes — owned by S1–S9 residual notes, not this unit gate.
+
+### Files touched
+
+- `agent-reports/SITE.md` (this section + table status)
 

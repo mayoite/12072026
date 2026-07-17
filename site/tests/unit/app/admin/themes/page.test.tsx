@@ -1,38 +1,26 @@
-import { describe, it, expect, vi, beforeAll } from 'vitest';
-import { render } from '@testing-library/react';
-import React from 'react';
-import AdminThemesPage from '@/app/admin/themes/page';
+import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import AdminThemesPage, { metadata } from "@/app/admin/themes/page";
 
-beforeAll(() => {
-  process.env.NEXT_PUBLIC_SUPABASE_URL = 'http://localhost:54321';
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-key';
-});
-
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
-  usePathname: () => '/test',
-  useSearchParams: () => new URLSearchParams(),
+vi.mock("@/app/admin/themes/ThemeEditor", () => ({
+  ThemeEditor: () => <div data-testid="admin-theme-editor">Theme editor</div>,
 }));
 
-vi.mock('next/font/google', () => ({
-  Inter: () => ({ className: 'inter' }),
-}));
+describe("app/admin/themes/page.tsx", () => {
+  it("exports Theme Manager metadata", () => {
+    expect(metadata.title).toBe("Theme Manager | Oando Admin");
+  });
 
+  it("renders admin page shell and ThemeEditor", () => {
+    render(<AdminThemesPage />);
 
-vi.mock('./ThemeEditor', async () => {
-  const actual = await vi.importActual('./ThemeEditor');
-  return {
-    ...actual,
-    default: (props: any) => <div data-testid="mock---ThemeEditor">{JSON.stringify(props)}</div>,
-  };
-});
-
-
-describe('app/admin/themes/page.tsx', () => {
-  it('renders without crashing', async () => {
-    // For coverage, we just need to render it
-    render(<AdminThemesPage {...({ params: Promise.resolve({ id: '1', type: 'standard' }), searchParams: Promise.resolve({ page: '1' }) } as any)} />);
-    // minimal assertion
-    expect(document.body.innerHTML).toBeDefined();
+    expect(
+      screen.getByRole("heading", { name: "Theme Manager" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/System · planner materials/i)).toBeInTheDocument();
+    expect(screen.getByTestId("admin-theme-editor")).toBeInTheDocument();
+    expect(
+      screen.getByText(/does not change the admin shell or marketing site theme/i),
+    ).toBeInTheDocument();
   });
 });

@@ -20,7 +20,7 @@ describe("homepage data", () => {
   it("hero glass proof links to trusted-by with badge and narrative copy", () => {
     expect(HOMEPAGE_HERO_CONTENT.glassProof.href).toBe("/trusted-by");
     expect(HOMEPAGE_HERO_CONTENT.glassProof.badge).toBe("Trusted by");
-    expect(HOMEPAGE_HERO_CONTENT.glassProof.lead).toContain("400+");
+    expect(HOMEPAGE_HERO_CONTENT.glassProof.lead).toContain("120+");
     expect(HOMEPAGE_HERO_CONTENT.glassProof.support).toMatch(/government/i);
     expect(HOMEPAGE_HERO_CONTENT.glassProof.cta).toBe("View clients");
   });

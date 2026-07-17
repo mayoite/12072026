@@ -181,16 +181,37 @@ async function navigatePlannerWorkspace(page: Page): Promise<void> {
   }
 }
 
-/** Complete the guest project setup gate when it appears (fresh session). */
+/**
+ * Complete the guest project setup gate when it appears (fresh session).
+ *
+ * `reloadSafe: true` clears storage once in-page (no init-script wipe on later
+ * `page.reload()`). Use for persistence / hard-reload journeys.
+ */
 export async function enterGuestPlannerWorkspace(
   page: Page,
-  options: { projectName?: string; navigate?: boolean; preservePlannerState?: boolean } = {},
+  options: {
+    projectName?: string;
+    navigate?: boolean;
+    preservePlannerState?: boolean;
+    /** One-shot in-page clear so IndexedDB survives reload. */
+    reloadSafe?: boolean;
+  } = {},
 ): Promise<void> {
-  if (!options.preservePlannerState) {
-    await clearPlannerStorage(page);
-  }
-  if (options.navigate !== false) {
-    await navigatePlannerWorkspace(page);
+  if (options.reloadSafe) {
+    if (options.navigate !== false) {
+      await navigatePlannerWorkspace(page);
+    }
+    if (!options.preservePlannerState) {
+      await clearPlannerStorageInPage(page);
+      await navigatePlannerWorkspace(page);
+    }
+  } else {
+    if (!options.preservePlannerState) {
+      await clearPlannerStorage(page);
+    }
+    if (options.navigate !== false) {
+      await navigatePlannerWorkspace(page);
+    }
   }
 
   const fabricStage = page.locator(PLANNER_FABRIC_STAGE);

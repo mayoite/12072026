@@ -1,20 +1,13 @@
+import type { Metadata } from "next";
+
 import { PlannerFeaturesHubPage } from "@/features/planner/landing/PlannerFeaturesHubPage";
+import { PLANNER_FEATURES_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 import { SITE_URL } from "@/lib/siteUrl";
-import { buildBreadcrumbJsonLd, buildPageJsonLd, buildPageMetadata } from "@/lib/helpers/seo";
+import { buildBreadcrumbJsonLd, buildPageJsonLd } from "@/lib/helpers/seo";
 import { sanitizeJsonForScript } from "@/lib/security/sanitize";
 
-export const metadata = buildPageMetadata(SITE_URL, {
-  title: "Planner Features — Measure, Catalog, 3D & Export",
-  description:
-    "Explore workspace planner capabilities: measurements, catalog furniture, 3D view, AI assist, and branded PDF export.",
-  path: "/planner/features",
-  keywords: [
-    "planner features",
-    "floor plan measurement",
-    "office layout 3d",
-    "furniture catalog planner",
-  ],
-});
+/** Canonical SEO for /planner/features (registry-owned; do not re-inline). */
+export const metadata: Metadata = PLANNER_FEATURES_PAGE_METADATA;
 
 const PAGE_JSON_LD = buildPageJsonLd(SITE_URL, {
   path: "/planner/features",

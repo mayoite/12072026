@@ -231,6 +231,12 @@ export interface PlannerProject {
   updatedAt: string;
 }
 
+/**
+ * Live canvas scene envelope (plan geometry authority).
+ * Distinct from `CadSuitePlannerSceneEnvelope` in `plannerDocument.ts`
+ * (portal/save/fabric-legacy scene with room+items shape).
+ * Same TypeScript name historically; prefer this alias in new code.
+ */
 export interface PlannerSceneEnvelope {
   type: "open3d-floorplan-project";
   version: 1;
@@ -239,3 +245,6 @@ export interface PlannerSceneEnvelope {
   source: "native-open3d";
   project: PlannerProject;
 }
+
+/** Alias clarifying the live canvas envelope (vs cad-suite portal scene). */
+export type Open3dPlannerSceneEnvelope = PlannerSceneEnvelope;

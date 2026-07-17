@@ -260,6 +260,12 @@ export interface PlannerSceneItem {
   rotationDeg: number;
 }
 
+/**
+ * Portal / save / fabric-legacy scene envelope.
+ * Distinct from live canvas `PlannerSceneEnvelope` in `types.ts`
+ * (`type: "open3d-floorplan-project"` wrapping `PlannerProject`).
+ * Same TypeScript name historically; prefer `CadSuitePlannerSceneEnvelope`.
+ */
 export interface PlannerSceneEnvelope {
   type: "cad-suite-planner-scene";
   version: 1;
@@ -272,6 +278,9 @@ export interface PlannerSceneEnvelope {
   items: PlannerSceneItem[];
   fabricSnapshot?: unknown;
 }
+
+/** Alias clarifying the portal/save scene (vs open3d canvas envelope). */
+export type CadSuitePlannerSceneEnvelope = PlannerSceneEnvelope;
 
 export function isPlannerSceneEnvelope(value: unknown): value is PlannerSceneEnvelope {
   if (!value || typeof value !== "object") return false;
@@ -490,12 +499,14 @@ function normalizeSceneEnvelopeMeasurement(
       })
     : envelope.items;
 
+  // Values above are converted into millimetres. Force sourceUnit to "mm"
+  // so a second normalize/finalize pass cannot re-apply cm/m/in scaling.
   return {
     ...envelope,
     measurement: {
-      canonicalUnit: "mm",
+      canonicalUnit: "mm" as const,
       displayUnit,
-      sourceUnit,
+      sourceUnit: "mm" as const,
     },
     room,
     items,
@@ -616,14 +627,16 @@ function finalizePlannerDocument(
       topMeasurement?.canonicalUnit,
     ) ?? "mm";
   const sceneJson = normalizeSceneJsonMeasurementMetadata(normalized.sceneJson, displayUnit, sourceUnit);
-  const fallbackRoomWidthMm =
-    sourceUnit === "mm"
-      ? normalized.roomWidthMm
-      : Math.max(1, Math.trunc(convertDimensionToMillimeters(normalized.roomWidthMm, sourceUnit)));
-  const fallbackRoomDepthMm =
-    sourceUnit === "mm"
-      ? normalized.roomDepthMm
-      : Math.max(1, Math.trunc(convertDimensionToMillimeters(normalized.roomDepthMm, sourceUnit)));
+  // Top-level roomWidthMm/roomDepthMm fields are already named in mm. Only
+  // convert when the *source payload* still declares a non-mm sourceUnit.
+  // After conversion (and after scene normalize), treat as mm only.
+  const topLevelNeedsConversion = sourceUnit !== "mm";
+  const fallbackRoomWidthMm = topLevelNeedsConversion
+    ? Math.max(1, Math.trunc(convertDimensionToMillimeters(normalized.roomWidthMm, sourceUnit)))
+    : normalized.roomWidthMm;
+  const fallbackRoomDepthMm = topLevelNeedsConversion
+    ? Math.max(1, Math.trunc(convertDimensionToMillimeters(normalized.roomDepthMm, sourceUnit)))
+    : normalized.roomDepthMm;
   const sceneRoom = getSceneRoomDimensions(sceneJson);
 
   const output = {

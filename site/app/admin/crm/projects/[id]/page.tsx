@@ -17,6 +17,9 @@ export default async function AdminCrmProjectDetailPage({ params }: PageProps) {
           <p className="admin-page__eyebrow">CRM</p>
           <h1 className="admin-page__title">Project detail</h1>
           <p className="admin-page__copy">Linked planner documents and client context.</p>
+          <p className="admin-page__copy">
+            Browser localStorage demo — not a production CRM.
+          </p>
         </div>
       </header>
       <CrmSubnav />

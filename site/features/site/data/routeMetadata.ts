@@ -250,10 +250,13 @@ export const PORTFOLIO_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
   ],
 });
 
+/** @deprecated Route redirects to /portfolio — noindex shell only. */
 export const GALLERY_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
   title: `${GALLERY_PAGE_COPY.heroTitle} | One&Only`,
   description: GALLERY_PAGE_COPY.heroSubtitle,
   path: "/gallery",
+  alternates: false,
+  indexable: false,
   keywords: [
     "project gallery office furniture",
     "workspace installation photos",
@@ -275,10 +278,13 @@ export const TRUSTED_BY_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
   ],
 });
 
+/** @deprecated Route redirects to /portfolio — noindex shell only. */
 export const SOCIAL_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
   title: `${SOCIAL_PAGE_COPY.heroTitle} | One&Only`,
   description: SOCIAL_PAGE_COPY.heroSubtitle,
   path: "/social",
+  alternates: false,
+  indexable: false,
   keywords: [
     "office furniture social",
     "workspace inspiration",
@@ -287,10 +293,13 @@ export const SOCIAL_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
   ],
 });
 
+/** @deprecated Route redirects to /about — noindex shell only. */
 export const NEWS_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
   title: `${NEWS_PAGE_COPY.heroTitle} | One&Only`,
   description: NEWS_PAGE_COPY.heroSubtitle,
   path: "/news",
+  alternates: false,
+  indexable: false,
   keywords: [
     "office furniture news India",
     "workspace updates",
@@ -369,32 +378,47 @@ export const PRODUCTS_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
   ],
 });
 
+/**
+ * Registry copy for planner marketing routes.
+ * Live pages under `app/planner/(marketing)/` currently build metadata inline —
+ * keep these strings identical so ownership and SEO stay single-sourced when wired.
+ */
 export const PLANNER_LANDING_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: "Workspace Planner | Plan Your Office in 2D & 3D | One&Only",
+  title: "Workspace Planner — Design Your Office Layout",
   description:
-    "Free online workspace planner. Design office layouts in 2D, preview in 3D, and export BOQ-ready plans. No signup required to try.",
+    "Plan desks, zones, and equipment on mm-accurate floor plans. 2D and 3D views, AI layout assist, and branded PDF export for client-ready proposals.",
   path: "/planner",
+  image: "/planner-og.webp",
   keywords: [
-    "office space planner",
-    "2D 3D workspace planner",
-    "free office layout tool",
-    "floor plan planner India",
-    "workspace design tool",
+    "workspace planner",
+    "office layout tool",
+    "floor plan furniture",
+    "office space planning",
+    "2D floor plan",
+    "3D office planner",
+    "One&Only planner",
   ],
 });
 
 export const PLANNER_HELP_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: "Planner Help & Guide | One&Only Workspace Planner",
+  title: "Planner Help — Workspace Layout Guide",
   description:
-    "Learn how to use the One&Only workspace planner: draw rooms, place furniture, switch to 3D, and export plans.",
+    "Learn how to draw walls, place furniture, measure areas, use AI assist, and export branded PDF floor plans.",
   path: "/planner/help",
+  keywords: ["planner help", "floor plan guide", "workspace layout tutorial"],
 });
 
 export const PLANNER_FEATURES_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: "Planner Features | Measure, Catalog, 3D & Export | One&Only",
+  title: "Planner Features — Measure, Catalog, 3D & Export",
   description:
-    "Explore workspace planner features: measurement tools, product catalog, 3D view, AI assist, and BOQ export.",
+    "Explore workspace planner capabilities: measurements, catalog furniture, 3D view, AI assist, and branded PDF export.",
   path: "/planner/features",
+  keywords: [
+    "planner features",
+    "floor plan measurement",
+    "office layout 3d",
+    "furniture catalog planner",
+  ],
 });
 
 export { SITE_BRAND };

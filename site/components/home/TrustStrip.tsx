@@ -8,7 +8,6 @@ import { KpiCounter } from "@/components/home/KpiCounter";
 interface TrustStripProps {
   stats: BusinessStats;
   embedded?: boolean;
-  dark?: boolean;
 }
 
 export function TrustStrip({ stats, embedded = false }: TrustStripProps) {
@@ -64,6 +63,7 @@ export function TrustStrip({ stats, embedded = false }: TrustStripProps) {
   return (
     <section
       data-testid="home-trust"
+      aria-label="Business metrics"
       className="home-section--white w-full border-t border-theme-soft section-y-sm"
     >
       <div className="home-shell-xl">{content}</div>

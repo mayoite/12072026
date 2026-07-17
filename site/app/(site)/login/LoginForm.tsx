@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import type { FormEvent} from "react";
+import type { FormEvent } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { PLANNER_GUEST_COOKIE } from "@/lib/auth/constants";
 import { getCustomerSafeAuthError } from "@/lib/auth/customerSafeAuthError";
@@ -53,7 +53,7 @@ export function LoginForm({
 
     try {
       const result = await loginWithSupabase(submittedEmail, submittedPassword);
-      
+
       if (!result.success) {
         setIsSubmitting(false);
         setError(result.error || "Invalid login credentials");
@@ -63,9 +63,9 @@ export function LoginForm({
       // Clear guest cookie on successful login
       document.cookie = `${PLANNER_GUEST_COOKIE}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
       window.location.assign(nextPath);
-    } catch (_e: unknown) {
+    } catch (e: unknown) {
       setIsSubmitting(false);
-      setError("An unexpected error occurred");
+      setError(getCustomerSafeAuthError(e));
     }
   }
 
@@ -82,7 +82,7 @@ export function LoginForm({
 
     try {
       const result = await signupWithSupabase(signupEmail || email, signupPassword);
-      
+
       if (!result.success) {
         setSignupSubmitting(false);
         setSignupError(result.error || "Failed to create account");
@@ -91,9 +91,9 @@ export function LoginForm({
 
       setSignupSubmitting(false);
       setSignupDone(true);
-    } catch (_e: unknown) {
+    } catch (e: unknown) {
       setSignupSubmitting(false);
-      setSignupError("An unexpected error occurred");
+      setSignupError(getCustomerSafeAuthError(e));
     }
   }
 
@@ -148,7 +148,11 @@ export function LoginForm({
           </label>
 
           {error ? (
-            <div className="shell-workspace-auth-alert text-sm">
+            <div
+              role="alert"
+              aria-live="assertive"
+              className="shell-workspace-auth-alert text-sm"
+            >
               {error}
             </div>
           ) : null}
@@ -192,10 +196,13 @@ export function LoginForm({
           {showSignup && !signupDone && (
             <form onSubmit={handleSignup} className="space-y-3 w-full max-w-md">
               <p className="typ-label">Create account</p>
-              <label className="shell-workspace-auth-label">
+              <label htmlFor="signup-email" className="shell-workspace-auth-label">
                 <span className="typ-label shell-workspace-auth-label-text">Email</span>
                 <input
+                  id="signup-email"
                   type="email"
+                  name="signup-email"
+                  autoComplete="email"
                   required
                   value={signupEmail}
                   onChange={(e) => setSignupEmail(e.target.value)}
@@ -204,10 +211,13 @@ export function LoginForm({
                 />
               </label>
 
-              <label className="shell-workspace-auth-label">
+              <label htmlFor="signup-password" className="shell-workspace-auth-label">
                 <span className="typ-label shell-workspace-auth-label-text">Password</span>
                 <input
+                  id="signup-password"
                   type="password"
+                  name="signup-password"
+                  autoComplete="new-password"
                   required
                   minLength={8}
                   value={signupPassword}
@@ -218,7 +228,13 @@ export function LoginForm({
               </label>
 
               {signupError ? (
-                <div className="shell-workspace-auth-alert text-sm">{signupError}</div>
+                <div
+                  role="alert"
+                  aria-live="assertive"
+                  className="shell-workspace-auth-alert text-sm"
+                >
+                  {signupError}
+                </div>
               ) : null}
 
               <div className="flex gap-2">
@@ -241,7 +257,11 @@ export function LoginForm({
           )}
 
           {signupDone && (
-            <div className="shell-workspace-auth-alert text-sm">
+            <div
+              role="status"
+              aria-live="polite"
+              className="shell-workspace-auth-alert text-sm"
+            >
               Account created! Please check your email to confirm, then sign in above.
             </div>
           )}

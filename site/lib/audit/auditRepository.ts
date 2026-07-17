@@ -1,3 +1,5 @@
+import "server-only";
+
 import { adminDb } from '@/platform/drizzle/adminDb'
 import { auditEvents } from '@/platform/drizzle/schema/planner'
 

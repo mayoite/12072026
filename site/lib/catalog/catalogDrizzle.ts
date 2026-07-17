@@ -24,7 +24,7 @@ function isMissingCatalogTableError(error: unknown): boolean {
   return (
     normalized.includes("does not exist") ||
     normalized.includes("could not find the table") ||
-    normalized.includes("relation") && normalized.includes("does not exist")
+    (normalized.includes("relation") && normalized.includes("does not exist"))
   );
 }
 

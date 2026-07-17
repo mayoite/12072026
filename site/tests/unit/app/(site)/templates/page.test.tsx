@@ -1,57 +1,81 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render } from '@testing-library/react';
-import React from 'react';
-import TemplatesPage from '@/app/(site)/templates/page';
+import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
 
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
-  usePathname: () => '/test',
-  useSearchParams: () => new URLSearchParams(),
+vi.mock("next/link", () => ({
+  default: ({
+    href,
+    children,
+    className,
+  }: {
+    href: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <a href={href} className={className}>
+      {children}
+    </a>
+  ),
 }));
 
-vi.mock('next/font/google', () => ({
-  Inter: () => ({ className: 'inter' }),
+vi.mock("@/components/home/Hero", () => ({
+  Hero: (props: { title: string; subtitle?: string }) => (
+    <header data-testid="mock-hero">
+      <h1>{props.title}</h1>
+      {props.subtitle ? <p>{props.subtitle}</p> : null}
+    </header>
+  ),
 }));
 
+vi.mock("@/components/home/layout", () => ({
+  HomeMarketingLayout: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="home-marketing-layout">{children}</div>
+  ),
+  HomeSection: ({ children }: { children: React.ReactNode }) => <section>{children}</section>,
+  HomeSectionInner: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}));
 
-vi.mock('@/components/home/Hero', async () => {
-  const actual = await vi.importActual('@/components/home/Hero');
-  return {
-    ...actual,
-    default: (props: any) => <div data-testid="mock---components-home-Hero">{JSON.stringify(props)}</div>,
-  };
-});
+vi.mock("@/components/shared/ContactTeaser", () => ({
+  ContactTeaser: () => <div data-testid="mock-contact-teaser" />,
+}));
 
-vi.mock('@/components/shared/ContactTeaser', async () => {
-  const actual = await vi.importActual('@/components/shared/ContactTeaser');
-  return {
-    ...actual,
-    default: (props: any) => <div data-testid="mock---components-shared-ContactTeaser">{JSON.stringify(props)}</div>,
-  };
-});
+vi.mock("@/lib/siteUrl", () => ({
+  SITE_URL: "https://example.com",
+}));
 
-vi.mock('@/lib/siteUrl', async () => {
-  const actual = await vi.importActual('@/lib/siteUrl');
-  return {
-    ...actual,
-    default: (props: any) => <div data-testid="mock---lib-siteUrl">{JSON.stringify(props)}</div>,
-  };
-});
+vi.mock("@/lib/security/sanitize", () => ({
+  sanitizeJsonForScript: (value: unknown) => JSON.stringify(value),
+}));
 
-vi.mock('@/lib/security/sanitize', async () => {
-  const actual = await vi.importActual('@/lib/security/sanitize');
-  return {
-    ...actual,
-    default: (props: any) => <div data-testid="mock---lib-security-sanitize">{JSON.stringify(props)}</div>,
-  };
-});
+vi.mock("@/features/site/data/seo", () => ({
+  buildPageMetadata: () => ({ title: "Workspace Templates" }),
+  buildPageJsonLd: () => ({ "@type": "CollectionPage" }),
+}));
 
+import TemplatesPage from "@/app/(site)/templates/page";
 
-describe('app/(site)/templates/page.tsx', () => {
-  it('renders without crashing', async () => {
-    // For coverage, we just need to render it
-    render(<TemplatesPage {...({ params: Promise.resolve({ id: '1', type: 'standard' }), searchParams: Promise.resolve({ page: '1' }) } as any)} />);
-    // minimal assertion
-    expect(document.body.innerHTML).toBeDefined();
+describe("app/(site)/templates/page.tsx", () => {
+  it("renders workspace templates shell with planner entry links", () => {
+    render(<TemplatesPage />);
+    expect(screen.getByTestId("home-marketing-layout")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: /workspace templates/i,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: /template library in progress/i,
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /open planning desk/i })).toHaveAttribute(
+      "href",
+      "/planning",
+    );
+    expect(screen.getByRole("link", { name: /request a layout/i })).toHaveAttribute(
+      "href",
+      "/contact",
+    );
   });
 });

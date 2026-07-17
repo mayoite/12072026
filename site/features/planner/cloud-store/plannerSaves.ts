@@ -97,7 +97,11 @@ export async function deletePlannerDocumentFromStore(
   userId?: string,
 ): Promise<boolean> {
   const res = await plannerPersistence.deletePlannerDocument(saveId, userId);
-  return res.success;
+  if (res.success) return true;
+  // Missing / not owned — honest false (callers map to 404).
+  if (res.error.code === "NOT_FOUND") return false;
+  // Real persistence failures must not look like "not deleted".
+  throw res.error;
 }
 
 // --- Backwards-compatible aliases ---------------------------------------

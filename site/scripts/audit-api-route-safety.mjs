@@ -43,14 +43,12 @@ const CSRF_OPTIONAL = new Set([
   "customer-queries",
   "recommendations",
   "nav-search",
-  "filter",
-  "generate-alt",
-  "configurator/smart-wizard",
 ]);
 
 /**
  * Paths that always require CSRF on mutating methods (prefix match).
  * Public marketing mutators stay optional via CSRF_OPTIONAL exact match first.
+ * Member AI helpers (filter rank, generate-alt, smart-wizard) require CSRF.
  */
 const CSRF_REQUIRED_PREFIXES = [
   "admin/",
@@ -64,6 +62,9 @@ const CSRF_REQUIRED_PREFIXES = [
   "ai-assist",
   "ai/",
   "audit",
+  "filter",
+  "generate-alt",
+  "configurator/smart-wizard",
 ];
 
 /**
@@ -76,9 +77,6 @@ const PUBLIC_FORM_MUTATORS = new Set([
   "log-error",
   "recommendations",
   "nav-search",
-  "filter",
-  "generate-alt",
-  "configurator/smart-wizard",
 ]);
 
 const ADMIN_AUTH_MARKERS = [

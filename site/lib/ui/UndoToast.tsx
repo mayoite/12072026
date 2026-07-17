@@ -7,6 +7,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { ArrowCounterClockwise as Undo2, ArrowClockwise as Redo2 } from "@phosphor-icons/react";
+import { Z } from "@/lib/z-index";
 
 export interface UndoToastMessage {
   id: string;
@@ -61,9 +62,10 @@ export function UndoToast({ message, onDismiss, duration = 4000 }: UndoToastProp
       role="status"
       aria-live="polite"
       aria-atomic="true"
-      className={`fixed bottom-6 left-1/2 z-[70] pointer-events-auto transition-all duration-300 ease-out ${
+      className={`fixed bottom-6 left-1/2 pointer-events-auto transition-all duration-300 ease-out ${
         visible ? "translate-x-[-50%] translate-y-0 opacity-100" : "translate-x-[-50%] translate-y-5 opacity-0"
       }`}
+      style={{ zIndex: Z.toast }}
     >
       <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl shadow-lg text-[0.8125rem] bg-[var(--surface-elevated,var(--color-ecru-950))] text-[var(--text-on-dark,var(--color-white-50))]">
         <span>{message.text}</span>

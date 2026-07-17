@@ -90,7 +90,9 @@ describe('WhatsAppCTA Component', () => {
 
     // Click FAB to open
     fireEvent.click(fab);
-    expect(screen.getByText('Quick contact')).toBeInTheDocument();
+    expect(fab).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('dialog', { name: 'Quick contact' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Close quick contact panel' })).toBeInTheDocument();
     expect(screen.getByText('WhatsApp now')).toBeInTheDocument();
     expect(screen.getByText('Call team')).toBeInTheDocument();
     expect(screen.getByText('Email us')).toBeInTheDocument();

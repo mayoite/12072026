@@ -52,6 +52,8 @@ describe("route copy — page heroes", () => {
     expect(CONTACT_PAGE_COPY.heroTitle).toBe("Contact us");
     expect(CONTACT_PAGE_COPY.offices).toHaveLength(2);
     expect(CONTACT_PAGE_COPY.offices[0].title).toBe("Corporate office");
+    // Corporate PIN must match SITE_CONTACT.address.postalCode (800001).
+    expect(CONTACT_PAGE_COPY.offices[0].lines.join(" ")).toMatch(/800\s*001/);
     expect(CONTACT_PAGE_COPY.offices[1].lines.some((l) => l.includes("Patna"))).toBe(true);
   });
 

@@ -56,10 +56,12 @@ describe('Collections Component', () => {
     const slides = screen.getAllByTestId('mock-swiper-slide');
     expect(slides.length).toBe(HOMEPAGE_COLLECTIONS_CONTENT.items.length);
 
-    // Verify first slide details (link wraps h3; assert via image + closest anchor)
+    // Link accessible name comes from visible h3; image is decorative (alt="").
     const firstItem = HOMEPAGE_COLLECTIONS_CONTENT.items[0];
-    const firstSlideImg = screen.getByAltText(firstItem.name);
+    const firstLink = screen.getByRole('link', { name: firstItem.name });
+    expect(firstLink).toHaveAttribute('href', firstItem.href);
+    const firstSlideImg = firstLink.querySelector('img');
+    expect(firstSlideImg).toHaveAttribute('alt', '');
     expect(firstSlideImg).toHaveAttribute('src', firstItem.image);
-    expect(firstSlideImg.closest('a')).toHaveAttribute('href', firstItem.href);
   });
 });

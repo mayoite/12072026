@@ -138,7 +138,7 @@ export function ModularPlannerShell({
   onRedo,
   statusLeft,
   statusRight,
-  displayUnit = "cm",
+  displayUnit = "mm",
   onDisplayUnitChange,
   fillParent = false,
   density = "compact",

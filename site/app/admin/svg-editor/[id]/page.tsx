@@ -36,10 +36,9 @@ export default async function AdminSvgEditorDetailPage({ params }: { params: Pro
     ? "Not published"
     : new Date(generatedAtMs).toLocaleString();
 
-  // If descriptor has excalidrawElements, they will be loaded automatically into FormState via descriptorToFormState
-
+  // Layout already owns <main id="main-content"> — do not nest another main.
   return (
-    <main className="h-full w-full">
+    <div className="h-full w-full">
       <AdminSvgEditorEditView
         slug={descriptor.slug}
         descriptor={descriptor}
@@ -48,6 +47,6 @@ export default async function AdminSvgEditorDetailPage({ params }: { params: Pro
         catalogLifecycle={catalogLifecycle}
         onPublishAction={publishSvgEditorAction.bind(null, id)}
       />
-    </main>
+    </div>
   );
 }

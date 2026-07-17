@@ -222,5 +222,10 @@ async function handleFilterRank(req: NextRequest): Promise<NextResponse> {
 
 export const POST = withAuth(
   async (req) => handleFilterRank(req as NextRequest),
-  { role: "member", rateLimitScope: "filter", rateLimit: 12 },
+  {
+    role: "member",
+    rateLimitScope: "filter",
+    rateLimit: 12,
+    requireCsrf: true,
+  },
 );

@@ -12,7 +12,7 @@
  * Canonical inventory is read-only via tryLoad; no descriptor/svg-catalog writes.
  */
 
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/newBlockDescriptorStub";
 import { descriptorToFormState } from "@/features/admin/svg-editor/form/svgEditorFormAdapters";
 import { tryLoad } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
@@ -24,12 +24,18 @@ const {
   publishSymbolToSupabaseCatalog,
   appendDescriptorAudit,
   setCatalogLifecycle,
+  resolveSvgPublishDualWriteDeps,
 } = vi.hoisted(() => ({
   publishDescriptorWithPipeline: vi.fn(),
   revalidatePath: vi.fn(),
   publishSymbolToSupabaseCatalog: vi.fn(),
   appendDescriptorAudit: vi.fn(),
   setCatalogLifecycle: vi.fn(),
+  resolveSvgPublishDualWriteDeps: vi.fn(async () => ({
+    dbRepository: undefined,
+    artifactStore: undefined,
+    mode: "skipped_no_db" as const,
+  })),
 }));
 
 vi.mock("next/cache", () => ({ revalidatePath }));
@@ -48,11 +54,7 @@ vi.mock("@/platform/drizzle/productsDb", () => {
 });
 
 vi.mock("@/features/admin/svg-editor/publish/resolveSvgPublishDualWrite", () => ({
-  resolveSvgPublishDualWriteDeps: vi.fn(async () => ({
-    dbRepository: undefined,
-    artifactStore: undefined,
-    mode: "skipped_no_db",
-  })),
+  resolveSvgPublishDualWriteDeps,
 }));
 
 vi.mock("@/features/shared/catalog/catalogAssetStorage.server", () => ({
@@ -108,12 +110,23 @@ function existingFormState(slug: string): SvgEditorFormState {
 }
 
 describe("publishSvgEditorAction", () => {
+  afterEach(() => {
+    delete process.env.SVG_RELEASE_AUTHORITY;
+  });
+
   beforeEach(() => {
     publishDescriptorWithPipeline.mockReset();
     revalidatePath.mockReset();
     publishSymbolToSupabaseCatalog.mockReset();
     appendDescriptorAudit.mockReset();
     setCatalogLifecycle.mockReset();
+    resolveSvgPublishDualWriteDeps.mockReset();
+    resolveSvgPublishDualWriteDeps.mockResolvedValue({
+      dbRepository: undefined,
+      artifactStore: undefined,
+      mode: "skipped_no_db",
+    });
+    delete process.env.SVG_RELEASE_AUTHORITY;
     publishDescriptorWithPipeline.mockResolvedValue({
       success: true,
       descriptor: {
@@ -307,5 +320,76 @@ describe("publishSvgEditorAction", () => {
       }),
     );
     expect(revalidatePath).toHaveBeenCalled();
+  });
+
+  it("SVG_RELEASE_AUTHORITY=db fails closed when dual-write skipped (no DB)", async () => {
+    process.env.SVG_RELEASE_AUTHORITY = "db";
+    resolveSvgPublishDualWriteDeps.mockResolvedValue({
+      dbRepository: undefined,
+      artifactStore: undefined,
+      mode: "skipped_no_db",
+    });
+
+    const result = await publishSvgEditorAction(
+      "side-table-001",
+      existingFormState("side-table-001"),
+    );
+
+    expect(result).toEqual({
+      success: false,
+      error: "DB release authority requires PRODUCTS_DATABASE_URL",
+    });
+    expect(publishDescriptorWithPipeline).not.toHaveBeenCalled();
+    expect(publishSymbolToSupabaseCatalog).not.toHaveBeenCalled();
+  });
+
+  it("SVG_RELEASE_AUTHORITY=db fails closed when R2 unavailable", async () => {
+    process.env.SVG_RELEASE_AUTHORITY = "db";
+    resolveSvgPublishDualWriteDeps.mockResolvedValue({
+      dbRepository: undefined,
+      artifactStore: undefined,
+      mode: "skipped_r2_unavailable",
+      r2Probe: { ok: false, reason: "Unauthorized (401)", source: "cloudflare-r2" },
+    });
+
+    const result = await publishSvgEditorAction(
+      "side-table-001",
+      existingFormState("side-table-001"),
+    );
+
+    expect(result).toEqual({
+      success: false,
+      error: "DB release authority requires reachable R2 catalog storage",
+    });
+    expect(publishDescriptorWithPipeline).not.toHaveBeenCalled();
+  });
+
+  it("default disk authority injects dual-write deps when resolve returns enabled", async () => {
+    const dbRepository = { publish: vi.fn() };
+    const artifactStore = { putText: vi.fn(), putBytes: vi.fn() };
+    resolveSvgPublishDualWriteDeps.mockResolvedValue({
+      dbRepository,
+      artifactStore,
+      mode: "enabled",
+      r2Probe: { ok: true, source: "cloudflare-r2" },
+    });
+    publishDescriptorWithPipeline.mockResolvedValue({
+      success: true,
+      descriptor: { slug: "side-table-001", checksum: "e".repeat(64) },
+    });
+
+    const result = await publishSvgEditorAction(
+      "side-table-001",
+      existingFormState("side-table-001"),
+    );
+
+    expect(result.success).toBe(true);
+    expect(publishDescriptorWithPipeline).toHaveBeenCalledTimes(1);
+    const deps = publishDescriptorWithPipeline.mock.calls[0]?.[1] as Record<
+      string,
+      unknown
+    >;
+    expect(deps.dbRepository).toBe(dbRepository);
+    expect(deps.artifactStore).toBe(artifactStore);
   });
 });

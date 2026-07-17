@@ -79,6 +79,7 @@ export async function ContactPageView({ intent, source }: ContactPageViewProps) 
 
               <div
                 className="scheme-panel scheme-border flex flex-col gap-4 rounded-2xl border p-6"
+                role="region"
                 aria-label="Phone, email, and service region"
               >
                 <div className="contact-channel">

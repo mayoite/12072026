@@ -39,7 +39,7 @@ export default function OpengraphImage() {
           >
             O
           </div>
-          <div style={{ fontSize: "1.875rem", fontWeight: 600, letterSpacing: "-0.0.3125rem" }}>
+          <div style={{ fontSize: "1.875rem", fontWeight: 600, letterSpacing: "-0.03125rem" }}>
             {SITE_BRAND.companyName}
           </div>
         </div>

@@ -78,6 +78,9 @@ export class DrizzleSvgRevisionPersistence
         );
       }
 
+      // DB-SVG-05: point matching managed product(s) at this revision.
+      // 0 rows is valid for pure SVG inventory not yet linked to a product.
+      // >1 is ambiguous identity and fails closed.
       const pointedProducts = await transaction
         .update(plannerManagedProducts)
         .set({
@@ -87,9 +90,9 @@ export class DrizzleSvgRevisionPersistence
         .where(eq(plannerManagedProducts.plannerSourceSlug, plannerSourceSlug))
         .returning({ id: plannerManagedProducts.id });
 
-      if (pointedProducts.length !== 1) {
+      if (pointedProducts.length > 1) {
         throw new Error(
-          `Expected one product for planner source "${plannerSourceSlug}", found ${pointedProducts.length}.`,
+          `Expected at most one product for planner source "${plannerSourceSlug}", found ${pointedProducts.length}.`,
         );
       }
     });

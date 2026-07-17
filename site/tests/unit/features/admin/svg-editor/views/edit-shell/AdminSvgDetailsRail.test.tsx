@@ -58,7 +58,7 @@ describe("AdminSvgDetailsRail", () => {
     expect(
       details.compareDocumentPosition(screen.getByTestId("mock-revision-panel")) &
         Node.DOCUMENT_POSITION_FOLLOWING,
-    ).toBeTruthy();
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     expect(screen.getByText("3D model (optional)")).toBeInTheDocument();
   });
 

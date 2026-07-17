@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { X, MagnifyingGlass as Search, Keyboard } from "@phosphor-icons/react";
+import { Z } from "@/lib/z-index";
 
 interface Shortcut {
   keys: string;
@@ -89,7 +90,10 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center">
+    <div
+      className="fixed inset-0 flex items-center justify-center"
+      style={{ zIndex: Z.modal }}
+    >
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
 

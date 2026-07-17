@@ -95,7 +95,9 @@ export async function dismissMobilePlannerPanels(page: Page): Promise<void> {
       await toggle.evaluate((el: HTMLElement) => {
         el.click();
       });
-      await page.waitForTimeout(150);
+      await expect(toggle)
+        .toHaveAttribute("aria-pressed", "false", { timeout: 3_000 })
+        .catch(() => undefined);
     }
   }
 
@@ -105,7 +107,9 @@ export async function dismissMobilePlannerPanels(page: Page): Promise<void> {
       await inventoryToggle.evaluate((el: HTMLElement) => {
         el.click();
       });
-      await page.waitForTimeout(150);
+      await expect(leftPanel)
+        .toBeHidden({ timeout: 3_000 })
+        .catch(() => undefined);
     }
   }
 
@@ -115,7 +119,9 @@ export async function dismissMobilePlannerPanels(page: Page): Promise<void> {
     await backdrop.evaluate((el: HTMLElement) => {
       el.click();
     });
-    await page.waitForTimeout(150);
+    await expect(backdrop)
+      .toBeHidden({ timeout: 3_000 })
+      .catch(() => undefined);
   }
 }
 
@@ -298,7 +304,6 @@ export async function selectPlannerTool(page: Page, toolName: string): Promise<v
     }
   }
   await waitForPlannerCanvas(page);
-  await page.waitForTimeout(150);
 }
 
 export async function getObjectCount(page: Page): Promise<number> {
@@ -677,9 +682,15 @@ export async function placeArmedCatalogOnCanvas(
     await dismissMobilePlannerPanels(page);
     await ensurePlannerCanvasOnScreen(page);
     await clickOnCanvas(page, point.rx, point.ry);
-    const count = await getFurnitureCount(page);
-    if (count >= target) return;
-    await page.waitForTimeout(200);
+    const placed = await expect
+      .poll(async () => getFurnitureCount(page), {
+        timeout: 1_500,
+        intervals: [100, 200, 400],
+      })
+      .toBeGreaterThanOrEqual(target)
+      .then(() => true)
+      .catch(() => false);
+    if (placed) return;
   }
 
   await expect

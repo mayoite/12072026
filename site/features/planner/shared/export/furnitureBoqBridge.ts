@@ -1,6 +1,11 @@
 /**
  * Single bridge from the live furniture BOQ into quote-cart + branded PDF rows.
  * Prefer this over workstation-only builders for customer-ready export.
+ *
+ * Canonical builder: `buildPlannerFurnitureBoq` (project document).
+ * Legacy `buildBoq` (placed items + catalog map) remains for lightweight helpers;
+ * convert furniture summaries with {@link furnitureBoqToBoqSummary} when a
+ * consumer still needs the older `BoqSummary` shape.
  */
 
 import type { PdfBoqRow } from "./pdfExport";
@@ -8,6 +13,7 @@ import type {
   PlannerFurnitureBoqLine,
   PlannerFurnitureBoqSummary,
 } from "./projectFurnitureBoq";
+import type { BoqSummary } from "../boq/types";
 import type { PlannerHandoffBoq } from "../handoff/handoffTypes";
 
 export type FurnitureQuoteCartItem = {
@@ -60,6 +66,38 @@ export function furnitureBoqToPdfRows(
       ? `demo-list · ${line.geometryMode}`
       : `unpriced · ${line.geometryMode}`,
   }));
+}
+
+/**
+ * Project the canonical furniture BOQ into the legacy `BoqSummary` shape
+ * used by `exportBoqToCsv` / `boqToQuoteCart`. Totals stay honest: GST is
+ * only rolled from priced lines (same as furniture builder).
+ */
+export function furnitureBoqToBoqSummary(
+  summary: PlannerFurnitureBoqSummary,
+): BoqSummary {
+  return {
+    lineItems: summary.lines.map((line) => ({
+      catalogId: line.catalogId,
+      name: line.name,
+      sku: line.sku,
+      category: line.category,
+      quantity: line.quantity,
+      unitPriceInr: line.unitPriceInr,
+      dimensions: {
+        widthMm: line.widthMm,
+        depthMm: line.depthMm,
+        heightMm: line.heightMm,
+      },
+    })),
+    totalItems: summary.totalItems,
+    totalPriceInr: summary.subtotalInr,
+    generatedAt: summary.generatedAt,
+    subtotalInr: summary.subtotalInr,
+    gstRate: summary.gstRate,
+    gstAmountInr: summary.gstInr,
+    grandTotalInr: summary.totalInr,
+  };
 }
 
 /** Compact payload for POST /api/planner/handoff (no source object IDs). */

@@ -23,7 +23,7 @@ export function FooterLogoMarquee() {
             >
               <Image
                 src={logo.src}
-                alt={logo.name}
+                alt=""
                 fill
                 sizes="176px"
                 className="footer-logo-marquee__logo opacity-100 saturate-100 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 motion-reduce:hover:scale-100"

@@ -200,5 +200,50 @@ describe("plannerDocument - additional coverage", () => {
         normalizePlannerDocument({ name: "T", status: "archived", sceneJson: {} }).status,
       ).toBe("archived");
     });
+
+    it("converts cad-suite scene cm sourceUnit to mm once (idempotent)", () => {
+      const sceneJson = {
+        type: "cad-suite-planner-scene",
+        version: 1,
+        measurement: {
+          canonicalUnit: "mm",
+          displayUnit: "mm",
+          sourceUnit: "cm",
+        },
+        room: {
+          widthMm: 600,
+          depthMm: 800,
+          wallHeightMm: 270,
+          wallThicknessMm: 15,
+          floorThicknessMm: 10,
+          originMm: { xMm: 0, yMm: 0 },
+        },
+        items: [],
+      };
+      const first = normalizePlannerDocument({
+        name: "Cm source",
+        sceneJson,
+      });
+      const room1 = first.sceneJson as {
+        measurement: { sourceUnit: string };
+        room: { widthMm: number; depthMm: number };
+      };
+      expect(room1.measurement.sourceUnit).toBe("mm");
+      expect(room1.room.widthMm).toBe(6000);
+      expect(room1.room.depthMm).toBe(8000);
+      expect(first.roomWidthMm).toBe(6000);
+      expect(first.roomDepthMm).toBe(8000);
+
+      const second = normalizePlannerDocument(first);
+      const room2 = second.sceneJson as {
+        measurement: { sourceUnit: string };
+        room: { widthMm: number; depthMm: number };
+      };
+      expect(room2.measurement.sourceUnit).toBe("mm");
+      expect(room2.room.widthMm).toBe(6000);
+      expect(room2.room.depthMm).toBe(8000);
+      expect(second.roomWidthMm).toBe(6000);
+      expect(second.roomDepthMm).toBe(8000);
+    });
   });
 });

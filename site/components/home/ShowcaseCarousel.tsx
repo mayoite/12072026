@@ -133,7 +133,7 @@ export function ShowcaseCarousel({
               className={navButtonClass}
               {...navHover}
             >
-              <ChevronLeft className="h-5 w-5" />
+              <ChevronLeft className="h-5 w-5" aria-hidden="true" />
             </motion.button>
             <motion.button
               type="button"
@@ -143,7 +143,7 @@ export function ShowcaseCarousel({
               className={navButtonClass}
               {...navHover}
             >
-              <ChevronRight className="h-5 w-5" />
+              <ChevronRight className="h-5 w-5" aria-hidden="true" />
             </motion.button>
             {browseLink ? (
               <Link href={browseLink} className={`${browseLinkClass} typ-cta`}>
@@ -157,6 +157,9 @@ export function ShowcaseCarousel({
           <div
             ref={emblaRef}
             className="overflow-hidden"
+            role="region"
+            aria-roledescription="carousel"
+            aria-label={`${sectionAriaLabel} slides`}
             onKeyDown={handleKeyDown}
             tabIndex={0}
           >
@@ -170,7 +173,7 @@ export function ShowcaseCarousel({
                   <div className="home-showcase-card__media-box relative aspect-[4/5] overflow-hidden">
                     <Image
                       src={item.image}
-                      alt={item.name}
+                      alt=""
                       aria-hidden="true"
                       fill
                       sizes="(max-width: 768px) 88vw, (max-width: 1280px) 42vw, 28rem"

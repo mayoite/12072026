@@ -89,8 +89,17 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
 
         {/* Image count badge */}
         {images.length > 0 && (
-          <div className="product-gallery__count">
-            {safeIndex + 1} / {images.length}
+          <div
+            className="product-gallery__count"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <span className="sr-only">
+              Image {safeIndex + 1} of {images.length} for {productName}
+            </span>
+            <span aria-hidden="true">
+              {safeIndex + 1} / {images.length}
+            </span>
           </div>
         )}
       </div>

@@ -466,7 +466,8 @@ describe("publishDescriptorWithPipeline skipCompile path (S4 reuses S1–S3 SVG)
 });
 
 /**
- * Disk-path mapping for dual publish safety (not Products DB transaction yet).
+ * Dual-write safety on the disk-authority path (enabled dual-write ≠ cutover).
+ * When dbRepository+artifactStore are injected: real artifacts + fail-closed rollback.
  * ADM-PUB-03 / DB-SVG-06 (ordered dual write) · DB-SVG-07 (prior live) · DB-SVG-08 (idempotent).
  */
 describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-06..08 disk path)", () => {
@@ -792,6 +793,56 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
     expect(persistRollback).toHaveBeenCalledOnce();
     expect(pipelineRollback).toHaveBeenCalledOnce();
     expect(pipelineCleanup).toHaveBeenCalledOnce();
+  });
+
+  it("dual-write: missing putBytes fails closed and rolls back disk", async () => {
+    const persistRollback = vi.fn();
+    const pipelineRollback = vi.fn();
+    const publish = vi.fn(async () => undefined);
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => compileOk(),
+      runPipeline: async () => ({ ...pipelineOk(), rollback: pipelineRollback }),
+      persist: () => ({ ...persistOk(), rollback: persistRollback }),
+      rasterizePng: () => ({ png: Buffer.from([3]), checksum: "a".repeat(64) }),
+      dbRepository: {
+        publish,
+        load: async () => null,
+      } as never,
+      artifactStore: {
+        putText: vi.fn(async () => undefined),
+        // putBytes intentionally absent — binary PNG masters require it
+      },
+    });
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error).toContain("putBytes");
+    expect(publish).not.toHaveBeenCalled();
+    expect(persistRollback).toHaveBeenCalledOnce();
+    expect(pipelineRollback).toHaveBeenCalledOnce();
+  });
+
+  it("dual-write without artifactStore fails closed (not silent disk-only success)", async () => {
+    const persistRollback = vi.fn();
+    const pipelineRollback = vi.fn();
+    const publish = vi.fn(async () => undefined);
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => compileOk(),
+      runPipeline: async () => ({ ...pipelineOk(), rollback: pipelineRollback }),
+      persist: () => ({ ...persistOk(), rollback: persistRollback }),
+      dbRepository: {
+        publish,
+        load: async () => null,
+      } as never,
+      // artifactStore omitted while dbRepository present = misconfigured dual-write
+    });
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error).toContain("Immutable SVG artifact storage is not configured");
+    expect(publish).not.toHaveBeenCalled();
+    expect(persistRollback).toHaveBeenCalledOnce();
+    expect(pipelineRollback).toHaveBeenCalledOnce();
   });
 
   it("rolls back when persist throws after pipeline success", async () => {

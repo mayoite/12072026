@@ -65,10 +65,17 @@ function applyCatalogFilters(items: CatalogItem[], query: string, purpose: Plann
   return purposeScoped.filter((item) => itemMatchesCatalogSearch(item, query));
 }
 
-function composeCatalogSource(managedCount: number, configuratorCount: number): string {
+function composeCatalogSource(
+  managedCount: number,
+  configuratorCount: number,
+  managedError?: string,
+  configuratorError?: string,
+): string {
   const parts = ["static"];
   if (configuratorCount > 0) parts.push("configurator");
   if (managedCount > 0) parts.push("managed");
+  if (managedError) parts.push("managed-error");
+  if (configuratorError) parts.push("configurator-error");
   return parts.join("+");
 }
 
@@ -100,18 +107,39 @@ export const usePlannerCatalogStore = create<PlannerCatalogState>((set, get) => 
       );
       const managedCount = managedResult.items.length;
       const configuratorCount = configuratorResult.items.length;
+      if (managedResult.error) {
+        console.warn(
+          "[planner] Managed catalog layer unavailable:",
+          managedResult.error,
+        );
+      }
+      if (configuratorResult.error) {
+        console.warn(
+          "[planner] Configurator catalog layer unavailable:",
+          configuratorResult.error,
+        );
+      }
 
       set({
         items: enrichCatalogItems(merged),
-        catalogSource: composeCatalogSource(managedCount, configuratorCount),
+        catalogSource: composeCatalogSource(
+          managedCount,
+          configuratorCount,
+          managedResult.error,
+          configuratorResult.error,
+        ),
         managedCount,
         configuratorCount,
       });
-    } catch {
+    } catch (error) {
       if (generation !== catalogHydrationGeneration) return;
+      console.error(
+        "[planner] Catalog hydration failed; falling back to static workspace catalog:",
+        error instanceof Error ? error.message : error,
+      );
       set({
         items: enrichCatalogItems(PLANNER_CATALOG_ITEMS),
-        catalogSource: "static",
+        catalogSource: "static+hydrate-error",
         managedCount: 0,
         configuratorCount: 0,
       });

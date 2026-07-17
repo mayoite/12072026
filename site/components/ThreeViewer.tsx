@@ -32,7 +32,10 @@ class ThreeErrorBoundary extends Component<{ children: ReactNode; fallback?: Rea
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <div className="flex h-full min-h-[20rem] flex-col items-center justify-center bg-inverse/5 text-subtle p-6 text-center border border-dashed border-muted rounded-xl">
+          <div
+            className="flex h-full min-h-[20rem] flex-col items-center justify-center bg-inverse/5 text-subtle p-6 text-center border border-dashed border-muted rounded-xl"
+            role="status"
+          >
             <p className="text-sm font-semibold text-muted">3D Preview unavailable</p>
             <p className="text-xs text-muted mt-1">An error occurred loading the 3D model.</p>
           </div>
@@ -86,16 +89,26 @@ export default function ThreeViewer({ modelUrl, fallback }: ThreeViewerProps) {
   if (!modelUrl) return fallback || null;
 
   return (
-    <div ref={mountRef} className="pdp-viewer-panel w-full h-full min-h-0">
+    <div
+      ref={mountRef}
+      className="pdp-viewer-panel w-full h-full min-h-0"
+      role="img"
+      aria-label="Interactive 3D product preview"
+    >
       <ThreeErrorBoundary fallback={fallback}>
         <Suspense
           fallback={
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="pdp-viewer-spinner"></div>
+            <div
+              className="absolute inset-0 flex items-center justify-center"
+              role="status"
+              aria-live="polite"
+              aria-label="Loading 3D model"
+            >
+              <div className="pdp-viewer-spinner" aria-hidden="true"></div>
             </div>
           }
         >
-          <Canvas camera={{ position: [0, 2, 5], fov: 50 }}>
+          <Canvas camera={{ position: [0, 2, 5], fov: 50 }} aria-hidden="true">
             <ResizeRenderer targetRef={mountRef} />
             <ambientLight intensity={0.5} />
             <spotLight

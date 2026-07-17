@@ -92,10 +92,11 @@ describe('CategoryGrid Component', () => {
       expect(screen.getByText(p.detail)).toBeInTheDocument();
     });
 
-    const categoryLink = screen.getByRole('link');
+    const categoryLink = screen.getByRole('link', { name: 'Label for Seating' });
     expect(categoryLink).toHaveAttribute('href', '/catalog/cat-seating');
 
-    const img = screen.getByAltText('Label for Seating');
+    const img = categoryLink.querySelector('img');
+    expect(img).toHaveAttribute('alt', '');
     expect(img).toHaveAttribute('src', '/seating.jpg');
   });
 

@@ -56,7 +56,19 @@ describe("mutation route CSRF + rate-limit matrix (static)", () => {
         methods: /requireCsrf:\s*true/,
       },
       { segments: ["admin", "svg-editor"], methods: /requireCsrf:\s*true/ },
+      // Legacy + canonical catalog mutators (F7b exclusive surfaces)
       { segments: ["admin", "catalog"], methods: /requireCsrf:\s*true/ },
+      { segments: ["admin", "catalog", "[id]"], methods: /requireCsrf:\s*true/ },
+      { segments: ["admin", "catalogs", "[type]"], methods: /requireCsrf:\s*true/ },
+      {
+        segments: ["admin", "catalogs", "[type]", "[id]"],
+        methods: /requireCsrf:\s*true/,
+      },
+      { segments: ["admin", "planner-catalog"], methods: /requireCsrf:\s*true/ },
+      {
+        segments: ["admin", "configurator-catalog", "[id]"],
+        methods: /requireCsrf:\s*true/,
+      },
       { segments: ["customer-queries", "manage"], methods: /export async function PATCH/ },
       { segments: ["theme", "manage"], methods: /export async function POST/ },
     ];
@@ -133,6 +145,44 @@ describe("mutation route CSRF + rate-limit matrix (static)", () => {
       expect(source).not.toMatch(
         /validateCsrfRequest[\s\S]{0,400}?API_ERROR_CODES\.(INVALID_INPUT|INSUFFICIENT_PERMISSIONS)/,
       );
+    });
+  });
+
+  describe("F4b site / AI mutators", () => {
+    it.each([
+      ["ai-advisor"],
+      ["ai-assist"],
+      ["ai", "advisor"],
+      ["filter"],
+      ["generate-alt"],
+      ["configurator", "smart-wizard"],
+      ["theme", "manage"],
+    ])("%s requires CSRF + rate limit + rejection hygiene", (...segments) => {
+      const source = readRoute(...segments);
+      expect(hasCsrf(source)).toBe(true);
+      expect(hasRateLimit(source)).toBe(true);
+      expect(hasRejectionHeader(source)).toBe(true);
+      if (/Invalid or missing CSRF token/i.test(source)) {
+        expect(source).not.toMatch(
+          /API_ERROR_CODES\.(INVALID_INPUT|INSUFFICIENT_PERMISSIONS)/,
+        );
+      }
+    });
+
+    it("public marketing mutators stay rate-limited without CSRF", () => {
+      for (const segments of [
+        ["customer-queries"],
+        ["tracking"],
+        ["log-error"],
+        ["recommendations"],
+        ["nav-search"],
+      ]) {
+        const source = readRoute(...segments);
+        expect(source).toMatch(/export async function POST/);
+        expect(hasRateLimit(source)).toBe(true);
+        expect(source).not.toMatch(/requireCsrf:\s*true/);
+        expect(source).not.toMatch(/validateCsrfRequest/);
+      }
     });
   });
 });

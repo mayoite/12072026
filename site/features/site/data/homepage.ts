@@ -44,7 +44,8 @@ export const HOMEPAGE_HERO_CONTENT = {
   secondaryCta: { label: "Request a quote", href: "/#contact" },
   glassProof: {
     badge: "Trusted by",
-    lead: "Executed 400+ workplace projects since 2011 — verified through internal project records.",
+    // Aligned with BUSINESS_STATS_SAFE_DEFAULTS.projectsDelivered (120) and proof/solutions floors.
+    lead: "Executed 120+ workplace projects since 2011 — verified through internal project records.",
     support: "Serving India's biggest companies and government.",
     href: "/trusted-by",
     cta: "View clients",
@@ -256,9 +257,14 @@ export const HOMEPAGE_CLOSING_CTA_CONTENT = {
   },
 } as const;
 
+/**
+ * Homepage KPI strip. Project/client floors match `TRUSTED_BY_STATS` and
+ * SOLUTIONS_PAGE_COPY.stats — do not inflate above `BUSINESS_STATS_SAFE_DEFAULTS`
+ * without a dated internal source review.
+ */
 export const HOMEPAGE_STATS_CONTENT = [
   { value: "14+", label: "Years delivering workspaces" },
-  { value: "500+", label: "Projects completed" },
+  { value: "120+", label: "Projects completed" },
   { value: "50+", label: "Partner brands and product lines" },
   { value: "24/7", label: "After-sales support routing" },
 ] as const;

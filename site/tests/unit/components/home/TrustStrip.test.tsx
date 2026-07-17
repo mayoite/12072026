@@ -33,7 +33,9 @@ describe('TrustStrip Component', () => {
     render(<TrustStrip stats={stats} />);
 
     // Verify main section
-    expect(screen.getByTestId('home-trust')).toBeInTheDocument();
+    const section = screen.getByTestId('home-trust');
+    expect(section).toBeInTheDocument();
+    expect(section).toHaveAttribute('aria-label', 'Business metrics');
 
     // Verify KPI elements are rendered
     expect(screen.getByTestId('kpi-years-experience')).toHaveTextContent('Value: 10');

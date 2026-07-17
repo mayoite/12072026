@@ -1,7 +1,14 @@
 /**
- * Top-level planner document model (domain / portal / API saves).
- * Live guest/canvas project model lives under `features/planner/model/`.
- * Do not treat this tree as the plan canvas host.
+ * Portal / domain / API save document model + shared domain exports.
+ *
+ * Dual document types (both under this folder — do not conflate):
+ * 1. `PlannerProject` + open3d `PlannerSceneEnvelope` (`types.ts` / `project.ts`)
+ *    — live canvas plan geometry (`type: "open3d-floorplan-project"`).
+ * 2. `PlannerDocument` + cad-suite `PlannerSceneEnvelope` (`plannerDocument.ts`)
+ *    — save row / CRM / portal (`type: "cad-suite-planner-scene"` in sceneJson).
+ *
+ * Prefer aliases `Open3dPlannerSceneEnvelope` and `CadSuitePlannerSceneEnvelope`.
+ * Do not treat `PlannerDocument` as the plan canvas host.
  * @see features/planner/CONTENTS.md — Dual trees
  */
 
@@ -47,6 +54,7 @@ export type {
   PlannerSaveSummary,
   PlannerSaveWrite,
   PlannerUnitSystem,
+  CadSuitePlannerSceneEnvelope,
   PlannerSceneEnvelope,
   PlannerSceneItem,
   PlannerSceneRoom,

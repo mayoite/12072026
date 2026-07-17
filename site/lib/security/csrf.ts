@@ -2,6 +2,7 @@
  * CSRF protection utilities for API routes.
  * Implements double-submit cookie pattern with timing-safe comparison.
  */
+import "server-only";
 
 import { cookies } from "next/headers";
 import { timingSafeEqual } from "crypto";

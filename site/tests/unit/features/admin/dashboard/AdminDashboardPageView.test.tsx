@@ -9,7 +9,7 @@ describe("AdminDashboardPageView (name-mirror)", () => {
     expect(screen.getByText("Admin")).toBeInTheDocument();
     expect(screen.getByLabelText("Quick operations")).toBeInTheDocument();
     expect(container.querySelectorAll(".admin-kpi").length).toBe(4);
-    expect(container.querySelector(".grid")).toBeTruthy();
+    expect(container.querySelector(".grid")).not.toBeNull();
     expect(container.querySelectorAll(".shell-admin-card").length).toBeGreaterThan(3);
     expect(container.querySelector(".admin-page__header")).not.toHaveAttribute("style");
   });

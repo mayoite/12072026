@@ -1,5 +1,6 @@
 import type { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { getPublicApiIp } from "@/app/api/_lib/public";
 import { createSupabaseAuthAdminClient } from '@/platform/supabase/auth-admin';
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import { success, error, rateLimitedError } from "@/features/shared/api/apiResponse";
@@ -99,7 +100,9 @@ async function resolveUserId(req: NextRequest): Promise<{
 }
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
+  // Use first client IP only — full XFF chains are attacker-controllable and
+  // would mint a new rate-limit key on every request if used raw.
+  const ip = getPublicApiIp(req);
   const rl = await rateLimit(`tracking:${ip}`, 30, 60000);
   if (!rl.success) {
     return rateLimitedError("Too many requests", rl.reset);

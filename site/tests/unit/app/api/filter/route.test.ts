@@ -8,6 +8,10 @@ vi.mock("@/lib/rateLimit", () => ({
   rateLimit: vi.fn(),
 }));
 
+vi.mock("@/lib/security/csrf", () => ({
+  validateCsrfRequest: vi.fn().mockResolvedValue(true),
+}));
+
 vi.mock("@/platform/supabase/server", () => ({
   createServerClient: vi.fn(() =>
     Promise.resolve({

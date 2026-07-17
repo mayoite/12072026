@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 describe('env.server', () => {
+  // Dynamic import + vi.resetModules is slow under parallel Windows forks.
+  const IMPORT_TEST_TIMEOUT_MS = 30_000;
   let originalEnv: NodeJS.ProcessEnv;
 
   beforeEach(() => {
@@ -28,7 +30,7 @@ describe('env.server', () => {
     expect(env.OPENROUTER_MODEL).toBe('test-model');
     expect(env.GEMINI_API_KEY).toBe('test-gemini-key');
     expect(env.GEMINI_MODEL).toBe('test-gemini-model');
-  });
+  }, IMPORT_TEST_TIMEOUT_MS);
 
   it('should throw an error and console.error when environment validation fails', async () => {
     // Force Zod validation failure by passing a non-string or we can use another trick.
@@ -43,7 +45,7 @@ describe('env.server', () => {
     expect(() => env.OPENAI_API_KEY).toThrow('Invalid server environment variables');
     expect(consoleSpy).toHaveBeenCalled();
     consoleSpy.mockRestore();
-  });
+  }, IMPORT_TEST_TIMEOUT_MS);
 
   it('resolves Cloudflare S3 keys as an intact pair (R2_* wins over ACCESS_*)', async () => {
     process.env.CLOUDFLARE_R2_ACCESS_KEY_ID = 'r2-access';
@@ -57,7 +59,7 @@ describe('env.server', () => {
 
     expect(env.CLOUDFLARE_ACCESS_KEY_ID).toBe('r2-access');
     expect(env.CLOUDFLARE_SECRET_ACCESS_KEY).toBe('r2-secret');
-  });
+  }, IMPORT_TEST_TIMEOUT_MS);
 
   it('does not mix incomplete R2 access with generic secret', async () => {
     process.env.CLOUDFLARE_R2_ACCESS_KEY_ID = 'r2-access-only';
@@ -69,5 +71,5 @@ describe('env.server', () => {
 
     expect(env.CLOUDFLARE_ACCESS_KEY_ID).toBe('generic-access');
     expect(env.CLOUDFLARE_SECRET_ACCESS_KEY).toBe('generic-secret');
-  });
+  }, IMPORT_TEST_TIMEOUT_MS);
 });

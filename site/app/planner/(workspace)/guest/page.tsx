@@ -1,26 +1,26 @@
 import { notFound, redirect } from "next/navigation";
 
-import {
-  isEntityUuid,
-  newEntityId,
-} from "@/features/planner/lib/newEntityId";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 import { PlannerWorkspaceRoute } from "@/features/planner/ui/PlannerWorkspaceRoute";
 import { buildGuestPlannerDraftRedirectHref } from "@/lib/analytics/plannerEntry";
 
+import { parsePlanIdSearchParam } from "../planIdGate";
+
 export const dynamic = "force-dynamic";
 
-/** Live guest workspace — Fabric 2-D + Three 3-D. */
+/** Live guest workspace - Fabric 2-D + Three 3-D. */
 export default async function PlannerGuestRoute({
   searchParams,
 }: {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const resolved = searchParams ? await searchParams : {};
-  const rawId = resolved.id;
-  if (Array.isArray(rawId)) {
+  const planIdGate = parsePlanIdSearchParam(resolved.id);
+  if (!planIdGate.ok) {
     notFound();
   }
-  const planId = rawId?.trim() || undefined;
+  const planId = planIdGate.planId;
+
   const rawResume = resolved.resume;
   if (Array.isArray(rawResume)) {
     notFound();
@@ -28,7 +28,6 @@ export default async function PlannerGuestRoute({
   const resumeLegacyDraft = rawResume === "1";
 
   if (
-    (rawId !== undefined && !planId) ||
     (rawResume !== undefined && !resumeLegacyDraft) ||
     (planId && resumeLegacyDraft)
   ) {
@@ -40,10 +39,6 @@ export default async function PlannerGuestRoute({
   // The legacy shared guest draft remains available only by explicit request.
   if (!planId && !resumeLegacyDraft) {
     redirect(buildGuestPlannerDraftRedirectHref(newEntityId(), resolved));
-  }
-
-  if (planId && !isEntityUuid(planId)) {
-    notFound();
   }
 
   return <PlannerWorkspaceRoute guestMode planId={planId} />;

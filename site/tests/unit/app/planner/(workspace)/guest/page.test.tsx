@@ -81,6 +81,30 @@ describe("PlannerGuestRoute", () => {
     expect(host).toHaveAttribute("data-plan-id", TEST_CLOUD_PLAN_1);
   });
 
+  it("canonicalizes uppercase guest plan ids to lowercase", async () => {
+    render(
+      await PlannerGuestRoute({
+        searchParams: Promise.resolve({ id: TEST_CLOUD_PLAN_1.toUpperCase() }),
+      }),
+    );
+    expect(screen.getByTestId("open3d-planner-route")).toHaveAttribute(
+      "data-plan-id",
+      TEST_CLOUD_PLAN_1.toLowerCase(),
+    );
+  });
+
+  it("accepts whitespace-padded guest plan ids after trim", async () => {
+    render(
+      await PlannerGuestRoute({
+        searchParams: Promise.resolve({ id: `  ${TEST_CLOUD_PLAN_1}  ` }),
+      }),
+    );
+    expect(screen.getByTestId("open3d-planner-route")).toHaveAttribute(
+      "data-plan-id",
+      TEST_CLOUD_PLAN_1.toLowerCase(),
+    );
+  });
+
   it("rejects repeated plan ids as ambiguous", async () => {
     await expect(
       PlannerGuestRoute({

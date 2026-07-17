@@ -75,6 +75,14 @@ describe('ShowcaseCarousel Component', () => {
     expect(screen.getByText('Workspace design')).toBeInTheDocument();
     expect(screen.getByText('Modern Workspaces')).toBeInTheDocument();
     expect(screen.getByText('Fluid Pro')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Office showcase slides' })).toHaveAttribute(
+      'aria-roledescription',
+      'carousel',
+    );
+    expect(screen.getByRole('link', { name: 'Fluid Pro' }).querySelector('img')).toHaveAttribute(
+      'alt',
+      '',
+    );
 
     const prevBtn = screen.getByRole('button', { name: 'Previous project' });
     const nextBtn = screen.getByRole('button', { name: 'Next project' });

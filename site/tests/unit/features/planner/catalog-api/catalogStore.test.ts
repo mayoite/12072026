@@ -112,4 +112,27 @@ describe("catalogStore", () => {
     expect(store.items.some((item) => item.id === "config-1")).toBe(true);
     expect(store.items.some((item) => item.id === "managed-1")).toBe(true);
   });
+
+  it("marks hydrate source when remote layers fail", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(fetchPlannerCatalogItems).mockResolvedValue({
+      items: [],
+      source: "managed-fetch-failed",
+      error: "HTTP 503",
+    });
+    vi.mocked(fetchConfiguratorCatalogItems).mockResolvedValue({
+      items: [],
+      source: "configurator-fetch-failed",
+      error: "HTTP 502",
+    });
+
+    await usePlannerCatalogStore.getState().hydrateCatalog();
+
+    const store = usePlannerCatalogStore.getState();
+    expect(store.catalogSource).toBe("static+managed-error+configurator-error");
+    expect(store.managedCount).toBe(0);
+    expect(store.configuratorCount).toBe(0);
+    expect(warn).toHaveBeenCalled();
+    warn.mockRestore();
+  });
 });

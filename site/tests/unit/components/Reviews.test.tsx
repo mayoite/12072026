@@ -40,6 +40,7 @@ describe('Reviews Component', () => {
     // Click rating star button 4
     const starButtons = screen.getAllByRole('button', { name: /Rate \d stars/ });
     fireEvent.click(starButtons[3]); // Rating 4
+    expect(starButtons[3]).toHaveAttribute('aria-pressed', 'true');
 
     // Fill out form fields
     const nameInput = screen.getByLabelText('Name');

@@ -2,6 +2,8 @@
  * Shared server auth helpers used across all product surfaces (Planner, Configurator, CRM).
  * Wraps Supabase auth and provides guest access functionality.
  */
+import "server-only";
+
 import { redirect } from "next/navigation";
 import { createServerClient } from "@/platform/supabase/server";
 import { hasPublicSupabaseEnv } from "@/platform/supabase/env";

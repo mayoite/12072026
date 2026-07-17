@@ -1,8 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import {
-  createAnonymousUserId,
-  normalizeAnonymousUserId,
-} from "@/lib/tracking/anonymousUserId";
 
 export type RecommendationResult = {
   mode: "personalized" | "popular";
@@ -17,26 +13,19 @@ export type RecommendationResult = {
   }>;
 };
 
-const getOrCreateUserId = () => {
-  if (typeof window === "undefined") return "";
-
-  let userId = normalizeAnonymousUserId(localStorage.getItem("oando_user_id"));
-  if (!userId) {
-    userId = createAnonymousUserId();
-    localStorage.setItem("oando_user_id", userId);
-  }
-  return userId;
-};
-
+/**
+ * Personalized mode uses the tracking anon cookie / bearer session on the server.
+ * Do not send a client-invented userId (API ignores body userId to prevent IDOR).
+ */
 export function useRecommendations(enabled = true) {
   return useQuery<RecommendationResult>({
     queryKey: ["recommendations", enabled],
     queryFn: async () => {
-      const userId = getOrCreateUserId();
       const res = await fetch("/api/recommendations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, limit: 4 }),
+        credentials: "include",
+        body: JSON.stringify({ limit: 4 }),
       });
 
       if (!res.ok) {

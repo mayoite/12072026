@@ -9,6 +9,7 @@ export { exportBrandedPdf, exportBoqOnly } from "./brandedPdfExport";
 export {
   furnitureBoqToQuoteCartItems,
   furnitureBoqToPdfRows,
+  furnitureBoqToBoqSummary,
   furnitureBoqToHandoffPayload,
 } from "./furnitureBoqBridge";
 export type { FurnitureQuoteCartItem } from "./furnitureBoqBridge";

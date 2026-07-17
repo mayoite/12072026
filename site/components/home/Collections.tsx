@@ -34,6 +34,7 @@ export function Collections() {
   return (
     <section
       data-testid="home-collections"
+      aria-label="Product collections"
       className="home-section--soft border-t border-b border-theme-soft section-y-sm"
     >
       <div className="home-shell-xl">
@@ -117,7 +118,7 @@ export function Collections() {
                       {/* Layers: media (0) → overlay (1) → footer (2). One fill image only. */}
                       <Image
                         src={item.image}
-                        alt={item.name}
+                        alt=""
                         aria-hidden="true"
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"

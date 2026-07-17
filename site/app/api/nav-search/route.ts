@@ -2,6 +2,7 @@ import type { NextRequest} from "next/server";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import Fuse from "fuse.js";
+import { getPublicApiIp } from "@/app/api/_lib/public";
 import { getCatalog } from '@/lib/catalog/site/getProducts';
 import { buildRequestedCategoryCatalog } from '@/lib/catalog/site/categories';
 import { rateLimit } from "@/lib/rateLimit";
@@ -270,10 +271,7 @@ async function executeSearch(
 
 export async function POST(req: NextRequest) {
   const started = Date.now();
-  const ip =
-    req.headers.get("cf-connecting-ip") ??
-    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
-    "127.0.0.1";
+  const ip = getPublicApiIp(req);
   const limitRes = await rateLimit(`nav-search:${ip}`, 20, 60000);
 
   if (!limitRes.success) {
@@ -330,10 +328,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   const started = Date.now();
-  const ip =
-    req.headers.get("cf-connecting-ip") ??
-    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
-    "127.0.0.1";
+  const ip = getPublicApiIp(req);
   const limitRes = await rateLimit(`nav-search:${ip}`, 20, 60000);
   if (!limitRes.success) {
     return NextResponse.json(

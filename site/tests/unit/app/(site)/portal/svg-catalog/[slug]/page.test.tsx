@@ -55,12 +55,21 @@ describe("app/(site)/portal/svg-catalog/[slug]/page.tsx", () => {
     expect(notFound).toHaveBeenCalled();
   });
 
-  it("generateMetadata produces title/og with version", async () => {
+  it("generateMetadata produces title/og with version and keeps noindex (protected portal)", async () => {
     const desc = { slug: "x", schemaVersion: "2026-07-04.v2", variant: "fixed" } as any;
     (loader.tryLoad as any).mockReturnValue({ ok: true, value: desc });
     const meta = await generateMetadata({ params: Promise.resolve({ slug: "x" }) });
     expect(meta.title).toMatch(/x/);
     expect(meta.openGraph?.images).toBeDefined();
+    expect(meta.robots).toEqual({ index: false, follow: false });
+  });
+
+  it("generateMetadata hard-404s unknown slug (no soft Not found metadata)", async () => {
+    (loader.tryLoad as any).mockReturnValue({ ok: false, error: { kind: "notFound" } });
+    await expect(
+      generateMetadata({ params: Promise.resolve({ slug: "nope" }) }),
+    ).rejects.toThrow();
+    expect(notFound).toHaveBeenCalled();
   });
 
   it("05-PORT-09: generateMetadata OG image references R2/CDN thumb bucket, not public/svg-catalog", async () => {

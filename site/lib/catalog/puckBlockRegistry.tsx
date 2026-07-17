@@ -7,16 +7,15 @@
  *     Phase 03 SVG pipeline output is wired into the editor preview)
  *   - a Puck `fields` map driven by the Zod schema's cartography
  *
- * Authority: PACKAGES.md admin panel set, AGENTS.md §Deferred by User Step 3,
- * Phase 02 §02-CAT-02 discriminated union (fixed | configurable | parametric).
+ * Authority: PACKAGES.md admin panel set, Phase 02 §02-CAT-02 discriminated
+ * union (fixed | configurable | parametric).
  *
- * The runtime registry is referenced from:
- *   - `site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts`
- *     (Phase 05 one-line alias re-export — verbatim, no fork; see I-D module paths).
- * One-line alias: site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts does `export * from "@/features/admin/svg-editor/puckBlockRegistry";` (verbatim, no fork, per I-D).
+ * Canonical module: this file (`site/lib/catalog/puckBlockRegistry.tsx`).
+ * Portal one-line alias (no fork):
+ *   `site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts`
+ *   → `export * from "@/lib/catalog/puckBlockRegistry";`
  * Admin authoring uses `SvgEditorForm`; it does not mount Puck.
- * Canonical path locked: site/features/admin/svg-editor/puckBlockRegistry.tsx .
- * GS BP-04/BP-05 + design §7/11 + anti-copy (no donor visuals; semantic tokens + Figma minimize principles) + 5-product. See also route-contract _phase* entries.
+ * GS BP-04/BP-05 + design §7/11 + anti-copy (no donor visuals; semantic tokens).
  *
  * Forbidden:
  *   - `any`, `@ts-ignore`, `@ts-nocheck`, `eslint suppress` (AGENTS.md).

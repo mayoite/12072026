@@ -23,7 +23,11 @@ export function CompareDock() {
   if (items.length === 0 || pathname === "/compare") return null;
 
   return (
-    <div className="scheme-panel scheme-border fixed bottom-4 left-1/2 z-40 w-[calc(100%-1rem)] max-w-3xl -translate-x-1/2 rounded-xl border p-3 shadow-theme-float sm:bottom-3">
+    <div
+      role="region"
+      aria-label="Product comparison shortlist"
+      className="scheme-panel scheme-border fixed bottom-4 left-1/2 z-40 w-[calc(100%-1rem)] max-w-3xl -translate-x-1/2 rounded-xl border p-3 shadow-theme-float sm:bottom-3"
+    >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <p className="typ-body-sm text-body">

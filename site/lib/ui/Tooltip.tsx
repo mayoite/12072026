@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, type ReactNode } from "react";
+import { Z } from "@/lib/z-index";
 
 interface TooltipProps {
   /** The content to show in the tooltip */
@@ -61,12 +62,13 @@ export function Tooltip({
       {isVisible && (
         <span
           role="tooltip"
-          className={`absolute z-[100] pointer-events-none ${positionClasses[position]} ${
+          className={`absolute pointer-events-none ${positionClasses[position]} ${
             variant === "rich"
               ? "w-64 rounded-lg border p-3 shadow-lg"
               : "max-w-xs rounded px-2 py-1 text-xs"
           }`}
           style={{
+            zIndex: Z.tooltip,
             background: variant === "rich" ? "var(--surface-page, var(--color-white-50))" : "var(--surface-inverse, var(--color-ecru-950))",
             color: variant === "rich" ? "var(--text-body, var(--color-bronze-900))" : "var(--text-inverse, var(--color-white-50))",
             borderColor: variant === "rich" ? "var(--border-soft, var(--color-bronze-100))" : "transparent",

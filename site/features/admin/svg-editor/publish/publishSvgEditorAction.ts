@@ -92,21 +92,13 @@ export async function publishSvgEditorAction(
     };
   }
 
-  const compiledSvgStr = formFromEditor.compiledSvg;
-  const compileSvg =
-    typeof compiledSvgStr === "string" && compiledSvgStr.trim().length > 0
-      ? async (desc: BlockDescriptor) => {
-          const base = await compileSvgForPublish(desc);
-          if (!base.ok) return base;
-          // Prefer studio-compiled SVG bytes when the form already has them.
-          return { ...base, svg: compiledSvgStr };
-        }
-      : compileSvgForPublish;
-
+  // Publish SVG bytes come only from server `compileSvgForPublish` (S1–S3).
+  // Client `form.compiledSvg` is studio preview only — never substitute it for
+  // the released catalog symbol (fail-closed integrity; ADM-SVG-12 authority).
   const published = await publishDescriptorWithPipeline(input, {
     dbRepository: dualWrite.dbRepository,
     artifactStore: dualWrite.artifactStore,
-    compileSvg,
+    compileSvg: compileSvgForPublish,
     actorId,
   });
   if (published.success) {

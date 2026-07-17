@@ -23,7 +23,7 @@ export function WorkspaceLeftPanel({
   onItemPlace,
   onWorkstationConfigPlace,
   onWorkstationConfigBatchPlace,
-  displayUnit = "cm",
+  displayUnit = "mm",
 }: WorkspaceLeftPanelProps) {
   return (
     <InventoryPanel

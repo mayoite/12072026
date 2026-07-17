@@ -136,6 +136,131 @@ describe("DrizzleSvgRevisionPersistence", () => {
     });
   });
 
+  it("publishRelease succeeds with zero matching managed products (pure SVG inventory)", async () => {
+    const transactionInsert = vi.fn(() => ({
+      values: vi.fn(() => ({
+        onConflictDoUpdate: vi.fn(async () => undefined),
+      })),
+    }));
+    const transactionUpdate = vi.fn(() => ({
+      set: vi.fn(() => ({
+        where: vi.fn(() => ({
+          returning: vi.fn(async () => []),
+        })),
+      })),
+    }));
+    transactionMock.mockImplementation(async (operation: (transaction: unknown) => Promise<void>) =>
+      operation({ insert: transactionInsert, update: transactionUpdate }),
+    );
+
+    const { DrizzleSvgRevisionPersistence } = await import(
+      "@/features/admin/svg-editor/storage/drizzleSvgPersistence.server"
+    );
+    const store = new DrizzleSvgRevisionPersistence();
+    const liveDescriptor = {
+      ...makeNewBlockDescriptorStub(),
+      slug: "orphan-svg",
+    };
+
+    await expect(
+      store.publishRelease(
+        {
+          schemaVersion: 1,
+          revisionId: "orphan-svg-r-1234567890abcdef1234",
+          definitionTypeId: "orphan-svg",
+          definitionVersion: 1,
+          compilerVersion: "v1",
+          sourceRevision: 0,
+          artifactChecksums: {
+            descriptor: "a".repeat(64),
+            svg: "b".repeat(64),
+            png: "c".repeat(64),
+            thumbnails: {},
+          },
+          validation: { valid: true, diagnostics: [] },
+          actorId: "admin-1",
+          publishedAt: "2026-07-16T00:00:00.000Z",
+          reason: "publish",
+        },
+        {
+          typeId: "orphan-svg",
+          lifecycle: { status: "published" },
+        } as never,
+        [
+          {
+            revisionId: "orphan-svg-r-1234567890abcdef1234",
+            kind: "svg",
+            checksum: "b".repeat(64),
+            storageKey: "svg-revisions/orphan/symbol.svg",
+          },
+        ],
+        liveDescriptor,
+        {} as never,
+        "orphan-svg",
+      ),
+    ).resolves.toBeUndefined();
+
+    expect(transactionUpdate).toHaveBeenCalledTimes(1);
+  });
+
+  it("publishRelease fails closed when multiple managed products share the source slug", async () => {
+    const transactionInsert = vi.fn(() => ({
+      values: vi.fn(() => ({
+        onConflictDoUpdate: vi.fn(async () => undefined),
+      })),
+    }));
+    const transactionUpdate = vi.fn(() => ({
+      set: vi.fn(() => ({
+        where: vi.fn(() => ({
+          returning: vi.fn(async () => [{ id: "p1" }, { id: "p2" }]),
+        })),
+      })),
+    }));
+    transactionMock.mockImplementation(async (operation: (transaction: unknown) => Promise<void>) =>
+      operation({ insert: transactionInsert, update: transactionUpdate }),
+    );
+
+    const { DrizzleSvgRevisionPersistence } = await import(
+      "@/features/admin/svg-editor/storage/drizzleSvgPersistence.server"
+    );
+    const store = new DrizzleSvgRevisionPersistence();
+    const liveDescriptor = {
+      ...makeNewBlockDescriptorStub(),
+      slug: "dup-source",
+    };
+
+    await expect(
+      store.publishRelease(
+        {
+          schemaVersion: 1,
+          revisionId: "dup-source-r-1234567890abcdef1234",
+          definitionTypeId: "dup-source",
+          definitionVersion: 1,
+          compilerVersion: "v1",
+          sourceRevision: 0,
+          artifactChecksums: {
+            descriptor: "a".repeat(64),
+            svg: "b".repeat(64),
+            png: "c".repeat(64),
+            thumbnails: {},
+          },
+          validation: { valid: true, diagnostics: [] },
+          actorId: "admin-1",
+          publishedAt: "2026-07-16T00:00:00.000Z",
+          reason: "publish",
+        },
+        {
+          typeId: "dup-source",
+          lifecycle: { status: "published" },
+        } as never,
+        [],
+        liveDescriptor,
+        {} as never,
+        "dup-source",
+      ),
+    ).rejects.toThrow(/at most one product/);
+  });
+
   it("insertRevision writes revision + upserts block_descriptors with checksum", async () => {
     const valuesCalls: unknown[] = [];
     insertMock.mockImplementation(() => ({

@@ -142,12 +142,6 @@ export function ProductViewer({
   ].filter(Boolean) as string[];
 
   const uniqueImages = Array.from(new Set(allImages));
-  const _swatchFallbackImage =
-    product.flagshipImage ||
-    product.images?.find(Boolean) ||
-    product.sceneImages?.find(Boolean) ||
-    uniqueImages[0] ||
-    "";
   const productImageAlt =
     (product as unknown as { altText?: string }).altText ||
     (product.metadata as Record<string, unknown> | undefined)?.ai_alt_text?.toString() ||
@@ -606,7 +600,7 @@ export function ProductViewer({
                 !isCheckingModel &&
                 isModelAvailable && (
                   <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-soft bg-panel/88 px-4 py-3 text-sm text-muted shadow-sm backdrop-blur">
-                    Toggle into the interactive model to inspect the chair from all sides.
+                    Toggle into the interactive model to inspect this product from all sides.
                   </div>
                 )
               )}
@@ -789,7 +783,7 @@ export function ProductViewer({
                     Take the next step
                   </p>
                   <p className="text-sm leading-relaxed text-muted">
-                    Add this chair to your shortlist, send a direct enquiry, or move into planning support.
+                    Add this product to your shortlist, send a direct enquiry, or move into planning support.
                   </p>
                 </div>
                 <button

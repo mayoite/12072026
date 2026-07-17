@@ -32,9 +32,11 @@ export interface FurnitureShapeInput {
 }
 
 /**
- * Planner canvas coordinates are centimetres (see room editor prompts: m × 100).
- * Shape props `widthMm` / `heightMm` store catalog cm (misnamed); autosave briefly
- * stored cm × 10 — values ≥ 1000 (or a paired leg ≥ 1000) are repaired on read.
+ * Canvas-unit helpers for catalog/legacy shape props (NOT PlannerProject space).
+ * Live project geometry is millimetres. Canvas scale is 10 mm per unit
+ * (`planner-canvas.json` → 1 unit = 1 cm). Shape props `widthMm` / `heightMm`
+ * often store catalog cm (misnamed); autosave briefly stored cm × 10 — values
+ * ≥ 1000 (or a paired leg ≥ 1000) are repaired on read.
  */
 export function plannerCanvasUnits(value: number, pairedValue?: number): number {
   if (value <= 0) return 1;

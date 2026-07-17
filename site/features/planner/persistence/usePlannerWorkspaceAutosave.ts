@@ -116,7 +116,11 @@ export function usePlannerWorkspaceAutosave(
       const existing = await loadProject(projectId);
       if (!existing?.snapshot?.trim()) return null;
       return parsePlannerSessionSnapshot(existing.snapshot);
-    } catch {
+    } catch (error) {
+      console.warn(
+        "[planner] Autosave restore failed:",
+        error instanceof Error ? error.message : error,
+      );
       return null;
     }
   }, [guestMode, ownerId, planId, projectId]);

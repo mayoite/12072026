@@ -1,16 +1,17 @@
 import type { NextRequest} from "next/server";
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { getPublicApiIp } from "@/app/api/_lib/public";
 import { getProducts, type Product } from '@/lib/catalog/site/getProducts';
 import { createSupabaseAuthAdminClient } from '@/platform/supabase/auth-admin';
 import { getCatalogProductHref } from '@/lib/catalog/site/categories';
 import { rateLimit } from "@/lib/rateLimit";
-import {
-  createAnonymousUserId,
-  normalizeAnonymousUserId,
-} from "@/lib/tracking/anonymousUserId";
+import { normalizeAnonymousUserId } from "@/lib/tracking/anonymousUserId";
+import { TRACKING_ANON_COOKIE } from "@/lib/tracking/trackingCookie";
 import { fetchViewedProducts } from "@/lib/tracking/userHistoryRepository";
 
 type RecommendationsPayload = {
+  /** @deprecated Ignored for history lookup (IDOR). Prefer session cookie / bearer. */
   userId?: string;
   limit?: number;
 };
@@ -68,19 +69,35 @@ function toRecommendation(product: Product, reason: string): Recommendation {
   };
 }
 
-async function resolveUserId(req: NextRequest, bodyUserId: string): Promise<string> {
+/**
+ * Resolve history subject for personalization.
+ * Bearer session first, then cookie-bound anon id (same as /api/tracking).
+ * Body `userId` is never trusted — it enabled cross-user history IDOR.
+ */
+async function resolveUserId(req: NextRequest): Promise<string | null> {
   const token = getBearerToken(req);
   if (token) {
-    const supabaseAdmin = createSupabaseAuthAdminClient();
-    const { data: authData } = await supabaseAdmin.auth.getUser(token);
-    const authUserId = normalizeText(authData?.user?.id);
-    if (authUserId) return authUserId;
+    try {
+      const supabaseAdmin = createSupabaseAuthAdminClient();
+      const { data: authData } = await supabaseAdmin.auth.getUser(token);
+      const authUserId = normalizeText(authData?.user?.id);
+      if (authUserId) return authUserId;
+    } catch {
+      // fall through to cookie-bound anonymous id
+    }
   }
 
-  const anonUserId = normalizeAnonymousUserId(bodyUserId);
-  if (anonUserId) return anonUserId;
+  try {
+    const cookieStore = await cookies();
+    const cookieAnonId = normalizeAnonymousUserId(
+      cookieStore.get(TRACKING_ANON_COOKIE)?.value,
+    );
+    if (cookieAnonId) return cookieAnonId;
+  } catch {
+    // cookies() unavailable in some test contexts
+  }
 
-  return createAnonymousUserId();
+  return null;
 }
 
 function pickPopular(products: Product[], limit: number): Recommendation[] {
@@ -136,10 +153,7 @@ function pickPersonalized(
 }
 
 export async function POST(req: NextRequest) {
-  const ip =
-    req.headers.get("cf-connecting-ip") ??
-    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
-    "127.0.0.1";
+  const ip = getPublicApiIp(req);
 
   try {
     const limitRes = await rateLimit(`recommendations:${ip}`, 30, 60 * 1000);
@@ -150,8 +164,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const payload = (await req.json()) as RecommendationsPayload;
-    const userId = await resolveUserId(req, normalizeText(payload.userId));
+    const payload = (await req.json().catch(() => ({}))) as RecommendationsPayload;
+    const userId = await resolveUserId(req);
     const limit = Math.min(Math.max(Number(payload.limit) || 4, 1), 8);
 
     const products = await getProducts();

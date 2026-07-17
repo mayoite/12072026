@@ -98,8 +98,11 @@ describe("Theme Manage API Route", () => {
 
       const res = await POST(createReq("POST", { presetId: "premium-dark" }));
       expect(res.status).toBe(403);
+      expect(res.headers.get("x-csrf-rejected")).toBe("1");
       const data = await res.json();
-      expect(data.error).toBe("Invalid or missing CSRF token");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("CSRF_FAILED");
+      expect(data.error.message).toBe("Invalid or missing CSRF token");
     });
 
     it("should return 400 if presetId is missing in request body", async () => {

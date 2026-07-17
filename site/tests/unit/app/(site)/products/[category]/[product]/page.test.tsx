@@ -113,7 +113,13 @@ describe('ProductPage Route', () => {
 
   describe('generateStaticParams', () => {
     it('calls buildProductStaticParams', async () => {
-      await generateStaticParams();
+      const { buildProductStaticParams } = await import('@/lib/catalog/productStaticParams');
+      vi.mocked(buildProductStaticParams).mockResolvedValueOnce([
+        { category: 'seating', product: 'super-chair' },
+      ]);
+      const params = await generateStaticParams();
+      expect(buildProductStaticParams).toHaveBeenCalledTimes(1);
+      expect(params).toEqual([{ category: 'seating', product: 'super-chair' }]);
     });
   });
 
@@ -221,8 +227,9 @@ describe('ProductPage Route', () => {
       )
         .map((node) => node.innerHTML)
         .find((html) => html.includes('"@type":"Product"') || html.includes('"@type": "Product"'));
-      expect(productScript).toBeTruthy();
-      const parsed = JSON.parse(productScript as string) as Record<string, unknown>;
+      expect(typeof productScript).toBe("string");
+      expect(productScript!.length).toBeGreaterThan(0);
+      const parsed = JSON.parse(productScript!) as Record<string, unknown>;
       expect(parsed['@type']).toBe('Product');
       expect(parsed.name).toBe('Super Chair');
       expect(parsed.description).toBe('Visible product description');

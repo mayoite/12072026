@@ -373,13 +373,13 @@ export const SITE_ROUTE_CLASSIFICATION: SiteRouteMeta[] = [
   {
     route: "/access",
     classification: "public",
-    audience: "Public / accessibility users",
-    intent: "Accessibility tools and preferences",
-    owner: "Ops",
+    audience: "Public / returning customer",
+    intent: "Sign-in or guest planner entry (auth gate)",
+    owner: "Site",
     canonicalUrl: canonicalFor("/access"),
-    primaryAction: "Adjust preferences",
+    primaryAction: "Sign in",
     indexable: false,
-    notes: "Utility page; noindex.",
+    notes: "Auth entry utility; noindex. Not an accessibility tools page.",
   },
   {
     route: "/quote-cart",

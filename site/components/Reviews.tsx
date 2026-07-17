@@ -72,8 +72,8 @@ export function Reviews({
                   Decision-makers use this section to gauge lived experience, not marketing copy. Keep it specific and useful.
                 </p>
               </div>
-              <div className="pdp-reviews-summary">
-                <div className="mb-1 flex gap-1 text-primary">
+              <div className="pdp-reviews-summary" aria-label={`Average rating ${avgRating} from ${reviews.length} reviews`}>
+                <div className="mb-1 flex gap-1 text-primary" aria-hidden="true">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
@@ -120,18 +120,23 @@ export function Reviews({
                           {new Date(r.created_at).toLocaleDateString()}
                         </span>
                       </div>
-                      <div className="flex text-primary">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={clsx(
-                              "h-3.5 w-3.5",
-                              i < r.rating
-                                ? "fill-current"
-                                : "text-[var(--border-soft)] fill-transparent",
-                            )}
-                          />
-                        ))}
+                      <div
+                        className="flex text-primary"
+                        aria-label={`${r.rating} out of 5 stars`}
+                      >
+                        <span className="flex" aria-hidden="true">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={clsx(
+                                "h-3.5 w-3.5",
+                                i < r.rating
+                                  ? "fill-current"
+                                  : "text-[var(--border-soft)] fill-transparent",
+                              )}
+                            />
+                          ))}
+                        </span>
                       </div>
                     </div>
                     <p className="text-sm leading-relaxed text-[var(--text-body)]">
@@ -157,20 +162,27 @@ export function Reviews({
 
               <form onSubmit={handleSubmit} className="mt-6 space-y-5">
                 <div>
-                  <label className="pdp-reviews-label">
+                  <span id="review-rating-label" className="pdp-reviews-label">
                     Rating
-                  </label>
-                  <div className="flex gap-2">
+                  </span>
+                  <div
+                    className="flex gap-2"
+                    role="group"
+                    aria-labelledby="review-rating-label"
+                    aria-label={`Selected rating ${rating} of 5`}
+                  >
                     {[1, 2, 3, 4, 5].map((val) => (
                       <button
                         key={val}
                         type="button"
                         onClick={() => setRating(val)}
                         aria-label={`Rate ${val} stars`}
+                        aria-pressed={rating === val}
                         title={`Rate ${val} stars`}
                         className="pdp-reviews-star-button"
                       >
                         <Star
+                          aria-hidden="true"
                           className={clsx(
                             "h-5 w-5",
                             val <= rating

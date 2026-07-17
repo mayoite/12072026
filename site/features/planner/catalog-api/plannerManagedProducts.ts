@@ -27,7 +27,7 @@ function isMissingPlannerManagedProductsTable(message: string): boolean {
   return (
     normalized.includes("planner_managed_products") &&
     (normalized.includes("could not find the table") ||
-      normalized.includes("relation") && normalized.includes("does not exist"))
+      (normalized.includes("relation") && normalized.includes("does not exist")))
   );
 }
 

@@ -5,13 +5,16 @@
  * success when compilation fails. Pure of Next server-action surface — injectable
  * deps for unit tests.
  *
- * Phase 2 disk-path mapping (not full Products DB transaction yet):
- * - Live authority: disk (`inventory/descriptors/`, `public/svg-catalog/`).
- * - ADM-PUB-03 / dual-write: success only after compile + S4 + persist; failures roll back.
- * - Optional `dbRepository` / `artifactStore` are injected only when Products DB is
- *   configured **and** R2 is reachable (`resolveSvgPublishDualWriteDeps`). Dead R2 must
- *   not roll back a successful disk publish. Dual-write uploads real descriptor + SVG +
- *   PNG (honest checksums). Disk remains live release authority until cutover is proven.
+ * Disk-path publish with optional Products DB dual-write (enabled ≠ cutover):
+ * - Live authority: disk (`inventory/descriptors/`, `public/svg-catalog/`) until
+ *   `SVG_RELEASE_AUTHORITY=db` is proven and flipped.
+ * - ADM-PUB-03: success only after compile + S4 + persist; failures roll back.
+ * - Optional `dbRepository` / `artifactStore` inject only when Products DB is
+ *   configured **and** R2 is reachable (`resolveSvgPublishDualWriteDeps`). Dead R2
+ *   skips dual-write and must not roll back disk. When dual-write **is** injected,
+ *   DB/storage failure rolls back disk (fail-closed dual-write, not best-effort).
+ * - Dual-write payload: real descriptor JSON + SVG + PNG (honest SHA-256, no PNG
+ *   stub) + revision metadata; product pointer when a matching managed product exists.
  * - DB-SVG-07: prior SVG/descriptor restored when post-pipeline persist fails.
  * - DB-SVG-08: unchanged released SVG + descriptor short-circuits (no partial rewrite).
  *
@@ -122,9 +125,10 @@ export type PublishDescriptorWithPipelineDeps = {
 
   /**
    * Optional DB revision repository for dual-write (DB-SVG-01..05).
-   * When provided, revisions + artifacts are also persisted to the Products DB
-   * after the disk pipeline commits. DB failures fail the publish and trigger
-   * rollback so DB-configured environments are not disk-authoritative.
+   * Injected only when Products DB + R2 are ready. When provided, revisions +
+   * artifacts are written after disk commits; DB/storage failures fail the
+   * publish and roll back disk so dual-write stays consistent. Disk remains
+   * live read authority until SVG_RELEASE_AUTHORITY=db cutover is proven.
    */
   readonly dbRepository?: ImmutableSvgRevisionRepository;
   /** Immutable object storage used by DB-backed releases. */
@@ -487,8 +491,9 @@ export async function publishDescriptorWithPipeline(
     return { success: false, error: withRecoveryErrors(`500.io: Publication commit failed. ${details}`, recoveryErrors) };
   }
 
-  // DB-SVG-01..05 minimal cutover: when DB publish is enabled, DB failure must
-  // fail the overall publish so disk cannot silently become the authority.
+  // DB-SVG-01..05 dual-write path: when deps are injected, DB/storage failure must
+  // fail publish and roll back disk. This is dual-write consistency — not cutover.
+  // Disk remains live release authority until SVG_RELEASE_AUTHORITY=db is proven.
   if (deps.dbRepository) {
     const compiledSvgChecksum = sha256Utf8(compile.svg);
     const definitionChecksum = descriptor.checksum;

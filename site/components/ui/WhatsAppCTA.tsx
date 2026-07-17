@@ -67,14 +67,16 @@ export function WhatsAppCTA() {
     <>
       <motion.button
         type="button"
-        aria-label="Open WhatsApp quick contact"
+        aria-label={open ? "Close WhatsApp quick contact" : "Open WhatsApp quick contact"}
+        aria-expanded={open}
+        aria-controls="quick-contact-panel"
         onClick={() => setOpen((prev) => !prev)}
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.8, duration: 0.25 }}
         className={`quick-contact-fab ${fabAnchor} inline-flex h-12 min-w-12 items-center justify-center rounded-full`}
       >
-        <span className="quick-contact-fab__icon">
+        <span className="quick-contact-fab__icon" aria-hidden="true">
           <MessageCircle className="h-5 w-5" />
         </span>
       </motion.button>
@@ -82,6 +84,9 @@ export function WhatsAppCTA() {
       <AnimatePresence>
         {open ? (
           <motion.div
+            id="quick-contact-panel"
+            role="dialog"
+            aria-label="Quick contact"
             initial={{ opacity: 0, y: 12, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
@@ -96,10 +101,10 @@ export function WhatsAppCTA() {
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                aria-label="Close WhatsApp quick contact"
+                aria-label="Close quick contact panel"
                 className="shell-icon-button rounded-full p-1.5 text-body"
               >
-                <X className="h-3.5 w-3.5" />
+                <X className="h-3.5 w-3.5" aria-hidden="true" />
               </button>
             </div>
 
@@ -123,13 +128,13 @@ export function WhatsAppCTA() {
                       }
                     >
                     <span className="quick-contact-panel__action-icon">
-                      <Icon className="h-4 w-4" />
+                      <Icon className="h-4 w-4" aria-hidden="true" />
                     </span>
                     <span className="quick-contact-panel__action-copy">
                       <span className="quick-contact-panel__action-label">{action.label}</span>
                       <span className="quick-contact-panel__action-detail">{action.detail}</span>
                     </span>
-                    <ArrowUpRight className="quick-contact-panel__action-arrow h-4 w-4" />
+                    <ArrowUpRight className="quick-contact-panel__action-arrow h-4 w-4" aria-hidden="true" />
                   </a>
                 );
               })}

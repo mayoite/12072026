@@ -82,6 +82,15 @@ describe("getRouteClassification resolution", () => {
     expect(getRouteClassification("/gallery")?.classification).toBe("redirect");
   });
 
+  it("classifies /access as workspace auth entry (not accessibility tools)", () => {
+    const meta = getRouteClassification("/access");
+    expect(meta?.classification).toBe("public");
+    expect(meta?.indexable).toBe(false);
+    expect(meta?.intent).toMatch(/sign-in|guest/i);
+    expect(meta?.intent).not.toMatch(/accessibility/i);
+    expect(meta?.primaryAction).toMatch(/sign in|guest/i);
+  });
+
   it("classifies legacy products/category alias as non-indexable redirect", () => {
     const meta = getRouteClassification("/products/category/seating");
     expect(meta?.route).toBe("/products/category/[slug]");

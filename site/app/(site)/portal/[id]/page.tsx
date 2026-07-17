@@ -7,7 +7,7 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-// Thin route layer only. Portal viewer stub — wire to features/planner when implemented.
+// Thin route layer: auth + load plan, view lives in features/planner/portal.
 export default async function PortalPlanViewerPage({ params }: PageProps) {
   const resolvedParams = await params;
   const user = await requireAuthUser(`/portal/${resolvedParams.id}`, "planner");

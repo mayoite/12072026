@@ -113,10 +113,14 @@ test.describe("a11y — key flows", () => {
     // Wait for setup gate or chrome (empty-ish initial state)
     const setupHeading = page.getByRole("heading", { name: /Set up your space/i });
     const topbar = page.locator(".pw-topbar");
-    await Promise.race([
-      setupHeading.waitFor({ state: "visible", timeout: 20_000 }),
-      topbar.waitFor({ state: "visible", timeout: 20_000 }),
-    ]).catch(() => {});
+    await expect
+      .poll(
+        async () =>
+          (await setupHeading.isVisible().catch(() => false)) ||
+          (await topbar.isVisible().catch(() => false)),
+        { timeout: 20_000 },
+      )
+      .toBe(true);
 
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa"])
@@ -162,10 +166,12 @@ test.describe("a11y — key flows", () => {
 
     const search = page.getByLabel("Search inventory by name or SKU");
     await search.fill("meeting"); // term expected to return multiple results in seeded guest catalog
-    await page.waitForTimeout(500); // allow filter
 
     // Ensure results list or empty state is present (scale test exercises the list UI)
-    const resultsOrEmpty = page.getByRole("button", { name: /Add .* to canvas/i }).first().or(page.getByText(/No elements found/i));
+    const resultsOrEmpty = page
+      .getByRole("button", { name: /Add .* to canvas/i })
+      .first()
+      .or(page.getByText(/No elements found/i));
     await expect(resultsOrEmpty).toBeVisible({ timeout: 10_000 });
 
     const results = await new AxeBuilder({ page })
@@ -186,7 +192,15 @@ test.describe("a11y — key flows", () => {
       await page.goto("/planner/guest/?plannerDevTools=1", { waitUntil: "domcontentloaded" });
 
       const setupHeading = page.getByRole("heading", { name: /Set up your space/i });
-      await setupHeading.waitFor({ state: "visible", timeout: 20_000 }).catch(() => {});
+      const topbar = page.locator(".pw-topbar");
+      await expect
+        .poll(
+          async () =>
+            (await setupHeading.isVisible().catch(() => false)) ||
+            (await topbar.isVisible().catch(() => false)),
+          { timeout: 20_000 },
+        )
+        .toBe(true);
 
       const results = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa"])

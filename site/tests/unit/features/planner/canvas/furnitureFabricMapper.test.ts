@@ -396,6 +396,7 @@ describe("isPlannerFabricFurnitureEnabled", () => {
     ).toBe(true);
   });
 
+  // Barrel pulls PlannerFabricStage (large); allow headroom under parallel load.
   it("barrel re-exports flag helpers from canvas index", async () => {
     const barrel = await import("@/features/planner/canvas");
     expect(barrel.PLANNER_FABRIC_FURNITURE_ENV).toBe(PLANNER_FABRIC_FURNITURE_ENV);
@@ -405,5 +406,5 @@ describe("isPlannerFabricFurnitureEnabled", () => {
         [PLANNER_FABRIC_FURNITURE_ENV]: "1",
       }),
     ).toBe(true);
-  });
+  }, 15_000);
 });

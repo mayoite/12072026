@@ -1,3 +1,5 @@
+import "server-only";
+
 export type RateLimitInfo = {
   count: number;
   lastReset: number;

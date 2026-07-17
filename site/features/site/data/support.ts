@@ -1,3 +1,5 @@
+import { SITE_CONTACT } from "@/features/site/data/contact";
+
 export type VisualIvrActionType = "contact" | "info" | "link";
 export type VisualIvrIconId = "user" | "phone" | "info" | "arrow-right";
 
@@ -14,6 +16,10 @@ export type VisualIvrNode = {
   };
 };
 
+/**
+ * Legacy visual-IVR tree. `/support-ivr` permanently redirects to `/service`.
+ * Contact values must stay aligned with `SITE_CONTACT` — never invent phones.
+ */
 export const VISUAL_IVR_TREE: VisualIvrNode = {
   id: "root",
   label: "Main Menu",
@@ -29,8 +35,8 @@ export const VISUAL_IVR_TREE: VisualIvrNode = {
           label: "Domestic (India)",
           action: {
             type: "contact",
-            value: "+91 124 403 1666",
-            detail: "sales@oando.co.in",
+            value: SITE_CONTACT.salesPhone,
+            detail: SITE_CONTACT.salesEmail,
           },
         },
         {
@@ -38,8 +44,8 @@ export const VISUAL_IVR_TREE: VisualIvrNode = {
           label: "International Sales",
           action: {
             type: "contact",
-            value: "+91 124 403 1666",
-            detail: "export@oando.co.in",
+            value: SITE_CONTACT.salesPhone,
+            detail: SITE_CONTACT.salesEmail,
           },
         },
         {
@@ -48,7 +54,7 @@ export const VISUAL_IVR_TREE: VisualIvrNode = {
           action: {
             type: "link",
             value: "/contact",
-            detail: "Use our Dealer Locator",
+            detail: "Use our contact form",
           },
         },
       ],
@@ -72,7 +78,7 @@ export const VISUAL_IVR_TREE: VisualIvrNode = {
           label: "Complaints & Claims",
           action: {
             type: "contact",
-            value: "service@oando.co.in",
+            value: SITE_CONTACT.salesEmail,
             detail: "Attach photos for faster processing",
           },
         },
@@ -98,8 +104,8 @@ export const VISUAL_IVR_TREE: VisualIvrNode = {
           label: "Reception / Switchboard",
           action: {
             type: "contact",
-            value: "+91 124 403 1666",
-            detail: "Mon-Sat 9:30 - 18:30 IST",
+            value: SITE_CONTACT.supportPhone,
+            detail: SITE_CONTACT.openingHours.replace("Mo-Sa", "Mon-Sat") + " IST",
           },
         },
         {
@@ -116,7 +122,7 @@ export const VISUAL_IVR_TREE: VisualIvrNode = {
           label: "Press & Marketing",
           action: {
             type: "contact",
-            value: "marketing@oando.co.in",
+            value: SITE_CONTACT.salesEmail,
           },
         },
       ],

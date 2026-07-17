@@ -18,7 +18,7 @@ import {
   type AdvisorStreamEvent,
   type ConfiguratorAdvisorContext,
 } from '@/features/site/advisor/aiAdvisor';
-import { withAuth } from "@/features/shared/api/withAuth";
+import { withAuth, type AuthContext } from "@/features/shared/api/withAuth";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import { success, error } from "@/features/shared/api/apiResponse";
 import { CatalogAdvisorRequestSchema } from "@/features/shared/api/schemas";
@@ -32,7 +32,6 @@ type AdvisorClientConfig = {
 };
 type ParsedAdvisorPayload = {
   query: string;
-  userId: string;
   context?: ConfiguratorAdvisorContext;
   stream: boolean;
 };
@@ -98,10 +97,11 @@ function normalizeContext(value: unknown): ConfiguratorAdvisorContext | undefine
 function parsePayload(value: unknown): ParsedAdvisorPayload | null {
   const parsed = CatalogAdvisorRequestSchema.safeParse(value);
   if (!parsed.success) return null;
-  const { query, userId, stream, context: rawContext } = parsed.data;
+  const { query, stream, context: rawContext } = parsed.data;
+  // Body `userId` is intentionally ignored — history is bound to the session only
+  // to prevent IDOR on user_history via spoofed identifiers.
   return {
     query,
-    userId: userId ?? "",
     context: normalizeContext(rawContext),
     stream: stream === true,
   };
@@ -549,7 +549,10 @@ Respond ONLY with valid JSON in this exact key order:
  * the legacy top-level fields (`recommendations`, `summary`, etc.) that the
  * `UnifiedAssistant` client reads.
  */
-async function handleCatalogAdvisor(req: NextRequest): Promise<NextResponse | Response> {
+async function handleCatalogAdvisor(
+  req: NextRequest,
+  auth: AuthContext,
+): Promise<NextResponse | Response> {
   const parsedBody = parsePayload(await req.json().catch(() => null));
   if (!parsedBody) {
     return error(
@@ -557,7 +560,7 @@ async function handleCatalogAdvisor(req: NextRequest): Promise<NextResponse | Re
     );
   }
 
-  const { query, userId, context, stream } = parsedBody;
+  const { query, context, stream } = parsedBody;
   const products = await getProductsFresh();
   if (!products || products.length === 0) {
     const unavailable = buildUnavailableCatalogResponse(context);
@@ -576,7 +579,8 @@ async function handleCatalogAdvisor(req: NextRequest): Promise<NextResponse | Re
       : success(fallbackResult);
   }
 
-  const historyContext = await buildHistoryContext(userId);
+  // Session-bound history only (guest routes may have null user).
+  const historyContext = await buildHistoryContext(auth.user?.id ?? "");
   const productList = products
     .slice(0, 80)
     .map(
@@ -681,6 +685,6 @@ async function handleCatalogAdvisor(req: NextRequest): Promise<NextResponse | Re
  * Errors: 400 (validation), 429 (rate limit), 500.
  */
 export const POST = withAuth(
-  async (req) => handleCatalogAdvisor(req as NextRequest),
+  async (req, auth) => handleCatalogAdvisor(req as NextRequest, auth),
   { role: "guest", rateLimitScope: "ai-advisor", rateLimit: 5, requireCsrf: true },
 );

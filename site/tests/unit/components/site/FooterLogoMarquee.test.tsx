@@ -13,20 +13,22 @@ vi.mock('@/features/site/data/homepage', () => ({
 
 describe('FooterLogoMarquee Component', () => {
   it('renders duplicated list of logos for infinite scroll track', () => {
-    render(<FooterLogoMarquee />);
+    const { container } = render(<FooterLogoMarquee />);
 
     // Since the original list is duplicated once:
     // logos: 2 elements -> duplicated list: 4 elements.
-    const images = screen.getAllByRole("img", { hidden: true });
+    // Empty alt makes images presentation-only (no img role) — query DOM.
+    const images = container.querySelectorAll('img');
     expect(images).toHaveLength(4);
 
-    expect(images[0]).toHaveAttribute('alt', 'Logo A');
+    // Decorative marquee (parent aria-hidden) — empty alts avoid SR noise.
+    expect(images[0]).toHaveAttribute('alt', '');
     expect(images[0]).toHaveAttribute('src', '/logos/a.png');
 
-    expect(images[1]).toHaveAttribute('alt', 'Logo B');
+    expect(images[1]).toHaveAttribute('alt', '');
     expect(images[1]).toHaveAttribute('src', '/logos/b.png');
 
-    expect(images[2]).toHaveAttribute('alt', 'Logo A');
-    expect(images[3]).toHaveAttribute('alt', 'Logo B');
+    expect(images[2]).toHaveAttribute('alt', '');
+    expect(images[3]).toHaveAttribute('alt', '');
   });
 });

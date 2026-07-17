@@ -1,8 +1,8 @@
-import { ThemeEditor } from './ThemeEditor'
+import { ThemeEditor } from "./ThemeEditor";
 
 export const metadata = {
-  title: 'Theme Manager | Oando Admin',
-}
+  title: "Theme Manager | Oando Admin",
+};
 
 export default function AdminThemesPage() {
   return (
@@ -21,5 +21,5 @@ export default function AdminThemesPage() {
       </header>
       <ThemeEditor />
     </div>
-  )
+  );
 }

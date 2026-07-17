@@ -66,6 +66,9 @@ describe('CompareDock Component', () => {
     // Verify copy
     expect(screen.getByText('Compare products (2/3)')).toBeInTheDocument();
     expect(screen.getByText('Chair A | Chair B')).toBeInTheDocument();
+    expect(
+      screen.getByRole('region', { name: 'Product comparison shortlist' }),
+    ).toBeInTheDocument();
 
     // Verify buttons (aria-labels preferred for accessible names)
     expect(

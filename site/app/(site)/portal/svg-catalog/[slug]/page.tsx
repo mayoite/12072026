@@ -45,18 +45,20 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const result = tryLoad(slug);
+  // Hard 404 — soft "Not found" metadata is an SEO soft-404 risk for bad slugs.
   if (!result.ok) {
-    return { title: "Not found | SVG catalog", robots: { index: false } };
+    notFound();
   }
   const d = result.value;
   const png = buildBlockThumbPngUrl(slug);
+  // Protected portal surface — keep noindex even when slug resolves (matches layout + robots.txt).
   return {
     title: `${d.slug} | SVG catalog`,
     description: `Puck-rendered ${d.variant} block descriptor (schema ${d.schemaVersion})`,
     openGraph: {
       images: [{ url: png }],
     },
-    robots: { index: true, follow: true },
+    robots: { index: false, follow: false },
   };
 }
 

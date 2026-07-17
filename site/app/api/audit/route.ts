@@ -9,9 +9,12 @@ import { success, error, rateLimitedError } from "@/features/shared/api/apiRespo
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError"
 
 function getRequestIp(req: Request): string {
-  const forwarded = req.headers.get("x-forwarded-for")
-  if (forwarded) return forwarded.split(",")[0].trim()
-  return req.headers.get("cf-connecting-ip") || "127.0.0.1"
+  // Prefer edge-set client IP; fall back to first XFF hop only.
+  return (
+    req.headers.get("cf-connecting-ip") ||
+    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+    "127.0.0.1"
+  )
 }
 
 export async function POST(req: Request) {

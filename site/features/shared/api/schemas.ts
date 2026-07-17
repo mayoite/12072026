@@ -131,6 +131,7 @@ export const AdminReviewPlanSchema = z.object({
 /** Catalog advisor request (`/api/ai-advisor`). */
 export const CatalogAdvisorRequestSchema = z.object({
   query: z.string().trim().min(1).max(2000),
+  /** @deprecated Accepted for backward compat; ignored server-side (session history only). */
   userId: z.string().trim().max(120).optional(),
   stream: z.boolean().optional(),
   context: z.unknown().optional(),
@@ -318,6 +319,7 @@ export const TrackingSchema = z.object({
 
 /** Recommendations request. */
 export const RecommendationsSchema = z.object({
+  /** @deprecated Accepted for backward compat; ignored server-side (cookie/bearer only). */
   userId: z.string().trim().max(120).optional(),
   limit: z.number().int().min(1).max(8).optional(),
 });

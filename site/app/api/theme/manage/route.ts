@@ -5,6 +5,8 @@ import { getActiveThemeId, setActiveThemeId } from "@/lib/theme/activeThemeId";
 import { enforceAdminRateLimit, requireAdminSession } from "@/app/api/admin/_lib/server";
 import { validateCsrfRequest } from "@/lib/security/csrf";
 import { CSRF_REJECTION_HEADER_NAME } from "@/lib/security/csrfConstants";
+import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
+import { error as apiError } from "@/features/shared/api/apiResponse";
 
 export const dynamic = "force-dynamic";
 
@@ -53,9 +55,12 @@ export async function POST(request: NextRequest) {
 
     const isCsrfValid = await validateCsrfRequest(request);
     if (!isCsrfValid) {
-      return NextResponse.json(
-        { error: "Invalid or missing CSRF token" },
-        { status: 403, headers: { [CSRF_REJECTION_HEADER_NAME]: "1" } },
+      return apiError(
+        ApiError.fromCode(
+          API_ERROR_CODES.CSRF_FAILED,
+          "Invalid or missing CSRF token",
+        ),
+        { headers: { [CSRF_REJECTION_HEADER_NAME]: "1" } },
       );
     }
 

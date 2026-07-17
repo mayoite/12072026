@@ -1,12 +1,13 @@
-﻿import { PlannerWorkspaceRoute } from "@/features/planner/ui/PlannerWorkspaceRoute";
+import { PlannerWorkspaceRoute } from "@/features/planner/ui/PlannerWorkspaceRoute";
 import { getOptionalPlannerUser } from "@/lib/auth/plannerSession";
 import { notFound, redirect } from "next/navigation";
-import { isEntityUuid } from "@/features/planner/lib/newEntityId";
 import { buildGuestPlannerEntryHref } from "@/lib/analytics/plannerEntry";
+
+import { parsePlanIdSearchParam } from "../planIdGate";
 
 export const dynamic = "force-dynamic";
 
-/** Live member/guest canvas â€” Fabric 2-D (`PlannerCanvasStage`) + Three 3-D. Legacy shell: /planner/fabric/canvas */
+/** Live member canvas - Fabric 2-D (`PlannerCanvasStage`) + Three 3-D. Legacy shell: /planner/fabric/canvas */
 export default async function PlannerCanvasRoute({
   searchParams,
 }: {
@@ -19,22 +20,16 @@ export default async function PlannerCanvasRoute({
     redirect(buildGuestPlannerEntryHref(resolvedSearchParams));
   }
 
-  const rawId = resolvedSearchParams.id;
-  if (Array.isArray(rawId)) {
-    notFound();
-  }
-  const planId = rawId?.trim() || undefined;
-
-  if ((rawId !== undefined && !planId) || (planId && !isEntityUuid(planId))) {
+  const planIdGate = parsePlanIdSearchParam(resolvedSearchParams.id);
+  if (!planIdGate.ok) {
     notFound();
   }
 
   return (
     <PlannerWorkspaceRoute
       guestMode={false}
-      planId={planId}
+      planId={planIdGate.planId}
       ownerId={user.id}
     />
   );
 }
-

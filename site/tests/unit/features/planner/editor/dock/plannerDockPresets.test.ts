@@ -126,13 +126,17 @@ describe("plannerDockPresets", () => {
     const api = createFakeApi();
     applyPlannerDockPreset(api as never, "canvas");
     ensurePlannerDockPanel(api as never, "properties");
-    expect(api.getPanel("properties")).toBeTruthy();
+    expect(api.getPanel("properties")).toEqual(
+      expect.objectContaining({ id: "properties" }),
+    );
   });
 
   it("closePlannerDockPanel removes properties so empty chrome does not consume canvas", () => {
     const api = createFakeApi();
     applyPlannerDockPreset(api as never, "review");
-    expect(api.getPanel("properties")).toBeTruthy();
+    expect(api.getPanel("properties")).toEqual(
+      expect.objectContaining({ id: "properties" }),
+    );
     closePlannerDockPanel(api as never, "properties");
     expect(api.getPanel("properties")).toBeUndefined();
     // Idempotent when already closed.

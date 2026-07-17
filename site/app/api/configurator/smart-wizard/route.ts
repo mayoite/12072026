@@ -130,5 +130,10 @@ async function handleSmartWizard(req: Request): Promise<NextResponse> {
 
 export const POST = withAuth(
   async (req) => handleSmartWizard(req),
-  { role: 'member', rateLimitScope: 'configurator-smart-wizard', rateLimit: 12 },
+  {
+    role: 'member',
+    rateLimitScope: 'configurator-smart-wizard',
+    rateLimit: 12,
+    requireCsrf: true,
+  },
 )

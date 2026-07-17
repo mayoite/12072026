@@ -32,7 +32,7 @@ test.describe("site navigation smoke", () => {
     await expect(glassProof).toBeVisible();
     await expect(glassProof).toHaveAttribute("href", /\/trusted-by\/?$/);
     await expect(glassProof).toContainText(/Trusted by/i);
-    await expect(glassProof).toContainText(/400\+/i);
+    await expect(glassProof).toContainText(/120\+/i);
   });
 
   test("homepage shows Final0704-inspired sections", async ({ page }) => {

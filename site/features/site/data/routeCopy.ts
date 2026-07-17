@@ -83,7 +83,7 @@ export const CONTACT_PAGE_COPY = {
   offices: [
     {
       title: "Corporate office",
-      lines: ["401, Jagat Trade Centre", "Frazer Road", "Patna - 800 013", "India"],
+      lines: ["401, Jagat Trade Centre", "Frazer Road", "Patna - 800 001", "India"],
     },
     {
       title: "Showroom",
@@ -383,7 +383,7 @@ export const SOLUTIONS_PAGE_COPY = {
   stats: [
     { value: "14+", label: "Years in workspace projects" },
     { value: "120+", label: "Projects delivered" },
-    { value: "250+", label: "Client organizations served" },
+    { value: "120+", label: "Client organizations served" },
     { value: "20+", label: "Cities supported" },
   ],
   processKicker: "Process detail",

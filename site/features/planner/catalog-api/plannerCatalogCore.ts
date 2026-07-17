@@ -1,6 +1,6 @@
 /**
  * Compatibility re-export — canonical implementation lives in
- * features/planner/store/plannerCatalogCore.ts
+ * features/planner/cloud-store/plannerCatalogCore.ts
  */
 export {
   type PlannerCatalogProduct,

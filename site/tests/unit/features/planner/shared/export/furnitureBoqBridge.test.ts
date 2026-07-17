@@ -1,9 +1,11 @@
 import { describe, it, expect } from "vitest";
 import {
+  furnitureBoqToBoqSummary,
   furnitureBoqToHandoffPayload,
   furnitureBoqToPdfRows,
   furnitureBoqToQuoteCartItems,
 } from "@/features/planner/shared/export/furnitureBoqBridge";
+import { boqToQuoteCart } from "@/features/planner/shared/boq/quoteCartBridge";
 import {
   buildPlannerFurnitureBoq,
   type PlannerFurnitureBoqSummary,
@@ -66,6 +68,27 @@ describe("furnitureBoqBridge", () => {
     expect(items[0]?.name).toBe("Task Chair");
     expect(items[0]?.priced).toBe(false);
     expect(items[0]?.plannerFamily).toBe("furniture");
+  });
+
+  it("projects furniture BOQ into legacy BoqSummary for dual-path consumers", () => {
+    const legacy = furnitureBoqToBoqSummary(sample);
+    expect(legacy.totalItems).toBe(3);
+    expect(legacy.lineItems).toHaveLength(1);
+    expect(legacy.lineItems[0]).toMatchObject({
+      catalogId: "chair-1",
+      quantity: 3,
+      unitPriceInr: 0,
+      dimensions: { widthMm: 600, depthMm: 600, heightMm: 900 },
+    });
+    expect(legacy.subtotalInr).toBe(0);
+    expect(legacy.gstAmountInr).toBe(0);
+    expect(legacy.grandTotalInr).toBe(0);
+    expect(legacy.generatedAt).toBe(sample.generatedAt);
+
+    const legacyCart = boqToQuoteCart(legacy);
+    expect(legacyCart).toHaveLength(1);
+    expect(legacyCart[0]?.qty).toBe(3);
+    expect(legacyCart[0]?.name).toBe("Task Chair");
   });
 
   it("maps pdf rows in cm with unpriced honesty label", () => {

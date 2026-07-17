@@ -86,7 +86,7 @@ export function LanguageSwitcher({
         id={selectId}
         value={currentLocale}
         onChange={handleChange}
-        className="w-40 cursor-pointer rounded border border-theme-soft bg-panel px-2.5 py-1 text-sm text-strong focus:border-primary focus:outline-none"
+        className="min-h-11 w-40 cursor-pointer rounded border border-theme-soft bg-panel px-2.5 py-1 text-sm text-strong focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       >
         {Object.entries(names).map(([code, name]) => (
           <option key={code} value={code} className="bg-panel text-strong">

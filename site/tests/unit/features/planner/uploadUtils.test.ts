@@ -175,8 +175,9 @@ describe("upload utilities", () => {
     expect(failedUpload.success).toBe(false);
 
     const aiFallback = await uploadSketchImage(file, { processEndpoint: "/api/sketch" });
-    expect(aiFallback.success).toBe(true);
+    expect(aiFallback.success).toBe(false);
     expect(aiFallback.error).toContain("AI processing failed");
+    expect(aiFallback.preview).toBeDefined();
   });
 
   it("uploads with XHR progress and handles network errors", async () => {
@@ -266,8 +267,9 @@ describe("upload utilities", () => {
       }),
     );
     const sketch = await uploadSketchImage(makePngFile(), { processEndpoint: "/api/sketch" });
-    expect(sketch.success).toBe(true);
+    expect(sketch.success).toBe(false);
     expect(sketch.error).toBeDefined();
+    expect(sketch.preview).toBeDefined();
   });
 
   it("returns an error when image loading fails client-side", async () => {

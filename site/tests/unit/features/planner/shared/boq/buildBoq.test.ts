@@ -36,12 +36,15 @@ describe("buildBoq", () => {
     const catalog = new Map<string, CatalogItem>([
       ["desk-1", catalogItem({ id: "desk-1", name: "Desk", priceInr: 10000 })],
     ]);
-    const boq = buildBoq([{ catalogId: "desk-1", name: "Desk" }], catalog);
+    const boq = buildBoq([{ catalogId: "desk-1", name: "Desk" }], catalog, {
+      now: "2026-07-17T00:00:00.000Z",
+    });
     expect(boq.subtotalInr).toBe(10000);
     expect(boq.totalPriceInr).toBe(10000);
     expect(boq.gstRate).toBe(0.18);
     expect(boq.gstAmountInr).toBe(1800);
     expect(boq.grandTotalInr).toBe(11800);
+    expect(boq.generatedAt).toBe("2026-07-17T00:00:00.000Z");
   });
 
   it("falls back to placement dimensions when catalog missing", () => {

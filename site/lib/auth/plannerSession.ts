@@ -2,6 +2,8 @@
  * Thin planner-auth server helpers used by route entrypoints and planner surfaces.
  * If this grows beyond auth gating and redirect wiring, move the feature-owned logic under features/planner/.
  */
+import "server-only";
+
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { getOptionalUser } from "@/lib/auth/session";
@@ -39,6 +41,29 @@ function isGuestAllowedPath(nextPath: string): boolean {
   );
 }
 
+/**
+ * Next.js control-flow errors must never be swallowed into an anonymous session.
+ * `redirect()` throws with digest NEXT_REDIRECT*; static probing throws DYNAMIC_SERVER_USAGE.
+ */
+function isNextControlFlowError(error: unknown): boolean {
+  const errorRecord =
+    error && typeof error === "object" ? (error as Record<string, unknown>) : null;
+  const digest = typeof errorRecord?.digest === "string" ? errorRecord.digest : "";
+  if (digest === "DYNAMIC_SERVER_USAGE" || digest.startsWith("NEXT_REDIRECT")) {
+    return true;
+  }
+
+  const message = error instanceof Error ? error.message : String(error);
+  return message === "NEXT_REDIRECT" || message.startsWith("NEXT_REDIRECT;");
+}
+
+function redirectToAccess(nextPath: string): never {
+  // next/navigation `redirect` throws (never returns). Keep an explicit throw so
+  // mocked redirects in unit tests cannot fall through to an anonymous session.
+  redirect(buildAccessRedirect(nextPath));
+  throw new Error("Authentication required");
+}
+
 export async function requirePlannerUser(nextPath = "/dashboard") {
   const cookieStore = await cookies();
   const isGuest = cookieStore.has(PLANNER_GUEST_COOKIE);
@@ -56,27 +81,45 @@ export async function requirePlannerUser(nextPath = "/dashboard") {
   // This allows the planner to render in fallback mode without env vars
   if (!hasPublicSupabaseEnv()) {
     console.warn(
-      "Supabase not configured. Rendering planner in anonymous mode."
+      "Supabase not configured. Rendering planner in anonymous mode.",
     );
     return ANONYMOUS_USER;
   }
 
+  // Keep redirect outside the auth try/catch so intentional access redirects
+  // are never mistaken for auth lookup failures (and double-fired).
+  let user: Awaited<ReturnType<typeof getOptionalPlannerUser>> = null;
   try {
-    const user = await getOptionalPlannerUser();
-
-    if (!user) {
-      // On guest-allowed paths, never redirect — fall back to anonymous
-      // so the planner canvas still renders in read-only/guest mode.
-      if (isGuestAllowedPath(nextPath)) {
-        return ANONYMOUS_USER;
-      }
-      redirect(buildAccessRedirect(nextPath));
+    user = await getOptionalPlannerUser();
+  } catch (error) {
+    if (isNextControlFlowError(error)) {
+      throw error;
     }
 
-    return user;
-  } catch (error) {
-    // Catch any unexpected errors from auth
-    console.warn("Failed to get planner user, falling back to anonymous:", error);
-    return ANONYMOUS_USER;
+    // Guest-allowed surfaces fail open (read-only anonymous). Protected paths fail closed.
+    if (isGuestAllowedPath(nextPath)) {
+      console.warn(
+        "Failed to get planner user, falling back to anonymous:",
+        error,
+      );
+      return ANONYMOUS_USER;
+    }
+
+    console.warn(
+      "Failed to get planner user on protected path; redirecting to access:",
+      error,
+    );
+    return redirectToAccess(nextPath);
   }
+
+  if (!user) {
+    // On guest-allowed paths, never redirect — fall back to anonymous
+    // so the planner canvas still renders in read-only/guest mode.
+    if (isGuestAllowedPath(nextPath)) {
+      return ANONYMOUS_USER;
+    }
+    return redirectToAccess(nextPath);
+  }
+
+  return user;
 }

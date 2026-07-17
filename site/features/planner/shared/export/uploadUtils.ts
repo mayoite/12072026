@@ -220,9 +220,9 @@ async function processSketchWithAI(
     });
 
     if (!response.ok) {
-      // Still return success with preview if AI processing fails
+      // Local preview is still useful; do not claim AI success.
       return {
-        success: true,
+        success: false,
         dataUrl: preview,
         preview,
         error: `AI processing failed: ${response.status}`,
@@ -238,9 +238,9 @@ async function processSketchWithAI(
       preview,
     };
   } catch (e) {
-    // Return success with local preview if processing fails
+    // Keep local preview for fallback UI; mark the AI request as failed.
     return {
-      success: true,
+      success: false,
       dataUrl: preview,
       preview,
       error: e instanceof Error ? e.message : "AI processing failed",

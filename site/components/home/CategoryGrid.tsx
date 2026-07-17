@@ -103,7 +103,7 @@ export async function CategoryGrid() {
                   >
                     <Image
                       src={flagshipImage}
-                      alt={categoryName}
+                      alt=""
                       aria-hidden="true"
                       fill
                       sizes="(max-width: 519px) 100vw, (max-width: 1024px) 45vw, 30vw"

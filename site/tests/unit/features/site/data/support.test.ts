@@ -3,6 +3,7 @@
  */
 
 import { describe, expect, it } from "vitest";
+import { SITE_CONTACT } from "@/features/site/data/contact";
 import { VISUAL_IVR_TREE } from "@/features/site/data/support";
 
 describe("VISUAL_IVR_TREE", () => {
@@ -20,6 +21,35 @@ describe("VISUAL_IVR_TREE", () => {
     const domestic = sales?.options?.find((n) => n.id === "sales_de");
     expect(domestic?.action?.type).toBe("contact");
     expect(domestic?.action?.detail).toContain("@");
+  });
+
+  it("contact actions use SITE_CONTACT only — no invented phones or emails", () => {
+    const allowedPhones = new Set([
+      SITE_CONTACT.salesPhone,
+      SITE_CONTACT.supportPhone,
+    ]);
+    const allowedEmails = new Set([SITE_CONTACT.salesEmail]);
+
+    function walk(node: (typeof VISUAL_IVR_TREE) | NonNullable<(typeof VISUAL_IVR_TREE)["options"]>[number]) {
+      if (node.action?.type === "contact") {
+        const value = node.action.value;
+        if (value.includes("@")) {
+          expect(allowedEmails.has(value), value).toBe(true);
+        } else {
+          expect(allowedPhones.has(value), value).toBe(true);
+        }
+        if (node.action.detail?.includes("@")) {
+          expect(allowedEmails.has(node.action.detail), node.action.detail).toBe(
+            true,
+          );
+        }
+      }
+      for (const child of node.options ?? []) {
+        walk(child);
+      }
+    }
+
+    walk(VISUAL_IVR_TREE);
   });
 
   it("support branch includes order status info action", () => {

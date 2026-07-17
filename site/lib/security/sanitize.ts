@@ -17,7 +17,12 @@ export function sanitizeJsonForScript(data: unknown): string {
 /** Strip script tags and inline event handlers from trusted-but-inline SVG markup. */
 export function sanitizeInlineSvg(markup: string): string {
   return markup
-    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    // Paired and self-closing script nodes (SVG XSS vectors).
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
+    .replace(/<script\b[^>]*\/>/gi, "")
+    // foreignObject can host HTML/script in some browsers.
+    .replace(/<foreignObject\b[^>]*>[\s\S]*?<\/foreignObject>/gi, "")
+    .replace(/<foreignObject\b[^>]*\/>/gi, "")
     .replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "")
     .replace(/javascript:/gi, "");
 }

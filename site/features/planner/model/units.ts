@@ -136,7 +136,9 @@ export function formatLengthInput(
 
 /**
  * Parse a user-entered length in the active display unit → canonical mm.
- * Accepts optional unit suffixes (mm/cm/m/in/"/'). Returns null if invalid.
+ * Explicit unit suffixes (mm/cm/m/in/"/'/ft) override the active display unit
+ * so "1200 mm" while display is cm stays 1200 mm (not 12 000 mm).
+ * Returns null if invalid.
  */
 export function parseLengthInput(
   raw: string,
@@ -157,10 +159,27 @@ export function parseLengthInput(
     }
   }
 
-  const stripped = text
-    .replace(/\s*(mm|cm|m|in|inch|inches|"|'|ft|feet)\s*$/i, "")
-    .trim();
-  const n = Number.parseFloat(stripped);
+  // Longest tokens first so "mm" wins over "m", "inch(es)" over bare "in".
+  const suffixMatch = text.match(
+    /^(.*?)\s*(mm|cm|inches|inch|in|ft|feet|m|"|')\s*$/i,
+  );
+  if (suffixMatch) {
+    const numericPart = suffixMatch[1]?.trim() ?? "";
+    const suffix = (suffixMatch[2] ?? "").toLowerCase();
+    const n = Number.parseFloat(numericPart);
+    if (!Number.isFinite(n) || numericPart.length === 0) return null;
+    if (suffix === "mm") return n;
+    if (suffix === "cm") return n * MM_PER_CM;
+    if (suffix === "m") return n * MM_PER_M;
+    if (suffix === "in" || suffix === "inch" || suffix === "inches" || suffix === '"') {
+      return n * MILLIMETRES_PER_INCH;
+    }
+    if (suffix === "ft" || suffix === "feet" || suffix === "'") {
+      return n * 12 * MILLIMETRES_PER_INCH;
+    }
+  }
+
+  const n = Number.parseFloat(text);
   if (!Number.isFinite(n)) return null;
   return displayValueToMm(n, unit);
 }
@@ -205,7 +224,7 @@ export function boundsMmToPlannerCm(bounds: PlannerBounds): PlannerBounds {
   };
 }
 
-export function boundsplannerCmToMm(bounds: PlannerBounds): PlannerBounds {
+export function boundsPlannerCmToMm(bounds: PlannerBounds): PlannerBounds {
   return {
     minX: plannerCmToMm(bounds.minX),
     minY: plannerCmToMm(bounds.minY),
@@ -213,6 +232,9 @@ export function boundsplannerCmToMm(bounds: PlannerBounds): PlannerBounds {
     maxY: plannerCmToMm(bounds.maxY),
   };
 }
+
+/** @deprecated Use {@link boundsPlannerCmToMm}. Kept for existing call sites. */
+export const boundsplannerCmToMm = boundsPlannerCmToMm;
 
 function trimTrailingZeros(value: number, maxFractionDigits: number): string {
   const fixed = value.toFixed(maxFractionDigits);

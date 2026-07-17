@@ -25,7 +25,8 @@ describe("PRODUCT_CATEGORY_SECTION", () => {
 describe("NEWS_PAGE_CONTENT", () => {
   it("lists dated coverage items with a social CTA", () => {
     expect(NEWS_PAGE_CONTENT.items).toHaveLength(3);
-    expect(NEWS_PAGE_CONTENT.cta.href).toBe("/social");
+    // /social permanently redirects — CTA must target a live indexable route.
+    expect(NEWS_PAGE_CONTENT.cta.href).toBe("/portfolio");
     for (const item of NEWS_PAGE_CONTENT.items) {
       expect(item.date.trim().length).toBeGreaterThan(0);
       expect(item.title.length).toBeGreaterThan(10);

@@ -255,5 +255,10 @@ async function handleGenerateAlt(req: NextRequest): Promise<NextResponse> {
 
 export const POST = withAuth(
   async (req) => handleGenerateAlt(req as NextRequest),
-  { role: "member", rateLimitScope: "generate-alt", rateLimit: 10 },
+  {
+    role: "member",
+    rateLimitScope: "generate-alt",
+    rateLimit: 10,
+    requireCsrf: true,
+  },
 );

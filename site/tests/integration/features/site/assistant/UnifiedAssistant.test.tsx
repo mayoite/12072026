@@ -8,9 +8,32 @@ import {
   GUIDED_PLANNER_COPY,
   MOBILE_ASSISTANT_COPY,
 } from "@/features/site/data/assistant";
+import { invalidateCsrfToken } from "@/lib/api/browserApi";
 
 const mockPathname = vi.fn(() => "/");
 const mockHasConsentChoice = vi.fn(() => true);
+
+function isCsrfUrl(input: RequestInfo | URL): boolean {
+  const url = String(input);
+  return url.includes("/api/csrf");
+}
+
+function isAdvisorUrl(input: RequestInfo | URL): boolean {
+  const url = String(input);
+  return url.includes("/api/ai-advisor");
+}
+
+function mockAdvisorFetch(handler: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>) {
+  return vi.spyOn(global, "fetch").mockImplementation((input, init) => {
+    if (isCsrfUrl(input)) {
+      return okJson({ token: "test-csrf-token" });
+    }
+    if (isAdvisorUrl(input)) {
+      return handler(input, init);
+    }
+    throw new Error(`Unexpected fetch: ${String(input)}`);
+  });
+}
 
 vi.mock("next/navigation", () => ({
   usePathname: () => mockPathname(),
@@ -137,6 +160,7 @@ function fillGuidedSteps(options?: { phone?: string }) {
 
 describe("UnifiedAssistant", () => {
   beforeEach(() => {
+    invalidateCsrfToken();
     mockPathname.mockReturnValue("/");
     mockHasConsentChoice.mockReturnValue(true);
   });
@@ -250,16 +274,13 @@ describe("UnifiedAssistant", () => {
   });
 
   it("streams NDJSON advisor replies with recommendations, warnings, and refiners", async () => {
-    vi.spyOn(global, "fetch").mockImplementation((input) => {
-      if (input === "/api/ai-advisor/") {
-        return ndjsonStream([
-          JSON.stringify({ type: "delta", text: '{"summary":"Streaming ' }),
-          JSON.stringify({ type: "delta", text: 'workspace plan"' }),
-          JSON.stringify({ type: "result", result: advisorResult }),
-        ]);
-      }
-      throw new Error(`Unexpected fetch: ${String(input)}`);
-    });
+    mockAdvisorFetch(() =>
+      ndjsonStream([
+        JSON.stringify({ type: "delta", text: '{"summary":"Streaming ' }),
+        JSON.stringify({ type: "delta", text: 'workspace plan"' }),
+        JSON.stringify({ type: "result", result: advisorResult }),
+      ]),
+    );
 
     render(<UnifiedAssistant />);
     await openAiChatbot();
@@ -299,15 +320,12 @@ describe("UnifiedAssistant", () => {
   });
 
   it("handles JSON advisor responses, starters, surprise prompts, reset, and planner switch", async () => {
-    vi.spyOn(global, "fetch").mockImplementation((input) => {
-      if (input === "/api/ai-advisor/") {
-        return okJson({
-          ...advisorResult,
-          pricingMode: "on-request",
-        });
-      }
-      throw new Error(`Unexpected fetch: ${String(input)}`);
-    });
+    mockAdvisorFetch(() =>
+      okJson({
+        ...advisorResult,
+        pricingMode: "on-request",
+      }),
+    );
 
     render(<UnifiedAssistant />);
     await openAiChatbot();
@@ -328,7 +346,8 @@ describe("UnifiedAssistant", () => {
     const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0);
     fireEvent.click(within(dialog).getByRole("button", { name: /try a sample/i }));
     randomSpy.mockRestore();
-    await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(2));
+    // CSRF bootstrap once + starter + sample
+    await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(3));
 
     fireEvent.click(within(dialog).getByRole("button", { name: AI_CHATBOT_COPY.switchToPlanner }));
     expect(screen.getByRole("dialog", { name: "Guided planner" })).toBeInTheDocument();
@@ -341,12 +360,17 @@ describe("UnifiedAssistant", () => {
   });
 
   it("surfaces advisor failures for stream errors, missing results, and JSON errors", async () => {
-    vi.spyOn(global, "fetch")
-      .mockImplementationOnce(() =>
-        ndjsonStream([JSON.stringify({ type: "error", message: "Model unavailable" })]),
-      )
-      .mockImplementationOnce(() => ndjsonStream([]))
-      .mockImplementationOnce(() => okJson({ error: "Bad prompt" }, { ok: false }));
+    const advisorResponses = [
+      () => ndjsonStream([JSON.stringify({ type: "error", message: "Model unavailable" })]),
+      () => ndjsonStream([]),
+      () => okJson({ error: "Bad prompt" }, { ok: false }),
+    ];
+    let advisorCall = 0;
+    mockAdvisorFetch(() => {
+      const next = advisorResponses[advisorCall] ?? advisorResponses[advisorResponses.length - 1];
+      advisorCall += 1;
+      return next();
+    });
 
     render(<UnifiedAssistant />);
     await openAiChatbot();
@@ -372,7 +396,7 @@ describe("UnifiedAssistant", () => {
 
   it("shows a timeout message when the advisor request is aborted", async () => {
     vi.useFakeTimers();
-    vi.spyOn(global, "fetch").mockImplementation((_url, init) =>
+    mockAdvisorFetch((_url, init) =>
       new Promise((_resolve, reject) => {
         init?.signal?.addEventListener("abort", () => {
           reject(new DOMException("Aborted", "AbortError"));

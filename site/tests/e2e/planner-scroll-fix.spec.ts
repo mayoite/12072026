@@ -16,7 +16,7 @@ test.describe("Planner marketing scroll vs workspace shell", () => {
   test("marketing /planner/ scrolls past hero to lower sections", async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await page.goto("/planner/", { waitUntil: "domcontentloaded", timeout: 60_000 });
-    await page.waitForTimeout(1500);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 30_000 });
 
     const before = await page.evaluate(() => ({
       bodyClasses: document.body.className,
@@ -36,7 +36,9 @@ test.describe("Planner marketing scroll vs workspace shell", () => {
     await page.screenshot({ path: path.join(EVIDENCE_ROOT, "planner-landing-top.png") });
 
     await page.evaluate(() => window.scrollTo({ top: 9_999, behavior: "instant" }));
-    await page.waitForTimeout(250);
+    await expect
+      .poll(async () => page.evaluate(() => window.scrollY), { timeout: 5_000 })
+      .toBeGreaterThan(400);
 
     const after = await page.evaluate(() => ({
       scrollY: window.scrollY,
@@ -106,7 +108,14 @@ test.describe("Planner marketing scroll vs workspace shell", () => {
       link.href = "/planner/";
       link.click();
     });
-    await page.waitForTimeout(3000);
+    await page.waitForURL(/\/planner\/?$/, { timeout: 30_000 });
+    await expect
+      .poll(
+        async () =>
+          page.evaluate(() => document.body.classList.contains("planner-workspace")),
+        { timeout: 15_000 },
+      )
+      .toBe(false);
 
     const landing = await page.evaluate(() => ({
       url: location.pathname,

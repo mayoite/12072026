@@ -1,33 +1,14 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render } from '@testing-library/react';
-import React from 'react';
-import PlansManagement from '@/app/admin/plans/page';
+import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import PlansManagement from "@/app/admin/plans/page";
 
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
-  usePathname: () => '/test',
-  useSearchParams: () => new URLSearchParams(),
+vi.mock("@/features/admin/plans/AdminPlansPageView", () => ({
+  default: () => <div data-testid="admin-plans-view">Plans</div>,
 }));
 
-vi.mock('next/font/google', () => ({
-  Inter: () => ({ className: 'inter' }),
-}));
-
-
-vi.mock('@/features/admin/plans/AdminPlansPageView', async () => {
-  const actual = await vi.importActual('@/features/admin/plans/AdminPlansPageView');
-  return {
-    ...actual,
-    default: (props: any) => <div data-testid="mock---features-planner-admin-AdminPlansPageView">{JSON.stringify(props)}</div>,
-  };
-});
-
-
-describe('app/admin/plans/page.tsx', () => {
-  it('renders without crashing', async () => {
-    // For coverage, we just need to render it
-    render(<PlansManagement {...({ params: Promise.resolve({ id: '1', type: 'standard' }), searchParams: Promise.resolve({ page: '1' }) } as any)} />);
-    // minimal assertion
-    expect(document.body.innerHTML).toBeDefined();
+describe("app/admin/plans/page.tsx", () => {
+  it("renders AdminPlansPageView under the admin route", () => {
+    render(<PlansManagement />);
+    expect(screen.getByTestId("admin-plans-view")).toBeInTheDocument();
   });
 });

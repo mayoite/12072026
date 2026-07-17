@@ -161,7 +161,7 @@ export function TopBar({
   viewMode,
   floors = [],
   activeFloorId,
-  displayUnit = "cm",
+  displayUnit = "mm",
   onViewModeChange,
   onFloorChange,
   onDisplayUnitChange,

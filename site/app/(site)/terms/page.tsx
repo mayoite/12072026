@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
