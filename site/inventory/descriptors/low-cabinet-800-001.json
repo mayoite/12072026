@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "2026-07-04.v2",
+  "id": "f81e3a1b-16f4-4000-8000-000000000041",
+  "slug": "low-cabinet-800-001",
+  "sku": "OFL-CAB-800",
+  "sourceProvenance": "native",
+  "createdBy": "seed-block-descriptors",
+  "geometry": {
+    "widthMm": 800,
+    "depthMm": 450,
+    "heightMm": 900
+  },
+  "viewBox": {
+    "x": 0,
+    "y": 0,
+    "width": 800,
+    "height": 450
+  },
+  "mounting": [
+    "floor"
+  ],
+  "blocks": [
+    {
+      "id": "body",
+      "x": 0,
+      "y": 0,
+      "width": 800,
+      "depth": 450
+    },
+    {
+      "id": "door-left",
+      "x": 20,
+      "y": 20,
+      "width": 360,
+      "depth": 410
+    },
+    {
+      "id": "door-right",
+      "x": 420,
+      "y": 20,
+      "width": 360,
+      "depth": 410
+    }
+  ],
+  "themeTokens": {
+    "currentColor": "currentColor",
+    "--fill-primary": "var(--color-surface-raised)"
+  },
+  "rovingFocus": [],
+  "liveAnnouncementCategories": [
+    "status"
+  ],
+  "generatedAt": 1751631041,
+  "checksum": "439f716f43adc0269635ad83b9d52e2da2ff3b2204a5e8061605a634a5d70c72",
+  "variant": "fixed",
+  "fixed": {
+    "sizingType": "fixed"
+  }
+}

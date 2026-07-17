@@ -44,6 +44,73 @@ function isMappableDescriptor(
   );
 }
 
+/**
+ * Infer planner taxonomy from slug so Admin-published plan symbols
+ * land in real furniture categories (not a generic Symbols dump).
+ */
+export function inferCatalogTaxonomyFromSlug(slug: string): {
+  category: PlannerCatalogItem["category"];
+  subCategory: string;
+  taxonomyPath: string;
+  typeTags: string[];
+} {
+  const s = slug.toLowerCase();
+  if (/desk|workstation|bench-desk|linear|l-desk/.test(s)) {
+    return {
+      category: "Furniture",
+      subCategory: "Desks & Workstations",
+      taxonomyPath: "Furniture > Desks & Workstations",
+      typeTags: ["desk", "workstation", "office"],
+    };
+  }
+  if (/meeting|conference|table/.test(s) && !/side-table|coffee/.test(s)) {
+    return {
+      category: "Furniture",
+      subCategory: "Tables",
+      taxonomyPath: "Furniture > Tables",
+      typeTags: ["table", "meeting", "office"],
+    };
+  }
+  if (/side-table|coffee|ottoman/.test(s)) {
+    return {
+      category: "Furniture",
+      subCategory: "Tables",
+      taxonomyPath: "Furniture > Tables",
+      typeTags: ["table", "occasional"],
+    };
+  }
+  if (/chair|seat/.test(s) && !/sofa|sectional|chaise|bench/.test(s)) {
+    return {
+      category: "Furniture",
+      subCategory: "Chairs",
+      taxonomyPath: "Furniture > Chairs",
+      typeTags: ["chair", "seating", "office"],
+    };
+  }
+  if (/sofa|sectional|chaise|lounge|bench/.test(s)) {
+    return {
+      category: "Furniture",
+      subCategory: "Sofas & Sectionals",
+      taxonomyPath: "Furniture > Sofas & Sectionals",
+      typeTags: ["sofa", "soft-seating"],
+    };
+  }
+  if (/cabinet|pedestal|storage|locker/.test(s)) {
+    return {
+      category: "Storage & Organisation",
+      subCategory: "Cabinets",
+      taxonomyPath: "Storage & Organisation > Cabinets",
+      typeTags: ["storage", "cabinet"],
+    };
+  }
+  return {
+    category: "Furniture",
+    subCategory: "Plan symbols",
+    taxonomyPath: "Furniture > Plan symbols",
+    typeTags: ["symbol", "plan"],
+  };
+}
+
 export function mapDescriptorToCatalogItem(
   descriptor: MappableDescriptor,
 ): PlannerCatalogItem {
@@ -70,6 +137,7 @@ export function mapDescriptorToCatalogItem(
       : humanizeCatalogSlug(slug);
   const shortName = buildShortName(displayName);
   const slugTags = catalogSlugSearchTags(slug);
+  const taxonomy = inferCatalogTaxonomyFromSlug(slug);
   const widthMm = descriptor.geometry?.widthMm ?? 0;
   const depthMm = descriptor.geometry?.depthMm ?? 0;
   const heightMm = descriptor.geometry?.heightMm ?? 0;
@@ -79,10 +147,10 @@ export function mapDescriptorToCatalogItem(
     sku: descriptor.sku ?? `DESC-${slug}`,
     name: displayName,
     shortName,
-    description: `SVG symbol · ${displayName}`,
-    category: "Symbols",
-    subCategory: "SVG Catalog",
-    taxonomyPath: `Symbols > SVG Catalog > ${displayName}`,
+    description: `Plan symbol · ${displayName} (${widthMm}×${depthMm} mm)`,
+    category: taxonomy.category,
+    subCategory: taxonomy.subCategory,
+    taxonomyPath: `${taxonomy.taxonomyPath} > ${displayName}`,
     dimensions: {
       widthMm,
       depthMm,
@@ -90,11 +158,11 @@ export function mapDescriptorToCatalogItem(
     },
     displayUnit: "mm",
     assets: {
-      imageUrls: [],
+      imageUrls: [svgUrl],
       previewImageUrl: svgUrl,
     },
     material: {
-      marketingMaterial: "SVG",
+      marketingMaterial: "Plan SVG",
       normalizedMaterial: "svg-symbol",
     },
     roomTags: ["Office"],
@@ -106,15 +174,17 @@ export function mapDescriptorToCatalogItem(
       new Set([
         slug,
         ...slugTags,
+        ...taxonomy.typeTags,
         ...(descriptorTags ?? []),
         "descriptor",
-        "symbol",
         "svg",
+        "plan-symbol",
       ]),
     ),
     variants: [],
     provenance: { source: "descriptor-loader" },
-    symbolOnly: true,
+    // Plan paint uses published SVG; not a marketing-only glyph.
+    symbolOnly: false,
     license: "standard",
     animated: false,
     staffPicked: false,

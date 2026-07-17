@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "2026-07-04.v2",
+  "id": "f81e3a1b-16f4-4000-8000-000000000032",
+  "slug": "lounge-sofa-2200-001",
+  "sku": "OFL-SOF-2200",
+  "sourceProvenance": "native",
+  "createdBy": "seed-block-descriptors",
+  "geometry": {
+    "widthMm": 2200,
+    "depthMm": 900,
+    "heightMm": 850
+  },
+  "viewBox": {
+    "x": 0,
+    "y": 0,
+    "width": 2200,
+    "height": 900
+  },
+  "mounting": [
+    "floor"
+  ],
+  "blocks": [
+    {
+      "id": "seat",
+      "x": 80,
+      "y": 160,
+      "width": 2040,
+      "depth": 620
+    },
+    {
+      "id": "backrest",
+      "x": 80,
+      "y": 40,
+      "width": 2040,
+      "depth": 140
+    },
+    {
+      "id": "arm-left",
+      "x": 40,
+      "y": 160,
+      "width": 80,
+      "depth": 620
+    },
+    {
+      "id": "arm-right",
+      "x": 2080,
+      "y": 160,
+      "width": 80,
+      "depth": 620
+    }
+  ],
+  "themeTokens": {
+    "currentColor": "currentColor",
+    "--fill-primary": "var(--color-surface-raised)"
+  },
+  "rovingFocus": [],
+  "liveAnnouncementCategories": [
+    "status"
+  ],
+  "generatedAt": 1751631032,
+  "checksum": "a02e8348af993e4b2331e143869ab348f8158f2355878391c2a87ed5ad31e3a4",
+  "variant": "fixed",
+  "fixed": {
+    "sizingType": "fixed"
+  }
+}

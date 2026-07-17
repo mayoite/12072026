@@ -360,19 +360,19 @@ export function AdminSvgEditorListView({
         <div>
           {/* ADM-SHELL-01: title, scope, source, state */}
           <p className="admin-page__eyebrow" data-testid="admin-shell-scope">
-            Catalog assets · SVG authoring
+            Inventory · plan symbols
           </p>
           <h1 className="admin-page__title" data-testid="admin-shell-title">
-            SVG symbols
+            Product plan symbols
           </h1>
           <p className="admin-page__copy" data-testid="admin-svg-journey-copy">
-            Find a product, open the visual studio, set identity and footprint,
-            preview the Planner symbol, then publish. You do not need to edit
-            JSON or source code.
+            Find a product, open the studio, set identity and footprint, preview
+            the Planner symbol, then publish. Guests place these symbols on the
+            canvas. You do not need to edit source files by hand.
           </p>
           <p className="admin-page__meta" data-testid="admin-shell-source">
-            Source: local disk (live publish authority) · Products DB not live ·
-            refreshed{" "}
+            Live authority: on-disk inventory (descriptors + svg-catalog) ·
+            Products DB dual-write optional · refreshed{" "}
             <time dateTime={refreshedAtLabel}>{refreshedAtLabel}</time>
           </p>
         </div>

@@ -1,31 +1,31 @@
 {
   "schemaVersion": "2026-07-04.v2",
-  "id": "f81e3a1b-16f4-4000-8000-000000000004",
-  "slug": "missing-geom-fallback-001",
-  "sku": "OFL-FBK-001",
+  "id": "f81e3a1b-16f4-4000-8000-000000000050",
+  "slug": "collab-ottoman-600-001",
+  "sku": "OFL-OTT-600",
   "sourceProvenance": "native",
   "createdBy": "seed-block-descriptors",
   "geometry": {
-    "widthMm": 200,
-    "depthMm": 200,
-    "heightMm": 200
+    "widthMm": 600,
+    "depthMm": 600,
+    "heightMm": 450
   },
   "viewBox": {
     "x": 0,
     "y": 0,
-    "width": 200,
-    "height": 200
+    "width": 600,
+    "height": 600
   },
   "mounting": [
     "floor"
   ],
   "blocks": [
     {
-      "id": "fallback-body",
-      "x": 20,
-      "y": 20,
-      "width": 160,
-      "depth": 160
+      "id": "seat",
+      "x": 40,
+      "y": 40,
+      "width": 520,
+      "depth": 520
     }
   ],
   "themeTokens": {
@@ -36,8 +36,8 @@
   "liveAnnouncementCategories": [
     "status"
   ],
-  "generatedAt": 1751631003,
-  "checksum": "a0b5bf45770a8a64e2cc092f2ec3cc41925cec25158e123d6e1555fb1a6a3266",
+  "generatedAt": 1751631050,
+  "checksum": "e6ecdfb5183590c379430d0f6296fefdfe5754b4aa4307c552792fddc52c567e",
   "variant": "fixed",
   "fixed": {
     "sizingType": "fixed"

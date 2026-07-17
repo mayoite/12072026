@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "2026-07-04.v2",
+  "id": "f81e3a1b-16f4-4000-8000-000000000051",
+  "slug": "bench-seat-1500-001",
+  "sku": "OFL-BNCH-1500",
+  "sourceProvenance": "native",
+  "createdBy": "seed-block-descriptors",
+  "geometry": {
+    "widthMm": 1500,
+    "depthMm": 500,
+    "heightMm": 450
+  },
+  "viewBox": {
+    "x": 0,
+    "y": 0,
+    "width": 1500,
+    "height": 500
+  },
+  "mounting": [
+    "floor"
+  ],
+  "blocks": [
+    {
+      "id": "seat",
+      "x": 40,
+      "y": 60,
+      "width": 1420,
+      "depth": 380
+    },
+    {
+      "id": "leg-left",
+      "x": 60,
+      "y": 420,
+      "width": 80,
+      "depth": 60
+    },
+    {
+      "id": "leg-right",
+      "x": 1360,
+      "y": 420,
+      "width": 80,
+      "depth": 60
+    }
+  ],
+  "themeTokens": {
+    "currentColor": "currentColor",
+    "--fill-primary": "var(--color-surface-raised)"
+  },
+  "rovingFocus": [],
+  "liveAnnouncementCategories": [
+    "status"
+  ],
+  "generatedAt": 1751631051,
+  "checksum": "39a7a32da833a2606a27cc1e8f0900db484cafac55e458f98b0f88202d1f9c64",
+  "variant": "fixed",
+  "fixed": {
+    "sizingType": "fixed"
+  }
+}

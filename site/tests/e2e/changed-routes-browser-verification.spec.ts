@@ -186,7 +186,9 @@ const ROUTES: RouteCheck[] = [
       await expect(page.getByTestId("admin-svg-primary-journey")).toBeVisible({
         timeout: 45_000,
       });
-      await expect(page.getByTestId("admin-shell-title")).toHaveText(/SVG symbols/i);
+      await expect(page.getByTestId("admin-shell-title")).toHaveText(
+        /Product plan symbols|SVG symbols/i,
+      );
       await assertNoHorizontalOverflow(page, "main, .admin-page, body");
       await runAxe(page, "admin-svg-list");
     },

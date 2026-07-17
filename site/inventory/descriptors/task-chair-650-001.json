@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "2026-07-04.v2",
+  "id": "f81e3a1b-16f4-4000-8000-000000000030",
+  "slug": "task-chair-650-001",
+  "sku": "OFL-CHR-TSK-650",
+  "sourceProvenance": "native",
+  "createdBy": "seed-block-descriptors",
+  "geometry": {
+    "widthMm": 650,
+    "depthMm": 650,
+    "heightMm": 1100
+  },
+  "viewBox": {
+    "x": 0,
+    "y": 0,
+    "width": 650,
+    "height": 650
+  },
+  "mounting": [
+    "floor"
+  ],
+  "blocks": [
+    {
+      "id": "seat",
+      "x": 100,
+      "y": 140,
+      "width": 450,
+      "depth": 380
+    },
+    {
+      "id": "backrest",
+      "x": 120,
+      "y": 40,
+      "width": 410,
+      "depth": 120
+    },
+    {
+      "id": "base",
+      "x": 200,
+      "y": 500,
+      "width": 250,
+      "depth": 100
+    }
+  ],
+  "themeTokens": {
+    "currentColor": "currentColor",
+    "--fill-primary": "var(--color-surface-raised)"
+  },
+  "rovingFocus": [
+    {
+      "key": "focus-seat",
+      "focusSelector": "#seat",
+      "label": "Seat"
+    }
+  ],
+  "liveAnnouncementCategories": [
+    "status"
+  ],
+  "generatedAt": 1751631030,
+  "checksum": "31e2e365001b39e47678ccc84b98c406869e0e3b6451bc8f736fab6b39052535",
+  "variant": "fixed",
+  "fixed": {
+    "sizingType": "fixed"
+  }
+}

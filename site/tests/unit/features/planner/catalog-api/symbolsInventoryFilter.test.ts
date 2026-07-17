@@ -26,14 +26,18 @@ function symbolItem(slug: string): PlannerCatalogItem {
   return mapDescriptorToCatalogItem(descriptor);
 }
 
-describe("Symbols inventory slice", () => {
-  it("maps descriptor-loader items to Symbols category", () => {
+describe("Plan symbol inventory mapping", () => {
+  it("maps desk descriptors to Furniture desks (not generic Symbols dump)", () => {
     const item = symbolItem("desk-linear-1200-001");
-    expect(item.category).toBe("Symbols");
-    expect(item.tags).toContain("symbol");
+    expect(item.category).toBe("Furniture");
+    expect(item.subCategory).toMatch(/Desk/i);
+    expect(item.tags).toContain("plan-symbol");
+    expect(item.assets.previewImageUrl).toBe(
+      "/svg-catalog/desk-linear-1200-001.svg",
+    );
   });
 
-  it("svg-catalog subcategory filter matches descriptor symbols", () => {
+  it("keeps plan-symbol tags for inventory search / svg-catalog filter", () => {
     const symbols = inventoryCategoriesForProduct("office-systems").find(
       (c) => c.id === "symbols",
     );

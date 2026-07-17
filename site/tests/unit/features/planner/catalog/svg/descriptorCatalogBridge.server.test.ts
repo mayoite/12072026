@@ -3,7 +3,11 @@ import * as mod from "@/features/planner/catalog/svg/descriptorCatalogBridge.ser
 
 describe("catalog/svg/descriptorCatalogBridge.server.ts", () => {
   it("exposes expected public API symbols", () => {
-    const expected = ["mapDescriptorToCatalogItem","mapDescriptorsToCatalogItems"] as const;
+    const expected = [
+      "mapDescriptorToCatalogItem",
+      "mapDescriptorsToCatalogItems",
+      "inferCatalogTaxonomyFromSlug",
+    ] as const;
     for (const name of expected) {
       expect(mod).toHaveProperty(name);
       expect((mod as Record<string, unknown>)[name]).not.toBeUndefined();
@@ -29,5 +33,20 @@ describe("catalog/svg/descriptorCatalogBridge.server.ts", () => {
       geometry: { widthMm: 1200, depthMm: 600, heightMm: 750 },
     });
     expect(item.assets.previewImageUrl).toBe("/svg-catalog/desk-linear-1200.svg");
+    expect(item.category).toBe("Furniture");
+    expect(item.subCategory).toMatch(/Desk/i);
+    expect(item.symbolOnly).toBe(false);
+  });
+
+  it("infers seating and storage taxonomy from slug", () => {
+    expect(mod.inferCatalogTaxonomyFromSlug("task-chair-650-001").subCategory).toMatch(
+      /Chair/i,
+    );
+    expect(
+      mod.inferCatalogTaxonomyFromSlug("low-cabinet-800-001").category,
+    ).toBe("Storage & Organisation");
+    expect(
+      mod.inferCatalogTaxonomyFromSlug("meeting-table-2400-001").subCategory,
+    ).toMatch(/Table/i);
   });
 });

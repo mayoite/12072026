@@ -137,13 +137,17 @@ describe("ADM-SHELL-01 list page landmarks", () => {
     );
 
     assertShellLandmarks();
-    expect(screen.getByTestId("admin-shell-title")).toHaveTextContent(/SVG symbols/i);
-    expect(screen.getByTestId("admin-shell-scope")).toHaveTextContent(/SVG authoring/i);
-    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
-      /local disk/i,
+    expect(screen.getByTestId("admin-shell-title")).toHaveTextContent(
+      /Product plan symbols|SVG symbols/i,
+    );
+    expect(screen.getByTestId("admin-shell-scope")).toHaveTextContent(
+      /Inventory|SVG authoring|plan symbols/i,
     );
     expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
-      /live publish authority/i,
+      /on-disk inventory|local disk|Live authority/i,
+    );
+    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
+      /live authority|descriptors|svg-catalog/i,
     );
     expect(screen.getByTestId("admin-shell-state")).toHaveTextContent(/published/i);
     expect(screen.getByTestId("admin-shell-primary-action")).toHaveTextContent(
