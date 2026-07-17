@@ -3,42 +3,33 @@ import { PRODUCT_SUITE } from "@/features/site/data/productSuite";
 
 /**
  * Marketing header + mobile drawer destinations.
- * `headerSlot: "more"` keeps the link in the mobile drawer and footer paths,
- * but collapses it under desktop header "More" so the bar does not clip CTAs.
+ * Flat primary toolbar only — no "More" dropdown, no Products mega menu.
+ * Secondary destinations live as direct footer links.
  */
 export const SITE_NAV_LINKS = [
-  { label: "Products", href: "/products", hasMega: true },
+  { label: "Products", href: "/products" },
   { label: "Solutions", href: "/solutions" },
   { label: "Projects", href: "/projects" },
-  /** Guest entry step — choose-product, then open planner (not bare /planner/guest). */
+  /** Guest entry step — choose-product, then open planner. */
   { label: "Planner", href: PRODUCT_SUITE.planner.routes.guestChooser },
-  // Portfolio moved to More — one fewer primary toolbar link.
-  { label: "Portfolio", href: "/portfolio", headerSlot: "more" as const },
-  { label: "Trusted", href: "/trusted-by", headerSlot: "more" as const },
   { label: "About", href: "/about" },
-  { label: "Sustainability", href: "/sustainability", headerSlot: "more" as const },
   { label: "Contact", href: "/contact" },
-  // Portal is a shim — not marketing nav. Sign-in is not a toolbar item:
-  // AccessForm offers sign-in + guest; post-login lands on dashboard via `next`.
 ] as const;
 
 export type SiteNavLink = (typeof SITE_NAV_LINKS)[number];
 
-/** Center desktop nav — primary buyer destinations only. */
-export const SITE_HEADER_PRIMARY_LINKS = SITE_NAV_LINKS.filter(
-  (link) => !("headerSlot" in link && link.headerSlot === "more"),
-);
+/** Desktop + mobile center nav — same flat list. */
+export const SITE_HEADER_PRIMARY_LINKS = SITE_NAV_LINKS;
 
-/** Desktop "More" flyout — secondary destinations still reachable without crowding. */
-export const SITE_HEADER_MORE_LINKS = SITE_NAV_LINKS.filter(
-  (link) => "headerSlot" in link && link.headerSlot === "more",
-);
+/** @deprecated Empty — no header dropdown. Secondary routes are footer-only. */
+export const SITE_HEADER_MORE_LINKS: readonly SiteNavLink[] = [];
 
 export const SITE_CTA_LINKS = [
   { label: "Get Quote", href: "/contact", variant: "primary" as const },
   { label: "View Products", href: "/products", variant: "outline" as const },
 ] as const;
 
+/** Legacy mega-menu cards (unused when Products is a direct link). Kept for search/featured surfaces. */
 export const SITE_NAV_FEATURED_CARDS = [
   {
     title: "Ergonomic Seating",
@@ -66,6 +57,8 @@ export const SITE_NAV_SEARCH_FALLBACK_LINKS = [
   { href: "/projects", label: "Projects" },
   { href: PRODUCT_SUITE.planner.routes.guestChooser, label: "Planner" },
   { href: "/portfolio", label: "Portfolio" },
+  { href: "/trusted-by", label: "Trusted By" },
+  { href: "/sustainability", label: "Sustainability" },
   { href: "/contact", label: "Contact" },
 ] as const;
 
@@ -95,14 +88,18 @@ export function buildFooterNav(
     .filter((section) => section.links.length > 0);
 }
 
+/**
+ * Public footer — all secondary destinations as direct links.
+ * No Admin, Portal, or Sign in.
+ */
 export const SITE_FOOTER_NAV = buildFooterNav([
   {
     heading: "Products",
     links: [
       { href: "/products", label: "All Products" },
       { href: "/solutions", label: "Solutions" },
+      { href: "/projects", label: "Projects" },
       { href: PRODUCT_SUITE.planner.routes.guestChooser, label: "Planner" },
-      // Member hub after sign-in only — not Admin, not Portal shim.
       { href: PRODUCT_SUITE.shared.routes.dashboard, label: "Member dashboard" },
     ],
   },
@@ -110,9 +107,10 @@ export const SITE_FOOTER_NAV = buildFooterNav([
     heading: "Company",
     links: [
       { href: "/about", label: "About Us" },
-      { href: "/trusted-by", label: "Trusted By" },
       { href: "/portfolio", label: "Portfolio" },
+      { href: "/trusted-by", label: "Trusted By" },
       { href: "/sustainability", label: "Sustainability" },
+      { href: "/showrooms", label: "Showrooms" },
     ],
   },
   {
@@ -120,7 +118,7 @@ export const SITE_FOOTER_NAV = buildFooterNav([
     links: [
       { href: "/contact", label: "Contact" },
       { href: "/service", label: "After Sales" },
-      { href: "/showrooms", label: "Showrooms" },
+      { href: "/downloads", label: "Downloads" },
     ],
   },
 ]);

@@ -81,9 +81,10 @@ describe("SITE_NAV_LINKS", () => {
     expect(match?.href).toBe("/solutions");
   });
 
-  it("Products link has hasMega set to true", () => {
+  it("Products is a direct link without mega dropdown", () => {
     const products = SITE_NAV_LINKS.find((l) => l.label === "Products");
-    expect(products?.hasMega).toBe(true);
+    expect(products?.href).toBe("/products");
+    expect("hasMega" in (products ?? {})).toBe(false);
   });
 
   it("no duplicate labels", () => {
@@ -91,7 +92,7 @@ describe("SITE_NAV_LINKS", () => {
     expect(new Set(labels).size).toBe(labels.length);
   });
 
-  it("splits primary desktop links from More-slot secondary links", () => {
+  it("uses a flat primary header list with no More dropdown links", () => {
     expect(SITE_HEADER_PRIMARY_LINKS.map((l) => l.label)).toEqual([
       "Products",
       "Solutions",
@@ -100,14 +101,12 @@ describe("SITE_NAV_LINKS", () => {
       "About",
       "Contact",
     ]);
-    expect(SITE_HEADER_MORE_LINKS.map((l) => l.label)).toEqual([
-      "Portfolio",
-      "Trusted",
-      "Sustainability",
-    ]);
-    expect(
-      SITE_HEADER_PRIMARY_LINKS.length + SITE_HEADER_MORE_LINKS.length,
-    ).toBe(SITE_NAV_LINKS.length);
+    expect(SITE_HEADER_MORE_LINKS).toEqual([]);
+    expect(SITE_HEADER_PRIMARY_LINKS).toEqual(SITE_NAV_LINKS);
+    // No mega-menu flag on any primary link
+    for (const link of SITE_NAV_LINKS) {
+      expect("hasMega" in link && (link as { hasMega?: boolean }).hasMega).toBeFalsy();
+    }
   });
 });
 
@@ -213,19 +212,31 @@ describe("SITE_FOOTER_NAV", () => {
     expect(new Set(hrefs).size).toBe(hrefs.length);
   });
 
-  it("includes trimmed Products links (categories live in header mega menu)", () => {
+  it("footer carries direct secondary routes (no header dropdown)", () => {
     const products = SITE_FOOTER_NAV.find((section) => section.heading === "Products");
     expect(products?.links.map((link) => link.label)).toEqual([
       "All Products",
       "Solutions",
+      "Projects",
       "Planner",
       "Member dashboard",
     ]);
+    const company = SITE_FOOTER_NAV.find((section) => section.heading === "Company");
+    expect(company?.links.map((link) => link.label)).toEqual([
+      "About Us",
+      "Portfolio",
+      "Trusted By",
+      "Sustainability",
+      "Showrooms",
+    ]);
+    const services = SITE_FOOTER_NAV.find((section) => section.heading === "Services");
+    expect(services?.links.map((link) => link.label)).toEqual([
+      "Contact",
+      "After Sales",
+      "Downloads",
+    ]);
     expect(SITE_FOOTER_NAV.flatMap((section) => section.links).some((link) => link.href === "/news")).toBe(
       false,
-    );
-    expect(SITE_FOOTER_NAV.flatMap((section) => section.links).some((link) => link.href === "/showrooms")).toBe(
-      true,
     );
   });
 
