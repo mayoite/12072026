@@ -67,7 +67,8 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
     createDefaultProjectSetupDraft({ guestMode }),
   );
   const [error, setError] = useState<string | null>(null);
-  const [startingMode, setStartingMode] = useState<PlannerStartingMode>("scratch");
+  // Template first — blank canvas is the weaker default for first-time guests (UI benchmark).
+  const [startingMode, setStartingMode] = useState<PlannerStartingMode>("template");
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -151,8 +152,8 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
 
   return (
     <div className="planner-setup-overlay bg-[color:var(--surface-inverse)]/88 backdrop-blur-sm">
-      <div className="grid max-w-5xl rounded-[var(--radius-xl)] border border-[color:var(--border-soft)] bg-[color:var(--surface-panel-strong)] shadow-[var(--shadow-soft)] lg:grid-cols-[1fr_1.05fr]">
-        <aside className="flex flex-col gap-8 border-b border-[color:var(--border-soft)] bg-[color:var(--surface-accent-wash)] p-8 lg:border-b-0 lg:border-r">
+      <div className="grid max-h-[min(100dvh,52rem)] max-w-5xl w-full overflow-y-auto rounded-[var(--radius-xl)] border border-[color:var(--border-soft)] bg-[color:var(--surface-panel-strong)] shadow-[var(--shadow-soft)] sm:max-h-none lg:grid-cols-[1fr_1.05fr]">
+        <aside className="hidden flex-col gap-8 border-b border-[color:var(--border-soft)] bg-[color:var(--surface-accent-wash)] p-6 sm:flex sm:p-8 lg:border-b-0 lg:border-r">
           <div>
             <p className="typ-eyebrow text-[color:var(--color-bronze-500)]">Project setup</p>
             <h1 className="typ-h2 mt-3 text-[color:var(--text-strong)]">
@@ -186,11 +187,17 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
         </aside>
 
         <form
-          className="flex flex-col gap-5 p-8"
+          className="flex flex-col gap-4 p-4 sm:gap-5 sm:p-8"
           onSubmit={handleSubmit}
           aria-label="Project setup"
           aria-busy={!isHydrated}
         >
+          <div className="sm:hidden">
+            <p className="typ-eyebrow text-[color:var(--color-bronze-500)]">Project setup</p>
+            <h1 className="typ-h3 mt-2 text-[color:var(--text-strong)]">
+              Set up in <span className="text-accent-italic">30 seconds</span>
+            </h1>
+          </div>
           <div className={SETUP_FIELD_SHELL_INLINE}>
             <label className={SETUP_FIELD_LABEL} htmlFor="project-setup-name">
               Project name
@@ -311,20 +318,20 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
               {([
                 {
                   value: "template",
-                  label: "Template",
-                  description: "Create a purpose-based starter layout.",
+                  label: "Starter layout",
+                  description: "Purpose-based desks and rooms you can edit.",
                   icon: Layout,
                 },
                 {
                   value: "scratch",
-                  label: "Scratch",
-                  description: "Start with a clean, blank canvas.",
+                  label: "Blank canvas",
+                  description: "Empty room — draw walls yourself.",
                   icon: PencilSimpleLine,
                 },
                 {
                   value: "import-trace",
-                  label: "Import or trace",
-                  description: "Open the workspace, then import a plan file.",
+                  label: "Import / trace",
+                  description: "Open the workspace, then import a plan.",
                   icon: FileArrowUp,
                 },
               ] as const).map((option) => {
@@ -364,7 +371,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
 
           <button
             type="submit"
-            className="btn-primary typ-cta mt-auto inline-flex gap-2 px-6 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-primary)]"
+            className="btn-primary typ-cta mt-auto inline-flex min-h-11 w-full items-center justify-center gap-2 px-6 py-3 sm:w-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-primary)]"
             disabled={!isHydrated}
             aria-label={isHydrated ? "Open planner" : "Preparing workspace"}
           >

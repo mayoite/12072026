@@ -129,6 +129,7 @@
 }
 
 .btn-hero-primary {
+  min-height: 2.75rem;
   color: var(--text-inverse);
   border: 1px solid var(--overlay-panel-14);
   background:
@@ -144,6 +145,7 @@
 }
 
 .btn-hero-secondary {
+  min-height: 2.75rem;
   color: var(--text-inverse);
   border: 1px solid var(--overlay-panel-14);
   background: var(--overlay-panel-12);

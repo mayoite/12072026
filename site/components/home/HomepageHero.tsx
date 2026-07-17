@@ -97,7 +97,7 @@ export function HomepageHero() {
   return (
     <section
       id="home-hero"
-      className="relative min-h-[min(78vh,44rem)] w-full overflow-hidden bg-inverse pt-20 md:min-h-[85vh] md:pt-24"
+      className="relative min-h-[min(72vh,40rem)] w-full overflow-hidden bg-inverse pt-[max(5rem,env(safe-area-inset-top))] md:min-h-[85vh] md:pt-24"
       aria-labelledby="home-hero-heading"
     >
       <AnimatePresence mode="wait" initial={false}>
@@ -124,9 +124,9 @@ export function HomepageHero() {
         </motion.div>
       </AnimatePresence>
 
-      <div className="home-hero__layout relative z-10 min-h-[calc(78vh-5rem)] py-10 md:py-16 lg:py-20">
+      <div className="home-hero__layout relative z-10 min-h-[calc(72vh-5rem)] py-8 pb-16 md:min-h-[calc(85vh-6rem)] md:py-16 lg:py-20">
         <motion.div
-          className="home-hero__copy w-full max-w-4xl space-y-6 md:space-y-8"
+          className="home-hero__copy w-full max-w-4xl space-y-5 md:space-y-8"
           variants={containerVariants}
           initial={revealMotion ? "hidden" : "visible"}
           animate="visible"

@@ -60,9 +60,9 @@ describe("ProjectSetupGate", () => {
       vi.runAllTimers();
     });
 
-    expect(screen.getByRole("radio", { name: /Template/i })).toBeInTheDocument();
-    expect(screen.getByRole("radio", { name: /Scratch/i })).toBeChecked();
-    expect(screen.getByRole("radio", { name: /Import or trace/i })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: /Starter layout/i })).toBeChecked();
+    expect(screen.getByRole("radio", { name: /Blank canvas/i })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: /Import \/ trace/i })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Open planner" }));
 
