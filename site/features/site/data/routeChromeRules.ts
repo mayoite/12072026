@@ -34,9 +34,13 @@ const CAD_PREFIXES = [
   "/planners",
 ];
 
+/**
+ * App shells without marketing chrome (no site header/footer).
+ * Guest chooser `/choose-product` is NOT here — it is a pre-planner marketing
+ * step and must show toolbar + footer.
+ */
 const WORKSPACE_PREFIXES = [
   "/access",
-  "/choose-product",
   "/dashboard",
   "/portal",
   "/admin",

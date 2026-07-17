@@ -57,6 +57,12 @@ describe('RouteChrome Component', () => {
       const { container } = render(<RouteChrome position="top" />);
       expect(container.firstChild).toBeNull();
     });
+
+    it('renders SiteHeader on guest chooser (pre-planner step)', () => {
+      mockPathname = '/choose-product';
+      render(<RouteChrome position="top" />);
+      expect(screen.getByTestId('site-header')).toBeInTheDocument();
+    });
   });
 
   describe('position="bottom"', () => {
@@ -87,6 +93,13 @@ describe('RouteChrome Component', () => {
       mockPathname = '/planner/canvas';
       const { container } = render(<RouteChrome position="bottom" />);
       expect(container.firstChild).toBeNull();
+    });
+
+    it('renders footer on guest chooser (pre-planner step)', () => {
+      mockPathname = '/choose-product';
+      render(<RouteChrome position="bottom" />);
+      expect(screen.getByTestId('site-footer')).toBeInTheDocument();
+      expect(screen.getByTestId('logo-marquee')).toBeInTheDocument();
     });
   });
 });

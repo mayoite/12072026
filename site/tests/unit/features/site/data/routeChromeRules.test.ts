@@ -10,6 +10,17 @@ describe("routeChromeRules", () => {
     expect(resolveRouteChromeMode("/planner/open3d")).toEqual({ header: "hidden", footer: "hidden" });
   });
 
+  it("keeps full site toolbar and footer on guest chooser (not CAD yet)", () => {
+    expect(resolveRouteChromeMode("/choose-product")).toEqual({
+      header: "full",
+      footer: "full",
+    });
+    expect(resolveRouteChromeMode("/choose-product?mode=guest")).toEqual({
+      header: "full",
+      footer: "full",
+    });
+  });
+
   it("shows login footer tools only on login routes", () => {
     expect(resolveRouteChromeMode("/login")).toEqual({ header: "hidden", footer: "login-tools" });
     expect(resolveRouteChromeMode("/login?next=%2Fdashboard")).toEqual({
