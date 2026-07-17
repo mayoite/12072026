@@ -577,6 +577,26 @@
   }
 }
 
+/* Phone / narrow shell: always 44px tools (Playwright measures 40px at default 2.5rem). */
+@media (max-width: 47.99rem) {
+  .rail,
+  .rail[data-rail-density="single-dense"],
+  .rail[data-dock-managed="true"] {
+    --rail-btn: var(--planner-touch-target, 2.75rem);
+    --rail-icon: 1.25rem;
+  }
+
+  .toolBtn {
+    min-width: var(--planner-touch-target, 2.75rem);
+    min-height: var(--planner-touch-target, 2.75rem);
+  }
+
+  .toolFace {
+    min-width: var(--planner-touch-target, 2.75rem);
+    min-height: var(--planner-touch-target, 2.75rem);
+  }
+}
+
 /* A narrow dock becomes a true CAD rail. Keep this after density rules. */
 @container (width < 10rem) {
   .rail[data-dock-managed="true"] {

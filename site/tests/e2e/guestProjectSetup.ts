@@ -89,6 +89,18 @@ export async function clearPlannerStorage(page: Page): Promise<void> {
   }, [...PLANNER_LS_PREFIXES], PLANNER_STORAGE_CLEAR_INIT_KEY);
 }
 
+/**
+ * Setup gate H1 differs by breakpoint:
+ * - desktop/tablet aside: "Set up your space in 30 seconds"
+ * - phone (sm:hidden form header): "Set up in 30 seconds"
+ */
+export const PLANNER_SETUP_HEADING =
+  /Set up (?:your space(?: in 30 seconds)?|in 30 seconds)/i;
+
+function plannerSetupHeading(page: Page) {
+  return page.getByRole("heading", { name: PLANNER_SETUP_HEADING });
+}
+
 /** Complete the single Planner setup step when the gate is showing. */
 export async function completePlannerSetupGate(
   page: Page,
@@ -99,11 +111,16 @@ export async function completePlannerSetupGate(
     return;
   }
 
-  const setupHeading = page.getByRole("heading", { name: /Set up your space/i });
-  const onMetadataStep = await setupHeading
-    .waitFor({ state: "visible", timeout: 30_000 })
-    .then(() => true)
-    .catch(() => false);
+  const setupHeading = plannerSetupHeading(page);
+  const setupForm = page.getByRole("form", { name: /Project setup/i });
+  const onMetadataStep = await Promise.race([
+    setupHeading
+      .waitFor({ state: "visible", timeout: 30_000 })
+      .then(() => true),
+    setupForm
+      .waitFor({ state: "visible", timeout: 30_000 })
+      .then(() => true),
+  ]).catch(() => false);
 
   if (onMetadataStep) {
     const nameInput = page.getByLabel("Project name");
@@ -122,6 +139,10 @@ export async function completePlannerSetupGate(
           await submit.click();
         }
       });
+    // Phone heading may already be gone; form is the durable gate marker.
+    await setupForm
+      .waitFor({ state: "hidden", timeout: 15_000 })
+      .catch(() => undefined);
   }
 
   await expect
@@ -145,8 +166,15 @@ export async function resumeGuestPlannerAfterReload(
       async () => {
         if (await fabricStage.isVisible().catch(() => false)) return "canvas";
         if (
+          await plannerSetupHeading(page)
+            .isVisible()
+            .catch(() => false)
+        ) {
+          return "setup";
+        }
+        if (
           await page
-            .getByRole("heading", { name: /Set up your space/i })
+            .getByRole("form", { name: /Project setup/i })
             .isVisible()
             .catch(() => false)
         ) {
@@ -215,12 +243,14 @@ export async function enterGuestPlannerWorkspace(
   }
 
   const fabricStage = page.locator(PLANNER_FABRIC_STAGE);
-  const setupHeading = page.getByRole("heading", { name: /Set up your space/i });
+  const setupHeading = plannerSetupHeading(page);
+  const setupForm = page.getByRole("form", { name: /Project setup/i });
 
   await Promise.race([
     page.locator(".pw-topbar").waitFor({ state: "visible", timeout: 60_000 }),
     fabricStage.waitFor({ state: "visible", timeout: 60_000 }),
     setupHeading.waitFor({ state: "visible", timeout: 60_000 }),
+    setupForm.waitFor({ state: "visible", timeout: 60_000 }),
   ]);
 
   await completePlannerSetupGate(

@@ -2061,13 +2061,15 @@
 
   .viewToggle {
     min-height: var(--planner-touch-target, 2.75rem);
-    padding: 2px;
+    padding: 0;
+    gap: 0;
     box-sizing: border-box;
   }
 
+  /* Full 44px faces — do not subtract group padding (was 40px, UI-MOB-03 fail). */
   .viewToggleBtn {
     min-width: var(--planner-touch-target, 2.75rem);
-    min-height: calc(var(--planner-touch-target, 2.75rem) - 4px);
+    min-height: var(--planner-touch-target, 2.75rem);
     font-size: 0.8125rem;
     font-weight: 600;
   }
