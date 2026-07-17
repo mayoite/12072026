@@ -18,11 +18,12 @@ export function usePlannerWorkspaceAutosave(
   project: PlannerProject,
   guestMode: boolean,
   planId?: string,
-  options?: { enabled?: boolean; hydrated?: boolean },
+  options?: { enabled?: boolean; hydrated?: boolean; ownerId?: string },
 ) {
   const enabled = options?.enabled ?? true;
   const hydrated = options?.hydrated ?? true;
-  const projectId = getPlannerProjectId(guestMode, planId);
+  const ownerId = options?.ownerId;
+  const projectId = getPlannerProjectId(guestMode, planId, ownerId);
   const [status, setStatus] = useState<PlannerSaveStatus>("idle");
   const [lastSavedAt, setLastSavedAt] = useState<string | null>(null);
   const saverRef = useRef<ReturnType<typeof createAutoSaver> | null>(null);
@@ -97,7 +98,7 @@ export function usePlannerWorkspaceAutosave(
   const restoreSnapshot = useCallback(async (): Promise<PlannerProject | null> => {
     try {
       if (!guestMode) {
-        await migrateGuestProjectToMember();
+        await migrateGuestProjectToMember(undefined, planId, ownerId);
       }
       const existing = await loadProject(projectId);
       if (!existing?.snapshot?.trim()) return null;
@@ -105,7 +106,7 @@ export function usePlannerWorkspaceAutosave(
     } catch {
       return null;
     }
-  }, [guestMode, projectId]);
+  }, [guestMode, ownerId, planId, projectId]);
 
   const exportSnapshot = useCallback(
     () => exportPlannerProjectJson(projectRef.current),

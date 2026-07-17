@@ -56,5 +56,8 @@
     "@secretlint/secretlint-rule-preset-recommend": "^13.0.2",
     "secretlint": "^13.0.2",
     "turbo": "2.10.5"
+  },
+  "dependencies": {
+    "codex": "^0.2.3"
   }
 }

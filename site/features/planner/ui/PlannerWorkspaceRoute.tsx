@@ -44,13 +44,15 @@ class PlannerHostErrorBoundary extends Component<
 function WorkspaceWithLoadTimeout({
   guestMode,
   planId,
+  ownerId,
 }: {
   guestMode: boolean;
   planId?: string;
+  ownerId?: string;
 }) {
   const [timedOutKey, setTimedOutKey] = useState<string | null>(null);
   const [retryKey, setRetryKey] = useState(0);
-  const loadKey = `${guestMode ? "guest" : "member"}:${planId ?? "new"}:${retryKey}`;
+  const loadKey = `${guestMode ? "guest" : `member:${ownerId ?? "legacy"}`}:${planId ?? "new"}:${retryKey}`;
 
   useEffect(() => {
     const id = window.setTimeout(() => {
@@ -78,10 +80,10 @@ function WorkspaceWithLoadTimeout({
   }
 
   return (
-    <PlannerHostErrorBoundary key={retryKey}>
+    <PlannerHostErrorBoundary key={loadKey}>
       {/* TW4 planner-fill + locked host CSS both stretch this under #main-content */}
       <div data-planner-workspace-root className="planner-route-fill planner-fill">
-        <PlannerHost guestMode={guestMode} planId={planId} />
+        <PlannerHost guestMode={guestMode} planId={planId} ownerId={ownerId} />
         <PlannerCanvasEnhancements guestMode={guestMode} />
       </div>
     </PlannerHostErrorBoundary>
@@ -92,14 +94,16 @@ function WorkspaceWithLoadTimeout({
 export function PlannerWorkspaceRoute({
   guestMode = false,
   planId,
+  ownerId,
 }: {
   guestMode?: boolean;
   planId?: string;
+  ownerId?: string;
 }) {
   return (
     <Providers>
       <ProjectSetupGate guestMode={guestMode} planId={planId}>
-        <WorkspaceWithLoadTimeout guestMode={guestMode} planId={planId} />
+        <WorkspaceWithLoadTimeout guestMode={guestMode} planId={planId} ownerId={ownerId} />
       </ProjectSetupGate>
     </Providers>
   );

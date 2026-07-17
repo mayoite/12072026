@@ -12,6 +12,7 @@ import path from "node:path";
 import {
   clearPlannerStorageInPage,
   enterGuestPlannerWorkspace,
+  getGuestPlannerStorageProjectId,
 } from "./guestProjectSetup";
 import {
   drawWallByTwoClicks,
@@ -35,8 +36,6 @@ const EVIDENCE = path.join(
 );
 
 const PROJECT_NAME = "W5 save-reload";
-const GUEST_PROJECT_ID = "planner-guest-local";
-
 type EntityIds = { wallIds: string[]; furnitureIds: string[] };
 
 /** Wait until explicit Save flushes to local storage (TopBar save status). */
@@ -74,6 +73,7 @@ async function expandWorkstationConfigurator(page: Page): Promise<void> {
  * `planner-workspace-db` → projects → snapshot.
  */
 async function readEntityIdsFromIdb(page: Page): Promise<EntityIds> {
+  const projectId = getGuestPlannerStorageProjectId(page);
   return page.evaluate(async (projectId) => {
     const openDb = () =>
       new Promise<IDBDatabase>((resolve, reject) => {
@@ -122,7 +122,7 @@ async function readEntityIdsFromIdb(page: Page): Promise<EntityIds> {
     } finally {
       db.close();
     }
-  }, GUEST_PROJECT_ID);
+  }, projectId);
 }
 
 function sortedCopy(ids: string[]): string[] {
@@ -155,6 +155,7 @@ test.describe("W5 save honesty / hard reload (browser)", () => {
       preservePlannerState: true,
     });
     await waitForPlannerCanvas(page);
+    const projectStorageId = getGuestPlannerStorageProjectId(page);
 
     const furnitureBefore = await getFurnitureCount(page);
     expect(furnitureBefore).toBeGreaterThanOrEqual(0);
@@ -271,7 +272,7 @@ test.describe("W5 save honesty / hard reload (browser)", () => {
       exitCode: 0,
       route: "/planner/guest/?plannerDevTools=1",
       cloudEnabled: false,
-      projectId: GUEST_PROJECT_ID,
+      projectId: projectStorageId,
       idChannel: "indexeddb-projects-snapshot",
       placePath: "configurator-batch",
       wallIdsBefore: beforeWallsSorted,

@@ -1,5 +1,7 @@
 "use client";
 
+import { isEntityUuid } from "@/features/planner/lib/newEntityId";
+
 /**
  * Planner workspace — IndexedDB persistence for autosave and history.
  */
@@ -14,32 +16,56 @@ const AUTO_SAVE_DEBOUNCE_MS = 5000;
 
 /** IndexedDB project keys — guest work stays local until claimed on member canvas. */
 export const GUEST_PROJECT_ID = "planner-guest-local";
+export const GUEST_PROJECT_PREFIX = `${GUEST_PROJECT_ID}:`;
 export const MEMBER_PROJECT_ID = "planner-member-local";
 const GUEST_CLAIMED_KEY = "planner.guest.claimed";
 
 export type GuestMigrationResult = "migrated" | "skipped" | "no-guest-data";
 
-export function isGuestPlanClaimed(): boolean {
+function guestClaimedStorageKey(planId?: string): string {
+  const trimmed = planId?.trim();
+  if (trimmed && !isEntityUuid(trimmed)) {
+    throw new Error("Invalid Planner plan ID.");
+  }
+  return trimmed ? `${GUEST_CLAIMED_KEY}:${trimmed}` : GUEST_CLAIMED_KEY;
+}
+
+export function isGuestPlanClaimed(planId?: string): boolean {
   if (typeof window === "undefined") return true;
-  return window.localStorage.getItem(GUEST_CLAIMED_KEY) === "1";
+  return window.localStorage.getItem(guestClaimedStorageKey(planId)) === "1";
 }
 
-export function markGuestPlanClaimed(): void {
+export function markGuestPlanClaimed(planId?: string): void {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(GUEST_CLAIMED_KEY, "1");
+  window.localStorage.setItem(guestClaimedStorageKey(planId), "1");
 }
 
-export function clearGuestPlanClaimed(): void {
+export function clearGuestPlanClaimed(planId?: string): void {
   if (typeof window === "undefined") return;
-  window.localStorage.removeItem(GUEST_CLAIMED_KEY);
+  window.localStorage.removeItem(guestClaimedStorageKey(planId));
 }
 
 export function getPlannerProjectId(
   guestMode: boolean,
   planId?: string,
+  ownerId?: string,
 ): string {
-  if (guestMode) return GUEST_PROJECT_ID;
   const trimmed = planId?.trim();
+
+  if (trimmed && !isEntityUuid(trimmed)) {
+    throw new Error("Invalid Planner plan ID.");
+  }
+
+  if (guestMode) {
+    return trimmed ? `${GUEST_PROJECT_PREFIX}${trimmed}` : GUEST_PROJECT_ID;
+  }
+
+  const ownerScope = ownerId?.trim();
+  if (ownerScope) {
+    return `${MEMBER_PROJECT_ID}:${encodeURIComponent(ownerScope)}:${trimmed ?? "default"}`;
+  }
+
+  // Legacy unowned member keys remain readable only for explicit recovery.
   return trimmed ? `${MEMBER_PROJECT_ID}:${trimmed}` : MEMBER_PROJECT_ID;
 }
 
@@ -66,20 +92,24 @@ export type GuestMigrationPersistence = {
  */
 export async function migrateGuestProjectToMember(
   persistence: GuestMigrationPersistence = { loadProject, saveProject },
+  planId?: string,
+  ownerId?: string,
 ): Promise<GuestMigrationResult> {
   if (typeof window === "undefined") return "skipped";
 
-  const alreadyClaimed = isGuestPlanClaimed();
+  const guestProjectId = getPlannerProjectId(true, planId);
+  const memberProjectId = getPlannerProjectId(false, planId, ownerId);
+  const alreadyClaimed = isGuestPlanClaimed(planId);
   const guest = await persistence
-    .loadProject(GUEST_PROJECT_ID)
+    .loadProject(guestProjectId)
     .catch(() => undefined);
   const member = await persistence
-    .loadProject(MEMBER_PROJECT_ID)
+    .loadProject(memberProjectId)
     .catch(() => undefined);
 
   if (!shouldMigrateGuestPlan(guest, member, alreadyClaimed)) {
     if (guest?.snapshot && (member?.snapshot || alreadyClaimed)) {
-      markGuestPlanClaimed();
+      markGuestPlanClaimed(planId);
     }
     return guest?.snapshot ? "skipped" : "no-guest-data";
   }
@@ -90,16 +120,16 @@ export async function migrateGuestProjectToMember(
 
   const now = Date.now();
   await persistence.saveProject({
-    id: MEMBER_PROJECT_ID,
+    id: memberProjectId,
     name:
-      guest.name && guest.name !== GUEST_PROJECT_ID ? guest.name : "My layout",
+      guest.name && guest.name !== guestProjectId ? guest.name : "My layout",
     createdAt: guest.createdAt || now,
     updatedAt: now,
     snapshot: guest.snapshot,
     thumbnail: guest.thumbnail,
   });
 
-  markGuestPlanClaimed();
+  markGuestPlanClaimed(planId);
   return "migrated";
 }
 

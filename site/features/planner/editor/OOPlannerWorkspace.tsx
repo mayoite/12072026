@@ -132,11 +132,13 @@ import { takePlannerStartupIntent } from "@/features/planner/onboarding/projectS
 export type OOPlannerWorkspaceProps = {
   guestMode: boolean;
   planId?: string;
+  ownerId?: string;
 };
 
 export function OOPlannerWorkspace({
   guestMode,
   planId,
+  ownerId,
 }: OOPlannerWorkspaceProps) {
   const accessContext: PlannerAccessContext = guestMode
     ? "guest"
@@ -157,8 +159,11 @@ export function OOPlannerWorkspace({
     [workspaceCanvas],
   );
   const addQuoteItem = useQuoteCart((state) => state.addItem);
-  // Immediate hydrated: avoids blocking render/restore waterfall; first paint uses default project, restore applies async if present.
-  const [hydrated] = useState(true);
+  // Do not enable autosave until the persisted document has been restored.
+  // React Strict Mode replays effects in development; treating the default
+  // project as hydrated can otherwise overwrite a saved draft before the
+  // asynchronous IndexedDB read completes.
+  const [hydrated, setHydrated] = useState(false);
   const replaceProjectRef = useRef(workspaceCanvas.replaceProject);
   useLayoutEffect(() => {
     replaceProjectRef.current = workspaceCanvas.replaceProject;
@@ -168,7 +173,7 @@ export function OOPlannerWorkspace({
     workspaceCanvas.project,
     guestMode,
     planId,
-    { hydrated },
+    { hydrated, ownerId },
   );
   const catalog = usePlannerSvgCatalog();
   const restoreSnapshotRef = useRef(autosave.restoreSnapshot);
@@ -185,21 +190,23 @@ export function OOPlannerWorkspace({
 
       if (restored) {
         replaceProjectRef.current(restored);
+        setHydrated(true);
         return;
       }
 
       const { pendingBootstrapLayout, setPendingBootstrapLayout } =
         usePlannerWorkspaceStore.getState();
-      if (!pendingBootstrapLayout) return;
-
-      replaceProjectRef.current(
-        applyLayoutToWorkspace(
-          createPlannerProject({ name: projectName || "Starter plan" }),
-          pendingBootstrapLayout,
-          catalog.resolveItem,
-        ),
-      );
-      setPendingBootstrapLayout(null);
+      if (pendingBootstrapLayout) {
+        replaceProjectRef.current(
+          applyLayoutToWorkspace(
+            createPlannerProject({ name: projectName || "Starter plan" }),
+            pendingBootstrapLayout,
+            catalog.resolveItem,
+          ),
+        );
+        setPendingBootstrapLayout(null);
+      }
+      setHydrated(true);
     })();
 
     return () => {

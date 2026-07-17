@@ -13,6 +13,26 @@ const MM_PER_M = 1000;
 /** 1 ft² = 144 in² = 144 × 25.4² mm² */
 const MM2_PER_SQ_FT = 92903.04;
 
+export const PLANNER_PRECISION = {
+  linearFractionDigits: {
+    mm: 2,
+    cm: 2,
+    m: 3,
+    in: 3,
+    "ft-in": 2,
+  },
+  angleFractionDigits: 1,
+  metricAreaFractionDigits: 2,
+  imperialAreaFractionDigits: 1,
+  quantityFractionDigits: 0,
+} as const satisfies {
+  linearFractionDigits: Record<PlannerDisplayUnit, number>;
+  angleFractionDigits: number;
+  metricAreaFractionDigits: number;
+  imperialAreaFractionDigits: number;
+  quantityFractionDigits: number;
+};
+
 export function mmToPlannerCm(valueMm: number): number {
   return valueMm / MM_PER_CM;
 }
@@ -86,15 +106,15 @@ export function formatLengthDisplay(
   if (!Number.isFinite(valueMm)) return "—";
   switch (unit) {
     case "mm":
-      return `${Math.round(valueMm)} mm`;
+      return `${trimTrailingZeros(valueMm, PLANNER_PRECISION.linearFractionDigits.mm)} mm`;
     case "cm":
-      return `${trimTrailingZeros(mmToDisplayValue(valueMm, "cm"), 1)} cm`;
+      return `${trimTrailingZeros(mmToDisplayValue(valueMm, "cm"), PLANNER_PRECISION.linearFractionDigits.cm)} cm`;
     case "m":
-      return `${trimTrailingZeros(mmToDisplayValue(valueMm, "m"), 3)} m`;
+      return `${trimTrailingZeros(mmToDisplayValue(valueMm, "m"), PLANNER_PRECISION.linearFractionDigits.m)} m`;
     case "in":
-      return `${trimTrailingZeros(mmToDisplayValue(valueMm, "in"), 2)} in`;
+      return `${trimTrailingZeros(mmToDisplayValue(valueMm, "in"), PLANNER_PRECISION.linearFractionDigits.in)} in`;
     case "ft-in":
-      return formatFeetAndInches(valueMm, 1);
+      return formatFeetAndInches(valueMm, PLANNER_PRECISION.linearFractionDigits["ft-in"]);
   }
 }
 
@@ -108,13 +128,10 @@ export function formatLengthInput(
 ): string {
   if (!Number.isFinite(valueMm)) return "";
   if (unit === "ft-in") {
-    return formatFeetAndInches(valueMm, 1);
+    return formatFeetAndInches(valueMm, PLANNER_PRECISION.linearFractionDigits["ft-in"]);
   }
   const n = mmToDisplayValue(valueMm, unit);
-  if (unit === "mm") return String(Math.round(n));
-  if (unit === "cm") return trimTrailingZeros(n, 1);
-  if (unit === "m") return trimTrailingZeros(n, 3);
-  return trimTrailingZeros(n, 2);
+  return trimTrailingZeros(n, PLANNER_PRECISION.linearFractionDigits[unit]);
 }
 
 /**
@@ -131,12 +148,12 @@ export function parseLengthInput(
   if (unit === "ft-in") {
     try {
       const mm = parseFeetAndInches(text);
-      return Number.isFinite(mm) ? Math.round(mm) : null;
+      return Number.isFinite(mm) ? mm : null;
     } catch {
       // Bare number while in ft-in: treat as total inches (CAD habit).
       const bare = Number.parseFloat(text);
       if (!Number.isFinite(bare)) return null;
-      return Math.round(bare * MILLIMETRES_PER_INCH);
+      return bare * MILLIMETRES_PER_INCH;
     }
   }
 
@@ -145,7 +162,7 @@ export function parseLengthInput(
     .trim();
   const n = Number.parseFloat(stripped);
   if (!Number.isFinite(n)) return null;
-  return Math.round(displayValueToMm(n, unit));
+  return displayValueToMm(n, unit);
 }
 
 /** Footprint pair for inventory / BOQ glance lines. */
@@ -164,9 +181,19 @@ export function formatAreaDisplay(
 ): string {
   if (!Number.isFinite(areaMm2) || areaMm2 < 0) return "—";
   if (unit === "in" || unit === "ft-in") {
-    return `${trimTrailingZeros(areaMm2 / MM2_PER_SQ_FT, 1)} sq ft`;
+    return `${trimTrailingZeros(areaMm2 / MM2_PER_SQ_FT, PLANNER_PRECISION.imperialAreaFractionDigits)} sq ft`;
   }
-  return `${trimTrailingZeros(areaMm2 / 1_000_000, 2)} m²`;
+  return `${trimTrailingZeros(areaMm2 / 1_000_000, PLANNER_PRECISION.metricAreaFractionDigits)} m²`;
+}
+
+export function formatAngleDisplay(valueDegrees: number): string {
+  if (!Number.isFinite(valueDegrees)) return "—";
+  return `${trimTrailingZeros(normalizeDegrees(valueDegrees), PLANNER_PRECISION.angleFractionDigits)}°`;
+}
+
+export function formatQuantityDisplay(value: number): string {
+  if (!Number.isFinite(value)) return "—";
+  return Math.round(value).toFixed(PLANNER_PRECISION.quantityFractionDigits);
 }
 
 export function boundsMmToPlannerCm(bounds: PlannerBounds): PlannerBounds {

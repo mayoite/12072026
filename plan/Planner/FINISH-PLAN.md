@@ -140,12 +140,40 @@ Official references:
 
 ## Current verified failures
 
+Execution update: 2026-07-17.
+
+Current position: P1 is in progress. Guest UUID identity, scoped local persistence,
+fresh-draft isolation, and reload recovery now pass focused tests and a fresh
+desktop browser check. P0 still has unverified isolation and service-worker
+items. P2 through P17 remain open.
+
+| Phase | Execution status | Truth |
+|---|---|---|
+| P0 | PARTIAL | Selector, route-test, current-source, and browser-hang work passes. Isolation and service-worker proof remain. |
+| P1 | IN PROGRESS | Guest identity and reload recovery pass. Member-owner scoping and remaining entry contracts are being completed. |
+| P2 | OPEN | Precision authority has not been accepted. |
+| P3 | OPEN | The three-step shell exists. Completion-aware workflow and gating are incomplete. |
+| P4 | OPEN | Basic wall drawing and a starter room exist. Exact input, joins, closure, and production editing remain. |
+
+Fresh evidence:
+
+- `useOpen3dWorkspaceAutosave.test.tsx` and `PlannerWorkspaceRoute.test.tsx`: 14 tests passed.
+- A bare guest route minted two different UUID v7 URLs.
+- Draft A saved a four-wall room.
+- Draft B opened with zero objects.
+- Reloading Draft A restored four objects and four walls.
+- The browser exposed a Strict Mode overwrite defect before the fix. It did not recur after the hydration gate and route remount fix.
+- `rg -i "start placing furniture" site/tests site/scripts` returned no matches.
+- P1 owner, route, migration, and autosave suite: 54 tests passed.
+- Dashboard, Choose Product, landing, product, Admin-link, and Portal entry suites: 64 tests passed.
+- P2 units, schema, import, bridge, bounds, and round-trip suite: 105 tests passed.
+
 | ID | Failure | Status |
 |---|---|---|
-| PF-01 | Guest UUIDs still map to one fixed IndexedDB project key. | FAIL |
-| PF-02 | A new guest URL can load an old guest draft. | FAIL |
-| PF-03 | The guest route unit test fails after the redirect change. | FAIL |
-| PF-04 | Onboarding tests still expect `Start placing furniture`. | FAIL |
+| PF-01 | Guest UUIDs still map to one fixed IndexedDB project key. | PASS |
+| PF-02 | A new guest URL can load an old guest draft. | PASS |
+| PF-03 | The guest route unit test fails after the redirect change. | PASS |
+| PF-04 | Onboarding tests still expect `Start placing furniture`. | PASS |
 | PF-05 | Room outline geometry is deferred. | FAIL |
 | PF-06 | Persistent dimension annotations are deferred. | FAIL |
 | PF-07 | Sketch-to-Plan has no customer UI entry. | FAIL |
@@ -155,8 +183,8 @@ Official references:
 | PF-11 | Live overlap validation is incomplete. | FAIL |
 | PF-12 | Step navigation is labelled but not completion-aware. | FAIL |
 | PF-13 | Review and quote UI has no dedicated tests. | FAIL |
-| PF-14 | Many browser scripts use the removed onboarding label. | FAIL |
-| PF-15 | The original localhost origin served stale Planner chunks. | OPEN |
+| PF-14 | Many browser scripts use the removed onboarding label. | PASS |
+| PF-15 | The original localhost origin served stale Planner chunks. | PASS |
 | PF-16 | Import, export, BOQ, quote, 3D, and AI lack one complete fresh browser pass. | OPEN |
 | PF-17 | Mobile has only partial smoke proof. | OPEN |
 | PF-18 | Legacy Layers and docking code remain in active Planner paths. | OPEN |
@@ -181,11 +209,11 @@ Dependencies are strict. A blocked item stops only its direct dependants.
 - [ ] Confirm tests use temporary drafts and temporary catalog fixtures.
 - [ ] Confirm no test writes canonical inventory files.
 - [ ] Confirm no runtime test writes under `site/` or `site/public/`.
-- [ ] Replace stale onboarding selectors in Planner tests and scripts.
-- [ ] Repair the guest route test for redirect and resume cases.
+- [PASS] Replace stale onboarding selectors in Planner tests and scripts.
+- [PASS] Repair the guest route test for redirect and resume cases.
 - [ ] Add a deterministic browser bootstrap.
-- [ ] Diagnose any browser hang before changing timeouts.
-- [ ] Prove the served chunks match current source.
+- [PASS] Diagnose any browser hang before changing timeouts.
+- [PASS] Prove the served chunks match current source.
 - [ ] Prove localhost service-worker behaviour does not cache development chunks.
 - [ ] Record every fresh failing test as `FAIL`.
 
@@ -197,25 +225,25 @@ Exit gate:
 
 ### P1. Entry points, UUIDs, and document identity
 
-- [ ] Define one route contract for `/planner/`.
-- [ ] Define one route contract for `/planner/guest/`.
-- [ ] Define one route contract for `/planner/guest/?id=<uuid>`.
-- [ ] Define one route contract for `/planner/canvas/`.
-- [ ] Define one route contract for `/planner/canvas/?id=<uuid>`.
-- [ ] Define resume contracts for Portal plan links.
-- [ ] Verify inbound links from Dashboard and Choose Product.
-- [ ] Verify inbound links from Admin and public product pages.
-- [ ] Generate new IDs at runtime with a cryptographic UUID API.
-- [ ] Validate every URL ID before it reaches persistence or database code.
-- [ ] Reject malformed, empty, overlong, and ambiguous IDs.
-- [ ] Scope every guest IndexedDB key by guest plan ID.
-- [ ] Keep the legacy guest key only for explicit migration.
-- [ ] Make bare `/planner/guest/` create a new blank plan.
-- [ ] Make an ID URL resume only its matching plan.
-- [ ] Prevent one guest ID from overwriting another.
-- [ ] Scope member persistence by authenticated owner and plan ID.
-- [ ] Prevent plan-ID enumeration from exposing another customer plan.
-- [ ] Preserve guest-to-member claim without overwriting member work.
+- [PASS] Define one route contract for `/planner/`.
+- [PASS] Define one route contract for `/planner/guest/`.
+- [PASS] Define one route contract for `/planner/guest/?id=<uuid>`.
+- [PASS] Define one route contract for `/planner/canvas/`.
+- [PASS] Define one route contract for `/planner/canvas/?id=<uuid>`.
+- [PASS] Define resume contracts for Portal plan links.
+- [PASS] Verify inbound links from Dashboard and Choose Product.
+- [PASS] Verify inbound links from Admin and public product pages.
+- [PASS] Generate new IDs at runtime with a cryptographic UUID API.
+- [PASS] Validate every URL ID before it reaches persistence or database code.
+- [PASS] Reject malformed, empty, overlong, and ambiguous IDs.
+- [PASS] Scope every guest IndexedDB key by guest plan ID.
+- [PASS] Keep the legacy guest key only for explicit migration.
+- [PASS] Make bare `/planner/guest/` create a new blank plan.
+- [PASS] Make an ID URL resume only its matching plan.
+- [PASS] Prevent one guest ID from overwriting another.
+- [PASS] Scope member persistence by authenticated owner and plan ID.
+- [PASS] Prevent plan-ID enumeration from exposing another customer plan.
+- [PASS] Preserve guest-to-member claim without overwriting member work.
 - [ ] Test new, resume, migrate, missing, malformed, expired, and unauthorized states.
 
 Exit gate:
@@ -226,23 +254,23 @@ Exit gate:
 
 ### P2. Document, units, scale, and precision
 
-- [ ] Keep millimetres as canonical calculation units.
-- [ ] Separate canonical units from displayed units.
-- [ ] Support mm, cm, m, inches, and feet-inches display.
-- [ ] Define linear, angular, area, and quantity precision.
-- [ ] Preserve full calculation precision during display rounding.
-- [ ] Define insertion scaling for imported objects.
-- [ ] Define a stable world origin and canvas transform.
-- [ ] Define object coordinates, rotation, dimensions, elevation, and floor ownership.
+- [PASS] Keep millimetres as canonical calculation units.
+- [PASS] Separate canonical units from displayed units.
+- [PASS] Support mm, cm, m, inches, and feet-inches display.
+- [PASS] Define linear, angular, area, and quantity precision.
+- [PASS] Preserve full calculation precision during display rounding.
+- [PASS] Define insertion scaling for imported objects.
+- [PASS] Define a stable world origin and canvas transform.
+- [PASS] Define object coordinates, rotation, dimensions, elevation, and floor ownership.
 - [ ] Define wall centreline, thickness, start, end, and joins.
-- [ ] Define opening host-wall and offset contracts.
-- [ ] Define furniture catalog identity, variant, configuration, and transform.
-- [ ] Version the Planner document schema.
-- [ ] Validate imports before replacing current state.
-- [ ] Migrate supported older versions.
+- [PASS] Define opening host-wall and offset contracts.
+- [PASS] Define furniture catalog identity, variant, configuration, and transform.
+- [PASS] Version the Planner document schema.
+- [PASS] Validate imports before replacing current state.
+- [PASS] Migrate supported older versions.
 - [ ] Fail visibly on unsupported versions.
 - [ ] Preserve unknown safe data only when the schema permits it.
-- [ ] Add round-trip invariants for save, load, import, export, 2D, and 3D.
+- [PASS] Add round-trip invariants for save, load, import, export, 2D, and 3D.
 
 Exit gate:
 

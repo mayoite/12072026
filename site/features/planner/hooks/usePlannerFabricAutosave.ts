@@ -31,10 +31,11 @@ export function usePlannerFabricAutosave(
   guestMode: boolean,
   planId?: string,
   revisionSignal?: string,
-  options?: { enabled?: boolean },
+  options?: { enabled?: boolean; ownerId?: string },
 ) {
   const enabled = options?.enabled ?? true;
-  const projectId = getPlannerProjectId(guestMode, planId);
+  const ownerId = options?.ownerId;
+  const projectId = getPlannerProjectId(guestMode, planId, ownerId);
   const [status, setStatus] = useState<PlannerSaveStatus>("idle");
   const [envelopeStatus, setEnvelopeStatus] = useState<PlannerEnvelopeStatus>({
     localSaveState: "saved_local",
@@ -78,7 +79,7 @@ export function usePlannerFabricAutosave(
     const restoreId = ++restoreSequenceRef.current;
     try {
       if (!guestMode) {
-        await migrateGuestProjectToMember();
+        await migrateGuestProjectToMember(undefined, planId, ownerId);
       }
       if (!mountedRef.current || restoreSequenceRef.current !== restoreId) return false;
       const existing: BuddyProject | undefined = await loadProject(projectId);
@@ -101,7 +102,7 @@ export function usePlannerFabricAutosave(
     } catch {
       return false;
     }
-  }, [guestMode, projectId]);
+  }, [guestMode, ownerId, planId, projectId]);
 
   useEffect(() => {
     if (!enabled) return;

@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 import {
   GUEST_PROJECT_ID,
+  GUEST_PROJECT_PREFIX,
   MEMBER_PROJECT_ID,
   clearGuestPlanClaimed,
   isGuestPlanClaimed,
@@ -10,6 +11,7 @@ import {
   shouldMigrateGuestPlan,
   type BuddyProject,
 } from "@/features/planner/persistence/persistence";
+import { TEST_PLAN_ID_1 } from "@/tests/fixtures/plannerTestUuids";
 
 const guestSnapshot = JSON.stringify({ version: 1, store: { schema: {} } });
 
@@ -54,6 +56,7 @@ describe("shouldMigrateGuestPlan", () => {
 describe("migrateGuestProjectToMember", () => {
   beforeEach(() => {
     clearGuestPlanClaimed();
+    clearGuestPlanClaimed(TEST_PLAN_ID_1);
   });
 
   it("marks claimed without copying when member already has data", async () => {
@@ -131,5 +134,59 @@ describe("migrateGuestProjectToMember", () => {
     expect(result).toBe("skipped");
     expect(saveCalls).toBe(0);
   });
-});
 
+  it("migrates only the matching UUID-scoped guest draft", async () => {
+    const guestProjectId = `${GUEST_PROJECT_PREFIX}${TEST_PLAN_ID_1}`;
+    const memberProjectId = `${MEMBER_PROJECT_ID}:${TEST_PLAN_ID_1}`;
+    const loaded: string[] = [];
+    const saved: BuddyProject[] = [];
+
+    const result = await migrateGuestProjectToMember(
+      {
+        loadProject: async (id) => {
+          loaded.push(id);
+          return id === guestProjectId
+            ? makeProject(guestProjectId, guestSnapshot)
+            : undefined;
+        },
+        saveProject: async (project) => {
+          saved.push(project);
+        },
+      },
+      TEST_PLAN_ID_1,
+    );
+
+    expect(result).toBe("migrated");
+    expect(loaded).toEqual([guestProjectId, memberProjectId]);
+    expect(saved).toEqual([
+      expect.objectContaining({ id: memberProjectId, snapshot: guestSnapshot }),
+    ]);
+    expect(isGuestPlanClaimed(TEST_PLAN_ID_1)).toBe(true);
+    expect(isGuestPlanClaimed()).toBe(false);
+  });
+
+  it("claims a guest draft into the authenticated owner's member key", async () => {
+    const guestProjectId = `${GUEST_PROJECT_PREFIX}${TEST_PLAN_ID_1}`;
+    const memberProjectId = `${MEMBER_PROJECT_ID}:owner-a:${TEST_PLAN_ID_1}`;
+    const saved: BuddyProject[] = [];
+
+    const result = await migrateGuestProjectToMember(
+      {
+        loadProject: async (id) =>
+          id === guestProjectId
+            ? makeProject(guestProjectId, guestSnapshot)
+            : undefined,
+        saveProject: async (project) => {
+          saved.push(project);
+        },
+      },
+      TEST_PLAN_ID_1,
+      "owner-a",
+    );
+
+    expect(result).toBe("migrated");
+    expect(saved).toEqual([
+      expect.objectContaining({ id: memberProjectId, snapshot: guestSnapshot }),
+    ]);
+  });
+});

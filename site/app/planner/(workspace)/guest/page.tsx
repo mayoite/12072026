@@ -1,5 +1,9 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
+import {
+  isEntityUuid,
+  newEntityId,
+} from "@/features/planner/lib/newEntityId";
 import { PlannerWorkspaceRoute } from "@/features/planner/ui/PlannerWorkspaceRoute";
 
 export const dynamic = "force-dynamic";
@@ -12,15 +16,32 @@ export default async function PlannerGuestRoute({
 }) {
   const resolved = searchParams ? await searchParams : {};
   const rawId = resolved.id;
-  const planId = (Array.isArray(rawId) ? rawId[0] : rawId)?.trim() || undefined;
+  if (Array.isArray(rawId)) {
+    notFound();
+  }
+  const planId = rawId?.trim() || undefined;
   const rawResume = resolved.resume;
-  const resumeLegacyDraft =
-    (Array.isArray(rawResume) ? rawResume[0] : rawResume) === "1";
+  if (Array.isArray(rawResume)) {
+    notFound();
+  }
+  const resumeLegacyDraft = rawResume === "1";
+
+  if (
+    (rawId !== undefined && !planId) ||
+    (rawResume !== undefined && !resumeLegacyDraft) ||
+    (planId && resumeLegacyDraft)
+  ) {
+    notFound();
+  }
 
   // A bare guest URL starts a distinct draft. Its generated URL resumes it.
   // The legacy shared guest draft remains available only by explicit request.
   if (!planId && !resumeLegacyDraft) {
-    redirect(`/planner/guest/?id=${crypto.randomUUID()}`);
+    redirect(`/planner/guest/?id=${newEntityId()}`);
+  }
+
+  if (planId && !isEntityUuid(planId)) {
+    notFound();
   }
 
   return <PlannerWorkspaceRoute guestMode planId={planId} />;

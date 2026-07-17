@@ -55,6 +55,16 @@ export async function clearPlannerStorageInPage(page: Page): Promise<void> {
 }
 
 const PLANNER_STORAGE_CLEAR_INIT_KEY = "__oandoPlannerStorageClearInit";
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+/** Resolve the scoped IndexedDB key for the guest draft in the current URL. */
+export function getGuestPlannerStorageProjectId(page: Page): string {
+  const id = new URL(page.url()).searchParams.get("id");
+  if (!id || !UUID_PATTERN.test(id)) {
+    throw new Error(`Guest Planner URL is missing a valid UUID: ${page.url()}`);
+  }
+  return `planner-guest-local:${id}`;
+}
 
 /**
  * Clears planner storage before any app code runs (init script).
@@ -104,12 +114,12 @@ export async function completePlannerSetupGate(
       name: /Open planner|Preparing workspace/i,
     });
     await expect(submit).toBeEnabled({ timeout: 60_000 });
-    await submit.click({ force: true });
+    await submit.click();
     await setupHeading
       .waitFor({ state: "hidden", timeout: 15_000 })
       .catch(async () => {
         if (await submit.isEnabled().catch(() => false)) {
-          await submit.click({ force: true });
+          await submit.click();
         }
       });
   }

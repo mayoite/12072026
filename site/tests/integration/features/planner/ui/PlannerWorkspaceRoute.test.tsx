@@ -1,15 +1,19 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/features/planner/ui/PlannerHost", () => ({
-  PlannerHost: (props: { guestMode?: boolean; planId?: string }) => (
-    <div
-      data-testid="planner-workspace"
-      data-guest-mode={props.guestMode ? "true" : "false"}
-      data-plan-id={props.planId ?? ""}
-    />
-  ),
+  PlannerHost: (props: { guestMode?: boolean; planId?: string }) => {
+    const [mountedFor] = useState(props.planId ?? "");
+    return (
+      <div
+        data-testid="planner-workspace"
+        data-guest-mode={props.guestMode ? "true" : "false"}
+        data-plan-id={props.planId ?? ""}
+        data-mounted-for={mountedFor}
+      />
+    );
+  },
 }));
 
 vi.mock("@/features/planner/components/Providers", () => ({
@@ -69,5 +73,23 @@ describe("PlannerWorkspaceRoute", () => {
     expect(screen.getByTestId("planner-workspace")).toHaveAttribute("data-guest-mode", "true");
     expect(screen.getByTestId("planner-canvas-enhancements")).toHaveAttribute("data-guest-mode", "true");
     expect(screen.getByTestId("planner-workspace")).toHaveAttribute("data-plan-id", "");
+  });
+
+  it("remounts the workspace when the plan identity changes", () => {
+    const { rerender } = render(
+      <PlannerWorkspaceRoute guestMode planId="plan-one" />,
+    );
+
+    expect(screen.getByTestId("planner-workspace")).toHaveAttribute(
+      "data-mounted-for",
+      "plan-one",
+    );
+
+    rerender(<PlannerWorkspaceRoute guestMode planId="plan-two" />);
+
+    expect(screen.getByTestId("planner-workspace")).toHaveAttribute(
+      "data-mounted-for",
+      "plan-two",
+    );
   });
 });

@@ -9,6 +9,7 @@ import path from "node:path";
 import {
   clearPlannerStorageInPage,
   enterGuestPlannerWorkspace,
+  getGuestPlannerStorageProjectId,
 } from "./guestProjectSetup";
 import {
   clickAtPoint,
@@ -45,7 +46,6 @@ const EVIDENCE_MOBILE = path.join(
 );
 
 const PROJECT_NAME = "P01 SVG persist";
-const GUEST_PROJECT_ID = "planner-guest-local";
 const TARGET_ROTATION = 45;
 const TARGET_WIDTH_MM = 900;
 
@@ -70,6 +70,7 @@ async function countSvgPaintedFurniture(page: Page): Promise<number> {
 }
 
 async function readSvgFurnitureFromIdb(page: Page): Promise<FurnitureSnapshot | null> {
+  const projectId = getGuestPlannerStorageProjectId(page);
   return page.evaluate(async (projectId) => {
     const openDb = () =>
       new Promise<IDBDatabase>((resolve, reject) => {
@@ -128,7 +129,7 @@ async function readSvgFurnitureFromIdb(page: Page): Promise<FurnitureSnapshot | 
     } finally {
       db.close();
     }
-  }, GUEST_PROJECT_ID);
+  }, projectId);
 }
 
 async function waitForSavedLocally(page: Page): Promise<void> {

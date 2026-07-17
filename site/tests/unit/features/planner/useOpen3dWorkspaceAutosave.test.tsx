@@ -3,6 +3,7 @@
  */
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
+import { StrictMode, type ReactNode } from "react";
 
 import { usePlannerWorkspaceAutosave } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
 import { createPlannerProject } from "@/features/planner/project/model/project";
@@ -55,6 +56,48 @@ describe("usePlannerWorkspaceAutosave", () => {
     const envelope = JSON.parse(raw) as { project: PlannerProject };
     return envelope.project;
   }
+
+  it("does not overwrite a restored draft during Strict Mode hydration", () => {
+    const empty = createPlannerProject({
+      name: "empty-before-restore",
+      now: "2026-07-10T09:00:00.000Z",
+    });
+    const restored = createPlannerProject({
+      name: "restored-from-disk",
+      now: "2026-07-10T09:05:00.000Z",
+    });
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <StrictMode>{children}</StrictMode>
+    );
+    const { rerender } = renderHook(
+      ({ project, hydrated }: { project: PlannerProject; hydrated: boolean }) =>
+        usePlannerWorkspaceAutosave(project, true, "plan-hydration", {
+          hydrated,
+        }),
+      {
+        initialProps: { project: empty, hydrated: false },
+        wrapper,
+      },
+    );
+
+    expect(scheduleSave).not.toHaveBeenCalled();
+
+    rerender({ project: restored, hydrated: true });
+
+    expect(scheduleSave).not.toHaveBeenCalled();
+
+    rerender({
+      project: {
+        ...restored,
+        name: "edited-after-restore",
+        updatedAt: "2026-07-10T09:06:00.000Z",
+      },
+      hydrated: true,
+    });
+
+    expect(scheduleSave).toHaveBeenCalledTimes(1);
+    expect(parseScheduledProject().name).toBe("edited-after-restore");
+  });
 
   it("exports local storage flags and isLocalSaved alias", () => {
     const project = createPlannerProject({ name: "Local flags" });
@@ -248,10 +291,17 @@ describe("usePlannerWorkspaceAutosave", () => {
   it("wires createAutoSaver with planner project id", () => {
     const project = createPlannerProject({ name: "id-wire" });
     renderHook(() =>
-      usePlannerWorkspaceAutosave(project, false, "member-plan-9", { hydrated: true }),
+      usePlannerWorkspaceAutosave(project, false, "member-plan-9", {
+        hydrated: true,
+        ownerId: "owner-9",
+      }),
     );
 
-    expect(getPlannerProjectId).toHaveBeenCalledWith(false, "member-plan-9");
+    expect(getPlannerProjectId).toHaveBeenCalledWith(
+      false,
+      "member-plan-9",
+      "owner-9",
+    );
     expect(createAutoSaver).toHaveBeenCalledWith(
       "member-plan-9",
       expect.objectContaining({
@@ -307,7 +357,11 @@ describe("usePlannerWorkspaceAutosave", () => {
       restored = await result.current.restoreSnapshot();
     });
 
-    expect(migrateGuestProjectToMember).toHaveBeenCalled();
+    expect(migrateGuestProjectToMember).toHaveBeenCalledWith(
+      undefined,
+      "plan-restore",
+      undefined,
+    );
     expect(loadProject).toHaveBeenCalledWith("plan-restore");
     expect(restored?.name).toBe("from-disk");
   });

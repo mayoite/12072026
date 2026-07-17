@@ -130,7 +130,11 @@ describe("usePlannerFabricAutosave", () => {
     });
 
     expect(restored).toBe(true);
-    expect(migrateGuestProjectToMember).toHaveBeenCalledTimes(1);
+    expect(migrateGuestProjectToMember).toHaveBeenCalledWith(
+      undefined,
+      "plan-123",
+      undefined,
+    );
     expect(loadProject).toHaveBeenCalledWith("plan-123");
     expect(parseSessionSnapshot).toHaveBeenCalledWith(mockProject.snapshot);
     expect(mockImportDraft).toHaveBeenCalledWith(JSON.stringify({ objects: ["rect"] }));

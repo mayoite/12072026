@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
+  formatAngleDisplay,
   formatAreaDisplay,
   formatFootprintDisplay,
   formatLengthDisplay,
   formatLengthInput,
+  formatQuantityDisplay,
+  PLANNER_PRECISION,
   parseLengthInput,
 } from "@/features/planner/project/model/units";
 
@@ -38,6 +41,19 @@ describe("display unit conversion (canonical mm)", () => {
     expect(parseLengthInput("1.2 m", "m")).toBe(1200);
     expect(parseLengthInput("120 cm", "cm")).toBe(1200);
     expect(parseLengthInput("1200 mm", "mm")).toBe(1200);
+  });
+
+  it("preserves canonical sub-millimetre precision while display rounds", () => {
+    expect(parseLengthInput("0.01", "in")).toBeCloseTo(0.254, 6);
+    expect(parseLengthInput("0.125", "mm")).toBe(0.125);
+    expect(formatLengthInput(0.125, "mm")).toBe("0.13");
+    expect(PLANNER_PRECISION.linearFractionDigits.mm).toBe(2);
+  });
+
+  it("defines angular and quantity display precision", () => {
+    expect(formatAngleDisplay(450.04)).toBe("90°");
+    expect(formatAngleDisplay(-10.25)).toBe("349.8°");
+    expect(formatQuantityDisplay(4.4)).toBe("4");
   });
 
   it("formats footprint and area in the active unit", () => {

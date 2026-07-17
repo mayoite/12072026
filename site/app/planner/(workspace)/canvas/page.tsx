@@ -1,5 +1,7 @@
 ﻿import { PlannerWorkspaceRoute } from "@/features/planner/ui/PlannerWorkspaceRoute";
 import { getOptionalPlannerUser } from "@/lib/auth/plannerSession";
+import { notFound, redirect } from "next/navigation";
+import { isEntityUuid } from "@/features/planner/lib/newEntityId";
 
 export const dynamic = "force-dynamic";
 
@@ -10,12 +12,27 @@ export default async function PlannerCanvasRoute({
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const user = await getOptionalPlannerUser();
-  const isGuest = !user;
+  if (!user) {
+    redirect("/planner/guest/");
+  }
 
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const rawId = resolvedSearchParams.id;
-  const planId = (Array.isArray(rawId) ? rawId[0] : rawId)?.trim() || undefined;
+  if (Array.isArray(rawId)) {
+    notFound();
+  }
+  const planId = rawId?.trim() || undefined;
 
-  return <PlannerWorkspaceRoute guestMode={isGuest} planId={planId} />;
+  if ((rawId !== undefined && !planId) || (planId && !isEntityUuid(planId))) {
+    notFound();
+  }
+
+  return (
+    <PlannerWorkspaceRoute
+      guestMode={false}
+      planId={planId}
+      ownerId={user.id}
+    />
+  );
 }
 
