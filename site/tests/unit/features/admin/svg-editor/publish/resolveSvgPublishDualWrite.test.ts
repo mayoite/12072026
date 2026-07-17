@@ -65,7 +65,7 @@ describe("resolveSvgPublishDualWriteDeps", () => {
     });
   });
 
-  it("mode enabled when Products DB configured and R2 probe ok", async () => {
+  it("mode enabled when Products DB configured, R2 ok, and schema pointer present", async () => {
     isProductsDatabaseConfigured.mockReturnValue(true);
     probeR2CatalogAccess.mockResolvedValue({
       ok: true,
@@ -74,12 +74,35 @@ describe("resolveSvgPublishDualWriteDeps", () => {
     const { resolveSvgPublishDualWriteDeps } = await import(
       "@/features/admin/svg-editor/publish/resolveSvgPublishDualWrite"
     );
-    const deps = await resolveSvgPublishDualWriteDeps();
+    const deps = await resolveSvgPublishDualWriteDeps({
+      schemaProbe: async () => ({ ok: true }),
+    });
     expect(deps.mode).toBe("enabled");
     expect(deps.dbRepository).toBeDefined();
     expect(deps.artifactStore).toBeDefined();
     expect(deps.artifactStore?.putText).toBeTypeOf("function");
     expect(deps.artifactStore?.putBytes).toBeTypeOf("function");
+    expect(deps.r2Probe).toEqual({ ok: true, source: "cloudflare-r2" });
+  });
+
+  it("mode skipped_schema_missing when pointer column absent — no dual-write injection", async () => {
+    isProductsDatabaseConfigured.mockReturnValue(true);
+    probeR2CatalogAccess.mockResolvedValue({
+      ok: true,
+      source: "cloudflare-r2",
+    });
+    const { resolveSvgPublishDualWriteDeps } = await import(
+      "@/features/admin/svg-editor/publish/resolveSvgPublishDualWrite"
+    );
+    const deps = await resolveSvgPublishDualWriteDeps({
+      schemaProbe: async () => ({
+        ok: false,
+        reason: "published_svg_revision_id_missing",
+      }),
+    });
+    expect(deps.mode).toBe("skipped_schema_missing");
+    expect(deps.dbRepository).toBeUndefined();
+    expect(deps.artifactStore).toBeUndefined();
     expect(deps.r2Probe).toEqual({ ok: true, source: "cloudflare-r2" });
   });
 

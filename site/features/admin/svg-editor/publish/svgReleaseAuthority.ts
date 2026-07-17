@@ -22,7 +22,8 @@ export type SvgReleaseAuthority = "disk" | "db";
 export type SvgDualWriteModeForAuthority =
   | "enabled"
   | "skipped_no_db"
-  | "skipped_r2_unavailable";
+  | "skipped_r2_unavailable"
+  | "skipped_schema_missing";
 
 export function getSvgReleaseAuthority(
   env: NodeJS.ProcessEnv = process.env,
@@ -64,6 +65,9 @@ export function getDbReleaseAuthorityDualWriteBlockError(input: {
   }
   if (input.mode === "skipped_r2_unavailable") {
     return "DB release authority requires reachable R2 catalog storage";
+  }
+  if (input.mode === "skipped_schema_missing") {
+    return "DB release authority requires planner_managed_products.published_svg_revision_id (run db:apply)";
   }
   if (input.productsDbConfigured === false) {
     return "DB release authority requires PRODUCTS_DATABASE_URL";

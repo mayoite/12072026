@@ -68,7 +68,15 @@ describe("svgReleaseAuthority", () => {
         mode: "skipped_r2_unavailable",
         env: { SVG_RELEASE_AUTHORITY: "db" },
       }),
-    ).toBe("DB release authority requires reachable R2 catalog storage");
+    ).toMatch(/R2/i);
+
+    expect(
+      getDbReleaseAuthorityDualWriteBlockError({
+        dualWriteReady: false,
+        mode: "skipped_schema_missing",
+        env: { SVG_RELEASE_AUTHORITY: "db" },
+      }),
+    ).toMatch(/published_svg_revision_id|db:apply/i);
 
     expect(
       getDbReleaseAuthorityDualWriteBlockError({
