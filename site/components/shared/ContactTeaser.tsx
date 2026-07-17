@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { ArrowUpRight, ChatCircleDots, ChatText, PhoneCall } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
+import { readApiErrorMessage } from "@/features/shared/api/readApiErrorMessage";
 import { buildWhatsAppHref, SITE_CONTACT, toTelHref } from "@/features/site/data/contact";
 import { HOMEPAGE_CONTACT_CONTENT } from "@/features/site/data/homepage";
 import {
@@ -85,9 +86,9 @@ export function ContactTeaser() {
         body: JSON.stringify(payload),
       });
 
-      const result = (await response.json()) as { error?: string };
+      const result: unknown = await response.json();
       if (!response.ok) {
-        throw new Error(result.error || "Unable to submit now.");
+        throw new Error(readApiErrorMessage(result, "Unable to submit now."));
       }
 
       setName("");

@@ -362,7 +362,8 @@ export function AdminSvgEditorListView({
             JSON or source code.
           </p>
           <p className="admin-page__meta" data-testid="admin-shell-source">
-            Source: local disk inventory · Products DB not live · refreshed{" "}
+            Source: local disk (live publish authority) · Products DB not live ·
+            refreshed{" "}
             <time dateTime={refreshedAtLabel}>{refreshedAtLabel}</time>
           </p>
         </div>

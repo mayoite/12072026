@@ -51,7 +51,21 @@ describe("AdminSvgEditorTopBar", () => {
       /SVG studio/i,
     );
     expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
+      /local disk/i,
+    );
+    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
+      /live publish authority/i,
+    );
+    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
       "2026-07-01",
+    );
+    expect(screen.getByTestId("admin-shell-primary-action")).toHaveAttribute(
+      "title",
+      expect.stringMatching(/disk \(live authority\)/i),
+    );
+    expect(screen.getByTestId("admin-shell-primary-action")).toHaveAttribute(
+      "title",
+      expect.stringMatching(/best-effort/i),
     );
     expect(screen.getByTestId("admin-shell-state")).toHaveTextContent(
       /Symbol released/i,
@@ -125,7 +139,10 @@ describe("AdminSvgEditorTopBar", () => {
       <AdminSvgEditorTopBar {...baseProps} artifactState="missing" />,
     );
     expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
-      /^Never published$/,
+      /local disk \(live publish authority\)/i,
+    );
+    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
+      /Never published/,
     );
     expect(screen.getByTestId("admin-shell-source")).not.toHaveTextContent(
       /Last published/i,

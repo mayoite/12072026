@@ -57,14 +57,20 @@ describe("CrmHubView", () => {
     vi.clearAllMocks();
   });
 
-  it("renders pipeline KPIs and recent activity", () => {
+  it("renders pipeline KPIs, demo honesty, and recent activity", () => {
     render(<CrmHubView />);
     expect(screen.getByLabelText("CRM summary")).toBeInTheDocument();
+    expect(screen.getByText(/Browser-only CRM demo/i)).toBeInTheDocument();
+    expect(screen.getByText(/localStorage/i)).toBeInTheDocument();
     expect(screen.getByText("HQ Fit-out")).toBeInTheDocument();
     expect(screen.getByText("Phase 1 quote")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /New client/i })).toHaveAttribute(
       "href",
       "/admin/crm/clients",
+    );
+    expect(screen.getByRole("link", { name: /Customer queries/i })).toHaveAttribute(
+      "href",
+      "/admin/customer-queries",
     );
   });
 });

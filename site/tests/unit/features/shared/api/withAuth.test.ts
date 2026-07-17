@@ -34,9 +34,17 @@ vi.mock("@/lib/security/csrf", () => ({
 
 const originalEnv = { ...process.env };
 
+function forceBypassOff(): void {
+  process.env = {
+    ...originalEnv,
+    NODE_ENV: "test",
+    DEV_AUTH_BYPASS: "0",
+  };
+}
+
 describe("withAuth", () => {
   beforeEach(async () => {
-    process.env = { ...originalEnv };
+    forceBypassOff();
     vi.clearAllMocks();
     const supabase = await createServerClient();
     vi.mocked(supabase.auth.getUser).mockReset();
@@ -82,6 +90,22 @@ describe("withAuth", () => {
     expect(handler).not.toHaveBeenCalled();
   });
 
+  it("returns 401 for admin routes without a session when DEV_AUTH_BYPASS is off", async () => {
+    const handler = vi.fn();
+    const wrapped = withAuth(handler, {
+      rateLimitScope: "admin:unauth",
+      role: "admin",
+    });
+    const response = await wrapped(
+      new NextRequest("http://localhost/api/admin/plans"),
+      {},
+    );
+    const body = await response.json();
+    expect(response.status).toBe(401);
+    expect(body.error?.code ?? body.error).toBeTruthy();
+    expect(handler).not.toHaveBeenCalled();
+  });
+
   it("returns 403 when admin is required but user is a member", async () => {
     const supabase = await createServerClient();
     vi.mocked(supabase.auth.getUser).mockResolvedValueOnce({
@@ -101,7 +125,7 @@ describe("withAuth", () => {
       role: "admin",
     });
     const response = await wrapped(
-      new NextRequest("http://localhost/api/test"),
+      new NextRequest("http://localhost/api/admin/plans"),
       {},
     );
     expect(response.status).toBe(403);
@@ -162,7 +186,7 @@ describe("withAuth", () => {
 
 describe("resolveAuthContext", () => {
   beforeEach(async () => {
-    process.env = { ...originalEnv };
+    forceBypassOff();
     vi.clearAllMocks();
     const supabase = await createServerClient();
     vi.mocked(supabase.auth.getUser).mockResolvedValue({
@@ -188,5 +212,33 @@ describe("resolveAuthContext", () => {
     const auth = await resolveAuthContext("admin");
     expect(auth.user?.id).toBe(DEV_BYPASS_USER.id);
     expect(auth.isAdmin).toBe(true);
+  });
+
+  it("rejects unauthenticated admin role when DEV_AUTH_BYPASS is off", async () => {
+    process.env.DEV_AUTH_BYPASS = "0";
+    process.env.NODE_ENV = "test";
+    await expect(resolveAuthContext("admin")).rejects.toMatchObject({
+      status: 401,
+    });
+  });
+
+  it("rejects non-admin users for admin role when bypass is off", async () => {
+    process.env.DEV_AUTH_BYPASS = "0";
+    process.env.NODE_ENV = "test";
+    const supabase = await createServerClient();
+    vi.mocked(supabase.auth.getUser).mockResolvedValueOnce({
+      data: {
+        user: {
+          id: "user-2",
+          email: "member@example.com",
+          app_metadata: { role: "member" },
+        },
+      },
+      error: null,
+    } as never);
+
+    await expect(resolveAuthContext("admin")).rejects.toMatchObject({
+      status: 403,
+    });
   });
 });

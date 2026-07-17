@@ -6,6 +6,9 @@ export {
   buildPageMetadata,
   buildSiteMetadata,
   canonicalPath,
+  countBrandPipeSegments,
+  normalizeSiteOrigin,
+  resolveDocumentTitle,
 } from "@/features/site/data/seo";
 
 export type {
@@ -28,7 +31,7 @@ export function buildProductJsonLd(
     return buildProductJsonLdCore(siteUrlOrData, input);
   }
   const data = siteUrlOrData;
-  let origin = "https://oneonly.in";
+  let origin = "https://oando.co.in";
   try {
     origin = new URL(data.url).origin;
   } catch {

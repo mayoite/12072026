@@ -122,4 +122,129 @@ describe("InventoryPanel", () => {
     // When demo fallback still populates, at least chrome remains.
     expect(screen.getByRole("region", { name: "Inventory panel" })).toBeInTheDocument();
   });
+
+  it("groups by family, filters by family chip, and compares two products", () => {
+    const deskA = sampleItem({
+      id: "desk-a",
+      sku: "DESK-A",
+      name: "Desk Alpha",
+      shortName: "Desk Alpha",
+      family: "Linear WS",
+      subCategory: "Desks",
+      material: { marketingMaterial: "Oak", normalizedMaterial: "oak" },
+      variants: [
+        {
+          variantId: "desk-a-v1",
+          sku: "DESK-A-V1",
+          parentProductId: "desk-a",
+          label: "Oak 1400",
+          variantAttributes: {},
+          dimensions: { widthMm: 1400, depthMm: 700, heightMm: 750 },
+          availability: "in-stock",
+        },
+      ],
+    });
+    const deskB = sampleItem({
+      id: "desk-b",
+      sku: "DESK-B",
+      name: "Desk Beta",
+      shortName: "Desk Beta",
+      family: "Linear WS",
+      subCategory: "Desks",
+      material: { marketingMaterial: "Walnut", normalizedMaterial: "walnut" },
+      availability: "backorder",
+    });
+    const chair = sampleItem({
+      id: "chair-1",
+      sku: "CHAIR-1",
+      name: "Chair One",
+      shortName: "Chair One",
+      family: "Task Chairs",
+      subCategory: "Chairs",
+      material: { marketingMaterial: "Mesh", normalizedMaterial: "mesh" },
+      dimensions: { widthMm: 650, depthMm: 650, heightMm: 1100 },
+    });
+
+    render(
+      <InventoryPanel
+        catalogItems={[deskA, deskB, chair]}
+        catalogStatus="ready"
+        isLoading={false}
+        officeSystemsInventory={false}
+      />,
+    );
+
+    // Family group headers + filter chips present
+    expect(screen.getAllByText(/Linear WS/i).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/Task Chairs/i).length).toBeGreaterThanOrEqual(1);
+    expect(document.querySelector('[data-family-group="linear ws"]')).not.toBeNull();
+    expect(document.querySelector('[data-family-group="task chairs"]')).not.toBeNull();
+
+    // Family filter chip narrows list
+    const familyGroup = screen.getByRole("group", {
+      name: "Filter by product family",
+    });
+    fireEvent.click(
+      within(familyGroup).getByRole("button", { name: /Task Chairs/i }),
+    );
+    expect(screen.queryByText("Desk Alpha")).not.toBeInTheDocument();
+    expect(screen.getByText("Chair One")).toBeInTheDocument();
+
+    // Reset and compare two desks
+    fireEvent.click(screen.getByRole("button", { name: "Reset inventory filters" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: /Add Desk Alpha to compare/i }),
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: /Add Desk Beta to compare/i }),
+    );
+
+    const compareRegion = screen.getByTestId("inventory-compare");
+    expect(compareRegion).toBeInTheDocument();
+    expect(
+      within(compareRegion).getByRole("table", {
+        name: "Compare selected products",
+      }),
+    ).toBeInTheDocument();
+    expect(within(compareRegion).getByText("SKU")).toBeInTheDocument();
+    expect(within(compareRegion).getByText("DESK-A")).toBeInTheDocument();
+    expect(within(compareRegion).getByText("DESK-B")).toBeInTheDocument();
+    expect(within(compareRegion).getByText("Oak 1400")).toBeInTheDocument();
+    expect(within(compareRegion).getByText("Backorder")).toBeInTheDocument();
+  });
+
+  it("shows family and variant fields on the card when present", () => {
+    render(
+      <InventoryPanel
+        catalogItems={[
+          sampleItem({
+            family: "Premium Linear",
+            variants: [
+              {
+                variantId: "v1",
+                sku: "DESK-UI-001-V",
+                parentProductId: "desk-ui-1",
+                label: "Walnut / 160",
+                variantAttributes: {},
+                dimensions: { widthMm: 1600, depthMm: 800, heightMm: 750 },
+                availability: "in-stock",
+              },
+            ],
+          }),
+        ]}
+        catalogStatus="ready"
+        isLoading={false}
+        officeSystemsInventory={false}
+      />,
+    );
+
+    const card = screen.getByText("UI Desk").closest("article");
+    expect(card).not.toBeNull();
+    expect(
+      within(card as HTMLElement).getByText("Premium Linear"),
+    ).toBeInTheDocument();
+    expect(
+      within(card as HTMLElement).getByText("Walnut / 160"),
+    ).toBeInTheDocument();
+  });
 });

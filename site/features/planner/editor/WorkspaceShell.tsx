@@ -95,6 +95,12 @@ export interface WorkspaceShellProps {
   onToggleSnap?: () => void;
   /** Flat plan metrics for status bar contract (E2E + operator glance) */
   planMetrics?: WorkspacePlanMetrics;
+  /**
+   * slim = mobile / modular density (More menu; no full chrome packs).
+   * full = legacy packs + desktop Grid/Snap strip.
+   * Mobile Modular path must pass slim so the top bar stays deliberate.
+   */
+  chromeMode?: "full" | "slim";
 }
 
 export function WorkspaceShell({
@@ -141,6 +147,7 @@ export function WorkspaceShell({
   onToggleGrid,
   onToggleSnap,
   planMetrics,
+  chromeMode = "full",
 }: WorkspaceShellProps) {
   const id = useId();
   const [internalViewMode, setInternalViewMode] = useState<"2d" | "3d">(initialViewMode);
@@ -330,7 +337,9 @@ export function WorkspaceShell({
       data-bottom-panel-open={bottomPanelOpen ? "true" : undefined}
       data-fill-parent={fillParent ? "true" : undefined}
       data-planner-density={density}
+      data-planner-surface="paper"
       data-layout-preset={presetId}
+      data-chrome-mode={chromeMode}
       id={`workspace-shell-${id.replace(/:/g, "")}`}
     >
       {/* Top bar */}
@@ -372,6 +381,7 @@ export function WorkspaceShell({
         layoutPresetId={presetId}
         onApplyLayoutPreset={applyPreset}
         onResetLayout={reset}
+        chromeMode={chromeMode}
         {...topBarSaveStatusProps}
       />
 

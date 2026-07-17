@@ -1,16 +1,27 @@
 # Admin features
 
-Repo-sourced index: **plan phase → code path → honest gap**. Live code and fresh checks are authoritative.
+Repo-sourced index: **feature → code path → honest gap**. Live code and fresh checks are authoritative.
 
 | Doc | Role |
 |---|---|
-| `PHASES-01-02`, `PHASES-03-04` | What to build and prove |
-| This file | What exists in code today |
-| `CHECKLIST.md` | Open acceptance work only |
+| This file | Current code map and known gaps |
+| `FINISH-PLAN.md` | Required work and verification status (**execution A0–A6**) |
+| `COMPLETION-CONTRACT.md` | How to prove done (wins on evidence) |
+| `docs/architecture/07-ADMIN-UI-BENCHMARK.md` | UI bar (not PASS proof) |
+| `docs/architecture/08-DATABASE-SVG-CONTRACT.md` | DB-SVG target IDs 01–20 |
+| `docs/architecture/10-SECURITY-BENCHMARK.md` | Security bar |
 
-**Code roots:** `site/features/admin/` · `site/app/admin/` · `site/app/api/admin/` · `site/platform/drizzle/schema/catalog.ts` · `site/inventory/descriptors/` · `site/public/svg-catalog/`
+**Historical:** `PHASES-01-02.md`, `PHASES-03-04.md`, `CHECKLIST.md` are **absent**. Not authority.
 
-**Manual SVG editor:** `@excalidraw/excalidraw` via `editor/ExcalidrawClient.tsx`. Retired: `SvgStudioCanvas` (SVG.js scene canvas; tests archived only). Not active: SVG-Edit iframe (`plan/svgblunder/`).
+**Code roots:** `site/features/admin/` · `site/app/admin/` · `site/app/api/admin/` · `site/platform/drizzle/schema/catalog.ts` · `site/inventory/descriptors/` · `site/public/svg-catalog/` · `site/features/crm/` (Admin-mounted demo CRM)
+
+**Manual SVG editor:** `@excalidraw/excalidraw` via `svg-editor/editor/ExcalidrawClient.tsx`. Retired: `SvgStudioCanvas` (archived tests only). Not active: SVG-Edit iframe (`plan/svgblunder/` reference only).
+
+**Section labels A0–A11 below** are code-map areas. **Execution phases** in FINISH-PLAN/COMPLETION-CONTRACT are **A0–A6** (auth, publish, dual-write, catalog/prices, ops/CRM, release). Map areas into the nearest execution phase; do not invent extra PASS.
+
+**Status vocabulary:** OPEN / PARTIAL / FAIL / PASS. PASS only with fresh commands. FEATURES never grants PASS alone.
+
+**Execution status (mirrors FINISH-PLAN, 2026-07-17):** A0–A5 PARTIAL · A6 OPEN. Disk is live SVG authority.
 
 ---
 
@@ -18,133 +29,229 @@ Repo-sourced index: **plan phase → code path → honest gap**. Live code and f
 
 | Surface | Disk | DB | Notes |
 |---|---|---|---|
-| `publishDescriptorWithPipeline.ts` | **Yes** (authority) | Optional additive | Comment: “Phase 2 disk-path mapping (not full Products DB transaction yet)” |
-| `persistBlockDescriptor.ts` | `inventory/descriptors/` (`{slug}.{n}.json` + `.latest.json`) | No | |
-| `svgPipelineRunner.ts` S4 | `public/svg-catalog/` | No | |
-| `publishSvgEditorAction.ts` | Yes | Best-effort if `PRODUCTS_DATABASE_URL` | Injects `dbRepository`; failure logged, publish still succeeds |
-| `POST /api/admin/svg-editor` | Yes | Best-effort if `PRODUCTS_DATABASE_URL` | `route.ts` injects `dbRepository` — parity with server action |
-| Lifecycle manifest + audit log | `results/admin/catalog-ops/` | No | `_catalog-lifecycle.json`, `_descriptor-audit.jsonl` — not in `inventory/descriptors/` |
+| `publish/publishDescriptorWithPipeline.ts` | **Yes** (authority) | Optional dual-write | Comment: disk-path mapping; not full Products DB transaction |
+| `storage/persistBlockDescriptor.ts` | `inventory/descriptors/` (`{slug}.{n}.json` + `.latest.json`) | No | |
+| `publish/svgPipelineRunner.ts` S4 | `public/svg-catalog/` | No | |
+| `publish/publishSvgEditorAction.ts` | Yes | Via `resolveSvgPublishDualWrite` | Only if Products DB **and** R2 ready |
+| `POST /api/admin/svg-editor` | Yes | Same dual-write gate | `withAuth` admin + CSRF |
+| `publish/resolveSvgPublishDualWrite.ts` | — | Injects `ImmutableSvgRevisionRepository` + R2 `putText` | Modes: `enabled` \| `skipped_no_db` \| `skipped_r2_unavailable` |
+| Lifecycle manifest + audit | `results/admin/catalog-ops/` (gitignored) | No | Not durable product authority |
 
-**UI admits disk authority:** `AdminSvgEditorListView.tsx` — “Source: local disk inventory · Products DB not live”.
+**UI admits disk authority:** `views/AdminSvgEditorListView.tsx` — local disk inventory messaging when DB not live.
 
-**DB tables:** `svg_revisions`, `svg_revision_artifacts`, `block_descriptors` in schema + Supabase migration `20260714100000_create_svg_revisions.sql`. When `PRODUCTS_DATABASE_URL` is configured (repo-root `.env.local`), `DrizzleSvgRevisionPersistence.insertRevision` **upserts `svg_revisions` and `block_descriptors`** (`onConflictDoUpdate` on `slug`). Dual-write still uses a stub definition and a hardcoded `version: 1` / `{slug}-r1`-style revision id, so it is not yet a full revision-authority transaction.
+**DB tables (schema present):** `svg_revisions`, `svg_revision_artifacts`, `block_descriptors` + migration `20260714100000_create_svg_revisions.sql`. Dual-write upserts exist in `storage/drizzleSvgPersistence.server.ts` but cutover incomplete (Failures.md). Stub/incomplete revision payload risk remains — treat DB as **not** release authority.
 
 ---
 
-## DB-SVG contract (repo truth)
+## DB-SVG contract map (repo truth)
 
-| ID | Status | Evidence |
+| ID | Status | Evidence in code |
 |---|---|---|
-| 01 | Partial | Publish upserts `block_descriptors` when `PRODUCTS_DATABASE_URL` set; disk still the real authority (stub payload); no `published_svg_revision_id` product pointer |
-| 02 | Partial | `descriptorLock.ts`, versioned disk files |
-| 03 | Partial | `ImmutableSvgRevisionRepository` + unit tests; not live authority |
-| 04 | Partial | Types exist; dual-write payload is stub |
-| 05 | Open | No `published_svg_revision_id` pointer write |
-| 06 | Disk only | Pipeline rollback tested; not one DB transaction |
-| 07 | Source present; status unverified | Failed-publish rollback handling exists in `publishDescriptorWithPipeline.ts`; not run in this repair |
-| 08 | Source present; status unverified | Idempotent unchanged-publish handling exists in `publishDescriptorWithPipeline.ts`; not run in this repair |
-| 09 | Source present; status unverified | `staleDraftPublishGate.ts` is wired into the editor publish flow; not run in this repair |
-| 10–16 | Partial (Planner consumer) | `svg-blocks/route.ts` → `loadBuyerVisibleDescriptorsWithDb()`: reads `block_descriptors` DB rows when configured (lifecycle-filtered), falls back to `loadBuyerVisibleDescriptors()` disk; reads definition JSON, not committed artifact bytes |
-| 17 | Source present; status unverified | `scripts/svg-disk-db-dry-run.ts` inventories disk inputs and writes report output; it does not prove DB write or authority |
-| 18 | Open | No parity tooling before cutover |
-| 19 | Security track | CSRF/rate limits on admin routes exist |
-| 20 | Partial | Tmp-dir pattern in unit/e2e publish; no automated canonical hash gate; some tests read canonical fixtures |
+| 01 | OPEN | Disk authority live; DB not sole release authority |
+| 02 | PARTIAL | `storage/descriptorLock.ts`, versioned disk files; DB draft lock not sole path |
+| 03 | PARTIAL | `svgRevisionRepository.server.ts` + unit tests; not live authority |
+| 04 | PARTIAL | Types/schemas; dual-write not full `PublishedRevisionV1` transaction |
+| 05 | OPEN | No `published_svg_revision_id` product pointer write found as cutover |
+| 06 | OPEN | Not one DB transaction with artifact upload + pointer + audit |
+| 07 | PARTIAL | Disk rollback in `publishDescriptorWithPipeline.ts` (unit exists); DB pointer N/A |
+| 08 | PARTIAL | Disk idempotent short-circuit; DB idempotency unproved as authority |
+| 09 | PARTIAL | `lifecycle/staleDraftPublishGate.ts` wired on POST svg-editor |
+| 10–12 | PARTIAL | Planner `app/api/planner/catalog/svg-blocks/route.ts` → `loadBuyerVisibleDescriptorsWithDb()`; DB rows when configured else disk; not committed artifact bytes by revision id |
+| 13 | OPEN / Planner co-own | Pin revision on place — Planner track |
+| 14–15 | PARTIAL | Server-only Drizzle patterns; degraded messaging incomplete for cutover |
+| 16 | OPEN | Disk can still be what Planner falls back to |
+| 17 | PARTIAL | `scripts/svg-disk-db-dry-run.ts` (report only; does not prove write authority) |
+| 18 | OPEN | No parity tooling before cutover |
+| 19 | PARTIAL | CSRF/rate limits on admin routes; full matrix open |
+| 20 | PARTIAL | Tmp-dir unit/e2e patterns; no automated canonical hash gate |
 
 ---
 
-## Step 0 — test isolation
+## A0 — Test isolation
 
 | Feature | Code | Gap |
 |---|---|---|
-| Tmp-dir catalog writes | `tests/unit/features/admin/svg-editor/`, `isolatedAdminSvgPublish.ts` | Convention, not CI hash gate |
-| E2E isolated publish | `admin-svg-publish-p01.spec.ts`, `admin-svg-scene-publish-a401.spec.ts` | Uses `DEV_AUTH_BYPASS=1` |
+| Tmp-dir catalog writes | `tests/e2e/helpers/isolatedAdminSvgPublish.ts`, `tests/unit/features/admin/svg-editor/publish/isolatedAdminSvgPublish.test.ts` | Convention; AF-12 CI hash gate open |
+| E2E isolated publish | `tests/e2e/admin-svg-publish-p01.spec.ts`, `admin-svg-scene-publish-a401.spec.ts` | Often `DEV_AUTH_BYPASS`; not production-auth proof |
+| Unit tree | `tests/unit/features/admin/**` (large: svg-editor, catalog, pricing, ui, …) | Not re-run this session |
 
 ---
 
-## Phase 1 — Excalidraw-first authoring
-
-Plan: `PHASES-01-02.md` (Phase 1)
+## A1 — Shell, auth, navigation
 
 | Feature | Code | Gap |
 |---|---|---|
-| SVG inventory + Excalidraw studio | `AdminSvgEditorListView.tsx`, `AdminSvgEditorShell.tsx`, `ExcalidrawClient.tsx`, `DimensionPanel.tsx`, `gridSnapping.ts`, `SvgEditorForm.tsx` | **Implemented** |
-| Excalidraw draft persistence | `svgEditorFormState.ts` (`excalidrawElements`, `compiledSvg`), `svgEditorFormAdapters.ts`, `publishSvgEditorAction.ts` | Publish uses Excalidraw-exported SVG; legacy `sceneParts` bridge remains |
-| Publish + compile | `publishDescriptorWithPipeline.ts`, `compileSvgForPublish`, `sharedCompilerAuthority.ts` | Disk authority; browser re-proof open |
-| Supabase catalog mirror | `publishSymbolToSupabaseCatalog` via `catalogAssetStorage.server.ts` after publish | Best-effort; paths `planner-symbols/{slug}/symbol.svg` + `descriptor.json` for Planner CDN import |
-| Planner-style export menu | `AdminSvgEditorTopBar` RAC Export (SVG / descriptor JSON / Open Planner) | Aligns chrome with Planner TopBar Export pattern |
-| Undo / rollback / lock | `descriptorLock.ts`, `rollbackDescriptorVersion.ts`, `staleDraftPublishGate.ts` | **Implemented** |
-| Bulk JSON import | `AdminSvgBulkImportPanel.tsx`, `bulkImportBlockDescriptors.ts` | **Implemented** (advanced path) |
-| AI SVG generate | *(no route.ts; empty dir removed 2026-07-17)* | **Not implemented** |
-| 3D previews | `GlbExtruderPreview.tsx`, `ModelViewerPreview.tsx` | Partial |
-| `ADM-SVG-01`…`17`, shell, form, pub, a11y | Test sources in `tests/unit/features/admin/svg-editor/` | Not run in this repair |
+| Edge proxy | `site/proxy.ts` · `isProtectedPath` | Unauth `/admin/*` → `/access?next=…` when `DEV_AUTH_BYPASS` off |
+| Layout auth | `app/admin/layout.tsx` → `requireAuthUser("/admin", "admin")` | Unit: layout calls requireAuthUser; production-auth smoke OPEN (AF-10) |
+| API session | `app/api/admin/_lib/server.ts` · `requireAdminSession` | 401 no session / 403 non-admin when bypass off |
+| withAuth admin | `features/shared/api/withAuth.ts` | role `admin` 401/403 when bypass off |
+| Dev bypass | `lib/auth/devAuthBypass.ts` | `DEV_AUTH_BYPASS=1` + non-prod only; local interactive admin |
+| Shell / nav | `ui/AdminLayoutShell.tsx`, `ui/adminNav.ts` | Groups Overview · Planner · Catalog · CRM · System |
+| Dashboard | `dashboard/AdminDashboardPageView.tsx`, `app/admin/page.tsx` | Browser re-proof open |
+| Mobile review helpers | `ui/adminMobileReview.ts` | AF-06 catalog phone unit PASS (A-W2); browser OPEN |
+
+**Auth unit proof (bypass mocked off):** `tests/unit/proxy.test.ts`, `tests/unit/lib/auth/session.test.ts`, `tests/unit/app/api/admin/_lib/server.test.ts`, `tests/unit/features/shared/api/withAuth.test.ts`, `tests/unit/app/admin/layout.test.tsx`. Bypass-on probes are **not** deploy auth proof.
 
 ---
 
-## Phase 2 — catalog lifecycle and Planner handoff
+## A2 — Excalidraw-first authoring
 
-Plan: `PHASES-01-02.md` (Phase 2)
+Plan phase: A2 in FINISH-PLAN / COMPLETION-CONTRACT.
 
 | Feature | Code | Gap |
 |---|---|---|
-| Standard + configurator CRUD | `AdminCatalogManager.tsx`, `ConfiguratorCatalogPageView.tsx`, `app/api/admin/catalog/`, `catalogs/[type]/` | **Implemented** |
-| Lifecycle / bulk | `catalogLifecycle.ts`, `bulkLifecycleBatch.ts`, `bulk-import/route.ts` | **Implemented** (disk manifest) |
-| Planner consumer | `app/api/planner/catalog/svg-blocks/route.ts` | **DB-aware bridge** (`loadBuyerVisibleDescriptorsWithDb`) — `block_descriptors` rows when configured, disk fallback; not artifact bytes |
-| `ADM-LIST-*`, `ADM-BULK-*`, `ADM-MOB-*`, `ADM-SVG-18` | List views, bulk panels, mobile CSS | Unit + partial Playwright |
-| Ops surfaces | `AdminPlansPageView.tsx`, `AdminInventoryPageView.tsx`, themes, flags, analytics | **Implemented**; not all in `admin-phases-live` |
-| Security | `requireCsrf`, rate limits on mutation routes | **Implemented** |
+| SVG inventory list | `views/AdminSvgEditorListView.tsx`, `app/admin/svg-editor/page.tsx` | Bulk/advanced dominance AF-05; internal language AF-13 |
+| Studio shell | `views/edit-shell/AdminSvgEditorShell.tsx`, `AdminSvgEditorTopBar.tsx`, rails, `useAdminSvgEditorPublish.ts` | Browser stage measurements open |
+| Excalidraw | `editor/ExcalidrawClient.tsx`, `ExcalidrawCanvas.tsx`, `gridSnapping.ts`, `DimensionPanel.tsx` | Supported subset contracts unit-covered; full safe path open |
+| Form / identity | `form/SvgEditorForm.tsx`, `svgEditorFormState.ts`, `svgEditorFormAdapters.ts`, `validateCoreProductFields.ts` | Legacy `sceneParts` bridge remains for old descriptors |
+| Contracts | `contracts/svgBlockSchemas.ts`, `supportedSvgAuthoringSubset.ts`, `stageLayoutContract.ts` | — |
+| AI SVG generate | *(no route)* | **Not implemented** (AF-11) |
+| 3D previews | `publish/GlbExtruderPreview.tsx`, `ModelViewerPreview.tsx` | Partial / preview only |
 
 ---
 
-## Phase 3 — product families
-
-Plan: `PHASES-03-04.md` (Phase 3)
+## A3 — Publish pipeline
 
 | Feature | Code | Gap |
 |---|---|---|
-| Family form + persistence | `AdminProductFamilyForm.tsx`, `productFamilyPersistence.ts` | **Implemented** |
-| Workstation families | `WorkstationFamilyAuthorFields.tsx`, `workstationFamilyRelease.ts` | **Implemented** |
-| `ADM-FAM-01`, `ADM-FAM-02` | Contracts + form unit tests | Browser release journey open |
-| 2D / 3D / BOQ parity | Planner configurator bridges | End-to-end browser proof open |
+| Publish core | `publish/publishDescriptorWithPipeline.ts` | Disk authority; DB transaction open |
+| Server action | `publish/publishSvgEditorAction.ts` | Dual-write gated |
+| HTTP publish | `app/api/admin/svg-editor/route.ts` | admin + CSRF |
+| Compiler | `publish/sharedCompilerAuthority.ts`, planner `compileSvgForPublish` | Fail-closed before S4 |
+| Dual-write resolve | `publish/resolveSvgPublishDualWrite.ts` | AF-02/18 |
+| Rollback / lock / stale | `lifecycle/rollbackDescriptorVersion.ts`, `storage/descriptorLock.ts`, `lifecycle/staleDraftPublishGate.ts` | Disk-path proved in unit; browser open |
+| Supabase symbol mirror | `catalogAssetStorage` paths via publish side effects | Best-effort CDN mirror; not authority |
+| Export chrome | `views/edit-shell/AdminSvgEditorTopBar.tsx` RAC Export | Aligns with Planner export pattern |
 
 ---
 
-## Phase 4 — commercial governance
-
-Plan: `PHASES-03-04.md` (Phase 4)
+## A4 — Catalog lifecycle and bulk
 
 | Feature | Code | Gap |
 |---|---|---|
-| Price books (filesystem) | `AdminPriceBookPageView.tsx`, `priceBookService.ts`, `priceBookFileStore.ts` → `features/admin/data/price-books/` | **Implemented** |
-| Governance API | `app/api/admin/price-books/[bookId]/action/route.ts` | **Implemented** |
-| Retire / restore | `catalogRetirement.ts`, lifecycle PATCH, `admin-svg-retire-restore.spec.ts` | Source and browser spec exist; not run in this repair |
-| `ADM-PUB-02`, `ADM-PRICE-*`, `ADM-ROLE-01`, `ADM-AUDIT-01` | Unit + `admin-pricing-pricebook-p05.spec.ts` | Current browser status not verified in this repair |
-| CRM / queries | `features/crm/`, `app/admin/customer-queries/` | **localStorage demo** — not production CRM |
+| Managed products UI | `catalog/AdminCatalogManager.tsx`, `AdminCatalogPageView.tsx`, `AdminCatalogTable.tsx`, `app/admin/catalog/page.tsx` | AF-06 unit PASS (A-W2 cards-priority, labels, ≥44px + CSS); browser 390×844 OPEN |
+| Configurator catalog | `catalog/ConfiguratorCatalogPageView.tsx`, `app/admin/planner-catalog/page.tsx` | Browser open |
+| Workspace library | `workspace-catalog/AdminWorkspaceCatalogPageView.tsx` | Read-oriented |
+| Catalog APIs | `app/api/admin/catalog/`, `catalogs/[type]/`, `configurator-catalog/`, `planner-catalog/` | CSRF on mutations |
+| Lifecycle | `lifecycle/catalogLifecycle.ts`, `catalogLifecycle.db.server.ts`, `bulkLifecycleBatch.ts`, `catalogRetirement.ts` | Disk manifest + optional DB helpers |
+| Lifecycle HTTP | `app/api/admin/svg-editor/[slug]/lifecycle/route.ts`, `rollback/`, `revisions/` | — |
+| Bulk import | `views/AdminSvgBulkImportPanel.tsx`, `storage/bulkImportBlockDescriptors.ts`, `app/api/admin/svg-editor/bulk-import/route.ts` | Advanced path; UX dominance issue |
+| Retire/restore e2e | `tests/e2e/admin-svg-retire-restore.spec.ts` | Not re-run this session |
 
 ---
 
-## APIs
+## A5 — Product families
 
-| Route | Code | DB on publish |
+| Feature | Code | Gap |
 |---|---|---|
-| `POST /api/admin/svg-editor` | `app/api/admin/svg-editor/route.ts` | Optional dual-write |
-| Server action publish | `publishSvgEditorAction.ts` | Optional dual-write |
-| `POST .../bulk-import`, `.../lifecycle`, `.../rollback` | under `svg-editor/` | No |
-| `GET/POST /api/admin/catalog`, `catalogs/[type]` | catalog routes | — |
-| `GET/POST /api/admin/price-books` | price-book routes | — |
+| Family form | `catalog/AdminProductFamilyForm.tsx`, `productFamilyContract.ts` | Browser release journey open |
+| Workstation | `workstation/WorkstationFamilyAuthorFields.tsx`, `workstationFamilyRelease.ts`, `workstationFamilyContract.ts` | End-to-end Planner parity open |
+
+---
+
+## A6 — Price books / commercial governance
+
+| Feature | Code | Gap |
+|---|---|---|
+| UI | `pricing/AdminPriceBookPageView.tsx`, `app/admin/price-books/page.tsx` | Currency primary + Advanced minor units + activate primary unit-proven (AF-07); browser OPEN |
+| Service / store | `pricing/priceBookService.ts`, `priceBookFileStore.ts` → `pricing/data/price-books/` | Filesystem authority for books |
+| Drizzle store | `pricing/priceBookDrizzleStore.server.ts` | Present; cutover/usage honesty open |
+| Governance | `pricing/priceBookGovernance.ts`, `priceBookGovernance.server.ts` | Unit exists |
+| API | `app/api/admin/price-books/`, `[bookId]/action/route.ts` | — |
+| Browser spec | `tests/e2e/admin-pricing-pricebook-p05.spec.ts` | Not re-run this session |
+
+---
+
+## A7 — DB-SVG cutover
+
+| Feature | Code | Gap |
+|---|---|---|
+| Repository | `svg-editor/svgRevisionRepository.server.ts` | Interface + tests; not sole authority |
+| Drizzle persistence | `storage/drizzleSvgPersistence.server.ts` | Upsert path; incomplete cutover |
+| Dual-read harness | `storage/dualReadHarness.ts` | Support tooling |
+| Active blocker | `Failures.md` | DB-SVG authority open until dual-write + pointer + Planner bytes proved |
+
+---
+
+## A8 — Planner / consumer handoff
+
+| Feature | Code | Gap |
+|---|---|---|
+| Planner SVG blocks API | `app/api/planner/catalog/svg-blocks/route.ts` | DB-aware + disk fallback (AF-17) |
+| Buyer-visible loaders | `lifecycle/catalogLifecycle.ts`, `catalogLifecycle.db.server.ts` | Definition rows ≠ artifact bytes |
+| Portal SVG catalog | `app/(site)/portal/svg-catalog/page.tsx` | Disk `loadBuyerVisibleDescriptors` |
+
+---
+
+## A9 — Ops surfaces
+
+| Feature | Code | Gap |
+|---|---|---|
+| Plans | `plans/AdminPlansPageView.tsx`, `AdminPlanDetailPageView.tsx`, `app/api/admin/plans/` | Browser open |
+| Features | `feature-flags/AdminFeatureFlagsPageView.tsx`, `app/api/admin/features/route.ts` | — |
+| Analytics | `analytics/AdminAnalyticsPageView.tsx`, `app/api/admin/analytics/route.ts` | — |
+| Themes | `app/admin/themes/`, `app/api/admin/themes/` | — |
+| Inventory map | `inventory/AdminInventoryPageView.tsx` | — |
+| Settings | `settings/AdminSettingsPageView.tsx` | — |
+
+---
+
+## A10 — CRM (Admin-mounted)
+
+| Feature | Code | Gap |
+|---|---|---|
+| CRM hub | `app/admin/crm/page.tsx` → `CrmHubView` + `CrmSubnav` | **Hub page** (not redirect-only); unit `tests/unit/app/admin/crm/page.test.tsx` |
+| CRM routes | `app/admin/crm/**` | **localStorage demo** (`features/crm/`, banners); not production |
+| Customer queries | `app/admin/customer-queries/` + `api/customer-queries/manage` | **Server-backed** Supabase inbox; auth = admin session **or** `CUSTOMER_QUERIES_ADMIN_TOKEN` (distinct from CRM demo store) |
+| Honesty | `CrmDemoBanner.tsx`, `CrmWorkspaceBanner.tsx` | AF-08 unit PASS — localStorage + "not production CRM" labelled; browser OPEN |
+
+---
+
+## A11 — Security (Admin surface)
+
+| Feature | Code | Gap |
+|---|---|---|
+| Layout role | `requireAuthUser` admin | Unit gate PARTIAL; production-auth OPEN |
+| API auth | `requireAdminSession` and/or `withAuth({ role: "admin", requireCsrf: true, rateLimit… })` | Unit 401/403 with bypass off; full route matrix open |
+| Dev bypass | `lib/auth/devAuthBypass.ts` | Must be excluded from production-auth PASS |
+| SVG safety | compile/sanitize server path | Regex helpers elsewhere are not sufficient authority (security benchmark) |
+
+---
+
+## APIs (inventory)
+
+| Route | Code | Notes |
+|---|---|---|
+| `POST /api/admin/svg-editor` | `app/api/admin/svg-editor/route.ts` | Publish + dual-write gate |
+| `…/svg-editor/bulk-import` | `bulk-import/route.ts` | |
+| `…/svg-editor/[slug]/lifecycle` | `lifecycle/route.ts` | |
+| `…/svg-editor/[slug]/rollback` | `rollback/route.ts` | |
+| `…/svg-editor/[slug]/revisions` | `revisions/route.ts` | |
+| `GET/POST /api/admin/catalog`, `catalog/[id]` | catalog routes | CSRF on write |
+| `…/catalogs/[type]`, `configurator-catalog`, `planner-catalog` | | |
+| `GET/POST/action /api/admin/price-books` | price-book routes | |
+| `…/plans`, `features`, `analytics`, `themes` | ops routes | |
 
 ---
 
 ## Test inventory
 
-| Suite | Path | Notes |
+| Suite | Path / command | Notes |
 |---|---|---|
-| SVG editor unit | `tests/unit/features/admin/svg-editor/` | Not run in this repair |
-| Playwright admin | `tests/e2e/admin-phases-live.spec.ts`, `admin-svg-publish-p01.spec.ts`, `admin-pricing-pricebook-p05.spec.ts` | Not run in this repair; development-auth output would not prove production authorization |
-| Auth smoke | `admin-smoke.spec.ts` via `pnpm run test:admin:production-auth` | Not run in this repair |
-| Admin unit coverage | `vitest.admin.coverage.config.ts` | Not run in this repair; no current coverage status claimed |
+| Auth gate unit | proxy, session, `requireAdminSession`, withAuth admin, admin layout | Bypass **off** for unauth paths |
+| CRM hub unit | `tests/unit/app/admin/crm/page.test.tsx` | Hub vs legacy redirect |
+| Dual-write unit | `tests/unit/features/admin/svg-editor/publish/resolveSvgPublishDualWrite.test.ts` | Modes honest |
+| Admin unit | `tests/unit/features/admin/` | Extensive |
+| Admin coverage | `pnpm run test:coverage:admin` → `vitest.admin.coverage.config.ts` | No current coverage % claimed |
+| p0 SVG publish | `pnpm run p0:admin-svg` | OPEN this session |
+| Retire/restore | `pnpm run test:e2e:admin-retire-restore` | OPEN |
+| Price book e2e | `tests/e2e/admin-pricing-pricebook-p05.spec.ts` | OPEN |
+| Phases live | `tests/e2e/admin-phases-live.spec.ts` | OPEN; dev-auth ≠ production |
+| Production auth | `pnpm run test:admin:production-auth` | OPEN (AF-10) |
+| Inventory preview | `tests/e2e/admin-svg-inventory-preview-p01.spec.ts` | OPEN |
 
 ---
 
-## Reference (not truth)
+## Reference (not PASS proof)
 
-`CHECKLIST.md` · `PHASES-01-02` · `PHASES-03-04` · `07-ADMIN-UI-BENCHMARK.md` · `08-DATABASE-SVG-CONTRACT.md`
+`COMPLETION-CONTRACT.md` · `FINISH-PLAN.md` · `07-ADMIN-UI-BENCHMARK.md` · `08-DATABASE-SVG-CONTRACT.md` · `10-SECURITY-BENCHMARK.md` · `../../Failures.md`

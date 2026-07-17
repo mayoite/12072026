@@ -1,9 +1,19 @@
 /**
  * Underlay scale calibration pure helpers.
  * Two plan points + known real-world distance → mm per image pixel scale factor.
+ * Width presets (5 m / 10 m) and persistence fields for reload survival.
  */
 
 export type UnderlayPoint = { x: number; y: number };
+
+/** Properties “5 m” width preset — map full underlay image width to this length. */
+export const UNDERLAY_KNOWN_WIDTH_5M_MM = 5_000;
+
+/** Properties “10 m” width preset — map full underlay image width to this length. */
+export const UNDERLAY_KNOWN_WIDTH_10M_MM = 10_000;
+
+/** Default assumed room width when placing a new underlay (matches Sketch-to-Plan accept). */
+export const DEFAULT_ASSUMED_ROOM_WIDTH_MM = UNDERLAY_KNOWN_WIDTH_10M_MM;
 
 export type UnderlayCalibratePickSession =
   | { phase: "pick-a"; knownLengthMm: number }
@@ -17,6 +27,15 @@ export type UnderlayCalibratePickResult =
       pointB: UnderlayPoint;
       knownLengthMm: number;
     };
+
+/** Subset of background-image fields that carry calibrated scale. */
+export type UnderlayScaleState = {
+  position: UnderlayPoint;
+  imageWidthPx: number;
+  imageHeightPx: number;
+  mmPerPixel: number;
+  scale: number;
+};
 
 /**
  * Distance between two points in the same unit system (px or mm).
@@ -57,13 +76,13 @@ export function calibrateMmPerPixelFromImageWidth(
  */
 export function defaultUnderlayMmPerPixel(
   imageWidthPx: number,
-  assumeRoomWidthMm = 10_000,
+  assumeRoomWidthMm = DEFAULT_ASSUMED_ROOM_WIDTH_MM,
 ): number {
   const w = Number.isFinite(imageWidthPx) && imageWidthPx > 0 ? imageWidthPx : 1;
   const room =
     Number.isFinite(assumeRoomWidthMm) && assumeRoomWidthMm > 0
       ? assumeRoomWidthMm
-      : 10_000;
+      : DEFAULT_ASSUMED_ROOM_WIDTH_MM;
   return room / w;
 }
 
@@ -81,6 +100,60 @@ export function resolveUnderlayMmPerPixel(
 }
 
 /**
+ * Display scale multiplier (1 when missing or invalid).
+ */
+export function resolveUnderlayDisplayScale(scale?: number): number {
+  if (Number.isFinite(scale) && (scale as number) > 0) {
+    return scale as number;
+  }
+  return 1;
+}
+
+/**
+ * Effective millimetres per image pixel including display scale.
+ * Footprint width = imageWidthPx * effectiveMmPerPixel.
+ */
+export function effectiveUnderlayMmPerPixel(
+  mmPerPixel: number,
+  scale = 1,
+): number {
+  const mpp =
+    Number.isFinite(mmPerPixel) && mmPerPixel > 0 ? mmPerPixel : 1;
+  const s = resolveUnderlayDisplayScale(scale);
+  return mpp * s;
+}
+
+/**
+ * Fold display scale into mmPerPixel and reset scale to 1 (canonical store form).
+ * Effective footprint is unchanged.
+ */
+export function normalizeUnderlayScale(input: {
+  mmPerPixel: number;
+  scale?: number;
+}): { mmPerPixel: number; scale: 1 } {
+  return {
+    mmPerPixel: effectiveUnderlayMmPerPixel(input.mmPerPixel, input.scale),
+    scale: 1,
+  };
+}
+
+/**
+ * Apply full-image-width calibration (Properties 5 m / 10 m).
+ * Always stores scale = 1 so reload uses mmPerPixel alone.
+ */
+export function applyUnderlayWidthCalibration(input: {
+  imageWidthPx: number;
+  knownWidthMm: number;
+}): { mmPerPixel: number; scale: 1 } | null {
+  const mmPerPixel = calibrateMmPerPixelFromImageWidth(
+    input.imageWidthPx,
+    input.knownWidthMm,
+  );
+  if (mmPerPixel === null) return null;
+  return { mmPerPixel, scale: 1 };
+}
+
+/**
  * Convert a plan-space point (mm) into image-pixel space for the underlay.
  * Rotation is ignored (underlay footprint is axis-aligned in plan space).
  */
@@ -92,15 +165,10 @@ export function planPointToImagePixel(
     scale?: number;
   },
 ): UnderlayPoint {
-  const scale =
-    Number.isFinite(underlay.scale) && (underlay.scale as number) > 0
-      ? (underlay.scale as number)
-      : 1;
-  const mpp =
-    Number.isFinite(underlay.mmPerPixel) && underlay.mmPerPixel > 0
-      ? underlay.mmPerPixel
-      : 1;
-  const factor = mpp * scale;
+  const factor = effectiveUnderlayMmPerPixel(
+    underlay.mmPerPixel,
+    underlay.scale,
+  );
   return {
     x: (plan.x - underlay.position.x) / factor,
     y: (plan.y - underlay.position.y) / factor,
@@ -131,6 +199,25 @@ export function calibrateMmPerPixelFromPlanSegment(input: {
 }
 
 /**
+ * Apply two-point plan-segment calibration.
+ * Stores scale = 1 so the calibrated mmPerPixel survives reload.
+ */
+export function applyUnderlayTwoPointCalibration(input: {
+  pointA: UnderlayPoint;
+  pointB: UnderlayPoint;
+  knownLengthMm: number;
+  underlay: {
+    position: UnderlayPoint;
+    mmPerPixel: number;
+    scale?: number;
+  };
+}): { mmPerPixel: number; scale: 1 } | null {
+  const mmPerPixel = calibrateMmPerPixelFromPlanSegment(input);
+  if (mmPerPixel === null) return null;
+  return { mmPerPixel, scale: 1 };
+}
+
+/**
  * Advance a two-click calibrate session with the next plan point.
  */
 export function advanceUnderlayCalibratePick(
@@ -156,19 +243,62 @@ export function advanceUnderlayCalibratePick(
 }
 
 /**
- * Plan-space width/depth of an underlay image given mm-per-pixel.
+ * Plan-space width/depth of an underlay image given mm-per-pixel (and optional display scale).
  */
 export function underlayFootprintMm(input: {
   imageWidthPx: number;
   imageHeightPx: number;
   mmPerPixel: number;
+  scale?: number;
 }): { widthMm: number; depthMm: number } {
-  const mpp =
-    Number.isFinite(input.mmPerPixel) && input.mmPerPixel > 0
-      ? input.mmPerPixel
-      : 1;
+  const mpp = effectiveUnderlayMmPerPixel(input.mmPerPixel, input.scale);
   return {
     widthMm: Math.max(1, input.imageWidthPx * mpp),
     depthMm: Math.max(1, input.imageHeightPx * mpp),
+  };
+}
+
+/**
+ * Fields that must round-trip through save/reload for calibrated underlays.
+ */
+export function underlayScalePersistenceFields(
+  state: UnderlayScaleState,
+): UnderlayScaleState {
+  const normalized = normalizeUnderlayScale(state);
+  return {
+    position: { x: state.position.x, y: state.position.y },
+    imageWidthPx: state.imageWidthPx,
+    imageHeightPx: state.imageHeightPx,
+    mmPerPixel: normalized.mmPerPixel,
+    scale: normalized.scale,
+  };
+}
+
+/**
+ * Revive scale after a JSON clone (reload simulation).
+ * Resolves mmPerPixel with the same defaulting the canvas uses.
+ */
+export function reviveUnderlayScaleAfterReload(persisted: {
+  position: UnderlayPoint;
+  imageWidthPx: number;
+  imageHeightPx: number;
+  mmPerPixel?: number;
+  scale?: number;
+}): UnderlayScaleState & { footprint: { widthMm: number; depthMm: number } } {
+  const mmPerPixel = resolveUnderlayMmPerPixel(
+    persisted.imageWidthPx,
+    persisted.mmPerPixel,
+  );
+  const scale = resolveUnderlayDisplayScale(persisted.scale);
+  const state: UnderlayScaleState = {
+    position: { x: persisted.position.x, y: persisted.position.y },
+    imageWidthPx: persisted.imageWidthPx,
+    imageHeightPx: persisted.imageHeightPx,
+    mmPerPixel,
+    scale,
+  };
+  return {
+    ...state,
+    footprint: underlayFootprintMm(state),
   };
 }

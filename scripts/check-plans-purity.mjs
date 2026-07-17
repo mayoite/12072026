@@ -9,7 +9,10 @@ const allowedRoots = new Set([
   "Planner",
   "Site",
   "Security",
+  "TechStack",
   "svgblunder",
+  // Docs design notes only — not a product track checklist root
+  "_meta",
 ]);
 const violations = [];
 
@@ -33,6 +36,9 @@ for (const required of [
   "Planner/FEATURES.md",
   "Admin/FEATURES.md",
   "Site/FEATURES.md",
+  "TechStack/COMPLETION-CONTRACT.md",
+  "TechStack/FEATURES.md",
+  "TechStack/FINISH-PLAN.md",
 ]) {
   if (!markdown.includes(required)) violations.push(`missing: plan/${required}`);
 }

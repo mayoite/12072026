@@ -7,11 +7,13 @@
  *   - CSRF rejects without `x-csrf-rejected` (browserApiFetch retry signal)
  *   - admin routes without session gate
  *   - protected mutators without rate limiting
- *   - CSRF failures coded as INVALID_INPUT instead of CSRF_FAILED
+ *   - public form mutators without rate limiting
+ *   - CSRF failures coded as INVALID_INPUT / INSUFFICIENT_PERMISSIONS instead of CSRF_FAILED
  *
  * Usage:
  *   node scripts/audit-api-route-safety.mjs
  *   node scripts/audit-api-route-safety.mjs --json
+ *   node scripts/audit-api-route-safety.mjs --matrix
  *   node scripts/audit-api-route-safety.mjs --warn-only
  *
  * Exit 1 when any error-severity issue is found (unless --warn-only).
@@ -25,11 +27,16 @@ const siteRoot = path.resolve(__dirname, "..");
 const apiRoot = path.join(siteRoot, "app", "api");
 
 const jsonMode = process.argv.includes("--json");
+const matrixMode = process.argv.includes("--matrix");
 const warnOnly = process.argv.includes("--warn-only");
 
 const MUTATING = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 
-/** Relative api paths (posix, no leading slash) that intentionally skip CSRF. */
+/**
+ * Relative api paths (posix, no leading slash) that intentionally skip CSRF.
+ * Public marketing / telemetry mutators use rate limits (+ honeypot where relevant)
+ * instead of double-submit CSRF.
+ */
 const CSRF_OPTIONAL = new Set([
   "tracking",
   "log-error",
@@ -39,7 +46,6 @@ const CSRF_OPTIONAL = new Set([
   "filter",
   "generate-alt",
   "configurator/smart-wizard",
-  "audit",
 ]);
 
 /**
@@ -48,12 +54,32 @@ const CSRF_OPTIONAL = new Set([
  */
 const CSRF_REQUIRED_PREFIXES = [
   "admin/",
+  "admin",
   "planner/",
+  "planner",
   "plans",
   "theme/manage",
   "customer-queries/manage",
-  "admin",
+  "ai-advisor",
+  "ai-assist",
+  "ai/",
+  "audit",
 ];
+
+/**
+ * Public / site form mutators that must keep rate limiting even without CSRF.
+ * Exact path match.
+ */
+const PUBLIC_FORM_MUTATORS = new Set([
+  "customer-queries",
+  "tracking",
+  "log-error",
+  "recommendations",
+  "nav-search",
+  "filter",
+  "generate-alt",
+  "configurator/smart-wizard",
+]);
 
 const ADMIN_AUTH_MARKERS = [
   /withAuth\s*[<(]/,
@@ -68,11 +94,6 @@ const RATE_LIMIT_MARKERS = [
   /\benforceAdminRateLimit\s*\(/,
   /\benforcePublicApiRateLimit\s*\(/,
   /\benforceRateLimit\s*\(/,
-];
-
-const CSRF_CHECK_MARKERS = [
-  /requireCsrf\s*:\s*true/,
-  /validateCsrfRequest\s*\(/,
 ];
 
 const CSRF_REJECTION_HEADER_MARKERS = [
@@ -134,10 +155,6 @@ function isPlannerPath(apiPath) {
   return apiPath === "planner" || apiPath.startsWith("planner/");
 }
 
-/**
- * Detect requireCsrf: true on withAuth wrappers that export mutating methods.
- * Heuristic: if file has requireCsrf:true anywhere and exports a mutator via withAuth.
- */
 function hasWithAuthCsrf(source) {
   return /requireCsrf\s*:\s*true/.test(source) && /withAuth\s*[<(]/.test(source);
 }
@@ -156,15 +173,37 @@ function hasCsrfRejectionHeader(source) {
   return hasAny(source, CSRF_REJECTION_HEADER_MARKERS);
 }
 
+/**
+ * CSRF failure path coded as INVALID_INPUT or INSUFFICIENT_PERMISSIONS
+ * (historical bugs: plans used INVALID_INPUT; audit used INSUFFICIENT_PERMISSIONS).
+ */
 function hasWrongCsrfCode(source) {
-  // CSRF failure path coded as INVALID_INPUT (historical bug on plans routes)
   if (!hasManualCsrf(source) && !/CSRF|csrf/.test(source)) return false;
+
+  // validateCsrfRequest → nearby API_ERROR_CODES.* that is not CSRF_FAILED
   const csrfBlocks = [
     ...source.matchAll(
-      /validateCsrfRequest[\s\S]{0,400}?API_ERROR_CODES\.(\w+)/g,
+      /validateCsrfRequest[\s\S]{0,500}?API_ERROR_CODES\.(\w+)/g,
     ),
   ];
-  return csrfBlocks.some((m) => m[1] === "INVALID_INPUT");
+  if (
+    csrfBlocks.some(
+      (m) => m[1] === "INVALID_INPUT" || m[1] === "INSUFFICIENT_PERMISSIONS",
+    )
+  ) {
+    return true;
+  }
+
+  // Message mentions CSRF but code is wrong stable name
+  if (
+    /Invalid or missing CSRF token/i.test(source) &&
+    /API_ERROR_CODES\.(INVALID_INPUT|INSUFFICIENT_PERMISSIONS)/.test(source) &&
+    !/API_ERROR_CODES\.CSRF_FAILED/.test(source)
+  ) {
+    return true;
+  }
+
+  return false;
 }
 
 /**
@@ -174,15 +213,12 @@ function hasWrongCsrfCode(source) {
  */
 function mutatingMethodMissingCsrf(source, method) {
   if (hasWithAuthCsrf(source)) {
-    // Prefer withAuth export pattern
     const withAuthExport = new RegExp(
       `export\\s+const\\s+${method}\\s*=\\s*withAuth`,
     );
     if (withAuthExport.test(source)) return false;
-    // function export but withAuth used elsewhere — still check body
   }
 
-  // Extract function body for this method (export async function METHOD)
   const fnRe = new RegExp(
     `export\\s+(?:async\\s+)?function\\s+${method}\\s*\\([\\s\\S]*?\\)\\s*\\{`,
   );
@@ -192,14 +228,12 @@ function mutatingMethodMissingCsrf(source, method) {
     const body = sliceBalancedBlock(source, start - 1);
     if (/validateCsrfRequest\s*\(/.test(body)) return false;
     if (/requireCsrf\s*:\s*true/.test(body)) return false;
-    // Delegate to shared helper that validates CSRF
     if (/assertCsrf|ensureCsrf|checkCsrf|csrfFailedResponse/.test(body)) {
       return false;
     }
     return true;
   }
 
-  // export const METHOD = withAuth(...)
   const constWithAuth = new RegExp(
     `export\\s+const\\s+${method}\\s*=\\s*withAuth`,
   );
@@ -207,7 +241,6 @@ function mutatingMethodMissingCsrf(source, method) {
     return !/requireCsrf\s*:\s*true/.test(source);
   }
 
-  // export const METHOD = something else
   const constAny = new RegExp(`export\\s+const\\s+${method}\\s*=`);
   if (constAny.test(source)) {
     return !hasCsrfCoverage(source);
@@ -237,7 +270,29 @@ function missingRateLimit(source) {
   return !hasAny(source, RATE_LIMIT_MARKERS);
 }
 
+function classifySurface(apiPath) {
+  if (isAdminPath(apiPath)) return "admin";
+  if (isPlannerPath(apiPath)) return "planner";
+  if (apiPath === "plans" || apiPath.startsWith("plans/")) return "plans";
+  if (apiPath === "customer-queries" || apiPath.startsWith("customer-queries/")) {
+    return "site-form";
+  }
+  if (PUBLIC_FORM_MUTATORS.has(apiPath)) return "site-public";
+  if (apiPath === "theme/manage" || apiPath.startsWith("theme/")) return "theme";
+  if (
+    apiPath === "ai-advisor" ||
+    apiPath === "ai-assist" ||
+    apiPath.startsWith("ai/")
+  ) {
+    return "ai";
+  }
+  if (apiPath === "audit") return "audit";
+  return "other";
+}
+
 const issues = [];
+/** @type {Array<Record<string, string | boolean | null>>} */
+const matrix = [];
 
 function addIssue({ file, apiPath, method, id, severity, message }) {
   issues.push({ file, apiPath, method: method ?? null, id, severity, message });
@@ -257,6 +312,25 @@ for (const abs of routeFiles) {
   const methods = extractExportedMethods(source);
   const mutators = methods.filter((m) => MUTATING.has(m));
   const needsCsrf = csrfRequiredForPath(apiPath) && mutators.length > 0;
+  const csrfPresent = hasCsrfCoverage(source);
+  const ratePresent = !missingRateLimit(source);
+  const authPresent = hasAny(source, ADMIN_AUTH_MARKERS) || /withAuth\s*[<(]/.test(source);
+
+  if (mutators.length > 0) {
+    matrix.push({
+      apiPath,
+      file: rel,
+      surface: classifySurface(apiPath),
+      methods: mutators.join(","),
+      csrfRequired: needsCsrf,
+      csrfOptional: CSRF_OPTIONAL.has(apiPath),
+      csrfPresent,
+      rateLimitPresent: ratePresent,
+      authPresent,
+      rejectionHeaderOk: !csrfPresent || hasCsrfRejectionHeader(source),
+      csrfCodeOk: !csrfPresent || !hasWrongCsrfCode(source),
+    });
+  }
 
   // Admin: every route must gate auth (GET included)
   if (isAdminPath(apiPath) && methods.length > 0 && adminMissingAuth(source)) {
@@ -284,7 +358,6 @@ for (const abs of routeFiles) {
       }
     }
 
-    // Rejection header so browserApiFetch can refresh token + retry
     if (hasCsrfCoverage(source) && !hasCsrfRejectionHeader(source)) {
       addIssue({
         file: rel,
@@ -303,15 +376,40 @@ for (const abs of routeFiles) {
         id: "csrf-wrong-error-code",
         severity: "error",
         message:
-          "CSRF failure uses API_ERROR_CODES.INVALID_INPUT; use CSRF_FAILED",
+          "CSRF failure uses API_ERROR_CODES.INVALID_INPUT or INSUFFICIENT_PERMISSIONS; use CSRF_FAILED",
+      });
+    }
+  } else if (csrfPresent && mutators.length > 0) {
+    // Optional path that still implements CSRF: hygiene still required
+    if (!hasCsrfRejectionHeader(source)) {
+      addIssue({
+        file: rel,
+        apiPath,
+        id: "missing-csrf-rejection-header",
+        severity: "error",
+        message:
+          "optional-CSRF path implements CSRF but never sets x-csrf-rejected",
+      });
+    }
+    if (hasWrongCsrfCode(source)) {
+      addIssue({
+        file: rel,
+        apiPath,
+        id: "csrf-wrong-error-code",
+        severity: "warn",
+        message:
+          "optional-CSRF path uses non-CSRF_FAILED code on CSRF reject",
       });
     }
   }
 
-  // Rate limit on protected mutators
+  // Rate limit on protected mutators (admin / planner / member plans)
   if (
     mutators.length > 0 &&
-    (isAdminPath(apiPath) || isPlannerPath(apiPath) || apiPath.startsWith("plans")) &&
+    (isAdminPath(apiPath) ||
+      isPlannerPath(apiPath) ||
+      apiPath === "plans" ||
+      apiPath.startsWith("plans/")) &&
     missingRateLimit(source)
   ) {
     addIssue({
@@ -324,9 +422,41 @@ for (const abs of routeFiles) {
     });
   }
 
+  // Public / site form mutators always need rate limiting
+  if (
+    mutators.length > 0 &&
+    PUBLIC_FORM_MUTATORS.has(apiPath) &&
+    missingRateLimit(source)
+  ) {
+    addIssue({
+      file: rel,
+      apiPath,
+      id: "missing-public-rate-limit",
+      severity: "error",
+      message:
+        "public/site form mutator has no rateLimit / withAuth / enforcePublicApiRateLimit",
+    });
+  }
+
+  // customer-queries public intake: honeypot expected (anti-bot alongside rate limit)
+  if (apiPath === "customer-queries" && mutators.includes("POST")) {
+    if (!/honeypot|website/.test(source)) {
+      addIssue({
+        file: rel,
+        apiPath,
+        id: "missing-public-form-honeypot",
+        severity: "warn",
+        message:
+          "public customer-queries POST should keep a honeypot field (website) or documented equivalent",
+      });
+    }
+  }
+
   // Planner + member plans mutators must use withAuth (CSRF header via requireCsrf)
   if (
-    (isPlannerPath(apiPath) || apiPath === "plans" || apiPath.startsWith("plans/")) &&
+    (isPlannerPath(apiPath) ||
+      apiPath === "plans" ||
+      apiPath.startsWith("plans/")) &&
     mutators.length > 0
   ) {
     if (!/withAuth\s*[<(]/.test(source)) {
@@ -353,15 +483,48 @@ for (const abs of routeFiles) {
 const errors = issues.filter((i) => i.severity === "error");
 const warns = issues.filter((i) => i.severity === "warn");
 
+function printMatrix(rows) {
+  const headers = [
+    "apiPath",
+    "surface",
+    "methods",
+    "csrfReq",
+    "csrf",
+    "rate",
+    "auth",
+    "hdr",
+    "code",
+  ];
+  const lines = [headers.join("\t")];
+  for (const r of rows) {
+    lines.push(
+      [
+        r.apiPath,
+        r.surface,
+        r.methods,
+        r.csrfRequired ? "Y" : r.csrfOptional ? "opt" : "n",
+        r.csrfPresent ? "Y" : "N",
+        r.rateLimitPresent ? "Y" : "N",
+        r.authPresent ? "Y" : "N",
+        r.rejectionHeaderOk ? "Y" : "N",
+        r.csrfCodeOk ? "Y" : "N",
+      ].join("\t"),
+    );
+  }
+  process.stdout.write(lines.join("\n") + "\n");
+}
+
 if (jsonMode) {
   process.stdout.write(
     JSON.stringify(
       {
         ok: errors.length === 0,
         routesScanned: routeFiles.length,
+        mutatorsScanned: matrix.length,
         errorCount: errors.length,
         warnCount: warns.length,
         issues,
+        matrix,
       },
       null,
       2,
@@ -369,8 +532,11 @@ if (jsonMode) {
   );
 } else {
   process.stdout.write(
-    `audit-api-route-safety: scanned ${routeFiles.length} route file(s)\n`,
+    `audit-api-route-safety: scanned ${routeFiles.length} route file(s), ${matrix.length} mutator route(s)\n`,
   );
+  if (matrixMode) {
+    printMatrix(matrix);
+  }
   if (issues.length === 0) {
     process.stdout.write("audit-api-route-safety: ok\n");
   } else {

@@ -18,8 +18,9 @@ describe("app/admin/crm/clients/page.tsx", () => {
       screen.getByRole("heading", { level: 1, name: "Clients" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("Client records, contact context, and linked projects."),
+      screen.getByText(/Client records, contact context, and linked projects/i),
     ).toBeInTheDocument();
+    expect(screen.getByText(/localStorage demo/i)).toBeInTheDocument();
     expect(screen.getByTestId("crm-clients-view")).toHaveTextContent(
       '"embedded":true',
     );

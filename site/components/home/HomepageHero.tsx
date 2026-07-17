@@ -10,6 +10,8 @@ import {
   DEFAULT_HERO_FALLBACK,
   HOMEPAGE_HERO_CONTENT,
   HOMEPAGE_HERO_IMAGES,
+  joinAccessibleTitleLines,
+  resolveHeroTitleLines,
 } from "@/features/site/data/homepage";
 import { TrackedLink } from "@/components/ui/TrackedLink";
 import {
@@ -45,10 +47,8 @@ const fadeUpVariants: Variants = {
 export function HomepageHero() {
   const t = useTranslations("home");
   // Prefer i18n messages; provenance fields stay on the TS source of truth.
-  const titleRaw = t.raw("hero.title");
-  const title = Array.isArray(titleRaw)
-    ? (titleRaw as string[])
-    : [...HOMEPAGE_HERO_CONTENT.title];
+  const title = resolveHeroTitleLines(t.raw("hero.title"), HOMEPAGE_HERO_CONTENT.title);
+  const accessibleTitle = joinAccessibleTitleLines(title);
   const kicker = t("hero.kicker");
   const primaryCta = {
     label: t("hero.primaryCta.label"),
@@ -132,11 +132,11 @@ export function HomepageHero() {
           animate="visible"
         >
           <h1 id="home-hero-heading" className="home-hero-title-homepage text-inverse">
-            {/* SITE-HOME-02: accessible name is full sentence with spaces; animated lines are decorative. */}
-            <span className="sr-only">{title.join(" ")}</span>
+            {/* SITE-HOME-02 / SF-01: accessible name keeps spaces; animated lines are decorative. */}
+            <span className="sr-only">{accessibleTitle}</span>
             <span aria-hidden="true">
               {title.map((line, i) => (
-                <span key={line} className="block overflow-hidden">
+                <span key={`${i}-${line}`} className="block overflow-hidden">
                   <motion.span
                     className={`inline-block${i === title.length - 1 ? " text-accent-italic-on-dark" : ""}`}
                     variants={wordVariants}

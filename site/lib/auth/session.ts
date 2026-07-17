@@ -92,15 +92,20 @@ export async function requireAuthUser(
 
   if (!user) {
     const fallback = surface === "admin" ? "/admin" : undefined;
+    // next/navigation `redirect` throws (never returns). Keep an explicit
+    // throw so mocked redirects in unit tests cannot fall through to null user.
     redirect(buildAccessRedirect(nextPath, fallback));
+    throw new Error("Authentication required");
   }
 
   if ((surface === "crm" || surface === "ops") && (user.role === "guest" || user.role === "viewer")) {
     redirect("/dashboard?error=unauthorized_access");
+    throw new Error("Unauthorized access");
   }
 
   if (surface === "admin" && user.role !== "owner") {
     redirect("/dashboard?error=unauthorized_admin_access");
+    throw new Error("Unauthorized admin access");
   }
 
   return user;

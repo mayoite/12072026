@@ -25,6 +25,10 @@ import {
   parseLengthInput,
 } from "@/features/planner/model/units";
 import { parseWorkstationConfigKey } from "@/features/planner/catalog/workstationSystemV0";
+import {
+  UNDERLAY_KNOWN_WIDTH_10M_MM,
+  UNDERLAY_KNOWN_WIDTH_5M_MM,
+} from "@/features/planner/lib/underlayCalibrate";
 import styles from "./properties.module.css";
 
 /**
@@ -1266,7 +1270,9 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                     <button
                       type="button"
                       className={styles.multiActionBtnWide}
-                      onClick={() => callbacks.onCalibrateUnderlay?.(10_000)}
+                      onClick={() =>
+                        callbacks.onCalibrateUnderlay?.(UNDERLAY_KNOWN_WIDTH_10M_MM)
+                      }
                       title="Map underlay width to 10 m"
                       aria-label="Calibrate underlay width to 10 metres"
                       disabled={underlayCalibratePhase != null}
@@ -1276,7 +1282,9 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                     <button
                       type="button"
                       className={styles.multiActionBtnWide}
-                      onClick={() => callbacks.onCalibrateUnderlay?.(5_000)}
+                      onClick={() =>
+                        callbacks.onCalibrateUnderlay?.(UNDERLAY_KNOWN_WIDTH_5M_MM)
+                      }
                       title="Map underlay width to 5 m"
                       aria-label="Calibrate underlay width to 5 metres"
                       disabled={underlayCalibratePhase != null}

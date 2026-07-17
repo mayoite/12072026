@@ -8,6 +8,7 @@ import {
   clampOpeningCenterAlongMm,
   collectOpeningSpansOnWall,
   defaultOpeningWidthMm,
+  openingCenterPointOnWall,
   openingLineEndpointsMm,
   openingPlacementRejectMessage,
   openingSpanFromNormalized,
@@ -42,15 +43,36 @@ describe("openingPlacement", () => {
     expect(wallOpeningPickToleranceMm(wall({ thickness: 0 }))).toBe(150 / 2 + 80);
   });
 
-  it("clamps opening centres away from wall ends", () => {
-    expect(clampOpeningCenterAlongMm(4000, 100, 900)).toBeGreaterThan(450);
-    expect(clampOpeningCenterAlongMm(4000, 3900, 900)).toBeLessThan(3550);
+  it("clamps opening centres away from wall ends with exact margins", () => {
+    // half=450 + endMargin=80 → min 530, max 3470 on a 4000 mm wall
+    expect(clampOpeningCenterAlongMm(4000, 100, 900)).toBe(530);
+    expect(clampOpeningCenterAlongMm(4000, 3900, 900)).toBe(3470);
+    expect(clampOpeningCenterAlongMm(4000, 2000, 900)).toBe(2000);
+    // Degenerate: opening + margins cannot fit — pin to midpoint
+    expect(clampOpeningCenterAlongMm(1000, 0, 900)).toBe(500);
+    expect(clampOpeningCenterAlongMm(1000, 999, 900, OPENING_END_MARGIN_MM)).toBe(
+      500,
+    );
   });
 
   it("detects overlapping spans with gap", () => {
     expect(openingSpansOverlap({ start: 800, end: 1400 }, { start: 1300, end: 1900 })).toBe(
       true,
     );
+    // Exactly OPENING_GAP_MM clear of each other is allowed (not overlap).
+    expect(
+      openingSpansOverlap(
+        { start: 800, end: 1200 },
+        { start: 1200 + OPENING_GAP_MM, end: 1800 },
+      ),
+    ).toBe(false);
+    // One millimetre inside the required gap is overlap.
+    expect(
+      openingSpansOverlap(
+        { start: 800, end: 1200 },
+        { start: 1200 + OPENING_GAP_MM - 1, end: 1800 },
+      ),
+    ).toBe(true);
     expect(
       openingSpansOverlap(
         { start: 800, end: 1200 },
@@ -162,6 +184,8 @@ describe("openingPlacement", () => {
     const { start, end } = openingLineEndpointsMm(vertical, 0.5, 900);
     expect(start.x).toBeCloseTo(end.x, 0);
     expect(Math.abs(end.y - start.y)).toBeCloseTo(900, 0);
+    const center = openingCenterPointOnWall(vertical, 0.5);
+    expect(center).toEqual({ x: 100, y: 1500 });
   });
 
   it("collects spans only for the requested wall", () => {
@@ -193,9 +217,107 @@ describe("openingPlacement", () => {
     expect(spans[0]?.id).toBe("door-a");
   });
 
+  it("excludes a moving opening id from collected spans", () => {
+    const doors: PlannerDoor[] = [
+      {
+        id: "door-a",
+        wallId: "wall-1",
+        position: 0.3,
+        width: 900,
+        height: 2100,
+        type: "single",
+        swingDirection: "left",
+        flipSide: false,
+      },
+      {
+        id: "door-b",
+        wallId: "wall-1",
+        position: 0.7,
+        width: 900,
+        height: 2100,
+        type: "single",
+        swingDirection: "left",
+        flipSide: false,
+      },
+    ];
+    const windows: PlannerWindow[] = [
+      {
+        id: "window-a",
+        wallId: "wall-1",
+        position: 0.5,
+        width: 1200,
+        height: 1200,
+        sillHeight: 900,
+        type: "standard",
+      },
+    ];
+    const withoutSelf = collectOpeningSpansOnWall(
+      "wall-1",
+      4000,
+      doors,
+      windows,
+      "door-a",
+    );
+    expect(withoutSelf.map((s) => s.id).sort()).toEqual(["door-b", "window-a"]);
+  });
+
   it("maps reject reasons to user messages", () => {
     expect(openingPlacementRejectMessage("overlap")).toMatch(/overlap/i);
     expect(openingPlacementRejectMessage("off-wall")).toMatch(/wall/i);
+    expect(openingPlacementRejectMessage("wall-end")).toMatch(/end/i);
+    expect(openingPlacementRejectMessage("wall-too-short")).toMatch(/short/i);
+  });
+
+  it("rejects non-finite or non-positive opening width as wall-too-short", () => {
+    expect(
+      resolveOpeningPlacementAtPoint({ x: 2000, y: 0 }, [wall()], 0, [], []),
+    ).toEqual({ rejected: true, reason: "wall-too-short" });
+    expect(
+      resolveOpeningPlacementAtPoint(
+        { x: 2000, y: 0 },
+        [wall()],
+        Number.NaN,
+        [],
+        [],
+      ),
+    ).toEqual({ rejected: true, reason: "wall-too-short" });
+    expect(
+      projectOpeningAlongHostWall({ x: 2000, y: 0 }, wall(), -10),
+    ).toEqual({ rejected: true, reason: "wall-too-short" });
+  });
+
+  it("allows re-placement of an existing opening via excludeId", () => {
+    const doors: PlannerDoor[] = [
+      {
+        id: "door-1",
+        wallId: "wall-1",
+        position: 0.3,
+        width: 900,
+        height: 2100,
+        type: "single",
+        swingDirection: "left",
+        flipSide: false,
+      },
+    ];
+    const nearExisting = resolveOpeningPlacementAtPoint(
+      { x: 1200, y: 0 },
+      [wall()],
+      DEFAULT_DOOR_WIDTH_MM,
+      doors,
+      [],
+      { excludeId: "door-1" },
+    );
+    expect("rejected" in nearExisting).toBe(false);
+    if ("rejected" in nearExisting) return;
+    expect(nearExisting.wallId).toBe("wall-1");
+    expect(nearExisting.position).toBeCloseTo(1200 / 4000, 5);
+  });
+
+  it("returns zero-length line endpoints for a collapsed wall", () => {
+    const collapsed = wall({ start: { x: 50, y: 50 }, end: { x: 50, y: 50 } });
+    const { start, end } = openingLineEndpointsMm(collapsed, 0.5, 900);
+    expect(start).toEqual({ x: 50, y: 50 });
+    expect(end).toEqual({ x: 50, y: 50 });
   });
 
   it("normalizes span geometry from position and width", () => {

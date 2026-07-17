@@ -556,6 +556,7 @@ export function CanvasToolRail({
       data-split={rail.splitGroups ? "true" : undefined}
       data-dock-managed={dockManaged ? "true" : undefined}
       data-pinned={pinned ? "true" : undefined}
+      data-mobile-chrome={dockManaged && isMobile ? "bottom" : undefined}
       style={
         !pinned && !dockManaged && isFloating
           ? ({

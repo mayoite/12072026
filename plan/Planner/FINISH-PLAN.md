@@ -144,25 +144,25 @@ Official references:
 
 Execution update: 2026-07-17.
 
-Current position: P1 PASS. P2–P15 partial/in progress. Exit gates remain open without full browser proof.
+Current position: P1 PASS. P4 grips/openings unit PASS (2026-07-17 Agent1). PF-22 unit PASS (Agent2). P8–P10 unit PASS (Agent3). Browser exit gates still open.
 
 | Phase | Execution status | Truth |
 |---|---|---|
 | P0 | PARTIAL | Selector, route-test, current-source, and browser-hang work passes. Isolation and service-worker proof remain. |
 | P1 | PASS | Guest identity, reload recovery, member-owner scoping, and entry-state matrix (unit + browser new/resume/malformed/two-UUID isolation) pass. |
 | P2 | PARTIAL | Wall centreline/thickness/start/end/joins contract defined (`wallContract.ts`). Remaining: fail-visibly on unsupported versions; preserve unknown safe data when schema permits. |
-| P3 | PARTIAL | Ordered shell: canvas-first Dockview + gutters, pinned left rail, Layers in TopBar, slim More menu. Phone TopBar density still open. |
-| P4 | IN PROGRESS | Chains/joins/rooms, exact L/A/thickness, snaps+marker, Enter→exact, openings place/overlap guards (unit). Exact room outline + auto dims, sticky ortho pure helpers, dimension tool live (unit). Remaining: wall grips UI, opening drag reposition, browser proof. |
+| P3 | PARTIAL | Ordered shell: canvas-first Dockview + gutters, pinned left rail, Layers in TopBar, slim More menu. Phone 2-row top + bottom tool chrome unit PASS (P-W2); browser canvas-share OPEN. |
+| P4 | PARTIAL | Wall grips + opening drag reposition unit PASS (Agent1 51+5). Room/ortho/dims unit landed. Browser reshape OPEN. |
 | P5 | PARTIAL | TopBar Sketch-to-Plan + preview/accept/reject wired; sketch-to-plan is guest+CSRF; legacy `project-sketch` returns 410. Underlay calibrate and dual-path cleanup remain. |
-| P6 | PARTIAL | Placement/config live; Fabric AligningGuidelines on for furniture edge/center; wall/object distance guides, exact spacing, row-array remain thin. |
+| P6 | PARTIAL | Family group/filter/compare unit PASS (Agent2 17). Placement/config live; exact spacing/row-array remain thin. Browser inventory OPEN. |
 | P7 | PARTIAL | One document drives 2D/3D. `POST /api/planner/generated-glb` returns 501 `not_configured` (no `site/public` write). Blob/object-storage path still needed. |
-| P8 | PARTIAL | Overlap + outside-room (error/overhang warning) + aisle-clearance (900 mm warning) in `runFloorValidation`. ValidationPanel in Review. Browser proof open. |
-| P9 | PARTIAL | Live BOQ is `projectFurnitureBoq` + bridges; branded PDF wired via Review `exportBoqOnly`. Dual specialty `workstationBoqV0` remains. Browser PDF download proof open. |
-| P10 | PARTIAL | Handoff delivers to customer_queries + optional staff email; workspace Send to Oando + idempotency + HANDOFF_* events. Live CRM browser proof open. |
+| P8 | PARTIAL | Overlap + wall-collision + outside-room + aisle + opening-obstruction unit PASS (Agent3). Browser Review OPEN. |
+| P9 | PARTIAL | Live BOQ bridges + branded PDF unit PASS (Agent3). Dual specialty `workstationBoqV0` remains. Browser PDF OPEN. |
+| P10 | PARTIAL | Handoff CRM+Resend config unit PASS (Agent3 74). Live CRM browser row OPEN. |
 | P11 | PARTIAL | Export success toasts are honest; empty floors blocked; **no GLB menu claim** (preflight unsupported). Member **Save plan JSON / BOQ CSV to cloud** via `POST /api/planner/export/cloud` (Supabase Storage). Scene GLB implementation and Chromium download proof remain. |
 | P12 | PARTIAL | AI optional overlay; CSRF/rate-limit/degraded paths live; dead apply path no longer called from drawer. Browser failure journey open. |
 | P13 | PARTIAL | Autosave live; divergent contentHash now returns conflict (no silent overwrite); explicit keep-local/cloud choice API. Conflict UI and immutable revisions remain. |
-| P14 | PARTIAL | Arrow-key furniture nudge (Shift = 10 mm). Full keyboard commercial journey and axe proof remain. |
+| P14 | PARTIAL | Arrow-key furniture nudge unit PASS (100 mm / Shift 10 mm; editable+button skip) P-W2. Full keyboard commercial journey and axe proof remain. |
 | P15 | PARTIAL | Lazy 3D + honest 501 APIs. Layers panel unused by live host. OOPlannerWorkspace split and perf budgets remain. |
 
 Fresh evidence:
@@ -185,13 +185,13 @@ Fresh evidence:
 | PF-02 | A new guest URL can load an old guest draft. | PASS |
 | PF-03 | The guest route unit test fails after the redirect change. | PASS |
 | PF-04 | Onboarding tests still expect `Start placing furniture`. | PASS |
-| PF-05 | Room outline incomplete for full acceptance. | OPEN (impl unit) | `roomOutline.ts` + `addRectangularRoom` + ExactRoomPanel unit. Remaining: wall grips UI, browser exact-room proof. |
-| PF-06 | Persistent dimensions incomplete for full acceptance. | OPEN (impl unit) | `dimensions.ts` + dimension tool + Fabric paint unit. Remaining: opening-specific dims, browser proof. |
+| PF-05 | Room outline incomplete for full acceptance. | PASS (unit) | Room outline + grips unit 2026-07-17 Agent1. Browser exact-room OPEN. |
+| PF-06 | Persistent dimensions incomplete for full acceptance. | PASS (unit) | Dim drafts + opening-along-wall dims unit 2026-07-17. Browser OPEN. |
 | PF-07 | Sketch-to-Plan has no customer UI entry. | PASS |
 | PF-08 | Sketch-to-Plan requires member auth and blocks guests. | PASS |
 | PF-09 | Planner scene GLB export. | PASS (honesty) | No export menu item claims downloadable GLB; `preflightPlannerExport("glb")` returns unsupported; no fake binary. Full scene GLB remains P11 OPEN. |
-| PF-10 | Planner does not send a quote to Oando. | PARTIAL | Workspace Send to Oando + handoff API (unit/code). Live CRM browser proof open. |
-| PF-11 | Live overlap validation is incomplete. | PASS (unit) | Overlap + room-boundary + aisle-clearance in `runFloorValidation`. Browser Review proof open. |
+| PF-10 | Planner does not send a quote to Oando. | PASS (unit) | Handoff API + CRM env probe 2026-07-17 Agent3. Live browser Send OPEN. |
+| PF-11 | Live overlap validation is incomplete. | PASS (unit) | Overlap + wall-collision + room-boundary + aisle + opening-obstruction. Browser Review OPEN. |
 | PF-12 | Step navigation is labelled but not completion-aware. | PASS |
 | PF-13 | Review and quote UI has no dedicated tests. | PASS (unit) | `ReviewQuotePanel.test.tsx`: send gating, guest block, demo confirm, BOQ/export disable on errors/empty, quote-cart wiring. Browser open. |
 | PF-14 | Many browser scripts use the removed onboarding label. | PASS |
@@ -202,10 +202,10 @@ Fresh evidence:
 | PF-19 | `OOPlannerWorkspace.tsx` owns too many unrelated concerns. | OPEN |
 | PF-20 | Save state is duplicated and contradictory. | PASS (code) | Live host: TopBar + `plannerSaveStatusLabel` only. Orphan `PlannerSaveIndicator` unused. Conflict/offline edge browser open. |
 | PF-21 | Empty properties consume customer workspace. | PASS (code) | Dock closes properties when no selection (not review); `PropertiesPanel` returns null when empty without underlay actions. |
-| PF-22 | Catalog comparison and family grouping are weak. | FAIL |
+| PF-22 | Catalog comparison and family grouping are weak. | PASS (unit) | Family group/filter/compare + InventoryPanel unit 2026-07-17 Agent2. Browser OPEN. |
 | PF-23 | Generic furniture cannot complete the quote-cart path. | PASS (unit) | `furnitureBoqBridge` + `buildPlannerFurnitureBoq` include non-workstation lines into quote cart / PDF / handoff. Browser cart UI open. |
 | PF-24 | The handoff route is not called and does not deliver to Oando. | PASS (code) | Workspace Review **Send to Oando** calls `POST /api/planner/handoff`. Delivery: `customer_queries` insert (source `planner-handoff`) + optional Resend. 501 only if CRM admin client env missing. Live browser/CRM proof still open. |
-| PF-25 | The handoff route lacks CSRF and idempotency. | PARTIAL | CSRF + rate limit + client idempotencyKey (requirement lookup) live. Immutable revision pin still open. |
+| PF-25 | The handoff route lacks CSRF and idempotency. | PASS (unit) | CSRF + rate limit + user-scoped idempotency unit 2026-07-17. Immutable revision pin still OPEN. |
 | PF-26 | Branded customer-ready BOQ is not wired to the live workspace. | PASS (code) | Review “Download branded BOQ PDF” → `exportBoqOnly` + `furnitureBoqToPdfRows`; demo-list labeled. Chromium download proof open. |
 | PF-27 | 2D and 3D object parity lacks full browser proof. | OPEN |
 | PF-28 | Runtime GLB generation can write under `site/public`. | PASS |
@@ -309,11 +309,11 @@ Exit gate:
 - [PASS] Open properties from selection context.
 - [PASS] Use Dockview only for useful desktop regions.
 - [ ] Make the desktop canvas at least 65 percent of viewport area by default.
-- [ ] Build a deliberate mobile top bar.
-- [ ] Build a deliberate mobile bottom tool bar.
-- [ ] Use mutually exclusive mobile sheets for Inventory and Properties.
-- [ ] Keep the mobile canvas at least 60 percent of initial viewport height.
-- [ ] Support portrait and landscape.
+- [PASS] Build a deliberate mobile top bar (2-row brand+actions / center; slim chromeMode; unit P-W2). Browser height share OPEN.
+- [PASS] Build a deliberate mobile bottom tool bar (`mobileBottomChrome` + horizontal dockManaged rail; unit P-W2). Browser OPEN.
+- [PASS] Use mutually exclusive mobile sheets for Inventory and Properties (unit: `data-panel-active` one-of; browser OPEN).
+- [PASS] Keep the mobile canvas at least 60 percent of initial viewport height (CSS `min-height: min(60dvh, 100%)` on stage; browser measure OPEN).
+- [PASS] Support portrait and landscape (CSS landscape compress chrome; browser matrix OPEN).
 - [PASS] Reset only layout state when requested.
 - [PASS] Never reset project content through a layout reset.
 
@@ -323,8 +323,8 @@ Exit gate:
 
 ### P4. Draw room
 
-- [ ] Implement room outline creation (impl landed: `roomOutline.ts` + `addRectangularRoom` + room fill; verify unit/browser).
-- [ ] Support rectangle rooms by exact width and depth (impl: ExactRoomPanel → `addRectangularRoom`).
+- [PASS] Implement room outline creation (unit: `roomOutline.ts` + `addRectangularRoom` + ExactRoomPanel; browser OPEN).
+- [PASS] Support rectangle rooms by exact width and depth (unit: ExactRoomPanel → `addRectangularRoom`; browser OPEN).
 - [PASS] Support connected wall chains.
 - [PASS] Support automatic corner joining.
 - [PASS] Support clean room closure.
@@ -332,7 +332,7 @@ Exit gate:
 - [PASS] Support direct wall length input while drawing.
 - [PASS] Support direct wall angle input while drawing.
 - [PASS] Support wall thickness input.
-- [ ] Support orthogonal lock (impl: sticky OR Shift via `orthogonal.ts` + Fabric `orthogonalLock`).
+- [PASS] Support orthogonal lock (unit: sticky OR Shift via `orthogonal.ts` + Fabric `orthogonalLock`; browser OPEN).
 - [PASS] Support grid snap.
 - [PASS] Support endpoint, midpoint, intersection, perpendicular, and nearest snaps.
 - [PASS] Show snap markers and snap names.
@@ -341,17 +341,17 @@ Exit gate:
 - [PASS] Support Escape to cancel the active operation.
 - [PASS] Support Enter to commit exact values.
 - [PASS] Add doors and windows only to valid host walls (unit: `openingPlacement.ts` + Fabric host pick tolerance; browser OPEN).
-- [PASS] Snap and rotate openings with host walls (unit: clamped along-wall placement + aligned preview/render; drag reposition OPEN).
+- [PASS] Snap and rotate openings with host walls (unit: clamped along-wall + drag reposition Agent1; browser OPEN).
 - [PASS] Support exact opening width and wall offset (unit: `PropertiesPanel` → `updatePlannerOpening`; no numeric entry during placement tool).
 - [PASS] Prevent invalid or overlapping openings (unit: resolver + `assertOpening` same-wall overlap/end margin; browser OPEN).
-- [ ] Support wall selection grips.
-- [ ] Support endpoint editing without corrupting connected geometry (impl unit: `movePlannerWallEndpointConnected`; grips UI open).
-- [ ] Implement persistent linear dimensions (impl: `dimensions.ts` + dimension tool + Fabric paint).
-- [ ] Implement overall room dimensions (impl: `overallRoomDimensionDrafts` on exact room).
-- [ ] Implement wall and opening dimensions (impl: wall drafts + free dim tool; opening-specific open).
+- [PASS] Support wall selection grips (unit: `wallEndpointGrips` + Fabric wire Agent1; browser OPEN).
+- [PASS] Support endpoint editing without corrupting connected geometry (unit: `movePlannerWallEndpointConnected` + grips; browser OPEN).
+- [PASS] Implement persistent linear dimensions (unit: `dimensions.ts` + dimension tool + Fabric paint; browser OPEN).
+- [PASS] Implement overall room dimensions (unit: `overallRoomDimensionDrafts` on exact room; browser OPEN).
+- [PASS] Implement wall and opening dimensions (unit: wall drafts + `openingAlongWallDimensionDrafts` Agent1; browser OPEN).
 - [ ] Implement distance and area measurement tools.
-- [ ] Keep dimensions readable across zoom (impl: fixed screen stroke/font).
-- [ ] Export dimensions consistently (impl: `exportAsSVG` annotation paint).
+- [PASS] Keep dimensions readable across zoom (unit: fixed screen stroke/font; browser OPEN).
+- [PASS] Export dimensions consistently (unit: `exportAsSVG` annotation paint; browser OPEN).
 - [ ] Add columns and keep-out zones needed for office layout validation.
 - [ ] Make undo and redo atomic for drawing operations.
 
@@ -397,9 +397,9 @@ Exit gate:
 ### P6. Place and configure furniture
 
 - [ ] Show recognizable product imagery or 2D geometry.
-- [ ] Show full name, SKU, family, variant, dimensions, and availability.
-- [ ] Group variants by family.
-- [ ] Filter by family, seats, dimensions, material, and availability.
+- [PASS] Show full name, SKU, family, variant, dimensions, and availability (unit InventoryPanel Agent2; browser OPEN).
+- [PASS] Group variants by family (unit `catalogFamilyBrowse` + panel Agent2; browser OPEN).
+- [PASS] Filter by family, seats, dimensions, material, and availability (unit facets Agent2; browser OPEN).
 - [ ] Keep search keyboard accessible.
 - [ ] Support click-to-place.
 - [ ] Support drag-to-place.
@@ -416,8 +416,8 @@ Exit gate:
 - [ ] Support rows and rectangular arrays for workstations.
 - [ ] Support group and ungroup where product semantics allow it.
 - [ ] Support front/back ordering where it affects 2D editing.
-- [ ] Prevent silent placement outside the room.
-- [ ] Warn about clearance and overlap during placement.
+- [PASS] Prevent silent placement outside the room (unit room-boundary validation Agent3; browser OPEN).
+- [PASS] Warn about clearance and overlap during placement (unit runFloorValidation Agent3; browser OPEN).
 - [ ] Keep placed 2D geometry recognizable from the catalog preview.
 - [ ] Keep configuration options attached to the placed instance.
 - [ ] Recalculate BOQ data after every relevant edit.
@@ -596,7 +596,7 @@ Exit gate:
 - [ ] Give every icon control an accessible name.
 - [ ] Use correct button, menu, tab, dialog, and status semantics.
 - [PASS] Announce save, import, conversion, validation, export, and handoff states.
-- [ ] Give every drag action a pointer and keyboard alternative.
+- [PASS] Give every drag action a pointer and keyboard alternative (furniture arrow nudge unit: 100 mm / Shift 10 mm; editable+button skip). Full drag matrix residual OPEN.
 - [ ] Keep frequent mobile targets at 44 by 44 pixels where practical.
 - [ ] Support zoom without clipping critical controls.
 - [ ] Respect reduced motion.

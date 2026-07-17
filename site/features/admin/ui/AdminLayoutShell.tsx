@@ -126,9 +126,16 @@ export default function AdminLayoutShell({
         Skip to main content
       </a>
       {!editorFocusMode && (
-        <header className="shell-admin-header shell-admin-header--brand">
-          <div className="shell-admin-bar shell-admin-bar--brand">
-            <div className="shell-admin-bar__group">
+        <header
+          className="shell-admin-header shell-admin-header--topbar"
+          aria-label="Admin workspace"
+          data-admin-topbar
+          data-density="compact"
+          data-testid="admin-topbar"
+        >
+          {/* Planner TopBar package: brand | center packs | actions (ecru paper stack). */}
+          <div className="shell-admin-topbar">
+            <div className="shell-admin-topbar__brand">
               <button
                 ref={mobileToggleRef}
                 type="button"
@@ -151,19 +158,32 @@ export default function AdminLayoutShell({
                   className="shell-admin-brand__mark h-8 w-8 md:hidden"
                 />
                 <OneAndOnlyLogo
-                  variant="white"
+                  variant="orange"
                   className="shell-admin-brand__wordmark hidden h-7 w-auto md:flex"
                 />
                 <span className="shell-admin-brand__badge">Console</span>
               </Link>
+            </div>
+
+            <div
+              className="shell-admin-topbar__center"
+              role="group"
+              aria-label="Current section"
+            >
               {currentNav ? (
                 <p className="shell-admin-context" aria-live="polite">
                   <span className="shell-admin-context__label">Now</span>
                   <span className="shell-admin-context__title">{currentNav.label}</span>
                 </p>
-              ) : null}
+              ) : (
+                <p className="shell-admin-context shell-admin-context--idle">
+                  <span className="shell-admin-context__label">Admin</span>
+                  <span className="shell-admin-context__title">Inventory console</span>
+                </p>
+              )}
             </div>
-            <div className="shell-admin-bar__actions">
+
+            <div className="shell-admin-topbar__actions">
               <Link href="/" className="shell-admin-header-link" aria-label="View site">
                 <span className="shell-admin-header-link__label">View site</span>
                 <ArrowUpRight size={14} aria-hidden />

@@ -1,8 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { getOptionalUser, requireAuthUser } from "@/lib/auth/session";
 import { createServerClient } from "@/platform/supabase/server";
 import { hasPublicSupabaseEnv } from "@/platform/supabase/env";
 import { redirect } from "next/navigation";
+import { buildAccessRedirect } from "@/lib/auth/plannerRedirect";
+import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
 
 vi.mock("next/navigation", () => ({
   redirect: vi.fn(),
@@ -11,7 +13,9 @@ vi.mock("next/navigation", () => ({
 vi.mock("@/platform/supabase/server", () => {
   const mockSupabase = {
     auth: {
-      getUser: vi.fn(() => Promise.resolve({ data: { user: null }, error: null })),
+      getUser: vi.fn(() =>
+        Promise.resolve({ data: { user: null }, error: null }),
+      ),
     },
   };
   return {
@@ -24,12 +28,40 @@ vi.mock("@/platform/supabase/env", () => ({
 }));
 
 vi.mock("@/lib/auth/plannerRedirect", () => ({
-  buildAccessRedirect: vi.fn(() => "/redirect-url"),
+  buildAccessRedirect: vi.fn((nextPath: string, fallback?: string) =>
+    `/access?next=${encodeURIComponent(nextPath)}${fallback ? `&fb=${fallback}` : ""}`,
+  ),
 }));
+
+const originalEnv = { ...process.env };
+
+function forceBypassOff(): void {
+  process.env = {
+    ...originalEnv,
+    NODE_ENV: "test",
+    DEV_AUTH_BYPASS: "0",
+  };
+  delete process.env.DEV_AUTH_BYPASS;
+  process.env.DEV_AUTH_BYPASS = "0";
+}
+
+function forceBypassOn(): void {
+  process.env = {
+    ...originalEnv,
+    NODE_ENV: "development",
+    DEV_AUTH_BYPASS: "1",
+  };
+}
 
 describe("session auth helpers", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    forceBypassOff();
+    vi.mocked(hasPublicSupabaseEnv).mockReturnValue(true);
+  });
+
+  afterEach(() => {
+    process.env = { ...originalEnv };
   });
 
   it("returns null if hasPublicSupabaseEnv is false", async () => {
@@ -49,7 +81,8 @@ describe("session auth helpers", () => {
           app_metadata: { role: "admin" },
         },
       },
-    } as any);
+      error: null,
+    } as never);
 
     const user = await getOptionalUser();
     expect(user).toEqual({
@@ -63,7 +96,9 @@ describe("session auth helpers", () => {
 
   it("rethrows Next dynamic server usage during static probing", async () => {
     const dynamicError = Object.assign(
-      new Error("Dynamic server usage: Route /access couldn't be rendered statically"),
+      new Error(
+        "Dynamic server usage: Route /access couldn't be rendered statically",
+      ),
       { digest: "DYNAMIC_SERVER_USAGE" },
     );
     vi.mocked(createServerClient).mockRejectedValueOnce(dynamicError);
@@ -72,19 +107,124 @@ describe("session auth helpers", () => {
   });
 
   it("returns null for auth client failures", async () => {
-    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
-    vi.mocked(createServerClient).mockRejectedValueOnce(new Error("invalid session"));
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+    vi.mocked(createServerClient).mockRejectedValueOnce(
+      new Error("invalid session"),
+    );
 
     await expect(getOptionalUser()).resolves.toBeNull();
-    expect(consoleError).toHaveBeenCalledWith("getOptionalUser error:", expect.any(Error));
+    expect(consoleError).toHaveBeenCalledWith(
+      "getOptionalUser error:",
+      expect.any(Error),
+    );
     consoleError.mockRestore();
   });
 
   it("redirects when requireAuthUser is called without user", async () => {
     const supabase = await createServerClient();
-    vi.mocked(supabase.auth.getUser).mockResolvedValueOnce({ data: { user: null } } as any);
+    vi.mocked(supabase.auth.getUser).mockResolvedValueOnce({
+      data: { user: null },
+      error: null,
+    } as never);
 
-    await requireAuthUser("/dashboard");
-    expect(redirect).toHaveBeenCalledWith("/redirect-url");
+    await expect(requireAuthUser("/dashboard")).rejects.toThrow(
+      "Authentication required",
+    );
+    expect(buildAccessRedirect).toHaveBeenCalledWith("/dashboard", undefined);
+    expect(redirect).toHaveBeenCalled();
+  });
+
+  describe("admin gate (DEV_AUTH_BYPASS off)", () => {
+    it("redirects unauthenticated /admin callers to access path", async () => {
+      const supabase = await createServerClient();
+      vi.mocked(supabase.auth.getUser).mockResolvedValueOnce({
+        data: { user: null },
+        error: null,
+      } as never);
+
+      await expect(requireAuthUser("/admin", "admin")).rejects.toThrow(
+        "Authentication required",
+      );
+
+      expect(buildAccessRedirect).toHaveBeenCalledWith("/admin", "/admin");
+      expect(redirect).toHaveBeenCalledWith(
+        expect.stringContaining("/access?next="),
+      );
+    });
+
+    it("rejects non-admin members from admin surface", async () => {
+      const supabase = await createServerClient();
+      vi.mocked(supabase.auth.getUser).mockResolvedValueOnce({
+        data: {
+          user: {
+            id: "member-1",
+            email: "member@example.com",
+            app_metadata: { role: "member" },
+          },
+        },
+        error: null,
+      } as never);
+
+      await expect(requireAuthUser("/admin/svg-editor", "admin")).rejects.toThrow(
+        "Unauthorized admin access",
+      );
+
+      expect(redirect).toHaveBeenCalledWith(
+        "/dashboard?error=unauthorized_admin_access",
+      );
+    });
+
+    it("allows owner (app admin) through admin surface", async () => {
+      const supabase = await createServerClient();
+      vi.mocked(supabase.auth.getUser).mockResolvedValueOnce({
+        data: {
+          user: {
+            id: "admin-1",
+            email: "admin@example.com",
+            app_metadata: { role: "admin" },
+          },
+        },
+        error: null,
+      } as never);
+
+      const user = await requireAuthUser("/admin", "admin");
+      expect(user.id).toBe("admin-1");
+      expect(user.role).toBe("owner");
+      expect(redirect).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("admin gate (DEV_AUTH_BYPASS on, non-prod only)", () => {
+    it("returns synthetic admin without session", async () => {
+      forceBypassOn();
+      const user = await requireAuthUser("/admin", "admin");
+      expect(user.id).toBe(DEV_BYPASS_USER.id);
+      expect(user.email).toBe(DEV_BYPASS_USER.email);
+      expect(redirect).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("admin gate (production ignores DEV_AUTH_BYPASS)", () => {
+    it("redirects unauthenticated admin callers when NODE_ENV=production and bypass=1", async () => {
+      process.env = {
+        ...originalEnv,
+        NODE_ENV: "production",
+        DEV_AUTH_BYPASS: "1",
+      };
+      const supabase = await createServerClient();
+      vi.mocked(supabase.auth.getUser).mockResolvedValueOnce({
+        data: { user: null },
+        error: null,
+      } as never);
+
+      await expect(requireAuthUser("/admin", "admin")).rejects.toThrow(
+        "Authentication required",
+      );
+      expect(redirect).toHaveBeenCalledWith(
+        expect.stringContaining("/access?next="),
+      );
+    });
   });
 });

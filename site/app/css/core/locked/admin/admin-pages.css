@@ -279,7 +279,8 @@ body:has(.admin-page--svg-engine) {
     word-break: break-word;
   }
 
-  /* Preview + product form the card header */
+  /* Preview + product form the card header (SVG inventory).
+   * Managed catalog uses Name as the sole header when no Preview column. */
   table[data-phone-layout="cards-priority"] td[data-label="Preview"] {
     grid-column: 1;
     grid-row: 1;
@@ -294,7 +295,8 @@ body:has(.admin-page--svg-engine) {
     content: none;
   }
 
-  table[data-phone-layout="cards-priority"] td[data-label="Product"] {
+  table[data-phone-layout="cards-priority"] td[data-label="Product"],
+  table[data-phone-layout="cards-priority"] td[data-label="Name"] {
     grid-column: 2;
     grid-row: 1;
     display: flex;
@@ -305,11 +307,21 @@ body:has(.admin-page--svg-engine) {
     border-top: none;
   }
 
-  table[data-phone-layout="cards-priority"] td[data-label="Product"]::before {
+  /* Catalog rows have no Preview cell — Name spans full card width as title */
+  table[data-phone-layout="cards-priority"]
+    tbody
+    tr:not(.admin-table__group):not(:has(td[data-label="Preview"]))
+    td[data-label="Name"] {
+    grid-column: 1 / -1;
+  }
+
+  table[data-phone-layout="cards-priority"] td[data-label="Product"]::before,
+  table[data-phone-layout="cards-priority"] td[data-label="Name"]::before {
     content: none;
   }
 
-  table[data-phone-layout="cards-priority"] td[data-label="Product"] .admin-table__primary {
+  table[data-phone-layout="cards-priority"] td[data-label="Product"] .admin-table__primary,
+  table[data-phone-layout="cards-priority"] td[data-label="Name"] .admin-table__primary {
     font-size: 0.95rem;
     font-weight: 700;
     line-height: 1.25;
@@ -326,13 +338,15 @@ body:has(.admin-page--svg-engine) {
     border-radius: 2px;
   }
 
-  table[data-phone-layout="cards-priority"] td[data-label="Product"] .admin-table__secondary {
+  table[data-phone-layout="cards-priority"] td[data-label="Product"] .admin-table__secondary,
+  table[data-phone-layout="cards-priority"] td[data-label="Name"] .admin-table__secondary {
     font-size: 0.8125rem;
     line-height: 1.35;
   }
 
   /* Remaining meta rows: label | value across full card width */
-  table[data-phone-layout="cards-priority"] td:not([data-label="Preview"]):not([data-label="Product"]) {
+  table[data-phone-layout="cards-priority"]
+    td:not([data-label="Preview"]):not([data-label="Product"]):not([data-label="Name"]) {
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: minmax(5rem, 32%) minmax(0, 1fr);
@@ -341,7 +355,8 @@ body:has(.admin-page--svg-engine) {
     border-top: 1px solid var(--border-soft);
   }
 
-  table[data-phone-layout="cards-priority"] td:not([data-label="Preview"]):not([data-label="Product"])::before {
+  table[data-phone-layout="cards-priority"]
+    td:not([data-label="Preview"]):not([data-label="Product"]):not([data-label="Name"])::before {
     content: attr(data-label);
     font-size: 0.7rem;
     font-weight: 700;
@@ -353,7 +368,8 @@ body:has(.admin-page--svg-engine) {
   }
 
   table[data-phone-layout="cards-priority"] td[data-label="Lifecycle"] .admin-badge,
-  table[data-phone-layout="cards-priority"] td[data-label="Symbol"] .admin-badge {
+  table[data-phone-layout="cards-priority"] td[data-label="Symbol"] .admin-badge,
+  table[data-phone-layout="cards-priority"] td[data-label="Status"] .admin-badge {
     max-width: 100%;
     white-space: normal;
     text-transform: none;
@@ -394,6 +410,31 @@ body:has(.admin-page--svg-engine) {
     justify-content: center;
     min-height: 2.75rem; /* ≥44px */
     min-width: 0;
+  }
+
+  /* Managed catalog panel (no SVG preview column): keep cards within viewport */
+  .admin-catalog-inventory,
+  .admin-catalog-inventory .admin-table-wrap {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .admin-catalog-inventory .admin-table-wrap[data-phone-layout="cards-priority"] {
+    overflow-x: visible;
+  }
+
+  /* Catalog paging: full-width ≥44px controls under the card list */
+  .admin-catalog-paging {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 0.55rem 0.15rem 0.35rem;
+  }
+
+  .admin-catalog-paging .admin-btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 2.75rem; /* ≥44px */
   }
 
   /* Family / group headers stay full-width labels, not cards */

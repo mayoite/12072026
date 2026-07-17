@@ -1,6 +1,14 @@
-import { describe, expect, it, afterEach } from "vitest";
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { describe, expect, it, afterEach, beforeEach, vi } from "vitest";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { WorkspaceShell } from "@/features/planner/editor/WorkspaceShell";
+import workspaceStyles from "@/features/planner/editor/workspace.module.css";
 
 afterEach(() => cleanup());
 
@@ -17,6 +25,36 @@ describe("WorkspaceShell", () => {
     );
     expect(document.body.textContent).toMatch(/Shell Plan/);
     expect(screen.getByTestId("canvas")).toHaveTextContent("canvas");
+  });
+
+  it("marks shell paper surface honesty (PF-32 ecru stack via surface tokens)", () => {
+    const { container } = render(
+      <WorkspaceShell projectName="Ecru shell">
+        <div>canvas</div>
+      </WorkspaceShell>,
+    );
+    const shell = container.querySelector("[data-planner-surface='paper']");
+    expect(shell).not.toBeNull();
+    expect(shell).toHaveAttribute("data-planner-surface", "paper");
+    // CSS module must own paper tokens — not a cool pure-white hard-code.
+    expect(workspaceStyles.shell).toBeTruthy();
+    expect(screen.getByTestId("planner-topbar")).toHaveAttribute(
+      "data-mobile-chrome",
+      "top",
+    );
+  });
+
+  it("passes slim chromeMode through to TopBar for mobile density", () => {
+    render(
+      <WorkspaceShell projectName="Slim shell" chromeMode="slim">
+        <div>canvas</div>
+      </WorkspaceShell>,
+    );
+    const topbar = screen.getByTestId("planner-topbar");
+    expect(topbar).toHaveAttribute("data-chrome-mode", "slim");
+    expect(
+      document.querySelector("[data-chrome-mode='slim']"),
+    ).not.toBeNull();
   });
 
   it("left panel title is Inventory (aligned with TopBar toggle)", () => {
@@ -79,5 +117,60 @@ describe("WorkspaceShell", () => {
     expect(floating).toHaveAttribute("data-state", "floating");
     expect(floating).toHaveAttribute("data-floating", "true");
     expect(within(floating).getByText("Floating")).toBeInTheDocument();
+  });
+
+  describe("P3 mobile sheets (mutually exclusive inventory / properties)", () => {
+    beforeEach(() => {
+      localStorage.clear();
+      Object.defineProperty(window, "innerWidth", {
+        configurable: true,
+        value: 390,
+      });
+    });
+
+    afterEach(() => {
+      cleanup();
+      vi.restoreAllMocks();
+    });
+
+    it("opens only one side sheet at a time on small viewport", async () => {
+      const { container } = render(
+        <WorkspaceShell
+          projectName="Phone sheets"
+          leftPanel={<div data-testid="inv-body">Inventory body</div>}
+          rightPanel={<div data-testid="prop-body">Properties body</div>}
+          chromeMode="slim"
+        >
+          <div>canvas</div>
+        </WorkspaceShell>,
+      );
+
+      await waitFor(() => {
+        expect(container.querySelector("[data-viewport='small']")).not.toBeNull();
+      });
+
+      const invToggle = screen.getByRole("button", {
+        name: /Toggle inventory panel/i,
+      });
+      const propToggle = screen.getByRole("button", {
+        name: /Toggle properties panel/i,
+      });
+
+      fireEvent.click(invToggle);
+      await waitFor(() => {
+        expect(container.querySelector("[data-panel-active='left']")).not.toBeNull();
+      });
+      expect(invToggle).toHaveAttribute("aria-pressed", "true");
+      expect(propToggle).toHaveAttribute("aria-pressed", "false");
+
+      fireEvent.click(propToggle);
+      await waitFor(() => {
+        expect(container.querySelector("[data-panel-active='right']")).not.toBeNull();
+      });
+      expect(propToggle).toHaveAttribute("aria-pressed", "true");
+      expect(invToggle).toHaveAttribute("aria-pressed", "false");
+      // Mutual exclusion: only one active panel attr value.
+      expect(container.querySelectorAll("[data-panel-active='left']").length).toBe(0);
+    });
   });
 });

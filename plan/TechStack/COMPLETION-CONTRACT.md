@@ -2,8 +2,14 @@
 
 **Status:** OPEN  
 **Authority:** This file is the **execution contract** for **toolchain, engines, workspace, CI, and dependency health**.  
+**Relation to plan files:**  
+- `FINISH-PLAN.md` — same phase journey (**T0–T8**) and **TF** failure registry; detailed checklists  
+- `FEATURES.md` — live code map (engines, scripts, env **names**, CI → path → gap)  
+- Where this file and `FINISH-PLAN.md` conflict on **how to prove done**, **this file wins**  
+- Phase scope and TF ids stay **1:1** with `FINISH-PLAN.md`  
+
 **Relation to fact docs:**  
-- `docs/Lockedfiles/03-dependencies-engines-current.md` — architectural limits (engines, i18n, persistence rules)  
+- `docs/Lockedfiles/03-dependencies-engines-current.md` — architectural limits  
 - `docs/architecture/11-RUNTIME-ARCHITECTURE.md` — live runtime shape  
 - `docs/architecture/08-DATABASE-SVG-CONTRACT.md` — DB/R2 SVG target  
 - `docs/architecture/10-SECURITY-BENCHMARK.md` — security release IDs  
@@ -13,7 +19,7 @@ Where a fact doc and this file conflict on **how to prove done**, **this file wi
 Where they conflict on **which package version is installed**, **lockfile wins**.
 
 **Not:** Site copy, Planner canvas features, Admin product UX. Those use their own contracts.  
-**Agent reports:** `../../agent-reports/` — short multi-files + INDEX only.
+**Agent reports:** `../../agent-reports/TECH-STACK.md` + short dated slices (≤40–50 lines).
 
 ---
 
@@ -21,13 +27,13 @@ Where they conflict on **which package version is installed**, **lockfile wins**
 
 A **maintainable, installable, releasable monorepo** where:
 
-1. **One install path** — pnpm from repo root; Node and pnpm pins are real.  
+1. **One install path** — pnpm from repo root; Node and pnpm pins are real and **CI-aligned**.  
 2. **Engines stay singular** — one interactive 2D engine, one 3D stack, one admin SVG authoring embed, server owns publish.  
 3. **Dependencies earn their keep** — direct deps have live imports or documented build roles.  
 4. **Gates are honest** — layout, lint, typecheck, test, build, secrets, release:gate are runnable and green for release claims.  
-5. **Secrets and envs** — never in git; `.env.local` pattern enforced.  
+5. **Secrets and envs** — never in git; `.env.local` pattern enforced; names only in docs.  
 6. **Storage and DB clients** — match locked policy (Drizzle/postgres, R2 via S3 API, no new unauthorized stack for DB-SVG).  
-7. **Docs stay thin** — `docs/` budget; stack policy not duplicated as fiction.
+7. **Docs stay thin** — stack policy not duplicated as fiction; FEATURES tracks code.
 
 **Benchmark:** Stripe/Vercel-class monorepo hygiene (reproducible installs, strict CI, lockfile truth) — not their product UI.
 
@@ -47,6 +53,7 @@ A **maintainable, installable, releasable monorepo** where:
 | No second canvas engine | Fabric only for interactive 2D |
 | No competitor stack | No competitor packages, assets, or trade dress |
 | Secrets | `.env.local` / platform secrets only |
+| Plan ticks ≠ PASS | FEATURES/FINISH checkboxes need §2.1 evidence |
 
 ### 2.1 What counts as PASS
 
@@ -55,11 +62,11 @@ All that apply:
 1. **Policy** written in Lockedfiles / architecture docs matches code.  
 2. **Automated proof** — named command exit 0.  
 3. **Dependency claim** — `pnpm why` / import grep / lockfile entry shown when asserting “in use” or “removed”.  
-4. **CI claim** — workflow file path + last green or local repro of same script.  
+4. **CI claim** — workflow file path + pin equals root `packageManager` intent + last green or local repro of same script.  
 5. **No silent pin drift** — root `packageManager` and CI pnpm pin agree.  
 6. Status flipped only with that evidence.
 
-**PARTIAL** = policy written, gate not green, or env-dependent.
+**PARTIAL** = policy or code written, gate not green, or env-dependent.
 
 ---
 
@@ -81,7 +88,8 @@ From **repo root**. All exit **0** for a full stack PASS:
 | Secrets | `pnpm run lint:secrets` |
 | Sharp / native | `pnpm run check-sharp` (as required by build) |
 | Build | `pnpm run build` |
-| Full release | `pnpm run release:gate` (or turbo equivalent) |
+| Full release | `pnpm run release:gate` (turbo → site `release:gate`) |
+| Fast release | `pnpm run release:gate:fast` (PR path) |
 | Tech-docs (if claimed) | `pnpm run tech-docs:gate` |
 
 Product tracks may ship features under FAIL gates only if owner accepts **OPEN** release.  
@@ -101,7 +109,8 @@ Done / Not done
 ### 3.3 Agents
 
 Implementer changes toolchain or deps → parent re-runs install-from-clean reasoning, `gate`, and dependency proof.  
-No “removed unused package” PASS without lockfile + import grep evidence.
+No “removed unused package” PASS without lockfile + import grep evidence.  
+No FINISH checkbox PASS without parent evidence in the same session.
 
 ---
 
@@ -120,10 +129,10 @@ No “removed unused package” PASS without lockfile + import grep evidence.
 | Test runners | Vitest, Playwright configs under `site/config/build/` |
 | CI | `.github/workflows/*` pins aligned to root |
 | Secrets lint | secretlint scripts |
-| Turbo | release orchestration |
-| Env contract | `.env.example` vs server readers (`lib/env.server.ts`) |
+| Turbo | `turbo.json` release orchestration |
+| Env contract | `.env.example` vs `lib/env.server.ts` vs `validate-launch-env.mjs` (**names only**) |
 | DB clients | Drizzle, postgres, Supabase clients (boundaries only) |
-| Object storage | R2 via S3 SDK policy |
+| Object storage | R2 via AWS S3 SDK policy |
 | i18n stack | next-intl only on Site |
 | Direct dependency hygiene | Live import or build role |
 
@@ -160,6 +169,7 @@ No “removed unused package” PASS without lockfile + import grep evidence.
 | Runtime writes | No production writes under `site/public` for generated GLB |
 | Handwritten `any` | Forbidden in product/test source |
 | Licenses | Verify before add; paid assets approved |
+| CI pins | pnpm action version matches root `packageManager` major.minor.patch intent |
 
 ---
 
@@ -175,145 +185,59 @@ No “removed unused package” PASS without lockfile + import grep evidence.
 
 ---
 
-## 7. Failure registry (TS) — tech stack
+## 7. Failure registry
+
+**Canonical ids for execution:** **TF-01…TF-24** in `FINISH-PLAN.md`.  
+**Synonyms:** **TS-01…TS-22** = TF-01…TF-22 (same bar). Prefer TF in finish reports.
 
 Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**.
 
-| ID | Failure | Bar to clear | Status seed |
-|----|---------|--------------|-------------|
-| TS-01 | Nested install possible / used | Guard + CI only root install | OPEN until grepped CI |
-| TS-02 | pnpm pin drift (root vs CI) | Identical pnpm major/minor intent | OPEN |
-| TS-03 | Node engine violated in CI image | Node ≥24 on CI | OPEN |
-| TS-04 | Second 2D canvas engine introduced | Fabric-only grep clean | OPEN |
-| TS-05 | Direct dep with no import / role | Remove or document | OPEN |
-| TS-06 | `release:gate` / `gate` not green | Fresh exit 0 | OPEN |
-| TS-07 | Typecheck flakes on `.next/dev/types` | Stable tsc story (exclude or generate) | FAIL if currently flaking |
-| TS-08 | Secrets in tree | `lint:secrets` exit 0; no committed secrets | OPEN |
-| TS-09 | Env example drift | `.env.example` covers required server keys (names only) | OPEN |
-| TS-10 | DB-SVG marketed as live authority | Failures.md + Lockedfiles honest; disk live | PARTIAL (documented) |
-| TS-11 | Dual-write incomplete treated as PASS | Dual-write proved or OPEN | OPEN |
-| TS-12 | Tech-docs broken / unowned | tech-docs gate green or package optional documented | OPEN |
-| TS-13 | Sharp / native binary broken on Windows | `check-sharp` + build | OPEN |
-| TS-14 | Playwright / Vitest misconfig for Windows | forks pool; paths work | PARTIAL if unit green |
-| TS-15 | Turbo cache hides real FAIL | Clean run or cache-bust proof | OPEN |
-| TS-16 | License / competitor package risk | Audit list; none present | OPEN |
-| TS-17 | i18n second framework introduced | next-intl only | OPEN |
-| TS-18 | Supabase client boundary violated | No new catalog `.from()` paths | OPEN |
-| TS-19 | Production GLB or publish writes `site/public` | Code path 501 / storage only | PARTIAL (recent intent) |
-| TS-20 | Docs budget broken / stack fiction in docs | ≤23 docs files; Lockedfiles matches code | OPEN |
-| TS-21 | **NEW** Install/docs claim pnpm@11 but CI differs | Align pins | OPEN |
-| TS-22 | **NEW** Hoisted monorepo phantom deps | No app import of undeclared package | OPEN |
+| ID | Failure | Bar to clear | Status seed (2026-07-17 inventory) |
+|----|---------|--------------|-------------------------------------|
+| TS-01 / TF-01 | Nested install possible / used | Guard + CI only root install | OPEN |
+| TS-02 / TF-02 | pnpm pin drift (root vs CI) | packageManager 11.13.0 = CI action version | **PASS** (CI 11.13.0, T-W1) |
+| TS-03 / TF-03 | Node engine violated in CI image | Node ≥24 on CI | PARTIAL |
+| TS-04 / TF-04 | Second 2D canvas engine introduced | Fabric-only grep clean | PARTIAL |
+| TS-05 / TF-05 | Direct dep with no import / role | Remove or document | OPEN |
+| TS-06 / TF-06 | `release:gate` / `gate` not green | Fresh exit 0 | OPEN |
+| TS-07 / TF-07 | Typecheck flakes on `.next/dev/types` | Stable tsc story (exclude or generate) | OPEN |
+| TS-08 / TF-08 | Secrets in tree | `lint:secrets` exit 0; no committed secrets | OPEN |
+| TS-09 / TF-09 | Env example drift | `.env.example` covers required server keys (names only) | PARTIAL — FEATURES env table; OpenAI optional |
+| TS-10 / TF-10 | DB-SVG marketed as live authority | Failures.md + Lockedfiles honest; disk live | PARTIAL |
+| TS-11 / TF-11 | Dual-write incomplete treated as PASS | Dual-write proved or OPEN | OPEN |
+| TS-12 / TF-12 | Tech-docs broken / unowned | tech-docs gate green or package optional documented | OPEN |
+| TS-13 / TF-13 | Sharp / native binary broken on Windows | `check-sharp` + build | OPEN |
+| TS-14 / TF-14 | Playwright / Vitest misconfig for Windows | forks pool; paths work | PARTIAL |
+| TS-15 / TF-15 | Turbo cache hides real FAIL | Clean run or cache-bust proof | OPEN |
+| TS-16 / TF-16 | License / competitor package risk | Audit list; none present | OPEN |
+| TS-17 / TF-17 | i18n second framework introduced | next-intl only | PARTIAL |
+| TS-18 / TF-18 | Supabase client boundary violated | No new catalog `.from()` paths | OPEN |
+| TS-19 / TF-19 | Production GLB or publish writes `site/public` | Code path 501 / storage only | PARTIAL |
+| TS-20 / TF-20 | Docs budget broken / stack fiction in docs | Lockedfiles matches code; plan trio present | PARTIAL |
+| TS-21 / TF-21 | Install/docs claim pnpm@11.13 but CI differs | Align pins | **PASS** (T-W1) |
+| TS-22 / TF-22 | Hoisted monorepo phantom deps | No app import of undeclared package | OPEN |
+| TF-23 | CI logs under `site/results/` | Prefer root `results/` | OPEN |
+| TF-24 | Fast gate CI timeout | Job succeeds or timeout adjusted with proof | OPEN |
 
 ---
 
-## 8. Execution phases (T0–T8)
+## 8. Execution phases (T0–T8) — 1:1 with FINISH-PLAN
 
-### T0 — Inventory and honesty
+Checklists live in `FINISH-PLAN.md`. Contract summary:
 
-- [ ] Snapshot root + site engines from package.json  
-- [ ] Confirm live canvas/3D/excalidraw imports  
-- [ ] List Failures.md stack-related blockers  
-- [ ] Diff Lockedfiles vs code  
+| Phase | Name | Exit |
+|-------|------|------|
+| **T0** | Inventory and honesty | Honest TF registry + FEATURES snapshot |
+| **T1** | Install and workspace | Clean install; **CI pnpm = packageManager** |
+| **T2** | Engine monoculture | Grep policy clean |
+| **T3** | Dependency hygiene | TF-05 clear for site |
+| **T4** | Type, lint, unit stability | lint + typecheck + test exit 0 |
+| **T5** | Security and secrets | secretlint + env contract |
+| **T6** | Build and release | build + release:gate honest |
+| **T7** | Data plane clients | Lockedfiles persistence matches code; disk SVG honesty |
+| **T8** | Docs and ops closure | Reproducible from Readme + lockfile |
 
-**Exit:** Honest TS registry.  
-**Proof:** short inventory report + commands.
-
-### T1 — Install and workspace
-
-- [ ] Root-only install documented and guarded  
-- [ ] Workspace packages only: site, tech-docs-generator  
-- [ ] No nested package-lock  
-- [ ] Node ≥24, pnpm pin match CI  
-
-**Exit:** Clean install from empty store reproduces.  
-**Proof:** `pnpm install` exit 0; guard script test.
-
-### T2 — Engine monoculture
-
-- [ ] Fabric only for interactive 2D  
-- [ ] Three stack only for 3D  
-- [ ] Excalidraw only for admin SVG studio embed  
-- [ ] No react-router in site (tech-docs SPA only)  
-
-**Exit:** Grep policy clean.  
-**Proof:** import inventory script or rg evidence in report.
-
-### T3 — Dependency hygiene
-
-- [ ] Every direct `site` dependency has import or build role  
-- [ ] Remove or justify dead deps  
-- [ ] License check on additions  
-- [ ] No competitor packages  
-
-**Exit:** TS-05 clear for site package.  
-**Proof:** dep audit report + lockfile.
-
-### T4 — Type, lint, unit stability
-
-- [ ] lint max-warnings 0  
-- [ ] typecheck stable (fix `.next` include race)  
-- [ ] vitest full suite green or FAIL list owned  
-- [ ] Windows forks pool preserved  
-
-**Exit:** `lint` + `typecheck` + `test` exit 0.  
-**Proof:** command exits same session.
-
-### T5 — Security and secrets
-
-- [ ] `lint:secrets` green  
-- [ ] CSRF / withAuth patterns not regressed by stack changes  
-- [ ] DEV bypass production-disabled  
-- [ ] Env example without secret values  
-
-**Exit:** SEC-REL-03 spirit for secrets + dep gates.  
-**Proof:** secretlint + sample auth unit.
-
-### T6 — Build and release
-
-- [ ] `check-sharp` + site build + tech-docs build  
-- [ ] `release:gate` or documented waiver in Failures.md  
-- [ ] Vercel root = site; no wrong root deploy  
-
-**Exit:** Production artifact builds.  
-**Proof:** build exit 0; note deploy is owner-only.
-
-### T7 — Data plane clients (boundary only)
-
-- [ ] Drizzle schemas present for owned tables  
-- [ ] R2 client credential pair integrity  
-- [ ] Live vs target SVG authority documented (disk live)  
-- [ ] No unauthorized new DB packages for cutover  
-
-**Exit:** Lockedfiles persistence table matches code.  
-**Proof:** file paths + Failures.md DB-SVG open items honest.
-
-### T8 — Docs and ops closure
-
-- [ ] Lockedfiles updated when engines change  
-- [ ] Runtime architecture date + code agree  
-- [ ] docs budget held  
-- [ ] Agent/process checks green  
-
-**Exit:** Stack claim reproducible by another engineer from docs + lockfile.  
-**Proof:** docs purity + layout + gate scripts.
-
----
-
-## 9. Required proof matrix
-
-| Claim | Minimum proof |
-|-------|----------------|
-| “pnpm only” | Guard script + CI uses pnpm |
-| “Node 24” | engines field + CI node version |
-| “Fabric only 2D” | No konva/paper/pixi interactive imports in site |
-| “No public GLB write” | Route/storage tests exit 0 |
-| “Deps clean” | Each direct dep: import path or BUILD-ROLE note in Lockedfiles |
-| “Release ready stack” | §3.1 full table green |
-| “DB is SVG authority” | **Forbidden** until 08-contract cutover proved |
-
----
-
-## 10. Dependency order
+### Order
 
 ```text
 T0 inventory
@@ -329,39 +253,56 @@ T8 docs (continuous; gates release claim)
 
 ---
 
-## 11. How this exceeds Lockedfiles alone
+## 9. Required proof matrix
 
-| Area | Lockedfiles / runtime docs | This contract |
-|------|----------------------------|---------------|
+| Claim | Minimum proof |
+|-------|----------------|
+| “pnpm only” | Guard script + CI uses pnpm |
+| “pnpm pin aligned” | Root `packageManager` string matches CI `pnpm/action-setup` version |
+| “Node 24” | engines field + CI node version |
+| “Fabric only 2D” | No konva/paper/pixi interactive imports in site |
+| “No public GLB write” | Route/storage tests exit 0 |
+| “Deps clean” | Each direct dep: import path or BUILD-ROLE note in Lockedfiles |
+| “Release ready stack” | §3.1 full table green |
+| “DB is SVG authority” | **Forbidden** until 08-contract cutover proved |
+
+---
+
+## 10. How this exceeds Lockedfiles alone
+
+| Area | Lockedfiles / runtime docs | This contract + FINISH-PLAN |
+|------|----------------------------|----------------------------|
 | Facts | Version/policy statements | **PASS recipe** + commands |
-| Engines | Table | Phase T2 + grep proof |
-| Deps | Prefer existing | TS-05 + audit phase |
-| CI | Mentioned loosely | §3.1 full gate table |
-| Failures | Failures.md generic | **TS-01…TS-22** registry |
+| Engines | Table | Phase T2 + FEATURES paths + grep proof |
+| Deps | Prefer existing | TF-05 + audit phase |
+| CI | Mentioned loosely | §3.1 + FEATURES CI table + TF-02 |
+| Failures | Failures.md generic | **TF/TS registry** |
 | Agents | — | Parent re-verify + short reports |
 | False completion | Easy if MD outdated | Lockfile + exit 0 required |
 
 ---
 
-## 12. Immediate priority queue
+## 11. Immediate priority queue
 
-1. **T0** — inventory engines + pins vs CI.  
-2. **TS-07** — stabilize typecheck (`.next/dev/types` race).  
-3. **T4** — lint/typecheck/test green.  
-4. **T3** — dead direct deps.  
-5. **T6** — build + release:gate.  
-6. **T7** — keep DB-SVG honesty (TS-10/11).  
-7. **T8** — Lockedfiles sync when anything engine-related lands.
+1. **T0** complete with recorded gate exits.  
+2. ~~**TF-02 / TF-21**~~ — CI pnpm **11.13.0** (**PASS**, T-W1).  
+3. **TF-07** — stabilize typecheck (`.next/dev/types` race).  
+4. **T4** — lint/typecheck/test green.  
+5. **T3** — dead direct deps.  
+6. **T6** — build + release:gate.  
+7. **T7** — keep DB-SVG honesty (TF-10/11).  
+8. **T8** — Lockedfiles sync when anything engine-related lands.
 
 ---
 
-## 13. Owner acceptance
+## 12. Owner acceptance
 
 Tech stack is **complete** (healthy for release) only when:
 
 1. §3.1 gates all green (or each miss is an active `Failures.md` item with owner accept).  
-2. No Critical TS open (nested install, secret leak, second canvas engine, false DB authority).  
+2. No Critical TF open (nested install, secret leak, second canvas engine, false DB authority, **silent pin drift**).  
 3. Lockedfiles + 11-RUNTIME match live imports and lockfile.  
-4. Another engineer can install and pass `pnpm run gate` from clean clone instructions in `Readme.md`.
+4. `FEATURES.md` paths still resolve.  
+5. Another engineer can install and pass `pnpm run gate` from clean clone instructions in `Readme.md`.
 
 Until then: **Status remains OPEN.**

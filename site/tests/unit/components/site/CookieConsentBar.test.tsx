@@ -2,6 +2,12 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { CookieConsentBar } from '@/components/site/CookieConsentBar';
 
+const flushAnalyticsAfterConsent = vi.fn();
+
+vi.mock('@/lib/analytics/siteEvents', () => ({
+  flushAnalyticsAfterConsent: () => flushAnalyticsAfterConsent(),
+}));
+
 describe('CookieConsentBar Component', () => {
   let mockCookieStore: Record<string, string> = {};
   const originalCookie = Object.getOwnPropertyDescriptor(document, 'cookie');
@@ -9,6 +15,7 @@ describe('CookieConsentBar Component', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     mockCookieStore = {};
+    flushAnalyticsAfterConsent.mockClear();
 
     // Mock document.cookie
     Object.defineProperty(document, 'cookie', {
@@ -86,7 +93,7 @@ describe('CookieConsentBar Component', () => {
     expect(screen.queryByRole('dialog')).toBeNull();
   });
 
-  it('sets cookies, dispatches event and hides on clicking Accept All', () => {
+  it('sets cookies, dispatches event and hides on clicking Accept All', async () => {
     const dispatchSpy = vi.spyOn(window, 'dispatchEvent');
 
     render(<CookieConsentBar />);
@@ -103,6 +110,11 @@ describe('CookieConsentBar Component', () => {
         detail: { value: 'accepted' },
       })
     );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(flushAnalyticsAfterConsent).toHaveBeenCalled();
 
     expect(screen.queryByRole('dialog')).toBeNull();
   });
@@ -131,6 +143,19 @@ describe('CookieConsentBar Component', () => {
       })
     );
 
+    expect(flushAnalyticsAfterConsent).not.toHaveBeenCalled();
     expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
+  it('flushes queued analytics after timed auto-accept', async () => {
+    render(<CookieConsentBar />);
+
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+      await Promise.resolve();
+    });
+
+    expect(mockCookieStore['oando_cookie_consent']).toBe('accepted');
+    expect(flushAnalyticsAfterConsent).toHaveBeenCalled();
   });
 });

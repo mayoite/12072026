@@ -1,11 +1,17 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { HomepageHero } from '@/components/home/HomepageHero';
-import { HOMEPAGE_HERO_IMAGES } from '@/features/site/data/homepage';
+import {
+  HOMEPAGE_HERO_IMAGES,
+  joinAccessibleTitleLines,
+} from '@/features/site/data/homepage';
 import enMessages from '@/i18n/messages/en.json';
 
 const hero = enMessages.home.hero;
 const heroTitle = hero.title as string[];
+const accessibleTitle = joinAccessibleTitleLines(heroTitle);
+/** Glued DOM text that block-level line spans produce without an accessible join. */
+const gluedTitle = heroTitle.join('');
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/',
@@ -40,20 +46,38 @@ vi.mock('@/lib/helpers/motion', () => ({
 }));
 
 describe('HomepageHero Component', () => {
+  it('exposes exact accessible h1 name with spaces between animated lines (SF-01 / SITE-HOME-02)', () => {
+    render(<HomepageHero />);
+
+    const heading = screen.getByRole('heading', { level: 1 });
+    expect(heading).toHaveAttribute('id', 'home-hero-heading');
+    expect(heading).toHaveAccessibleName(accessibleTitle);
+    expect(accessibleTitle).toBe('Spaces that work as hard as your team');
+    expect(accessibleTitle).not.toMatch(/workas|asyour/);
+    // Must not collapse to the glued visual-only concatenation.
+    expect(accessibleTitle).not.toBe(gluedTitle);
+    expect(heading).not.toHaveAccessibleName(gluedTitle);
+
+    const srOnly = heading.querySelector('.sr-only');
+    expect(srOnly).not.toBeNull();
+    expect(srOnly).toHaveTextContent(accessibleTitle);
+
+    const decorative = heading.querySelector('[aria-hidden="true"]');
+    expect(decorative).not.toBeNull();
+    for (const line of heroTitle) {
+      expect(within(decorative as HTMLElement).getByText(line)).toBeInTheDocument();
+    }
+  });
+
   it('renders hero title and details correctly', () => {
     render(<HomepageHero />);
 
-    const accessibleTitle = heroTitle.join(' ');
     expect(
       screen.getByRole('heading', {
         level: 1,
         name: accessibleTitle,
       }),
     ).toBeInTheDocument();
-
-    // Accessible name includes spaces between animated lines (SITE-A11Y)
-    expect(accessibleTitle).toBe('Spaces that work as hard as your team');
-    expect(accessibleTitle).not.toMatch(/workas|asyour/);
 
     // Visual line copy still present (aria-hidden decoration)
     heroTitle.forEach((line) => {

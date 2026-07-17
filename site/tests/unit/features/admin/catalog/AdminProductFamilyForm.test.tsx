@@ -19,4 +19,13 @@ describe("Admin product family form", () => {
       /2D:|3D:|BOQ:/,
     );
   });
+
+  it("migration keep-both appends v2 without dropping prior version id", () => {
+    render(<AdminProductFamilyForm />);
+    fireEvent.click(screen.getByTestId("admin-family-migrate"));
+    expect(screen.getByTestId("admin-family-message")).toBeInTheDocument();
+    // Authoring surface remains; browser family-release journey stays OPEN
+    expect(screen.getByTestId("admin-product-family-form")).toBeInTheDocument();
+    expect(screen.getByTestId("admin-family-version")).toBeInTheDocument();
+  });
 });

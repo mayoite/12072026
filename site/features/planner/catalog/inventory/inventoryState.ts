@@ -9,6 +9,7 @@
  */
 
 
+import type { PlannerAvailabilityStatus } from "../catalogTypes";
 import type { InventorySortKey, InventoryDensity } from "./inventoryTaxonomy";
 
 // ── Inventory panel state ──
@@ -48,6 +49,18 @@ export interface InventoryPanelState {
   selectedRoomGroupId: string | null;
   /** Selected style filter (null = all) */
   selectedStyleGroupId: string | null;
+  /** Product family key filter (PF-22; null = all) */
+  selectedFamilyKey: string | null;
+  /** Normalized material facet (null = all) */
+  selectedMaterial: string | null;
+  /** Availability facet (null = all) */
+  selectedAvailability: PlannerAvailabilityStatus | null;
+  /** Seat-count facet (null = all) */
+  selectedSeatCount: number | null;
+  /** Min width mm facet (null = unbound) */
+  minWidthMm: number | null;
+  /** Max width mm facet (null = unbound) */
+  maxWidthMm: number | null;
   /** Active sort order */
   sortOrder: InventorySortKey;
   /** Display density */
@@ -77,6 +90,12 @@ export function defaultInventoryPanelState(): InventoryPanelState {
     selectedSubCategoryId: null,
     selectedRoomGroupId: null,
     selectedStyleGroupId: null,
+    selectedFamilyKey: null,
+    selectedMaterial: null,
+    selectedAvailability: null,
+    selectedSeatCount: null,
+    minWidthMm: null,
+    maxWidthMm: null,
     sortOrder: "name-asc",
     density: "comfortable",
     collapsedCategories: {},
@@ -99,6 +118,11 @@ export type InventoryCommand =
   | { type: "SELECT_SUBCATEGORY"; subCategoryId: string | null }
   | { type: "SELECT_ROOM"; roomGroupId: string | null }
   | { type: "SELECT_STYLE"; styleGroupId: string | null }
+  | { type: "SELECT_FAMILY"; familyKey: string | null }
+  | { type: "SELECT_MATERIAL"; material: string | null }
+  | { type: "SELECT_AVAILABILITY"; availability: PlannerAvailabilityStatus | null }
+  | { type: "SELECT_SEAT_COUNT"; seatCount: number | null }
+  | { type: "SET_WIDTH_RANGE"; minWidthMm: number | null; maxWidthMm: number | null }
   | { type: "SET_SORT"; sort: InventorySortKey }
   | { type: "SET_DENSITY"; density: InventoryDensity }
   | { type: "SET_FOCUSED_ITEM"; item: InventoryItemIdentity | null }
@@ -154,6 +178,20 @@ export function reduceInventoryCommand(
       return { ...state, selectedRoomGroupId: command.roomGroupId };
     case "SELECT_STYLE":
       return { ...state, selectedStyleGroupId: command.styleGroupId };
+    case "SELECT_FAMILY":
+      return { ...state, selectedFamilyKey: command.familyKey };
+    case "SELECT_MATERIAL":
+      return { ...state, selectedMaterial: command.material };
+    case "SELECT_AVAILABILITY":
+      return { ...state, selectedAvailability: command.availability };
+    case "SELECT_SEAT_COUNT":
+      return { ...state, selectedSeatCount: command.seatCount };
+    case "SET_WIDTH_RANGE":
+      return {
+        ...state,
+        minWidthMm: command.minWidthMm,
+        maxWidthMm: command.maxWidthMm,
+      };
     case "SET_SORT":
       return { ...state, sortOrder: command.sort };
     case "SET_DENSITY":

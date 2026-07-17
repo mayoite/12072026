@@ -13,6 +13,10 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
+import {
+  assertCatalogWriteAllowed,
+  CatalogIsolationError,
+} from "@/features/admin/svg-editor/storage/catalogWriteIsolation";
 
 /** Default timeout per Phase 04 §04-SUB-02 (10s). */
 export const DEFAULT_TIMEOUT_MS = 10_000;
@@ -167,6 +171,26 @@ export function runSvgPipeline(
   const _maxStderrBytes = options.maxStderrBytes ?? DEFAULT_MAX_STDERR_BYTES;
   void _timeoutMs;
   void _maxStderrBytes;
+
+  try {
+    assertCatalogWriteAllowed(svgPath);
+  } catch (cause) {
+    const message =
+      cause instanceof CatalogIsolationError
+        ? cause.message
+        : cause instanceof Error
+          ? cause.message
+          : String(cause);
+    return Promise.resolve({
+      ok: false,
+      reason: "writeFixtureError" as const,
+      stderr: "",
+      stdout: "",
+      exitCode: null,
+      error: message,
+      fixturePath: null,
+    });
+  }
 
   const skipCompile = options.skipCompile === true;
   const precompiledSvg =

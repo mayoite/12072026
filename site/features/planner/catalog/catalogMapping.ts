@@ -381,6 +381,11 @@ export function mapConfiguratorProductToCatalogItem(
       })()
       : undefined;
 
+  const familyLabel =
+    input.family && input.family.trim().length > 0
+      ? input.family.trim()
+      : undefined;
+
   const item: PlannerCatalogItem = {
     id: input.slug,
     slug: input.slug,
@@ -390,6 +395,7 @@ export function mapConfiguratorProductToCatalogItem(
     description,
     category,
     subCategory,
+    ...(familyLabel ? { family: familyLabel } : {}),
     taxonomyPath,
     dimensions,
     displayUnit: "cm",

@@ -55,8 +55,9 @@ export function CrmWorkspaceBanner() {
   return (
     <div className="admin-alert admin-alert--warn crm-workspace-banner" role="status">
       <p>
-        <strong>Browser-only CRM.</strong> Clients, projects, and quotes save in this browser
-        only. They do not sync across devices, and clearing site data removes them.
+        <strong>Browser-only CRM demo.</strong> Clients, projects, and quotes persist in this
+        browser&apos;s <code>localStorage</code> only. They do not sync across devices or to
+        the server, and clearing site data removes them. Not a production CRM.
         {demoEnv ? " Demo mode env is on — seeds may load on first visit." : null}
       </p>
       <div className="crm-workspace-banner__actions">

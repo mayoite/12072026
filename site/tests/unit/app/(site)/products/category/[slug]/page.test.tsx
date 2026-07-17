@@ -1,44 +1,82 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import LegacyCategorySlugPage from '@/app/(site)/products/category/[slug]/page';
-import { notFound } from 'next/navigation';
+/**
+ * Legacy alias /products/category/:slug must hard-redirect (or hard-404).
+ * Soft marketing shells are an SEO soft-404 risk.
+ */
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { notFound, permanentRedirect } from "next/navigation";
+import LegacyCategorySlugPage, {
+  generateMetadata,
+} from "@/app/(site)/products/category/[slug]/page";
 
-// Mock next/navigation
-vi.mock('next/navigation', () => ({
-  notFound: vi.fn(),
+vi.mock("next/navigation", () => ({
+  notFound: vi.fn(() => {
+    throw new Error("NOT_FOUND");
+  }),
+  permanentRedirect: vi.fn(() => {
+    throw new Error("NEXT_REDIRECT");
+  }),
 }));
 
-// Mock categories helpers
-vi.mock('@/lib/catalog/site/categories', () => ({
+vi.mock("@/lib/catalog/site/categories", () => ({
   normalizeRequestedCategoryId: (slug: string) => {
-    if (slug === 'valid-slug') return 'seating';
+    if (slug === "valid-slug" || slug === "seating") return "seating";
     return null;
   },
-  buildRequestedCategoryCatalog: vi.fn(() => []),
-  getCatalogCategoryLabel: vi.fn((id, name) => name || id),
-  getCatalogCategoryDescription: vi.fn((id, desc) => desc || ''),
 }));
 
-// Mock CategoryPageView
-vi.mock('@/app/(site)/products/[category]/CategoryPageView', () => ({
-  CategoryPageView: ({ categoryId }: any) => (
-    <div data-testid="category-page-view" data-id={categoryId}>
-      Category Page View
-    </div>
-  ),
+vi.mock("@/features/site/data/seo", () => ({
+  buildPageMetadata: (
+    _url: string,
+    opts: { title: string; description: string; path: string; indexable?: boolean },
+  ) => ({
+    title: opts.title,
+    description: opts.description,
+    path: opts.path,
+    robots: opts.indexable === false ? { index: false, follow: false } : { index: true, follow: true },
+  }),
 }));
 
-describe('LegacyCategorySlugPage Component', () => {
+vi.mock("@/lib/siteUrl", () => ({
+  SITE_URL: "https://oando.co.in",
+}));
+
+describe("LegacyCategorySlugPage (/products/category/[slug])", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('triggers notFound() if category slug is invalid', async () => {
-    await LegacyCategorySlugPage({ params: Promise.resolve({ slug: 'invalid-slug' }) });
-    expect(notFound).toHaveBeenCalled();
+  describe("generateMetadata", () => {
+    it("hard-404s unknown slugs instead of emitting indexable metadata", async () => {
+      await expect(
+        generateMetadata({ params: Promise.resolve({ slug: "not-a-category" }) }),
+      ).rejects.toThrow("NOT_FOUND");
+      expect(notFound).toHaveBeenCalled();
+    });
+
+    it("emits noindex metadata for valid legacy slugs (redirect target owns index)", async () => {
+      const meta = await generateMetadata({
+        params: Promise.resolve({ slug: "valid-slug" }),
+      });
+      expect(meta.title).toBe("seating");
+      expect(meta.robots).toEqual({ index: false, follow: false });
+    });
   });
 
-  it('renders CategoryPageView if category slug is valid', async () => {
-    const element = await LegacyCategorySlugPage({ params: Promise.resolve({ slug: 'valid-slug' }) });
-    expect(element).toBeDefined();
+  describe("page", () => {
+    it("hard-404s unknown category slugs", async () => {
+      await expect(
+        LegacyCategorySlugPage({ params: Promise.resolve({ slug: "invalid-slug" }) }),
+      ).rejects.toThrow("NOT_FOUND");
+      expect(notFound).toHaveBeenCalled();
+      expect(permanentRedirect).not.toHaveBeenCalled();
+    });
+
+    it("permanentRedirects valid slugs to /products/:category/", async () => {
+      await expect(
+        LegacyCategorySlugPage({ params: Promise.resolve({ slug: "valid-slug" }) }),
+      ).rejects.toThrow("NEXT_REDIRECT");
+      expect(permanentRedirect).toHaveBeenCalledWith("/products/seating/");
+      expect(notFound).not.toHaveBeenCalled();
+    });
   });
 });

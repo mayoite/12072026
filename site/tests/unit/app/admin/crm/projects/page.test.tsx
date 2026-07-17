@@ -18,8 +18,9 @@ describe("app/admin/crm/projects/page.tsx", () => {
       screen.getByRole("heading", { level: 1, name: "Projects" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("Active deals, floor plans, and delivery pipelines."),
+      screen.getByText(/Active deals, floor plans, and delivery pipelines/i),
     ).toBeInTheDocument();
+    expect(screen.getByText(/localStorage demo/i)).toBeInTheDocument();
     expect(screen.getByTestId("crm-projects-view")).toHaveTextContent(
       '"embedded":true',
     );

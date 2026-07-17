@@ -7,6 +7,7 @@ import {
   PUBLIC_INDEXABLE_STATIC_PATHS,
   SOLUTION_CATEGORY_SITEMAP_PATHS,
 } from '@/features/site/data/routeClassification';
+import { SITE_URL } from '@/lib/siteUrl';
 
 vi.mock('@/lib/catalog/site/getProducts', () => ({
   getCatalog: vi.fn(),
@@ -51,5 +52,16 @@ describe('sitemap.ts', () => {
     const result = await sitemap();
     expect(result.some(r => r.url.includes('slug1'))).toBe(true);
     expect(result.some(r => r.url.includes('p2'))).toBe(true);
+  });
+
+  it('prefixes every URL with SITE_URL and never hardcodes localhost', async () => {
+    vi.spyOn(getProducts, 'getCatalog').mockRejectedValue(new Error('fail'));
+    const result = await sitemap();
+    const base = SITE_URL.replace(/\/+$/, '');
+    expect(result.length).toBeGreaterThan(0);
+    for (const entry of result) {
+      expect(entry.url.startsWith(`${base}/`)).toBe(true);
+      expect(entry.url).not.toMatch(/localhost|127\.0\.0\.1/i);
+    }
   });
 });

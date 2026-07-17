@@ -77,12 +77,21 @@ describe("furnitureBoqBridge", () => {
   it("builds compact handoff payload without source ids", () => {
     const payload = furnitureBoqToHandoffPayload(sample);
     expect(payload.calculationHash).toBe("hash1");
+    expect(payload.currencyCode).toBe("INR");
+    expect(payload.totalItems).toBe(3);
+    expect(payload.totalLines).toBe(1);
+    expect(payload.pricingMode).toBe("demo-list-partial");
     expect(payload.lines[0]).toMatchObject({
       catalogId: "chair-1",
       quantity: 3,
       priceSource: "none",
+      priced: false,
+      unitPriceInr: 0,
     });
     expect(payload.lines[0]).not.toHaveProperty("sourceObjectIds");
+    expect(payload.lines[0]).not.toHaveProperty("geometryMode");
+    expect(payload).not.toHaveProperty("generatedAt");
+    expect(payload).not.toHaveProperty("unsupportedLines");
   });
 
   it("includes non-workstation furniture from a live project BOQ in quote cart", () => {

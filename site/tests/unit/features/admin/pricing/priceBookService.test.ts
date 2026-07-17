@@ -311,6 +311,50 @@ describe("priceBookService", () => {
     });
   });
 
+  describe("draft → approve → activate path", () => {
+    it("moves a draft through approve then activate to live commercial rates", async () => {
+      const store = memoryStore({
+        bookId: "pb-path",
+        activeVersionId: null,
+        versions: [
+          {
+            versionId: "v-draft",
+            effectiveFrom: "2026-07-01",
+            currency: "INR",
+            status: "draft",
+            rules: [rule],
+          },
+        ],
+      });
+
+      const approved = await approvePriceBookVersion(
+        store,
+        "pb-path",
+        "v-draft",
+        "author",
+      );
+      expect(approved.ok).toBe(true);
+      if (!approved.ok) throw new Error("expected approve ok");
+      expect(approved.action).toBe("approve");
+      expect(store.getState().versions[0]?.status).toBe("approved");
+      expect(store.getState().book.activeVersionId).toBeNull();
+
+      const activated = await activatePriceBookVersion(
+        store,
+        "pb-path",
+        "v-draft",
+        "approver",
+      );
+      expect(activated.ok).toBe(true);
+      if (!activated.ok) throw new Error("expected activate ok");
+      expect(activated.action).toBe("activate");
+      expect(activated.newActiveVersionId).toBe("v-draft");
+      expect(store.getState().book.activeVersionId).toBe("v-draft");
+      expect(store.getState().versions[0]?.status).toBe("active");
+      expect(activated.contract.activeVersionId).toBe("v-draft");
+    });
+  });
+
   describe("approvePriceBookVersion", () => {
     it("denies viewer", async () => {
       const store = memoryStore({

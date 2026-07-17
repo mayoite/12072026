@@ -23,6 +23,7 @@ import {
   BLOCK_DESCRIPTORS_DIR_DEFAULT,
   tryLoad,
 } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
+import { assertCatalogWriteAllowed } from "./catalogWriteIsolation";
 import {
   persistBlockDescriptor,
   unlinkBlockDescriptor,
@@ -435,7 +436,8 @@ export function bulkImportBlockDescriptors(
 ): BulkImportResult | (BulkImportPreview & { readonly ok: true; readonly dryRun: true }) {
   const options: BulkImportOptions =
     typeof dirOrOptions === "string" ? { dir: dirOrOptions } : dirOrOptions;
-  const dir = options.dir ?? BLOCK_DESCRIPTORS_DIR_DEFAULT;
+  const dir = path.resolve(options.dir ?? BLOCK_DESCRIPTORS_DIR_DEFAULT);
+  assertCatalogWriteAllowed(dir);
   const slugExists = (slug: string) => defaultSlugExists(slug, dir);
   const preview = previewBulkImport(csv, slugExists);
 

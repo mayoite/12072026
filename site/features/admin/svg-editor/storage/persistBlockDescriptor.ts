@@ -55,6 +55,10 @@ import {
   versionedDescriptorPath,
   writeLatestPointer,
 } from "@/features/planner/catalog/svg/descriptorPointer";
+import {
+  assertCatalogWriteAllowed,
+  CatalogIsolationError,
+} from "./catalogWriteIsolation";
 import { verifyDualRead, writeDualReadEvidence } from "./dualReadHarness";
 
 /** Reasons surfaced to the per-route `withAuth` envelope. */
@@ -166,10 +170,30 @@ function buildTempPath(slug: string, dir: string, nextVersion: number): string {
 }
 
 function ensureDir(dir?: string): PlannerResult<string, PersistError> {
-  if (typeof dir === "string" && dir.length > 0) {
-    return { ok: true, value: path.resolve(dir) };
+  const resolved =
+    typeof dir === "string" && dir.length > 0
+      ? path.resolve(dir)
+      : path.resolve(BLOCK_DESCRIPTORS_DIR_DEFAULT);
+  try {
+    assertCatalogWriteAllowed(resolved);
+  } catch (cause) {
+    const message =
+      cause instanceof CatalogIsolationError
+        ? cause.message
+        : cause instanceof Error
+          ? cause.message
+          : String(cause);
+    return {
+      ok: false,
+      error: {
+        reason: "pathEscape",
+        code: "500.catalog_isolation",
+        fieldPath: "dir",
+        message,
+      },
+    };
   }
-  return { ok: true, value: path.resolve(BLOCK_DESCRIPTORS_DIR_DEFAULT) };
+  return { ok: true, value: resolved };
 }
 
 function readCurrentRaw(slug: string, dir: string): string | null {
@@ -489,7 +513,8 @@ export function readPersistedRaw(slug: string, dir?: string): string | null {
 }
 
 export function unlinkBlockDescriptor(slug: string, dir?: string): void {
-  const targetDir = dir ?? BLOCK_DESCRIPTORS_DIR_DEFAULT;
+  const targetDir = path.resolve(dir ?? BLOCK_DESCRIPTORS_DIR_DEFAULT);
+  assertCatalogWriteAllowed(targetDir);
   const legacy = legacyDescriptorPath(slug, targetDir);
   if (existsSync(legacy)) unlinkSync(legacy);
   const pointer = readLatestPointer(slug, targetDir);

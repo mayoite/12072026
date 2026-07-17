@@ -77,14 +77,15 @@ describe("app/api/audit/route.ts", () => {
     expect(body.error.message).toBe("Unauthorized");
   });
 
-  it("returns 403 envelope when CSRF is invalid", async () => {
+  it("returns 403 CSRF_FAILED envelope when CSRF is invalid", async () => {
     vi.mocked(validateCsrfRequest).mockResolvedValue(false);
     const res = await POST(createReq({ team_id: TEAM_ID, action: "update", target_type: "plan" }));
     expect(res.status).toBe(403);
     const body = await res.json();
     expect(body.success).toBe(false);
-    expect(body.error.code).toBe(API_ERROR_CODES.INSUFFICIENT_PERMISSIONS);
+    expect(body.error.code).toBe(API_ERROR_CODES.CSRF_FAILED);
     expect(body.error.message).toBe("Invalid or missing CSRF token");
+    expect(res.headers.get("x-csrf-rejected")).toBe("1");
   });
 
   it("returns 400 envelope when required fields are missing", async () => {

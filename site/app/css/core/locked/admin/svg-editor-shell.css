@@ -24,18 +24,32 @@
   gap: 0;
 }
 
+/* Planner TopBar package: brand | center | actions, ecru panel, flat chrome. */
 .admin-svg-engine-shell__topbar {
   grid-area: topbar;
-  display: flex;
+  display: grid;
   align-items: center;
-  gap: 10px;
-  min-height: 52px;
-  padding: 0 14px;
+  gap: 0.5rem 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.75rem;
   flex-shrink: 0;
-  border-bottom: 1px solid var(--border-soft);
-  background: var(--color-surface-raised);
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--text-strong) 12%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ecru-300) 55%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-ecru-50) 88%, var(--color-white-50));
+  box-shadow: none;
   z-index: 20;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+@media (max-width: 48rem) {
+  .admin-svg-engine-shell__topbar {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto;
+  }
+
+  .admin-svg-engine-shell__actions {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
 }
 
 .admin-svg-engine-shell__divider {

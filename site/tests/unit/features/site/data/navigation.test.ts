@@ -67,4 +67,17 @@ describe("navigation site-data helper", () => {
     expect(SITE_NAV_SEARCH_FALLBACK_LINKS.length).toBeGreaterThan(0);
     expect(SITE_FOOTER_NAV.length).toBeGreaterThan(0);
   });
+
+  it("does not expose public Admin destinations in header or footer nav", () => {
+    const all = [
+      ...SITE_NAV_LINKS,
+      ...SITE_CTA_LINKS,
+      ...SITE_NAV_SEARCH_FALLBACK_LINKS,
+      ...SITE_FOOTER_NAV.flatMap((section) => section.links),
+    ];
+    for (const link of all) {
+      expect(link.href.toLowerCase()).not.toMatch(/^\/admin(\/|$)/);
+      expect(link.label.toLowerCase()).not.toBe("admin");
+    }
+  });
 });

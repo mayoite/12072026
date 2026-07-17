@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { buildPageMetadata } from "@/features/site/data/seo";
+import { SITE_URL } from "@/lib/siteUrl";
 
-export const metadata: Metadata = {
-  title: "Portal | One&Only",
-  robots: { index: false, follow: false },
-};
+/** Absolute title — avoids "Portal | One&Only | One&Only" from root title template. */
+export const metadata: Metadata = buildPageMetadata(SITE_URL, {
+  title: "Portal",
+  description:
+    "Signed-in portal for planner access, SVG catalog, and workspace tools. Not indexed.",
+  path: "/portal",
+  indexable: false,
+  alternates: false,
+});
 
 export default function PortalLayout({ children }: { children: ReactNode }) {
   return children;

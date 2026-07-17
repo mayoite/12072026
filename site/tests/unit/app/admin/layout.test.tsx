@@ -1,64 +1,71 @@
-import { describe, it, expect, vi } from 'vitest';
-import { renderToStaticMarkup } from 'react-dom/server';
-import React from 'react';
-import AdminLayout from '@/app/admin/layout';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { renderToStaticMarkup } from "react-dom/server";
+import React from "react";
+import AdminLayout, { metadata } from "@/app/admin/layout";
+import { requireAuthUser } from "@/lib/auth/session";
 
-vi.mock('next/navigation', () => ({
+vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
-  usePathname: () => '/test',
+  usePathname: () => "/admin",
   useSearchParams: () => new URLSearchParams(),
 }));
 
-vi.mock('next/headers', () => ({
+vi.mock("next/headers", () => ({
   cookies: vi.fn(() => ({ get: vi.fn() })),
   headers: vi.fn(() => new Headers()),
 }));
 
-vi.mock('next/font/google', () => ({
-  Inter: () => ({ className: 'inter' }),
+vi.mock("next/font/google", () => ({
+  Inter: () => ({ className: "inter" }),
 }));
 
+vi.mock("@/features/admin/ui/AdminLayoutShell", () => ({
+  default: ({ children }: { children?: React.ReactNode }) => (
+    <div data-testid="admin-layout-shell">{children}</div>
+  ),
+}));
 
-vi.mock('@/features/admin/ui/AdminLayoutShell', async () => {
-  const actual = await vi.importActual('@/features/admin/ui/AdminLayoutShell');
-  return {
-    ...actual,
-    default: (props: any) => <div data-testid="mock---features-planner-admin-AdminLayoutShell">{JSON.stringify(props)}</div>,
-  };
-});
-
-vi.mock('@/components/security/CsrfBootstrap', async () => {
-  const actual = await vi.importActual('@/components/security/CsrfBootstrap');
-  return {
-    ...actual,
-    default: (props: any) => <div data-testid="mock---components-security-CsrfBootstrap">{JSON.stringify(props)}</div>,
-  };
-});
-
-vi.mock('@/lib/auth/session', () => ({
+vi.mock("@/lib/auth/session", () => ({
   requireAuthUser: vi.fn(),
 }));
 
-vi.mock('@/lib/fonts', async () => {
-  const actual = await vi.importActual('@/lib/fonts');
-  return {
-    ...actual,
-    default: (props: any) => <div data-testid="mock---lib-fonts">{JSON.stringify(props)}</div>,
-  };
-});
+describe("app/admin/layout.tsx", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(requireAuthUser).mockResolvedValue({
+      id: "admin-1",
+      email: "admin@example.com",
+      name: "Admin",
+      role: "owner",
+    });
+  });
 
-
-describe('app/admin/layout.tsx', () => {
-  it('exports noindex robots metadata', async () => {
-    const { metadata } = await import('@/app/admin/layout');
+  it("exports noindex robots metadata", () => {
     expect(metadata.robots).toEqual({ index: false, follow: false });
   });
 
-  it('renders without crashing', async () => {
-    // For coverage, we just need to render it
-    const resolved = await AdminLayout({ params: Promise.resolve({ id: '1', type: 'standard' }), searchParams: Promise.resolve({ page: '1' }) } as any);
+  it("gates the admin tree with requireAuthUser('/admin', 'admin')", async () => {
+    await AdminLayout({ children: <div>child</div> });
+    expect(requireAuthUser).toHaveBeenCalledWith("/admin", "admin");
+  });
+
+  it("renders shell after auth resolves", async () => {
+    const resolved = await AdminLayout({
+      children: <div data-testid="admin-child">ok</div>,
+    });
     const html = renderToStaticMarkup(resolved);
-    // minimal assertion
-    expect(html).toContain('mock---features-planner-admin-AdminLayoutShell');
+    expect(html).toContain("admin-layout-shell");
+    expect(html).toContain("admin-child");
+    expect(html).toContain('id="main-content"');
+  });
+
+  it("fails closed when requireAuthUser rejects (unauth / non-admin path)", async () => {
+    vi.mocked(requireAuthUser).mockRejectedValueOnce(
+      new Error("Authentication required"),
+    );
+
+    await expect(
+      AdminLayout({ children: <div data-testid="leaked">secret</div> }),
+    ).rejects.toThrow("Authentication required");
   });
 });

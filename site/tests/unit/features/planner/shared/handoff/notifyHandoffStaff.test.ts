@@ -84,4 +84,27 @@ describe("notifyHandoffStaff", () => {
       reason: "resend_422",
     });
   });
+
+  it("returns resend_error when fetch throws", async () => {
+    process.env.RESEND_API_KEY = "re_test";
+    process.env.STAFF_NOTIFY_EMAIL = "staff@example.com";
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("network down"));
+
+    const result = await notifyHandoffStaff(baseInput);
+    expect(result).toEqual({
+      attempted: true,
+      sent: false,
+      reason: "resend_error",
+    });
+  });
+
+  it("skips when only one of api key / staff email is set", async () => {
+    process.env.RESEND_API_KEY = "re_test";
+    delete process.env.STAFF_NOTIFY_EMAIL;
+    const fetchMock = vi.spyOn(globalThis, "fetch");
+    const result = await notifyHandoffStaff(baseInput);
+    expect(result.reason).toBe("email_not_configured");
+    expect(result.sent).toBe(false);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 });

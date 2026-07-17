@@ -324,15 +324,24 @@ export function ModularPlannerShell({
         onToggleGrid={onToggleGrid}
         onToggleSnap={onToggleSnap}
         planMetrics={planMetrics}
+        chromeMode="slim"
       >
-        <div className={styles.mobileCanvasStack}>
+        <div
+          className={styles.mobileCanvasStack}
+          data-mobile-shell="true"
+          data-testid="planner-mobile-shell"
+        >
           <PlannerWorkflowBar
             currentStep={plannerStep}
             onStepChange={changePlannerStep}
             onOpenAssistant={assistant ? () => setAssistantOpen(true) : undefined}
             planMetrics={planMetrics}
           />
-          <div className={styles.mobileCanvasStage}>
+          <div
+            className={styles.mobileCanvasStage}
+            data-mobile-chrome="canvas"
+            data-testid="planner-mobile-canvas"
+          >
             {children}
             {assistantOpen && assistant ? (
               <aside className={styles.assistantOverlay} aria-label="AI assistant panel">
@@ -348,20 +357,32 @@ export function ModularPlannerShell({
             ) : null}
           </div>
           {showTools ? (
-            <CanvasToolRail
-              activeTool={activeTool}
-              onToolChange={onToolChange}
-              onZoomReset={onZoomReset}
-              gridEnabled={gridEnabled}
-              snapEnabled={snapEnabled}
-              orthogonalLock={orthogonalLock}
-              onToggleGrid={onToggleGrid}
-              onToggleSnap={onToggleSnap}
-              onToggleOrthogonal={onToggleOrthogonal}
-              dockManaged
-            />
+            <div
+              className={styles.mobileBottomChrome}
+              data-mobile-chrome="bottom"
+              data-testid="planner-mobile-bottom-chrome"
+              role="region"
+              aria-label="Canvas tools"
+            >
+              <CanvasToolRail
+                activeTool={activeTool}
+                onToolChange={onToolChange}
+                onZoomReset={onZoomReset}
+                gridEnabled={gridEnabled}
+                snapEnabled={snapEnabled}
+                orthogonalLock={orthogonalLock}
+                onToggleGrid={onToggleGrid}
+                onToggleSnap={onToggleSnap}
+                onToggleOrthogonal={onToggleOrthogonal}
+                dockManaged
+              />
+            </div>
           ) : (
-            <div className={styles.mobileToolsUnavailable}>
+            <div
+              className={styles.mobileToolsUnavailable}
+              data-mobile-chrome="bottom"
+              data-testid="planner-mobile-bottom-chrome"
+            >
               Switch to 2D to use drawing tools
             </div>
           )}
@@ -379,7 +400,9 @@ export function ModularPlannerShell({
       )}
       data-fill-parent={fillParent ? "true" : undefined}
       data-planner-density={density}
+      data-planner-surface="paper"
       data-modular-dock="true"
+      data-chrome-mode="slim"
       id={`modular-shell-${id.replace(/:/g, "")}`}
     >
       <TopBar

@@ -6,7 +6,12 @@
  * deps for unit tests.
  *
  * Phase 2 disk-path mapping (not full Products DB transaction yet):
+ * - Live authority: disk (`inventory/descriptors/`, `public/svg-catalog/`).
  * - ADM-PUB-03 / dual-write: success only after compile + S4 + persist; failures roll back.
+ * - Optional `dbRepository` / `artifactStore` are injected only when Products DB is
+ *   configured **and** R2 is reachable (`resolveSvgPublishDualWriteDeps`). Dead R2 must
+ *   not roll back a successful disk publish. Dual-write may still use stub revision
+ *   payloads — do not treat DB as release authority until DB-SVG cutover is proven.
  * - DB-SVG-07: prior SVG/descriptor restored when post-pipeline persist fails.
  * - DB-SVG-08: unchanged released SVG + descriptor short-circuits (no partial rewrite).
  *

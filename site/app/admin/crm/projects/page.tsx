@@ -11,7 +11,8 @@ export default function AdminCrmProjectsPage() {
           <p className="admin-page__eyebrow">CRM</p>
           <h1 className="admin-page__title">Projects</h1>
           <p className="admin-page__copy">
-            Active deals, floor plans, and delivery pipelines.
+            Active deals, floor plans, and delivery pipelines. Browser localStorage demo —
+            not a production CRM.
           </p>
         </div>
       </header>

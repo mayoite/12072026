@@ -46,4 +46,54 @@ buyer-retire-001,OFL-R-001,fixed,600,600,750,live`,
     setCatalogLifecycle("buyer-retire-001", "retired", workDir);
     expect(isBuyerVisibleSlug("buyer-retire-001", readLifecycleManifest(workDir))).toBe(false);
   });
+
+  it("draft → release (live) → retire → restore keeps buyer visibility honest", () => {
+    const slug = "a4-lifecycle-path-001";
+    const imported = bulkImportBlockDescriptors(
+      `slug,sku,variant,width_mm,depth_mm,height_mm,lifecycle
+${slug},OFL-A4-001,fixed,600,600,750,draft`,
+      workDir,
+    );
+    expect(imported.ok).toBe(true);
+
+    // Draft: not buyer-visible
+    expect(readLifecycleManifest(workDir)[slug]?.state).toBe("draft");
+    expect(isBuyerVisibleSlug(slug, readLifecycleManifest(workDir))).toBe(false);
+    expect(
+      loadBuyerVisibleDescriptors({ dir: workDir, forceReload: true }).some(
+        (d) => d.slug === slug,
+      ),
+    ).toBe(false);
+
+    // Release (= set live)
+    const released = setCatalogLifecycle(slug, "live", workDir);
+    expect(released.state).toBe("live");
+    expect(typeof released.updatedAt).toBe("string");
+    expect(isBuyerVisibleSlug(slug, readLifecycleManifest(workDir))).toBe(true);
+    expect(
+      loadBuyerVisibleDescriptors({ dir: workDir, forceReload: true }).some(
+        (d) => d.slug === slug,
+      ),
+    ).toBe(true);
+
+    // Retire: hides from buyers; descriptor file remains on disk via import dir
+    setCatalogLifecycle(slug, "retired", workDir);
+    expect(readLifecycleManifest(workDir)[slug]?.state).toBe("retired");
+    expect(isBuyerVisibleSlug(slug, readLifecycleManifest(workDir))).toBe(false);
+    expect(
+      loadBuyerVisibleDescriptors({ dir: workDir, forceReload: true }).some(
+        (d) => d.slug === slug,
+      ),
+    ).toBe(false);
+
+    // Restore: live again
+    setCatalogLifecycle(slug, "live", workDir);
+    expect(readLifecycleManifest(workDir)[slug]?.state).toBe("live");
+    expect(isBuyerVisibleSlug(slug, readLifecycleManifest(workDir))).toBe(true);
+    expect(
+      loadBuyerVisibleDescriptors({ dir: workDir, forceReload: true }).some(
+        (d) => d.slug === slug,
+      ),
+    ).toBe(true);
+  });
 });

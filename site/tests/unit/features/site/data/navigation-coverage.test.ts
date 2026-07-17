@@ -230,6 +230,13 @@ describe("SITE_FOOTER_NAV", () => {
       true,
     );
   });
+
+  it("never links the public footer to Admin", () => {
+    const hrefs = SITE_FOOTER_NAV.flatMap((section) => section.links.map((link) => link.href));
+    const labels = SITE_FOOTER_NAV.flatMap((section) => section.links.map((link) => link.label));
+    expect(hrefs.some((href) => /^\/admin(\/|$)/i.test(href))).toBe(false);
+    expect(labels.some((label) => label.trim().toLowerCase() === "admin")).toBe(false);
+  });
 });
 
 // Coverage extras for 0% modules (site-data + lib/catalog/site). These execute top-level + pure fns.

@@ -11,6 +11,7 @@ import {
   crmProjectDetailPath,
 } from "./crmRoutes";
 import { computeCrmMetrics, formatInrCompact } from "./crmMetrics";
+import { CrmDemoBanner } from "./CrmDemoBanner";
 import { CrmWorkspaceBanner } from "./CrmWorkspaceBanner";
 import { crmProjectStatus, crmQuoteStatusColumns } from "./crmUi";
 
@@ -52,6 +53,7 @@ export default function CrmHubView() {
 
   return (
     <div className="crm-hub space-y-6">
+      <CrmDemoBanner />
       <CrmWorkspaceBanner />
 
       <section className="admin-kpi-grid" aria-label="CRM summary">

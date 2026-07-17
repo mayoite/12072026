@@ -179,3 +179,70 @@ export function annotationMatchesSegment(
       Math.abs(annotation.y2 - start.y) <= epsilonMm);
   return same;
 }
+
+export type OpeningAlongWallDimInput = {
+  /** Normalized centre position along the host wall (0–1). */
+  position: number;
+  widthMm: number;
+};
+
+/**
+ * Opening-aware chain along one wall centreline: wall-start → opening edges
+ * and each opening width, sorted by along-wall centre. Skips short segments.
+ */
+export function openingAlongWallDimensionDrafts(
+  wall: Pick<PlannerWall, "start" | "end">,
+  openings: readonly OpeningAlongWallDimInput[],
+  offsetMm = DEFAULT_DIMENSION_OFFSET_MM,
+  displayUnit: PlannerDisplayUnit = "mm",
+): DimensionDraft[] {
+  const length = linearLengthMm(wall.start, wall.end);
+  if (length < MIN_DIMENSION_LENGTH_MM) return [];
+
+  const ux = (wall.end.x - wall.start.x) / length;
+  const uy = (wall.end.y - wall.start.y) / length;
+  const pointAt = (alongMm: number): PlannerPoint => ({
+    x: wall.start.x + ux * alongMm,
+    y: wall.start.y + uy * alongMm,
+  });
+
+  const sorted = [...openings]
+    .filter(
+      (item) =>
+        Number.isFinite(item.position) &&
+        Number.isFinite(item.widthMm) &&
+        item.widthMm > 0,
+    )
+    .map((item) => {
+      const center = item.position * length;
+      const half = item.widthMm / 2;
+      return {
+        startMm: center - half,
+        endMm: center + half,
+      };
+    })
+    .sort((a, b) => a.startMm - b.startMm);
+
+  const chain: number[] = [0];
+  for (const span of sorted) {
+    chain.push(span.startMm, span.endMm);
+  }
+  chain.push(length);
+
+  const drafts: DimensionDraft[] = [];
+  for (let i = 0; i < chain.length - 1; i += 1) {
+    const a = chain[i];
+    const b = chain[i + 1];
+    if (a === undefined || b === undefined) continue;
+    if (b - a < MIN_DIMENSION_LENGTH_MM) continue;
+    const draft = annotationDraftFromSegment(
+      pointAt(a),
+      pointAt(b),
+      offsetMm,
+      undefined,
+      displayUnit,
+    );
+    if (draft) drafts.push(draft);
+  }
+  return drafts;
+}

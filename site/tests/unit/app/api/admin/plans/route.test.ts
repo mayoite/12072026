@@ -73,6 +73,15 @@ describe("app/api/admin/plans/route.ts", () => {
     expect(res.status).toBe(403);
   });
 
+  it("DELETE returns 403 when CSRF is invalid", async () => {
+    vi.mocked(isPlannerDatabaseConfigured).mockReturnValue(true);
+    vi.mocked(validateCsrfRequest).mockResolvedValue(false);
+    const res = await DELETE(
+      new NextRequest("http://localhost/api/admin/plans?id=plan-1", { method: "DELETE" }),
+    );
+    expect(res.status).toBe(403);
+  });
+
   it("DELETE returns 400 when id query param is missing", async () => {
     vi.mocked(isPlannerDatabaseConfigured).mockReturnValue(true);
     const res = await DELETE(new NextRequest("http://localhost/api/admin/plans", { method: "DELETE" }));

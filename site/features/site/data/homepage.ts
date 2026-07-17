@@ -54,6 +54,37 @@ export const HOMEPAGE_HERO_CONTENT = {
   },
 } as const satisfies HomepageHeroContent;
 
+/**
+ * Resolve i18n / raw hero title lines. Non-array or empty payloads fall back to
+ * the TS source of truth so the accessible heading never collapses to "".
+ * SITE-HOME-02 / SF-01
+ */
+export function resolveHeroTitleLines(
+  raw: unknown,
+  fallback: readonly string[] = HOMEPAGE_HERO_CONTENT.title,
+): readonly string[] {
+  if (
+    Array.isArray(raw) &&
+    raw.length > 0 &&
+    raw.every((item): item is string => typeof item === "string")
+  ) {
+    return raw;
+  }
+  return fallback;
+}
+
+/**
+ * Join animated / split title lines into one accessible sentence with spaces.
+ * Without this, block-level line spans concatenate as "workas" / "asyour".
+ * SITE-HOME-02 / SF-01
+ */
+export function joinAccessibleTitleLines(lines: readonly string[]): string {
+  return lines
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .join(" ");
+}
+
 export const HOMEPAGE_PLANNER_SUITE_CONTENT = {
   titleLead: "Oando",
   titleAccent: "Planner",

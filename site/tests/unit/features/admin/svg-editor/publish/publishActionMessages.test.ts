@@ -20,12 +20,22 @@ describe("publishActionMessages", () => {
     expect(publishImpactSummary(impact)).toContain("desk-1");
     expect(publishImpactSummary(impact)).toContain("current revision abc");
     expect(publishImpactSummary(impact)).toMatch(/Released symbol/i);
+    expect(publishImpactSummary(impact)).toMatch(/disk \(live authority\)/i);
+    expect(publishImpactSummary(impact)).toMatch(
+      /Products DB is not live release authority/i,
+    );
     expect(publishImpactSummary(impact)).not.toMatch(/schema|pipeline|Zod/i);
     expect(publishConfirmMessage(impact)).toMatch(/Impact/);
     expect(publishConfirmMessage(impact)).toContain("Draft version");
     expect(publishConfirmMessage(impact)).toContain("abc");
+    expect(publishConfirmMessage(impact)).toMatch(/on disk/i);
+    expect(publishConfirmMessage(impact)).toMatch(
+      /Products DB is not live release authority/i,
+    );
     expect(publishFailureMessage("desk-1", "err")).toMatch(/not replaced/i);
+    expect(publishFailureMessage("desk-1", "err")).toMatch(/on disk/i);
     expect(publishSuccessMessage("desk-1", "now")).toMatch(/Published/);
+    expect(publishSuccessMessage("desk-1", "now")).toMatch(/to disk/i);
     expect(releasedSvgHref("desk-1")).toBe("/svg-catalog/desk-1.svg");
     expect(PLANNER_VERIFY_HREF).toBe("/planner/guest");
   });

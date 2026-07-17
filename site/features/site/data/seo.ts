@@ -43,8 +43,9 @@ export const LOCALE_HREFLANG: Record<Locale, string> = {
 };
 
 function localeAlternateUrl(siteUrl: string, path: string, locale: Locale): string {
+  const origin = normalizeSiteOrigin(siteUrl);
   const canonical = canonicalPath(path);
-  const canonicalUrl = new URL(canonical, siteUrl).toString();
+  const canonicalUrl = buildCanonicalUrl(origin, path);
 
   if (routing.localePrefix === "never") {
     return canonicalUrl;
@@ -54,10 +55,7 @@ function localeAlternateUrl(siteUrl: string, path: string, locale: Locale): stri
     return canonicalUrl;
   }
 
-  return new URL(
-    `/${locale}${canonical === "/" ? "" : canonical}`,
-    siteUrl,
-  ).toString();
+  return buildCanonicalUrl(origin, `/${locale}${canonical === "/" ? "" : canonical}`);
 }
 
 /**
@@ -66,10 +64,11 @@ function localeAlternateUrl(siteUrl: string, path: string, locale: Locale): stri
  * negotiated via cookie/header). Otherwise non-default locales are prefixed.
  */
 export function buildLocaleAlternates(siteUrl: string, path: string) {
-  const canonicalUrl = new URL(canonicalPath(path), siteUrl).toString();
+  const origin = normalizeSiteOrigin(siteUrl);
+  const canonicalUrl = buildCanonicalUrl(origin, path);
   const languages: Record<string, string> = {};
   for (const locale of locales) {
-    languages[LOCALE_HREFLANG[locale]] = localeAlternateUrl(siteUrl, path, locale);
+    languages[LOCALE_HREFLANG[locale]] = localeAlternateUrl(origin, path, locale);
   }
   languages["x-default"] = canonicalUrl;
   return languages;
@@ -95,12 +94,46 @@ export function canonicalPath(path: string): string {
 }
 
 export function buildCanonicalUrl(siteUrl: string, path: string): string {
-  return new URL(canonicalPath(path), siteUrl).toString();
+  const origin = normalizeSiteOrigin(siteUrl);
+  // Relative base requires a trailing slash so `/about` resolves under origin, not as sibling path.
+  const base = origin.endsWith("/") ? origin : `${origin}/`;
+  return new URL(canonicalPath(path).replace(/^\//, ""), base).toString();
+}
+
+const TITLE_PIPE = /\s*[|–—-]\s*/;
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function isPureBrandSegment(segment: string): boolean {
+  return segment.trim().toLowerCase() === SITE_BRAND.titleSuffix.toLowerCase();
+}
+
+/**
+ * Count pure brand pipe segments (`| One&Only`).
+ * Used by SF-02 unit contracts — more than one is a double-brand title.
+ */
+export function countBrandPipeSegments(title: string): number {
+  if (!title.trim()) return 0;
+  return title
+    .split(TITLE_PIPE)
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0 && isPureBrandSegment(part)).length;
+}
+
+/**
+ * Normalize caller-supplied site origin for metadataBase / canonicals.
+ * Strips trailing slashes only — never invents a host (SITE_URL is caller's job).
+ */
+export function normalizeSiteOrigin(siteUrl: string): string {
+  return siteUrl.trim().replace(/\/+$/, "");
 }
 
 /**
  * Collapse repeated brand suffixes and produce one document title.
  * Prevents "Workstations | One&Only | One&Only" from template + manual suffix.
+ * Result has at most one pure brand pipe segment (defaultTitle leads with brand once).
  */
 export function resolveDocumentTitle(rawTitle: string): string {
   const suffix = SITE_BRAND.titleSuffix;
@@ -108,35 +141,52 @@ export function resolveDocumentTitle(rawTitle: string): string {
   if (!trimmed) return SITE_BRAND.defaultTitle;
   if (trimmed === SITE_BRAND.defaultTitle) return SITE_BRAND.defaultTitle;
 
-  const trailingBrand = new RegExp(
-    `(?:\\s*[|–—-]\\s*${suffix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})+$`,
-    "i",
-  );
-  const body = trimmed.replace(trailingBrand, "").trim();
-  if (!body || body === suffix) return SITE_BRAND.defaultTitle;
+  const escaped = escapeRegExp(suffix);
+  const trailingBrand = new RegExp(`(?:\\s*[|–—-]\\s*${escaped})+$`, "i");
+  const withoutTrailing = trimmed.replace(trailingBrand, "").trim();
 
-  // defaultTitle style ("One&Only | Premium…") — brand not only as trailing suffix
-  if (body === SITE_BRAND.defaultTitle || trimmed === SITE_BRAND.defaultTitle) {
+  if (
+    withoutTrailing === SITE_BRAND.defaultTitle ||
+    trimmed === SITE_BRAND.defaultTitle
+  ) {
     return SITE_BRAND.defaultTitle;
   }
 
-  // Already complete without trailing-only pattern (brand mid-title)
-  if (
-    !trailingBrand.test(trimmed) &&
-    new RegExp(suffix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(trimmed)
-  ) {
-    return trimmed;
+  if (!withoutTrailing || isPureBrandSegment(withoutTrailing)) {
+    return SITE_BRAND.defaultTitle;
+  }
+
+  const parts = withoutTrailing
+    .split(TITLE_PIPE)
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0);
+
+  // Drop pure brand segments from the body; re-append at most once below.
+  const bodyParts = parts.filter((part) => !isPureBrandSegment(part));
+  if (bodyParts.length === 0) return SITE_BRAND.defaultTitle;
+
+  const body = bodyParts.join(" | ");
+  if (body === SITE_BRAND.defaultTitle) return SITE_BRAND.defaultTitle;
+
+  // Brand already present as a non-pure segment ("About One&Only", "…One&Only Patna").
+  // Do not append a second pure brand suffix.
+  const brandAsSubstring = new RegExp(escaped, "i");
+  if (bodyParts.some((part) => brandAsSubstring.test(part))) {
+    return body;
   }
 
   return `${body} | ${suffix}`;
 }
 
 export function buildSiteMetadata(siteUrl: string): Metadata {
+  const origin = normalizeSiteOrigin(siteUrl);
   return {
-    metadataBase: new URL(siteUrl),
+    metadataBase: new URL(origin),
     applicationName: SITE_BRAND.companyName,
     title: {
       default: SITE_BRAND.defaultTitle,
+      // Child pages that already include the brand must use buildPageMetadata
+      // (`title.absolute`) so Next does not apply this template again.
       template: `%s | ${SITE_BRAND.titleSuffix}`,
     },
     description: SITE_BRAND.description,
@@ -153,7 +203,7 @@ export function buildSiteMetadata(siteUrl: string): Metadata {
       "office furniture Jharkhand",
       "storage solutions India",
     ],
-    authors: [{ name: SITE_BRAND.companyName, url: siteUrl }],
+    authors: [{ name: SITE_BRAND.companyName, url: origin }],
     creator: SITE_BRAND.companyName,
     publisher: SITE_BRAND.companyName,
     category: "business",
@@ -174,13 +224,13 @@ export function buildSiteMetadata(siteUrl: string): Metadata {
     },
     alternates: {
       canonical: "/",
-      languages: buildLocaleAlternates(siteUrl, "/"),
+      languages: buildLocaleAlternates(origin, "/"),
     },
     openGraph: {
       type: "website",
       locale: "en_IN",
       alternateLocale: ["hi_IN", "fr_FR", "de_DE", "es_ES"],
-      url: siteUrl,
+      url: origin,
       siteName: SITE_BRAND.siteName,
       title: SITE_BRAND.defaultTitle,
       description: SITE_BRAND.description,
@@ -203,7 +253,8 @@ export function buildSiteMetadata(siteUrl: string): Metadata {
 }
 
 export function buildPageMetadata(siteUrl: string, input: PageMetadataInput): Metadata {
-  const canonicalUrl = buildCanonicalUrl(siteUrl, input.path);
+  const origin = normalizeSiteOrigin(siteUrl);
+  const canonicalUrl = buildCanonicalUrl(origin, input.path);
   const image = input.image || SITE_BRAND.ogImage;
   const includeAlternates = input.alternates !== false;
   const indexable = input.indexable !== false;
@@ -212,7 +263,7 @@ export function buildPageMetadata(siteUrl: string, input: PageMetadataInput): Me
   const title: Metadata["title"] = { absolute: resolvedTitle };
 
   return {
-    metadataBase: new URL(siteUrl),
+    metadataBase: new URL(origin),
     title,
     description: input.description,
     keywords: input.keywords,
@@ -222,7 +273,7 @@ export function buildPageMetadata(siteUrl: string, input: PageMetadataInput): Me
     alternates: {
       canonical: canonicalUrl,
       ...(includeAlternates && indexable
-        ? { languages: buildLocaleAlternates(siteUrl, input.path) }
+        ? { languages: buildLocaleAlternates(origin, input.path) }
         : {}),
     },
     openGraph: {

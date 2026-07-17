@@ -1,33 +1,30 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render } from '@testing-library/react';
-import React from 'react';
-import AdminCustomerQueriesPage from '@/app/admin/customer-queries/page';
+import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import AdminCustomerQueriesPage from "@/app/admin/customer-queries/page";
 
-vi.mock('next/navigation', () => ({
+vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
-  usePathname: () => '/test',
+  usePathname: () => "/admin/customer-queries",
   useSearchParams: () => new URLSearchParams(),
 }));
 
-vi.mock('next/font/google', () => ({
-  Inter: () => ({ className: 'inter' }),
+vi.mock("@/features/ops/CustomerQueriesOpsPageView", () => ({
+  default: (props: { embedded?: boolean }) => (
+    <div data-testid="customer-queries-ops">{JSON.stringify(props)}</div>
+  ),
 }));
 
+vi.mock("@/features/crm/CrmSubnav", () => ({
+  CrmSubnav: () => <nav aria-label="CRM sections">subnav</nav>,
+}));
 
-vi.mock('@/features/ops/CustomerQueriesOpsPageView', async () => {
-  const actual = await vi.importActual('@/features/ops/CustomerQueriesOpsPageView');
-  return {
-    ...actual,
-    default: (props: any) => <div data-testid="mock---features-ops-CustomerQueriesOpsPageView">{JSON.stringify(props)}</div>,
-  };
-});
+describe("app/admin/customer-queries/page.tsx", () => {
+  it("renders CRM subnav and embedded server-backed ops view", () => {
+    render(<AdminCustomerQueriesPage />);
 
-
-describe('app/admin/customer-queries/page.tsx', () => {
-  it('renders without crashing', async () => {
-    // For coverage, we just need to render it
-    render(<AdminCustomerQueriesPage {...({ params: Promise.resolve({ id: '1', type: 'standard' }), searchParams: Promise.resolve({ page: '1' }) } as any)} />);
-    // minimal assertion
-    expect(document.body.innerHTML).toBeDefined();
+    expect(screen.getByLabelText("CRM sections")).toBeInTheDocument();
+    expect(screen.getByTestId("customer-queries-ops")).toHaveTextContent(
+      '"embedded":true',
+    );
   });
 });

@@ -1,5 +1,10 @@
 .shell-admin-layout {
-  --admin-header-height: 4rem;
+  --admin-header-height: 2.75rem;
+  /* Match Planner TopBar density (compact). */
+  --admin-topbar-control-h: 2rem;
+  --admin-topbar-pad-block: var(--space-1, 0.25rem);
+  --admin-topbar-pad-inline: var(--space-3, 0.75rem);
+  --admin-topbar-gap: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
   /* Status tones — CRM, queries, publish (semantic only; not marketing palette). */
   --admin-status-success: var(--color-success, #15803d);
   --admin-status-warn: var(--color-warning, #b45309);
@@ -9,19 +14,95 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  /* Ecru paper stack (same surface tokens as Planner). */
   background: var(--surface-page);
   color: var(--text-body);
   transition: color var(--motion-fast) var(--ease-standard),
               background-color var(--motion-fast) var(--ease-standard);
 }
 
+/* Planner TopBar package: sticky header, ecru panel, hairline only. */
 .shell-admin-header {
   position: sticky;
   top: 0;
   z-index: 50;
-  border-bottom: 0.0625rem solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--surface-panel);
+  box-shadow: none;
 }
 
+.shell-admin-header--topbar {
+  background: color-mix(in srgb, var(--color-ecru-50) 88%, var(--color-white-50));
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ecru-300) 55%, var(--border-soft));
+}
+
+/* 3-column grid — brand | center packs | actions (same package as planner pw-topbar). */
+.shell-admin-topbar {
+  display: grid;
+  align-items: center;
+  gap: var(--admin-topbar-gap);
+  min-height: var(--admin-header-height);
+  padding: var(--admin-topbar-pad-block) var(--admin-topbar-pad-inline);
+  box-sizing: border-box;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  width: 100%;
+}
+
+.shell-admin-topbar__brand {
+  grid-column: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  min-width: 0;
+}
+
+.shell-admin-topbar__center {
+  grid-column: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2, 0.5rem);
+  min-width: 0;
+}
+
+.shell-admin-topbar__actions {
+  grid-column: 3;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2, 0.5rem);
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+
+/* Phone: brand+actions row, context pack on second row (Planner phone chrome). */
+@media (max-width: 48rem) {
+  .shell-admin-topbar {
+    --admin-header-height: auto;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "brand actions"
+      "center center";
+    row-gap: 0.35rem;
+    padding-block: 0.45rem;
+  }
+
+  .shell-admin-topbar__brand {
+    grid-area: brand;
+  }
+
+  .shell-admin-topbar__center {
+    grid-area: center;
+    justify-content: flex-start;
+  }
+
+  .shell-admin-topbar__actions {
+    grid-area: actions;
+  }
+}
+
+/* Legacy bar hooks (pages / older CSS) still resolve. */
 .shell-admin-bar {
   display: flex;
   align-items: center;
@@ -44,10 +125,10 @@
   margin-left: auto;
 }
 
-.shell-admin-header--brand {
-  background: linear-gradient(128deg, var(--color-ocean-boat-blue-950) 0%, var(--color-ocean-boat-blue-850) 48%, var(--color-ocean-boat-blue-800) 100%);
-  border-bottom: 1px solid var(--overlay-panel-08);
-  box-shadow: 0 0.625rem 1.875rem var(--shadow-tint-pdp-22);
+.shell-admin-bar__group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .shell-admin-brand {
@@ -55,7 +136,7 @@
   align-items: center;
   gap: 0.65rem;
   text-decoration: none;
-  color: inherit;
+  color: var(--text-heading, var(--text-body));
 }
 
 .shell-admin-brand__mark {
@@ -68,30 +149,26 @@
   display: inline-flex;
   align-items: center;
   border-radius: var(--radius-full);
-  border: 1px solid var(--glass-white-20);
-  background: var(--overlay-panel-10);
+  border: 1px solid color-mix(in srgb, var(--color-ecru-400) 45%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-ecru-100) 70%, var(--surface-panel));
   padding: 0.2rem 0.55rem;
   font-size: 0.625rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--surface-glass-strong);
+  color: var(--color-ecru-800);
 }
 
 .shell-admin-context {
-  display: none;
+  display: flex;
   margin: 0;
   flex-direction: column;
   gap: 0.05rem;
   min-width: 0;
-  padding-inline-start: 0.85rem;
-  border-inline-start: 1px solid var(--glass-white-18);
-}
-
-@media (min-width: 48rem) {
-  .shell-admin-context {
-    display: flex;
-  }
+  padding: 0.2rem 0.75rem;
+  border-radius: var(--radius-md, 0.5rem);
+  border: 1px solid color-mix(in srgb, var(--color-ecru-300) 50%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-ecru-100) 55%, var(--surface-panel));
 }
 
 .shell-admin-context__label {
@@ -99,33 +176,38 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--surface-tint-muted);
+  color: var(--color-ecru-700);
 }
 
 .shell-admin-context__title {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--color-white-50);
+  color: var(--text-heading, var(--text-body));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 14rem;
+  max-width: 16rem;
 }
 
 .shell-admin-header-link {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  min-height: 2.25rem;
+  min-height: var(--admin-topbar-control-h);
+  padding: 0 0.55rem;
+  border-radius: var(--radius-md, 0.5rem);
   font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--surface-tint-muted);
+  color: var(--text-muted, var(--text-body));
   text-decoration: none;
-  transition: color var(--motion-fast) var(--ease-standard);
+  transition:
+    color var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
 }
 
 .shell-admin-header-link:hover {
-  color: var(--color-white-50);
+  color: var(--text-heading, var(--text-body));
+  background: var(--surface-soft);
 }
 
 .shell-admin-header-cta {
@@ -133,25 +215,23 @@
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  border-radius: 999px;
-  border: 1px solid var(--glass-white-18);
-  background: var(--overlay-panel-12);
-  min-height: 2.25rem;
-  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-md, 0.5rem);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 28%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-ecru-50));
+  min-height: var(--admin-topbar-control-h);
+  padding: 0.35rem 0.75rem;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--color-white-50);
+  color: var(--color-primary);
   text-decoration: none;
   transition:
     background-color var(--motion-fast) var(--ease-standard),
-    border-color var(--motion-fast) var(--ease-standard),
-    transform var(--motion-fast) var(--ease-standard);
+    border-color var(--motion-fast) var(--ease-standard);
 }
 
 .shell-admin-header-cta:hover {
-  background: var(--glass-white-18);
-  border-color: var(--border-inverse);
-  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--color-primary) 16%, var(--color-ecru-100));
+  border-color: color-mix(in srgb, var(--color-primary) 40%, var(--border-soft));
 }
 
 .shell-admin-header-link:focus-visible,
@@ -166,22 +246,16 @@
   justify-content: center;
   min-width: 2.75rem; /* ≥44px */
   min-height: 2.75rem;
-  border: 1px solid var(--glass-white-20);
+  border: 1px solid color-mix(in srgb, var(--color-ecru-400) 40%, var(--border-soft));
   border-radius: 0.55rem;
-  background: var(--overlay-panel-08);
-  color: var(--color-white-50);
+  background: var(--surface-soft);
+  color: var(--text-heading, var(--text-body));
   cursor: pointer;
 }
 
 .shell-admin-mobile-toggle:focus-visible {
   box-shadow: var(--focus-ring);
   outline: none;
-}
-
-.shell-admin-bar__group {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
 }
 
 .shell-admin-frame {
@@ -196,8 +270,12 @@
   flex-shrink: 0;
   flex-direction: column;
   min-height: 0;
-  border-right: 1px solid var(--border-soft);
-  background: linear-gradient(180deg, var(--color-white-50) 0%, var(--color-white-150) 100%);
+  border-right: 1px solid color-mix(in srgb, var(--color-ecru-300) 45%, var(--border-soft));
+  background: linear-gradient(
+    180deg,
+    var(--color-ecru-50) 0%,
+    color-mix(in srgb, var(--color-ecru-100) 70%, var(--color-white-50)) 100%
+  );
   padding: 0;
 }
 

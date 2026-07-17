@@ -77,6 +77,25 @@ describe("app/api/customer-queries/manage/route.ts", () => {
     expect(body.items).toEqual([{ id: "q1" }]);
   });
 
+  it("PATCH returns 403 when CSRF is invalid", async () => {
+    vi.mocked(validateCsrfRequest).mockResolvedValue(false);
+    const req = new NextRequest("http://localhost/api/customer-queries/manage", {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        id: "q1",
+        status: "closed",
+        followUpChannel: "none",
+      }),
+    });
+    const res = await PATCH(req);
+    expect(res.status).toBe(403);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe(API_ERROR_CODES.CSRF_FAILED);
+    expect(res.headers.get("x-csrf-rejected")).toBe("1");
+  });
+
   it("PATCH returns 400 when id is missing", async () => {
     const req = new NextRequest("http://localhost/api/customer-queries/manage", {
       method: "PATCH",

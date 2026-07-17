@@ -11,6 +11,10 @@ import type {
   ConfiguratorCatalogItem,
   StandardCatalogItem,
 } from "../api/adminCatalogClient";
+import {
+  ADMIN_PHONE_MIN_TAP_PX,
+  phoneListLayoutMode,
+} from "../ui/adminMobileReview";
 import type { CatalogManagerItem } from "./adminCatalogManagerUtils";
 
 type Props = {
@@ -41,6 +45,9 @@ function categoryLabel(item: CatalogManagerItem): string {
   return parts.filter(Boolean).join(" · ");
 }
 
+const phoneLayout = phoneListLayoutMode();
+const minTapPx = String(ADMIN_PHONE_MIN_TAP_PX);
+
 export function AdminCatalogTable({
   items,
   isStandard,
@@ -59,6 +66,7 @@ export function AdminCatalogTable({
     <div
       className="admin-panel admin-catalog-inventory"
       data-testid="admin-catalog-inventory"
+      data-phone-layout={phoneLayout}
     >
       <div className="admin-panel__header">
         {isStandard ? total : items.length} items
@@ -67,12 +75,12 @@ export function AdminCatalogTable({
       </div>
       <div
         className="admin-table-wrap admin-catalog-table-wrap"
-        data-phone-layout="cards-priority"
+        data-phone-layout={phoneLayout}
       >
         <table
           className="admin-table admin-catalog-table"
           data-testid="admin-catalog-table"
-          data-phone-layout="cards-priority"
+          data-phone-layout={phoneLayout}
         >
           <caption className="sr-only">
             Catalog products with name, category, size, status, and actions.
@@ -129,12 +137,16 @@ export function AdminCatalogTable({
                     </span>
                   </td>
                   <td data-label="Actions">
-                    <div className="admin-catalog-row-actions">
+                    <div
+                      className="admin-catalog-row-actions"
+                      data-testid={`admin-catalog-row-actions-${String(id)}`}
+                    >
                       <button
                         type="button"
                         className="admin-btn admin-btn--outline"
                         onClick={() => onEdit(item)}
                         aria-label={`Edit ${name}`}
+                        data-min-tap-px={minTapPx}
                         data-testid={`admin-catalog-edit-${String(id)}`}
                       >
                         <Pencil size={14} aria-hidden />
@@ -151,6 +163,7 @@ export function AdminCatalogTable({
                         }
                         disabled={readOnly || busy || !item.id}
                         onClick={() => void onToggleVisible(item)}
+                        data-min-tap-px={minTapPx}
                         data-testid={`admin-catalog-toggle-${String(id)}`}
                       >
                         {busy ? (
@@ -170,6 +183,7 @@ export function AdminCatalogTable({
                         aria-label={`Delete ${name}`}
                         disabled={readOnly || busy || !item.id}
                         onClick={() => void onDelete(item)}
+                        data-min-tap-px={minTapPx}
                         data-testid={`admin-catalog-delete-${String(id)}`}
                       >
                         <Trash2 size={14} aria-hidden />
@@ -187,6 +201,7 @@ export function AdminCatalogTable({
         <div
           className="admin-catalog-paging"
           data-testid="admin-catalog-paging"
+          data-min-tap-px={minTapPx}
         >
           <button
             type="button"
@@ -194,6 +209,7 @@ export function AdminCatalogTable({
             disabled={page <= 1}
             onClick={() => onPageChange(Math.max(1, page - 1))}
             aria-label="Previous catalog page"
+            data-min-tap-px={minTapPx}
           >
             Previous
           </button>
@@ -206,6 +222,7 @@ export function AdminCatalogTable({
             disabled={page >= pageCount}
             onClick={() => onPageChange(page + 1)}
             aria-label="Next catalog page"
+            data-min-tap-px={minTapPx}
           >
             Next
           </button>

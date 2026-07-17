@@ -23,6 +23,11 @@ type PlannerSyncConflictDialogProps = {
 const FOCUSABLE_SELECTOR =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+function shortHash(hash: string): string {
+  if (hash.length <= 16) return hash;
+  return `${hash.slice(0, 8)}…${hash.slice(-6)}`;
+}
+
 export function PlannerSyncConflictDialog({
   open,
   details,
@@ -35,6 +40,7 @@ export function PlannerSyncConflictDialog({
   const previouslyFocused = useRef<HTMLElement | null>(null);
   const titleId = useId();
   const descId = useId();
+  const busyId = useId();
 
   useEffect(() => {
     if (!open) return;
@@ -96,6 +102,25 @@ export function PlannerSyncConflictDialog({
 
   if (!open) return null;
 
+  const hasTimestamps = Boolean(details?.localUpdatedAt || details?.remoteUpdatedAt);
+  const hasHashes = Boolean(details?.localHash || details?.remoteHash);
+  const showMeta = hasTimestamps || hasHashes;
+
+  const handleKeepLocal = () => {
+    if (busy) return;
+    onKeepLocal();
+  };
+
+  const handleKeepCloud = () => {
+    if (busy) return;
+    onKeepCloud();
+  };
+
+  const handleDismiss = () => {
+    if (busy) return;
+    onDismiss?.();
+  };
+
   return (
     <div className={styles.backdrop} role="presentation">
       <div
@@ -104,7 +129,8 @@ export function PlannerSyncConflictDialog({
         role="alertdialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        aria-describedby={descId}
+        aria-describedby={busy ? `${descId} ${busyId}` : descId}
+        aria-busy={busy || undefined}
         tabIndex={-1}
       >
         <header className={styles.header}>
@@ -113,7 +139,7 @@ export function PlannerSyncConflictDialog({
             <button
               type="button"
               className={styles.close}
-              onClick={onDismiss}
+              onClick={handleDismiss}
               aria-label="Close conflict dialog"
               disabled={busy}
             >
@@ -126,18 +152,51 @@ export function PlannerSyncConflictDialog({
             This plan changed on this device and in the cloud. Choose which version to keep.
             The other version is not deleted from your draft history, but only one becomes active.
           </p>
-          {details?.localUpdatedAt || details?.remoteUpdatedAt ? (
+          {busy ? (
+            <p id={busyId} className={styles.busy} role="status" aria-live="polite">
+              Applying your choice…
+            </p>
+          ) : null}
+          {showMeta ? (
             <dl className={styles.meta}>
-              {details.localUpdatedAt ? (
+              {details?.localUpdatedAt || details?.localHash ? (
                 <div>
                   <dt>Local</dt>
-                  <dd>{details.localUpdatedAt}</dd>
+                  <dd>
+                    {details.localUpdatedAt ? (
+                      <span data-testid="conflict-local-updated">{details.localUpdatedAt}</span>
+                    ) : null}
+                    {details.localHash ? (
+                      <span
+                        data-testid="conflict-local-hash"
+                        title={details.localHash}
+                        className={styles.hash}
+                      >
+                        {details.localUpdatedAt ? " · " : null}
+                        hash {shortHash(details.localHash)}
+                      </span>
+                    ) : null}
+                  </dd>
                 </div>
               ) : null}
-              {details.remoteUpdatedAt ? (
+              {details?.remoteUpdatedAt || details?.remoteHash ? (
                 <div>
                   <dt>Cloud</dt>
-                  <dd>{details.remoteUpdatedAt}</dd>
+                  <dd>
+                    {details.remoteUpdatedAt ? (
+                      <span data-testid="conflict-remote-updated">{details.remoteUpdatedAt}</span>
+                    ) : null}
+                    {details.remoteHash ? (
+                      <span
+                        data-testid="conflict-remote-hash"
+                        title={details.remoteHash}
+                        className={styles.hash}
+                      >
+                        {details.remoteUpdatedAt ? " · " : null}
+                        hash {shortHash(details.remoteHash)}
+                      </span>
+                    ) : null}
+                  </dd>
                 </div>
               ) : null}
             </dl>
@@ -147,16 +206,18 @@ export function PlannerSyncConflictDialog({
           <button
             type="button"
             className={styles.secondary}
-            onClick={onKeepLocal}
+            onClick={handleKeepLocal}
             disabled={busy}
+            data-testid="conflict-keep-local"
           >
             Keep local
           </button>
           <button
             type="button"
             className={styles.primary}
-            onClick={onKeepCloud}
+            onClick={handleKeepCloud}
             disabled={busy}
+            data-testid="conflict-keep-cloud"
           >
             Keep cloud
           </button>

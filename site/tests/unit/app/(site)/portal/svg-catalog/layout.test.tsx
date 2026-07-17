@@ -6,9 +6,10 @@ import SvgCatalogLayout, {
 } from "@/app/(site)/portal/svg-catalog/layout";
 
 describe("app/(site)/portal/svg-catalog/layout.tsx", () => {
-  it("exports noindex SVG catalog metadata (protected portal subtree)", () => {
-    expect(metadata.title).toBe("SVG catalog | One&Only");
+  it("exports noindex SVG catalog metadata with absolute single-brand title", () => {
+    expect(metadata.title).toEqual({ absolute: "SVG catalog | One&Only" });
     expect(metadata.robots).toEqual({ index: false, follow: false });
+    expect(metadata.alternates?.canonical).toMatch(/\/portal\/svg-catalog\/?$/);
   });
 
   it("renders children directly", () => {

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
 import { usePathname } from "next/navigation";
+import { readApiErrorMessage } from "@/features/shared/api/readApiErrorMessage";
 import { CONTACT_FORM_CONTEXT_COPY } from "@/features/site/data/routeCopy";
 import { trackContactSubmission } from "@/lib/analytics/siteEvents";
 
@@ -108,7 +109,7 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
       });
 
       const json = (await response.json()) as
-        | { error?: string; queryId?: string; followUp?: SubmitResult["followUp"] }
+        | { queryId?: string; followUp?: SubmitResult["followUp"] }
         | undefined;
 
       if (!response.ok || !json?.queryId || !json.followUp) {
@@ -118,7 +119,7 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
           source: contextCopy ? `website-contact-${source}` : "website-contact",
           status: "error",
         });
-        setError(json?.error || "Unable to submit right now.");
+        setError(readApiErrorMessage(json, "Unable to submit right now."));
         return;
       }
 

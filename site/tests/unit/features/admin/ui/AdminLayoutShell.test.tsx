@@ -48,6 +48,16 @@ describe("AdminLayoutShell (name-mirror)", () => {
       "href",
       "/planner/guest",
     );
+    // Planner-package topbar on ecru (not dark brand bar).
+    const topbar = screen.getByTestId("admin-topbar");
+    expect(topbar).toHaveAttribute("data-admin-topbar");
+    expect(topbar).toHaveAttribute("data-density", "compact");
+    expect(topbar.className).toContain("shell-admin-header--topbar");
+    expect(screen.getByLabelText("Admin workspace")).toBe(topbar);
+    // Light/orange logo for ecru chrome (not white-on-dark).
+    const logos = screen.getAllByTestId("mock-logo");
+    expect(logos.some((n) => n.getAttribute("data-variant") === "orange")).toBe(true);
+    expect(logos.every((n) => n.getAttribute("data-variant") !== "white")).toBe(true);
   });
 
   it("shows current page context from nav", () => {

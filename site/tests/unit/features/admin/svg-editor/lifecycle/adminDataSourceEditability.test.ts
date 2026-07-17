@@ -17,6 +17,7 @@ describe("adminDataSourceEditability", () => {
       "disk-published-svg",
     ]);
     expect(live[1]?.reason).toMatch(/Publish replaces/i);
+    expect(live[1]?.reason).toMatch(/disk \(live authority\)/i);
   });
 
   it("keeps draft descriptors editable but still requires publish for SVG writes", () => {

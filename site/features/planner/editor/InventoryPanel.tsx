@@ -41,12 +41,29 @@ import {
   capCatalogResults,
   rankCatalogItems,
 } from "@/features/planner/catalog/catalogSearch";
-import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
+import type {
+  PlannerAvailabilityStatus,
+  PlannerCatalogItem,
+} from "@/features/planner/catalog/catalogTypes";
 import {
   filterBuyerFacingCatalogItems,
   formatCatalogFootprint,
   prioritizeOfficeSystemsBrowse,
 } from "@/features/planner/catalog/catalogBuyerVisibility";
+import {
+  PLANNER_CATALOG_COMPARE_MAX,
+  buildCatalogCompareTable,
+  buildCatalogListMetadata,
+  catalogFacetsFromPanelFields,
+  filterCatalogByFacets,
+  groupCatalogItemsByFamily,
+  hasActiveCatalogFacets,
+  listCatalogAvailabilityOptions,
+  listCatalogFamilyOptions,
+  listCatalogMaterialOptions,
+  listCatalogSeatOptions,
+  toggleCatalogCompareSelection,
+} from "@/features/planner/catalog/catalogFamilyBrowse";
 import type { PlannerDisplayUnit } from "@/features/planner/model/types";
 import type { WorkstationConfigV0 } from "@/features/planner/catalog/workstationSystemV0";
 import { PLANNER_DEMO_CATALOG_ITEMS } from "./demoCatalogItems";
@@ -139,6 +156,9 @@ export const InventoryPanel = memo(function InventoryPanel({
   );
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
+  /** Compare shortlist (PF-22) — local selection, max PLANNER_CATALOG_COMPARE_MAX */
+  const [compareIds, setCompareIds] = useState<string[]>([]);
+  const [compareOpen, setCompareOpen] = useState(false);
 
   const indexedItems = useMemo(() => {
     const raw: PlannerCatalogItem[] = (() => {
@@ -230,6 +250,84 @@ export const InventoryPanel = memo(function InventoryPanel({
     [state.selectedRoomGroupId, dispatch],
   );
 
+  const handleFamilyFilterClick = useCallback(
+    (familyKey: string) => {
+      dispatch({
+        type: "SELECT_FAMILY",
+        familyKey:
+          familyKey === state.selectedFamilyKey ? null : familyKey,
+      });
+    },
+    [state.selectedFamilyKey, dispatch],
+  );
+
+  const handleMaterialChange = useCallback(
+    (material: string) => {
+      dispatch({
+        type: "SELECT_MATERIAL",
+        material: material.length > 0 ? material : null,
+      });
+    },
+    [dispatch],
+  );
+
+  const handleAvailabilityChange = useCallback(
+    (availability: string) => {
+      dispatch({
+        type: "SELECT_AVAILABILITY",
+        availability:
+          availability.length > 0
+            ? (availability as PlannerAvailabilityStatus)
+            : null,
+      });
+    },
+    [dispatch],
+  );
+
+  const handleSeatCountChange = useCallback(
+    (raw: string) => {
+      if (!raw) {
+        dispatch({ type: "SELECT_SEAT_COUNT", seatCount: null });
+        return;
+      }
+      const n = Number(raw);
+      dispatch({
+        type: "SELECT_SEAT_COUNT",
+        seatCount: Number.isFinite(n) ? n : null,
+      });
+    },
+    [dispatch],
+  );
+
+  const handleWidthRangeChange = useCallback(
+    (raw: string) => {
+      if (!raw) {
+        dispatch({ type: "SET_WIDTH_RANGE", minWidthMm: null, maxWidthMm: null });
+        return;
+      }
+      // Values: "lt1000" | "1000-1600" | "gt1600"
+      if (raw === "lt1000") {
+        dispatch({ type: "SET_WIDTH_RANGE", minWidthMm: null, maxWidthMm: 999 });
+      } else if (raw === "1000-1600") {
+        dispatch({ type: "SET_WIDTH_RANGE", minWidthMm: 1000, maxWidthMm: 1600 });
+      } else if (raw === "gt1600") {
+        dispatch({ type: "SET_WIDTH_RANGE", minWidthMm: 1601, maxWidthMm: null });
+      } else {
+        dispatch({ type: "SET_WIDTH_RANGE", minWidthMm: null, maxWidthMm: null });
+      }
+    },
+    [dispatch],
+  );
+
+  const handleCompareToggle = useCallback((itemId: string) => {
+    setCompareIds((current) => toggleCatalogCompareSelection(current, itemId));
+  }, []);
+
+  const handleClearCompare = useCallback(() => {
+    setCompareIds([]);
+    setCompareOpen(false);
+  }, []);
+
   // Handle item click
   const handleItemClick = useCallback(
     (item: PlannerCatalogItem) => {
@@ -290,6 +388,31 @@ export const InventoryPanel = memo(function InventoryPanel({
     dispatch({ type: "RESET_FILTERS" });
   }, [dispatch]);
 
+  const familyOptions = useMemo(
+    () => listCatalogFamilyOptions(indexedItems),
+    [indexedItems],
+  );
+  const materialOptions = useMemo(
+    () => listCatalogMaterialOptions(indexedItems),
+    [indexedItems],
+  );
+  const availabilityOptions = useMemo(
+    () => listCatalogAvailabilityOptions(indexedItems),
+    [indexedItems],
+  );
+  const seatOptions = useMemo(
+    () => listCatalogSeatOptions(indexedItems),
+    [indexedItems],
+  );
+  const hasDimSpread = useMemo(() => {
+    if (indexedItems.length < 2) return false;
+    const widths = indexedItems
+      .map((i) => i.dimensions?.widthMm)
+      .filter((n): n is number => typeof n === "number" && Number.isFinite(n));
+    if (widths.length < 2) return false;
+    return Math.max(...widths) - Math.min(...widths) >= 200;
+  }, [indexedItems]);
+
   // Fuse + displayed computed early for keyboard closure order (TS block scope)
   // GS: Fuse local rank, RAC a11y.
   const searchResultsItems = useMemo(() => {
@@ -309,6 +432,17 @@ export const InventoryPanel = memo(function InventoryPanel({
       const tags = roomGroup.roomTags as string[];
       base = base.filter((it) => it.roomTags?.some((t) => tags.includes(t)));
     }
+    base = filterCatalogByFacets(
+      base,
+      catalogFacetsFromPanelFields({
+        selectedFamilyKey: state.selectedFamilyKey,
+        selectedMaterial: state.selectedMaterial,
+        selectedAvailability: state.selectedAvailability,
+        selectedSeatCount: state.selectedSeatCount,
+        minWidthMm: state.minWidthMm,
+        maxWidthMm: state.maxWidthMm,
+      }),
+    );
     const ranked = rankCatalogItems(base, state.searchQuery || "");
     const ordered =
       officeSystemsInventory && !(state.searchQuery || "").trim()
@@ -323,6 +457,12 @@ export const InventoryPanel = memo(function InventoryPanel({
     state.searchQuery,
     state.selectedCategoryId,
     state.selectedRoomGroupId,
+    state.selectedFamilyKey,
+    state.selectedMaterial,
+    state.selectedAvailability,
+    state.selectedSeatCount,
+    state.minWidthMm,
+    state.maxWidthMm,
   ]);
 
   const displayedItems = useMemo(() => {
@@ -349,6 +489,29 @@ export const InventoryPanel = memo(function InventoryPanel({
     state.selectedCategoryId,
     state.selectedSubCategoryId,
   ]);
+
+  const familyGroups = useMemo(
+    () => groupCatalogItemsByFamily(displayedItems),
+    [displayedItems],
+  );
+
+  /** Flat list in family-group order — keyboard roving matches visible order. */
+  const orderedItems = useMemo(
+    () => familyGroups.flatMap((group) => [...group.items]),
+    [familyGroups],
+  );
+
+  const compareTable = useMemo(
+    () => buildCatalogCompareTable(indexedItems, compareIds),
+    [indexedItems, compareIds],
+  );
+
+  const widthRangeValue = useMemo(() => {
+    if (state.minWidthMm === null && state.maxWidthMm === 999) return "lt1000";
+    if (state.minWidthMm === 1000 && state.maxWidthMm === 1600) return "1000-1600";
+    if (state.minWidthMm === 1601 && state.maxWidthMm === null) return "gt1600";
+    return "";
+  }, [state.minWidthMm, state.maxWidthMm]);
 
   // Keyboard navigation (panel owns list roving when focus is on the region, not chrome controls)
   const handleKeyDown = useCallback(
@@ -382,7 +545,7 @@ export const InventoryPanel = memo(function InventoryPanel({
         return;
       }
 
-      const items = displayedItems; // post filter/rank
+      const items = orderedItems; // post filter/rank, family-group order
 
       switch (event.key) {
         case "ArrowDown":
@@ -411,7 +574,7 @@ export const InventoryPanel = memo(function InventoryPanel({
       }
     },
     [
-      displayedItems,
+      orderedItems,
       focusedIndex,
       handleItemClick,
       handleClearSearch,
@@ -438,7 +601,17 @@ export const InventoryPanel = memo(function InventoryPanel({
   const hasActiveFilters =
     state.selectedCategoryId !== null ||
     state.selectedRoomGroupId !== null ||
-    state.searchQuery !== "";
+    state.searchQuery !== "" ||
+    hasActiveCatalogFacets(
+      catalogFacetsFromPanelFields({
+        selectedFamilyKey: state.selectedFamilyKey,
+        selectedMaterial: state.selectedMaterial,
+        selectedAvailability: state.selectedAvailability,
+        selectedSeatCount: state.selectedSeatCount,
+        minWidthMm: state.minWidthMm,
+        maxWidthMm: state.maxWidthMm,
+      }),
+    );
 
   return (
     <div
@@ -511,6 +684,117 @@ export const InventoryPanel = memo(function InventoryPanel({
           </button>
         ))}
       </div>
+
+      {/* PF-22: family chips */}
+      {familyOptions.length > 1 ? (
+        <div
+          className={styles.quickFilters}
+          role="group"
+          aria-label="Filter by product family"
+        >
+          {familyOptions.map((family) => (
+            <button
+              key={family.key}
+              type="button"
+              className={`${styles.filterChip} ${state.selectedFamilyKey === family.key ? styles.filterChipActive : ""}`}
+              onClick={() => handleFamilyFilterClick(family.key)}
+              aria-pressed={
+                state.selectedFamilyKey === family.key ? "true" : "false"
+              }
+            >
+              <span className={styles.filterChipLabel}>
+                {family.label}
+                {family.count > 1 ? ` (${family.count})` : ""}
+              </span>
+            </button>
+          ))}
+        </div>
+      ) : null}
+
+      {/* PF-22: material / availability / seats / dims when data exists */}
+      {(materialOptions.length > 1
+        || availabilityOptions.length > 1
+        || seatOptions.length > 0
+        || hasDimSpread) && (
+        <div
+          className={styles.quickFilters}
+          role="group"
+          aria-label="Catalog attribute filters"
+        >
+          {materialOptions.length > 1 ? (
+            <label className={styles.filterChip}>
+              <span className="sr-only">Material</span>
+              <select
+                value={state.selectedMaterial ?? ""}
+                onChange={(event) => handleMaterialChange(event.target.value)}
+                aria-label="Filter by material"
+              >
+                <option value="">Material</option>
+                {materialOptions.map((material) => (
+                  <option key={material} value={material}>
+                    {material}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+          {availabilityOptions.length > 1 ? (
+            <label className={styles.filterChip}>
+              <span className="sr-only">Availability</span>
+              <select
+                value={state.selectedAvailability ?? ""}
+                onChange={(event) =>
+                  handleAvailabilityChange(event.target.value)
+                }
+                aria-label="Filter by availability"
+              >
+                <option value="">Availability</option>
+                {availabilityOptions.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+          {seatOptions.length > 0 ? (
+            <label className={styles.filterChip}>
+              <span className="sr-only">Seats</span>
+              <select
+                value={
+                  state.selectedSeatCount !== null
+                    ? String(state.selectedSeatCount)
+                    : ""
+                }
+                onChange={(event) => handleSeatCountChange(event.target.value)}
+                aria-label="Filter by seat count"
+              >
+                <option value="">Seats</option>
+                {seatOptions.map((seats) => (
+                  <option key={seats} value={seats}>
+                    {seats} seat{seats === 1 ? "" : "s"}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+          {hasDimSpread ? (
+            <label className={styles.filterChip}>
+              <span className="sr-only">Width</span>
+              <select
+                value={widthRangeValue}
+                onChange={(event) => handleWidthRangeChange(event.target.value)}
+                aria-label="Filter by width"
+              >
+                <option value="">Width</option>
+                <option value="lt1000">&lt; 1000 mm</option>
+                <option value="1000-1600">1000–1600 mm</option>
+                <option value="gt1600">&gt; 1600 mm</option>
+              </select>
+            </label>
+          ) : null}
+        </div>
+      )}
 
       {/* Categories */}
       <div className={styles.categoriesSection}>
@@ -623,7 +907,25 @@ export const InventoryPanel = memo(function InventoryPanel({
       <div className={styles.resultsInfo}>
         <span className={styles.resultsCount}>
           {displayedItems.length} item{displayedItems.length !== 1 ? "s" : ""}
+          {familyGroups.length > 1
+            ? ` · ${familyGroups.length} families`
+            : ""}
         </span>
+        {compareIds.length > 0 ? (
+          <button
+            type="button"
+            className={styles.resetButton}
+            onClick={() => setCompareOpen((open) => !open)}
+            aria-expanded={compareOpen ? "true" : "false"}
+            aria-label={
+              compareTable
+                ? `Compare ${compareIds.length} products`
+                : `Compare selection (${compareIds.length} of ${PLANNER_CATALOG_COMPARE_MAX}; need 2)`
+            }
+          >
+            Compare ({compareIds.length})
+          </button>
+        ) : null}
         {effectiveStatus === "stale" ? (
           <span className={styles.resultsStatus} aria-live="polite">
             Refreshing…
@@ -634,6 +936,82 @@ export const InventoryPanel = memo(function InventoryPanel({
           <span className={styles.resultsStatus}>Offline catalog</span>
         ) : null}
       </div>
+
+      {/* PF-22: usable compare table (not a stub) */}
+      {compareOpen && compareIds.length > 0 ? (
+        <section
+          className={styles.categoriesSection}
+          aria-label="Product compare"
+          data-testid="inventory-compare"
+        >
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionTitle}>Compare</span>
+            <button
+              type="button"
+              className={styles.resetButton}
+              onClick={handleClearCompare}
+              aria-label="Clear compare selection"
+            >
+              Clear
+            </button>
+          </div>
+          {compareTable ? (
+            <div
+              role="table"
+              aria-label="Compare selected products"
+              style={{
+                display: "grid",
+                gap: "0.25rem",
+                padding: "0.35rem 0.5rem",
+                fontSize: "0.6875rem",
+              }}
+            >
+              <div
+                role="row"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: `minmax(4rem, auto) repeat(${compareTable.names.length}, minmax(0, 1fr))`,
+                  gap: "0.35rem",
+                  fontWeight: 600,
+                }}
+              >
+                <div role="columnheader" />
+                {compareTable.names.map((name, index) => (
+                  <div key={compareTable.itemIds[index]} role="columnheader">
+                    {name}
+                  </div>
+                ))}
+              </div>
+              {compareTable.attributes.map((row) => (
+                <div
+                  key={row.key}
+                  role="row"
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: `minmax(4rem, auto) repeat(${row.values.length}, minmax(0, 1fr))`,
+                    gap: "0.35rem",
+                  }}
+                >
+                  <div role="rowheader">{row.label}</div>
+                  {row.values.map((value, index) => (
+                    <div
+                      key={`${row.key}-${compareTable.itemIds[index]}`}
+                      role="cell"
+                    >
+                      {value}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className={styles.emptyHint} style={{ padding: "0.35rem 0.5rem" }}>
+              Select at least two products to compare (up to{" "}
+              {PLANNER_CATALOG_COMPARE_MAX}).
+            </p>
+          )}
+        </section>
+      ) : null}
 
       {/* Loading/empty/grid — lifecycle badges above stay visible; never replace results (E2E + REC-04). */}
       {(effectiveLoading || effectiveStatus === "loading") &&
@@ -698,145 +1076,223 @@ export const InventoryPanel = memo(function InventoryPanel({
       ) : (
         <section className={styles.catalogBrowser} aria-label="Catalog browser">
           <ul className={styles.itemGrid}>
-            {displayedItems.map((item, index) => (
-              <li
-                key={item.id}
-                className={styles.itemListEntry}
-                data-catalog-item={item.id}
-              >
-                <article
-                  className={`${styles.itemCard} ${selectedItemId === item.id ? styles.itemCardSelected : ""} ${focusedIndex === index ? styles.itemCardFocused : ""}`}
-                  // Roving tab stop for panel arrow keys + focus-visible ring.
-                  // No role=button — Place / favorite stay nested interactive controls.
-                  tabIndex={focusedIndex === index ? 0 : -1}
-                  data-selected={selectedItemId === item.id ? "true" : "false"}
-                  data-catalog-name={item.shortName}
-                  onClick={() => handleItemClick(item)}
-                  onDoubleClick={(event) => handleItemDoubleClick(item, event)}
-                  onFocus={() => setFocusedIndex(index)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ") {
-                      // Ignore when Place / favorite owns the event
-                      if (
-                        event.target instanceof HTMLElement
-                        && event.target.closest("button")
-                      ) {
-                        return;
-                      }
-                      event.preventDefault();
-                      handleItemClick(item);
-                    }
-                  }}
+            {familyGroups.map((group) => {
+              return (
+                <li
+                  key={group.familyKey}
+                  className={styles.itemListEntry}
+                  data-family-group={group.familyKey}
                 >
-              <div className={styles.itemThumbnail} aria-hidden="true">
-                {item.assets.previewImageUrl ? (
-                  <Image
-                    src={item.assets.previewImageUrl}
-                    alt=""
-                    className={`${styles.itemImage}${ isSvgAssetUrl(item.assets.previewImageUrl) ? ` ${styles.itemImageVector}` : "" }`}
-                    width={256}
-                    height={256}
-                    loading="lazy"
-                    unoptimized
-                    onError={(event) => {
-                      // Residual 404 thumbs: hide broken image, show icon fallback.
-                      const img = event.currentTarget;
-                      img.style.display = "none";
-                      const parent = img.parentElement;
-                      if (parent && !parent.querySelector("[data-thumb-fallback]")) {
-                        const fallback = document.createElement("div");
-                        fallback.className = styles.itemPlaceholder;
-                        fallback.dataset.thumbFallback = "1";
-                        fallback.setAttribute("aria-hidden", "true");
-                        parent.appendChild(fallback);
-                      }
-                    }}
-                  />
-                ) : (
-                  <div className={styles.itemPlaceholder}>
-                    <PlaceholderIcon />
-                  </div>
-                )}
-              </div>
-              <div className={styles.itemInfo}>
-                <span className={styles.itemName} title={item.name || item.shortName}>
-                  {item.shortName || item.name}
-                </span>
-                <span className={styles.itemMeta}>
-                  {item.sku ? (
-                    <span className={styles.itemSku} title={`SKU ${item.sku}`}>
-                      {item.sku}
+                  <div className={styles.sectionHeader}>
+                    <span className={styles.sectionTitle}>
+                      {group.familyLabel}
+                      <span className={styles.resultsCount}>
+                        {" "}
+                        ({group.items.length})
+                      </span>
                     </span>
-                  ) : null}
-                  <span className={styles.itemDimensions}>
-                    {formatCatalogFootprint(
-                      item.dimensions.widthMm,
-                      item.dimensions.depthMm,
-                      displayUnit,
-                    )}
-                  </span>
-                  {item.category ? (
-                    <span className={styles.itemCategory}>{item.category}</span>
-                  ) : null}
-                </span>
-                {item.availability && item.availability !== "in-stock" ? (
-                  <span
-                    className={styles.itemAvailability}
-                    data-availability={item.availability}
-                  >
-                    {item.availability === "out-of-stock"
-                      ? "Unavailable"
-                      : item.availability === "discontinued"
-                        ? "Discontinued"
-                        : item.availability === "preorder"
-                          ? "Pre-order"
-                          : item.availability === "backorder"
-                            ? "Backorder"
-                            : item.availability}
-                  </span>
-                ) : null}
-              </div>
-              <button
-                type="button"
-                className={styles.placeAction}
-                // WCAG 2.5.3: accessible name must contain visible "Place".
-                // Keep "Add … to canvas" substring so existing e2e locators still match.
-                aria-label={`Place — Add ${item.shortName} to canvas`}
-                title={`Arm place: click the plan to drop ${item.shortName}`}
-                onClick={(event) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  onItemPlace?.(item.id, null, { x: 0, y: 0 });
-                  setCollections((current) =>
-                    addInventoryRecent(current, item.id, new Date().toISOString()),
-                  );
-                }}
-              >
-                Place
-              </button>
-              <button
-                type="button"
-                className={`${styles.favoriteButton} ${isInventoryFavorite(collections, item.id) ? styles.favoriteButtonActive : ""}`}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  handleFavoriteToggle(item.id);
-                }}
-                aria-label={
-                  isInventoryFavorite(collections, item.id)
-                    ? "Remove from favorites"
-                    : "Add to favorites"
-                }
-                aria-pressed={
-                  isInventoryFavorite(collections, item.id) ? "true" : "false"
-                }
-              >
-                <FavoriteIcon
-                  filled={isInventoryFavorite(collections, item.id)}
-                />
-              </button>
-                </article>
-              </li>
-            ))}
+                  </div>
+                  <ul className={styles.itemGrid} style={{ flex: "none", overflow: "visible" }}>
+                    {group.items.map((item) => {
+                      const index = orderedItems.findIndex(
+                        (entry) => entry.id === item.id,
+                      );
+                      const listMeta = buildCatalogListMetadata(item);
+                      const inCompare = compareIds.includes(item.id);
+                      return (
+                        <li
+                          key={item.id}
+                          className={styles.itemListEntry}
+                          data-catalog-item={item.id}
+                        >
+                          <article
+                            className={`${styles.itemCard} ${selectedItemId === item.id ? styles.itemCardSelected : ""} ${focusedIndex === index ? styles.itemCardFocused : ""}`}
+                            tabIndex={focusedIndex === index ? 0 : -1}
+                            data-selected={
+                              selectedItemId === item.id ? "true" : "false"
+                            }
+                            data-catalog-name={listMeta.name}
+                            data-family={listMeta.family}
+                            onClick={() => handleItemClick(item)}
+                            onDoubleClick={(event) =>
+                              handleItemDoubleClick(item, event)
+                            }
+                            onFocus={() => setFocusedIndex(index)}
+                            onKeyDown={(event) => {
+                              if (event.key === "Enter" || event.key === " ") {
+                                if (
+                                  event.target instanceof HTMLElement
+                                  && event.target.closest("button, input")
+                                ) {
+                                  return;
+                                }
+                                event.preventDefault();
+                                handleItemClick(item);
+                              }
+                            }}
+                          >
+                            <div className={styles.itemThumbnail} aria-hidden="true">
+                              {item.assets.previewImageUrl ? (
+                                <Image
+                                  src={item.assets.previewImageUrl}
+                                  alt=""
+                                  className={`${styles.itemImage}${ isSvgAssetUrl(item.assets.previewImageUrl) ? ` ${styles.itemImageVector}` : "" }`}
+                                  width={256}
+                                  height={256}
+                                  loading="lazy"
+                                  unoptimized
+                                  onError={(event) => {
+                                    const img = event.currentTarget;
+                                    img.style.display = "none";
+                                    const parent = img.parentElement;
+                                    if (
+                                      parent
+                                      && !parent.querySelector("[data-thumb-fallback]")
+                                    ) {
+                                      const fallback = document.createElement("div");
+                                      fallback.className = styles.itemPlaceholder;
+                                      fallback.dataset.thumbFallback = "1";
+                                      fallback.setAttribute("aria-hidden", "true");
+                                      parent.appendChild(fallback);
+                                    }
+                                  }}
+                                />
+                              ) : (
+                                <div className={styles.itemPlaceholder}>
+                                  <PlaceholderIcon />
+                                </div>
+                              )}
+                            </div>
+                            <div className={styles.itemInfo}>
+                              <span
+                                className={styles.itemName}
+                                title={listMeta.fullName || listMeta.name}
+                              >
+                                {listMeta.name}
+                              </span>
+                              <span className={styles.itemMeta}>
+                                {listMeta.sku ? (
+                                  <span
+                                    className={styles.itemSku}
+                                    title={`SKU ${listMeta.sku}`}
+                                  >
+                                    {listMeta.sku}
+                                  </span>
+                                ) : null}
+                                <span
+                                  className={styles.itemCategory}
+                                  data-field="family"
+                                  title={`Family ${listMeta.family}`}
+                                >
+                                  {listMeta.family}
+                                </span>
+                                {listMeta.variant ? (
+                                  <span
+                                    className={styles.itemCategory}
+                                    data-field="variant"
+                                    title={`Variant ${listMeta.variant}`}
+                                  >
+                                    {listMeta.variant}
+                                  </span>
+                                ) : null}
+                                <span className={styles.itemDimensions}>
+                                  {formatCatalogFootprint(
+                                    listMeta.dimsMm.widthMm ?? item.dimensions.widthMm,
+                                    listMeta.dimsMm.depthMm ?? item.dimensions.depthMm,
+                                    displayUnit,
+                                  )}
+                                </span>
+                              </span>
+                              {item.availability && item.availability !== "in-stock" ? (
+                                <span
+                                  className={styles.itemAvailability}
+                                  data-availability={item.availability}
+                                >
+                                  {item.availability === "out-of-stock"
+                                    ? "Unavailable"
+                                    : item.availability === "discontinued"
+                                      ? "Discontinued"
+                                      : item.availability === "preorder"
+                                        ? "Pre-order"
+                                        : item.availability === "backorder"
+                                          ? "Backorder"
+                                          : item.availability}
+                                </span>
+                              ) : null}
+                            </div>
+                            <button
+                              type="button"
+                              className={styles.placeAction}
+                              aria-label={`Place — Add ${item.shortName} to canvas`}
+                              title={`Arm place: click the plan to drop ${item.shortName}`}
+                              onClick={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                onItemPlace?.(item.id, null, { x: 0, y: 0 });
+                                setCollections((current) =>
+                                  addInventoryRecent(
+                                    current,
+                                    item.id,
+                                    new Date().toISOString(),
+                                  ),
+                                );
+                              }}
+                            >
+                              Place
+                            </button>
+                            <button
+                              type="button"
+                              className={`${styles.favoriteButton} ${isInventoryFavorite(collections, item.id) ? styles.favoriteButtonActive : ""}`}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                handleFavoriteToggle(item.id);
+                              }}
+                              aria-label={
+                                isInventoryFavorite(collections, item.id)
+                                  ? "Remove from favorites"
+                                  : "Add to favorites"
+                              }
+                              aria-pressed={
+                                isInventoryFavorite(collections, item.id)
+                                  ? "true"
+                                  : "false"
+                              }
+                            >
+                              <FavoriteIcon
+                                filled={isInventoryFavorite(collections, item.id)}
+                              />
+                            </button>
+                            <button
+                              type="button"
+                              className={`${styles.filterChip} ${inCompare ? styles.filterChipActive : ""}`}
+                              style={{
+                                gridColumn: "1 / -1",
+                                justifySelf: "start",
+                                minHeight: "1.25rem",
+                                fontSize: "0.625rem",
+                              }}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                handleCompareToggle(item.id);
+                                setCompareOpen(true);
+                              }}
+                              aria-pressed={inCompare ? "true" : "false"}
+                              aria-label={
+                                inCompare
+                                  ? `Remove ${item.shortName} from compare`
+                                  : `Add ${item.shortName} to compare`
+                              }
+                            >
+                              {inCompare ? "In compare" : "Compare"}
+                            </button>
+                          </article>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </li>
+              );
+            })}
           </ul>
         </section>
       )}

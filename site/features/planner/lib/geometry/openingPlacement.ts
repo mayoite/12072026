@@ -132,6 +132,17 @@ export function collectOpeningSpansOnWall(
   return spans;
 }
 
+/** World-space centre of an opening at normalized position on a wall centreline. */
+export function openingCenterPointOnWall(
+  wall: Pick<PlannerWall, "start" | "end">,
+  position: number,
+): PlannerPoint {
+  return {
+    x: wall.start.x + (wall.end.x - wall.start.x) * position,
+    y: wall.start.y + (wall.end.y - wall.start.y) * position,
+  };
+}
+
 export function openingLineEndpointsMm(
   wall: PlannerWall,
   position: number,
@@ -141,10 +152,7 @@ export function openingLineEndpointsMm(
   if (length <= 0) {
     return { start: { ...wall.start }, end: { ...wall.start } };
   }
-  const center = {
-    x: wall.start.x + (wall.end.x - wall.start.x) * position,
-    y: wall.start.y + (wall.end.y - wall.start.y) * position,
-  };
+  const center = openingCenterPointOnWall(wall, position);
   const unit = {
     x: (wall.end.x - wall.start.x) / length,
     y: (wall.end.y - wall.start.y) / length,

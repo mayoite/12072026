@@ -30,7 +30,7 @@ They must not silently override database truth.
 
 The product catalog already reads `planner_managed_products` from the Products database.
 
-The SVG-block route still reads descriptors from disk.
+The SVG-block route is DB-aware with disk fallback; the published SVG gate and live Admin publish still use disk.
 
 That is a split authority.
 

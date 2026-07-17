@@ -9,6 +9,8 @@ import {
   buildProductJsonLd,
   buildCareerJobsJsonLd,
   resolveDocumentTitle,
+  countBrandPipeSegments,
+  normalizeSiteOrigin,
   LOCALE_HREFLANG,
 } from '@/features/site/data/seo';
 import { SITE_BRAND } from '@/features/site/data/brand';
@@ -104,16 +106,58 @@ describe('resolveDocumentTitle', () => {
     expect(resolveDocumentTitle('Workstations')).toBe(
       `Workstations | ${SITE_BRAND.titleSuffix}`,
     );
+    expect(countBrandPipeSegments(resolveDocumentTitle('Workstations'))).toBe(1);
   });
 
-  it('collapses repeated brand suffixes', () => {
-    expect(
-      resolveDocumentTitle(`Workstations | ${SITE_BRAND.titleSuffix} | ${SITE_BRAND.titleSuffix}`),
-    ).toBe(`Workstations | ${SITE_BRAND.titleSuffix}`);
+  it('collapses repeated brand suffixes (SF-02)', () => {
+    const doubled = `Workstations | ${SITE_BRAND.titleSuffix} | ${SITE_BRAND.titleSuffix}`;
+    const resolved = resolveDocumentTitle(doubled);
+    expect(resolved).toBe(`Workstations | ${SITE_BRAND.titleSuffix}`);
+    expect(countBrandPipeSegments(resolved)).toBe(1);
   });
 
-  it('keeps default title intact', () => {
+  it('collapses three trailing brand segments and en-dash separators', () => {
+    const messy = `Seating | ${SITE_BRAND.titleSuffix} – ${SITE_BRAND.titleSuffix} — ${SITE_BRAND.titleSuffix}`;
+    expect(resolveDocumentTitle(messy)).toBe(`Seating | ${SITE_BRAND.titleSuffix}`);
+  });
+
+  it('keeps default title intact and strips an extra trailing brand', () => {
     expect(resolveDocumentTitle(SITE_BRAND.defaultTitle)).toBe(SITE_BRAND.defaultTitle);
+    expect(
+      resolveDocumentTitle(`${SITE_BRAND.defaultTitle} | ${SITE_BRAND.titleSuffix}`),
+    ).toBe(SITE_BRAND.defaultTitle);
+  });
+
+  it('does not double-append when brand is already embedded mid-title', () => {
+    const about = 'About One&Only | Office furniture Patna';
+    expect(resolveDocumentTitle(about)).toBe(about);
+    expect(countBrandPipeSegments(about)).toBe(0);
+  });
+
+  it('empty input falls back to default title', () => {
+    expect(resolveDocumentTitle('   ')).toBe(SITE_BRAND.defaultTitle);
+  });
+});
+
+describe('normalizeSiteOrigin / host honesty', () => {
+  it('strips trailing slashes without inventing a host', () => {
+    expect(normalizeSiteOrigin('https://seo-host.example.com///')).toBe(
+      'https://seo-host.example.com',
+    );
+    expect(normalizeSiteOrigin('https://oando.co.in')).toBe('https://oando.co.in');
+  });
+
+  it('buildPageMetadata canonical uses the given origin, never localhost', () => {
+    const meta = buildPageMetadata('https://seo-host.example.com///', {
+      title: 'Workstations',
+      description: 'Category of modular workstations for offices.',
+      path: '/products/workstations',
+    });
+    expect(String(meta.alternates!.canonical)).toBe(
+      'https://seo-host.example.com/products/workstations/',
+    );
+    expect(String(meta.alternates!.canonical)).not.toMatch(/localhost|127\.0\.0\.1/i);
+    expect(meta.metadataBase!.toString()).toBe('https://seo-host.example.com/');
   });
 });
 
@@ -130,6 +174,17 @@ describe('buildPageMetadata', () => {
       absolute: `Test Page | ${SITE_BRAND.titleSuffix}`,
     });
     expect(meta.openGraph!.title).toBe(`Test Page | ${SITE_BRAND.titleSuffix}`);
+    expect(countBrandPipeSegments(String((meta.title as { absolute: string }).absolute))).toBe(1);
+  });
+
+  it('collapses pre-suffixed input into one absolute brand title', () => {
+    const meta = buildPageMetadata(TEST_SITE_URL, {
+      ...input,
+      title: `Test Page | ${SITE_BRAND.titleSuffix} | ${SITE_BRAND.titleSuffix}`,
+    });
+    expect(meta.title).toEqual({
+      absolute: `Test Page | ${SITE_BRAND.titleSuffix}`,
+    });
   });
 
   it('sets the description from input', () => {

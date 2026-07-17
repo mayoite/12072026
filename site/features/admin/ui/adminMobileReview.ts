@@ -3,8 +3,20 @@
  * Pure copy + breakpoints for existing admin media queries.
  */
 
-/** Matches the locked admin theme max-width: 60rem phone/tablet stack. */
+/** Authoring block threshold (SVG studio / bulk import). */
 export const ADMIN_PHONE_MAX_WIDTH_REM = 60;
+
+/**
+ * Cards-priority media in locked admin CSS (`max-width: 48rem`).
+ * Catalog / inventory phone cards switch on this breakpoint.
+ */
+export const ADMIN_PHONE_CARDS_MAX_WIDTH_REM = 48;
+
+/** WCAG 2.5.5 target floor used by admin phone CSS (`min-height: 2.75rem`). */
+export const ADMIN_PHONE_MIN_TAP_PX = 44;
+
+/** Locked rem equivalent of {@link ADMIN_PHONE_MIN_TAP_PX} at 16px root. */
+export const ADMIN_PHONE_MIN_TAP_REM = 2.75;
 
 export type AdminPhoneCapability =
   | "list-review"
@@ -53,6 +65,19 @@ export function phoneAuthoringBlockedMessage(): string {
   );
 }
 
+/** Markup + CSS contract for catalog / inventory phone lists (AF-06). */
 export function phoneListLayoutMode(): "cards-priority" {
   return "cards-priority";
 }
+
+/** Cell labels required on managed catalog phone cards (AF-06). */
+export const ADMIN_CATALOG_PHONE_CELL_LABELS = [
+  "Name",
+  "Category",
+  "Size",
+  "Status",
+  "Actions",
+] as const;
+
+export type AdminCatalogPhoneCellLabel =
+  (typeof ADMIN_CATALOG_PHONE_CELL_LABELS)[number];

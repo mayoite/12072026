@@ -31,7 +31,9 @@ export function publishImpactSummary(input: PublishImpactInput): string {
     `Publish target: ${input.targetSlug}.`,
     `Draft version ${input.draftSchemaVersion}.`,
     `Released symbol: ${releasedStatePhrase(input.liveArtifactState)} (${liveRev}).`,
-    "Primary Publish replaces the released Planner symbol. Previous revisions remain available for rollback.",
+    "Primary Publish writes the released Planner symbol to disk (live authority).",
+    "Products DB is not live release authority.",
+    "Previous revisions remain available for rollback.",
   ].join(" ");
 }
 
@@ -43,8 +45,9 @@ export function publishConfirmMessage(input: PublishImpactInput): string {
     `Draft version: ${input.draftSchemaVersion}`,
     `Released symbol: ${releasedStatePhrase(input.liveArtifactState)}${input.liveRevisionShort ? ` · ${input.liveRevisionShort}` : ""}`,
     "",
-    "Impact: the current released Planner symbol is replaced. Previous revisions stay available for rollback.",
-    "If publish fails, the previous released symbol is not replaced.",
+    "Impact: the released Planner symbol on disk is replaced (live authority). Products DB is not live release authority.",
+    "Previous revisions stay available for rollback.",
+    "If publish fails, the previous released symbol on disk is not replaced.",
   ].join("\n");
 }
 
@@ -52,14 +55,14 @@ export function publishFailureMessage(
   productSlug: string,
   error: string,
 ): string {
-  return `Publish failed for “${productSlug}”: ${error}. The previous released symbol was not replaced.`;
+  return `Publish failed for “${productSlug}”: ${error}. The previous released symbol on disk was not replaced.`;
 }
 
 export function publishSuccessMessage(
   productSlug: string,
   whenLabel: string,
 ): string {
-  return `Published “${productSlug}” at ${whenLabel}. Use the links below to open the released SVG or verify it in Planner.`;
+  return `Published “${productSlug}” to disk at ${whenLabel}. Use the links below to open the released SVG or verify it in Planner.`;
 }
 
 export function releasedSvgHref(productSlug: string): string {

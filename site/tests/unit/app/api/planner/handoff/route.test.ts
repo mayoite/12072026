@@ -276,5 +276,78 @@ describe("app/api/planner/handoff/route.ts", () => {
     const insertArg = insertMock.mock.calls[0]?.[0] as { requirement?: string };
     expect(insertArg.requirement).toBe("handoff-key:user-1:scoped-key-123456");
   });
+
+  it("returns 400 when contact has neither email nor phone", async () => {
+    const res = await POST(
+      new NextRequest("http://localhost/api/planner/handoff", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(
+          validBody({
+            contact: { name: "Ada Lovelace", company: "Analytical Engines" },
+          }),
+        ),
+      }),
+    );
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(String(body.message)).toMatch(/email or phone/i);
+    expect(insertMock).not.toHaveBeenCalled();
+  });
+
+  it("returns 400 when confirmDemoPricing is not true", async () => {
+    const res = await POST(
+      new NextRequest("http://localhost/api/planner/handoff", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(validBody({ confirmDemoPricing: false })),
+      }),
+    );
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(String(body.message)).toMatch(/confirmDemoPricing/i);
+    expect(insertMock).not.toHaveBeenCalled();
+  });
+
+  it("reports staffNotified true when Resend notify succeeds", async () => {
+    vi.mocked(notifyHandoffStaff).mockResolvedValue({
+      attempted: true,
+      sent: true,
+    });
+    const res = await POST(
+      new NextRequest("http://localhost/api/planner/handoff", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(validBody()),
+      }),
+    );
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.success).toBe(true);
+    expect(body.staffNotified).toBe(true);
+    expect(String(body.message)).toMatch(/staff were notified/i);
+  });
+
+  it("keeps success when staff notify is not configured", async () => {
+    vi.mocked(notifyHandoffStaff).mockResolvedValue({
+      attempted: false,
+      sent: false,
+      reason: "email_not_configured",
+    });
+    const res = await POST(
+      new NextRequest("http://localhost/api/planner/handoff", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(validBody()),
+      }),
+    );
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.success).toBe(true);
+    expect(body.staffNotified).toBe(false);
+    expect(String(body.message)).toMatch(/not configured|still saved/i);
+  });
 });
 

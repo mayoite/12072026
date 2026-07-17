@@ -18,8 +18,9 @@ describe("app/admin/crm/quotes/page.tsx", () => {
       screen.getByRole("heading", { level: 1, name: "Quotes" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("Quote drafts, approvals, and follow-up status."),
+      screen.getByText(/Quote drafts, approvals, and follow-up status/i),
     ).toBeInTheDocument();
+    expect(screen.getByText(/localStorage demo/i)).toBeInTheDocument();
     expect(screen.getByTestId("crm-quotes-view")).toHaveTextContent(
       '"embedded":true',
     );

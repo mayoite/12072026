@@ -119,6 +119,21 @@ describe('proxy.ts', () => {
       expect(isProtectedPath('/admin')).toBe(true);
     });
 
+    it('protects nested /admin/* page paths', () => {
+      expect(isProtectedPath('/admin/')).toBe(true);
+      expect(isProtectedPath('/admin/svg-editor')).toBe(true);
+      expect(isProtectedPath('/admin/crm')).toBe(true);
+      expect(isProtectedPath('/admin/crm/projects')).toBe(true);
+      expect(isProtectedPath('/admin/catalog')).toBe(true);
+    });
+
+    it('does not edge-protect /api/admin (JSON auth via requireAdminSession/withAuth)', () => {
+      // Edge redirect would break API clients that expect 401/403 JSON, not /access HTML.
+      expect(isProtectedPath('/api/admin')).toBe(false);
+      expect(isProtectedPath('/api/admin/plans')).toBe(false);
+      expect(isProtectedPath('/api/admin/svg-editor')).toBe(false);
+    });
+
     it('should return true for /crm', () => {
       expect(isProtectedPath('/crm')).toBe(true);
     });
@@ -179,6 +194,84 @@ describe('proxy.ts', () => {
       expect(response.headers.get('X-Content-Type-Options')).toBe('nosniff');
       expect(response.headers.get('X-Frame-Options')).toBe('SAMEORIGIN');
       expect(response.headers.get('Content-Security-Policy')).toContain("default-src 'self'");
+    });
+
+    it('redirects unauthenticated /admin to /access when DEV_AUTH_BYPASS is off', async () => {
+      const prevBypass = process.env.DEV_AUTH_BYPASS;
+      const prevNode = process.env.NODE_ENV;
+      process.env.DEV_AUTH_BYPASS = '0';
+      process.env.NODE_ENV = 'test';
+      try {
+        const request = new NextRequest('http://localhost/admin');
+        const response = await proxy(request as unknown as NextRequest);
+        expect(response.status).toBe(307);
+        const location = response.headers.get('location') ?? '';
+        expect(location).toContain('/access');
+        expect(location).toContain('next=');
+        expect(decodeURIComponent(location)).toContain('/admin');
+      } finally {
+        process.env.DEV_AUTH_BYPASS = prevBypass;
+        process.env.NODE_ENV = prevNode;
+      }
+    });
+
+    it.each([
+      '/admin/svg-editor',
+      '/admin/crm',
+      '/admin/catalog',
+      '/admin/plans',
+    ] as const)(
+      'redirects unauthenticated %s to /access when DEV_AUTH_BYPASS is off',
+      async (path) => {
+        const prevBypass = process.env.DEV_AUTH_BYPASS;
+        const prevNode = process.env.NODE_ENV;
+        process.env.DEV_AUTH_BYPASS = '0';
+        process.env.NODE_ENV = 'test';
+        try {
+          const request = new NextRequest(`http://localhost${path}`);
+          const response = await proxy(request as unknown as NextRequest);
+          expect(response.status).toBe(307);
+          const location = response.headers.get('location') ?? '';
+          expect(location).toContain('/access');
+          expect(decodeURIComponent(location)).toContain(path);
+        } finally {
+          process.env.DEV_AUTH_BYPASS = prevBypass;
+          process.env.NODE_ENV = prevNode;
+        }
+      },
+    );
+
+    it('still redirects unauthenticated /admin in production even if DEV_AUTH_BYPASS=1', async () => {
+      const prevBypass = process.env.DEV_AUTH_BYPASS;
+      const prevNode = process.env.NODE_ENV;
+      process.env.DEV_AUTH_BYPASS = '1';
+      process.env.NODE_ENV = 'production';
+      try {
+        const request = new NextRequest('http://localhost/admin/svg-editor');
+        const response = await proxy(request as unknown as NextRequest);
+        expect(response.status).toBe(307);
+        const location = response.headers.get('location') ?? '';
+        expect(location).toContain('/access');
+      } finally {
+        process.env.DEV_AUTH_BYPASS = prevBypass;
+        process.env.NODE_ENV = prevNode;
+      }
+    });
+
+    it('allows /admin without cookies when DEV_AUTH_BYPASS=1 (local only)', async () => {
+      const prevBypass = process.env.DEV_AUTH_BYPASS;
+      const prevNode = process.env.NODE_ENV;
+      process.env.DEV_AUTH_BYPASS = '1';
+      process.env.NODE_ENV = 'development';
+      try {
+        const request = new NextRequest('http://localhost/admin/svg-editor');
+        const response = await proxy(request as unknown as NextRequest);
+        expect(response.status).toBe(200);
+        expect(response.headers.get('location')).toBeNull();
+      } finally {
+        process.env.DEV_AUTH_BYPASS = prevBypass;
+        process.env.NODE_ENV = prevNode;
+      }
     });
 
     it('should allow unauthenticated users on public /portal/svg-catalog (Phase 05)', async () => {

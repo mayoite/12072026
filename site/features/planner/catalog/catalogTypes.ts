@@ -220,6 +220,11 @@ export interface PlannerCatalogItem {
   category: PlannerCatalogCategory;
   /** Taxonomy subcategory */
   subCategory: PlannerCatalogSubCategory;
+  /**
+   * Product family label for inventory grouping/filter/compare (PF-22).
+   * When omitted, UI derives family from subCategory / taxonomy path.
+   */
+  family?: string;
   /** Full taxonomy path string */
   taxonomyPath: PlannerCatalogTaxonomyPath;
   /** Canonical dimensions in millimetres */

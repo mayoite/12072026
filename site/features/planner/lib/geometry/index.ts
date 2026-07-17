@@ -59,8 +59,10 @@ export {
   wallDimensionDrafts,
   overallRoomDimensionDrafts,
   annotationMatchesSegment,
+  openingAlongWallDimensionDrafts,
   type DimensionDraft,
   type DimensionPaintGeometry,
+  type OpeningAlongWallDimInput,
 } from './dimensions';
 export {
   applyOrthogonalLock,

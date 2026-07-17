@@ -53,12 +53,18 @@ export {
 } from "./wallDrawGeometry";
 
 export {
+  WALL_GRIP_KIND_PROP,
+  WALL_GRIP_ENDPOINT_PROP,
   WALL_GRIP_RADIUS_PX,
   projectPointFromGripScreen,
   readWallGripMeta,
   resolveWallForEndpointGrips,
   wallEndpointGripScreens,
+  wallEndpointsAfterGripMove,
+  wallGripAnchorPoint,
+  wallGripFabricOptions,
   writeWallGripMeta,
   type WallGripEndpoint,
   type WallGripMeta,
+  type WallGripScreenPair,
 } from "./wallEndpointGrips";

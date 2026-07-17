@@ -65,4 +65,73 @@ describe("roomOutline", () => {
     expect(corners.length).toBeGreaterThanOrEqual(4);
     expect(corners[0]).toEqual({ x: 0, y: 0 });
   });
+
+  it("chains scrambled wall order by shared endpoints", () => {
+    const walls: PlannerWall[] = [
+      {
+        id: "w3",
+        start: { x: 4000, y: 3000 },
+        end: { x: 0, y: 3000 },
+        thickness: 150,
+        height: 2700,
+        color: "#000",
+      },
+      {
+        id: "w1",
+        start: { x: 0, y: 0 },
+        end: { x: 4000, y: 0 },
+        thickness: 150,
+        height: 2700,
+        color: "#000",
+      },
+      {
+        id: "w4",
+        start: { x: 0, y: 3000 },
+        end: { x: 0, y: 0 },
+        thickness: 150,
+        height: 2700,
+        color: "#000",
+      },
+      {
+        id: "w2",
+        start: { x: 4000, y: 0 },
+        end: { x: 4000, y: 3000 },
+        thickness: 150,
+        height: 2700,
+        color: "#000",
+      },
+    ];
+    // Id list is not sequential around the loop; chain by joins.
+    const corners = orderedRoomCorners(walls, ["w1", "w3", "w2", "w4"]);
+    expect(corners).toHaveLength(4);
+    const keys = corners.map((c) => `${c.x},${c.y}`).sort();
+    expect(keys).toEqual(["0,0", "0,3000", "4000,0", "4000,3000"]);
+  });
+
+  it("returns empty corners for empty or unknown wall ids", () => {
+    expect(orderedRoomCorners([], [])).toEqual([]);
+    expect(
+      orderedRoomCorners(
+        [
+          {
+            id: "w1",
+            start: { x: 0, y: 0 },
+            end: { x: 1000, y: 0 },
+            thickness: 150,
+            height: 2700,
+            color: "#000",
+          },
+        ],
+        ["missing"],
+      ),
+    ).toEqual([]);
+  });
+
+  it("accepts reverse corner drag order for rectangular metrics", () => {
+    const metrics = rectangularRoomMetrics({ x: 5000, y: 4000 }, { x: 0, y: 0 });
+    expect(metrics.widthMm).toBe(5000);
+    expect(metrics.depthMm).toBe(4000);
+    expect(metrics.corners[0]).toEqual({ x: 0, y: 0 });
+    expect(metrics.corners[2]).toEqual({ x: 5000, y: 4000 });
+  });
 });

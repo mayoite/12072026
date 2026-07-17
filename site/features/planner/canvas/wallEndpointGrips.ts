@@ -51,6 +51,31 @@ export function projectPointFromGripScreen(
 }
 
 /**
+ * Fixed endpoint while dragging a grip: start-grip moves start, so end is anchor.
+ */
+export function wallGripAnchorPoint(
+  wall: Pick<PlannerWall, "start" | "end">,
+  endpoint: WallGripEndpoint,
+): PlannerPoint {
+  return endpoint === "start" ? { ...wall.end } : { ...wall.start };
+}
+
+/**
+ * Wall centreline endpoints after a grip drag commits a new project point.
+ * Copies only; never mutates the source wall.
+ */
+export function wallEndpointsAfterGripMove(
+  wall: Pick<PlannerWall, "start" | "end">,
+  endpoint: WallGripEndpoint,
+  newPoint: PlannerPoint,
+): { start: PlannerPoint; end: PlannerPoint } {
+  if (endpoint === "start") {
+    return { start: { ...newPoint }, end: { ...wall.end } };
+  }
+  return { start: { ...wall.start }, end: { ...newPoint } };
+}
+
+/**
  * Resolve the single selected wall that should show endpoint grips.
  * Multi-select and non-wall selections yield null.
  */

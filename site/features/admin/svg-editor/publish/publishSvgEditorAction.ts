@@ -36,6 +36,10 @@ import path from "node:path";
 /**
  * Fail-closed publish for one slug.
  *
+ * Order: stale-draft gate → dual-write resolve → compile → S4 disk → persist.
+ * Disk is live publish authority. Supabase Storage mirror is best-effort only
+ * and must never roll back a successful disk publish.
+ *
  * @param slug - route slug (`new` or existing inventory descriptor slug)
  * @param formFromEditor - no-code form state from the client editor
  */

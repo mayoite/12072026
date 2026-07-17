@@ -80,7 +80,7 @@ function publishButtonTitle(args: {
 }): string {
   if (args.submitting) return "Publishing…";
   if (args.canPublish) {
-    return "Publish to disk + Supabase catalog mirror for Planner import";
+    return "Publish to disk (live authority). Supabase catalog mirror is best-effort and does not undo disk success.";
   }
   return "Publish is blocked until the draft is valid and ready to release";
 }
@@ -147,6 +147,8 @@ export function AdminSvgEditorTopBar({
           ) : null}
         </h1>
         <p className="admin-svg-engine-shell__source" data-testid="admin-shell-source">
+          Local disk (live publish authority)
+          {" · "}
           {artifactState === "published" ? (
             <>
               Last published{" "}

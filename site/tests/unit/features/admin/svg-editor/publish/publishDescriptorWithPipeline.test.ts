@@ -1,10 +1,11 @@
 /**
  * Fail-closed publish helper: compileSvgForPublish (S1–S3) → pipeline (S4) → persist.
  * Covers success, compile fail, pipeline !ok, pipeline throw, persist-after-pipeline failure,
- * and invalid payload (no compile/pipeline/persist calls).
+ * invalid payload (no compile/pipeline/persist calls), real compile authority,
+ * and Vitest isolation (no canonical catalog mutation).
  */
 
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -13,12 +14,21 @@ import { afterEach, describe, it, expect, vi } from "vitest";
 import { BLOCK_DESCRIPTOR_SCHEMA_VERSION } from "@/features/planner/catalog/svg/svgTypes";
 import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import type { PipelineResult } from "@/features/admin/svg-editor/publish/svgPipelineRunner";
-import type { PersistResult } from "@/features/admin/svg-editor/storage/persistBlockDescriptor";
+import { runSvgPipeline } from "@/features/admin/svg-editor/publish/svgPipelineRunner";
+import {
+  persistBlockDescriptor,
+  type PersistResult,
+} from "@/features/admin/svg-editor/storage/persistBlockDescriptor";
 import type { SvgCompileStagesResult } from "@/features/planner/asset-engine/svg/runSvgCompileStages";
+import { compileSvgForPublish } from "@/features/planner/asset-engine/svg/compileSvgForPublish";
 import {
   publishDescriptorWithPipeline,
   sha256Utf8,
 } from "@/features/admin/svg-editor/publish/publishDescriptorWithPipeline";
+import {
+  assertCanonicalCatalogUnchanged,
+  snapshotCanonicalCatalog,
+} from "../../../../../helpers/adminCatalogIsolation";
 
 const tempDirs: string[] = [];
 
@@ -803,5 +813,97 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
     expect(result.error).toContain("commit denied");
     expect(persistRollback).toHaveBeenCalledOnce();
     expect(pipelineRollback).toHaveBeenCalledOnce();
+  });
+});
+
+/**
+ * Residual A-W1: real compileSvgForPublish authority + isolation fail-closed.
+ * Temp inventory only — never mutate committed descriptors / svg-catalog.
+ */
+describe("publishDescriptorWithPipeline real compile + isolation (A-W1)", () => {
+  it("real compile failure is fail-closed: no S4 pipeline and no persist", async () => {
+    const before = snapshotCanonicalCatalog();
+    const runPipeline = vi.fn(async () => pipelineOk());
+    const persist = vi.fn(() => persistOk());
+
+    // Real asset-engine entry: empty slug fails S1 normalize → ok:false.
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => compileSvgForPublish({ ...validDescriptor, slug: "" }),
+      runPipeline,
+      persist,
+    });
+
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error).toContain("compiler_failed");
+    expect(result.error).toMatch(/slug|normalize/i);
+    expect(runPipeline).not.toHaveBeenCalled();
+    expect(persist).not.toHaveBeenCalled();
+    assertCanonicalCatalogUnchanged(before);
+  });
+
+  it("real compile success then isolated S4 + persist does not touch canonical catalog", async () => {
+    const before = snapshotCanonicalCatalog();
+    const projectRoot = mkdtempSync(path.join(tmpdir(), "aw1-publish-root-"));
+    const descriptorDir = mkdtempSync(path.join(tmpdir(), "aw1-publish-desc-"));
+    tempDirs.push(projectRoot, descriptorDir);
+    mkdirSync(path.join(projectRoot, "site", "public", "svg-catalog"), {
+      recursive: true,
+    });
+    mkdirSync(path.join(projectRoot, "results", "admin", "svg-pipeline-fixtures"), {
+      recursive: true,
+    });
+
+    // Strip checksum so persist freeze recomputes cleanly for temp dir write.
+    const input = { ...validDescriptor, checksum: undefined as unknown as string };
+
+    const result = await publishDescriptorWithPipeline(input, {
+      parsePayload: (raw) => {
+        const parsed = raw as BlockDescriptor;
+        return { ok: true, value: { ...parsed, checksum: validDescriptor.checksum } };
+      },
+      compileSvg: compileSvgForPublish,
+      runPipeline: (descriptor, options) =>
+        runSvgPipeline(descriptor, { ...options, projectRoot }),
+      persist: (raw) => persistBlockDescriptor(raw, { dir: descriptorDir }),
+    });
+
+    expect(result.success).toBe(true);
+    if (!result.success) throw new Error(result.error);
+    expect(result.descriptor.slug).toBe("test-block");
+    const svgOnDisk = path.join(
+      projectRoot,
+      "site",
+      "public",
+      "svg-catalog",
+      "test-block.svg",
+    );
+    expect(existsSync(svgOnDisk)).toBe(true);
+    expect(readFileSync(svgOnDisk, "utf8")).toMatch(/<svg/i);
+    expect(existsSync(path.join(descriptorDir, "test-block.latest.json"))).toBe(
+      true,
+    );
+    assertCanonicalCatalogUnchanged(before);
+  });
+
+  it("default (canonical) S4 after real compile fails isolation under Vitest", async () => {
+    const before = snapshotCanonicalCatalog();
+    const persist = vi.fn(() => persistOk());
+
+    // compile real; pipeline defaults to monorepo public/svg-catalog → guard fails.
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: compileSvgForPublish,
+      // runPipeline: default runSvgPipeline
+      persist,
+    });
+
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error).toContain("compiler_failed");
+    expect(result.error).toMatch(/Catalog isolation violation/);
+    expect(persist).not.toHaveBeenCalled();
+    assertCanonicalCatalogUnchanged(before);
   });
 });

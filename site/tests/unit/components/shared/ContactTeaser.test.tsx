@@ -163,7 +163,10 @@ describe('ContactTeaser Component', () => {
   it('handles API error response correctly', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: false,
-      json: async () => ({ error: 'Database offline' }),
+      json: async () => ({
+        success: false,
+        error: { code: 'DATABASE_ERROR', message: 'Database offline' },
+      }),
     });
 
     render(<ContactTeaser />);

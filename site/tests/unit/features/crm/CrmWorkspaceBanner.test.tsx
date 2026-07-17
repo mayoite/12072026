@@ -49,7 +49,9 @@ describe("CrmWorkspaceBanner", () => {
 
   it("shows load sample data when empty", () => {
     render(<CrmWorkspaceBanner />);
-    expect(screen.getByText(/Browser-only CRM/i)).toBeInTheDocument();
+    expect(screen.getByText(/Browser-only CRM demo/i)).toBeInTheDocument();
+    expect(screen.getByText(/localStorage/i)).toBeInTheDocument();
+    expect(screen.getByText(/Not a production CRM/i)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /Load sample data/i }));
     expect(seedDemoData).toHaveBeenCalled();
   });

@@ -1,91 +1,92 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import { SiteFooter } from '@/components/site/Footer';
+import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { SiteFooter } from "@/components/site/Footer";
+import { SITE_FOOTER_NAV, SITE_SOCIAL_LINKS } from "@/features/site/data/navigation";
+import { SITE_CONTACT } from "@/features/site/data/contact";
 
-// Mock components
-vi.mock('@/components/ui/Logo', () => ({
-  OneAndOnlyLogo: ({ variant, className }: any) => (
+vi.mock("@/components/ui/Logo", () => ({
+  OneAndOnlyLogo: ({
+    variant,
+    className,
+  }: {
+    variant?: string;
+    className?: string;
+  }) => (
     <div data-testid="logo" data-variant={variant} className={className}>
       Logo
     </div>
   ),
 }));
 
-vi.mock('@/components/site/LanguageSwitcher', () => ({
+vi.mock("@/components/site/LanguageSwitcher", () => ({
   LanguageSwitcher: () => <div data-testid="language-switcher">Language Switcher</div>,
 }));
 
-// Mock contact site-data
-vi.mock('@/features/site/data/contact', () => ({
-  buildMailtoHref: () => 'mailto:sales@oando.local',
-  formatSitePostalAddress: () => 'Patna office address',
-  SITE_CONTACT: {
-    supportPhone: '+91 99999 99999',
-    salesEmail: 'sales@oando.local',
-  },
-  toTelHref: (num: string) => `tel:${num}`,
-}));
-
-// Mock site navigation
-vi.mock('@/features/site/data/navigation', () => ({
-  SITE_SOCIAL_LINKS: [
-    { id: 'facebook', label: 'Facebook', href: 'https://facebook.com' },
-    { id: 'youtube', label: 'YouTube', href: 'https://youtube.com' },
-    { id: 'instagram', label: 'Instagram', href: 'https://instagram.com' },
-  ],
-  SITE_FOOTER_NAV: [
-    {
-      heading: 'Category A',
-      links: [{ href: '/a', label: 'Link A' }],
-    },
-    {
-      heading: 'Category B',
-      links: [{ href: '/b', label: 'Link B' }],
-    },
-  ],
-}));
-
-
-describe('SiteFooter Component', () => {
-  it('renders logo, address details, and custom lists correctly', () => {
+describe("SiteFooter Component", () => {
+  it("renders brand, contact, real footer nav, and legal links", () => {
     render(<SiteFooter />);
 
-    // Logo check
-    const logo = screen.getByTestId('logo');
+    const logo = screen.getByTestId("logo");
     expect(logo).toBeInTheDocument();
-    expect(logo).toHaveAttribute('data-variant', 'orange');
-    expect(screen.getByRole('link', { name: /One&Only - home/i })).toHaveAttribute('href', '/');
+    expect(logo).toHaveAttribute("data-variant", "orange");
+    expect(screen.getByRole("link", { name: /One&Only - home/i })).toHaveAttribute("href", "/");
 
-    // Contact details check
-    expect(screen.getByText('Patna office address')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: '9031022875' })).toHaveAttribute('href', 'tel:+91 99999 99999');
-    expect(screen.getByRole('link', { name: 'sales@oando.local' })).toHaveAttribute('href', 'mailto:sales@oando.local');
+    expect(screen.getByText(/Jagat Trade Centre/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "9031022875" })).toHaveAttribute(
+      "href",
+      `tel:${SITE_CONTACT.supportPhone}`,
+    );
+    expect(screen.getByRole("link", { name: SITE_CONTACT.salesEmail })).toHaveAttribute(
+      "href",
+      `mailto:${SITE_CONTACT.salesEmail}`,
+    );
 
-    // Language switcher
-    expect(screen.getByTestId('language-switcher')).toBeInTheDocument();
+    expect(screen.getByTestId("language-switcher")).toBeInTheDocument();
 
-    // Social links checks
-    const facebookLink = screen.getByRole('link', { name: 'Facebook' });
-    expect(facebookLink).toHaveAttribute('href', 'https://facebook.com');
-    const youtubeLink = screen.getByRole('link', { name: 'YouTube' });
-    expect(youtubeLink).toHaveAttribute('href', 'https://youtube.com');
+    for (const social of SITE_SOCIAL_LINKS) {
+      const socialLink = screen.getByRole("link", { name: social.label });
+      expect(socialLink).toHaveAttribute("href", social.href);
+    }
 
-    // Nav columns checks
-    expect(screen.getByText('Category A')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Link A' })).toHaveAttribute('href', '/a');
-    expect(screen.getByText('Category B')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Link B' })).toHaveAttribute('href', '/b');
+    for (const col of SITE_FOOTER_NAV) {
+      expect(screen.getByText(col.heading)).toBeInTheDocument();
+      for (const link of col.links) {
+        expect(screen.getByRole("link", { name: link.label })).toHaveAttribute("href", link.href);
+      }
+    }
 
-    // Legal bar checks
-    expect(screen.getByRole('link', { name: 'Refund Policy' })).toHaveAttribute('href', '/refund-and-return-policy');
-    expect(screen.getByRole('link', { name: 'Privacy Policy' })).toHaveAttribute('href', '/privacy');
-    expect(screen.getByRole('link', { name: 'Terms' })).toHaveAttribute('href', '/terms');
-    expect(screen.getByRole('link', { name: 'Terms' })).toHaveAttribute('href', '/terms');
-    expect(screen.queryByRole('link', { name: 'Imprint' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: 'Admin' })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Refund Policy" })).toHaveAttribute(
+      "href",
+      "/refund-and-return-policy",
+    );
+    expect(screen.getByRole("link", { name: "Privacy Policy" })).toHaveAttribute(
+      "href",
+      "/privacy",
+    );
+    expect(screen.getByRole("link", { name: "Terms" })).toHaveAttribute("href", "/terms");
+    expect(screen.queryByRole("link", { name: "Imprint" })).not.toBeInTheDocument();
 
-    // Current Year copy
     const currentYear = new Date().getFullYear();
-    expect(screen.getByText(new RegExp(`© ${currentYear} One&Only. All rights reserved.`))).toBeInTheDocument();
+    expect(
+      screen.getByText(new RegExp(`© ${currentYear} One&Only. All rights reserved.`)),
+    ).toBeInTheDocument();
+  });
+
+  it("does not expose a public Admin link (real nav data, not mocks)", () => {
+    render(<SiteFooter />);
+
+    const hrefs = SITE_FOOTER_NAV.flatMap((section) => section.links.map((l) => l.href));
+    const labels = SITE_FOOTER_NAV.flatMap((section) => section.links.map((l) => l.label));
+    expect(hrefs.some((href) => /^\/admin(\/|$)/i.test(href))).toBe(false);
+    expect(labels.some((label) => label.trim().toLowerCase() === "admin")).toBe(false);
+
+    const rendered = screen.getAllByRole("link");
+    for (const link of rendered) {
+      const href = link.getAttribute("href") ?? "";
+      const label = (link.textContent ?? "").trim().toLowerCase();
+      expect(href.toLowerCase()).not.toMatch(/^\/admin(\/|$)/);
+      expect(label).not.toBe("admin");
+    }
+    expect(screen.queryByRole("link", { name: /^admin$/i })).not.toBeInTheDocument();
   });
 });

@@ -4,6 +4,7 @@ import { isAppAdmin } from '@/lib/auth/roles'
 import { rateLimit } from "@/lib/rateLimit"
 import { createServerClient } from "@/platform/supabase/server"
 import { validateCsrfRequest } from "@/lib/security/csrf"
+import { CSRF_REJECTION_HEADER_NAME } from "@/lib/security/csrfConstants"
 import { success, error, rateLimitedError } from "@/features/shared/api/apiResponse"
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError"
 
@@ -33,9 +34,10 @@ export async function POST(req: Request) {
       return error(
         new ApiError(
           403,
-          API_ERROR_CODES.INSUFFICIENT_PERMISSIONS,
+          API_ERROR_CODES.CSRF_FAILED,
           "Invalid or missing CSRF token",
         ),
+        { headers: { [CSRF_REJECTION_HEADER_NAME]: "1" } },
       );
     }
 

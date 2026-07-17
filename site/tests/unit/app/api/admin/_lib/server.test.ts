@@ -11,6 +11,7 @@ import {
 } from "@/platform/supabase/adminServer";
 import { rateLimit } from "@/lib/rateLimit";
 import { createServerClient } from "@/platform/supabase/server";
+import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
 
 vi.mock("@/lib/rateLimit", () => ({
   rateLimit: vi.fn(),
@@ -30,6 +31,9 @@ describe("app/api/admin/_lib/server.ts", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     process.env = { ...originalEnv };
+    // Unit gate honesty: bypass must be off unless a test turns it on.
+    process.env.DEV_AUTH_BYPASS = "0";
+    process.env.NODE_ENV = "test";
   });
 
   afterEach(() => {
@@ -55,7 +59,69 @@ describe("app/api/admin/_lib/server.ts", () => {
   });
 
   describe("requireAdminSession", () => {
-    it("returns 401 when session is missing", async () => {
+    it("returns 401 when session is missing and DEV_AUTH_BYPASS is off", async () => {
+      vi.mocked(createServerClient).mockResolvedValue({
+        auth: {
+          getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
+        },
+      } as never);
+      const result = await requireAdminSession();
+      expect(result?.status).toBe(401);
+      const body = await result?.json();
+      expect(body).toMatchObject({ error: expect.any(String) });
+    });
+
+    it("returns 403 when session user is not admin and bypass is off", async () => {
+      vi.mocked(createServerClient).mockResolvedValue({
+        auth: {
+          getUser: vi.fn().mockResolvedValue({
+            data: {
+              user: {
+                id: "member-1",
+                email: "member@example.com",
+                app_metadata: { role: "member" },
+              },
+            },
+            error: null,
+          }),
+        },
+      } as never);
+      const result = await requireAdminSession();
+      expect(result?.status).toBe(403);
+    });
+
+    it("returns null when an admin session is present", async () => {
+      vi.mocked(createServerClient).mockResolvedValue({
+        auth: {
+          getUser: vi.fn().mockResolvedValue({
+            data: {
+              user: {
+                id: "admin-1",
+                email: "admin@example.com",
+                app_metadata: { role: "admin" },
+              },
+            },
+            error: null,
+          }),
+        },
+      } as never);
+      const result = await requireAdminSession();
+      expect(result).toBeNull();
+    });
+
+    it("returns null under DEV_AUTH_BYPASS=1 in non-production (local only)", async () => {
+      process.env.NODE_ENV = "development";
+      process.env.DEV_AUTH_BYPASS = "1";
+      const result = await requireAdminSession();
+      expect(result).toBeNull();
+      // Bypass must not call Supabase when enabled.
+      expect(createServerClient).not.toHaveBeenCalled();
+      expect(DEV_BYPASS_USER.role).toBe("admin");
+    });
+
+    it("returns 401 in production even when DEV_AUTH_BYPASS=1 and session missing", async () => {
+      process.env.NODE_ENV = "production";
+      process.env.DEV_AUTH_BYPASS = "1";
       vi.mocked(createServerClient).mockResolvedValue({
         auth: {
           getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),

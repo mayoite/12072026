@@ -4,9 +4,10 @@ import React from "react";
 import PortalLayout, { metadata } from "@/app/(site)/portal/layout";
 
 describe("app/(site)/portal/layout.tsx", () => {
-  it("exports noindex portal metadata", () => {
-    expect(metadata.title).toBe("Portal | One&Only");
+  it("exports noindex portal metadata with absolute single-brand title", () => {
+    expect(metadata.title).toEqual({ absolute: "Portal | One&Only" });
     expect(metadata.robots).toEqual({ index: false, follow: false });
+    expect(metadata.alternates?.canonical).toMatch(/\/portal\/?$/);
   });
 
   it("renders children directly", () => {

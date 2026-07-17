@@ -7,6 +7,8 @@ import {
   HOMEPAGE_PARTNERSHIP_CONTENT,
   HOMEPAGE_CONTACT_CONTENT,
   HOMEPAGE_WHY_CHOOSE_US_CONTENT,
+  joinAccessibleTitleLines,
+  resolveHeroTitleLines,
 } from "@/features/site/data/homepage";
 
 describe("homepage data", () => {
@@ -24,10 +26,30 @@ describe("homepage data", () => {
   });
 
   it("hero uses brand headline and pan-india kicker without subtitle", () => {
-    expect(HOMEPAGE_HERO_CONTENT.title.join(" ")).toMatch(/your team/i);
+    expect(joinAccessibleTitleLines(HOMEPAGE_HERO_CONTENT.title)).toMatch(/your team/i);
     expect(HOMEPAGE_HERO_CONTENT.kicker).toMatch(/India/i);
     expect(HOMEPAGE_HERO_CONTENT.secondaryCta.label).toBe("Request a quote");
     expect("description" in HOMEPAGE_HERO_CONTENT).toBe(false);
+  });
+
+  it("joinAccessibleTitleLines preserves spaces between animated lines (SF-01)", () => {
+    const joined = joinAccessibleTitleLines(HOMEPAGE_HERO_CONTENT.title);
+    expect(joined).toBe("Spaces that work as hard as your team");
+    expect(joined).not.toMatch(/workas|asyour/);
+    expect(joined).not.toBe(HOMEPAGE_HERO_CONTENT.title.join(""));
+    expect(joinAccessibleTitleLines(["  Spaces that work  ", "", " your team "])).toBe(
+      "Spaces that work your team",
+    );
+  });
+
+  it("resolveHeroTitleLines accepts string arrays and falls back otherwise", () => {
+    expect(resolveHeroTitleLines(["A", "B"])).toEqual(["A", "B"]);
+    expect(resolveHeroTitleLines(null)).toEqual([...HOMEPAGE_HERO_CONTENT.title]);
+    expect(resolveHeroTitleLines("not-an-array")).toEqual([...HOMEPAGE_HERO_CONTENT.title]);
+    expect(resolveHeroTitleLines([])).toEqual([...HOMEPAGE_HERO_CONTENT.title]);
+    expect(resolveHeroTitleLines([1, 2] as unknown as string[])).toEqual([
+      ...HOMEPAGE_HERO_CONTENT.title,
+    ]);
   });
 
   it("hero carousel excludes titan-patna-hero slide", () => {

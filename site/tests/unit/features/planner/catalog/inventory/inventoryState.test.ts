@@ -33,4 +33,43 @@ describe("inventoryState", () => {
     collections = removeInventoryFavorite(collections, "item-1");
     expect(isInventoryFavorite(collections, "item-1")).toBe(false);
   });
+
+  it("reduces family and facet filter commands and resets them", () => {
+    let state = defaultInventoryPanelState();
+    state = reduceInventoryCommand(state, {
+      type: "SELECT_FAMILY",
+      familyKey: "desks",
+    });
+    state = reduceInventoryCommand(state, {
+      type: "SELECT_MATERIAL",
+      material: "oak",
+    });
+    state = reduceInventoryCommand(state, {
+      type: "SELECT_AVAILABILITY",
+      availability: "backorder",
+    });
+    state = reduceInventoryCommand(state, {
+      type: "SELECT_SEAT_COUNT",
+      seatCount: 2,
+    });
+    state = reduceInventoryCommand(state, {
+      type: "SET_WIDTH_RANGE",
+      minWidthMm: 1000,
+      maxWidthMm: 1600,
+    });
+    expect(state.selectedFamilyKey).toBe("desks");
+    expect(state.selectedMaterial).toBe("oak");
+    expect(state.selectedAvailability).toBe("backorder");
+    expect(state.selectedSeatCount).toBe(2);
+    expect(state.minWidthMm).toBe(1000);
+    expect(state.maxWidthMm).toBe(1600);
+
+    state = reduceInventoryCommand(state, { type: "RESET_FILTERS" });
+    expect(state.selectedFamilyKey).toBeNull();
+    expect(state.selectedMaterial).toBeNull();
+    expect(state.selectedAvailability).toBeNull();
+    expect(state.selectedSeatCount).toBeNull();
+    expect(state.minWidthMm).toBeNull();
+    expect(state.maxWidthMm).toBeNull();
+  });
 });

@@ -303,6 +303,8 @@ export function TopBar({
       className={`pw-topbar ${styles.header}`}
       aria-label="Planner workspace"
       data-density={density}
+      data-chrome-mode={chromeMode}
+      data-mobile-chrome="top"
       data-testid="planner-topbar"
     >
       <div className={styles.brand}>

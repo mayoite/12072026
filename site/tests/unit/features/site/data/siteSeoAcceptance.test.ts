@@ -23,7 +23,12 @@ import {
   publicNoindexRoutes,
   sitemapMustExcludePaths,
 } from "@/features/site/data/siteSeoContract";
-import { buildPageMetadata, buildProductJsonLd } from "@/features/site/data/seo";
+import {
+  buildPageMetadata,
+  buildProductJsonLd,
+  countBrandPipeSegments,
+  resolveDocumentTitle,
+} from "@/features/site/data/seo";
 import {
   ACCESS_PAGE_METADATA,
   CHOOSE_PRODUCT_PAGE_METADATA,
@@ -31,6 +36,8 @@ import {
   TRACKING_PAGE_METADATA,
 } from "@/features/site/data/routeMetadata";
 import { metadata as svgCatalogLayoutMetadata } from "@/app/(site)/portal/svg-catalog/layout";
+import { SITE_URL } from "@/lib/siteUrl";
+import { SITE_BRAND } from "@/features/site/data/brand";
 
 describe("SITE-SEO-01 unique title, description, canonical", () => {
   it("registers metadata for every static indexable public path", () => {
@@ -50,6 +57,32 @@ describe("SITE-SEO-01 unique title, description, canonical", () => {
       const canonical = entry.metadata.alternates?.canonical;
       expect(canonical, entry.path).toBeDefined();
       expect(String(canonical), entry.path).toContain(entry.path === "/" ? "" : entry.path);
+    }
+  });
+
+  it("SF-02: static titles are absolute and never double the brand suffix", () => {
+    for (const entry of SEO01_STATIC_METADATA) {
+      const raw = entry.metadata.title;
+      expect(raw && typeof raw === "object" && "absolute" in raw, entry.path).toBe(true);
+      const title = metadataTitleString(entry.metadata);
+      expect(countBrandPipeSegments(title), entry.path).toBeLessThanOrEqual(1);
+      expect(title, entry.path).not.toMatch(
+        new RegExp(
+          `${SITE_BRAND.titleSuffix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*[|–—-]\\s*${SITE_BRAND.titleSuffix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`,
+          "i",
+        ),
+      );
+      // resolveDocumentTitle is idempotent on absolute page titles
+      expect(resolveDocumentTitle(title), entry.path).toBe(title);
+    }
+  });
+
+  it("host honesty: static canonicals use SITE_URL origin, never localhost", () => {
+    const origin = new URL(SITE_URL).origin;
+    for (const entry of SEO01_STATIC_METADATA) {
+      const canonical = String(entry.metadata.alternates?.canonical ?? "");
+      expect(canonical, entry.path).toMatch(new RegExp(`^${origin.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+      expect(canonical, entry.path).not.toMatch(/localhost|127\.0\.0\.1/i);
     }
   });
 

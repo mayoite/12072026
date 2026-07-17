@@ -101,6 +101,7 @@ import {
   readWallGripMeta,
   resolveWallForEndpointGrips,
   wallEndpointGripScreens,
+  wallGripAnchorPoint,
   wallGripFabricOptions,
   writeWallGripMeta,
 } from "./wallEndpointGrips";
@@ -925,25 +926,21 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         };
       };
 
-      const snapOpeningTargetToDocument = (
+      /** Rewrite opening Line endpoints so drag stays wall-aligned (not free-float). */
+      const paintOpeningMarkerGeometry = (
         target: FabricObject,
-        kind: "door" | "window",
-        entityId: string,
+        wall: PlannerWall,
+        position: number,
+        widthMm: number,
       ) => {
-        const host = lookupOpeningHost(kind, entityId);
-        if (!host) return;
-        const centerMm = {
-          x:
-            host.wall.start.x +
-            (host.wall.end.x - host.wall.start.x) * host.position,
-          y:
-            host.wall.start.y +
-            (host.wall.end.y - host.wall.start.y) * host.position,
-        };
-        const centerScreen = projectToScreen(centerMm, transformRef.current);
+        const endpoints = openingLineEndpointsMm(wall, position, widthMm);
+        const startScreen = projectToScreen(endpoints.start, transformRef.current);
+        const endScreen = projectToScreen(endpoints.end, transformRef.current);
         target.set({
-          left: centerScreen.x,
-          top: centerScreen.y,
+          x1: startScreen.x,
+          y1: startScreen.y,
+          x2: endScreen.x,
+          y2: endScreen.y,
           scaleX: 1,
           scaleY: 1,
           angle: 0,
@@ -951,6 +948,21 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           skewY: 0,
         });
         target.setCoords();
+      };
+
+      const snapOpeningTargetToDocument = (
+        target: FabricObject,
+        kind: "door" | "window",
+        entityId: string,
+      ) => {
+        const host = lookupOpeningHost(kind, entityId);
+        if (!host) return;
+        paintOpeningMarkerGeometry(
+          target,
+          host.wall,
+          host.position,
+          host.widthMm,
+        );
       };
 
       const constrainOpeningTargetToHostWall = (
@@ -969,41 +981,63 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         );
         const position =
           "rejected" in projected ? host.position : projected.position;
-        const centerMm = {
-          x:
-            host.wall.start.x +
-            (host.wall.end.x - host.wall.start.x) * position,
-          y:
-            host.wall.start.y +
-            (host.wall.end.y - host.wall.start.y) * position,
-        };
-        const centerScreen = projectToScreen(centerMm, transformRef.current);
-        target.set({
-          left: centerScreen.x,
-          top: centerScreen.y,
-          scaleX: 1,
-          scaleY: 1,
-          angle: 0,
-          skewX: 0,
-          skewY: 0,
+        paintOpeningMarkerGeometry(target, host.wall, position, host.widthMm);
+      };
+
+      const constrainGripTargetWhileMoving = (target: FabricObject) => {
+        const gripMeta = readWallGripMeta(
+          target as Parameters<typeof readWallGripMeta>[0],
+        );
+        if (!gripMeta) return false;
+        const floor = activeFloorRef.current;
+        const wall = floor?.walls.find((item) => item.id === gripMeta.wallId);
+        if (!wall) return true;
+        const raw = projectPointFromGripScreen(
+          { x: target.left ?? 0, y: target.top ?? 0 },
+          transformRef.current,
+        );
+        const anchor = wallGripAnchorPoint(wall, gripMeta.endpoint);
+        const snapped = snapProjectPoint({
+          raw,
+          start: anchor,
+          walls: floor?.walls ?? [],
+          transform: transformRef.current,
+          snapEnabled: snapEnabledRef.current,
+          gridMm: gridMmRef.current,
+          orthogonal: orthogonalLockRef.current,
         });
+        const screen = projectToScreen(snapped.point, transformRef.current);
+        target.set({ left: screen.x, top: screen.y });
         target.setCoords();
+        return true;
       };
 
       const handleOpeningMoving = (event: {
         target?: FabricObject;
         pointer?: { x: number; y: number };
+        e?: { clientX?: number; clientY?: number };
       }) => {
         if (rebuildingRef.current) return;
         const target = event.target;
         if (!target) return;
+        if (constrainGripTargetWhileMoving(target)) return;
         const kind = readCanvasEntityType(target);
         if (kind !== "door" && kind !== "window") return;
         const entityId = readFurnitureEntityId(target);
         if (!entityId) return;
-        const pointerScreen = event.pointer
-          ? { x: event.pointer.x, y: event.pointer.y }
-          : { x: target.left ?? 0, y: target.top ?? 0 };
+        let pointerScreen: PlannerPoint = {
+          x: target.left ?? 0,
+          y: target.top ?? 0,
+        };
+        if (event.pointer) {
+          pointerScreen = { x: event.pointer.x, y: event.pointer.y };
+        } else if (
+          event.e &&
+          typeof event.e.clientX === "number" &&
+          typeof event.e.clientY === "number"
+        ) {
+          pointerScreen = hostPoint(host, event.e.clientX, event.e.clientY);
+        }
         constrainOpeningTargetToHostWall(target, kind, entityId, pointerScreen);
       };
 
@@ -1025,9 +1059,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           const anchor =
             wall == null
               ? null
-              : gripMeta.endpoint === "start"
-                ? wall.end
-                : wall.start;
+              : wallGripAnchorPoint(wall, gripMeta.endpoint);
           const snapped = snapProjectPoint({
             raw,
             start: anchor,
@@ -1902,6 +1934,8 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           lockSkewingX: true,
           lockSkewingY: true,
           objectCaching: false,
+          hoverCursor: "move",
+          moveCursor: "move",
         });
         writeCanvasEntityType(marker, "door");
         writeFurnitureEntityId(marker, door.id);
@@ -1946,6 +1980,8 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           lockSkewingX: true,
           lockSkewingY: true,
           objectCaching: false,
+          hoverCursor: "move",
+          moveCursor: "move",
         });
         writeCanvasEntityType(marker, "window");
         writeFurnitureEntityId(marker, window.id);

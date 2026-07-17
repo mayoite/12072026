@@ -5,8 +5,11 @@
  *   - slug "new" → default descriptor → pipeline
  *   - missing slug → { success:false, error:"not found" }, no pipeline
  *   - valid side-table-001 → tryLoad → pipeline (mocked)
+ *   - stale-draft gate fail-closed before pipeline
+ *   - Supabase catalog mirror failure does not roll back disk success
  *
  * Pipeline is mocked so this seat does not re-test compile/persist.
+ * Canonical inventory is read-only via tryLoad; no descriptor/svg-catalog writes.
  */
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -15,9 +18,18 @@ import { descriptorToFormState } from "@/features/admin/svg-editor/form/svgEdito
 import { tryLoad } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import type { SvgEditorFormState } from "@/features/admin/svg-editor/form/svgEditorFormState";
 
-const { publishDescriptorWithPipeline, revalidatePath } = vi.hoisted(() => ({
+const {
+  publishDescriptorWithPipeline,
+  revalidatePath,
+  publishSymbolToSupabaseCatalog,
+  appendDescriptorAudit,
+  setCatalogLifecycle,
+} = vi.hoisted(() => ({
   publishDescriptorWithPipeline: vi.fn(),
   revalidatePath: vi.fn(),
+  publishSymbolToSupabaseCatalog: vi.fn(),
+  appendDescriptorAudit: vi.fn(),
+  setCatalogLifecycle: vi.fn(),
 }));
 
 vi.mock("next/cache", () => ({ revalidatePath }));
@@ -44,14 +56,7 @@ vi.mock("@/features/admin/svg-editor/publish/resolveSvgPublishDualWrite", () => 
 }));
 
 vi.mock("@/features/shared/catalog/catalogAssetStorage.server", () => ({
-  publishSymbolToSupabaseCatalog: vi.fn(async () => ({
-    svg: { ok: true, path: "planner-symbols/x/symbol.svg", publicUrl: "https://x/svg" },
-    descriptor: {
-      ok: true,
-      path: "planner-symbols/x/descriptor.json",
-      publicUrl: "https://x/json",
-    },
-  })),
+  publishSymbolToSupabaseCatalog,
 }));
 
 vi.mock("node:fs/promises", () => ({
@@ -62,11 +67,11 @@ vi.mock("node:fs/promises", () => ({
 }));
 
 vi.mock("@/features/admin/svg-editor/lifecycle/catalogLifecycle", () => ({
-  setCatalogLifecycle: vi.fn(),
+  setCatalogLifecycle,
 }));
 
 vi.mock("@/features/admin/svg-editor/storage/descriptorAuditLog", () => ({
-  appendDescriptorAudit: vi.fn(),
+  appendDescriptorAudit,
 }));
 
 vi.mock("@/features/shared/api/withAuth", () => ({
@@ -106,10 +111,21 @@ describe("publishSvgEditorAction", () => {
   beforeEach(() => {
     publishDescriptorWithPipeline.mockReset();
     revalidatePath.mockReset();
+    publishSymbolToSupabaseCatalog.mockReset();
+    appendDescriptorAudit.mockReset();
+    setCatalogLifecycle.mockReset();
     publishDescriptorWithPipeline.mockResolvedValue({
       success: true,
       descriptor: {
         slug: "mock-published",
+      },
+    });
+    publishSymbolToSupabaseCatalog.mockResolvedValue({
+      svg: { ok: true, path: "planner-symbols/x/symbol.svg", publicUrl: "https://x/svg" },
+      descriptor: {
+        ok: true,
+        path: "planner-symbols/x/descriptor.json",
+        publicUrl: "https://x/json",
       },
     });
   });
@@ -207,5 +223,89 @@ describe("publishSvgEditorAction", () => {
       error: "compiler_failed: empty blocks",
     });
     expect(publishDescriptorWithPipeline).toHaveBeenCalledTimes(1);
+    expect(publishSymbolToSupabaseCatalog).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("blocks stale drafts before pipeline (DB-SVG-09 disk path)", async () => {
+    const form = existingFormState("side-table-001");
+    const baseline = form.openedBaselineGeneratedAt;
+    expect(typeof baseline).toBe("number");
+    if (typeof baseline !== "number") throw new Error("expected baseline stamp");
+
+    const result = await publishSvgEditorAction("side-table-001", {
+      ...form,
+      openedBaselineGeneratedAt: baseline - 1,
+    });
+
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error).toMatch(/baseline changed|reload/i);
+    expect(publishDescriptorWithPipeline).not.toHaveBeenCalled();
+    expect(publishSymbolToSupabaseCatalog).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("keeps disk publish success when Supabase catalog mirror fails", async () => {
+    publishDescriptorWithPipeline.mockResolvedValue({
+      success: true,
+      descriptor: { slug: "side-table-001", checksum: "c".repeat(64) },
+    });
+    publishSymbolToSupabaseCatalog.mockResolvedValue({
+      svg: { ok: false, reason: "bucket unavailable" },
+      descriptor: { ok: false, reason: "bucket unavailable" },
+    });
+
+    const result = await publishSvgEditorAction(
+      "side-table-001",
+      existingFormState("side-table-001"),
+    );
+
+    expect(result).toEqual({
+      success: true,
+      descriptor: { slug: "side-table-001", checksum: "c".repeat(64) },
+    });
+    expect(setCatalogLifecycle).toHaveBeenCalledWith("side-table-001", "draft");
+    expect(publishSymbolToSupabaseCatalog).toHaveBeenCalledTimes(1);
+    expect(appendDescriptorAudit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        slug: "side-table-001",
+        action: "publish",
+        detail: expect.objectContaining({
+          supabaseSvgOk: false,
+          supabaseDescriptorOk: false,
+          supabaseMirrorReason: "bucket unavailable",
+        }),
+      }),
+    );
+    expect(revalidatePath).toHaveBeenCalledWith("/admin/svg-editor");
+    expect(revalidatePath).toHaveBeenCalledWith(
+      "/admin/svg-editor/side-table-001",
+    );
+  });
+
+  it("keeps disk publish success when Supabase mirror throws", async () => {
+    publishDescriptorWithPipeline.mockResolvedValue({
+      success: true,
+      descriptor: { slug: "side-table-001", checksum: "d".repeat(64) },
+    });
+    publishSymbolToSupabaseCatalog.mockRejectedValue(new Error("network down"));
+
+    const result = await publishSvgEditorAction(
+      "side-table-001",
+      existingFormState("side-table-001"),
+    );
+
+    expect(result.success).toBe(true);
+    expect(appendDescriptorAudit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        detail: expect.objectContaining({
+          supabaseSvgOk: false,
+          supabaseDescriptorOk: false,
+          supabaseMirrorReason: "network down",
+        }),
+      }),
+    );
+    expect(revalidatePath).toHaveBeenCalled();
   });
 });

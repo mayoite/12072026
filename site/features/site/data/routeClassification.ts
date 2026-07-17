@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/siteUrl";
+
 export type RouteClassification =
   | "public"
   | "protected"
@@ -17,7 +19,8 @@ export interface SiteRouteMeta {
   notes?: string;
 }
 
-const SITE_BASE = "https://oneonly.in";
+/** Same production/env host as robots, sitemap, and page metadata. */
+const SITE_BASE = SITE_URL.replace(/\/+$/, "");
 
 function canonicalFor(route: string): string {
   const normalized = route.endsWith("/") ? route : `${route}/`;

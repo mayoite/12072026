@@ -42,7 +42,7 @@ export function declareSvgEditSources(input: {
         writeBlocked
           ? "Retired products do not accept publish writes."
           : input.hasOnPublishAction
-            ? "Publish replaces the released SVG only after confirmation."
+            ? "Publish replaces the released SVG on disk (live authority) only after confirmation."
             : "Publish action is not wired — artifact is view-only.",
     },
   ];
