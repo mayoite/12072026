@@ -16,9 +16,10 @@ import { SnapManager } from "@/features/planner/lib/snapManager";
 import { appendSnapshot } from "@/features/planner/lib/versioning";
 import { createPlannerDocument } from "@/features/planner/model";
 import { browserApiFetch } from "@/lib/api/browserApi";
+import type * as BrowserApiModule from "@/lib/api/browserApi";
 
 vi.mock("@/lib/api/browserApi", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@/lib/api/browserApi")>();
+  const actual = (await importOriginal()) as typeof BrowserApiModule;
   return {
     ...actual,
     browserApiFetch: vi.fn(),

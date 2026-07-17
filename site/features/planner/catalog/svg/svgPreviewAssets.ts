@@ -29,6 +29,21 @@ export function buildSvgCatalogPublicUrl(slug: string): string {
   return `${SVG_CATALOG_PUBLIC_PATH}/${slug}.svg`;
 }
 
+/**
+ * Supabase Storage mirror path (Admin publish best-effort upload).
+ * Prefer disk `/svg-catalog/` for live paint; use this for CDN / cross-env import.
+ */
+export function buildSupabasePlannerSymbolUrl(slug: string): string | null {
+  const base =
+    process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ||
+    process.env.SUPABASE_URL?.trim() ||
+    "";
+  if (!base) return null;
+  const safe = slug.trim();
+  if (!safe) return null;
+  return `${base.replace(/\/$/, "")}/storage/v1/object/public/catalog-assets/planner-symbols/${safe}/symbol.svg`;
+}
+
 function thumbObjectKey(slug: string, variant: SvgThumbVariant = "1x"): string {
   return variant === "2x" ? `${slug}@2x.png` : `${slug}.png`;
 }

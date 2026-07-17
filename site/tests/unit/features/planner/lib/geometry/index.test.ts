@@ -5,6 +5,9 @@ import {
   polygonArea,
   segmentIntersection,
   buildWallGraph,
+  rectangularRoomMetrics,
+  applyOrthogonalLock,
+  linearLengthMm,
 } from "@/features/planner/lib/geometry";
 
 describe("lib/geometry/index barrel", () => {
@@ -37,5 +40,11 @@ describe("lib/geometry/index barrel", () => {
       },
     ]);
     expect(graph.edges.size).toBeGreaterThanOrEqual(1);
+  });
+
+  it("re-exports room outline, orthogonal, and dimension helpers", () => {
+    expect(rectangularRoomMetrics({ x: 0, y: 0 }, { x: 10, y: 20 }).widthMm).toBe(10);
+    expect(applyOrthogonalLock({ x: 0, y: 0 }, { x: 5, y: 1 })).toEqual({ x: 5, y: 0 });
+    expect(linearLengthMm({ x: 0, y: 0 }, { x: 3, y: 4 })).toBe(5);
   });
 });

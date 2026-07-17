@@ -2,6 +2,8 @@
 
 `package.json` + `pnpm-lock.yaml` are authoritative. This file records architectural limits.
 
+**How to prove stack health / “done”:** `plan/TechStack/COMPLETION-CONTRACT.md` (stricter evidence). Update this file when engines or policy change; do not claim PASS from this list alone.
+
 ## Engines
 
 | Role | Package | Rule |

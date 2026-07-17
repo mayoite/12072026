@@ -16,7 +16,7 @@ import type {
 } from "@/features/planner/model/types";
 import { degreesToRadians } from "@/features/planner/model/units";
 
-export type PlannerSceneNodeKind = "wall" | "furniture";
+export type PlannerSceneNodeKind = "wall" | "furniture" | "door" | "window";
 
 export interface PlannerSceneNode {
   readonly id: string;
@@ -134,6 +134,48 @@ export function buildPlannerSceneNodes(
           }
         : {}),
       ...(loadableGlb !== null ? { generatedGlbUrl: loadableGlb } : {}),
+    });
+  }
+
+  // Openings as thin vertical slabs for 2D/3D parity (not full door swings).
+  for (const door of floor.doors) {
+    const wall = floor.walls.find((w) => w.id === door.wallId);
+    if (!wall) continue;
+    const dx = wall.end.x - wall.start.x;
+    const dy = wall.end.y - wall.start.y;
+    const cx = wall.start.x + dx * door.position;
+    const cy = wall.start.y + dy * door.position;
+    nodes.push({
+      id: door.id,
+      kind: "door",
+      xMm: cx,
+      yMm: cy,
+      // Door slab width is the opening width; wall length only places the door along the wall.
+      widthMm: Math.max(door.width, 100),
+      depthMm: Math.max(wall.thickness, 50),
+      heightMm: door.height > 0 ? door.height : 2100,
+      rotation: Math.atan2(dy, dx),
+      color: "#b45309",
+    });
+  }
+
+  for (const win of floor.windows) {
+    const wall = floor.walls.find((w) => w.id === win.wallId);
+    if (!wall) continue;
+    const dx = wall.end.x - wall.start.x;
+    const dy = wall.end.y - wall.start.y;
+    const cx = wall.start.x + dx * win.position;
+    const cy = wall.start.y + dy * win.position;
+    nodes.push({
+      id: win.id,
+      kind: "window",
+      xMm: cx,
+      yMm: cy,
+      widthMm: Math.max(win.width, 100),
+      depthMm: Math.max(wall.thickness, 40),
+      heightMm: win.height > 0 ? win.height : 1200,
+      rotation: Math.atan2(dy, dx),
+      color: "#0369a1",
     });
   }
 

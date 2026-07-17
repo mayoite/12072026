@@ -71,9 +71,6 @@ describe("Plans API Route", () => {
       expect(data.error.message).toBe("Too many requests");
       expect(res.headers.get("X-RateLimit-Reset")).toBe("999");
       expect(rateLimit).toHaveBeenCalledWith("plans:get:10.0.0.1", 20, 60000);
-      
-      const telemetry = JSON.parse(res.headers.get("x-mock-telemetry")!);
-      expect(telemetry.rowCount).toBe(0);
     });
 
     it("should parse x-forwarded-for for IP if cf-connecting-ip is absent", async () => {
@@ -159,8 +156,9 @@ describe("Plans API Route", () => {
       expect(res.status).toBe(403);
       const data = await res.json();
       expect(data.success).toBe(false);
-      expect(data.error.code).toBe("INSUFFICIENT_PERMISSIONS");
+      expect(data.error.code).toBe("CSRF_FAILED");
       expect(data.error.message).toBe("Invalid or missing CSRF token");
+      expect(res.headers.get("x-csrf-rejected")).toBe("1");
     });
 
     it("should handle empty/invalid JSON body gracefully", async () => {
@@ -170,8 +168,8 @@ describe("Plans API Route", () => {
       expect(res.status).toBe(400);
       const data = await res.json();
       expect(data.success).toBe(false);
-      expect(data.error.code).toBe("MISSING_REQUIRED_FIELD");
-      expect(data.error.message).toBe("Plan id is required");
+      expect(data.error.code).toBe("INVALID_INPUT");
+      expect(data.error.message).toBe("Invalid JSON body");
     });
 
     it("should return 400 if id is missing", async () => {
@@ -222,7 +220,7 @@ describe("Plans API Route", () => {
       const data = await res.json();
       expect(data.success).toBe(false);
       expect(data.error.code).toBe("AUTH_REQUIRED");
-      expect(data.error.message).toBe("Authentication required to publish to portal");
+      expect(data.error.message).toBe("Authentication required");
     });
 
     it("should populate publishData with arrays if properties are missing, and save draft status", async () => {

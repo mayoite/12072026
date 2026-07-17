@@ -21,10 +21,7 @@ import { success } from "@/features/shared/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import { parseAdminPayload } from "@/features/admin/svg-editor/storage/persistBlockDescriptor";
 import { publishDescriptorWithPipeline } from "@/features/admin/svg-editor/publish/publishDescriptorWithPipeline";
-import { DrizzleSvgRevisionPersistence } from "@/features/admin/svg-editor/storage/drizzleSvgPersistence.server";
-import { ImmutableSvgRevisionRepository } from "@/features/admin/svg-editor/svgRevisionRepository.server";
-import { isProductsDatabaseConfigured } from "@/platform/drizzle/databaseUrls";
-import { writeR2ObjectText } from "@/lib/storage/r2Catalog";
+import { resolveSvgPublishDualWriteDeps } from "@/features/admin/svg-editor/publish/resolveSvgPublishDualWrite";
 import { buildBlockThumbPngUrl } from "@/features/planner/catalog/svg/svgPreviewAssets";
 import {
   toPlannerDescriptorErrorHttp,
@@ -84,15 +81,10 @@ async function handleSvgEditorPost(req: NextRequest, actorId: string) {
     }
   }
 
-  const dbRepository: ImmutableSvgRevisionRepository | undefined =
-    isProductsDatabaseConfigured()
-      ? new ImmutableSvgRevisionRepository(new DrizzleSvgRevisionPersistence())
-      : undefined;
+  const dualWrite = await resolveSvgPublishDualWriteDeps();
   const published = await publishDescriptorWithPipeline(payload, {
-    dbRepository,
-    artifactStore: dbRepository
-      ? { putText: writeR2ObjectText }
-      : undefined,
+    dbRepository: dualWrite.dbRepository,
+    artifactStore: dualWrite.artifactStore,
     actorId,
   });
   if (!published.success) {

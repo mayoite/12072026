@@ -2,6 +2,7 @@ import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 
 import {
   clearPersistedDockLayout,
+  closePlannerDockPanel,
   PLANNER_DOCKVIEW_STORAGE_KEY,
   PLANNER_DOCKVIEW_SCHEMA_VERSION,
   PLANNER_DOCK_MODULE_IDS,
@@ -11,7 +12,10 @@ import {
   tryRestoreDockLayout,
 } from "@/features/planner/editor/dock/plannerDockPresets";
 
-type FakePanel = { id: string; api: { setActive: ReturnType<typeof vi.fn> } };
+type FakePanel = {
+  id: string;
+  api: { setActive: ReturnType<typeof vi.fn>; close: ReturnType<typeof vi.fn> };
+};
 
 function createFakeApi() {
   const panels = new Map<string, FakePanel>();
@@ -23,7 +27,16 @@ function createFakeApi() {
     }),
     getPanel: vi.fn((id: string) => panels.get(id)),
     addPanel: vi.fn((opts: { id: string }) => {
-      const panel: FakePanel = { id: opts.id, api: { setActive: vi.fn() } };
+      const panel: FakePanel = {
+        id: opts.id,
+        api: {
+          setActive: vi.fn(),
+          close: vi.fn(() => {
+            panels.delete(opts.id);
+            api.panels = [...panels.values()];
+          }),
+        },
+      };
       panels.set(opts.id, panel);
       api.panels = [...panels.values()];
       return panel;
@@ -32,7 +45,16 @@ function createFakeApi() {
     fromJSON: vi.fn((data: { panels?: Record<string, unknown> }) => {
       panels.clear();
       for (const id of Object.keys(data.panels ?? {})) {
-        panels.set(id, { id, api: { setActive: vi.fn() } });
+        panels.set(id, {
+          id,
+          api: {
+            setActive: vi.fn(),
+            close: vi.fn(() => {
+              panels.delete(id);
+              api.panels = [...panels.values()];
+            }),
+          },
+        });
       }
       api.panels = [...panels.values()];
     }),
@@ -105,6 +127,17 @@ describe("plannerDockPresets", () => {
     applyPlannerDockPreset(api as never, "canvas");
     ensurePlannerDockPanel(api as never, "properties");
     expect(api.getPanel("properties")).toBeTruthy();
+  });
+
+  it("closePlannerDockPanel removes properties so empty chrome does not consume canvas", () => {
+    const api = createFakeApi();
+    applyPlannerDockPreset(api as never, "review");
+    expect(api.getPanel("properties")).toBeTruthy();
+    closePlannerDockPanel(api as never, "properties");
+    expect(api.getPanel("properties")).toBeUndefined();
+    // Idempotent when already closed.
+    closePlannerDockPanel(api as never, "properties");
+    expect(api.getPanel("properties")).toBeUndefined();
   });
 
   it("persists and restores layout JSON", () => {

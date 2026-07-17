@@ -8,6 +8,7 @@
 
 import { exportModularCabinetV0GlbBinary } from "@/features/planner/asset-engine/mesh/exportModularGlbBinary";
 import { stampFurnitureGeneratedGlb } from "@/features/planner/asset-engine/mesh/stampFurnitureGeneratedGlb";
+import { isSystemGeneratedGlbUrl } from "@/features/planner/lib/glbAssetPolicy";
 import {
   placeCatalogItemInProject,
   type PlacementOptions,
@@ -186,10 +187,16 @@ export async function placeModularWithGeneratedGlbCore(
     }
   }
 
-  const stampedItem = stampFurnitureGeneratedGlb(
-    furniture,
-    exportResult.relativePath,
-  );
+  // Prefer absolute public URL when storage wrote a remote object (Supabase CDN).
+  // Keep relative catalog-assets/generated/… for same-origin / path-only plan paths.
+  const remotePublicUrl =
+    publicUrlPath &&
+    /^https?:\/\//i.test(publicUrlPath) &&
+    isSystemGeneratedGlbUrl(publicUrlPath)
+      ? publicUrlPath
+      : null;
+  const stampUrl = remotePublicUrl ?? exportResult.relativePath;
+  const stampedItem = stampFurnitureGeneratedGlb(furniture, stampUrl);
   nextProject = replaceFurniture(nextProject, furnitureId, stampedItem);
 
   return {

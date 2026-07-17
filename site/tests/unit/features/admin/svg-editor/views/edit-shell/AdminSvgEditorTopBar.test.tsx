@@ -104,7 +104,7 @@ describe("AdminSvgEditorTopBar", () => {
       "admin-btn--primary",
     );
     expect(screen.getByTestId("admin-shell-primary-action")).toHaveTextContent(
-      /^Publish$/,
+      /Publish to Planner/,
     );
     expect(screen.getByTestId("admin-shell-destructive-reset")).toHaveTextContent(
       /Reset draft/i,

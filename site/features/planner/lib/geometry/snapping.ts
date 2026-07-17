@@ -93,10 +93,15 @@ export function buildSegmentSnapTargets(
   }
   for (let left = 0; left < segments.length; left += 1) {
     for (let right = left + 1; right < segments.length; right += 1) {
-      const point = segmentIntersection(segments[left]!, segments[right]!);
+      const leftSegment = segments[left];
+      const rightSegment = segments[right];
+      if (!leftSegment || !rightSegment) {
+        continue;
+      }
+      const point = segmentIntersection(leftSegment, rightSegment);
       if (point) {
         targets.push({
-          id: `${segments[left]!.id}:${segments[right]!.id}:intersection`,
+          id: `${leftSegment.id}:${rightSegment.id}:intersection`,
           point,
           kind: "intersection",
         });

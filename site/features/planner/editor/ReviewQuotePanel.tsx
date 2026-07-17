@@ -1,31 +1,72 @@
 "use client";
 
+import { useId, useState } from "react";
+
 import type { ValidationResult } from "@/features/planner/lib/validation/runValidation";
 import type { ValidationIssue } from "@/features/planner/lib/validation/types";
 import { ValidationPanel } from "./ValidationPanel";
 
 import styles from "./review-quote-panel.module.css";
 
+export type HandoffContactDraft = {
+  name: string;
+  company: string;
+  email: string;
+  phone: string;
+  notes: string;
+};
+
 type ReviewQuotePanelProps = {
   validation: ValidationResult;
   furnitureCount: number;
   workstationSeats: number;
-  onDownloadBoq: () => void;
-  onAddWorkstationsToQuote: () => void;
+  pricingNote: string;
+  guestMode: boolean;
+  handoffBusy: boolean;
+  lastHandoffReference?: string | null;
+  onDownloadBoqCsv: () => void;
+  onDownloadBoqPdf: () => void;
+  onAddAllToQuote: () => void;
+  onSendToOando: (contact: HandoffContactDraft) => void | Promise<void>;
   onFocusIssue?: (issue: ValidationIssue) => void;
+};
+
+const emptyContact: HandoffContactDraft = {
+  name: "",
+  company: "",
+  email: "",
+  phone: "",
+  notes: "",
 };
 
 export function ReviewQuotePanel({
   validation,
   furnitureCount,
   workstationSeats,
-  onDownloadBoq,
-  onAddWorkstationsToQuote,
+  pricingNote,
+  guestMode,
+  handoffBusy,
+  lastHandoffReference,
+  onDownloadBoqCsv,
+  onDownloadBoqPdf,
+  onAddAllToQuote,
+  onSendToOando,
   onFocusIssue,
 }: ReviewQuotePanelProps) {
+  const formId = useId();
+  const [contact, setContact] = useState<HandoffContactDraft>(emptyContact);
+  const [confirmDemoPricing, setConfirmDemoPricing] = useState(false);
+
   const hasBlockingErrors = validation.errors > 0;
-  const canDownloadBoq = furnitureCount > 0 && !hasBlockingErrors;
-  const canAddToQuote = workstationSeats > 0 && !hasBlockingErrors;
+  const hasFurniture = furnitureCount > 0;
+  const canExportBoq = hasFurniture && !hasBlockingErrors;
+  const canSend =
+    canExportBoq &&
+    !guestMode &&
+    !handoffBusy &&
+    confirmDemoPricing &&
+    contact.name.trim().length > 0 &&
+    (contact.email.trim().length > 0 || contact.phone.trim().length > 0);
 
   return (
     <section className={styles.panel} aria-label="Review and quote">
@@ -37,7 +78,9 @@ export function ReviewQuotePanel({
         <span className={hasBlockingErrors ? styles.blocked : styles.ready}>
           {hasBlockingErrors
             ? `${validation.errors} error${validation.errors === 1 ? "" : "s"}`
-            : "Ready to review"}
+            : hasFurniture
+              ? "Ready to quote"
+              : "Add furniture"}
         </span>
       </header>
 
@@ -63,19 +106,132 @@ export function ReviewQuotePanel({
 
         <ValidationPanel result={validation} onFocusIssue={onFocusIssue} />
 
+        <p className={styles.pricingNote} role="note">
+          {pricingNote}
+        </p>
+
         <div className={styles.actions}>
-          <button type="button" className={styles.primaryAction} disabled={!canDownloadBoq} onClick={onDownloadBoq}>
+          <button
+            type="button"
+            className={styles.primaryAction}
+            disabled={!canExportBoq}
+            onClick={onDownloadBoqCsv}
+          >
             Download BOQ CSV
           </button>
-          <button type="button" className={styles.secondaryAction} disabled={!canAddToQuote} onClick={onAddWorkstationsToQuote}>
-            Add workstations to quote
+          <button
+            type="button"
+            className={styles.secondaryAction}
+            disabled={!canExportBoq}
+            onClick={onDownloadBoqPdf}
+          >
+            Download branded BOQ PDF
+          </button>
+          <button
+            type="button"
+            className={styles.secondaryAction}
+            disabled={!canExportBoq}
+            onClick={onAddAllToQuote}
+          >
+            Add all furniture to quote cart
           </button>
         </div>
 
+        <fieldset className={styles.handoffFieldset} disabled={guestMode || handoffBusy}>
+          <legend className={styles.handoffLegend}>Send BOQ to Oando</legend>
+          {guestMode ? (
+            <p className={styles.hint}>
+              Sign in as a member to send this BOQ to Oando. Guests can still download the BOQ.
+            </p>
+          ) : (
+            <>
+              <label className={styles.field} htmlFor={`${formId}-name`}>
+                <span>Contact name</span>
+                <input
+                  id={`${formId}-name`}
+                  name="handoff-name"
+                  autoComplete="name"
+                  value={contact.name}
+                  onChange={(e) => setContact((c) => ({ ...c, name: e.target.value }))}
+                />
+              </label>
+              <label className={styles.field} htmlFor={`${formId}-company`}>
+                <span>Company (optional)</span>
+                <input
+                  id={`${formId}-company`}
+                  name="handoff-company"
+                  autoComplete="organization"
+                  value={contact.company}
+                  onChange={(e) => setContact((c) => ({ ...c, company: e.target.value }))}
+                />
+              </label>
+              <label className={styles.field} htmlFor={`${formId}-email`}>
+                <span>Email</span>
+                <input
+                  id={`${formId}-email`}
+                  name="handoff-email"
+                  type="email"
+                  autoComplete="email"
+                  value={contact.email}
+                  onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))}
+                />
+              </label>
+              <label className={styles.field} htmlFor={`${formId}-phone`}>
+                <span>Phone</span>
+                <input
+                  id={`${formId}-phone`}
+                  name="handoff-phone"
+                  type="tel"
+                  autoComplete="tel"
+                  value={contact.phone}
+                  onChange={(e) => setContact((c) => ({ ...c, phone: e.target.value }))}
+                />
+              </label>
+              <label className={styles.field} htmlFor={`${formId}-notes`}>
+                <span>Notes (optional)</span>
+                <textarea
+                  id={`${formId}-notes`}
+                  name="handoff-notes"
+                  rows={2}
+                  value={contact.notes}
+                  onChange={(e) => setContact((c) => ({ ...c, notes: e.target.value }))}
+                />
+              </label>
+              <label className={styles.checkLabel} htmlFor={`${formId}-confirm`}>
+                <input
+                  id={`${formId}-confirm`}
+                  type="checkbox"
+                  checked={confirmDemoPricing}
+                  onChange={(e) => setConfirmDemoPricing(e.target.checked)}
+                />
+                <span>
+                  I understand unit prices are demo list figures, not approved commercial quotes.
+                </span>
+              </label>
+              <button
+                type="button"
+                className={styles.sendAction}
+                disabled={!canSend}
+                onClick={() => void onSendToOando(contact)}
+                aria-busy={handoffBusy}
+              >
+                {handoffBusy ? "Sending…" : "Send to Oando"}
+              </button>
+              {lastHandoffReference ? (
+                <p className={styles.reference} role="status">
+                  Last reference: {lastHandoffReference}
+                </p>
+              ) : null}
+            </>
+          )}
+        </fieldset>
+
         {hasBlockingErrors ? (
-          <p className={styles.hint}>Resolve the validation errors before creating the BOQ or quote.</p>
-        ) : workstationSeats === 0 ? (
-          <p className={styles.hint}>A BOQ supports all furniture. The quote cart currently supports workstation systems.</p>
+          <p className={styles.hint}>
+            Resolve validation errors before downloading the BOQ or sending to Oando.
+          </p>
+        ) : !hasFurniture ? (
+          <p className={styles.hint}>Place furniture to build a BOQ.</p>
         ) : null}
       </div>
     </section>

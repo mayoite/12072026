@@ -9,8 +9,8 @@ import { CHOOSE_PRODUCT_PAGE_METADATA } from "@/features/site/data/routeMetadata
 /** Workspace entry — noindex. Real chooser UI; not a bounce to dashboard. */
 export const metadata: Metadata = CHOOSE_PRODUCT_PAGE_METADATA;
 
-/** Guest entry that survives post-login return via `next`. */
-export const CHOOSE_PRODUCT_GUEST_PATH = "/choose-product?mode=guest";
+/** Guest entry that survives post-login return via `next`. Not a page export (Next forbids non-route exports). */
+const CHOOSE_PRODUCT_GUEST_PATH = "/choose-product?mode=guest";
 
 export default async function ChooseProductRoute({
   searchParams,

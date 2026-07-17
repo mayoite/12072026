@@ -24,7 +24,10 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("@/lib/auth/plannerSession", () => ({
-  getOptionalPlannerUser: vi.fn(async () => null),
+  getOptionalPlannerUser: vi.fn(async () => ({
+    id: "550e8400-e29b-41d4-a716-446655440001",
+    email: "member@example.com",
+  })),
 }));
 
 vi.mock("@/features/planner/ui/PlannerWorkspaceRoute", () => ({
@@ -78,19 +81,24 @@ describe("site planner routes", () => {
   });
 
   it("wires guest route to PlannerWorkspaceRoute", async () => {
+    const guestPlanId = "550e8400-e29b-41d4-a716-4466554400aa";
     const { default: PlannerGuestPage } = await import("@/app/planner/(workspace)/guest/page");
-    render(await PlannerGuestPage({ searchParams: Promise.resolve({}) }));
+    render(
+      await PlannerGuestPage({ searchParams: Promise.resolve({ id: guestPlanId }) }),
+    );
     expect(screen.getByTestId("planner-workspace-route")).toHaveTextContent("guest");
+    expect(screen.getByTestId("planner-workspace-route")).toHaveTextContent(guestPlanId);
   });
 
   it("wires canvas route to PlannerWorkspaceRoute with plan id", async () => {
+    const planId = "550e8400-e29b-41d4-a716-4466554400bb";
     const { default: PlannerCanvasPage } = await import("@/app/planner/(workspace)/canvas/page");
     render(
       await PlannerCanvasPage({
-        searchParams: Promise.resolve({ id: "alpha-plan" }),
+        searchParams: Promise.resolve({ id: planId }),
       }),
     );
-    expect(screen.getByTestId("planner-workspace-route")).toHaveTextContent("alpha-plan");
+    expect(screen.getByTestId("planner-workspace-route")).toHaveTextContent(planId);
   });
 
   it("has no pilot /planner/open3d page — redirect-only to canvas", () => {
@@ -109,15 +117,18 @@ describe("site planner routes", () => {
     ).rejects.toThrow("NOT_FOUND");
   });
 
-  // Direct navigation + refresh: guest vs planId on live /planner/canvas (same host as guest)
+  // Direct navigation + refresh: blank canvas vs planId on live /planner/canvas
   it("preserves guest and planId mount on /planner/canvas for direct navigation and refresh", async () => {
+    const planId = "550e8400-e29b-41d4-a716-4466554400cc";
     const { default: PlannerCanvasPage } = await import("@/app/planner/(workspace)/canvas/page");
-    const guest = await PlannerCanvasPage({ searchParams: Promise.resolve({}) });
-    const auth = await PlannerCanvasPage({ searchParams: Promise.resolve({ id: "plan-42" }) });
-    const { unmount } = render(guest);
+    const blank = await PlannerCanvasPage({ searchParams: Promise.resolve({}) });
+    const withPlan = await PlannerCanvasPage({
+      searchParams: Promise.resolve({ id: planId }),
+    });
+    const { unmount } = render(blank);
     expect(screen.getByTestId("planner-workspace-route")).toBeInTheDocument();
     unmount();
-    render(auth);
-    expect(screen.getByTestId("planner-workspace-route")).toHaveTextContent("plan-42");
+    render(withPlan);
+    expect(screen.getByTestId("planner-workspace-route")).toHaveTextContent(planId);
   });
 });

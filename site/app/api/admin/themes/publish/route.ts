@@ -6,6 +6,7 @@ import {
   requireAdminSession,
 } from "@/app/api/admin/_lib/server";
 import { validateCsrfRequest } from "@/lib/security/csrf";
+import { CSRF_REJECTION_HEADER_NAME } from "@/lib/security/csrfConstants";
 import {
   contentTypeForKey,
   createR2CatalogClient,
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
   if (!isCsrfValid) {
     return NextResponse.json(
       { error: "Invalid or missing CSRF token" },
-      { status: 403 },
+      { status: 403, headers: { [CSRF_REJECTION_HEADER_NAME]: "1" } },
     );
   }
 
@@ -60,8 +61,10 @@ export async function POST(req: NextRequest) {
     );
 
     const cdnBase =
-      process.env.CLOULDFLARE_CDN_URL?.trim() ||
+      process.env.CLOUDFLARE_CDN_URL?.trim() ||
       process.env.CDN_ENDPOINT?.trim() ||
+      process.env.CLOUDFLARE_S3_URL?.trim() ||
+      process.env.CLOULDFLARE_CDN_URL?.trim() ||
       process.env.CLOULDFLARE_S3_URL?.trim() ||
       "";
     const cdnUrl = cdnBase ? `${cdnBase.replace(/\/$/, "")}/${fileKey}` : fileKey;

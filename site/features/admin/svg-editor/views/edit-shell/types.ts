@@ -45,6 +45,10 @@ export interface AdminSvgEditorShellProps {
   readonly onResetToPublished: () => void;
   readonly onApproveForBuyers: () => void;
   readonly onPublish: () => void;
+  /** Planner-style export menu actions. */
+  readonly onExportAction?: (
+    action: "download-svg" | "download-descriptor" | "open-planner",
+  ) => void;
   readonly onStartGlbConversion: () => void;
   readonly onGlbGenerated: (blob: Blob) => Promise<void>;
   readonly onDocument: (svg: string, excalidrawElements: unknown) => void;

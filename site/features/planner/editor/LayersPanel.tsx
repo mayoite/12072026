@@ -65,13 +65,24 @@ function EyeIcon({ open }: { open: boolean }) {
   );
 }
 
+/** Customer-facing layers only — hide deferred geometry noise from the live host. */
+const CUSTOMER_LAYER_KEYS: readonly PlannerLayerCategory[] = [
+  "walls",
+  "doors",
+  "windows",
+  "furniture",
+  "rooms",
+];
+
 export const LayersPanel = memo(function LayersPanel({
   floor,
   visibility,
   onVisibilityChange,
   showHeader = true,
 }: LayersPanelProps) {
-  const categories = summarizeFloorLayers(floor);
+  const categories = summarizeFloorLayers(floor).filter((category) =>
+    CUSTOMER_LAYER_KEYS.includes(category.key),
+  );
   const totalItems = categories.reduce((sum, category) => sum + category.count, 0);
   const allVisible = categories.every((category) => visibility[category.key]);
 

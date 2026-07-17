@@ -69,7 +69,22 @@ export function AIAssistDrawer({
 
   const handleApplyCatalogMatch = useCallback(
     (shapeId: string, catalogItemId: string) => {
-      workspaceBridge?.replaceCatalogMatch(shapeId, catalogItemId);
+      if (!workspaceBridge) return;
+      workspaceBridge.replaceCatalogMatch(shapeId, catalogItemId);
+    },
+    [workspaceBridge],
+  );
+
+  const handleApplyLayout = useCallback(
+    (layout: SuggestedLayoutJson) => {
+      if (!workspaceBridge) {
+        console.warn(
+          "[AIAssistDrawer] No WorkspaceAiBridge — layout apply skipped. Wire applyLayoutToWorkspace via the live host.",
+        );
+        return;
+      }
+      workspaceBridge.applyLayout(layout);
+      workspaceBridge.fitCanvas?.();
     },
     [workspaceBridge],
   );
@@ -150,7 +165,7 @@ export function AIAssistDrawer({
               ].join(":")}
               _editor={editor}
               projectMetadata={projectMetadata}
-              onApplyLayout={workspaceBridge?.applyLayout}
+              onApplyLayout={handleApplyLayout}
               onFitCanvas={workspaceBridge?.fitCanvas}
             />
           ) : tab === "match-catalog" ? (

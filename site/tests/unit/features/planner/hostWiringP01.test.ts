@@ -1,5 +1,7 @@
 /**
- * P01 host wiring — simplified planner layout (editor / canvas / 3d / project).
+ * P01 host wiring — simplified planner layout (editor / canvas / 3d / model).
+ * Project-tree lift: live canvas stage lives under features/planner/canvas;
+ * document model under features/planner/model (no features/planner/project).
  */
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
@@ -54,14 +56,17 @@ describe("P01 host wiring (import graph + source)", () => {
     expect(existsSync(siteFile("app", "planner", "open3d"))).toBe(false);
     expect(existsSync(siteFile("app", "planner", "fabric"))).toBe(false);
     expect(existsSync(siteFile("app", "planner", "(workspace)", "fabric"))).toBe(false);
+    // Lifted away: document + stage live under model/ and canvas/.
+    expect(existsSync(siteFile("features", "planner", "project"))).toBe(false);
     expect(existsSync(siteFile("features", "planner", "editor", "OOPlannerWorkspace.tsx"))).toBe(
       true,
     );
     expect(existsSync(siteFile("features", "planner", "canvas", "PlannerFabricStage.tsx"))).toBe(
       true,
     );
+    expect(existsSync(siteFile("features", "planner", "canvas", "index.ts"))).toBe(true);
     expect(existsSync(siteFile("features", "planner", "3d", "ThreeLazyViewer.tsx"))).toBe(true);
-    expect(existsSync(siteFile("features", "planner", "project", "model"))).toBe(true);
+    expect(existsSync(siteFile("features", "planner", "model", "plannerDocument.ts"))).toBe(true);
   });
 
   it("redirects fabric and open3d URLs to canvas", () => {
@@ -79,16 +84,14 @@ describe("P01 host wiring (import graph + source)", () => {
       "OOPlannerWorkspace.tsx",
     );
     expect(workspaceSrc).toMatch(/PlannerCanvasStage/);
-    expect(workspaceSrc).not.toMatch(/PlannerFabricStage/);
-    const stageBarrel = readSite(
-      "features",
-      "planner",
-      "project",
-      "canvas-stage",
-      "index.ts",
+    expect(workspaceSrc).toMatch(/@\/features\/planner\/canvas/);
+    // Direct Fabric stage import is forbidden in the workspace host — use the barrel alias.
+    expect(workspaceSrc).not.toMatch(
+      /from ["']@\/features\/planner\/canvas\/PlannerFabricStage["']/,
     );
+    const stageBarrel = readSite("features", "planner", "canvas", "index.ts");
     expect(stageBarrel).toMatch(/PlannerFabricStage as PlannerCanvasStage/);
-    expect(stageBarrel).toMatch(/@\/features\/planner\/canvas\/PlannerFabricStage/);
+    expect(stageBarrel).toMatch(/from ["']\.\/PlannerFabricStage["']/);
     expect(isPlannerFabricFurnitureEnabled({})).toBe(false);
     expect(
       isPlannerFabricFurnitureEnabled({ [PLANNER_FABRIC_FURNITURE_ENV]: "1" }),

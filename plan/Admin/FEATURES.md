@@ -70,6 +70,8 @@ Plan: `PHASES-01-02.md` (Phase 1)
 | SVG inventory + Excalidraw studio | `AdminSvgEditorListView.tsx`, `AdminSvgEditorShell.tsx`, `ExcalidrawClient.tsx`, `DimensionPanel.tsx`, `gridSnapping.ts`, `SvgEditorForm.tsx` | **Implemented** |
 | Excalidraw draft persistence | `svgEditorFormState.ts` (`excalidrawElements`, `compiledSvg`), `svgEditorFormAdapters.ts`, `publishSvgEditorAction.ts` | Publish uses Excalidraw-exported SVG; legacy `sceneParts` bridge remains |
 | Publish + compile | `publishDescriptorWithPipeline.ts`, `compileSvgForPublish`, `sharedCompilerAuthority.ts` | Disk authority; browser re-proof open |
+| Supabase catalog mirror | `publishSymbolToSupabaseCatalog` via `catalogAssetStorage.server.ts` after publish | Best-effort; paths `planner-symbols/{slug}/symbol.svg` + `descriptor.json` for Planner CDN import |
+| Planner-style export menu | `AdminSvgEditorTopBar` RAC Export (SVG / descriptor JSON / Open Planner) | Aligns chrome with Planner TopBar Export pattern |
 | Undo / rollback / lock | `descriptorLock.ts`, `rollbackDescriptorVersion.ts`, `staleDraftPublishGate.ts` | **Implemented** |
 | Bulk JSON import | `AdminSvgBulkImportPanel.tsx`, `bulkImportBlockDescriptors.ts` | **Implemented** (advanced path) |
 | AI SVG generate | `app/api/admin/svg-editor/ai-generate/route.ts` | **Implemented** |

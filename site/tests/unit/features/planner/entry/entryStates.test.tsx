@@ -113,7 +113,8 @@ describe("P1 entry states — new", () => {
       digest: expect.stringContaining("NEXT_REDIRECT"),
     });
     const id = new URL(redirectTarget(thrown), "http://planner.local").searchParams.get("id");
-    expect(id).toBeTruthy();
+    expect(typeof id).toBe("string");
+    expect(id?.length).toBeGreaterThan(0);
     expect(isEntityUuid(id ?? "")).toBe(true);
   });
 

@@ -214,7 +214,7 @@ export function withAuth<TContext = unknown>(
         return error(
           new ApiError(
             403,
-            API_ERROR_CODES.INSUFFICIENT_PERMISSIONS,
+            API_ERROR_CODES.CSRF_FAILED,
             "Invalid or missing CSRF token",
           ),
           { headers: { [CSRF_REJECTION_HEADER_NAME]: "1" } },

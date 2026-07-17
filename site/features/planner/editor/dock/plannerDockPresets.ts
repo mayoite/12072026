@@ -79,6 +79,19 @@ function addCanvas(api: DockviewApi): void {
 }
 
 /**
+ * Close a non-canvas module so empty chrome does not consume canvas area.
+ * No-op when the panel is already absent.
+ */
+export function closePlannerDockPanel(
+  api: DockviewApi,
+  panelId: Exclude<PlannerDockPanelId, "canvas">,
+): void {
+  const existing = api.getPanel(panelId);
+  if (!existing) return;
+  existing.api.close();
+}
+
+/**
  * Re-open a module if the user closed its tab. Canvas is always restored as center.
  */
 export function ensurePlannerDockPanel(

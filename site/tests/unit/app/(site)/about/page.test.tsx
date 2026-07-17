@@ -8,7 +8,11 @@ describe('app/(site)/about/page.tsx', () => {
     const jsx = await Page();
     render(jsx);
     expect(screen.getByTestId('home-marketing-layout')).toBeInTheDocument();
-    expect(screen.getByText(/Built around/i)).toBeInTheDocument();
-    expect(screen.getByText(/better work/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: /planning-first furniture partner/i,
+      }),
+    ).toBeInTheDocument();
   });
 });

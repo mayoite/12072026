@@ -44,7 +44,9 @@ export async function savePlannerDocumentToStore(
   }
   const res = await plannerPersistence.savePlannerDocument(userId, document, options.saveId);
   if (!res.success) {
-    throw new Error(res.error.message);
+    const err = new Error(res.error.message) as Error & { code?: string };
+    err.code = res.error.code;
+    throw err;
   }
   return res.document;
 }
@@ -92,8 +94,9 @@ export async function listPlannerDocumentsFromStore(
 
 export async function deletePlannerDocumentFromStore(
   saveId: string,
+  userId?: string,
 ): Promise<boolean> {
-  const res = await plannerPersistence.deletePlannerDocument(saveId);
+  const res = await plannerPersistence.deletePlannerDocument(saveId, userId);
   return res.success;
 }
 
@@ -112,5 +115,5 @@ export const listPlannerDocumentsFromSupabase = (
   options?: PlannerListDocumentsOptions,
 ) => listPlannerDocumentsFromStore(options);
 
-export const deletePlannerDocumentFromSupabase = (saveId: string) =>
-  deletePlannerDocumentFromStore(saveId);
+export const deletePlannerDocumentFromSupabase = (saveId: string, userId?: string) =>
+  deletePlannerDocumentFromStore(saveId, userId);

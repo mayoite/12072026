@@ -29,7 +29,7 @@ export type SuggestedLayoutZone = {
 };
 
 /**
- * Structured layout payload consumed by `applySuggestedLayout`.
+ * Structured layout payload consumed by `applyLayoutToWorkspace` / WorkspaceAiBridge.
  *
  * Unit convention:
  * - `room.x` / `room.y`, zone `x`/`y`, furniture `x`/`y`, wall anchors: canvas units

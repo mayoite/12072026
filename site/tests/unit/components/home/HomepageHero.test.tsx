@@ -1,7 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { HomepageHero } from '@/components/home/HomepageHero';
-import { HOMEPAGE_HERO_CONTENT, HOMEPAGE_HERO_IMAGES } from '@/features/site/data/homepage';
+import { HOMEPAGE_HERO_IMAGES } from '@/features/site/data/homepage';
+import enMessages from '@/i18n/messages/en.json';
+
+const hero = enMessages.home.hero;
+const heroTitle = hero.title as string[];
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/',
@@ -39,7 +43,7 @@ describe('HomepageHero Component', () => {
   it('renders hero title and details correctly', () => {
     render(<HomepageHero />);
 
-    const accessibleTitle = HOMEPAGE_HERO_CONTENT.title.join(' ');
+    const accessibleTitle = heroTitle.join(' ');
     expect(
       screen.getByRole('heading', {
         level: 1,
@@ -52,20 +56,20 @@ describe('HomepageHero Component', () => {
     expect(accessibleTitle).not.toMatch(/workas|asyour/);
 
     // Visual line copy still present (aria-hidden decoration)
-    HOMEPAGE_HERO_CONTENT.title.forEach((line) => {
+    heroTitle.forEach((line) => {
       expect(screen.getByText(line)).toBeInTheDocument();
     });
 
-    expect(screen.getByText(HOMEPAGE_HERO_CONTENT.kicker)).toBeInTheDocument();
+    expect(screen.getByText(hero.kicker)).toBeInTheDocument();
 
-    const primaryBtn = screen.getByRole('link', { name: HOMEPAGE_HERO_CONTENT.primaryCta.label });
-    expect(primaryBtn).toHaveAttribute('href', HOMEPAGE_HERO_CONTENT.primaryCta.href);
+    const primaryBtn = screen.getByRole('link', { name: hero.primaryCta.label });
+    expect(primaryBtn).toHaveAttribute('href', hero.primaryCta.href);
 
-    const secondaryBtn = screen.getByRole('link', { name: HOMEPAGE_HERO_CONTENT.secondaryCta.label });
-    expect(secondaryBtn).toHaveAttribute('href', HOMEPAGE_HERO_CONTENT.secondaryCta.href);
+    const secondaryBtn = screen.getByRole('link', { name: hero.secondaryCta.label });
+    expect(secondaryBtn).toHaveAttribute('href', hero.secondaryCta.href);
 
-    expect(screen.getByText(HOMEPAGE_HERO_CONTENT.glassProof.badge)).toBeInTheDocument();
-    expect(screen.getByText(HOMEPAGE_HERO_CONTENT.glassProof.lead)).toBeInTheDocument();
+    expect(screen.getByText(hero.glassProof.badge)).toBeInTheDocument();
+    expect(screen.getByText(hero.glassProof.lead)).toBeInTheDocument();
   });
 
   it('cycles background images on slide button clicks', () => {
@@ -94,12 +98,12 @@ describe('HomepageHero Component', () => {
     expect(firstDot.className).toMatch(/min-w-11/);
 
     const primary = screen.getByRole('link', {
-      name: HOMEPAGE_HERO_CONTENT.primaryCta.label,
+      name: hero.primaryCta.label,
     });
     const secondary = screen.getByRole('link', {
-      name: HOMEPAGE_HERO_CONTENT.secondaryCta.label,
+      name: hero.secondaryCta.label,
     });
-    expect(primary).toHaveAttribute('href', HOMEPAGE_HERO_CONTENT.primaryCta.href);
-    expect(secondary).toHaveAttribute('href', HOMEPAGE_HERO_CONTENT.secondaryCta.href);
+    expect(primary).toHaveAttribute('href', hero.primaryCta.href);
+    expect(secondary).toHaveAttribute('href', hero.secondaryCta.href);
   });
 });

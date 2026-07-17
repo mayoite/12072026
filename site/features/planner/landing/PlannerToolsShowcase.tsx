@@ -63,9 +63,10 @@ export function PlannerToolsShowcase({
   primaryCta,
   secondaryCta,
   demoHref,
-  // Accessible name must include visible caption text (label-content-name-mismatch).
-  demoAriaLabel = "Example layout · 10 × 8 m · true-scale floor plan — open Oando Planner",
-  demoCaption = "Example layout · 10 × 8 m · true-scale floor plan",
+  // Accessible name must include visible diagram + caption text (label-content-name-mismatch).
+  // Diagram chrome shows "Office layout · 10 × 8 m"; caption restates true-scale context.
+  demoAriaLabel = "Office layout · 10 × 8 m · true-scale floor plan",
+  demoCaption = "Office layout · 10 × 8 m · true-scale floor plan",
   demoTestId,
   proof,
   variant = "homepage",

@@ -41,33 +41,38 @@ vi.mock("next/link", () => ({
 import enMessages from "../i18n/messages/en.json";
 
 vi.mock("next-intl", () => {
-  const getNestedValue = (obj: any, path: string) => {
-    return path.split('.').reduce((acc: any, part: string) => acc && acc[part], obj);
+  const getNestedValue = (obj: Record<string, unknown> | unknown, path: string): unknown => {
+    return path.split(".").reduce<unknown>((acc, part) => {
+      if (acc && typeof acc === "object" && part in (acc as Record<string, unknown>)) {
+        return (acc as Record<string, unknown>)[part];
+      }
+      return undefined;
+    }, obj);
   };
 
-  return {
-    useTranslations: (namespace?: string) => (key: string, values?: any) => {
+  const makeTranslator = (namespace?: string) => {
+    const t = (key: string, values?: Record<string, unknown>) => {
       const fullKey = namespace ? `${namespace}.${key}` : key;
-      let text = getNestedValue(enMessages, fullKey) || fullKey;
-      if (typeof text === 'string' && values) {
-        Object.entries(values).forEach(([k, v]) => {
-          text = (text as string).replace(`{${k}}`, String(v));
-        });
-      }
-      return text;
-    },
-    getTranslations: async (namespace?: string) => (key: string, values?: any) => {
-      const fullKey = namespace ? `${namespace}.${key}` : key;
-      let text = getNestedValue(enMessages, fullKey) || fullKey;
+      let text = getNestedValue(enMessages, fullKey) ?? fullKey;
       if (typeof text === "string" && values) {
         Object.entries(values).forEach(([k, v]) => {
           text = (text as string).replace(`{${k}}`, String(v));
         });
       }
       return text;
-    },
+    };
+    (t as typeof t & { raw: (key: string) => unknown }).raw = (key: string) => {
+      const fullKey = namespace ? `${namespace}.${key}` : key;
+      return getNestedValue(enMessages, fullKey);
+    };
+    return t;
+  };
+
+  return {
+    useTranslations: (namespace?: string) => makeTranslator(namespace),
+    getTranslations: async (namespace?: string) => makeTranslator(namespace),
     useLocale: () => "en",
-    NextIntlClientProvider: ({ children }: any) => children,
+    NextIntlClientProvider: ({ children }: { children: React.ReactNode }) => children,
   };
 });
 

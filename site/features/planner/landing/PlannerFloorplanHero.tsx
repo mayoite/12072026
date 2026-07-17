@@ -97,7 +97,7 @@ export function PlannerFloorplanHero() {
             <Link
               href={primaryCta.href}
               className="home-tools-floor-demo home-floorplan-showcase"
-              aria-label="Open Oando Planner — example 10 by 8 metre office floor plan"
+              aria-label="Office layout · 10 × 8 m"
               data-testid="planner-hero-floorplan"
             >
               <PlannerHeroDemo />

@@ -34,4 +34,10 @@ describe("compliance", () => {
     expect(runPlannerComplianceCheck).toBeTypeOf("function");
     expect(runPlannerComplianceCheck.name.length).toBeGreaterThan(0);
   });
+
+  it("does not silently claim a clean plan (points callers at live validation)", () => {
+    const messages = runPlannerComplianceCheck(null, []);
+    expect(messages.length).toBeGreaterThan(0);
+    expect(messages[0]).toMatch(/runFloorValidation/i);
+  });
 });

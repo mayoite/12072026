@@ -46,12 +46,19 @@ const PURPOSE_SUMMARIES: Record<PlannerPrimaryPurpose, string> = {
   mixed: "Balanced office mix",
 };
 
-const SETUP_FIELD_SHELL =
-  "flex items-center gap-3 rounded-[var(--radius-sm)] border border-[color:var(--border-soft)] bg-[color:var(--surface-soft)] px-4 py-3 transition-[border-color,box-shadow] focus-within:border-[color:var(--color-primary)] focus-within:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-primary)_16%,transparent)]";
+/** Full-width row: label + control side-by-side (project name). */
+const SETUP_FIELD_SHELL_INLINE =
+  "flex min-h-[var(--planner-touch-target,2.75rem)] items-center gap-3 rounded-[var(--radius-sm)] border border-[color:var(--border-soft)] bg-[color:var(--surface-soft)] px-4 py-3 transition-[border-color,box-shadow] focus-within:border-[color:var(--color-primary)] focus-within:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-primary)_16%,transparent)]";
+/**
+ * Grid cells: label above control so long labels (e.g. Floor area) cannot
+ * collapse the input to 0 width in 2–3 column layouts.
+ */
+const SETUP_FIELD_SHELL_STACK =
+  "flex min-h-[var(--planner-touch-target,2.75rem)] min-w-0 flex-col gap-1.5 rounded-[var(--radius-sm)] border border-[color:var(--border-soft)] bg-[color:var(--surface-soft)] px-3 py-2.5 transition-[border-color,box-shadow] focus-within:border-[color:var(--color-primary)] focus-within:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-primary)_16%,transparent)]";
 const SETUP_FIELD_LABEL =
   "shrink-0 text-[0.8125rem] font-semibold text-[color:var(--text-body)]";
 const SETUP_FIELD_INPUT =
-  "min-w-0 flex-1 border-none bg-transparent text-end text-[0.9375rem] font-medium text-[color:var(--text-strong)] outline-none";
+  "min-h-9 min-w-0 w-full flex-1 border-none bg-transparent text-start text-[0.9375rem] font-medium text-[color:var(--text-strong)] outline-none";
 const SETUP_FIELDSET =
   "rounded-[var(--radius-md)] border border-[color:var(--border-soft)] bg-[color:var(--surface-soft)] p-4";
 
@@ -184,13 +191,13 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
           aria-label="Project setup"
           aria-busy={!isHydrated}
         >
-          <div className={SETUP_FIELD_SHELL}>
+          <div className={SETUP_FIELD_SHELL_INLINE}>
             <label className={SETUP_FIELD_LABEL} htmlFor="project-setup-name">
               Project name
             </label>
             <input
               id="project-setup-name"
-              className={SETUP_FIELD_INPUT}
+              className={`${SETUP_FIELD_INPUT} text-end`}
               placeholder="TVS Bihar Office — 2nd Floor"
               value={draft.projectName}
               onChange={(event) => updateDraft("projectName", event.target.value)}
@@ -201,12 +208,12 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
             />
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <div className={SETUP_FIELD_SHELL}>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className={SETUP_FIELD_SHELL_STACK}>
               <label className={SETUP_FIELD_LABEL} htmlFor="project-setup-city">
                 City
               </label>
-              <div className="relative min-w-0 flex-1">
+              <div className="relative min-w-0 w-full">
                 <MapPin
                   className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-muted)]"
                   aria-hidden="true"
@@ -226,8 +233,8 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
               </div>
             </div>
 
-            <div>
-              <div className={SETUP_FIELD_SHELL}>
+            <div className="min-w-0">
+              <div className={SETUP_FIELD_SHELL_STACK}>
                 <label className={SETUP_FIELD_LABEL} htmlFor="project-setup-area">
                   Floor area (sq ft)
                 </label>
@@ -244,8 +251,8 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
               <p className="typ-caption mt-1 px-2 text-[color:var(--text-muted)]">Start with 1000 sq ft if unsure.</p>
             </div>
 
-            <div>
-              <div className={SETUP_FIELD_SHELL}>
+            <div className="min-w-0 sm:col-span-2 lg:col-span-1">
+              <div className={SETUP_FIELD_SHELL_STACK}>
                 <label className={SETUP_FIELD_LABEL} htmlFor="project-setup-seats">
                   People to seat
                 </label>

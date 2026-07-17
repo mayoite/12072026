@@ -34,9 +34,9 @@ Secrets:
 
 - `PRODUCTS_DATABASE_URL`
 - `SUPABASE_AUTH_DATABASE_URL`
-- `CLOULDFLARE_S3_URL` (or `CLOUDFLARE_ACCOUNT_ID`)
-- `CLOULD_ACCESS_KEY_ID`
-- `CLOULDFLARE_S3_SECRET_ACCESS_KEY`
+- `CLOUDFLARE_S3_URL` (or `CLOUDFLARE_ACCOUNT_ID`)
+- One intact S3 pair: `CLOUDFLARE_R2_ACCESS_KEY_ID` + `CLOUDFLARE_R2_SECRET_ACCESS_KEY`
+  (or alias pair `CLOUDFLARE_ACCESS_KEY_ID` + `CLOUDFLARE_SECRET_ACCESS_KEY`)
 - `CLOUDFLARE_R2_CATALOG_BUCKET`
 
 Workflow: [`.github/workflows/supabase-backup-r2.yml`](../../.github/workflows/supabase-backup-r2.yml) (daily 02:15 UTC). Requires Node 24, pnpm 11.9, PostgreSQL client 17 on the runner.

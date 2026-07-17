@@ -19,7 +19,10 @@ import {
 } from "@/features/planner/cleanup/importGraphProof";
 
 vi.mock("@/lib/auth/plannerSession", () => ({
-  getOptionalPlannerUser: vi.fn(async () => null),
+  getOptionalPlannerUser: vi.fn(async () => ({
+    id: "550e8400-e29b-41d4-a716-446655440001",
+    email: "member@example.com",
+  })),
 }));
 
 vi.mock("@/features/planner/ui/PlannerWorkspaceRoute", () => ({
@@ -68,20 +71,25 @@ describe("Phase 08 import graph proof", () => {
   });
 
   it("wires the live guest and canvas routes to PlannerWorkspaceRoute", async () => {
+    const guestPlanId = "550e8400-e29b-41d4-a716-4466554400aa";
+    const canvasPlanId = "550e8400-e29b-41d4-a716-4466554400bb";
     const { default: PlannerGuestPage } = await import("@/app/planner/(workspace)/guest/page");
     const { default: PlannerCanvasPage } = await import("@/app/planner/(workspace)/canvas/page");
 
-    render(await PlannerGuestPage({ searchParams: Promise.resolve({}) }));
+    render(
+      await PlannerGuestPage({ searchParams: Promise.resolve({ id: guestPlanId }) }),
+    );
     expect(screen.getByTestId("planner-workspace-route")).toHaveTextContent("guest");
+    expect(screen.getByTestId("planner-workspace-route")).toHaveTextContent(guestPlanId);
 
     cleanup();
 
     render(
       await PlannerCanvasPage({
-        searchParams: Promise.resolve({ id: "live-plan" }),
+        searchParams: Promise.resolve({ id: canvasPlanId }),
       }),
     );
-    expect(screen.getByTestId("planner-workspace-route")).toHaveTextContent("live-plan");
+    expect(screen.getByTestId("planner-workspace-route")).toHaveTextContent(canvasPlanId);
   });
 
   it("has no pilot /planner/open3d page module (redirect-only in next.config)", () => {

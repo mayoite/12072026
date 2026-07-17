@@ -313,6 +313,64 @@ export function AdminSvgEditorEditView({
 
   const canConvertToGlb = form.variant === "fixed" && compiledSvg !== null;
 
+  const handleExportAction = useCallback(
+    (action: "download-svg" | "download-descriptor" | "open-planner") => {
+      const productSlug = form.slug.trim() || slug;
+      if (action === "open-planner") {
+        window.open(plannerVerifyHref, "_blank", "noopener,noreferrer");
+        return;
+      }
+      if (action === "download-svg") {
+        const svg =
+          (preview?.ok === true ? preview.svg : null) ||
+          (excalidrawSvg.trim() ? excalidrawSvg : null);
+        if (!svg) {
+          window.open(publishArtifactHref(productSlug), "_blank", "noopener,noreferrer");
+          return;
+        }
+        const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${productSlug || "symbol"}.svg`;
+        a.click();
+        URL.revokeObjectURL(url);
+        return;
+      }
+      // download-descriptor
+      const payload = {
+        slug: productSlug,
+        sku: form.sku,
+        geometry: form.geometry,
+        viewBox: form.viewBox,
+        excalidrawElements: form.excalidrawElements,
+        assetsGlbUrl: form.assetsGlbUrl,
+      };
+      const blob = new Blob([`${JSON.stringify(payload, null, 2)}\n`], {
+        type: "application/json;charset=utf-8",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${productSlug || "descriptor"}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    },
+    [
+      excalidrawSvg,
+      form.assetsGlbUrl,
+      form.excalidrawElements,
+      form.geometry,
+      form.sku,
+      form.slug,
+      form.viewBox,
+      plannerVerifyHref,
+      preview,
+      publishArtifactHref,
+      slug,
+    ],
+  );
+
   // ADM-STATE-01: one authoritative authoring lifecycle.
   const authoringLifecycle = deriveAuthoringLifecycle({
     submitting: feedback.submitting,
@@ -393,6 +451,7 @@ export function AdminSvgEditorEditView({
       onResetToPublished={handleResetToPublished}
       onApproveForBuyers={() => void handleApproveForBuyers()}
       onPublish={() => void handlePublish()}
+      onExportAction={handleExportAction}
       onStartGlbConversion={startGlbConversion}
       onGlbGenerated={handleGlbGenerated}
       onDocument={handleStudioDocumentChange}

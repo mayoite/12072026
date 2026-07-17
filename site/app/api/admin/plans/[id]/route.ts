@@ -6,6 +6,7 @@ import {
   requireAdminSession,
 } from "@/app/api/admin/_lib/server";
 import { validateCsrfRequest } from "@/lib/security/csrf";
+import { CSRF_REJECTION_HEADER_NAME } from "@/lib/security/csrfConstants";
 import {
   isPlannerDatabaseConfigured,
   loadPlannerDocumentAdmin,
@@ -93,7 +94,10 @@ export async function PATCH(req: NextRequest, context: RouteContext) {
   const isCsrfValid = await validateCsrfRequest(req);
   if (!isCsrfValid) {
     return applyPlannerRouteTelemetry(
-      NextResponse.json({ error: "Invalid or missing CSRF token" }, { status: 403 }),
+      NextResponse.json(
+        { error: "Invalid or missing CSRF token" },
+        { status: 403, headers: { [CSRF_REJECTION_HEADER_NAME]: "1" } },
+      ),
       { ...telemetry(), rowCount: 0 },
     );
   }

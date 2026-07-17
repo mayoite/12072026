@@ -58,6 +58,7 @@ export function AdminSvgEditorShell({
   onResetToPublished,
   onApproveForBuyers,
   onPublish,
+  onExportAction,
   onStartGlbConversion,
   onGlbGenerated,
   onDocument,
@@ -88,6 +89,7 @@ export function AdminSvgEditorShell({
         onReset={onResetToPublished}
         onApprove={onApproveForBuyers}
         onPublish={onPublish}
+        onExportAction={onExportAction}
       />
       <p
         id="admin-svg-publication-impact"

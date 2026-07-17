@@ -30,6 +30,43 @@ const HIGHLIGHT_PACKAGES = [
   'three',
 ]
 
+/**
+ * Normalized dependency facts drop packageName onto `id`:
+ *   `{importer}:{dependencies|devDependencies}:{packageName}.{requested-range|resolved-version}`
+ * Recover package name + resolved version from that shape.
+ */
+export function packageNameFromDependencyRecord(record) {
+  if (typeof record?.packageName === 'string' && record.packageName.length > 0) {
+    return record.packageName
+  }
+  const id = typeof record?.id === 'string' ? record.id : ''
+  const match = id.match(
+    /:(?:dependencies|devDependencies):(.+)\.(?:requested-range|resolved-version)$/,
+  )
+  return match?.[1] ?? null
+}
+
+export function resolvedVersionFromDependencyRecord(record) {
+  if (record?.resolved && typeof record.resolved.value === 'string') {
+    return record.resolved.value
+  }
+  if (
+    (record?.field === 'resolvedVersion' || record?.field === 'resolved-version') &&
+    record?.fact &&
+    typeof record.fact.value === 'string'
+  ) {
+    return record.fact.value
+  }
+  return null
+}
+
+function humanizePackageName(packageName) {
+  const baseName = packageName.replace(/^@[^/]+\//, '')
+  return baseName
+    .replace(/[-_.]+/g, ' ')
+    .replace(/\b\w/g, (match) => match.toUpperCase())
+}
+
 function searchPathForSection(section) {
   switch (section) {
     case 'Dependencies':
@@ -68,18 +105,26 @@ export function buildOverviewSummary(model) {
     ],
     keyPackages: (() => {
       const seen = new Set()
-      return model.dependencies
-        .filter((record) => HIGHLIGHT_PACKAGES.includes(record.packageName))
-        .filter((record) => {
-          if (seen.has(record.packageName)) return false
-          seen.add(record.packageName)
-          return true
+      const packages = []
+      for (const record of model.dependencies) {
+        const packageName = packageNameFromDependencyRecord(record)
+        if (!packageName || !HIGHLIGHT_PACKAGES.includes(packageName)) continue
+        if (seen.has(packageName)) continue
+        const version = resolvedVersionFromDependencyRecord(record)
+        if (!version) continue
+        seen.add(packageName)
+        packages.push({
+          name: record.displayName || humanizePackageName(packageName),
+          version,
+          packageName,
         })
-        .map((record) => ({
-          name: record.displayName,
-          version: record.resolved.value,
-          packageName: record.packageName,
-        }))
+      }
+      // Stable order matching HIGHLIGHT_PACKAGES declaration.
+      return packages.sort(
+        (left, right) =>
+          HIGHLIGHT_PACKAGES.indexOf(left.packageName) -
+          HIGHLIGHT_PACKAGES.indexOf(right.packageName),
+      )
     })(),
   }
 }

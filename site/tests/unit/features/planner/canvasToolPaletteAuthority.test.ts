@@ -25,17 +25,20 @@ import {
   type PaletteCommandHandlers,
 } from "@/features/planner/lib/commands/paletteCommands";
 
+/** Live tools match CANVAS_TOOL_REQUIREMENT — room is exact-panel live; dimension is two-click live. */
 const LIVE_TOOLS: readonly PlannerTool[] = [
   "select",
   "pan",
   "wall",
   "opening",
+  "dimension",
   "placement",
   "door",
   "window",
+  "room",
 ];
 
-const DEFERRED_TOOLS: readonly PlannerTool[] = ["room", "dimension", "text"];
+const DEFERRED_TOOLS: readonly PlannerTool[] = ["text"];
 
 /** Every PlannerTool id — maps must stay exhaustive (no silent omit). */
 const ALL_PLANNER_TOOLS: readonly PlannerTool[] = [
@@ -71,10 +74,12 @@ describe("canvasTool requirement tiers (authority)", () => {
     }
   });
 
-  it("marks room, dimension, and text as deferred", () => {
+  it("marks text as deferred; room and dimension are live", () => {
     for (const tool of DEFERRED_TOOLS) {
       expect(CANVAS_TOOL_REQUIREMENT[tool]).toBe("deferred");
     }
+    expect(CANVAS_TOOL_REQUIREMENT.room).toBe("live");
+    expect(CANVAS_TOOL_REQUIREMENT.dimension).toBe("live");
   });
 
   it("LIVE_GEOMETRY_TOOLS is exactly the live-tier tools", () => {
@@ -114,12 +119,12 @@ describe("runtimeToolFor (Fabric pointer path)", () => {
     expect(runtimeToolFor("window")).toBe("window");
   });
 
-  it("maps room → select (deferred, no fake geometry)", () => {
+  it("maps room → select (exact panel, not freehand draw path)", () => {
     expect(runtimeToolFor("room")).toBe("select");
   });
 
-  it("maps dimension and text → select (deferred)", () => {
-    expect(runtimeToolFor("dimension")).toBe("select");
+  it("maps dimension → dimension; text → select (deferred)", () => {
+    expect(runtimeToolFor("dimension")).toBe("dimension");
     expect(runtimeToolFor("text")).toBe("select");
   });
 
@@ -138,6 +143,7 @@ describe("runtimeToolFor (Fabric pointer path)", () => {
       "window",
       "placement",
       "opening",
+      "dimension",
     ]);
     for (const tool of DEFERRED_TOOLS) {
       const runtime = runtimeToolFor(tool);
@@ -161,11 +167,17 @@ describe("rail / palette composition (honesty)", () => {
     expect(RAIL_NAV_TOOLS).toEqual(["select", "pan"]);
   });
 
-  it("RAIL_DRAW_TOOLS is live-only; deferred tools sit in their own rail group", () => {
-    expect(RAIL_DRAW_TOOLS).toEqual(["wall", "opening", "placement"]);
-    expect(RAIL_DEFERRED_TOOLS).toEqual(["room", "dimension"]);
-    expect(CANVAS_TOOL_REQUIREMENT.room).toBe("deferred");
-    expect(CANVAS_TOOL_REQUIREMENT.dimension).toBe("deferred");
+  it("RAIL_DRAW_TOOLS is live-only including dimension; deferred rail empty", () => {
+    expect(RAIL_DRAW_TOOLS).toEqual([
+      "room",
+      "wall",
+      "opening",
+      "dimension",
+      "placement",
+    ]);
+    expect(RAIL_DEFERRED_TOOLS).toEqual([]);
+    expect(CANVAS_TOOL_REQUIREMENT.room).toBe("live");
+    expect(CANVAS_TOOL_REQUIREMENT.dimension).toBe("live");
     expect(CANVAS_TOOL_REQUIREMENT.wall).toBe("live");
     expect(CANVAS_TOOL_REQUIREMENT.opening).toBe("live");
     expect(CANVAS_TOOL_REQUIREMENT.placement).toBe("live");

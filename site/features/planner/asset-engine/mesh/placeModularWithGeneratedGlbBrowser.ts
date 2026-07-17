@@ -76,14 +76,28 @@ export async function writeGeneratedGlbViaApi(
     throw new Error("writeGeneratedGlbViaApi requires fetch");
   }
   const path = options?.writeApiPath ?? GENERATED_GLB_WRITE_API_PATH;
-  const response = await fetchFn(path, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/octet-stream",
-      "X-Generated-Glb-Relative-Path": relativePath,
-    },
-    body: buffer,
-  });
+  // Prefer CSRF-aware browser fetch when available (planner client).
+  let response: Response;
+  if (options?.fetchImpl) {
+    response = await options.fetchImpl(path, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/octet-stream",
+        "X-Generated-Glb-Relative-Path": relativePath,
+      },
+      body: buffer,
+    });
+  } else {
+    const { browserApiFetch } = await import("@/lib/api/browserApi");
+    response = await browserApiFetch(path, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/octet-stream",
+        "X-Generated-Glb-Relative-Path": relativePath,
+      },
+      body: buffer,
+    });
+  }
   if (!response.ok) {
     throw new Error(
       `writeGeneratedGlbViaApi failed: HTTP ${response.status}`,
@@ -95,7 +109,8 @@ export async function writeGeneratedGlbViaApi(
   }
   return {
     absolutePath: null,
-    publicUrlPath: json.publicUrlPath,
+    // Prefer public URL for fetch; fall back to relative path for policy stamp.
+    publicUrlPath: json.publicUrlPath || json.relativePath,
   };
 }
 

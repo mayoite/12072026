@@ -3,9 +3,19 @@
 import Link from "next/link";
 import {
   ArrowLeft,
+  CaretDown,
   CheckCircle,
   CircleNotch as Loader2,
+  Export,
+  SquaresFour,
 } from "@phosphor-icons/react";
+import {
+  Button,
+  Menu,
+  MenuItem,
+  MenuTrigger,
+  Popover,
+} from "react-aria-components";
 
 import {
   authoringLifecycleBadgeClass,
@@ -14,6 +24,11 @@ import {
 } from "../../lifecycle/authoringLifecycle";
 import type { CatalogLifecycleState } from "../../lifecycle/catalogLifecycle.shared";
 import type { SvgArtifactState } from "../../publish/svgArtifactStatus.server";
+
+export type AdminSvgExportAction =
+  | "download-svg"
+  | "download-descriptor"
+  | "open-planner";
 
 interface AdminSvgEditorTopBarProps {
   readonly slug: string;
@@ -29,6 +44,8 @@ interface AdminSvgEditorTopBarProps {
   readonly onReset: () => void;
   readonly onApprove: () => void;
   readonly onPublish: () => void;
+  /** Planner-style export menu (download / open Planner). */
+  readonly onExportAction?: (action: AdminSvgExportAction) => void;
 }
 
 function releasedSymbolLabel(state: SvgArtifactState): string {
@@ -63,7 +80,7 @@ function publishButtonTitle(args: {
 }): string {
   if (args.submitting) return "Publishing…";
   if (args.canPublish) {
-    return "Release this draft as the Planner symbol for this product";
+    return "Publish to disk + Supabase catalog mirror for Planner import";
   }
   return "Publish is blocked until the draft is valid and ready to release";
 }
@@ -82,6 +99,7 @@ export function AdminSvgEditorTopBar({
   onReset,
   onApprove,
   onPublish,
+  onExportAction,
 }: AdminSvgEditorTopBarProps) {
   const approveDisabled =
     approving || submitting || lifecycle === "live" || artifactState !== "published";
@@ -117,7 +135,7 @@ export function AdminSvgEditorTopBar({
           className="admin-svg-engine-shell__eyebrow"
           data-testid="admin-shell-scope"
         >
-          Catalog asset · SVG studio
+          Planner catalog · SVG studio
         </p>
         <h1
           className="admin-svg-engine-shell__title"
@@ -184,6 +202,37 @@ export function AdminSvgEditorTopBar({
       <div className="admin-svg-engine-shell__divider" aria-hidden />
 
       <div className="admin-svg-engine-shell__actions" data-testid="admin-shell-actions">
+        {/* Planner-style export menu (same RAC pattern as TopBar Export). */}
+        {onExportAction ? (
+          <MenuTrigger>
+            <Button
+              className="admin-btn admin-btn--outline admin-btn--compact"
+              aria-label="Export — download symbol or open Planner"
+              data-testid="admin-shell-export-menu"
+            >
+              <Export size={14} aria-hidden />
+              <span className="admin-svg-engine-shell__action-label-long">Export</span>
+              <CaretDown size={12} weight="bold" aria-hidden />
+            </Button>
+            <Popover className="admin-svg-engine-shell__menu-popover" placement="bottom end">
+              <Menu
+                className="admin-svg-engine-shell__menu"
+                aria-label="Export options"
+                onAction={(key) => onExportAction(String(key) as AdminSvgExportAction)}
+              >
+                <MenuItem id="download-svg" className="admin-svg-engine-shell__menu-item">
+                  Download symbol (SVG)
+                </MenuItem>
+                <MenuItem id="download-descriptor" className="admin-svg-engine-shell__menu-item">
+                  Download descriptor (JSON)
+                </MenuItem>
+                <MenuItem id="open-planner" className="admin-svg-engine-shell__menu-item">
+                  <SquaresFour size={14} aria-hidden /> Open in Planner
+                </MenuItem>
+              </Menu>
+            </Popover>
+          </MenuTrigger>
+        ) : null}
         <button
           type="button"
           className="admin-btn admin-btn--outline admin-btn--compact admin-svg-engine-shell__action-reset"
@@ -229,7 +278,7 @@ export function AdminSvgEditorTopBar({
           ) : (
             <CheckCircle size={14} aria-hidden />
           )}
-          {submitting ? "Publishing…" : "Publish"}
+          {submitting ? "Publishing…" : "Publish to Planner"}
         </button>
       </div>
     </header>

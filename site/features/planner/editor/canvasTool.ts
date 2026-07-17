@@ -25,7 +25,8 @@ export type CanvasRuntimeTool =
   | "text"
   | "pan"
   | "opening"
-  | "placement";
+  | "placement"
+  | "dimension";
 
 export type PlannerToolPhase =
   | "inactive"
@@ -75,9 +76,9 @@ export const CANVAS_TOOL_GUIDANCE: Record<PlannerTool, string> = {
   select: "Click an object to inspect it. Delete removes the selection.",
   pan: "Drag to move the drawing. Release Space to restore the armed tool.",
   room: "Enter exact width, depth, and wall thickness to create a closed room.",
-  wall: "Press and drag to draw a wall; Shift = orthogonal; Enter commits length/angle/thickness.",
+  wall: "Press and drag to draw a wall; sticky ortho toggle or Shift locks 90°; Enter commits length/angle/thickness.",
   opening: "Click a wall to add a door opening.",
-  dimension: "Dimension annotations are deferred — measure via properties for now.",
+  dimension: "Click two points to place a durable linear dimension annotation.",
   placement: "Choose a catalogue item, then click the canvas to place it.",
   door: "Click a wall to add a door (same path as Opening).",
   window: "Click a wall to add a window.",
@@ -97,7 +98,7 @@ export const CANVAS_TOOL_REQUIREMENT: Record<PlannerTool, ToolRequirementTier> =
   door: "live",
   window: "live",
   room: "live",
-  dimension: "deferred",
+  dimension: "live",
   text: "deferred",
 };
 
@@ -109,11 +110,12 @@ export const RAIL_DRAW_TOOLS: readonly PlannerTool[] = [
   "room",
   "wall",
   "opening",
+  "dimension",
   "placement",
 ];
 
 /** Deferred tools — labelled "Coming soon" on the rail, not peers with live draw tools. */
-export const RAIL_DEFERRED_TOOLS: readonly PlannerTool[] = ["dimension"];
+export const RAIL_DEFERRED_TOOLS: readonly PlannerTool[] = [];
 
 /** Full rail order (nav + draw + deferred). Palette tool list must match this + keyboard extras. */
 export const CANVAS_TOOLS: PlannerTool[] = [
@@ -140,13 +142,14 @@ export const LIVE_GEOMETRY_TOOLS: readonly PlannerTool[] = (
 
 /**
  * Map UI tool → Fabric pointer path.
- * Room opens an exact-input overlay. Dimension/text remain non-pointer tools.
+ * Room opens an exact-input overlay. Text remains non-pointer.
  */
 export function runtimeToolFor(tool: PlannerTool): CanvasRuntimeTool {
   if (tool === "opening" || tool === "door") return "door";
   if (tool === "window") return "window";
   if (tool === "placement") return "placement";
-  if (tool === "room" || tool === "dimension" || tool === "text") return "select";
+  if (tool === "dimension") return "dimension";
+  if (tool === "room" || tool === "text") return "select";
   return tool;
 }
 

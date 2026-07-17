@@ -1,20 +1,27 @@
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { vi } from "vitest";
 import { PropertiesPanel } from "@/features/planner/editor/PropertiesPanel";
 
 describe("PropertiesPanel", () => {
-  it("renders empty state without selection", () => {
+  it("collapses to null when nothing is selected and no underlay actions", () => {
     const { container } = render(
+      <PropertiesPanel selectedEntity={null} displayUnit="mm" />,
+    );
+    expect(container.firstChild).toBeNull();
+  });
+
+  it("keeps empty underlay chrome when calibrate is available", () => {
+    render(
       <PropertiesPanel
         selectedEntity={null}
         displayUnit="mm"
-        onUpdateEntity={vi.fn()}
-        onDeleteEntity={vi.fn()}
+        callbacks={{ onCalibrateUnderlay: vi.fn() }}
       />,
     );
-    expect(container.firstChild).not.toBeNull();
-    expect((container.textContent ?? "").length).toBeGreaterThan(0);
+    expect(screen.getByText(/no selection/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /calibrate underlay width to 10 metres/i }),
+    ).toBeInTheDocument();
   });
 
   it("edits opening position as an exact host-wall offset", () => {

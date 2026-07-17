@@ -41,9 +41,23 @@ vi.mock("@/features/admin/svg-editor/lifecycle/DescriptorRevisionPanel", () => (
 vi.mock("@/features/admin/svg-editor/publish/uploadAsset", () => ({
   uploadAssetToSupabase: vi.fn(),
 }));
-vi.mock("next/dynamic", () => ({
-  default: () => () => null,
-}));
+vi.mock("next/dynamic", async () => {
+  const React = await import("react");
+  return {
+    default: () =>
+      function MockExcalidrawStudio(props: {
+        onDocument?: (svg: string, elements: unknown) => void;
+      }) {
+        React.useEffect(() => {
+          props.onDocument?.(
+            '<svg viewBox="0 0 600 600"><rect x="0" y="0" width="100" height="100"/></svg>',
+            [{ type: "rectangle", isDeleted: false }],
+          );
+        }, [props]);
+        return React.createElement("div", { "data-testid": "mock-excalidraw-studio" });
+      },
+  };
+});
 vi.mock("next/link", () => ({
   default: ({
     href,
@@ -139,12 +153,14 @@ describe("ADM-SVG-16 failure never false success", () => {
       success: false as const,
       error: "pipeline stopped",
     }));
+    // Unpublished artifact so canPublish is true without waiting for form dirty.
+    const draftArtifact = { ...artifactStatus, state: "missing" as const };
     render(
       <AdminSvgEditorEditView
         slug={descriptor.slug}
         descriptor={descriptor}
         updatedAtLabel="today"
-        artifactStatus={artifactStatus}
+        artifactStatus={draftArtifact}
         catalogLifecycle="draft"
         onPublishAction={publish}
       />,
@@ -175,12 +191,13 @@ describe("ADM-SVG-17 success links artifact and Planner", () => {
       success: true as const,
       descriptor,
     }));
+    const draftArtifact = { ...artifactStatus, state: "missing" as const };
     render(
       <AdminSvgEditorEditView
         slug={descriptor.slug}
         descriptor={descriptor}
         updatedAtLabel="today"
-        artifactStatus={artifactStatus}
+        artifactStatus={draftArtifact}
         catalogLifecycle="draft"
         onPublishAction={publish}
       />,

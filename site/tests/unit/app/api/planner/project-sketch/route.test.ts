@@ -1,5 +1,25 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { NextRequest } from "next/server";
+
+vi.mock("@/features/shared/api/withAuth", () => ({
+  withAuth:
+    (
+      handler: (
+        req: NextRequest,
+        auth: {
+          user: { id: string; email: string; role: string } | null;
+          isAdmin: boolean;
+          requiredRole: string;
+        },
+      ) => Promise<Response>,
+    ) =>
+    (req: NextRequest) =>
+      handler(req, {
+        user: null,
+        isAdmin: false,
+        requiredRole: "guest",
+      }),
+}));
 
 import { POST } from "@/app/api/planner/project-sketch/route";
 

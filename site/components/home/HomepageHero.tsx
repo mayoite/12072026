@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ArrowRight, SealCheck } from "@phosphor-icons/react";
 import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
 
@@ -42,7 +43,31 @@ const fadeUpVariants: Variants = {
 };
 
 export function HomepageHero() {
-  const { kicker, title, primaryCta, secondaryCta, glassProof } = HOMEPAGE_HERO_CONTENT;
+  const t = useTranslations("home");
+  // Prefer i18n messages; provenance fields stay on the TS source of truth.
+  const titleRaw = t.raw("hero.title");
+  const title = Array.isArray(titleRaw)
+    ? (titleRaw as string[])
+    : [...HOMEPAGE_HERO_CONTENT.title];
+  const kicker = t("hero.kicker");
+  const primaryCta = {
+    label: t("hero.primaryCta.label"),
+    href: t("hero.primaryCta.href"),
+  };
+  const secondaryCta = {
+    label: t("hero.secondaryCta.label"),
+    href: t("hero.secondaryCta.href"),
+  };
+  const glassProof = {
+    badge: t("hero.glassProof.badge"),
+    lead: t("hero.glassProof.lead"),
+    support: t("hero.glassProof.support"),
+    href: t("hero.glassProof.href"),
+    cta: t("hero.glassProof.cta"),
+    source: HOMEPAGE_HERO_CONTENT.glassProof.source,
+    owner: HOMEPAGE_HERO_CONTENT.glassProof.owner,
+    reviewDate: HOMEPAGE_HERO_CONTENT.glassProof.reviewDate,
+  };
   const [currentIndex, setCurrentIndex] = useState(0);
   const [motionReady, setMotionReady] = useState(false);
   const [failedImageSrc, setFailedImageSrc] = useState<string | null>(null);

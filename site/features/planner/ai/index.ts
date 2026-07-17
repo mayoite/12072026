@@ -13,7 +13,10 @@ export {
 export { suggestLayout, suggestLayoutGridPack, type SuggestLayoutResult } from "./spaceSuggest";
 export { matchCatalogForPlacement, matchCatalogForPlacements, inferCatalogPriceTier } from "./catalogMatch";
 export { extractCanvasPlacements } from "./extractCanvasPlacements";
+/** @deprecated Fail-closed legacy; live path is applyLayoutToWorkspace. */
 export { applySuggestedLayout, buildShapesFromSuggestedLayout } from "./applySuggestedLayout";
+export { applyLayoutToWorkspace } from "./applyLayoutToWorkspace";
+export type { WorkspaceAiBridge } from "./workspaceAiBridge";
 export {
   CHAT_ADVISOR_SYSTEM_PROMPT,
   SPACE_SUGGEST_SYSTEM_PROMPT,

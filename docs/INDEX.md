@@ -31,6 +31,7 @@ Start: `architecture/README.md` (vision + **current vs target** table). Live SVG
 | `database/ADVISORS.md` | DB security/performance lints |
 | `database/RESTORE-RUNBOOK.md` | Backup, restore, degraded mode |
 | `Lockedfiles/03-dependencies-engines-current.md` | Engines, i18n, persistence, licenses |
+| *(execution, not under docs/)* `plan/TechStack/COMPLETION-CONTRACT.md` | Stack health proof bar — install, gates, deps, CI |
 
 ## Site package maps (4) — `docs/site/`
 

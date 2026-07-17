@@ -132,18 +132,19 @@ describe("CanvasToolRail RAC upgrade + a11y", () => {
     }
   });
 
-  it("keeps only dimension deferred on the rail", () => {
+  it("keeps dimension live on the rail (no deferred stamp)", () => {
     render(<CanvasToolRail activeTool="wall" onToolChange={vi.fn()} />);
     expect(CANVAS_TOOL_REQUIREMENT.room).toBe("live");
+    expect(CANVAS_TOOL_REQUIREMENT.dimension).toBe("live");
     expect(screen.getByTestId("canvas-tool-room")).not.toHaveAttribute("data-deferred");
     const dimension = screen.getByRole("radio", { name: toolAccessibleName("dimension") });
-    expect(dimension).toHaveAttribute("data-deferred", "true");
-    expect(dimension).toHaveAttribute("data-tier", "deferred");
+    expect(dimension).not.toHaveAttribute("data-deferred");
+    expect(dimension).toHaveAttribute("data-tier", "live");
   });
 
   it("keeps live draw tools free of deferred attrs", () => {
     render(<CanvasToolRail activeTool="wall" onToolChange={vi.fn()} />);
-    for (const tool of ["room", "wall", "opening", "placement"] as const) {
+    for (const tool of ["room", "wall", "opening", "dimension", "placement"] as const) {
       const btn = screen.getByTestId(`canvas-tool-${tool}`);
       expect(btn).toHaveAttribute("data-tier", "live");
       expect(btn).not.toHaveAttribute("data-deferred");

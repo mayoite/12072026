@@ -77,11 +77,10 @@ Do not write under `site/results/` or `site/test-results/`. Cache/tooling dirs (
 | Surface | Live authority | Notes |
 |---|---|---|
 | Admin publish | **Disk** — `inventory/descriptors/`, `public/svg-catalog/` | `publishDescriptorWithPipeline.ts` |
-| Planner SVG API | **Disk** | `loadBuyerVisibleDescriptors()` |
+| Planner SVG API | DB-aware when configured, disk fallback | `loadBuyerVisibleDescriptorsWithDb()` — not revision artifact bytes |
 | Marketing catalog | Products DB | `catalog_products` |
 | Planner managed catalog | Products DB | `planner_managed_products` |
-| DB dual-write | Best-effort stub | `publishSvgEditorAction.ts` only; not authority |
-| `POST /api/admin/svg-editor` | Disk only | No `dbRepository` |
+| DB dual-write | Best-effort stub when `PRODUCTS_DATABASE_URL` set | Both `publishSvgEditorAction.ts` and `POST /api/admin/svg-editor` inject `dbRepository`; disk remains authority |
 | Lifecycle + audit | `results/admin/catalog-ops/` | `_catalog-lifecycle.json`, `_descriptor-audit.jsonl` |
 
 Tests must never mutate canonical catalog (committed descriptors or released DB rows).

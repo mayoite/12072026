@@ -18,26 +18,11 @@ const solutions = [
   { title: "Education", href: "/solutions/education" },
 ] as const;
 
-const process = [
-  {
-    number: "01",
-    title: "Brief",
-    description: "We understand your people, space, priorities, and budget.",
-  },
-  {
-    number: "02",
-    title: "Plan",
-    description: "We turn the brief into layouts, product selections, and a clear proposal.",
-  },
-  {
-    number: "03",
-    title: "Deliver",
-    description: "We coordinate production, installation, and handover.",
-  },
-] as const;
+type DeliveryStep = { title: string; detail: string };
 
 export default async function SolutionsPage() {
-  await getTranslations("solutions");
+  const t = await getTranslations("solutions");
+  const deliverySteps = t.raw("deliverySteps") as DeliveryStep[];
 
   return (
     <HomeMarketingLayout>
@@ -45,19 +30,20 @@ export default async function SolutionsPage() {
         variant="small"
         title={
           <>
-            Designed for the way <span className="text-accent-italic">work happens.</span>
+            {t("heroTitleLead")}{" "}
+            <span className="text-accent-italic">{t("heroTitleAccent")}</span>
           </>
         }
-        subtitle="Workspace solutions for workstations, seating, tables, storage, and education environments across Patna, Ranchi, Bihar, and Jharkhand."
+        subtitle={t("heroSubtitle")}
         showButton={false}
         backgroundImage={DEFAULT_HERO_FALLBACK}
       />
 
       <HomeSection variant="white" spacing="md">
         <HomeSectionInner>
-          <p className="typ-label text-body mb-4">Solution categories</p>
+          <p className="typ-label text-body mb-4">{t("deliveryKicker")}</p>
           <h2 className="home-heading mb-8 max-w-3xl">
-            Choose the workspace system that matches the brief.
+            {t("deliveryTitle")}
           </h2>
           <nav aria-label="Workspace solution categories">
             <ul className="w-full max-w-3xl">
@@ -83,22 +69,25 @@ export default async function SolutionsPage() {
 
       <HomeSection variant="soft" spacing="md" borderY>
         <HomeSectionInner>
-          <h2 className="home-heading mb-10">How we deliver workspace projects</h2>
+          <h2 className="home-heading mb-10">{t("processTitle")}</h2>
           <div className="grid gap-8 md:grid-cols-3 md:gap-12">
-            {process.map((step) => (
-              <article key={step.number}>
-                <div className="flex items-center gap-4 text-primary">
-                  <span className="font-[family-name:var(--font-display)] text-4xl font-light">
-                    {step.number}
-                  </span>
-                  <span className="h-px flex-1 bg-[var(--border-soft)]" />
-                </div>
-                <h3 className="mt-6 font-[family-name:var(--font-display)] text-3xl font-light text-strong">
-                  {step.title}
-                </h3>
-                <p className="page-copy-sm mt-4 text-body">{step.description}</p>
-              </article>
-            ))}
+            {deliverySteps.map((step, index) => {
+              const number = String(index + 1).padStart(2, "0");
+              return (
+                <article key={step.title}>
+                  <div className="flex items-center gap-4 text-primary">
+                    <span className="font-[family-name:var(--font-display)] text-4xl font-light">
+                      {number}
+                    </span>
+                    <span className="h-px flex-1 bg-[var(--border-soft)]" />
+                  </div>
+                  <h3 className="mt-6 font-[family-name:var(--font-display)] text-3xl font-light text-strong">
+                    {step.title}
+                  </h3>
+                  <p className="page-copy-sm mt-4 text-body">{step.detail}</p>
+                </article>
+              );
+            })}
           </div>
         </HomeSectionInner>
       </HomeSection>

@@ -81,6 +81,23 @@ describe('renderer payloads (plan 02)', () => {
     expect(payloads['gaps.json'].length).toBeGreaterThan(0)
   }, 30_000)
 
+  it('summary.keyPackages is non-empty for highlight packages (next/react/…)', () => {
+    const model = buildGeneratorModel({ repoRoot })
+    const payloads = buildRendererDataPayloads(model)
+    const summary = payloads['summary.json'] as {
+      keyPackages: Array<{ packageName: string; version: string; name: string }>
+    }
+
+    expect(summary.keyPackages.length).toBeGreaterThan(0)
+    const names = summary.keyPackages.map((p) => p.packageName)
+    expect(names).toContain('next')
+    expect(names).toContain('react')
+    for (const pkg of summary.keyPackages) {
+      expect(pkg.version).toMatch(/\d/)
+      expect(pkg.name.length).toBeGreaterThan(0)
+    }
+  }, 30_000)
+
   it('excludes secret-value-forbidden records from browser environment payload', () => {
     const model = buildGeneratorModel({ repoRoot })
     const payloads = buildRendererDataPayloads(model)

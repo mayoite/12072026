@@ -656,11 +656,10 @@ describe("TDD editor coverage additions", () => {
     });
 
     it("maps semantic tools onto the existing canvas runtime", () => {
-      // Match canvasTool.ts / canvasToolPaletteAuthority: deferred tools arm as select
-      // (no fake geometry); live aliases keep their Fabric pointer path.
-      expect(runtimeToolFor("room")).toBe("select"); // deferred
+      // Room uses exact panel (select pointer). Dimension is a live two-click path.
+      expect(runtimeToolFor("room")).toBe("select");
       expect(runtimeToolFor("opening")).toBe("door");
-      expect(runtimeToolFor("dimension")).toBe("select"); // deferred
+      expect(runtimeToolFor("dimension")).toBe("dimension");
       expect(runtimeToolFor("placement")).toBe("placement");
       expect(runtimeToolFor("pan")).toBe("pan");
     });

@@ -197,6 +197,7 @@ export function createSceneObjectFromNode(
   const d = mmToMeters(node.depthMm);
   const h = mmToMeters(node.heightMm);
   const isWall = node.kind === "wall";
+  const isOpening = node.kind === "door" || node.kind === "window";
   // Model walls default to wallDefault (--text-inverse-body) for 2D plan paint.
   // In 3D that reads as washed inverse-text gray — use wallStroke (block wall) for mass.
   // Explicit user hex/rgb still wins; theme refs remap to intentional wall token.
@@ -206,9 +207,11 @@ export function createSceneObjectFromNode(
     paintInput,
     isWall
       ? PLANNER_COLOR_TOKENS.wallStroke
-      : PLANNER_COLOR_TOKENS.furnitureDefault,
+      : isOpening
+        ? PLANNER_COLOR_TOKENS.furnitureDefault
+        : PLANNER_COLOR_TOKENS.furnitureDefault,
     // Match theme.css --color-dark-midnight-blue-600 (wall block family)
-    isWall ? "#182A40" : "#e5e7eb",
+    isWall ? "#182A40" : isOpening ? (node.color ?? "#94a3b8") : "#e5e7eb",
   );
   const geometry = new THREE.BoxGeometry(w, h, d);
   const material = new THREE.MeshStandardMaterial({

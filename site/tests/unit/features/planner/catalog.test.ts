@@ -1582,12 +1582,12 @@ describe("03-CAT-09: Admin Boundaries", () => {
   }
 
   it("keeps planner runtime free of admin catalog write routes", () => {
-    // Live host trees (not admin) — open3d folder deleted; guest/canvas host is editor+canvas+3d+project+ui
+    // Live host trees (not admin) — open3d/project folders retired; guest/canvas host is editor+canvas+3d+model+ui
     const source = [
       ...readAllSourceFiles(join("features", "planner", "editor")),
       ...readAllSourceFiles(join("features", "planner", "canvas")),
       ...readAllSourceFiles(join("features", "planner", "3d")),
-      ...readAllSourceFiles(join("features", "planner", "project")),
+      ...readAllSourceFiles(join("features", "planner", "model")),
       ...readAllSourceFiles(join("features", "planner", "ui")),
     ].join("\n");
     expect(source).not.toContain("/api/admin/catalogs");

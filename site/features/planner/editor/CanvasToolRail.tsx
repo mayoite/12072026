@@ -87,8 +87,10 @@ export interface CanvasToolRailProps {
   onZoomReset?: () => void;
   gridEnabled?: boolean;
   snapEnabled?: boolean;
+  orthogonalLock?: boolean;
   onToggleGrid?: () => void;
   onToggleSnap?: () => void;
+  onToggleOrthogonal?: () => void;
   disabled?: boolean;
   /** When true, Dockview owns float/dock — hide local layout chrome. */
   dockManaged?: boolean;
@@ -151,7 +153,7 @@ function ViewToggle({
   testId,
   disabled,
 }: {
-  label: "Grid" | "Snap";
+  label: "Grid" | "Snap" | "Ortho";
   enabled: boolean;
   onPress: () => void;
   icon: Icon;
@@ -243,8 +245,10 @@ export function CanvasToolRail({
   onZoomReset,
   gridEnabled = true,
   snapEnabled = true,
+  orthogonalLock = false,
   onToggleGrid,
   onToggleSnap,
+  onToggleOrthogonal,
   disabled = false,
   dockManaged = false,
   pinned = false,
@@ -459,7 +463,7 @@ export function CanvasToolRail({
     }> = [
       { id: "nav", tools: RAIL_NAV_TOOLS, label: "Navigation tools" },
       { id: "draw", tools: RAIL_DRAW_TOOLS, label: "Drawing tools" },
-      ...(!dockManaged
+      ...(!dockManaged && RAIL_DEFERRED_TOOLS.length > 0
         ? [{ id: "deferred" as const, tools: RAIL_DEFERRED_TOOLS, label: "Coming soon" }]
         : []),
     ];
@@ -637,14 +641,14 @@ export function CanvasToolRail({
 
       <span className={styles.srOnly}>
         Canvas drawing tools.
-        {!dockManaged
+        {!hideRailChrome
           ? " Drag the grip to float. Drop on left or top edge to dock."
           : null}
       </span>
 
-      {renderGroups(dockManaged ? false : rail.splitGroups)}
+      {renderGroups(hideRailChrome ? false : rail.splitGroups)}
 
-      {onZoomReset || onToggleGrid || onToggleSnap ? (
+      {onZoomReset || onToggleGrid || onToggleSnap || onToggleOrthogonal ? (
         <>
           <div className={styles.divider} aria-hidden data-orientation={orientation} />
           <div className={styles.group} role="group" aria-label="View tools" data-orientation={orientation}>
@@ -684,6 +688,16 @@ export function CanvasToolRail({
                 onPress={onToggleSnap}
                 icon={Magnet}
                 testId="canvas-tool-snap"
+                disabled={disabled}
+              />
+            ) : null}
+            {onToggleOrthogonal ? (
+              <ViewToggle
+                label="Ortho"
+                enabled={orthogonalLock}
+                onPress={onToggleOrthogonal}
+                icon={Square}
+                testId="canvas-tool-ortho"
                 disabled={disabled}
               />
             ) : null}

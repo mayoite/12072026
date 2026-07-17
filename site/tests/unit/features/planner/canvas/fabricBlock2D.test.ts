@@ -89,16 +89,25 @@ describe("fabricBlock2D paint", () => {
     expect(fills.size).toBeGreaterThanOrEqual(2);
   });
 
-  it("furniturePlanSvgUrl accepts published /svg-catalog/ URLs only", () => {
+  it("furniturePlanSvgUrl accepts published /svg-catalog/ URLs and slug fallback", () => {
     expect(
       furniturePlanSvgUrl({
         ...cabinetItem(),
         previewImageUrl: "/svg-catalog/chaise-lounge-001.svg",
       }),
     ).toBe("/svg-catalog/chaise-lounge-001.svg");
+    // Raster preview is not plan SVG; fall back to disk catalog slug path when present.
     expect(
       furniturePlanSvgUrl({
         ...cabinetItem(),
+        previewImageUrl: "/images/cabinet-thumb.png",
+      }),
+    ).toBe("/svg-catalog/cabinet-v0.svg");
+    expect(
+      furniturePlanSvgUrl({
+        ...cabinetItem(),
+        catalogId: "",
+        sourceSlug: "",
         previewImageUrl: "/images/cabinet-thumb.png",
       }),
     ).toBeNull();

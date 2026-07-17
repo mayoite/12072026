@@ -781,3 +781,39 @@
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
+
+/* Planner-aligned export menu (RAC Popover/Menu) */
+.admin-svg-engine-shell__menu-popover {
+  z-index: 80;
+  min-width: 14rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md, 0.5rem);
+  background: var(--surface-panel);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--text-strong) 16%, transparent);
+  padding: 0.35rem;
+}
+
+.admin-svg-engine-shell__menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  outline: none;
+}
+
+.admin-svg-engine-shell__menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0.4rem 0.65rem;
+  border-radius: var(--radius-sm, 0.35rem);
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--text-strong);
+  outline: none;
+}
+
+.admin-svg-engine-shell__menu-item[data-focused],
+.admin-svg-engine-shell__menu-item:hover {
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+}

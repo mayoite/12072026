@@ -70,6 +70,10 @@ export interface PropertiesPanelCallbacks {
   onAlignEntities?: (axis: "x" | "y", anchor: "min" | "center" | "max") => void;
   /** Called when distribute is requested */
   onDistributeEntities?: (axis: "x" | "y") => void;
+  /** Array selection into a row-major grid (columns + gap mm). */
+  onArrayEntities?: (columns: number, gapMm: number) => void;
+  /** Calibrate underlay image width to known millimetres. */
+  onCalibrateUnderlay?: (knownWidthMm: number) => void;
   /** Called when user clicks outside to deselect */
   onDeselect?: () => void;
 }
@@ -1035,14 +1039,58 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="4" /><rect x="3" y="17" width="18" height="4" /><line x1="12" y1="10" x2="12" y2="14" /><polyline points="10,12 12,14 14,12" /></svg>
               </button>
             </div>
+
+            {multiSelection.type === "furniture" ? (
+              <>
+                <span className={styles.multiActionLabel}>Array / grid</span>
+                <div className={styles.multiActionRow}>
+                  <button
+                    type="button"
+                    className={styles.multiActionBtn}
+                    onClick={() => callbacks?.onArrayEntities?.(multiSelection.count, 200)}
+                    title="Row array (1 column, 200 mm gap)"
+                    aria-label="Array in a single row with 200 millimetre gap"
+                  >
+                    Row
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.multiActionBtn}
+                    onClick={() =>
+                      callbacks?.onArrayEntities?.(
+                        Math.max(2, Math.ceil(Math.sqrt(multiSelection.count))),
+                        200,
+                      )
+                    }
+                    title="Grid array (~square columns, 200 mm gap)"
+                    aria-label="Array in a grid with 200 millimetre gap"
+                  >
+                    Grid
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.multiActionBtn}
+                    onClick={() => callbacks?.onArrayEntities?.(5, 400)}
+                    title="5-column array, 400 mm aisle"
+                    aria-label="Array in five columns with 400 millimetre gap"
+                  >
+                    5×
+                  </button>
+                </div>
+              </>
+            ) : null}
           </div>
         </div>
       </div>
     );
   }
 
-  // Empty state when nothing is selected
+  // Empty state: only keep chrome when underlay calibrate is available.
+  // Live workspace collapses the properties dock when nothing is selected (PF-21).
   if (!selectedEntity) {
+    if (!callbacks?.onCalibrateUnderlay) {
+      return null;
+    }
     return (
       <div
         className={styles.panel}
@@ -1075,6 +1123,31 @@ export const PropertiesPanel = memo(function PropertiesPanel({
             Walls, doors, windows, rooms, and furniture open contextual fields
             here.
           </p>
+          {callbacks?.onCalibrateUnderlay ? (
+            <div className={styles.multiActions}>
+              <span className={styles.multiActionLabel}>Underlay scale</span>
+              <div className={styles.multiActionRow}>
+                <button
+                  type="button"
+                  className={styles.multiActionBtn}
+                  onClick={() => callbacks.onCalibrateUnderlay?.(10_000)}
+                  title="Map underlay width to 10 m"
+                  aria-label="Calibrate underlay width to 10 metres"
+                >
+                  10 m
+                </button>
+                <button
+                  type="button"
+                  className={styles.multiActionBtn}
+                  onClick={() => callbacks.onCalibrateUnderlay?.(5_000)}
+                  title="Map underlay width to 5 m"
+                  aria-label="Calibrate underlay width to 5 metres"
+                >
+                  5 m
+                </button>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
     );

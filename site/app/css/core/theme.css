@@ -184,29 +184,36 @@
   --color-whatsapp-hover: var(--color-ocean-boat-blue-600);
   --color-whatsapp-footer-hover: var(--color-ocean-boat-blue-700);
 
-  /* ── Surfaces (Light theme) ── */
-  --surface-page: var(--color-white-50);
-  --surface-soft: var(--color-white-100);
-  --surface-muted: var(--color-white-150);
-  --surface-card: var(--color-white-50);
-  --surface-panel: var(--color-white-50);
-  --surface-panel-strong: var(--color-white-50);
-  --surface-panel-soft: var(--color-white-100);
-  --surface-hover: var(--color-white-100);
-  --surface-hover-soft: var(--color-white-150);
-  --surface-focus: var(--color-white-200);
+  /* ── Surfaces (Light theme) ──
+     Paper stack uses ecru (warm brand neutral), not cool pure-white/mist.
+     Cards/panels sit slightly lighter than page so hierarchy still reads. */
+  --surface-page: var(--color-ecru-50);
+  --surface-soft: var(--color-ecru-100);
+  --surface-muted: var(--color-ecru-100);
+  --surface-card: var(--color-ecru-50);
+  --surface-panel: var(--color-ecru-50);
+  --surface-panel-strong: color-mix(in srgb, var(--color-white-50) 72%, var(--color-ecru-50));
+  --surface-panel-soft: var(--color-ecru-100);
+  --surface-hover: var(--color-ecru-100);
+  --surface-hover-soft: var(--color-ecru-200);
+  --surface-focus: var(--color-ecru-200);
   --surface-inverse: var(--color-dark-midnight-blue-900);
   --surface-inverse-soft: var(--color-dark-midnight-blue-800);
   --surface-canvas: var(--color-dark-midnight-blue-950);
   --surface-canvas-soft: var(--color-dark-midnight-blue-900);
   --surface-canvas-panel: var(--color-dark-midnight-blue-800);
-  --surface-accent-wash: var(--color-support-mist);
-  --surface-glass: #FFFFFFD1;
-  --surface-glass-strong: #FFFFFFEB;
-  --surface-tint-soft: #FFFFFFEB;
-  --surface-tint-muted: #FFFFFFC7;
-  --surface-status-ok: #E8EFF6;
-  --surface-status-bad: #EEF1F5;
+  /* Warm wash: ecru + soft bronze (not cool support-mist) */
+  --surface-accent-wash: color-mix(
+    in srgb,
+    var(--color-bronze-300) 14%,
+    var(--color-ecru-100)
+  );
+  --surface-glass: color-mix(in srgb, var(--color-ecru-50) 82%, transparent);
+  --surface-glass-strong: color-mix(in srgb, var(--color-ecru-50) 92%, transparent);
+  --surface-tint-soft: color-mix(in srgb, var(--color-ecru-50) 92%, transparent);
+  --surface-tint-muted: color-mix(in srgb, var(--color-ecru-100) 78%, transparent);
+  --surface-status-ok: color-mix(in srgb, var(--color-ocean-boat-blue-200) 28%, var(--color-ecru-50));
+  --surface-status-bad: color-mix(in srgb, var(--color-bronze-200) 22%, var(--color-ecru-50));
   --surface-sustain-soft: #7FAF9614;
   --surface-sustain-soft-strong: #7FAF9624;
   --surface-sustain-glow: #7FAF9633;
@@ -228,9 +235,9 @@
   --text-inverse-subtle: #94A3B8;
   --text-sustain: var(--color-sustain-300);
 
-  /* ── Borders ── */
-  --border-soft: var(--color-white-350);
-  --border-muted: var(--color-white-450);
+  /* ── Borders ── warm paper edges (ecru) with ink strength ── */
+  --border-soft: color-mix(in srgb, var(--color-ecru-300) 55%, var(--color-white-350));
+  --border-muted: color-mix(in srgb, var(--color-ecru-400) 40%, var(--color-white-450));
   --border-strong: var(--color-dark-midnight-blue-300);
   --border-accent: #1F36532E;
   --border-hover: #1F365347;
@@ -418,11 +425,37 @@
   --color-blueprint-line: var(--color-primary);
 }
 
-/* Planner canvas uses primary as accent; site marketing keeps bronze from @theme above. */
+/* Planner: keep primary as interactive accent, but preserve warm ecru paper + bronze soft. */
 body.planner-workspace {
   --color-accent: var(--color-primary);
   --color-accent-hover: var(--color-primary-hover);
   --color-accent-soft: var(--surface-accent-wash);
+  --surface-page: var(--color-ecru-50);
+  --surface-soft: var(--color-ecru-100);
+  --surface-panel: color-mix(in srgb, var(--color-white-50) 55%, var(--color-ecru-50));
+  --surface-panel-strong: color-mix(in srgb, var(--color-white-50) 70%, var(--color-ecru-50));
+  --surface-panel-soft: var(--color-ecru-100);
+  --surface-accent-wash: color-mix(
+    in srgb,
+    var(--color-bronze-300) 16%,
+    var(--color-ecru-100)
+  );
+}
+
+/* Admin console: same warm paper stack as brand (not cool white-only). */
+body.admin-shell,
+.admin-shell,
+[data-admin-shell="true"] {
+  --surface-page: var(--color-ecru-50);
+  --surface-soft: var(--color-ecru-100);
+  --surface-panel: color-mix(in srgb, var(--color-white-50) 60%, var(--color-ecru-50));
+  --surface-panel-strong: color-mix(in srgb, var(--color-white-50) 75%, var(--color-ecru-50));
+  --surface-panel-soft: var(--color-ecru-100);
+  --surface-accent-wash: color-mix(
+    in srgb,
+    var(--color-bronze-300) 14%,
+    var(--color-ecru-100)
+  );
 }
 
 /* ── Dark color scheme (html.dark via planner WorkspaceThemeProvider) ── */

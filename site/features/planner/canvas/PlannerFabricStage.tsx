@@ -16,7 +16,16 @@ import {
   type FormEvent,
   type WheelEvent as ReactWheelEvent,
 } from "react";
-import { Canvas, Line, type FabricObject, type ModifiedEvent, type TPointerEventInfo } from "fabric";
+import {
+  Canvas,
+  FabricImage,
+  FabricText,
+  Line,
+  Polygon,
+  type FabricObject,
+  type ModifiedEvent,
+  type TPointerEventInfo,
+} from "fabric";
 
 import { runtimeToolFor, type PlannerTool } from "@/features/planner/editor/canvasTool";
 import type { PlannerLayerVisibility } from "@/features/planner/editor/layerVisibility";
@@ -30,6 +39,10 @@ import {
   type CanvasTransform,
   type SnapKind,
 } from "@/features/planner/lib/geometry/snapping";
+import {
+  paintGeometryFromAnnotation,
+} from "@/features/planner/lib/geometry/dimensions";
+import { orderedRoomCorners } from "@/features/planner/lib/geometry/roomOutline";
 import {
   PLANNER_STAGE_GRID_MM,
   plannerGridOverlayStyle,
@@ -98,6 +111,8 @@ export type PlannerFabricStageProps = {
   placementItemLabel?: string | null;
   gridEnabled?: boolean;
   snapEnabled?: boolean;
+  /** Sticky orthogonal lock (OR’d with Shift while drawing walls). */
+  orthogonalLock?: boolean;
   gridMm?: number;
   onPlaceAtPoint?: (point: PlannerPoint) => void;
   onWallDrawn?: (
@@ -105,6 +120,8 @@ export type PlannerFabricStageProps = {
     end: PlannerPoint,
     input?: { thicknessMm?: number },
   ) => void;
+  /** Durable linear dimension: first click start, second click end. */
+  onDimensionPlaced?: (start: PlannerPoint, end: PlannerPoint) => void;
   /** kind restored: door vs window (opening tool defaults to door). */
   onOpeningPlaced?: (wallId: string, position: number, kind: "door" | "window") => void;
   onOpeningRejected?: (reason: OpeningPlacementRejectReason) => void;
@@ -187,6 +204,37 @@ function fabricBackgroundPaint(gridEnabled: boolean): string {
   return gridEnabled ? "rgba(0,0,0,0)" : stageBackgroundPaint();
 }
 
+/** Cache underlay HTML images so rebuild can paint synchronously after first load. */
+const underlayImageCache = new Map<string, HTMLImageElement | "loading">();
+
+function getUnderlayHtmlImage(
+  dataUrl: string,
+  onReady: () => void,
+): HTMLImageElement | null {
+  const existing = underlayImageCache.get(dataUrl);
+  if (existing && existing !== "loading" && existing.naturalWidth > 0) {
+    return existing;
+  }
+  if (existing === "loading") return null;
+  if (typeof Image === "undefined") return null;
+  underlayImageCache.set(dataUrl, "loading");
+  const img = new Image();
+  img.decoding = "async";
+  img.onload = () => {
+    underlayImageCache.set(dataUrl, img);
+    onReady();
+  };
+  img.onerror = () => {
+    underlayImageCache.delete(dataUrl);
+  };
+  img.src = dataUrl;
+  if (img.complete && img.naturalWidth > 0) {
+    underlayImageCache.set(dataUrl, img);
+    return img;
+  }
+  return null;
+}
+
 export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFabricStageProps>(
   function PlannerFabricStage(
     {
@@ -198,9 +246,11 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       placementItemLabel = null,
       gridEnabled = true,
       snapEnabled = true,
+      orthogonalLock = false,
       gridMm = PLANNER_STAGE_GRID_MM,
       onPlaceAtPoint,
       onWallDrawn,
+      onDimensionPlaced,
       onOpeningPlaced,
       onOpeningRejected,
       onSelectionChange,
@@ -228,6 +278,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       formatLengthInput(150, displayUnit),
     );
     const [exactError, setExactError] = useState<string | null>(null);
+    const orthogonalLockRef = useRef(orthogonalLock);
     const transformRef = useRef(transform);
     const activeToolRef = useRef(activeTool);
     const rebuildingRef = useRef(false);
@@ -235,6 +286,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     const onModifiedRef = useRef(onFurnitureModified);
     const onPlaceRef = useRef(onPlaceAtPoint);
     const onWallDrawnRef = useRef(onWallDrawn);
+    const onDimensionPlacedRef = useRef(onDimensionPlaced);
     const onOpeningPlacedRef = useRef(onOpeningPlaced);
     const onOpeningRejectedRef = useRef(onOpeningRejected);
     const onSelectionRef = useRef(onSelectionChange);
@@ -247,12 +299,24 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     const displayUnitRef = useRef(displayUnit);
     const exactThicknessRef = useRef(exactThickness);
     const wallDrawRef = useRef<{ start: PlannerPoint; pointerId: number } | null>(null);
+    const dimDrawRef = useRef<{ start: PlannerPoint } | null>(null);
     const previewLineRef = useRef<Line | null>(null);
+    const dimPreviewLineRef = useRef<Line | null>(null);
     const openingPreviewLineRef = useRef<Line | null>(null);
     const snapMarkerHandleRef = useRef(createWallSnapMarkerHandle());
 
+    const clearDimPreview = useCallback(() => {
+      const canvas = fabricRef.current;
+      const preview = dimPreviewLineRef.current;
+      if (preview) {
+        canvas?.remove(preview);
+        dimPreviewLineRef.current = null;
+      }
+    }, []);
+
     const clearWallSession = useCallback(() => {
       wallDrawRef.current = null;
+      dimDrawRef.current = null;
       setWallReadout(null);
       setExactError(null);
       const canvas = fabricRef.current;
@@ -262,8 +326,9 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         canvas?.remove(preview);
         previewLineRef.current = null;
       }
+      clearDimPreview();
       canvas?.requestRenderAll();
-    }, []);
+    }, [clearDimPreview]);
 
     /** Form submit and workspace Enter share this path (typed length/angle/thickness). */
     const commitExactWallValues = useCallback((): boolean => {
@@ -341,6 +406,10 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     }, [onWallDrawn]);
 
     useEffect(() => {
+      onDimensionPlacedRef.current = onDimensionPlaced;
+    }, [onDimensionPlaced]);
+
+    useEffect(() => {
       onOpeningPlacedRef.current = onOpeningPlaced;
     }, [onOpeningPlaced]);
 
@@ -373,6 +442,10 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     }, [snapEnabled]);
 
     useEffect(() => {
+      orthogonalLockRef.current = orthogonalLock;
+    }, [orthogonalLock]);
+
+    useEffect(() => {
       gridMmRef.current = gridMm;
     }, [gridMm]);
 
@@ -395,7 +468,15 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           canvas.requestRenderAll();
         }
       }
-    }, [activeTool]);
+      if (tool !== "dimension") {
+        dimDrawRef.current = null;
+        clearDimPreview();
+      }
+      if (tool !== "wall" && wallDrawRef.current) {
+        // Keep wall chain only while wall tool is armed.
+        clearWallSession();
+      }
+    }, [activeTool, clearDimPreview, clearWallSession]);
 
     const emitStatus = useCallback(
       (nextTransform: CanvasTransform, tool: PlannerTool) => {
@@ -788,8 +869,16 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           event.preventDefault();
           event.stopPropagation();
           if (wallDrawRef.current) {
-            updateWallAt(event.clientX, event.clientY, event.shiftKey);
-            commitWallAt(event.clientX, event.clientY, event.shiftKey);
+            updateWallAt(
+              event.clientX,
+              event.clientY,
+              event.shiftKey || orthogonalLockRef.current,
+            );
+            commitWallAt(
+              event.clientX,
+              event.clientY,
+              event.shiftKey || orthogonalLockRef.current,
+            );
             return;
           }
           startWallAt(event.clientX, event.clientY, pointerId);
@@ -800,6 +889,36 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
               // Capture is best-effort; window-level up still commits.
             }
           }
+          return;
+        }
+
+        if (tool === "dimension") {
+          event.preventDefault();
+          event.stopPropagation();
+          const floor = activeFloorRef.current;
+          const screen = hostPoint(host, event.clientX, event.clientY);
+          const raw = screenToProject(screen, transformRef.current);
+          const snapped = snapProjectPoint({
+            raw,
+            start: dimDrawRef.current?.start ?? null,
+            walls: floor?.walls ?? [],
+            transform: transformRef.current,
+            snapEnabled: snapEnabledRef.current,
+            gridMm: gridMmRef.current,
+            orthogonal: event.shiftKey || orthogonalLockRef.current,
+          });
+          if (!dimDrawRef.current) {
+            dimDrawRef.current = { start: snapped.point };
+            emitStatusRef.current(transformRef.current, "dimension");
+            return;
+          }
+          const start = dimDrawRef.current.start;
+          dimDrawRef.current = null;
+          clearDimPreview();
+          if (shouldCommitWallSegment(start, snapped.point)) {
+            onDimensionPlacedRef.current?.(start, snapped.point);
+          }
+          emitStatusRef.current(transformRef.current, "dimension");
           return;
         }
 
@@ -848,11 +967,46 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
 
       const handleHostPointerMove = (event: PointerEvent | MouseEvent) => {
         if (wallDrawRef.current) {
-          updateWallAt(event.clientX, event.clientY, event.shiftKey);
+          updateWallAt(
+            event.clientX,
+            event.clientY,
+            event.shiftKey || orthogonalLockRef.current,
+          );
           return;
         }
         const uiTool = activeToolRef.current;
         const tool = runtimeToolFor(uiTool);
+        if (tool === "dimension" && dimDrawRef.current) {
+          const floor = activeFloorRef.current;
+          const canvas = fabricRef.current;
+          if (!canvas) return;
+          const screen = hostPoint(host, event.clientX, event.clientY);
+          const raw = screenToProject(screen, transformRef.current);
+          const snapped = snapProjectPoint({
+            raw,
+            start: dimDrawRef.current.start,
+            walls: floor?.walls ?? [],
+            transform: transformRef.current,
+            snapEnabled: snapEnabledRef.current,
+            gridMm: gridMmRef.current,
+            orthogonal: event.shiftKey || orthogonalLockRef.current,
+          });
+          const a = projectToScreen(dimDrawRef.current.start, transformRef.current);
+          const b = projectToScreen(snapped.point, transformRef.current);
+          clearDimPreview();
+          const line = new Line([a.x, a.y, b.x, b.y], {
+            stroke: resolveStageColor(PLANNER_COLOR_TOKENS.dimensionLabel, "#64748b"),
+            strokeWidth: 1.5,
+            strokeDashArray: [6, 4],
+            selectable: false,
+            evented: false,
+            objectCaching: false,
+          });
+          canvas.add(line);
+          dimPreviewLineRef.current = line;
+          canvas.requestRenderAll();
+          return;
+        }
         if (tool === "door" || tool === "window" || tool === "opening") {
           syncOpeningPreview(event.clientX, event.clientY);
           return;
@@ -880,7 +1034,11 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           return;
         }
         if (wallDrawRef.current) {
-          commitWallAt(event.clientX, event.clientY, event.shiftKey);
+          commitWallAt(
+            event.clientX,
+            event.clientY,
+            event.shiftKey || orthogonalLockRef.current,
+          );
           if ("pointerId" in event) {
             try {
               if (host.hasPointerCapture(event.pointerId)) {
@@ -1040,17 +1198,19 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         }
       };
       // Mount once — scene rebuild + refs handle document/tool updates.
+      // clearDimPreview is stable ([] deps); listed so exhaustive-deps is honest.
       // Do not recreate Fabric when wall count changes (that aborted draws).
-    }, []);
+    }, [clearDimPreview]);
 
     useEffect(() => {
       const canvas = fabricRef.current;
       if (!canvas || !activeFloor) return;
 
       rebuildingRef.current = true;
-      // Preserve in-progress wall preview across document rebuilds so a live
+      // Preserve in-progress wall/dim preview across document rebuilds so a live
       // stroke is not wiped mid-drag (HTML5 drag residual / status re-render).
       const livePreview = previewLineRef.current;
+      const liveDimPreview = dimPreviewLineRef.current;
       canvas.clear();
       // clear() drops the snap glyph; drop the stale handle so the next move recreates it.
       snapMarkerHandleRef.current.marker = null;
@@ -1059,7 +1219,87 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
 
       const showWalls = layerVisibility?.walls !== false;
       const showFurniture = layerVisibility?.furniture !== false;
+      const showDoors = layerVisibility?.doors !== false;
+      const showWindows = layerVisibility?.windows !== false;
+      const showRooms = layerVisibility?.rooms !== false;
+      const showAnnotations = layerVisibility?.annotations !== false;
       const interactive = activeTool === "select";
+      // Screen-stable dim stroke/font so labels stay readable across zoom.
+      const dimStrokePx = Math.max(1, 1.25);
+      const dimFontPx = Math.max(11, Math.round(12));
+
+      // Locked underlay (sketch / floor plan image) under geometry.
+      const underlay = activeFloor.backgroundImage;
+      if (underlay?.dataUrl) {
+        const htmlImg = getUnderlayHtmlImage(underlay.dataUrl, () => {
+          setSvgPaintEpoch((epoch) => epoch + 1);
+        });
+        if (htmlImg) {
+          const naturalW = Math.max(
+            1,
+            underlay.imageWidthPx ?? (htmlImg.naturalWidth || 1024),
+          );
+          const naturalH = Math.max(
+            1,
+            underlay.imageHeightPx ?? (htmlImg.naturalHeight || 768),
+          );
+          const mmPerPixel =
+            underlay.mmPerPixel && underlay.mmPerPixel > 0
+              ? underlay.mmPerPixel
+              : 10_000 / naturalW;
+          const displayScale = underlay.scale > 0 ? underlay.scale : 1;
+          const widthMm = naturalW * mmPerPixel * displayScale;
+          const depthMm = naturalH * mmPerPixel * displayScale;
+          const topLeft = projectToScreen(underlay.position, transform);
+          const bottomRight = projectToScreen(
+            {
+              x: underlay.position.x + widthMm,
+              y: underlay.position.y + depthMm,
+            },
+            transform,
+          );
+          const screenW = Math.max(1, Math.abs(bottomRight.x - topLeft.x));
+          const screenH = Math.max(1, Math.abs(bottomRight.y - topLeft.y));
+          const fabricImg = new FabricImage(htmlImg, {
+            left: topLeft.x,
+            top: topLeft.y,
+            originX: "left",
+            originY: "top",
+            scaleX: screenW / Math.max(1, htmlImg.naturalWidth || naturalW),
+            scaleY: screenH / Math.max(1, htmlImg.naturalHeight || naturalH),
+            opacity: Math.min(1, Math.max(0.05, underlay.opacity ?? 0.45)),
+            angle: underlay.rotation ?? 0,
+            selectable: false,
+            evented: false,
+            objectCaching: true,
+          });
+          canvas.insertAt(0, fabricImg);
+        }
+      }
+
+      if (showRooms) {
+        for (const room of activeFloor.rooms) {
+          const corners = orderedRoomCorners(activeFloor.walls, room.walls);
+          if (corners.length < 3) continue;
+          const screenPts = corners.map((corner) =>
+            projectToScreen(corner, transform),
+          );
+          const fill = resolveStageColor(
+            room.color ?? PLANNER_COLOR_TOKENS.exportBackground,
+            "rgba(148, 163, 184, 0.18)",
+          );
+          const poly = new Polygon(screenPts, {
+            fill,
+            stroke: resolveStageColor(PLANNER_COLOR_TOKENS.wallStroke, "#94a3b8"),
+            strokeWidth: 1,
+            opacity: 0.35,
+            selectable: false,
+            evented: false,
+            objectCaching: false,
+          });
+          canvas.add(poly);
+        }
+      }
 
       if (showWalls) {
         const wallStroke = resolveStageColor(
@@ -1082,6 +1322,57 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         }
       }
 
+      if (showAnnotations) {
+        const dimStroke = resolveStageColor(
+          PLANNER_COLOR_TOKENS.dimensionLabel,
+          "#475569",
+        );
+        for (const annotation of activeFloor.annotations) {
+          const geom = paintGeometryFromAnnotation(annotation, displayUnit);
+          if (!geom) continue;
+          const lineA = projectToScreen(geom.lineStart, transform);
+          const lineB = projectToScreen(geom.lineEnd, transform);
+          const extA0 = projectToScreen(geom.extStart, transform);
+          const extA1 = projectToScreen(geom.lineStart, transform);
+          const extB0 = projectToScreen(geom.extEnd, transform);
+          const extB1 = projectToScreen(geom.lineEnd, transform);
+          const labelPt = projectToScreen(geom.labelPoint, transform);
+          const dimLine = new Line([lineA.x, lineA.y, lineB.x, lineB.y], {
+            stroke: dimStroke,
+            strokeWidth: dimStrokePx,
+            selectable: false,
+            evented: false,
+            objectCaching: false,
+          });
+          const tickA = new Line([extA0.x, extA0.y, extA1.x, extA1.y], {
+            stroke: dimStroke,
+            strokeWidth: dimStrokePx,
+            selectable: false,
+            evented: false,
+            objectCaching: false,
+          });
+          const tickB = new Line([extB0.x, extB0.y, extB1.x, extB1.y], {
+            stroke: dimStroke,
+            strokeWidth: dimStrokePx,
+            selectable: false,
+            evented: false,
+            objectCaching: false,
+          });
+          const label = new FabricText(geom.label, {
+            left: labelPt.x,
+            top: labelPt.y - dimFontPx,
+            fontSize: dimFontPx,
+            fill: dimStroke,
+            originX: "center",
+            originY: "bottom",
+            selectable: false,
+            evented: false,
+            objectCaching: false,
+          });
+          canvas.add(tickA, tickB, dimLine, label);
+        }
+      }
+
       if (showFurniture) {
         for (const item of activeFloor.furniture) {
           const pose = furnitureToFabricPose(item, transform);
@@ -1100,7 +1391,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         }
       }
 
-      for (const door of activeFloor.doors) {
+      if (showDoors) for (const door of activeFloor.doors) {
         const wall = activeFloor.walls.find((item) => item.id === door.wallId);
         if (!wall) continue;
         const wallLength = Math.hypot(
@@ -1137,7 +1428,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         canvas.add(marker);
       }
 
-      for (const window of activeFloor.windows) {
+      if (showWindows) for (const window of activeFloor.windows) {
         const wall = activeFloor.walls.find((item) => item.id === window.wallId);
         if (!wall) continue;
         const wallLength = Math.hypot(
@@ -1181,11 +1472,18 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         previewLineRef.current = null;
       }
 
+      if (liveDimPreview && dimDrawRef.current) {
+        canvas.add(liveDimPreview);
+        dimPreviewLineRef.current = liveDimPreview;
+      } else if (!dimDrawRef.current) {
+        dimPreviewLineRef.current = null;
+      }
+
       canvas.selection = false;
       canvas.skipTargetFind = !interactive;
       canvas.requestRenderAll();
       rebuildingRef.current = false;
-    }, [activeFloor, activeTool, layerVisibility, transform, svgPaintEpoch]);
+    }, [activeFloor, activeTool, layerVisibility, transform, svgPaintEpoch, displayUnit]);
 
     useEffect(() => {
       const canvas = fabricRef.current;

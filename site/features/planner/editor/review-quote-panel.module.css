@@ -149,7 +149,103 @@
 }
 
 .primaryAction:disabled,
-.secondaryAction:disabled {
+.secondaryAction:disabled,
+.sendAction:disabled {
   cursor: not-allowed;
   opacity: 0.55;
+}
+
+.pricingNote {
+  margin: 0;
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+  background: var(--surface-soft);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.handoffFieldset {
+  margin: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  min-width: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.handoffLegend {
+  padding: 0 var(--space-1);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.field input,
+.field textarea {
+  min-height: var(--planner-touch-target);
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-2);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--surface-panel);
+  color: var(--text-strong);
+  font: inherit;
+  font-size: 0.8125rem;
+}
+
+.field textarea {
+  min-height: 4.5rem;
+  resize: vertical;
+}
+
+.checkLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.checkLabel input {
+  margin-top: 0.2rem;
+  flex: 0 0 auto;
+}
+
+.sendAction {
+  min-height: var(--planner-touch-target);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 88%, black);
+  color: var(--text-inverse);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.reference {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-success);
+  word-break: break-all;
+}
+
+@media (max-width: 640px) {
+  .metrics {
+    grid-template-columns: 1fr;
+  }
 }

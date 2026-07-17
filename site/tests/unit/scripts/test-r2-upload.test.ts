@@ -10,16 +10,20 @@ import {
 } from "../../../scripts/test-r2-upload";
 
 describe("test-r2-upload (name-mirror)", () => {
-  it("resolves endpoint from CLOULDFLARE_* env names used by the script", () => {
+  it("resolves endpoint and intact R2 credentials", () => {
     const cfg = resolveR2UploadConfig({
-      CLOULDFLARE_ACCOUNT_ID: "acct-123",
-      CLOULDFLARE_SECRET_API_TOKEN: "tok",
+      CLOUDFLARE_ACCOUNT_ID: "acct-123",
+      CLOUDFLARE_R2_ACCESS_KEY_ID: "key-id",
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: "secret",
       CLOUDFLARE_R2_CATALOG_BUCKET: "bucket-a",
     } as NodeJS.ProcessEnv);
     expect(cfg.endpoint).toBe("https://acct-123.r2.cloudflarestorage.com");
     expect(cfg.bucket).toBe("bucket-a");
-    expect(cfg.credentials.accessKeyId).toBe("acct-123");
-    expect(cfg.credentials.secretAccessKey).toBe("tok");
+    expect(cfg.credentialSource).toBe("cloudflare-r2");
+    expect(cfg.credentials).toEqual({
+      accessKeyId: "key-id",
+      secretAccessKey: "secret",
+    });
   });
 
   it("builds a test-auth.json put payload", () => {
@@ -36,8 +40,9 @@ describe("test-r2-upload (name-mirror)", () => {
     const send = vi.fn(async () => ({}));
     const result = await testUpload({
       env: {
-        CLOULDFLARE_ACCOUNT_ID: "a",
-        CLOULDFLARE_SECRET_API_TOKEN: "b",
+        CLOUDFLARE_ACCOUNT_ID: "a",
+        CLOUDFLARE_R2_ACCESS_KEY_ID: "key",
+        CLOUDFLARE_R2_SECRET_ACCESS_KEY: "secret",
       } as NodeJS.ProcessEnv,
       client: { send } as never,
       logger: { log: () => undefined, error: () => undefined },
@@ -51,12 +56,28 @@ describe("test-r2-upload (name-mirror)", () => {
       throw new Error("AccessDenied");
     });
     const result = await testUpload({
+      env: {
+        CLOUDFLARE_R2_ACCESS_KEY_ID: "key",
+        CLOUDFLARE_R2_SECRET_ACCESS_KEY: "secret",
+        CLOUDFLARE_ACCOUNT_ID: "acct",
+      } as NodeJS.ProcessEnv,
       client: { send } as never,
       logger: { log: () => undefined, error: () => undefined },
     });
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.message).toContain("AccessDenied");
+    }
+  });
+
+  it("fails closed when credentials are missing", async () => {
+    const result = await testUpload({
+      env: {} as NodeJS.ProcessEnv,
+      logger: { log: () => undefined, error: () => undefined },
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.message).toBe("missing_r2_config");
     }
   });
 });

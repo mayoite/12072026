@@ -17,6 +17,8 @@ export {
 } from "./types";
 /** Live Three viewer for planner editor (Fabric plan uses canvas/). */
 export { Lazy3DViewer } from "./ThreeLazyViewer";
+export { checkSceneParity, type SceneParityReport } from "./sceneParity";
+export { buildPlannerSceneNodes, type PlannerSceneNode } from "./buildPlannerSceneNodes";
 export {
   PLANNER_ORBIT_DEFAULT_ENABLED,
   getPlannerViewerControlProps,

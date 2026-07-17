@@ -171,9 +171,15 @@ function fabricPrim(
 }
 
 export function furniturePlanSvgUrl(item: PlannerFurnitureItem): string | null {
-  const url = item.previewImageUrl;
-  if (!isPublishedSvgPlanUrl(url)) return null;
-  return url ?? null;
+  // Prefer stamped preview; fall back to disk catalog slug path for older placements.
+  const direct = item.previewImageUrl;
+  if (isPublishedSvgPlanUrl(direct)) return direct ?? null;
+  const slug = (item.sourceSlug || item.catalogId || "").trim();
+  if (slug && /^[a-z0-9][a-z0-9._-]{0,120}$/i.test(slug)) {
+    const candidate = `/svg-catalog/${slug}.svg`;
+    if (isPublishedSvgPlanUrl(candidate)) return candidate;
+  }
+  return null;
 }
 
 function writePlanPaintMode(target: FabricObject, mode: PlanPaintMode): void {

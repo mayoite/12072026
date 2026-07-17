@@ -22,16 +22,16 @@ import {
   type PublishDescriptorResult,
 } from "@/features/admin/svg-editor/publish/publishDescriptorWithPipeline";
 import { compileSvgForPublish } from "@/features/planner/asset-engine/svg/compileSvgForPublish";
-import { DrizzleSvgRevisionPersistence } from "@/features/admin/svg-editor/storage/drizzleSvgPersistence.server";
-import { ImmutableSvgRevisionRepository } from "@/features/admin/svg-editor/svgRevisionRepository.server";
-import { isProductsDatabaseConfigured } from "@/platform/drizzle/databaseUrls";
-import { writeR2ObjectText } from "@/lib/storage/r2Catalog";
+import { resolveSvgPublishDualWriteDeps } from "@/features/admin/svg-editor/publish/resolveSvgPublishDualWrite";
 import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/newBlockDescriptorStub";
 import { setCatalogLifecycle } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
 import { appendDescriptorAudit } from "@/features/admin/svg-editor/storage/descriptorAuditLog";
 import { resolveAuthContext } from "@/features/shared/api/withAuth";
+import { publishSymbolToSupabaseCatalog } from "@/features/shared/catalog/catalogAssetStorage.server";
 import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
 import { assertDraftNotStale, readOpenedBaselineStamp } from "@/features/admin/svg-editor/lifecycle/staleDraftPublishGate";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 
 /**
  * Fail-closed publish for one slug.
@@ -73,11 +73,9 @@ export async function publishSvgEditorAction(
   }
   const input = formStateToDescriptorInput(descriptor, formFromEditor);
 
-  // Inject DB dual-write repository when Products DB is configured.
-  const dbRepository: ImmutableSvgRevisionRepository | undefined =
-    isProductsDatabaseConfigured()
-      ? new ImmutableSvgRevisionRepository(new DrizzleSvgRevisionPersistence())
-      : undefined;
+  // Dual-write only when Products DB is configured AND R2 is reachable.
+  // Disk remains live authority; dead R2 keys must not roll back disk publish.
+  const dualWrite = await resolveSvgPublishDualWriteDeps();
 
   const compiledSvgStr = formFromEditor.compiledSvg;
   const compileSvg =
@@ -91,20 +89,58 @@ export async function publishSvgEditorAction(
       : compileSvgForPublish;
 
   const published = await publishDescriptorWithPipeline(input, {
-    dbRepository,
-    artifactStore: dbRepository
-      ? { putText: writeR2ObjectText }
-      : undefined,
+    dbRepository: dualWrite.dbRepository,
+    artifactStore: dualWrite.artifactStore,
     compileSvg,
     actorId,
   });
   if (published.success) {
     setCatalogLifecycle(published.descriptor.slug, "draft");
+    // Best-effort Supabase Storage mirror for Planner import (stable public paths).
+    // Disk remains live authority; Supabase failure must not roll back publish.
+    let supabaseMirror: { svgOk: boolean; descriptorOk: boolean; reason?: string } | undefined;
+    try {
+      const slug = published.descriptor.slug;
+      const svgPath = path.join(
+        process.cwd(),
+        "public",
+        "svg-catalog",
+        `${slug}.svg`,
+      );
+      const svgMarkup = await readFile(svgPath, "utf8");
+      const mirror = await publishSymbolToSupabaseCatalog({
+        slug,
+        svgMarkup,
+        descriptorJson: JSON.stringify(published.descriptor),
+      });
+      supabaseMirror = {
+        svgOk: mirror.svg.ok,
+        descriptorOk: mirror.descriptor.ok,
+        reason:
+          !mirror.svg.ok && "reason" in mirror.svg
+            ? mirror.svg.reason
+            : !mirror.descriptor.ok && "reason" in mirror.descriptor
+              ? mirror.descriptor.reason
+              : undefined,
+      };
+    } catch (err) {
+      supabaseMirror = {
+        svgOk: false,
+        descriptorOk: false,
+        reason: err instanceof Error ? err.message : String(err),
+      };
+    }
     appendDescriptorAudit({
       actorId,
       slug: published.descriptor.slug,
       action: "publish",
-      detail: { checksum: published.descriptor.checksum, lifecycle: "draft" },
+      detail: {
+        checksum: published.descriptor.checksum,
+        lifecycle: "draft",
+        supabaseSvgOk: supabaseMirror?.svgOk ?? false,
+        supabaseDescriptorOk: supabaseMirror?.descriptorOk ?? false,
+        supabaseMirrorReason: supabaseMirror?.reason ?? null,
+      },
     });
     revalidatePath("/admin/svg-editor");
     revalidatePath(`/admin/svg-editor/${published.descriptor.slug}`);

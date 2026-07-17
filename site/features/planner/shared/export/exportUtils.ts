@@ -24,6 +24,7 @@ import {
   resolvePaintColor,
 } from "../readThemeColor";
 import { PLANNER_COLOR_TOKENS } from "../themeColorTokens";
+import { paintGeometryFromAnnotation } from "@/features/planner/lib/geometry/dimensions";
 
 // ── Types ──
 
@@ -306,6 +307,18 @@ export function exportAsSVG(project: PlannerProject, floor?: PlannerFloor): stri
     paths += `  <g transform="translate(${fx},${fy}) rotate(${rot})">\n`;
     paths += `    <rect x="${-fw / 2}" y="${-fd / 2}" width="${fw}" height="${fd}" fill="${color}" stroke="${colors.furnitureStroke}" stroke-width="2" rx="5" opacity="0.8"/>\n`;
     paths += `  </g>\n`;
+  }
+
+  // Durable dimension annotations (same geometry as canvas)
+  for (const annotation of targetFloor.annotations) {
+    const geom = paintGeometryFromAnnotation(annotation, displayUnit);
+    if (!geom) continue;
+    const sx = (p: { x: number; y: number }) => p.x - minX + pad;
+    const sy = (p: { x: number; y: number }) => p.y - minY + pad;
+    paths += `  <line x1="${sx(geom.extStart)}" y1="${sy(geom.extStart)}" x2="${sx(geom.lineStart)}" y2="${sy(geom.lineStart)}" stroke="${colors.dimensionLabel}" stroke-width="8"/>\n`;
+    paths += `  <line x1="${sx(geom.extEnd)}" y1="${sy(geom.extEnd)}" x2="${sx(geom.lineEnd)}" y2="${sy(geom.lineEnd)}" stroke="${colors.dimensionLabel}" stroke-width="8"/>\n`;
+    paths += `  <line x1="${sx(geom.lineStart)}" y1="${sy(geom.lineStart)}" x2="${sx(geom.lineEnd)}" y2="${sy(geom.lineEnd)}" stroke="${colors.dimensionLabel}" stroke-width="12"/>\n`;
+    paths += `  <text x="${sx(geom.labelPoint)}" y="${sy(geom.labelPoint) - 40}" text-anchor="middle" font-size="48" fill="${colors.dimensionLabel}" font-family="sans-serif">${escapeXml(geom.label)}</text>\n`;
   }
 
   // Title

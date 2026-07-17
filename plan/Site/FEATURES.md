@@ -4,9 +4,11 @@ Repo-sourced index: **plan phase → code path → honest gap**. Live code and f
 
 | Doc | Role |
 |---|---|
-| `PHASES-01-02.md`, `PHASES-03-05.md` | What to build and prove |
+| **`COMPLETION-CONTRACT.md`** | **Execution contract — how to prove done (wins on evidence)** |
+| `PHASES-01-02.md`, `PHASES-03-05.md` | Historical phase intent (files may be absent; contract replaces) |
 | This file | What exists in code today |
-| `CHECKLIST.md` | Open acceptance work only |
+| `CHECKLIST.md` | Historical open work (may be absent) |
+| `docs/architecture/09-SITE-UI-BENCHMARK.md` | UI benchmark (not PASS proof) |
 
 **Code roots:** `site/app/(site)/` · `site/components/` · `site/features/site/` (`data/`, `assistant/`, `advisor/`) · `site/lib/analytics/` · `site/lib/catalog/site/`
 

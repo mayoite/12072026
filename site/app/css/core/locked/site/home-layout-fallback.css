@@ -455,7 +455,7 @@
   color: var(--text-inverse);
 }
 
-/* Below lg: centered stack — title block centers as one unit; lines share a left edge inside it. */
+/* Below lg: centered stack — title lines, kicker, and CTAs share one center axis. */
 @media (width < theme(--breakpoint-lg)) {
   .home-hero__copy {
     display: flex;
@@ -466,11 +466,11 @@
   .home-hero-title-homepage [aria-hidden="true"] {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     width: fit-content;
     max-width: 100%;
     margin-inline: auto;
-    text-align: left;
+    text-align: center;
   }
 
   .home-hero-title-homepage [aria-hidden="true"] > span {

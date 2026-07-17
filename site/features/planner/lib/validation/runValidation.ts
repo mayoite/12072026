@@ -1,8 +1,10 @@
-import type {
-  ValidationIssue,
-  PlacedFurniture,
-} from "./types";
+import type { ValidationIssue, PlacedFurniture } from "./types";
 import { detectFurnitureOverlaps } from "./furnitureOverlap";
+import {
+  detectFurnitureOutsideRoom,
+  floorRoomPolygons,
+} from "./furnitureRoomBoundary";
+import { detectFurnitureClearance } from "./furnitureClearance";
 import type { PlannerFloor, PlannerFurnitureItem } from "@/features/planner/model/types";
 
 function toPlacedFurniture(item: PlannerFurnitureItem): PlacedFurniture {
@@ -39,6 +41,10 @@ export function countBySeverity(issues: readonly ValidationIssue[]): {
   return { errors, warnings, advisories };
 }
 
+/**
+ * Live floor validation for Review + ValidationPanel.
+ * Rules: furniture-overlap (error), room-boundary (error/warning), aisle-clearance (warning).
+ */
 export function runFloorValidation(floor: PlannerFloor): ValidationResult {
   const furnitureList: PlacedFurniture[] = [];
   for (const item of floor.furniture) {
@@ -47,9 +53,22 @@ export function runFloorValidation(floor: PlannerFloor): ValidationResult {
     }
   }
 
+  const roomPolygons = floorRoomPolygons(floor);
+
   const issues: ValidationIssue[] = [
     ...detectFurnitureOverlaps(furnitureList),
+    ...detectFurnitureOutsideRoom(furnitureList, roomPolygons),
+    ...detectFurnitureClearance(furnitureList),
   ];
+
+  // Deterministic order for UI stability: errors first, then warnings, then id.
+  issues.sort((a, b) => {
+    const severityRank = (s: ValidationIssue["severity"]) =>
+      s === "error" ? 0 : s === "warning" ? 1 : 2;
+    const bySeverity = severityRank(a.severity) - severityRank(b.severity);
+    if (bySeverity !== 0) return bySeverity;
+    return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+  });
 
   return {
     issues,

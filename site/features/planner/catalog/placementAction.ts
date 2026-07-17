@@ -32,6 +32,7 @@ import {
   workstationFootprintMm,
   type WorkstationConfigV0,
 } from "./workstationSystemV0";
+import { resolvePlanSvgUrl } from "./resolvePlanSvgUrl";
 
 /** Catalog id/slug that maps to modular cabinet-v0 multi-part mesh. */
 export const MODULAR_CABINET_V0_CATALOG_ID = "cabinet-v0";
@@ -327,10 +328,15 @@ export function placeCatalogItemInProject(
               sourceSku: snapshot.variantIdentity?.sku ?? snapshot.productIdentity.sku,
               ...(geometryMode !== undefined ? { geometryMode } : {}),
               ...(modularOptions !== undefined ? { modularOptions } : {}),
-              // S7: inventory/catalog published preview (often /svg-catalog/{slug}.svg)
-              ...(item.assets.previewImageUrl
-                ? { previewImageUrl: item.assets.previewImageUrl }
-                : {}),
+              // S7: published plan SVG (explicit preview, or disk /svg-catalog/{slug}.svg)
+              ...(() => {
+                const planSvg = resolvePlanSvgUrl({
+                  previewImageUrl: item.assets.previewImageUrl,
+                  imageUrls: item.assets.imageUrls,
+                  slug: item.slug,
+                });
+                return planSvg ? { previewImageUrl: planSvg } : {};
+              })(),
               // generatedGlbUrl intentionally omitted — procedural default;
               // stamp after G5 export via stampFurnitureGeneratedGlb.
             }

@@ -185,10 +185,20 @@ export interface PlannerElementGroup {
 export interface PlannerBackgroundImage {
   dataUrl: string;
   position: PlannerPoint;
+  /** Display scale multiplier (1 = natural mm-per-pixel mapping). */
   scale: number;
   opacity: number;
   rotation: number;
   locked: boolean;
+  /** Image natural width in pixels (for calibrate / paint). */
+  imageWidthPx?: number;
+  /** Image natural height in pixels. */
+  imageHeightPx?: number;
+  /**
+   * Millimetres per image pixel after calibration (or default room mapping).
+   * Footprint widthMm = imageWidthPx * mmPerPixel * scale.
+   */
+  mmPerPixel?: number;
 }
 
 export interface PlannerFloor {

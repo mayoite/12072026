@@ -27,7 +27,7 @@ export default async function AboutPage() {
                 {t("sectionKicker")}
               </p>
               <h1 className="home-heading !text-[clamp(2.4rem,5vw,4.4rem)]">
-                Built around <span className="text-accent-italic">better work.</span>
+                {t("sectionTitle")}
               </h1>
               <div className="mt-8 space-y-4">
                 {paragraphs.map((paragraph) => (
@@ -37,7 +37,7 @@ export default async function AboutPage() {
                 ))}
               </div>
               <EditorialArrowLink href="/contact" className="mt-8">
-                Talk to our team
+                {t("confidenceCta")}
               </EditorialArrowLink>
             </div>
           </div>

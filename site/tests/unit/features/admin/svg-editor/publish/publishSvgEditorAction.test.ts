@@ -35,6 +35,40 @@ vi.mock("@/platform/drizzle/productsDb", () => {
   return { productsDb: proxy, default: proxy };
 });
 
+vi.mock("@/features/admin/svg-editor/publish/resolveSvgPublishDualWrite", () => ({
+  resolveSvgPublishDualWriteDeps: vi.fn(async () => ({
+    dbRepository: undefined,
+    artifactStore: undefined,
+    mode: "skipped_no_db",
+  })),
+}));
+
+vi.mock("@/features/shared/catalog/catalogAssetStorage.server", () => ({
+  publishSymbolToSupabaseCatalog: vi.fn(async () => ({
+    svg: { ok: true, path: "planner-symbols/x/symbol.svg", publicUrl: "https://x/svg" },
+    descriptor: {
+      ok: true,
+      path: "planner-symbols/x/descriptor.json",
+      publicUrl: "https://x/json",
+    },
+  })),
+}));
+
+vi.mock("node:fs/promises", () => ({
+  default: {
+    readFile: vi.fn(async () => "<svg xmlns='http://www.w3.org/2000/svg'/>"),
+  },
+  readFile: vi.fn(async () => "<svg xmlns='http://www.w3.org/2000/svg'/>"),
+}));
+
+vi.mock("@/features/admin/svg-editor/lifecycle/catalogLifecycle", () => ({
+  setCatalogLifecycle: vi.fn(),
+}));
+
+vi.mock("@/features/admin/svg-editor/storage/descriptorAuditLog", () => ({
+  appendDescriptorAudit: vi.fn(),
+}));
+
 vi.mock("@/features/shared/api/withAuth", () => ({
   resolveAuthContext: vi.fn().mockResolvedValue({
     user: {

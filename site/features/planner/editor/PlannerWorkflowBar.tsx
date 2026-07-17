@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import {
   PLANNER_STEPS,
@@ -33,14 +33,10 @@ export function PlannerWorkflowBar({
     () => derivePlannerStepCompletion(planMetrics),
     [planMetrics],
   );
-  const [warning, setWarning] = useState<string | null>(null);
-
-  useEffect(() => {
-    setWarning(plannerForwardWarning(currentStep, completion));
-  }, [completion, currentStep]);
+  // Derive during render — do not mirror props into state via an effect.
+  const warning = plannerForwardWarning(currentStep, completion);
 
   const changeStep = (step: PlannerStep) => {
-    setWarning(plannerForwardWarning(step, completion));
     onStepChange(step);
   };
 

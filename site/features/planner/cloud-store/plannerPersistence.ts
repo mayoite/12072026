@@ -152,8 +152,14 @@ function documentToPlanValues(document: PlannerDocument, userId: string) {
 }
 
 /**
- * Hardened save operation with validation. Inserts a new plan or updates an
- * existing one when `documentId` is provided.
+ * Hardened save operation with validation.
+ *
+ * Ownership rules:
+ * - Updates are scoped to `id + user_id = caller` (no IDOR / ownership takeover).
+ * - `user_id` is never reassigned to a different owner on an existing row.
+ * - When `documentId` is set and no owned row matches: insert with that client id
+ *   if the id is free; fail with FORBIDDEN if another user owns it.
+ * - When `documentId` is omitted: server-generated id insert.
  */
 export async function savePlannerDocument(
   userId: string,
@@ -173,11 +179,36 @@ export async function savePlannerDocument(
 
     let rows: PlanRow[];
     if (documentId) {
+      // Owner-scoped update only — never rewrite a foreign plan's owner/payload.
+      // Do not set userId on update (owner is immutable once the row exists).
+      const { userId: _ownerImmutable, ...updateValues } = values;
       rows = await adminDb
         .update(plans)
-        .set(values)
-        .where(eq(plans.id, documentId))
+        .set(updateValues)
+        .where(and(eq(plans.id, documentId), eq(plans.userId, userId)))
         .returning();
+
+      if (rows.length === 0) {
+        const existing = await adminDb
+          .select({ id: plans.id, userId: plans.userId })
+          .from(plans)
+          .where(eq(plans.id, documentId))
+          .limit(1);
+
+        if (existing[0]) {
+          // Foreign (or concurrent) ownership — do not insert/overwrite.
+          throw new PlannerPersistenceError(
+            "Document not found or not owned by caller",
+            "FORBIDDEN",
+          );
+        }
+
+        // First save with client-chosen UUID: insert with explicit id + owner.
+        rows = await adminDb
+          .insert(plans)
+          .values({ id: documentId, ...values })
+          .returning();
+      }
     } else {
       rows = await adminDb.insert(plans).values(values).returning();
     }
@@ -329,15 +360,33 @@ export async function listPlannerDocumentSummaries(
 
 /**
  * Delete a planner document by id.
+ * When `userId` is provided (member path), delete is owner-scoped.
+ * Admin callers may omit `userId` to delete by id only.
  */
 export async function deletePlannerDocument(
-  documentId: string
+  documentId: string,
+  userId?: string,
 ): Promise<
   | { success: true }
   | { success: false; error: PlannerPersistenceError }
 > {
   try {
-    await adminDb.delete(plans).where(eq(plans.id, documentId));
+    const deleted = await adminDb
+      .delete(plans)
+      .where(
+        userId
+          ? and(eq(plans.id, documentId), eq(plans.userId, userId))
+          : eq(plans.id, documentId),
+      )
+      .returning({ id: plans.id });
+
+    if (userId && deleted.length === 0) {
+      throw new PlannerPersistenceError(
+        "Document not found or not owned by caller",
+        "NOT_FOUND",
+      );
+    }
+
     return { success: true };
   } catch (error) {
     if (error instanceof PlannerPersistenceError) {

@@ -18,8 +18,18 @@ import {
   type PlannerTool,
 } from "@/features/planner/editor/canvasTool";
 
-const LIVE: PlannerTool[] = ["select", "pan", "wall", "opening", "placement", "door", "window"];
-const DEFERRED: PlannerTool[] = ["room", "dimension", "text"];
+const LIVE: PlannerTool[] = [
+  "select",
+  "pan",
+  "room",
+  "wall",
+  "opening",
+  "dimension",
+  "placement",
+  "door",
+  "window",
+];
+const DEFERRED: PlannerTool[] = ["text"];
 
 describe("canvasTool authority", () => {
   it("maps every tool to label, shortcut, guidance, and tier", () => {
@@ -33,28 +43,38 @@ describe("canvasTool authority", () => {
 
   it("keeps rail groups disjoint and palette = rail + extras", () => {
     expect(RAIL_NAV_TOOLS).toEqual(["select", "pan"]);
-    expect(RAIL_DRAW_TOOLS).toEqual(["wall", "opening", "placement"]);
-    expect(RAIL_DEFERRED_TOOLS).toEqual(["room", "dimension"]);
-    expect(CANVAS_TOOLS).toEqual([...RAIL_NAV_TOOLS, ...RAIL_DRAW_TOOLS, ...RAIL_DEFERRED_TOOLS]);
+    expect(RAIL_DRAW_TOOLS).toEqual([
+      "room",
+      "wall",
+      "opening",
+      "dimension",
+      "placement",
+    ]);
+    expect(RAIL_DEFERRED_TOOLS).toEqual([]);
+    expect(CANVAS_TOOLS).toEqual([
+      ...RAIL_NAV_TOOLS,
+      ...RAIL_DRAW_TOOLS,
+      ...RAIL_DEFERRED_TOOLS,
+    ]);
     for (const t of LIVE) {
-      if (t === "door" || t === "window") continue;
-      if (t === "select" || t === "pan" || t === "wall" || t === "opening" || t === "placement") {
-        expect(isLiveGeometryTool(t)).toBe(true);
-      }
+      expect(isLiveGeometryTool(t)).toBe(true);
     }
     expect(LIVE_GEOMETRY_TOOLS.every(isLiveGeometryTool)).toBe(true);
     expect(PALETTE_TOOLS.length).toBe(CANVAS_TOOLS.length + PALETTE_EXTRA_TOOLS.length);
   });
 
-  it("runtimeToolFor maps opening/door→door; deferred tools arm as select", () => {
+  it("runtimeToolFor maps opening/door→door; room/text arm as select for overlay path", () => {
     expect(runtimeToolFor("door")).toBe("door");
     expect(runtimeToolFor("window")).toBe("window");
     expect(runtimeToolFor("opening")).toBe("door");
     expect(runtimeToolFor("wall")).toBe("wall");
+    expect(runtimeToolFor("dimension")).toBe("dimension");
+    // Room is live (exact-input overlay) but pointer path stays select.
     expect(runtimeToolFor("room")).toBe("select");
     expect(runtimeToolFor("text")).toBe("select");
     expect(toolAccessibleName("wall")).toContain(CANVAS_TOOL_LABELS.wall);
-    expect(toolAccessibleName("room")).toMatch(/deferred/i);
+    expect(toolAccessibleName("room")).toBe("Room (R)");
+    expect(toolAccessibleName("dimension")).toBe("Dimension (M)");
     expect(toolTooltipText("wall")).toBe(CANVAS_TOOL_GUIDANCE.wall);
   });
 });

@@ -751,6 +751,12 @@ export function TopBar({
                       <MenuItem id="quote" className={styles.dropdownItem}>
                         Add seats to quote cart
                       </MenuItem>
+                      <MenuItem id="cloud-json" className={styles.dropdownItem}>
+                        Save plan JSON to cloud
+                      </MenuItem>
+                      <MenuItem id="cloud-boq-csv" className={styles.dropdownItem}>
+                        Save BOQ CSV to cloud
+                      </MenuItem>
                     </Menu>
                   </PlannerMenuPopover>
                 </MenuTrigger>

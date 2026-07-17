@@ -5,6 +5,7 @@ import { getClientIp } from "@/platform/supabase/adminServer";
 import { createServerClient } from "@/platform/supabase/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateCsrfRequest } from "@/lib/security/csrf";
+import { CSRF_REJECTION_HEADER_NAME } from "@/lib/security/csrfConstants";
 import { isAppAdmin } from "@/lib/auth/roles";
 import { success, error, rateLimitedError } from "@/features/shared/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
@@ -142,9 +143,10 @@ export async function PATCH(req: NextRequest) {
   if (!isCsrfValid) {
     return error(
       ApiError.fromCode(
-        API_ERROR_CODES.INSUFFICIENT_PERMISSIONS,
+        API_ERROR_CODES.CSRF_FAILED,
         "Invalid or missing CSRF token",
       ),
+      { headers: { [CSRF_REJECTION_HEADER_NAME]: "1" } },
     );
   }
 

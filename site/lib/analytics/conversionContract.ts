@@ -114,9 +114,10 @@ export function filterEventPrivacy<T extends Record<string, unknown>>(
 /**
  * Site funnel events emit via consent-gated `emitSiteEvent`.
  *
- * OPEN (Planner): PROJECT_START, FIRST_PLACEMENT, BOQ_*, HANDOFF_* are defined
- * here but Planner never imports `trackConversionEvent`. Do not claim those
- * funnel steps are wired until a planner call site exists.
+ * Planner call sites (as of commercial handoff work):
+ * - BOQ_GENERATED from Review export / quote cart
+ * - HANDOFF_INTENT / HANDOFF_SUCCESS / HANDOFF_FAILURE from Send to Oando
+ * Still OPEN for browser proof: PROJECT_START, FIRST_PLACEMENT.
  */
 export function trackConversionEvent<K extends ConversionEventName>(
   name: K,

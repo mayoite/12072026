@@ -112,7 +112,7 @@ Canonical planner surface is **`/planner/**`** (`app/planner/`). Legacy `/oando-
 - `/api/csrf` → `app/api/csrf/route.ts`
 - `/api/customer-queries/manage` → `app/api/customer-queries/manage/route.ts`
 - `/api/customer-queries` → `app/api/customer-queries/route.ts`
-- … +24 more API routes
+- … +25 more API routes
 
 ## Legacy redirects (301)
 

@@ -5,12 +5,9 @@ import { WorkspaceLeftPanel } from "@/features/planner/editor/WorkspaceLeftPanel
 vi.mock("@/features/planner/editor/InventoryPanel", () => ({
   InventoryPanel: () => <div data-testid="inventory">inventory</div>,
 }));
-vi.mock("@/features/planner/ai/AIAssistDrawer", () => ({
-  AIAssistDrawer: () => <div data-testid="ai-assist">ai</div>,
-}));
 
 describe("WorkspaceLeftPanel", () => {
-  it("renders library tab chrome", () => {
+  it("renders inventory panel (library chrome lives on the inventory surface)", () => {
     render(
       <WorkspaceLeftPanel
         catalogItems={[]}
@@ -19,15 +16,9 @@ describe("WorkspaceLeftPanel", () => {
         onItemPlace={vi.fn()}
         onWorkstationConfigPlace={vi.fn()}
         onWorkstationConfigBatchPlace={vi.fn()}
-        workspaceBridge={
-          {
-            getProjectSnapshot: () => null,
-            applyLayout: vi.fn(),
-          } as never
-        }
       />,
     );
-    expect(screen.getByRole("tablist", { name: /left panel/i })).toBeDefined();
-    expect(document.body.textContent).toMatch(/Library|AI/i);
+    expect(screen.getByTestId("inventory")).toBeInTheDocument();
+    expect(screen.getByText("inventory")).toBeInTheDocument();
   });
 });

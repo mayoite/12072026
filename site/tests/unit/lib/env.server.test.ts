@@ -44,4 +44,30 @@ describe('env.server', () => {
     expect(consoleSpy).toHaveBeenCalled();
     consoleSpy.mockRestore();
   });
+
+  it('resolves Cloudflare S3 keys as an intact pair (R2_* wins over ACCESS_*)', async () => {
+    process.env.CLOUDFLARE_R2_ACCESS_KEY_ID = 'r2-access';
+    process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY = 'r2-secret';
+    process.env.CLOUDFLARE_ACCESS_KEY_ID = 'generic-access';
+    process.env.CLOUDFLARE_SECRET_ACCESS_KEY = 'generic-secret';
+    // Must never be used as S3 secret
+    process.env.CLOUDFLARE_SECRET_Authorization = 'not-an-s3-secret';
+
+    const { env } = await import('../../../lib/env.server');
+
+    expect(env.CLOUDFLARE_ACCESS_KEY_ID).toBe('r2-access');
+    expect(env.CLOUDFLARE_SECRET_ACCESS_KEY).toBe('r2-secret');
+  });
+
+  it('does not mix incomplete R2 access with generic secret', async () => {
+    process.env.CLOUDFLARE_R2_ACCESS_KEY_ID = 'r2-access-only';
+    delete process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
+    process.env.CLOUDFLARE_ACCESS_KEY_ID = 'generic-access';
+    process.env.CLOUDFLARE_SECRET_ACCESS_KEY = 'generic-secret';
+
+    const { env } = await import('../../../lib/env.server');
+
+    expect(env.CLOUDFLARE_ACCESS_KEY_ID).toBe('generic-access');
+    expect(env.CLOUDFLARE_SECRET_ACCESS_KEY).toBe('generic-secret');
+  });
 });

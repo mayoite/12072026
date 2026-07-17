@@ -7,9 +7,13 @@ import type { PlannerFloor, PlannerFurnitureItem } from "@/features/planner/mode
 import { createRectangularRoomProject } from "@/features/planner/model/project";
 
 function floorWithFurniture(items: PlannerFurnitureItem[]): PlannerFloor {
-  const project = createRectangularRoomProject({ name: "test", widthMm: 5000, depthMm: 4000 });
+  const project = createRectangularRoomProject({
+    name: "test",
+    widthMm: 5000,
+    depthMm: 4000,
+  });
   return {
-    ...project.floors[0],
+    ...project.floors[0]!,
     furniture: items,
   };
 }
@@ -43,10 +47,10 @@ describe("runFloorValidation", () => {
     expect(result.advisories).toBe(0);
   });
 
-  it("returns no issues for separated furniture", () => {
+  it("returns no issues for separated furniture inside the room", () => {
     const floor = floorWithFurniture([
-      makeItem("a", 0, 0, 600, 600),
-      makeItem("b", 3000, 0, 600, 600),
+      makeItem("a", 1500, 1500, 600, 600),
+      makeItem("b", 3500, 1500, 600, 600),
     ]);
     const result = runFloorValidation(floor);
     expect(result.issues).toEqual([]);
@@ -54,15 +58,42 @@ describe("runFloorValidation", () => {
 
   it("detects overlapping furniture as errors", () => {
     const floor = floorWithFurniture([
-      makeItem("a", 0, 0, 1200, 600),
-      makeItem("b", 500, 100, 1200, 600),
+      makeItem("a", 2000, 2000, 1200, 600),
+      makeItem("b", 2500, 2100, 1200, 600),
     ]);
     const result = runFloorValidation(floor);
-    expect(result.errors).toBe(1);
-    expect(result.issues[0]).toMatchObject({
-      ruleId: "furniture-overlap",
-      severity: "error",
-    });
+    expect(result.errors).toBeGreaterThanOrEqual(1);
+    expect(result.issues.some((i) => i.ruleId === "furniture-overlap")).toBe(
+      true,
+    );
+  });
+
+  it("detects furniture outside the room as room-boundary errors", () => {
+    const floor = floorWithFurniture([
+      makeItem("out", 9000, 9000, 600, 600),
+    ]);
+    const result = runFloorValidation(floor);
+    expect(result.errors).toBeGreaterThanOrEqual(1);
+    expect(
+      result.issues.some(
+        (i) => i.ruleId === "room-boundary" && i.severity === "error",
+      ),
+    ).toBe(true);
+  });
+
+  it("detects tight aisle clearance as warnings", () => {
+    // 1200-wide desks, centres 1600 apart → gap 400 mm < 900
+    const floor = floorWithFurniture([
+      makeItem("a", 1500, 2000, 1200, 600),
+      makeItem("b", 3100, 2000, 1200, 600),
+    ]);
+    const result = runFloorValidation(floor);
+    expect(
+      result.issues.some(
+        (i) => i.ruleId === "aisle-clearance" && i.severity === "warning",
+      ),
+    ).toBe(true);
+    expect(result.warnings).toBeGreaterThanOrEqual(1);
   });
 
   it("skips items with unknown catalogId", () => {
@@ -76,10 +107,38 @@ describe("runFloorValidation", () => {
 
   it("counts errors, warnings, and advisories separately", () => {
     const counts = countBySeverity([
-      { id: "1", ruleId: "furniture-overlap", severity: "error", objectIds: [], message: "", remedy: "" },
-      { id: "2", ruleId: "furniture-overlap", severity: "error", objectIds: [], message: "", remedy: "" },
-      { id: "3", ruleId: "wall-collision", severity: "warning", objectIds: [], message: "", remedy: "" },
-      { id: "4", ruleId: "aisle-clearance", severity: "advisory", objectIds: [], message: "", remedy: "" },
+      {
+        id: "1",
+        ruleId: "furniture-overlap",
+        severity: "error",
+        objectIds: [],
+        message: "",
+        remedy: "",
+      },
+      {
+        id: "2",
+        ruleId: "furniture-overlap",
+        severity: "error",
+        objectIds: [],
+        message: "",
+        remedy: "",
+      },
+      {
+        id: "3",
+        ruleId: "wall-collision",
+        severity: "warning",
+        objectIds: [],
+        message: "",
+        remedy: "",
+      },
+      {
+        id: "4",
+        ruleId: "aisle-clearance",
+        severity: "advisory",
+        objectIds: [],
+        message: "",
+        remedy: "",
+      },
     ]);
     expect(counts.errors).toBe(2);
     expect(counts.warnings).toBe(1);

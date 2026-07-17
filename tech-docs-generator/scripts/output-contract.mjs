@@ -44,12 +44,9 @@ export const LIVE_WATCH_ROOTS = [
   'pnpm-workspace.yaml',
   'pnpm-lock.yaml',
   'Readme.md',
-  'START.md',
-  'OPERATIONS_RUNBOOK.md',
   'Failures.md',
   'AGENTS.md',
-  'HANDOVER.md',
-  'testing-handbook.md',
+  'CLAUDE.md',
 ]
 
 function isWithinRoot(root, candidate) {

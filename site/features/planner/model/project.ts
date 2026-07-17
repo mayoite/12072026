@@ -2,11 +2,16 @@ import type {
   PlannerFloor,
   PlannerSceneEnvelope,
   PlannerProject,
+  PlannerRoom,
   PlannerWall,
 } from "./types";
 import { themeColorRef } from "../shared/readThemeColor";
-import { PLANNER_COLOR_TOKENS } from "../shared/themeColorTokens";
+import { PLANNER_COLOR_TOKENS, ROOM_FILL_TOKENS } from "../shared/themeColorTokens";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
+import {
+  rectangularRoomMetrics,
+  rectangularRoomSegments,
+} from "@/features/planner/lib/geometry/roomOutline";
 
 export type PlannerIdFactory = () => string;
 
@@ -66,28 +71,54 @@ export function createRectangularRoomProject(
 ): PlannerProject {
   const idFactory = options.idFactory ?? defaultIdFactory;
   const project = createPlannerProject({ ...options, idFactory });
-  const width = options.widthMm;
-  const depth = options.depthMm;
   const height = options.wallHeightMm ?? 2700;
   const thickness = options.wallThicknessMm ?? 150;
-  const points = [
+  const metrics = rectangularRoomMetrics(
     { x: 0, y: 0 },
-    { x: width, y: 0 },
-    { x: width, y: depth },
-    { x: 0, y: depth },
-  ];
-  const walls: PlannerWall[] = points.map((start, index) => ({
+    { x: options.widthMm, y: options.depthMm },
+  );
+  const segments = rectangularRoomSegments(
+    { x: 0, y: 0 },
+    { x: options.widthMm, y: options.depthMm },
+  );
+  const wallIds = segments.map(() => idFactory());
+  const walls: PlannerWall[] = segments.map((segment, index) => {
+    const wallId = wallIds[index];
+    if (!wallId) {
+      throw new Error("Room wall id generation failed.");
+    }
+    return {
+      id: wallId,
+      start: { ...segment.start },
+      end: { ...segment.end },
+      height,
+      thickness,
+      color: themeColorRef(PLANNER_COLOR_TOKENS.wallDefault),
+    };
+  });
+  const room: PlannerRoom = {
     id: idFactory(),
-    start,
-    end: points[(index + 1) % points.length],
-    height,
-    thickness,
-    color: themeColorRef(PLANNER_COLOR_TOKENS.wallDefault),
-  }));
+    name: "Room 1",
+    walls: wallIds,
+    floorTexture: "plain",
+    area: Number((metrics.areaMm2 / 1_000_000).toFixed(2)),
+    roomType: "indoor",
+    labelOffset: {
+      x: metrics.minX + metrics.widthMm / 2,
+      y: metrics.minY + metrics.depthMm / 2,
+    },
+    color: themeColorRef(ROOM_FILL_TOKENS[0]),
+  };
 
   return {
     ...project,
-    floors: [{ ...project.floors[0], walls }],
+    floors: (() => {
+      const baseFloor = project.floors[0];
+      if (!baseFloor) {
+        throw new Error("Project is missing a floor.");
+      }
+      return [{ ...baseFloor, walls, rooms: [room] }];
+    })(),
   };
 }
 

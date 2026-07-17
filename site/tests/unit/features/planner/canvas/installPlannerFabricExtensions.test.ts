@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import type { Canvas } from "fabric";
 import { PLANNER_COLOR_TOKENS } from "@/features/planner/shared/themeColorTokens";
 
 const { AligningGuidelinesCtor, disposeMock } = vi.hoisted(() => {
@@ -29,7 +30,7 @@ describe("installPlannerFabricExtensions", () => {
     const { installPlannerFabricExtensions } = await import(
       "@/features/planner/canvas/installPlannerFabricExtensions"
     );
-    const canvas = {} as import("fabric").Canvas;
+    const canvas = {} as Canvas;
 
     const handles = installPlannerFabricExtensions(canvas);
 
@@ -53,7 +54,7 @@ describe("installPlannerFabricExtensions", () => {
     const { installPlannerFabricExtensions } = await import(
       "@/features/planner/canvas/installPlannerFabricExtensions"
     );
-    const canvas = {} as import("fabric").Canvas;
+    const canvas = {} as Canvas;
 
     installPlannerFabricExtensions(canvas);
 

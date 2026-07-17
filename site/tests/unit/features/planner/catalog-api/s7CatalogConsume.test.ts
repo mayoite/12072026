@@ -102,9 +102,23 @@ describe("S7 catalog/inventory published SVG consume", () => {
     expect(isSvgAssetUrl(furniture?.previewImageUrl ?? "")).toBe(true);
   });
 
-  it("does not invent a preview URL when catalog item has none", () => {
+  it("falls back to disk /svg-catalog/{slug}.svg when catalog item has no preview", () => {
     const project = emptyProject("s7-empty");
     const item = svgCatalogItem("no-preview");
+    item.assets = { imageUrls: [] };
+    const placement = placeCatalogItemInProject(project, item, null, {
+      placedFrom: "click",
+      position: { x: 0, y: 0 },
+    });
+    const furniture = placement.result.project.floors[0]?.furniture[0];
+    // resolvePlanSvgUrl: explicit assets first, then valid slug → published path
+    expect(furniture?.previewImageUrl).toBe("/svg-catalog/no-preview.svg");
+  });
+
+  it("does not invent a preview URL when catalog item has no preview and no usable slug", () => {
+    const project = emptyProject("s7-empty-slug");
+    const item = svgCatalogItem("no-preview");
+    item.slug = "";
     item.assets = { imageUrls: [] };
     const placement = placeCatalogItemInProject(project, item, null, {
       placedFrom: "click",

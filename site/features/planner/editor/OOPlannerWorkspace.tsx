@@ -37,9 +37,23 @@ import { shouldPlaceModularWithGeneratedGlb } from "@/features/planner/asset-eng
 import { importPlannerPlannerText } from "@/features/planner/shared/export/importUtils";
 import { usePlannerWorkspaceAutosave } from "@/features/planner/persistence/usePlannerWorkspaceAutosave";
 import {
+  addLinearDimension,
   addRectangularRoom,
   setActiveFloor,
+  setBackgroundImage,
+  updateBackgroundImage,
 } from "@/features/planner/model/operations/pureActions";
+import { defaultUnderlayMmPerPixel } from "@/features/planner/lib/underlayCalibrate";
+import { layoutGridPositions } from "@/features/planner/lib/geometry/gridLayout";
+import {
+  resolveConflict,
+  type ConflictResolutionChoice,
+} from "@/features/planner/persistence/cloudPlanHydration";
+import type { OfflinePlan } from "@/features/planner/cloud-store/offlineStorage";
+import {
+  PlannerSyncConflictDialog,
+  type SyncConflictDetails,
+} from "./PlannerSyncConflictDialog";
 import { createPlannerProject } from "@/features/planner/model/project";
 import { addPlannerWall } from "@/features/planner/model/actions/walls";
 import {
@@ -71,12 +85,21 @@ import {
   buildPlannerBoqFilename,
   exportPlannerFurnitureBoqToCsv,
   exportPlannerFurnitureBoqToJson,
+  PLANNER_FURNITURE_BOQ_PRICING_NOTE,
 } from "@/features/planner/shared/export/projectFurnitureBoq";
 import {
-  summarizeWorkstationBoqV0,
-  workstationBoqToQuoteCartItems,
-} from "@/features/planner/catalog/workstationBoqV0";
+  furnitureBoqToHandoffPayload,
+  furnitureBoqToPdfRows,
+  furnitureBoqToQuoteCartItems,
+} from "@/features/planner/shared/export/furnitureBoqBridge";
+import { exportBoqOnly } from "@/features/planner/shared/export/brandedPdfExport";
+import { summarizeWorkstationBoqV0 } from "@/features/planner/catalog/workstationBoqV0";
 import { useQuoteCart } from "@/lib/store/quoteCart";
+import {
+  CONVERSION_EVENTS,
+  trackConversionEvent,
+} from "@/lib/analytics/conversionContract";
+import type { HandoffContactDraft } from "./ReviewQuotePanel";
 import { usePlannerSvgCatalog } from "@/features/planner/catalog/usePlannerWorkspaceCatalog";
 import { CommandPalette } from "./CommandPalette";
 import { CommandsPaletteTrigger } from "./CommandsPaletteTrigger";
@@ -97,6 +120,7 @@ import {
   type SketchToPlanResponse,
 } from "@/features/planner/ai/sketchToPlan";
 import { browserApiFetch } from "@/lib/api/browserApi";
+import { readPlannerApiError } from "@/features/planner/lib/plannerApiError";
 import { readFloorPlanImageFile } from "@/features/planner/lib/floorPlanImageImport";
 import type { SketchRecoveryReason } from "@/features/shared/api/schemas";
 import type { ValidationIssue } from "@/features/planner/lib/validation/types";
@@ -184,6 +208,11 @@ export function OOPlannerWorkspace({
     [workspaceCanvas],
   );
   const addQuoteItem = useQuoteCart((state) => state.addItem);
+  const [handoffBusy, setHandoffBusy] = useState(false);
+  const [lastHandoffReference, setLastHandoffReference] = useState<string | null>(
+    null,
+  );
+  const handoffIdempotencyKeyRef = useRef<string | null>(null);
   // Do not enable autosave until the persisted document has been restored.
   // React Strict Mode replays effects in development; treating the default
   // project as hydrated can otherwise overwrite a saved draft before the
@@ -288,6 +317,12 @@ export function OOPlannerWorkspace({
   const [snapEnabled, setSnapEnabled] = useState(
     DEFAULT_PLANNER_WORKSPACE_PREFERENCES.snapEnabled,
   );
+  const [orthogonalLock, setOrthogonalLock] = useState(false);
+  const [syncConflict, setSyncConflict] = useState<{
+    local: OfflinePlan;
+    cloud: OfflinePlan;
+    details: SyncConflictDetails;
+  } | null>(null);
   useEffect(() => {
     if (typeof window === "undefined") return;
     const prefs = readPlannerWorkspacePreferencesFromStorage();
@@ -298,6 +333,21 @@ export function OOPlannerWorkspace({
       setSnapEnabled(prefs.snapEnabled);
       setDisplayUnit(prefs.units);
     }, 0);
+  }, []);
+
+  // Phone: prefer touch density when no stored preference forces compact.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const narrow = window.matchMedia("(max-width: 48rem)");
+    const apply = () => {
+      if (!narrow.matches) return;
+      const prefs = readPlannerWorkspacePreferencesFromStorage();
+      if (prefs?.density) return;
+      setDensity("touch");
+    };
+    apply();
+    narrow.addEventListener("change", apply);
+    return () => narrow.removeEventListener("change", apply);
   }, []);
 
   const handleDisplayUnitChange = useCallback((unit: PlannerDisplayUnit) => {
@@ -432,6 +482,115 @@ export function OOPlannerWorkspace({
     });
   }, []);
 
+  const toggleOrthogonalLock = useCallback(() => {
+    setOrthogonalLock((current) => {
+      const next = !current;
+      setWorkspaceMessage(
+        next
+          ? "Orthogonal lock on — walls snap to 90° (Shift still works)."
+          : "Orthogonal lock off — hold Shift for 90°.",
+      );
+      return next;
+    });
+  }, []);
+
+  const handleArrayEntities = useCallback(
+    (columns: number, gapMm: number) => {
+      const { selection } = workspaceCanvas;
+      if (selection.type !== "furniture" || selection.ids.length < 1) return;
+      const floor = workspaceCanvas.activeFloor;
+      const items = selection.ids
+        .map((id) => floor.furniture.find((f) => f.id === id))
+        .filter((item): item is NonNullable<typeof item> => Boolean(item));
+      if (items.length < 1) return;
+      const widthMm = items[0]?.width ?? 600;
+      const depthMm = items[0]?.depth ?? 600;
+      const origin = {
+        x: Math.min(...items.map((i) => i.position.x)),
+        y: Math.min(...items.map((i) => i.position.y)),
+      };
+      const cells = layoutGridPositions(items.length, widthMm, depthMm, {
+        columns: Math.max(1, Math.floor(columns)),
+        gapMm: Math.max(0, gapMm),
+        originMm: origin,
+      });
+      workspaceCanvas.updateProject((project) => {
+        let p = project;
+        items.forEach((item, index) => {
+          const cell = cells[index];
+          if (!cell) return;
+          p = updateEntityInProject(p, "furniture", item.id, {
+            position: { x: cell.xMm, y: cell.yMm },
+          });
+        });
+        return p;
+      });
+      setWorkspaceMessage(
+        `Arrayed ${items.length} items · ${Math.max(1, Math.floor(columns))} columns · ${gapMm} mm gap`,
+      );
+    },
+    [workspaceCanvas],
+  );
+
+  const handleResolveSyncConflict = useCallback(
+    (choice: ConflictResolutionChoice) => {
+      if (!syncConflict) return;
+      // Pure choice is recorded; live host local autosave remains the working document
+      // until cloud hydrate loads OfflinePlan.document into the project model.
+      resolveConflict(syncConflict.local, syncConflict.cloud, choice);
+      setSyncConflict(null);
+      setWorkspaceMessage(
+        choice === "local"
+          ? "Kept local plan. Cloud version was not applied."
+          : "Kept cloud plan choice recorded. Reload cloud plan to replace the canvas.",
+      );
+    },
+    [syncConflict],
+  );
+
+  const applyUnderlayFromSketch = useCallback(
+    (underlay: { dataUrl: string; width: number; height: number }) => {
+      const mmPerPixel = defaultUnderlayMmPerPixel(underlay.width, 10_000);
+      workspaceCanvas.updateProject((project) =>
+        setBackgroundImage(project, {
+          dataUrl: underlay.dataUrl,
+          position: { x: 0, y: 0 },
+          scale: 1,
+          opacity: 0.4,
+          rotation: 0,
+          locked: true,
+          imageWidthPx: underlay.width,
+          imageHeightPx: underlay.height,
+          mmPerPixel,
+        }).project,
+      );
+    },
+    [workspaceCanvas],
+  );
+
+  const handleCalibrateUnderlay = useCallback(
+    (knownLengthMm: number) => {
+      const bg = workspaceCanvas.activeFloor.backgroundImage;
+      if (!bg?.imageWidthPx) {
+        setWorkspaceMessage("No underlay to calibrate. Accept a sketch first.");
+        return;
+      }
+      // Single-axis calibrate: set mmPerPixel so image width maps to knownLengthMm.
+      const mmPerPixel = knownLengthMm / Math.max(1, bg.imageWidthPx);
+      try {
+        workspaceCanvas.updateProject((project) =>
+          updateBackgroundImage(project, { mmPerPixel, scale: 1 }).project,
+        );
+        setWorkspaceMessage(
+          `Underlay calibrated: image width = ${knownLengthMm} mm.`,
+        );
+      } catch {
+        setWorkspaceMessage("Could not calibrate underlay.");
+      }
+    },
+    [workspaceCanvas],
+  );
+
   const handleStartTemplate = useCallback(() => {
     setActiveTool("room");
     armedToolRef.current = "room";
@@ -548,6 +707,23 @@ export function OOPlannerWorkspace({
       setWorkspaceMessage(
         "Wall added. Next segment starts from this endpoint — Escape to stop.",
       );
+    },
+    [workspaceCanvas],
+  );
+
+  const handleDimensionPlaced = useCallback(
+    (start: PlannerPoint, end: PlannerPoint) => {
+      try {
+        workspaceCanvas.updateProject((project) =>
+          addLinearDimension(project, start, end, { idFactory: newEntityId })
+            .project,
+        );
+        setWorkspaceMessage("Dimension annotation added.");
+      } catch (error) {
+        setWorkspaceMessage(
+          error instanceof Error ? error.message : "Could not add dimension.",
+        );
+      }
     },
     [workspaceCanvas],
   );
@@ -946,7 +1122,9 @@ export function OOPlannerWorkspace({
               baseProject,
               catalogItem,
               point,
-              { placedFrom: "click", writeToPublic: false },
+              // Try persistent generated GLB (Supabase) when configured; core falls
+              // back to procedural mesh if the write API returns not_configured.
+              { placedFrom: "click", writeToPublic: true },
             );
             workspaceCanvas.updateProject(() => result.project);
             const placedId =
@@ -1059,6 +1237,73 @@ export function OOPlannerWorkspace({
   const handleExport = useCallback(
     (format = "json") => {
       const downloadVerb = guestMode ? "Downloaded" : "Exported";
+
+      // Cloud storage export (member) — Supabase Storage via service route.
+      if (format === "cloud-json" || format === "cloud-boq-csv") {
+        if (guestMode) {
+          setWorkspaceMessage("Cloud export requires member sign-in.");
+          return;
+        }
+        void (async () => {
+          try {
+            let body = "";
+            let filename = "plan-export.json";
+            let contentType = "application/json";
+            if (format === "cloud-boq-csv") {
+              const summary = buildPlannerFurnitureBoq(workspaceCanvas.project);
+              if (summary.totalItems === 0) {
+                setWorkspaceMessage("No furniture to export for BOQ (place items first).");
+                return;
+              }
+              body = exportPlannerFurnitureBoqToCsv(summary);
+              filename = buildPlannerBoqFilename(workspaceCanvas.project, "csv");
+              contentType = "text/csv";
+            } else {
+              body = `${JSON.stringify(workspaceCanvas.project, null, 2)}\n`;
+              filename = `${(workspaceCanvas.project.name || "plan")
+                .trim()
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "") || "plan"}.json`;
+            }
+            const response = await browserApiFetch("/api/planner/export/cloud", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                planId: workspaceCanvas.project.id,
+                filename,
+                contentType,
+                body,
+              }),
+            });
+            if (!response.ok) {
+              setWorkspaceMessage(
+                await readPlannerApiError(response, "Cloud export failed."),
+              );
+              return;
+            }
+            const payload = (await response.json()) as {
+              success?: boolean;
+              publicUrl?: string;
+            };
+            if (!payload.success) {
+              setWorkspaceMessage("Cloud export failed.");
+              return;
+            }
+            setWorkspaceMessage(
+              payload.publicUrl
+                ? `Saved to cloud storage.`
+                : "Saved export to cloud storage.",
+            );
+          } catch (err) {
+            setWorkspaceMessage(
+              err instanceof Error ? err.message : "Cloud export failed.",
+            );
+          }
+        })();
+        return;
+      }
+
       // First-class project furniture BOQ (JSON / CSV) — all placed furniture.
       if (format === "boq" || format === "boq-json" || format === "boq-csv") {
         const summary = buildPlannerFurnitureBoq(workspaceCanvas.project);
@@ -1105,18 +1350,47 @@ export function OOPlannerWorkspace({
         return;
       }
 
-      if (format === "quote") {
-        const summary = summarizeWorkstationBoqV0(workspaceCanvas.project);
-        if (summary.totalInstances === 0) {
-          setWorkspaceMessage("No workstation seats for quote (place systems v0 first).");
+      if (format === "quote" || format === "boq-pdf") {
+        const summary = buildPlannerFurnitureBoq(workspaceCanvas.project);
+        if (summary.totalItems === 0) {
+          setWorkspaceMessage("No furniture to quote. Place catalog items first.");
           return;
         }
-        const items = workstationBoqToQuoteCartItems(summary);
+        if (format === "boq-pdf") {
+          void exportBoqOnly(
+            workspaceCanvas.project.name || "Workspace Plan",
+            furnitureBoqToPdfRows(summary),
+            { brandName: "One&Only" },
+          )
+            .then(() => {
+              trackConversionEvent(CONVERSION_EVENTS.BOQ_GENERATED, {
+                productCount: summary.totalItems,
+                source: "planner-branded-pdf",
+                locale: "en",
+              });
+              setWorkspaceMessage(
+                `${downloadVerb} branded BOQ PDF: ${summary.totalItems} items · demo list prices (not approved commercial)`,
+              );
+            })
+            .catch(() => {
+              setWorkspaceMessage("Branded BOQ PDF export failed.");
+            });
+          return;
+        }
+        const items = furnitureBoqToQuoteCartItems(summary);
         for (const item of items) {
           addQuoteItem({ id: item.id, name: item.name, qty: item.qty });
         }
+        trackConversionEvent(CONVERSION_EVENTS.BOQ_GENERATED, {
+          productCount: summary.totalItems,
+          source: "planner-quote-cart",
+          locale: "en",
+        });
         setWorkspaceMessage(
-          `Added ${summary.totalSeats} seats to quote cart · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST (${items.length} lines)`,
+          `Added ${summary.totalItems} furniture items to quote cart · ${items.length} lines` +
+            (summary.unpricedItemCount > 0
+              ? ` · ${summary.unpricedItemCount} unpriced (demo honesty)`
+              : ` · ₹${summary.totalInr.toLocaleString("en-IN")} demo list incl. GST`),
         );
         return;
       }
@@ -1182,7 +1456,114 @@ export function OOPlannerWorkspace({
         check.messages[0] ?? `Export unavailable for ${format}`,
       );
     },
-    [workspaceCanvas.project, addQuoteItem, guestMode],
+    [workspaceCanvas, addQuoteItem, guestMode],
+  );
+
+  const handleSendToOando = useCallback(
+    async (contact: HandoffContactDraft) => {
+      if (guestMode) {
+        setWorkspaceMessage("Sign in as a member to send the BOQ to Oando.");
+        return;
+      }
+      if (validationResult.errors > 0) {
+        setWorkspaceMessage("Resolve validation errors before sending to Oando.");
+        return;
+      }
+      const summary = buildPlannerFurnitureBoq(workspaceCanvas.project);
+      if (summary.totalItems === 0) {
+        setWorkspaceMessage("Place furniture before sending a BOQ.");
+        return;
+      }
+
+      if (!handoffIdempotencyKeyRef.current) {
+        handoffIdempotencyKeyRef.current =
+          typeof crypto !== "undefined" && "randomUUID" in crypto
+            ? crypto.randomUUID()
+            : `handoff-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+      }
+      const idempotencyKey = handoffIdempotencyKeyRef.current;
+      const projectId = workspaceCanvas.project.id || planId || "untitled";
+
+      trackConversionEvent(CONVERSION_EVENTS.HANDOFF_INTENT, {
+        projectId,
+        channel: "planner-api",
+        locale: "en",
+      });
+
+      setHandoffBusy(true);
+      setWorkspaceMessage("Sending BOQ to Oando…");
+      try {
+        const response = await browserApiFetch("/api/planner/handoff", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            idempotencyKey,
+            confirmDemoPricing: true,
+            contact: {
+              name: contact.name.trim(),
+              company: contact.company.trim() || undefined,
+              email: contact.email.trim() || undefined,
+              phone: contact.phone.trim() || undefined,
+              notes: contact.notes.trim() || undefined,
+            },
+            boq: furnitureBoqToHandoffPayload(summary),
+          }),
+        });
+
+        if (!response.ok) {
+          const message = await readPlannerApiError(
+            response,
+            "Handoff failed.",
+          );
+          trackConversionEvent(CONVERSION_EVENTS.HANDOFF_FAILURE, {
+            projectId,
+            channel: "planner-api",
+            reason: String(response.status),
+            locale: "en",
+          });
+          setWorkspaceMessage(message);
+          return;
+        }
+
+        const body = (await response.json()) as {
+          success?: boolean;
+          referenceId?: string;
+          message?: string;
+          idempotentReplay?: boolean;
+        };
+        const referenceId =
+          typeof body.referenceId === "string" ? body.referenceId : "";
+        if (referenceId) setLastHandoffReference(referenceId);
+        // New successful send gets a fresh key so a later edit can be a new submission.
+        if (!body.idempotentReplay) {
+          handoffIdempotencyKeyRef.current = null;
+        }
+        trackConversionEvent(CONVERSION_EVENTS.HANDOFF_SUCCESS, {
+          projectId,
+          channel: "planner-api",
+          locale: "en",
+        });
+        setWorkspaceMessage(
+          body.message?.trim() ||
+            (referenceId
+              ? `BOQ sent to Oando. Reference ${referenceId}`
+              : "BOQ sent to Oando."),
+        );
+      } catch {
+        trackConversionEvent(CONVERSION_EVENTS.HANDOFF_FAILURE, {
+          projectId,
+          channel: "planner-api",
+          reason: "network",
+          locale: "en",
+        });
+        setWorkspaceMessage(
+          "Network error while sending. Your draft is still on this device.",
+        );
+      } finally {
+        setHandoffBusy(false);
+      }
+    },
+    [guestMode, planId, validationResult.errors, workspaceCanvas.project],
   );
 
   const handleImportClick = useCallback(() => {
@@ -1240,16 +1621,27 @@ export function OOPlannerWorkspace({
           | null;
 
         if (!response.ok) {
+          const apiMessage = await readPlannerApiError(
+            response,
+            "Sketch conversion failed.",
+          );
           setSketchUi({
             status: "error",
             fileName: file.name,
             message:
               body?.message ??
               body?.error ??
-              `Sketch conversion failed (${response.status}).`,
+              apiMessage,
           });
+          setWorkspaceMessage(body?.message ?? body?.error ?? apiMessage);
           return;
         }
+
+        const underlay = {
+          dataUrl: image.dataUrl,
+          width: image.width,
+          height: image.height,
+        };
 
         if (body?.status === "fallback") {
           setSketchUi({
@@ -1259,6 +1651,7 @@ export function OOPlannerWorkspace({
             message:
               body.message ??
               getSketchRecoveryMessage(body.reason ?? "server_error"),
+            underlay,
           });
           return;
         }
@@ -1269,6 +1662,7 @@ export function OOPlannerWorkspace({
             fileName: file.name,
             objects: body.objects,
             warnings: body.warnings ?? [],
+            underlay,
           });
           return;
         }
@@ -1298,17 +1692,49 @@ export function OOPlannerWorkspace({
       (object): object is Extract<SketchToPlanResponse["objects"][number], { type: "wall" }> =>
         object.type === "wall",
     );
-    workspaceCanvas.updateProject((project) =>
-      applySketchWallObjects(project, walls, newEntityId),
-    );
+    const underlay = sketchUi.underlay;
+    workspaceCanvas.updateProject((project) => {
+      let next = applySketchWallObjects(project, walls, newEntityId);
+      if (underlay) {
+        const mmPerPixel = defaultUnderlayMmPerPixel(underlay.width, 10_000);
+        next = setBackgroundImage(next, {
+          dataUrl: underlay.dataUrl,
+          position: { x: 0, y: 0 },
+          scale: 1,
+          opacity: 0.4,
+          rotation: 0,
+          locked: true,
+          imageWidthPx: underlay.width,
+          imageHeightPx: underlay.height,
+          mmPerPixel,
+        }).project;
+      }
+      return next;
+    });
     setWorkspaceMessage(
-      `Accepted ${walls.length} wall${walls.length === 1 ? "" : "s"} from ${sketchUi.fileName}. Undo to reverse.`,
+      `Accepted ${walls.length} wall${walls.length === 1 ? "" : "s"} from ${sketchUi.fileName}` +
+        (underlay ? " · sketch kept as underlay" : "") +
+        ". Undo to reverse.",
     );
     setSketchUi({ status: "idle" });
     requestAnimationFrame(() => {
       canvasRef.current?.fitToView?.();
     });
   }, [sketchUi, workspaceCanvas]);
+
+  const placeSketchUnderlayOnly = useCallback(() => {
+    if (sketchUi.status !== "fallback" && sketchUi.status !== "preview") return;
+    const underlay = sketchUi.underlay;
+    if (!underlay) return;
+    applyUnderlayFromSketch(underlay);
+    setWorkspaceMessage(
+      `Placed underlay from ${sketchUi.fileName}. Calibrate scale from Properties if needed.`,
+    );
+    setSketchUi({ status: "idle" });
+    requestAnimationFrame(() => {
+      canvasRef.current?.fitToView?.();
+    });
+  }, [applyUnderlayFromSketch, sketchUi]);
 
   const rejectSketchGeometry = useCallback(() => {
     if (sketchUi.status === "preview") {
@@ -1502,6 +1928,14 @@ export function OOPlannerWorkspace({
         onAccept={acceptSketchGeometry}
         onReject={rejectSketchGeometry}
         onDismiss={dismissSketchUi}
+        onPlaceUnderlayOnly={placeSketchUnderlayOnly}
+      />
+      <PlannerSyncConflictDialog
+        open={Boolean(syncConflict)}
+        details={syncConflict?.details}
+        onKeepLocal={() => handleResolveSyncConflict("local")}
+        onKeepCloud={() => handleResolveSyncConflict("cloud")}
+        onDismiss={() => setSyncConflict(null)}
       />
       <ModularPlannerShell
         accessContext={accessContext}
@@ -1540,8 +1974,10 @@ export function OOPlannerWorkspace({
         onToggleDensity={toggleDensity}
         gridEnabled={gridEnabled}
         snapEnabled={snapEnabled}
+        orthogonalLock={orthogonalLock}
         onToggleGrid={toggleGrid}
         onToggleSnap={toggleSnap}
+        onToggleOrthogonal={toggleOrthogonalLock}
         activeTool={activeTool}
         onToolChange={setTool}
         onZoomReset={() => canvasRef.current?.fitToView()}
@@ -1575,8 +2011,14 @@ export function OOPlannerWorkspace({
             validation={validationResult}
             furnitureCount={planMetrics.furniture}
             workstationSeats={planMetrics.workstationSeats}
-            onDownloadBoq={() => handleExport("boq-csv")}
-            onAddWorkstationsToQuote={() => handleExport("quote")}
+            pricingNote={PLANNER_FURNITURE_BOQ_PRICING_NOTE}
+            guestMode={guestMode}
+            handoffBusy={handoffBusy}
+            lastHandoffReference={lastHandoffReference}
+            onDownloadBoqCsv={() => handleExport("boq-csv")}
+            onDownloadBoqPdf={() => handleExport("boq-pdf")}
+            onAddAllToQuote={() => handleExport("quote")}
+            onSendToOando={handleSendToOando}
             onFocusIssue={handleValidationFocus}
           />
         }
@@ -1594,6 +2036,8 @@ export function OOPlannerWorkspace({
                   onDuplicateEntity: handleDuplicateEntity,
                   onAlignEntities: handleAlignEntities,
                   onDistributeEntities: handleDistributeEntities,
+                  onArrayEntities: handleArrayEntities,
+                  onCalibrateUnderlay: handleCalibrateUnderlay,
                   onDeselect: () =>
                     workspaceCanvas.setSelection({ type: "none", ids: [] }),
                 }}
@@ -1678,6 +2122,7 @@ export function OOPlannerWorkspace({
               activeFloor={activeFloor}
               gridEnabled={gridEnabled}
               snapEnabled={snapEnabled}
+              orthogonalLock={orthogonalLock}
               displayUnit={displayUnit}
               pendingCatalogPlacement={
                 pendingCatalogItemId !== null ||
@@ -1692,6 +2137,7 @@ export function OOPlannerWorkspace({
               }
               onPlaceAtPoint={handlePlaceAtPoint}
               onWallDrawn={handleWallDrawn}
+              onDimensionPlaced={handleDimensionPlaced}
               onOpeningPlaced={handleOpeningPlaced}
               onOpeningRejected={handleOpeningRejected}
               onSelectionChange={handleCanvasSelection}
@@ -1768,6 +2214,24 @@ export function OOPlannerWorkspace({
             workspaceCanvas.canRedo ? "available" : "unavailable"
           }.`}
       </span>
+      {workspaceMessage ? (
+        <div
+          className="open3d-workspace-toast"
+          role="status"
+          aria-live="polite"
+          data-testid="planner-workspace-toast"
+        >
+          <p className="open3d-workspace-toast__text">{workspaceMessage}</p>
+          <button
+            type="button"
+            className="open3d-workspace-toast__dismiss"
+            aria-label="Dismiss message"
+            onClick={() => setWorkspaceMessage(null)}
+          >
+            Dismiss
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

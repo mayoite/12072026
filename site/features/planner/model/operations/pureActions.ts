@@ -18,6 +18,18 @@ import { themeColorRef } from "../../shared/readThemeColor";
 import { PLANNER_COLOR_TOKENS, ROOM_FILL_TOKENS } from "../../shared/themeColorTokens";
 import { activeFloorOrThrow } from "../actions/projectActions";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
+import {
+  annotationDraftFromSegment,
+  DEFAULT_DIMENSION_OFFSET_MM,
+  DEFAULT_OVERALL_DIMENSION_OFFSET_MM,
+  overallRoomDimensionDrafts,
+  wallDimensionDrafts,
+} from "@/features/planner/lib/geometry/dimensions";
+import {
+  isValidRectangularRoom,
+  rectangularRoomMetrics,
+  rectangularRoomSegments,
+} from "@/features/planner/lib/geometry/roomOutline";
 
 export interface PureAction {
   type: string;
@@ -41,6 +53,8 @@ export interface AddRectangularRoomOptions extends ApplyPureActionOptions {
   floorTexture?: string;
   wallHeightMm?: number;
   wallThicknessMm?: number;
+  /** When true (default), attach wall + overall room dimension annotations. */
+  attachDimensions?: boolean;
 }
 
 function uid(factory?: PlannerIdFactory): string {
@@ -101,38 +115,36 @@ export function addRectangularRoom(
 ): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
-  const minX = Math.min(start.x, end.x);
-  const maxX = Math.max(start.x, end.x);
-  const minY = Math.min(start.y, end.y);
-  const maxY = Math.max(start.y, end.y);
-  const widthMm = maxX - minX;
-  const depthMm = maxY - minY;
 
-  if (widthMm < 1 || depthMm < 1) {
+  if (!isValidRectangularRoom(start, end)) {
     throw new Error("Room dimensions must be positive.");
   }
 
-  const points: PlannerPoint[] = [
-    { x: minX, y: minY },
-    { x: maxX, y: minY },
-    { x: maxX, y: maxY },
-    { x: minX, y: maxY },
-  ];
-  const wallIds = points.map(() => uid(options?.idFactory));
+  const metrics = rectangularRoomMetrics(start, end);
+  const segments = rectangularRoomSegments(start, end);
+  const wallIds = segments.map(() => uid(options?.idFactory));
   const roomId = uid(options?.idFactory);
   const wallHeight = options?.wallHeightMm ?? 2700;
   const wallThickness = options?.wallThicknessMm ?? 150;
   const wallColor = themeColorRef(PLANNER_COLOR_TOKENS.wallDefault);
+  const attachDimensions = options?.attachDimensions !== false;
+  const displayUnit = p.displayUnit ?? "mm";
 
   floor.walls.push(
-    ...points.map((point, index) => ({
-      id: wallIds[index],
-      start: point,
-      end: points[(index + 1) % points.length],
-      height: wallHeight,
-      thickness: wallThickness,
-      color: wallColor,
-    })),
+    ...segments.map((segment, index) => {
+      const wallId = wallIds[index];
+      if (!wallId) {
+        throw new Error("Room wall id generation failed.");
+      }
+      return {
+        id: wallId,
+        start: { ...segment.start },
+        end: { ...segment.end },
+        height: wallHeight,
+        thickness: wallThickness,
+        color: wallColor,
+      };
+    }),
   );
 
   floor.rooms.push({
@@ -140,16 +152,35 @@ export function addRectangularRoom(
     name: options?.name ?? `Room ${floor.rooms.length + 1}`,
     walls: wallIds,
     floorTexture: options?.floorTexture ?? "plain",
-    area: Number(((widthMm * depthMm) / 1_000_000).toFixed(2)),
+    area: Number((metrics.areaMm2 / 1_000_000).toFixed(2)),
     roomType: options?.roomType ?? "indoor",
     labelOffset: {
-      x: minX + widthMm / 2,
-      y: minY + depthMm / 2,
+      x: metrics.minX + metrics.widthMm / 2,
+      y: metrics.minY + metrics.depthMm / 2,
     },
     color: themeColorRef(
       ROOM_FILL_TOKENS[floor.rooms.length % ROOM_FILL_TOKENS.length],
     ),
   });
+
+  if (attachDimensions) {
+    const wallDrafts = wallDimensionDrafts(
+      floor.walls.slice(-4),
+      DEFAULT_DIMENSION_OFFSET_MM,
+      displayUnit,
+    );
+    const overallDrafts = overallRoomDimensionDrafts(
+      metrics.corners,
+      DEFAULT_OVERALL_DIMENSION_OFFSET_MM,
+      displayUnit,
+    );
+    for (const draft of [...wallDrafts, ...overallDrafts]) {
+      floor.annotations.push({
+        id: uid(options?.idFactory),
+        ...draft,
+      });
+    }
+  }
 
   return {
     project: withUpdatedFloor(p, floor),
@@ -894,6 +925,41 @@ export function addAnnotation(
     project: withUpdatedFloor(p, floor),
     action: makeAction("ADD_ANNOTATION", { id, x1, y1, x2, y2, offset, label }, "Added annotation"),
   };
+}
+
+/**
+ * Durable linear dimension annotation with auto length label.
+ * First-class document data (not ephemeral snap readout).
+ */
+export function addLinearDimension(
+  project: PlannerProject,
+  start: PlannerPoint,
+  end: PlannerPoint,
+  options?: ApplyPureActionOptions & {
+    offsetMm?: number;
+    label?: string;
+  },
+): PureActionResult {
+  const draft = annotationDraftFromSegment(
+    start,
+    end,
+    options?.offsetMm ?? DEFAULT_DIMENSION_OFFSET_MM,
+    options?.label,
+    project.displayUnit ?? "mm",
+  );
+  if (!draft) {
+    throw new Error("Dimension length must be at least 10 mm.");
+  }
+  return addAnnotation(
+    project,
+    draft.x1,
+    draft.y1,
+    draft.x2,
+    draft.y2,
+    draft.offset,
+    draft.label,
+    options,
+  );
 }
 
 export function removeAnnotation(project: PlannerProject, id: string): PureActionResult {

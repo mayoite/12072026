@@ -15,7 +15,7 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 
 **Live host:** `editor/OOPlannerWorkspace.tsx` wires canvas, catalog, export, AI, validation. Document kernel lives at planner root (`model/`, `store/`, `lib/`, `persistence/`, `catalog/`, `shared/`). Parallel trees (`catalog-api/`, `cloud-store/`) still serve APIs, portal, and legacy paths.
 
-**Execution status (mirrors `FINISH-PLAN.md`, 2026-07-17):** P0 PARTIAL · P1 PASS · P2 PARTIAL · P3 PARTIAL · P4 IN PROGRESS · P5 PARTIAL · P6 PARTIAL · P7 PARTIAL · P8 PARTIAL · P9 PARTIAL · P10 FAIL · P11 PARTIAL (honest export failures; no scene GLB) · P12 PARTIAL (AI optional + bridge apply) · P13 PARTIAL (no silent conflict overwrite) · P14 PARTIAL (arrow nudge; journey axe open) · P15 PARTIAL (lazy 3D; host split/budgets open) · P16–P17 OPEN. Gap cells below reflect this status.
+**Execution status (mirrors `FINISH-PLAN.md`, 2026-07-17):** P0 PARTIAL · P1 PASS · P2–P9 PARTIAL · P10 PARTIAL (handoff delivery) · P11 PARTIAL (no full scene GLB **export**; modular GLB **storage** when configured) · P12 PARTIAL (bridge-only AI apply) · P13 PARTIAL (conflict dialog) · P14–P15 PARTIAL · P16–P17 OPEN.
 
 ---
 
@@ -30,10 +30,10 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 | Guest permissions | `model/plannerPermissions.ts`, `lib/commands/plannerAccessContext.ts` | — |
 | Session / errors | `ui/PlannerSessionDialog.tsx`, `editor/PlannerErrorBoundary.tsx` | — |
 | Project document (mm) | `model/` (`types.ts`, `units.ts`, `actions/`, `operations/`) | P2 PASS: mm canonical, display units (mm/cm/m/in/ft-in), linear/angular/area/quantity precision via `PLANNER_PRECISION`, full calculation precision preserved during display rounding. Remaining: wall centreline/thickness/start/end/joins contract (FINISH-PLAN P2) |
-| Conversion events | `site/lib/analytics/siteEvents.ts`, `site/lib/analytics/conversionContract.ts` | Only `PLANNER_ENTRY` has a call site; Planner does not emit project, placement, BOQ, or handoff events |
-| Primary BOQ | `shared/export/projectFurnitureBoq.ts` | Parallel: `catalog/workstationBoqV0.ts`, `shared/boq/buildBoq.ts` |
-| Branded PDF BOQ library | `shared/export/brandedPdfExport.ts`, `shared/export/pdfExport.ts` | Not wired into the live workspace; defaults to `One&Only`; rows may include unit prices |
-| Quote cart (partial) | `catalog/workstationBoqV0.ts`, `shared/boq/quoteCartBridge.ts`, `editor/OOPlannerWorkspace.tsx` | Live workspace uses the workstation-only bridge; the generic bridge is not wired |
+| Conversion events | `conversionContract.ts`, `OOPlannerWorkspace` | `BOQ_GENERATED`, `HANDOFF_INTENT` / `SUCCESS` / `FAILURE` emit from Review export and Send to Oando. `PROJECT_START` / `FIRST_PLACEMENT` still open |
+| Primary BOQ | `shared/export/projectFurnitureBoq.ts` | Live Review/export/handoff path. Legacy `workstationBoqV0` specialty export remains; `shared/boq/buildBoq` unused by live host |
+| Branded PDF BOQ library | `shared/export/brandedPdfExport.ts`, `furnitureBoqBridge.ts` | Wired from Review “Download branded BOQ PDF”; demo-list pricing labeled |
+| Quote cart | `furnitureBoqBridge.ts`, `editor/OOPlannerWorkspace.tsx` | All placed furniture lines → quote cart (not workstation-only) |
 
 ---
 
@@ -41,20 +41,20 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 
 | Feature | Code | Gap |
 |---|---|---|
-| Shell | `editor/WorkspaceShell.tsx`, `editor/dock/ModularPlannerShell.tsx`, `TopBar.tsx`, `LayersPanel.tsx`, `workspacePlanMetrics.ts` | Canvas-first Dockview with gutters; pinned left RAC rail; Layers from TopBar; Inventory/Properties on demand. TopBar still dense on phone |
-| Tools | `editor/canvasTool.ts`, `CanvasToolRail.tsx` | Room, dimension, text deferred |
-| 2D canvas | `canvas/PlannerFabricStage.tsx`, `canvas/installPlannerFabricExtensions.ts`, `lib/geometry/` | Fabric `AligningGuidelines` wired for furniture edge/center guides (theme `--color-primary`). Wall object snaps stay in `lib/geometry/snapping.ts` |
-| Walls / openings | `model/wallContract.ts`, `model/actions/walls.ts`, `model/actions/openings.ts`, `lib/geometry/wallGraph.ts`, `lib/geometry/snapping.ts`, `lib/geometry/openingPlacement.ts`, `canvas/PlannerFabricStage.tsx`, `canvas/wallSnapMarker.ts`, `editor/PropertiesPanel.tsx`, `useDoorWindowPlacement.ts` | P2 PASS: centreline = start/end, thickness full width, joins within `WALL_JOIN_EPSILON_MM` (1 mm). P4: join-on-commit, chain continue, auto rooms, exact L/A/thickness, object+grid snaps, snap marker+name, Enter→exact; openings placement resolver (valid host wall, along-wall snap, overlap/end guards, properties width/offset). Remaining: orthogonal toggle (Shift-only), grips, dimensions, drag reposition openings, browser proof |
-| Edit / undo | `editor/PropertiesPanel.tsx`, `store/history.ts`, `lib/geometry/alignDistribute.ts`, `lib/geometry/gridLayout.ts` | Align/distribute is wired; grid is a pure helper only; row/array/group/ungroup UI is absent |
+| Shell | `ModularPlannerShell`, `LayersPanel`, `TopBar` | Canvas-first Dockview; Layers from TopBar shows customer categories only (walls/doors/windows/furniture/rooms); 2D layer gates doors/windows |
+| Tools | `editor/canvasTool.ts`, `CanvasToolRail.tsx` | Room (exact panel), wall, opening, dimension live; text deferred |
+| 2D canvas | `canvas/PlannerFabricStage.tsx`, `canvas/installPlannerFabricExtensions.ts`, `lib/geometry/` | Fabric `AligningGuidelines` for furniture edge/center. Rooms paint as polygons; durable annotations paint as offset dim lines. Wall snaps in `lib/geometry/snapping.ts` |
+| Walls / openings | `model/wallContract.ts`, `model/actions/walls.ts`, `model/actions/openings.ts`, `lib/geometry/wallGraph.ts`, `lib/geometry/roomOutline.ts`, `lib/geometry/dimensions.ts`, `lib/geometry/orthogonal.ts`, `lib/geometry/snapping.ts`, `lib/geometry/openingPlacement.ts`, `canvas/PlannerFabricStage.tsx`, `canvas/wallSnapMarker.ts`, `editor/ExactRoomPanel.tsx`, `editor/PropertiesPanel.tsx` | P2 PASS centreline/joins. P4: exact room outline + auto wall/overall dims; sticky ortho OR Shift; dimension two-click tool; join-aware `movePlannerWallEndpointConnected` (unit). Remaining: wall grips UI, opening drag reposition, browser proof |
+| Edit / undo | `PropertiesPanel`, `alignDistribute`, `gridLayout` | Align/distribute + multi-select array (row / grid / 5-col); group/ungroup still absent; wall orthogonal sticky lock on tool rail |
 | Catalog UI | `editor/InventoryPanel.tsx`, `catalog/catalogSearch.ts`, `catalog/catalogBuyerVisibility.ts` | UI-CAT-* browser proof open |
 | Workstation config | `editor/WorkstationConfiguratorPanel.tsx`, `catalog/workstationConfiguratorV0.ts` | — |
 | Catalog APIs | `app/api/planner/catalog/route.ts`, `app/api/planner/catalog/configurator/route.ts`, `app/api/planner/catalog/svg-blocks/route.ts` | `svg-blocks` strictly dual-reads native and legacy DB rows and filters internal inventory; the live DB currently returns zero buyer-visible SVG items |
-| SVG on canvas | `canvas/fabricBlock2D.ts`, `catalog/furnitureBlock2D.ts`, `catalog/svg/svgPlanSymbolCache.ts` | Block2D fallback common; DB-SVG-* open |
+| SVG on canvas | `canvas/fabricBlock2D.ts`, `catalog/resolvePlanSvgUrl.ts`, `svgPlanSymbolCache.ts` | Place stamps `/svg-catalog/{slug}.svg` when preview missing; paint prefers published SVG then Block2D; sparse disk set remains |
 | Asset publish | `asset-engine/`, `site/features/admin/svg-editor/publish/publishDescriptorWithPipeline.ts` | PNG thumb stub; consumer does not read committed revision artifact bytes |
-| 3D | `3d/ThreeLazyViewer.tsx`, `buildPlannerSceneNodes.ts`, `loadGeneratedGlbObject.ts` | P7: generated-glb API returns 501 `not_configured` (no `site/public` write). Blob/object-storage path open |
-| Persistence | `persistence/usePlannerWorkspaceAutosave.ts`, `persistence/cloudPlanHydration.ts`, `cloud-store/plannerPersistence.ts`, `cloud-store/offlineStorage.ts`, `cloud-store/syncQueueProcessor.ts` | P1 PASS: reload restores matching draft. P13 PARTIAL: divergent contentHash returns conflict (no silent overwrite); explicit `resolveConflict(choice)`. Conflict UI, immutable revisions, and one save-state machine remain. PF-20 FAIL |
-| Import / templates | `shared/export/importUtils.ts`, `lib/floorPlanImageImport.ts`, `templates/layoutTemplates.ts` | P2 PASS: import validation before replacing state, supported-version migration, round-trip invariants. Remaining: visible fail on unsupported versions; preserve unknown safe data only when schema permits. P5 PARTIAL: Sketch-to-Plan TopBar + preview/accept; underlay calibrate open |
-| AI assist | `ai/AIAssistDrawer.tsx`, `workspaceAiBridge.ts`, `app/api/planner/ai-advisor/` | P12 PARTIAL: optional overlay; apply only via bridge; dead applySuggestedLayout not called from drawer. Browser failure journey open |
+| 3D | `3d/ThreeLazyViewer`, `buildPlannerSceneNodes`, `sceneParity`, `loadGeneratedGlbObject` | Generated GLB uploads to Supabase `catalog-assets/generated/*` when service role set (never site/public). Doors/windows as 3D nodes. `checkSceneParity` matrix for walls/furniture/openings |
+| Persistence | `usePlannerWorkspaceAutosave`, `cloudPlanHydration`, `editor/PlannerSyncConflictDialog.tsx` | Conflict dialog (keep local / keep cloud) wired; pure `resolveConflict` remains source of truth. Immutable revisions + single save-state machine still open |
+| Import / templates | `shared/export/importUtils.ts`, `lib/floorPlanImageImport.ts`, `lib/underlayCalibrate.ts` | Sketch accept preserves locked underlay; default 10 m width scale; Properties 5 m / 10 m calibrate; 2-point calibrate pure helpers ready |
+| AI assist | `AIAssistDrawer`, `applyLayoutToWorkspace`, `workspaceAiBridge` | Apply only via WorkspaceAiBridge → `applyLayoutToWorkspace`. Legacy `applySuggestedLayout` fail-closed. Browser failure journey open |
 | Sketch-to-plan | `ai/sketchToPlan.ts`, `ai/applySketchWallObjects.ts`, `editor/SketchToPlanDialog.tsx`, `app/api/planner/sketch-to-plan/` | Guest+CSRF wired; legacy `project-sketch` returns 410. Underlay preserve open |
 | Local versions | `lib/versioning.ts` | Local snapshots can be labelled, but remain mutable localStorage data and pin no catalog, validation, or price version |
 
@@ -66,7 +66,7 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 |---|---|---|
 | Family / options | `catalog-api/productFamilyContract.ts`, `catalog/workstationFamilyBuyer.ts`, configurator bridges | End-to-end through validation and BOQ remains thin |
 | Bulk align/distribute | `lib/geometry/alignDistribute.ts`, `lib/geometry/gridLayout.ts`, `editor/OOPlannerWorkspace.tsx` | Align/distribute is wired; exact-spacing controls, row/array/grid workflow, group/ungroup, and bulk preview are absent |
-| Validation UI | `editor/ValidationPanel.tsx`, `editor/ReviewQuotePanel.tsx`, `lib/validation/runValidation.ts` | P8 PARTIAL: rotation-aware OBB overlap; ValidationPanel mounted in Review with focus. Outside-room / clearance rules remain; `compliance.ts` returns `[]` |
+| Validation UI | `editor/ValidationPanel.tsx`, `editor/ReviewQuotePanel.tsx`, `lib/validation/runValidation.ts`, `furnitureRoomBoundary.ts`, `furnitureClearance.ts` | P8 PARTIAL: OBB overlap + outside-room + 900 mm aisle clearance. `compliance.ts` is legacy stub pointing at `runFloorValidation`. Browser proof open |
 | Live pricing (admin) | `site/features/admin/pricing/priceBookService.ts`, `site/features/admin/pricing/AdminPriceBookPageView.tsx` | Not pinned in workspace BOQ |
 | Workspace BOQ price display | `shared/export/projectFurnitureBoq.ts` | JSON/CSV exports use demo INR list prices; no customer-ready price authority or workspace line-item price view |
 | Named revisions | `lib/versioning.ts` | Labels exist on local snapshots only; revisions are not immutable or server-owned |
@@ -79,14 +79,14 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 
 | Feature | Code | Gap |
 |---|---|---|
-| Export menu | `editor/TopBar.tsx`, `editor/OOPlannerWorkspace.tsx` | P11 PARTIAL: failed PNG/SVG/DXF no longer toast as success; empty floors blocked; GLB unsupported message. Chromium download proof and scene GLB remain open |
+| Export menu | `TopBar`, `OOPlannerWorkspace` | Honest export toasts; empty floors blocked; **scene GLB download still unsupported** (interchange = JSON/DXF). Generated modular GLB **upload** path live when Supabase configured |
 | Floor plan exports | `shared/export/exportUtils.ts`, `shared/export/exportPreflight.ts` | JSON, SVG, PNG, PDF, DXF exist; success is boolean-checked |
 | BOQ exports | `shared/export/projectFurnitureBoq.ts`, `exportPlannerFurnitureBoqToCsv` | Unify parallel BOQ builders |
 | Export preflight | `shared/export/exportPreflight.ts` | Blocks empty geometry; honest GLB unsupported |
-| Send to Oando | `app/api/planner/handoff/route.ts` | Returns 501 `not_configured` (no fake success); CSRF + rate limit on; no Planner caller and no delivery to Oando |
-| Draft vs customer-ready | — | Not distinguished |
-| Handoff events | `conversionContract.ts` (`HANDOFF_*`) | Not emitted |
-| Handoff security | `app/api/planner/handoff/route.ts`, `site/features/shared/api/withAuth.ts` | Member auth, CSRF, and rate limiting exist; idempotency and commercial authorization are absent |
+| Send to Oando | `app/api/planner/handoff/route.ts`, `editor/ReviewQuotePanel.tsx`, `shared/handoff/` | Member Review form posts BOQ + contact; persists `customer_queries` (source `planner-handoff`); optional Resend staff email; 501 only when CRM admin client missing |
+| Draft vs customer-ready | Review exports + handoff confirm | Demo pricing note + confirmDemoPricing; branded PDF BOQ distinct from draft JSON/SVG |
+| Handoff events | `conversionContract.ts` (`HANDOFF_*`) | INTENT/SUCCESS/FAILURE emitted from workspace caller |
+| Handoff security | `app/api/planner/handoff/route.ts`, `withAuth` | Member auth, CSRF, rate limit, idempotency key; commercial price authority still demo-list |
 
 ---
 
@@ -113,7 +113,7 @@ Not a customer phase. Disk still supplies the live SVG bytes. Both Admin publish
 | `POST /api/planner/ai-advisor` | `app/api/planner/ai-advisor/route.ts` |
 | `POST /api/planner/sketch-to-plan` | `app/api/planner/sketch-to-plan/route.ts` |
 | `POST /api/planner/project-sketch` | `app/api/planner/project-sketch/route.ts` |
-| `POST /api/planner/generated-glb` | `app/api/planner/generated-glb/route.ts` |
+| `POST /api/planner/generated-glb` | `app/api/planner/generated-glb/route.ts` — Supabase `catalog-assets/generated/*` or 501 |
 | `POST /api/planner/handoff` | `app/api/planner/handoff/route.ts` |
 
 ---

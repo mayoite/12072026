@@ -24,6 +24,7 @@ import styles from "../workspace.module.css";
 import { PlannerDockHost, type DockviewApi } from "./PlannerDockHost";
 import {
   clearPersistedDockLayout,
+  closePlannerDockPanel,
   ensurePlannerDockPanel,
 } from "./plannerDockPresets";
 import type { PlannerDockSlots } from "./plannerDockSlots";
@@ -75,8 +76,10 @@ export interface ModularPlannerShellProps {
   onToggleDensity?: () => void;
   gridEnabled?: boolean;
   snapEnabled?: boolean;
+  orthogonalLock?: boolean;
   onToggleGrid?: () => void;
   onToggleSnap?: () => void;
+  onToggleOrthogonal?: () => void;
   planMetrics?: WorkspacePlanMetrics;
   /** Hide tools dock when in 3D (tools are 2D Fabric). */
   showTools?: boolean;
@@ -142,8 +145,10 @@ export function ModularPlannerShell({
   onToggleDensity,
   gridEnabled = true,
   snapEnabled = true,
+  orthogonalLock = false,
   onToggleGrid,
   onToggleSnap,
+  onToggleOrthogonal,
   planMetrics,
   showTools = true,
   hasSelection = false,
@@ -154,21 +159,18 @@ export function ModularPlannerShell({
   const id = useId();
   const isMobile = useIsMobile();
   const dockApiRef = useRef<DockviewApi | null>(null);
+  // Seed canvas-first dock once via initializers (no setState-in-effect).
   const [layoutPresetId, setLayoutPresetId] = useState<LayoutPresetId | "custom">(
-    "default",
+    () => {
+      clearPersistedDockLayout();
+      return STEP_PRESET.draw;
+    },
   );
   const [layoutEpoch, setLayoutEpoch] = useState(0);
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [layersOpen, setLayersOpen] = useState(false);
   const plannerStep = usePlannerWorkspaceStore((state) => state.plannerStep);
   const setPlannerStep = usePlannerWorkspaceStore((state) => state.setPlannerStep);
-
-  useEffect(() => {
-    // One seed: canvas-first dock. Do not force step back to draw on remount.
-    clearPersistedDockLayout();
-    setLayoutPresetId(STEP_PRESET.draw);
-    setLayoutEpoch((n) => n + 1);
-  }, []);
 
   const resolvedLocalSaved = isLocalSaved ?? isSynced;
   const topBarSaveStatusProps = {
@@ -209,25 +211,55 @@ export function ModularPlannerShell({
     [],
   );
 
+  // Open properties on selection; collapse when empty so the panel does not eat canvas (PF-21).
+  // Review step always keeps the right dock for BOQ / validation.
   useEffect(() => {
-    if (!hasSelection || isMobile) return;
-    showDockPanel("properties");
-  }, [hasSelection, isMobile, showDockPanel]);
+    if (isMobile) return;
+    const api = dockApiRef.current;
+    if (plannerStep === "review") {
+      showDockPanel("properties");
+      return;
+    }
+    if (hasSelection) {
+      showDockPanel("properties");
+      return;
+    }
+    if (api) {
+      closePlannerDockPanel(api, "properties");
+    }
+  }, [hasSelection, isMobile, plannerStep, showDockPanel]);
 
   const handleDockApiReady = useCallback((api: DockviewApi) => {
     dockApiRef.current = api;
-  }, []);
+    // Apply selection/review visibility once dock mounts.
+    if (plannerStep === "review" || hasSelection) {
+      ensurePlannerDockPanel(api, "properties");
+    } else {
+      closePlannerDockPanel(api, "properties");
+    }
+  }, [hasSelection, plannerStep]);
 
   const slots: PlannerDockSlots = useMemo(
     () => ({
       canvas: <div className={styles.planCanvasInset}>{children}</div>,
       inventory,
-      properties: (plannerStep === "review" ? review : properties) ?? (
-        <div className={styles.dockEmptyHint}>
-          <strong>Nothing selected</strong>
-          <span>Select a wall, opening, or catalog item to edit its dimensions and placement.</span>
-        </div>
-      ),
+      properties:
+        plannerStep === "review"
+          ? (review ?? (
+              <div className={styles.dockEmptyHint}>
+                <strong>Review</strong>
+                <span>Validation and quote actions appear when the plan is ready.</span>
+              </div>
+            ))
+          : (properties ?? (
+              <div className={styles.dockEmptyHint}>
+                <strong>Nothing selected</strong>
+                <span>
+                  Select a wall, opening, or catalog item to edit its dimensions
+                  and placement.
+                </span>
+              </div>
+            )),
       tools: showTools ? (
         <div className={styles.dockEmptyHint}>
           <strong>Tools live on the plan</strong>
@@ -322,8 +354,10 @@ export function ModularPlannerShell({
               onZoomReset={onZoomReset}
               gridEnabled={gridEnabled}
               snapEnabled={snapEnabled}
+              orthogonalLock={orthogonalLock}
               onToggleGrid={onToggleGrid}
               onToggleSnap={onToggleSnap}
+              onToggleOrthogonal={onToggleOrthogonal}
               dockManaged
             />
           ) : (
@@ -406,8 +440,10 @@ export function ModularPlannerShell({
               onZoomReset={onZoomReset}
               gridEnabled={gridEnabled}
               snapEnabled={snapEnabled}
+              orthogonalLock={orthogonalLock}
               onToggleGrid={onToggleGrid}
               onToggleSnap={onToggleSnap}
+              onToggleOrthogonal={onToggleOrthogonal}
               pinned
             />
           ) : null}

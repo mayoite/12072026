@@ -8,7 +8,9 @@ import { createRequire } from "node:module";
 // GS: BP-03 Option A locked pipeline order; REC-05 (no json render); anti-copy (semantic only).
 // SVGO config locked here + svgo.config.cjs ; integration test asserts usage.
 const requireCjs = createRequire(import.meta.url);
-const lockedSvgoConfig = requireCjs("../../../../../scripts/generate-svg/svgo.config.cjs");
+// Path is relative to this file under site/features/planner/catalog/svg/
+// → site/scripts/generate-svg/svgo.config.cjs
+const lockedSvgoConfig = requireCjs("../../../../scripts/generate-svg/svgo.config.cjs");
 
 const ALLOWED_TAGS = ["svg", "title", "desc", "g", "defs", "symbol", "use", "path", "rect", "circle", "ellipse", "line", "polyline", "polygon", "text"];
 const ALLOWED_ATTR = ["xmlns", "viewBox", "id", "role", "aria-labelledby", "shape-rendering", "vector-effect", "x", "y", "x1", "y1", "x2", "y2", "cx", "cy", "r", "rx", "ry", "width", "height", "d", "points", "fill", "stroke", "stroke-width", "opacity", "href"];

@@ -6,6 +6,12 @@ export type { PdfBoqRow, PdfExportOptions } from "./pdfExport";
 export { exportBoqToPdf } from "./pdfExport";
 export type { BrandedExportOptions } from "./brandedPdfExport";
 export { exportBrandedPdf, exportBoqOnly } from "./brandedPdfExport";
+export {
+  furnitureBoqToQuoteCartItems,
+  furnitureBoqToPdfRows,
+  furnitureBoqToHandoffPayload,
+} from "./furnitureBoqBridge";
+export type { FurnitureQuoteCartItem } from "./furnitureBoqBridge";
 
 // Canvas/workspace export surface (merged from the former project tree)
 export {

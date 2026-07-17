@@ -155,12 +155,13 @@ test.describe("P04 snap and measure", () => {
     });
   });
 
-  test("dimension tool (M) remains deferred until UI P01", async ({ page }) => {
+  test("dimension tool (M) is live on the rail", async ({ page }) => {
     const dimension = page.getByTestId("canvas-tool-dimension");
-    await expect(dimension).toHaveAttribute("data-deferred", "true");
+    await expect(dimension).toHaveAttribute("data-tier", "live");
+    await expect(dimension).not.toHaveAttribute("data-deferred", "true");
     await page.locator(PLANNER_FABRIC_STAGE).click({ position: { x: 200, y: 200 } });
     await page.keyboard.press("m");
     await expect(page.getByText("Dimension · M · 2D")).toBeVisible();
-    await expect(dimension).toHaveAttribute("data-deferred", "true");
+    await expect(dimension).toHaveAttribute("data-tier", "live");
   });
 });

@@ -7,6 +7,7 @@ import {
   savePlannerDocumentToStore,
   deletePlannerDocumentFromStore,
 } from "@/features/planner/cloud-store/plannerSaves";
+import { createEmptyPlannerDocument } from "@/features/planner/model/plannerDocument";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateCsrfRequest } from "@/lib/security/csrf";
 
@@ -96,8 +97,28 @@ describe("app/api/plans/[id]/route.ts", () => {
     expect(res.status).toBe(403);
     const body = await res.json();
     expect(body.success).toBe(false);
-    expect(body.error.code).toBe("INSUFFICIENT_PERMISSIONS");
+    expect(body.error.code).toBe("CSRF_FAILED");
     expect(body.error.message).toBe("Invalid or missing CSRF token");
+    expect(res.headers.get("x-csrf-rejected")).toBe("1");
+  });
+
+  it("PUT returns 404 when foreign plan id cannot be overwritten", async () => {
+    const ownershipError = Object.assign(new Error("Document not found or not owned by caller"), {
+      code: "FORBIDDEN",
+    });
+    vi.mocked(savePlannerDocumentToStore).mockRejectedValue(ownershipError);
+    const document = createEmptyPlannerDocument({ id: "plan-1", name: "Takeover" });
+    const req = new NextRequest("http://localhost/api/plans/plan-1", {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ document }),
+    });
+    const res = await PUT(req, routeContext);
+    expect(res.status).toBe(404);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe("RESOURCE_NOT_FOUND");
+    expect(savePlannerDocumentToStore).toHaveBeenCalled();
   });
 
   it("DELETE returns 404 when plan does not exist", async () => {
@@ -112,7 +133,7 @@ describe("app/api/plans/[id]/route.ts", () => {
     expect(deletePlannerDocumentFromStore).not.toHaveBeenCalled();
   });
 
-  it("DELETE removes existing plan", async () => {
+  it("DELETE removes existing plan with owner-scoped store delete", async () => {
     vi.mocked(loadPlannerDocumentFromStore).mockResolvedValue({ id: "plan-1" } as never);
     vi.mocked(deletePlannerDocumentFromStore).mockResolvedValue(true);
     const req = new NextRequest("http://localhost/api/plans/plan-1", { method: "DELETE" });
@@ -122,5 +143,9 @@ describe("app/api/plans/[id]/route.ts", () => {
     expect(body.success).toBe(true);
     expect(body.source).toBe("drizzle_plans");
     expect(savePlannerDocumentToStore).not.toHaveBeenCalled();
+    // IDOR guard: delete must pass authenticated userId.
+    expect(deletePlannerDocumentFromStore).toHaveBeenCalledWith("plan-1", "user-1");
+    expect(loadPlannerDocumentFromStore).toHaveBeenCalledWith("plan-1", "user-1");
   });
 });
+
