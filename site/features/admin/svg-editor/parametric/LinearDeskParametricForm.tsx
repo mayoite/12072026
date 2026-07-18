@@ -255,15 +255,8 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
             <div
               data-testid="linear-desk-preview"
               className="admin-linear-desk-preview"
-              style={{
-                border: "1px solid #ccc",
-                background: "var(--surface-studio-field)",
-                padding: 12,
-                maxWidth: 480,
-                width: "100%",
-                overflow: "hidden",
-              }}
               // Preview from same draw* as publish — trusted code path, not user HTML
+              // Styles: app/css/core/locked/svg/svg-preview.css
               dangerouslySetInnerHTML={{ __html: previewSvg }}
             />
           ) : (

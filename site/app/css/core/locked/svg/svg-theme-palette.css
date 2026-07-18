@@ -1,0 +1,113 @@
+/**
+ * SVG theme palette — widest paint set for plan SVG / Admin SVG studio.
+ * All values are theme tokens only (no raw hex). Published multipath still
+ * freezes image-safe hex at compile; this sheet is for CSS surfaces + roles.
+ *
+ * Scope: svg editor, parametric preview, catalog SVG thumbs when classed.
+ */
+
+:root,
+.admin-svg-editor-workspace,
+.admin-linear-desk-preview,
+.admin-svg-preview,
+[data-product-type="linear-desk"] {
+  /* ── Full family mirrors (widest palette) ── */
+
+  /* Ocean boat blue */
+  --svg-ocean-50: var(--color-ocean-boat-blue-50);
+  --svg-ocean-100: var(--color-ocean-boat-blue-100);
+  --svg-ocean-150: var(--color-ocean-boat-blue-150);
+  --svg-ocean-200: var(--color-ocean-boat-blue-200);
+  --svg-ocean-250: var(--color-ocean-boat-blue-250);
+  --svg-ocean-300: var(--color-ocean-boat-blue-300);
+  --svg-ocean-350: var(--color-ocean-boat-blue-350);
+  --svg-ocean-400: var(--color-ocean-boat-blue-400);
+  --svg-ocean-450: var(--color-ocean-boat-blue-450);
+  --svg-ocean-500: var(--color-ocean-boat-blue-500);
+  --svg-ocean-550: var(--color-ocean-boat-blue-550);
+  --svg-ocean-600: var(--color-ocean-boat-blue-600);
+  --svg-ocean-650: var(--color-ocean-boat-blue-650);
+  --svg-ocean-700: var(--color-ocean-boat-blue-700);
+  --svg-ocean-750: var(--color-ocean-boat-blue-750);
+  --svg-ocean-800: var(--color-ocean-boat-blue-800);
+  --svg-ocean-850: var(--color-ocean-boat-blue-850);
+  --svg-ocean-900: var(--color-ocean-boat-blue-900);
+  --svg-ocean-950: var(--color-ocean-boat-blue-950);
+
+  /* Dark midnight blue */
+  --svg-midnight-50: var(--color-dark-midnight-blue-50);
+  --svg-midnight-100: var(--color-dark-midnight-blue-100);
+  --svg-midnight-150: var(--color-dark-midnight-blue-150);
+  --svg-midnight-200: var(--color-dark-midnight-blue-200);
+  --svg-midnight-250: var(--color-dark-midnight-blue-250);
+  --svg-midnight-300: var(--color-dark-midnight-blue-300);
+  --svg-midnight-350: var(--color-dark-midnight-blue-350);
+  --svg-midnight-400: var(--color-dark-midnight-blue-400);
+  --svg-midnight-450: var(--color-dark-midnight-blue-450);
+  --svg-midnight-500: var(--color-dark-midnight-blue-500);
+  --svg-midnight-550: var(--color-dark-midnight-blue-550);
+  --svg-midnight-600: var(--color-dark-midnight-blue-600);
+  --svg-midnight-650: var(--color-dark-midnight-blue-650);
+  --svg-midnight-700: var(--color-dark-midnight-blue-700);
+  --svg-midnight-750: var(--color-dark-midnight-blue-750);
+  --svg-midnight-800: var(--color-dark-midnight-blue-800);
+  --svg-midnight-850: var(--color-dark-midnight-blue-850);
+  --svg-midnight-900: var(--color-dark-midnight-blue-900);
+  --svg-midnight-950: var(--color-dark-midnight-blue-950);
+
+  /* White (cool) */
+  --svg-white-50: var(--color-white-50);
+  --svg-white-100: var(--color-white-100);
+  --svg-white-150: var(--color-white-150);
+  --svg-white-200: var(--color-white-200);
+  --svg-white-250: var(--color-white-250);
+  --svg-white-300: var(--color-white-300);
+  --svg-white-350: var(--color-white-350);
+  --svg-white-400: var(--color-white-400);
+  --svg-white-450: var(--color-white-450);
+  --svg-white-500: var(--color-white-500);
+
+  /* Ecru (warm paper — chrome only, not photo plates) */
+  --svg-ecru-50: var(--color-ecru-50);
+  --svg-ecru-100: var(--color-ecru-100);
+  --svg-ecru-200: var(--color-ecru-200);
+  --svg-ecru-300: var(--color-ecru-300);
+  --svg-ecru-400: var(--color-ecru-400);
+  --svg-ecru-500: var(--color-ecru-500);
+  --svg-ecru-600: var(--color-ecru-600);
+  --svg-ecru-700: var(--color-ecru-700);
+  --svg-ecru-800: var(--color-ecru-800);
+  --svg-ecru-900: var(--color-ecru-900);
+  --svg-ecru-950: var(--color-ecru-950);
+
+  /* Bronze */
+  --svg-bronze-50: var(--color-bronze-50);
+  --svg-bronze-100: var(--color-bronze-100);
+  --svg-bronze-200: var(--color-bronze-200);
+  --svg-bronze-300: var(--color-bronze-300);
+  --svg-bronze-400: var(--color-bronze-400);
+  --svg-bronze-500: var(--color-bronze-500);
+  --svg-bronze-600: var(--color-bronze-600);
+  --svg-bronze-700: var(--color-bronze-700);
+  --svg-bronze-800: var(--color-bronze-800);
+  --svg-bronze-900: var(--color-bronze-900);
+
+  /* Sustain + support */
+  --svg-sustain-300: var(--color-sustain-300);
+  --svg-sustain-400: var(--color-sustain-400);
+  --svg-sustain-500: var(--color-sustain-500);
+  --svg-mist: var(--color-support-mist);
+  --svg-fog: var(--color-support-fog);
+
+  /* Semantic aliases for plan multipath roles (preview / themed chrome) */
+  --svg-plan-stroke: var(--svg-midnight-700);
+  --svg-plan-fill-top: var(--svg-midnight-500);
+  --svg-plan-fill-pedestal: var(--svg-midnight-400);
+  --svg-plan-fill-modesty: var(--svg-midnight-450);
+  --svg-plan-fill-frame: none;
+  --svg-plan-ink: var(--text-strong);
+
+  /* Studio field under previews (cool, not ecru paper) */
+  --svg-studio-field: var(--surface-studio-field);
+  --svg-studio-solid: var(--surface-studio);
+}

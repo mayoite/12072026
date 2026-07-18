@@ -1,0 +1,8 @@
+/**
+ * Locked SVG surface styles.
+ * Import order: palette tokens → preview → chrome.
+ */
+@reference "../../../index.css";
+@import "./svg-theme-palette.css";
+@import "./svg-preview.css";
+@import "./svg-studio-chrome.css";

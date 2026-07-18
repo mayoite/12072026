@@ -1,0 +1,57 @@
+/**
+ * Admin SVG studio chrome helpers (Dockview host lives in module CSS).
+ * Tokens only.
+ */
+
+.admin-svg-engine-shell__chrome-toolbar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-inline-end: 0.5rem;
+}
+
+.admin-svg-engine-shell__chrome-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 1.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm, 0.35rem);
+  border: 1px solid var(--border-soft);
+  background: var(--surface-panel);
+  color: var(--text-body);
+  font-size: 0.75rem;
+}
+
+.admin-svg-engine-shell__chrome-btn[data-selected],
+.admin-svg-engine-shell__chrome-btn[aria-pressed="true"] {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.admin-svg-engine-shell__chrome-btn-label {
+  font-weight: 600;
+}
+
+.admin-svg-engine-shell__chrome-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text-muted);
+  opacity: 0.85;
+}
+
+.admin-svg-engine-shell__stage--dock {
+  grid-area: unset;
+  height: 100%;
+  min-height: 0;
+}
+
+.admin-svg-editor-workspace--dock .admin-svg-engine-shell--dock {
+  grid-area: workspace;
+  min-height: 0;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}

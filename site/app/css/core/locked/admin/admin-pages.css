@@ -1,13 +1,7 @@
 /* Admin page layout — page chrome, header, sections, eyebrow.
  * Depends on: admin-primitives.css */
 
-/* Parametric plan SVG: fit preview box (raw width/height attrs are mm viewBox). */
-.admin-linear-desk-preview svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-width: 100%;
-}
+/* Parametric preview rules live in locked/svg/svg-preview.css */
 
 /* ── Page shell ── */
 

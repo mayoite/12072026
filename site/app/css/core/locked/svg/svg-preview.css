@@ -1,0 +1,48 @@
+/**
+ * SVG preview stages — parametric + admin published thumbs.
+ * Uses --svg-* tokens from svg-theme-palette.css.
+ */
+
+/* Parametric form live preview */
+.admin-linear-desk-preview {
+  border: 1px solid var(--border-soft);
+  background: var(--svg-studio-field);
+  padding: 0.75rem;
+  max-width: 30rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.admin-linear-desk-preview svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+/* Optional: role paints via CSS when SVG uses currentColor / class hooks */
+.admin-linear-desk-preview svg [id="desk-top"],
+.admin-linear-desk-preview svg .role-top {
+  /* published paths already bake fill; class hooks for future CSS-themed previews */
+  color: var(--svg-plan-fill-top);
+}
+
+.admin-linear-desk-preview svg [id^="pedestal"],
+.admin-linear-desk-preview svg .role-pedestal {
+  color: var(--svg-plan-fill-pedestal);
+}
+
+.admin-linear-desk-preview svg [id="modesty"],
+.admin-linear-desk-preview svg .role-modesty {
+  color: var(--svg-plan-fill-modesty);
+}
+
+/* Admin inventory / rail preview stages use studio field */
+.admin-svg-preview__stage {
+  background-color: var(--svg-studio-solid);
+  color: var(--svg-plan-stroke);
+}
+
+.admin-svg-preview__stage--empty {
+  background: var(--svg-studio-solid);
+}
