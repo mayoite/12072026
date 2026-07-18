@@ -41,13 +41,13 @@ function descriptorFromFields(
   const slug = ensureGuestVisibleSlug(fields.slug, fields.widthMm);
   const sku = ensureCommercialSku(fields.sku, fields.widthMm);
   const base = makeNewBlockDescriptorStub();
-  const now = Math.floor(Date.now() / 1000);
   const id =
     typeof crypto !== "undefined" && "randomUUID" in crypto
       ? crypto.randomUUID()
       : base.id;
+  // Persist freezes generatedAt and rejects changing it on republish — never send a new one.
   return {
-    ...base,
+    schemaVersion: base.schemaVersion,
     id,
     slug,
     sku,
@@ -63,7 +63,11 @@ function descriptorFromFields(
       width: fields.widthMm,
       height: fields.depthMm,
     },
-    generatedAt: now,
+    mounting: base.mounting,
+    themeTokens: base.themeTokens,
+    rovingFocus: base.rovingFocus,
+    liveAnnouncementCategories: base.liveAnnouncementCategories,
+    checksum: base.checksum,
     variant: "fixed",
     fixed: { sizingType: "fixed" },
   } as BlockDescriptor;

@@ -35,6 +35,10 @@ const RESIDENTIAL_ROOM = new Set([
  * True when item must not appear in buyer/guest catalog UI.
  */
 export function isInternalCatalogItem(item: PlannerCatalogItem): boolean {
+  // Brand heroes are never "internal" even if slug tags include words like "proof".
+  if (isBrandHeroCatalogItem(item)) {
+    return false;
+  }
   if (item.provenance?.source === "proof_catalog") {
     return true;
   }

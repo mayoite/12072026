@@ -13,6 +13,7 @@ import { success } from "@/features/shared/api/apiResponse";
 import { mapDescriptorsToCatalogItems } from "@/features/planner/catalog/svg/descriptorCatalogBridge.server";
 import { filterGuestInventoryCatalogItems } from "@/features/planner/catalog/catalogBuyerVisibility";
 import { loadBuyerVisibleDescriptorsWithDb } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server";
+import { clearLoaderCache } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import { readSvgArtifactStatus } from "@/features/admin/svg-editor/publish/svgArtifactStatus.server";
 import { isDbSvgReleaseAuthority } from "@/features/admin/svg-editor/publish/svgReleaseAuthority";
 import { isPublishedSvgApiUrl } from "@/features/planner/catalog/svg/svgPreviewAssets";
@@ -36,6 +37,9 @@ export async function GET(req: NextRequest) {
   );
   if (rateError) return rateError;
 
+  // Drop in-process descriptor cache so Admin publish is visible without restart.
+  // (Server action clearLoaderCache does not share module state with this route.)
+  clearLoaderCache();
   const descriptors = await loadBuyerVisibleDescriptorsWithDb();
   // Guest / buyer inventory = oando-* brand heroes only (P10); no OFL toys / demo junk.
   const items = filterGuestInventoryCatalogItems(

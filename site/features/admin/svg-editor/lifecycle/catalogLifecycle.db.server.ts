@@ -111,7 +111,7 @@ export async function loadBuyerVisibleDescriptorsWithDb(): Promise<
 
   if (!isProductsDatabaseConfigured()) {
     // DB authority without Products DB is an empty catalog (no disk override).
-    return dbAuthority ? [] : loadBuyerVisibleDescriptors();
+    return dbAuthority ? [] : loadBuyerVisibleDescriptors({ forceReload: true });
   }
 
   try {
@@ -151,7 +151,8 @@ export async function loadBuyerVisibleDescriptorsWithDb(): Promise<
     }
 
     // Disk authority + partial dual-write: merge disk inventory with revision pointers.
-    const disk = loadBuyerVisibleDescriptors();
+    // forceReload: Admin publish must show up without relying on cross-isolate cache clears.
+    const disk = loadBuyerVisibleDescriptors({ forceReload: true });
     const bySlug = new Map<string, BlockDescriptor | PlannerSvgCatalogDescriptor>();
     for (const d of disk) {
       const slug = typeof d.slug === "string" ? d.slug : "";

@@ -44,15 +44,27 @@ async function main() {
     .locator("[data-testid=admin-linear-desk-parametric]")
     .count();
 
-  // Prefer cm + 160 width
+  // Prefer cm + 160 width, then set unique slug AFTER width sync
   const cmRadio = page.locator('input[name="unit"][value="cm"], input[name="unit"]').nth(1);
   if ((await cmRadio.count()) > 0) {
     await cmRadio.check({ force: true }).catch(() => undefined);
   }
   await page.locator("[data-testid=linear-desk-width]").fill("160");
+  await page.waitForTimeout(300);
 
   const slug = `oando-param-proof-${Date.now().toString(36).slice(-6)}`;
-  await page.locator("[data-testid=linear-desk-slug]").fill(slug);
+  const slugInput = page.locator("[data-testid=linear-desk-slug]");
+  // Drive React controlled state via real keystrokes (fill can desync React 19)
+  await slugInput.click({ clickCount: 3 });
+  await page.keyboard.press("Backspace");
+  await page.keyboard.type(slug, { delay: 15 });
+  await page.keyboard.press("Tab");
+  await page.waitForTimeout(400);
+  const slugValue = await slugInput.inputValue();
+  console.log(JSON.stringify({ slugWanted: slug, slugInDom: slugValue }));
+  if (slugValue !== slug) {
+    throw new Error(`slug state desync: want ${slug} got ${slugValue}`);
+  }
 
   await page.waitForTimeout(800);
   const previewHtml = await page
@@ -111,7 +123,8 @@ async function main() {
     previewOk &&
     exists &&
     svgChecks?.hasDeskTop &&
-    svgChecks?.noCurrentColor;
+    svgChecks?.noCurrentColor &&
+    Boolean(hit);
 
   // Disconnect without killing Beta if shared
   await browser.close().catch(() => undefined);
