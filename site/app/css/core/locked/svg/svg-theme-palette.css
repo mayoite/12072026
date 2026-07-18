@@ -131,8 +131,7 @@
   --svg-studio-highlight: var(--surface-studio-highlight);
   --svg-studio-edge: var(--surface-studio-edge);
 
-  /* ── Line / stroke sizes (SVG plan mm + UI chrome) ──
-     Custom for SVG only — does not change site type scale. */
+  /* ── Line / stroke sizes (SVG-only; site type scale untouched) ── */
   --svg-line-hair: 0.5px;
   --svg-line-thin: 1px;
   --svg-line-base: 1.5px;
@@ -141,12 +140,24 @@
   --svg-line-heavy: 4px;
   --svg-line-bold: 6px;
   --svg-line-display: 8px;
+  --svg-line-10: 10px;
+  --svg-line-12: 12px;
+  --svg-line-14: 14px;
+  --svg-line-16: 16px;
+  --svg-line-18: 18px;
+  --svg-line-20: 20px;
+  --svg-line-24: 24px;
+  --svg-line-28: 28px;
+  --svg-line-32: 32px;
 
-  /* Plan stroke weight scale (mm in plan space — used as CSS defaults / previews) */
+  /* Plan stroke weight scale (mm in plan space) */
   --svg-plan-stroke-min: 10;
   --svg-plan-stroke-max: 28;
   --svg-plan-stroke-default: 12;
   --svg-plan-stroke-ui: var(--svg-line-medium);
+  --svg-plan-stroke-hair: var(--svg-line-thin);
+  --svg-plan-stroke-light: var(--svg-line-base);
+  --svg-plan-stroke-strong: var(--svg-line-thick);
 
   /* ── Spacing / radii for SVG chrome only ── */
   --svg-pad-xs: 0.25rem;

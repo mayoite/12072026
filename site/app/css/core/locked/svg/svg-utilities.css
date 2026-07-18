@@ -1,107 +1,129 @@
 /**
- * SVG-only utilities (LOCKED/svg).
- * Use on Admin SVG studio / parametric / plan-symbol chrome.
- * Does not redefine site-wide Tailwind utilities.
+ * SVG-only utilities (LOCKED/svg) — as wide as needed.
+ * Scoped names (svg-*) so site Tailwind utilities stay untouched.
  */
 
-/* ── Backgrounds ── */
-.svg-bg-studio {
-  background: var(--svg-studio-field);
-}
-.svg-bg-studio-solid {
-  background-color: var(--svg-studio-solid);
-}
-.svg-bg-paper {
-  background-color: var(--svg-ecru-50);
-}
-.svg-bg-midnight {
-  background-color: var(--svg-midnight-500);
-}
-.svg-bg-ocean {
-  background-color: var(--svg-ocean-500);
-}
-.svg-bg-bronze {
-  background-color: var(--svg-bronze-400);
-}
-.svg-bg-primary {
-  background-color: var(--svg-primary);
-}
-.svg-bg-accent {
-  background-color: var(--svg-accent);
-}
+/* ═══════════════════════════════════════════════════════════════════════════
+   BACKGROUNDS
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ── Text / ink ── */
-.svg-ink {
-  color: var(--svg-ink);
-}
-.svg-ink-muted {
-  color: var(--svg-ink-muted);
-}
-.svg-ink-subtle {
-  color: var(--svg-ink-subtle);
-}
-.svg-ink-primary {
-  color: var(--svg-primary);
-}
-.svg-ink-accent {
-  color: var(--svg-accent);
-}
-.svg-ink-ocean {
-  color: var(--svg-ocean-600);
-}
-.svg-ink-midnight {
-  color: var(--svg-midnight-600);
-}
+.svg-bg-studio { background: var(--svg-studio-field); }
+.svg-bg-studio-solid { background-color: var(--svg-studio-solid); }
+.svg-bg-studio-highlight { background-color: var(--svg-studio-highlight); }
+.svg-bg-paper { background-color: var(--svg-ecru-50); }
+.svg-bg-paper-muted { background-color: var(--svg-ecru-100); }
+.svg-bg-mist { background-color: var(--svg-mist); }
+.svg-bg-fog { background-color: var(--svg-fog); }
+.svg-bg-primary { background-color: var(--svg-primary); }
+.svg-bg-accent { background-color: var(--svg-accent); }
+.svg-bg-success { background-color: var(--svg-success); }
+.svg-bg-warning { background-color: var(--svg-warning); }
+.svg-bg-danger { background-color: var(--svg-danger); }
 
-/* ── Borders ── */
-.svg-border {
-  border-color: var(--svg-border);
-}
-.svg-border-strong {
-  border-color: var(--svg-border-strong);
-}
-.svg-border-primary {
-  border-color: var(--svg-primary);
-}
-.svg-border-accent {
-  border-color: var(--svg-accent);
-}
+/* Ocean bg */
+.svg-bg-ocean-50 { background-color: var(--svg-ocean-50); }
+.svg-bg-ocean-100 { background-color: var(--svg-ocean-100); }
+.svg-bg-ocean-200 { background-color: var(--svg-ocean-200); }
+.svg-bg-ocean-300 { background-color: var(--svg-ocean-300); }
+.svg-bg-ocean-400 { background-color: var(--svg-ocean-400); }
+.svg-bg-ocean-500 { background-color: var(--svg-ocean-500); }
+.svg-bg-ocean-600 { background-color: var(--svg-ocean-600); }
+.svg-bg-ocean-700 { background-color: var(--svg-ocean-700); }
+.svg-bg-ocean-800 { background-color: var(--svg-ocean-800); }
+.svg-bg-ocean-900 { background-color: var(--svg-ocean-900); }
+.svg-bg-ocean-950 { background-color: var(--svg-ocean-950); }
 
-/* ── Stroke / line weights (UI chrome around SVG) ── */
-.svg-line-hair {
-  stroke-width: var(--svg-line-hair);
-  border-width: var(--svg-line-hair);
-}
-.svg-line-thin {
-  stroke-width: var(--svg-line-thin);
-  border-width: var(--svg-line-thin);
-}
-.svg-line-base {
-  stroke-width: var(--svg-line-base);
-  border-width: var(--svg-line-base);
-}
-.svg-line-medium {
-  stroke-width: var(--svg-line-medium);
-  border-width: var(--svg-line-medium);
-}
-.svg-line-thick {
-  stroke-width: var(--svg-line-thick);
-  border-width: var(--svg-line-thick);
-}
-.svg-line-heavy {
-  stroke-width: var(--svg-line-heavy);
-  border-width: var(--svg-line-heavy);
-}
-.svg-line-bold {
-  stroke-width: var(--svg-line-bold);
-  border-width: var(--svg-line-bold);
-}
-.svg-line-display {
-  stroke-width: var(--svg-line-display);
-  border-width: var(--svg-line-display);
-}
+/* Midnight bg */
+.svg-bg-midnight-50 { background-color: var(--svg-midnight-50); }
+.svg-bg-midnight-100 { background-color: var(--svg-midnight-100); }
+.svg-bg-midnight-200 { background-color: var(--svg-midnight-200); }
+.svg-bg-midnight-300 { background-color: var(--svg-midnight-300); }
+.svg-bg-midnight-400 { background-color: var(--svg-midnight-400); }
+.svg-bg-midnight-500 { background-color: var(--svg-midnight-500); }
+.svg-bg-midnight-600 { background-color: var(--svg-midnight-600); }
+.svg-bg-midnight-700 { background-color: var(--svg-midnight-700); }
+.svg-bg-midnight-800 { background-color: var(--svg-midnight-800); }
+.svg-bg-midnight-900 { background-color: var(--svg-midnight-900); }
+.svg-bg-midnight-950 { background-color: var(--svg-midnight-950); }
 
-/* ── Plan role helpers (class on paths when CSS-themed) ── */
+/* White / ecru / bronze bg (selected steps) */
+.svg-bg-white-50 { background-color: var(--svg-white-50); }
+.svg-bg-white-100 { background-color: var(--svg-white-100); }
+.svg-bg-white-150 { background-color: var(--svg-white-150); }
+.svg-bg-white-200 { background-color: var(--svg-white-200); }
+.svg-bg-white-250 { background-color: var(--svg-white-250); }
+.svg-bg-white-300 { background-color: var(--svg-white-300); }
+.svg-bg-ecru-50 { background-color: var(--svg-ecru-50); }
+.svg-bg-ecru-100 { background-color: var(--svg-ecru-100); }
+.svg-bg-ecru-200 { background-color: var(--svg-ecru-200); }
+.svg-bg-ecru-300 { background-color: var(--svg-ecru-300); }
+.svg-bg-bronze-100 { background-color: var(--svg-bronze-100); }
+.svg-bg-bronze-200 { background-color: var(--svg-bronze-200); }
+.svg-bg-bronze-300 { background-color: var(--svg-bronze-300); }
+.svg-bg-bronze-400 { background-color: var(--svg-bronze-400); }
+.svg-bg-bronze-500 { background-color: var(--svg-bronze-500); }
+.svg-bg-sustain-300 { background-color: var(--svg-sustain-300); }
+.svg-bg-sustain-400 { background-color: var(--svg-sustain-400); }
+.svg-bg-sustain-500 { background-color: var(--svg-sustain-500); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TEXT / INK
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.svg-ink { color: var(--svg-ink); }
+.svg-ink-muted { color: var(--svg-ink-muted); }
+.svg-ink-subtle { color: var(--svg-ink-subtle); }
+.svg-ink-primary { color: var(--svg-primary); }
+.svg-ink-accent { color: var(--svg-accent); }
+.svg-ink-success { color: var(--svg-success); }
+.svg-ink-warning { color: var(--svg-warning); }
+.svg-ink-danger { color: var(--svg-danger); }
+.svg-ink-ocean { color: var(--svg-ocean-600); }
+.svg-ink-ocean-500 { color: var(--svg-ocean-500); }
+.svg-ink-ocean-700 { color: var(--svg-ocean-700); }
+.svg-ink-midnight { color: var(--svg-midnight-600); }
+.svg-ink-midnight-500 { color: var(--svg-midnight-500); }
+.svg-ink-midnight-700 { color: var(--svg-midnight-700); }
+.svg-ink-bronze { color: var(--svg-bronze-500); }
+.svg-ink-sustain { color: var(--svg-sustain-500); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BORDERS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.svg-border { border-color: var(--svg-border); }
+.svg-border-strong { border-color: var(--svg-border-strong); }
+.svg-border-primary { border-color: var(--svg-primary); }
+.svg-border-accent { border-color: var(--svg-accent); }
+.svg-border-ocean { border-color: var(--svg-ocean-500); }
+.svg-border-midnight { border-color: var(--svg-midnight-500); }
+.svg-border-bronze { border-color: var(--svg-bronze-400); }
+.svg-border-studio { border-color: var(--svg-studio-edge); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LINE / STROKE WIDTHS (UI + SVG stroke-width)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.svg-line-hair { stroke-width: var(--svg-line-hair); border-width: var(--svg-line-hair); }
+.svg-line-thin { stroke-width: var(--svg-line-thin); border-width: var(--svg-line-thin); }
+.svg-line-base { stroke-width: var(--svg-line-base); border-width: var(--svg-line-base); }
+.svg-line-medium { stroke-width: var(--svg-line-medium); border-width: var(--svg-line-medium); }
+.svg-line-thick { stroke-width: var(--svg-line-thick); border-width: var(--svg-line-thick); }
+.svg-line-heavy { stroke-width: var(--svg-line-heavy); border-width: var(--svg-line-heavy); }
+.svg-line-bold { stroke-width: var(--svg-line-bold); border-width: var(--svg-line-bold); }
+.svg-line-display { stroke-width: var(--svg-line-display); border-width: var(--svg-line-display); }
+.svg-line-10 { stroke-width: 10px; }
+.svg-line-12 { stroke-width: 12px; }
+.svg-line-14 { stroke-width: 14px; }
+.svg-line-16 { stroke-width: 16px; }
+.svg-line-20 { stroke-width: 20px; }
+.svg-line-24 { stroke-width: 24px; }
+.svg-line-28 { stroke-width: 28px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PLAN ROLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 .svg-role-top {
   fill: var(--svg-plan-fill-top);
   stroke: var(--svg-plan-stroke);
@@ -122,47 +144,168 @@
   stroke: var(--svg-plan-stroke);
 }
 
-/* ── Fill utilities (widest set — family mid + ends) ── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   FILL — ocean full steps
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.svg-fill-none { fill: none; }
+.svg-fill-ocean-50 { fill: var(--svg-ocean-50); }
 .svg-fill-ocean-100 { fill: var(--svg-ocean-100); }
+.svg-fill-ocean-150 { fill: var(--svg-ocean-150); }
+.svg-fill-ocean-200 { fill: var(--svg-ocean-200); }
+.svg-fill-ocean-250 { fill: var(--svg-ocean-250); }
 .svg-fill-ocean-300 { fill: var(--svg-ocean-300); }
+.svg-fill-ocean-350 { fill: var(--svg-ocean-350); }
+.svg-fill-ocean-400 { fill: var(--svg-ocean-400); }
+.svg-fill-ocean-450 { fill: var(--svg-ocean-450); }
 .svg-fill-ocean-500 { fill: var(--svg-ocean-500); }
+.svg-fill-ocean-550 { fill: var(--svg-ocean-550); }
+.svg-fill-ocean-600 { fill: var(--svg-ocean-600); }
+.svg-fill-ocean-650 { fill: var(--svg-ocean-650); }
 .svg-fill-ocean-700 { fill: var(--svg-ocean-700); }
+.svg-fill-ocean-750 { fill: var(--svg-ocean-750); }
+.svg-fill-ocean-800 { fill: var(--svg-ocean-800); }
+.svg-fill-ocean-850 { fill: var(--svg-ocean-850); }
 .svg-fill-ocean-900 { fill: var(--svg-ocean-900); }
+.svg-fill-ocean-950 { fill: var(--svg-ocean-950); }
+
+/* Midnight full steps */
+.svg-fill-midnight-50 { fill: var(--svg-midnight-50); }
 .svg-fill-midnight-100 { fill: var(--svg-midnight-100); }
+.svg-fill-midnight-150 { fill: var(--svg-midnight-150); }
+.svg-fill-midnight-200 { fill: var(--svg-midnight-200); }
+.svg-fill-midnight-250 { fill: var(--svg-midnight-250); }
 .svg-fill-midnight-300 { fill: var(--svg-midnight-300); }
+.svg-fill-midnight-350 { fill: var(--svg-midnight-350); }
+.svg-fill-midnight-400 { fill: var(--svg-midnight-400); }
+.svg-fill-midnight-450 { fill: var(--svg-midnight-450); }
 .svg-fill-midnight-500 { fill: var(--svg-midnight-500); }
+.svg-fill-midnight-550 { fill: var(--svg-midnight-550); }
+.svg-fill-midnight-600 { fill: var(--svg-midnight-600); }
+.svg-fill-midnight-650 { fill: var(--svg-midnight-650); }
 .svg-fill-midnight-700 { fill: var(--svg-midnight-700); }
+.svg-fill-midnight-750 { fill: var(--svg-midnight-750); }
+.svg-fill-midnight-800 { fill: var(--svg-midnight-800); }
+.svg-fill-midnight-850 { fill: var(--svg-midnight-850); }
 .svg-fill-midnight-900 { fill: var(--svg-midnight-900); }
+.svg-fill-midnight-950 { fill: var(--svg-midnight-950); }
+
+/* White / ecru / bronze / sustain */
 .svg-fill-white-50 { fill: var(--svg-white-50); }
+.svg-fill-white-100 { fill: var(--svg-white-100); }
 .svg-fill-white-150 { fill: var(--svg-white-150); }
+.svg-fill-white-200 { fill: var(--svg-white-200); }
 .svg-fill-white-250 { fill: var(--svg-white-250); }
+.svg-fill-white-300 { fill: var(--svg-white-300); }
+.svg-fill-white-350 { fill: var(--svg-white-350); }
+.svg-fill-white-400 { fill: var(--svg-white-400); }
+.svg-fill-white-450 { fill: var(--svg-white-450); }
+.svg-fill-white-500 { fill: var(--svg-white-500); }
 .svg-fill-ecru-50 { fill: var(--svg-ecru-50); }
+.svg-fill-ecru-100 { fill: var(--svg-ecru-100); }
 .svg-fill-ecru-200 { fill: var(--svg-ecru-200); }
+.svg-fill-ecru-300 { fill: var(--svg-ecru-300); }
+.svg-fill-ecru-400 { fill: var(--svg-ecru-400); }
+.svg-fill-ecru-500 { fill: var(--svg-ecru-500); }
+.svg-fill-ecru-600 { fill: var(--svg-ecru-600); }
+.svg-fill-ecru-700 { fill: var(--svg-ecru-700); }
+.svg-fill-ecru-800 { fill: var(--svg-ecru-800); }
+.svg-fill-ecru-900 { fill: var(--svg-ecru-900); }
+.svg-fill-ecru-950 { fill: var(--svg-ecru-950); }
+.svg-fill-bronze-50 { fill: var(--svg-bronze-50); }
+.svg-fill-bronze-100 { fill: var(--svg-bronze-100); }
+.svg-fill-bronze-200 { fill: var(--svg-bronze-200); }
 .svg-fill-bronze-300 { fill: var(--svg-bronze-300); }
 .svg-fill-bronze-400 { fill: var(--svg-bronze-400); }
 .svg-fill-bronze-500 { fill: var(--svg-bronze-500); }
+.svg-fill-bronze-600 { fill: var(--svg-bronze-600); }
+.svg-fill-bronze-700 { fill: var(--svg-bronze-700); }
+.svg-fill-bronze-800 { fill: var(--svg-bronze-800); }
+.svg-fill-bronze-900 { fill: var(--svg-bronze-900); }
 .svg-fill-sustain-300 { fill: var(--svg-sustain-300); }
+.svg-fill-sustain-400 { fill: var(--svg-sustain-400); }
 .svg-fill-sustain-500 { fill: var(--svg-sustain-500); }
-.svg-fill-none { fill: none; }
+.svg-fill-primary { fill: var(--svg-primary); }
+.svg-fill-accent { fill: var(--svg-accent); }
+.svg-fill-mist { fill: var(--svg-mist); }
+.svg-fill-fog { fill: var(--svg-fog); }
 
-/* ── Stroke color utilities ── */
-.svg-stroke-ocean-500 { stroke: var(--svg-ocean-500); }
-.svg-stroke-ocean-700 { stroke: var(--svg-ocean-700); }
-.svg-stroke-midnight-500 { stroke: var(--svg-midnight-500); }
-.svg-stroke-midnight-700 { stroke: var(--svg-midnight-700); }
-.svg-stroke-bronze-400 { stroke: var(--svg-bronze-400); }
-.svg-stroke-bronze-600 { stroke: var(--svg-bronze-600); }
+/* ═══════════════════════════════════════════════════════════════════════════
+   STROKE COLOR — full useful set
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.svg-stroke-none { stroke: none; }
 .svg-stroke-ink { stroke: var(--svg-ink); }
 .svg-stroke-primary { stroke: var(--svg-primary); }
 .svg-stroke-accent { stroke: var(--svg-accent); }
+.svg-stroke-success { stroke: var(--svg-success); }
+.svg-stroke-warning { stroke: var(--svg-warning); }
+.svg-stroke-danger { stroke: var(--svg-danger); }
 
-/* ── Padding / radius (SVG chrome boxes) ── */
+.svg-stroke-ocean-100 { stroke: var(--svg-ocean-100); }
+.svg-stroke-ocean-300 { stroke: var(--svg-ocean-300); }
+.svg-stroke-ocean-500 { stroke: var(--svg-ocean-500); }
+.svg-stroke-ocean-600 { stroke: var(--svg-ocean-600); }
+.svg-stroke-ocean-700 { stroke: var(--svg-ocean-700); }
+.svg-stroke-ocean-800 { stroke: var(--svg-ocean-800); }
+.svg-stroke-ocean-900 { stroke: var(--svg-ocean-900); }
+
+.svg-stroke-midnight-100 { stroke: var(--svg-midnight-100); }
+.svg-stroke-midnight-300 { stroke: var(--svg-midnight-300); }
+.svg-stroke-midnight-500 { stroke: var(--svg-midnight-500); }
+.svg-stroke-midnight-600 { stroke: var(--svg-midnight-600); }
+.svg-stroke-midnight-700 { stroke: var(--svg-midnight-700); }
+.svg-stroke-midnight-800 { stroke: var(--svg-midnight-800); }
+.svg-stroke-midnight-900 { stroke: var(--svg-midnight-900); }
+
+.svg-stroke-white-50 { stroke: var(--svg-white-50); }
+.svg-stroke-white-300 { stroke: var(--svg-white-300); }
+.svg-stroke-ecru-300 { stroke: var(--svg-ecru-300); }
+.svg-stroke-ecru-500 { stroke: var(--svg-ecru-500); }
+.svg-stroke-bronze-300 { stroke: var(--svg-bronze-300); }
+.svg-stroke-bronze-400 { stroke: var(--svg-bronze-400); }
+.svg-stroke-bronze-500 { stroke: var(--svg-bronze-500); }
+.svg-stroke-bronze-600 { stroke: var(--svg-bronze-600); }
+.svg-stroke-sustain-300 { stroke: var(--svg-sustain-300); }
+.svg-stroke-sustain-500 { stroke: var(--svg-sustain-500); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPACING / RADIUS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 .svg-pad-xs { padding: var(--svg-pad-xs); }
 .svg-pad-sm { padding: var(--svg-pad-sm); }
 .svg-pad-md { padding: var(--svg-pad-md); }
 .svg-pad-lg { padding: var(--svg-pad-lg); }
 .svg-pad-xl { padding: var(--svg-pad-xl); }
+.svg-gap-xs { gap: var(--svg-pad-xs); }
+.svg-gap-sm { gap: var(--svg-pad-sm); }
+.svg-gap-md { gap: var(--svg-pad-md); }
+.svg-gap-lg { gap: var(--svg-pad-lg); }
 .svg-radius-sm { border-radius: var(--svg-radius-sm); }
 .svg-radius-md { border-radius: var(--svg-radius-md); }
 .svg-radius-lg { border-radius: var(--svg-radius-lg); }
 .svg-radius-pill { border-radius: var(--svg-radius-pill); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SVG ELEMENT HELPERS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.svg-fit {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+.svg-fit-contain {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.svg-center-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
