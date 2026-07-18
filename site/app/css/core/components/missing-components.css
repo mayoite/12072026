@@ -215,12 +215,12 @@
 
 .contact-teaser__status--success {
   background: var(--color-bronze-50);
-  color: rgb(21 128 61);
+  color: var(--color-success);
 }
 
 .contact-teaser__status--error {
   background: var(--color-ecru-50);
-  color: rgb(185 28 28);
+  color: var(--color-error-red);
 }
 
 .shell-card {

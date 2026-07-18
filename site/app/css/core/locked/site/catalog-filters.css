@@ -40,13 +40,13 @@
 }
 
 @utility catalog-toolbar__panel {
-  border-radius: 1.75rem;
+  border-radius: var(--radius-2xl);
   border-width: 1px;
-  padding: 1rem;
+  padding: var(--space-4);
   border-color: var(--border-soft);
   background: var(--surface-panel-strong);
   box-shadow: var(--shadow-soft);
-  @media (width >= theme(--breakpoint-md)) { padding: 1rem 1.25rem; }
+  @media (width >= theme(--breakpoint-md)) { padding: var(--space-4) 1.25rem; }
 }
 
 @utility catalog-toolbar__meta {
@@ -116,11 +116,12 @@
   color: var(--text-strong);
   box-shadow: var(--shadow-soft);
   outline: none;
-  transition-property: border-color;
+  transition-property: border-color, box-shadow;
   transition-duration: var(--motion-fast);
   transition-timing-function: var(--ease-standard);
 }
-.catalog-search__input:focus {
+.catalog-search__input:focus,
+.catalog-search__input:focus-visible {
   border-color: var(--color-primary);
   box-shadow: var(--focus-ring);
 }
@@ -130,14 +131,18 @@
   border-radius: var(--radius-pill);
   border: 1px solid var(--border-soft);
   background: var(--surface-panel-strong);
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
   font-size: 0.875rem;
   color: var(--text-strong);
   box-shadow: var(--shadow-soft);
   outline: none;
+  transition-property: border-color, box-shadow;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--ease-standard);
 }
-.catalog-sort:focus {
+.catalog-sort:focus,
+.catalog-sort:focus-visible {
   border-color: var(--color-primary);
   box-shadow: var(--focus-ring);
 }
@@ -145,7 +150,7 @@
 /* Filter shell */
 @utility catalog-filter-shell {
   overflow: hidden;
-  border-radius: 1.6rem;
+  border-radius: var(--radius-giant);
   border-width: 1px;
   border-color: var(--border-soft);
   background: var(--surface-panel-strong);
@@ -170,11 +175,18 @@
 
 .catalog-filter-shell__clear {
   color: var(--color-primary);
-  transition-property: color;
+  min-height: var(--control-height-xs);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition-property: color, box-shadow;
   transition-duration: var(--motion-fast);
   transition-timing-function: var(--ease-standard);
 }
 .catalog-filter-shell__clear:hover { color: var(--color-primary-hover); }
+.catalog-filter-shell__clear:focus-visible {
+  box-shadow: var(--focus-ring);
+  color: var(--color-primary-hover);
+}
 
 .catalog-filter-section {
   border-bottom: 1px solid var(--border-soft);
@@ -183,17 +195,20 @@
 
 .catalog-filter-choice {
   width: 100%;
-  border-radius: 0.75rem;
-  padding: 0.5rem 0.75rem;
+  min-height: var(--control-height-xs);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
   text-align: left;
   font-size: 0.875rem;
-  transition-property: color, background-color;
+  outline: none;
+  transition-property: color, background-color, box-shadow;
   transition-duration: var(--motion-fast);
   transition-timing-function: var(--ease-standard);
 }
 .catalog-filter-choice--active { color: var(--text-inverse); background: var(--color-primary); }
 .catalog-filter-choice--idle { color: var(--text-body); }
 .catalog-filter-choice--idle:hover { background: var(--overlay-panel-72); color: var(--text-strong); }
+.catalog-filter-choice:focus-visible { box-shadow: var(--focus-ring); }
 
 @utility catalog-checklist__label {
   display: flex;
@@ -230,5 +245,14 @@
   transition-property: opacity;
   transition-duration: var(--motion-fast);
   transition-timing-function: var(--ease-standard);
+}
+
+/* Plain chip focus (products chunk emits non-@utility rules) */
+.catalog-active-chip {
+  outline: none;
+}
+.catalog-active-chip:focus-visible {
+  box-shadow: var(--focus-ring);
+  opacity: 1;
 }
 

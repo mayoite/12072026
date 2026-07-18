@@ -13,7 +13,7 @@
 
 .filter-ui-label {
   color: var(--text-muted);
-  font-size: var(--type-body-size);
+  font-size: var(--type-label-size);
   font-weight: 700;
   letter-spacing: 0.2em;
   line-height: 1.25;
@@ -32,11 +32,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-pill, 9999px);
+  border-radius: var(--radius-pill);
   padding: 0.125rem 0.375rem;
   color: var(--text-inverse);
   background: var(--color-primary);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0.02em;
@@ -58,11 +58,20 @@
   backdrop-filter: blur(4px);
 }
 
+/* Density gap for results row + action cluster (TSX owns padding) */
+.catalog-toolbar.flex {
+  gap: var(--space-3);
+}
+
+.catalog-toolbar__actions {
+  gap: var(--space-2);
+}
+
 /* ── Filter shell (desktop sidebar / drawer body) ────────────────────────── */
 
 .catalog-filter-shell {
   overflow: hidden;
-  border-radius: 1.6rem;
+  border-radius: var(--radius-giant);
   border-width: 1px;
   border-style: solid;
   border-color: var(--border-soft);
@@ -76,15 +85,146 @@
   justify-content: space-between;
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  padding: 0.75rem 1rem;
+  padding: var(--space-3) var(--space-4);
   border-color: var(--border-muted);
 }
 
 .catalog-filter-shell__label {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   color: var(--text-strong);
+}
+
+.catalog-filter-shell__clear {
+  color: var(--color-primary);
+  min-height: var(--control-height-xs);
+  padding-inline: var(--space-1);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition-property: color, box-shadow;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--ease-standard);
+}
+
+.catalog-filter-shell__clear:hover {
+  color: var(--color-primary-hover);
+}
+
+.catalog-filter-shell__clear:focus-visible {
+  box-shadow: var(--focus-ring);
+  color: var(--color-primary-hover);
+}
+
+/* Filter choices — readable hit target + focus for keyboard */
+.catalog-filter-choice {
+  width: 100%;
+  min-height: var(--control-height-xs);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  font-size: 0.875rem;
+  outline: none;
+  transition-property: color, background-color, box-shadow;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--ease-standard);
+}
+
+.catalog-filter-choice--active {
+  color: var(--text-inverse);
+  background: var(--color-primary);
+}
+
+.catalog-filter-choice--idle {
+  color: var(--text-body);
+}
+
+.catalog-filter-choice--idle:hover {
+  background: var(--overlay-panel-72);
+  color: var(--text-strong);
+}
+
+.catalog-filter-choice:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.catalog-filter-choice--active:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* Checklist rows — larger tap area */
+.catalog-checklist__label {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: var(--control-height-xs);
+  border-radius: var(--radius-sm);
+  padding-block: var(--space-1);
+  padding-inline: var(--space-1);
+  outline: none;
+}
+
+.catalog-checklist__label:focus-within {
+  box-shadow: var(--focus-ring);
+}
+
+.catalog-checklist__copy {
+  font-size: 0.875rem;
+  text-transform: capitalize;
+  color: var(--text-body);
+  transition-property: color;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--ease-standard);
+}
+
+.catalog-checklist__label:hover .catalog-checklist__copy {
+  color: var(--text-strong);
+}
+
+/* Active filter chips */
+.catalog-active-chips {
+  border-top-width: 1px;
+  border-top-style: solid;
+  padding-top: var(--space-3);
+  border-color: var(--border-muted);
+}
+
+.catalog-active-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 1.75rem;
+  border-radius: var(--radius-pill);
+  padding: var(--space-1) 0.625rem;
+  font-size: var(--type-label-size);
+  color: var(--text-inverse);
+  background: var(--color-primary);
+  outline: none;
+  transition-property: opacity, box-shadow;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--ease-standard);
+}
+
+.catalog-active-chip:hover {
+  opacity: 0.92;
+}
+
+.catalog-active-chip:focus-visible {
+  box-shadow: var(--focus-ring);
+  opacity: 1;
+}
+
+/* Search + sort — reinforce focus (locked :focus already present; focus-visible preferred) */
+.catalog-search__input,
+.catalog-sort {
+  outline: none;
+}
+
+.catalog-search__input:focus-visible,
+.catalog-sort:focus-visible {
+  border-color: var(--color-primary);
+  box-shadow: var(--focus-ring);
 }
 
 /* ── Empty / summary bands used on category routes ───────────────────────── */
@@ -94,10 +234,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 1.9rem;
+  border-radius: var(--radius-blob);
   border-width: 1px;
   border-style: solid;
-  padding: 5rem 1.5rem;
+  padding: var(--space-10) var(--space-5);
   text-align: center;
   border-color: var(--border-soft);
   background: var(--surface-panel-strong);
@@ -110,4 +250,14 @@
   border-bottom-style: solid;
   border-color: var(--border-soft);
   background: var(--surface-soft);
+}
+
+.catalog-summary-band__link {
+  border-radius: var(--radius-sm);
+  outline: none;
+}
+
+.catalog-summary-band__link:focus-visible {
+  box-shadow: var(--focus-ring);
+  color: var(--color-primary);
 }

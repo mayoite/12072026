@@ -570,11 +570,11 @@ export function UnifiedAssistant() {
             <div className="assistant-log">
               {guidedSubmittedId ? (
                 <div className="rounded-xl border border-accent bg-success-soft p-4">
-                  <p className="mb-1 flex items-center gap-2 text-sm font-semibold text-emerald-900">
+                  <p className="mb-1 flex items-center gap-2 text-sm font-semibold text-success">
                     <CheckCircle2 className="h-4 w-4" />
                     {GUIDED_PLANNER_COPY.submittedTitle}
                   </p>
-                  <p className="text-sm text-emerald-800">Reference: {guidedSubmittedId}</p>
+                  <p className="text-sm text-body">Reference: {guidedSubmittedId}</p>
                   <div className="mt-3 flex gap-3">
                     <button
                       type="button"

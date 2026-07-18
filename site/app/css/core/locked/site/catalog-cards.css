@@ -21,24 +21,41 @@
   box-shadow: var(--shadow-float);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .catalog-card,
+  .catalog-card:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
 .catalog-card__compare {
   position: absolute;
-  right: 0.75rem;
-  top: 0.75rem;
+  right: var(--space-3);
+  top: var(--space-3);
   z-index: 10;
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
+  justify-content: center;
+  gap: var(--space-1);
+  min-height: var(--control-height-xs);
+  min-width: var(--control-height-xs);
   border-radius: var(--radius-pill);
   border-width: 1px;
-  padding: 0.25rem 0.625rem;
+  padding: var(--space-1) 0.625rem;
   font-size: 0.875rem;
   letter-spacing: 0.05em;
-  transition-property: color, background-color, border-color, opacity, transform;
+  outline: none;
+  transition-property: color, background-color, border-color, opacity, transform, box-shadow;
   transition-duration: var(--motion-fast);
   transition-timing-function: var(--ease-standard);
   -webkit-backdrop-filter: blur(0.625rem);
   backdrop-filter: blur(10px);
+}
+.catalog-card__compare:focus-visible {
+  box-shadow: var(--focus-ring);
+  border-color: var(--color-primary);
+  opacity: 1;
 }
 .catalog-card__compare--active {
   border-color: var(--color-primary);
@@ -91,8 +108,8 @@
   border-radius: var(--radius-pill);
   border: 1px solid var(--border-soft);
   background: var(--overlay-panel-92);
-  padding: 0.25rem 0.625rem;
-  font-size: 0.6875rem;
+  padding: var(--space-1) 0.625rem;
+  font-size: var(--type-tiny-size);
   letter-spacing: 0.08em;
   color: var(--text-body);
   -webkit-backdrop-filter: blur(8px);

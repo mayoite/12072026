@@ -476,7 +476,7 @@ export function AdvancedFilterGridInner({
         </div>
 
         <div className="min-w-0 space-y-4 md:space-y-5">
-          <div className="catalog-toolbar flex flex-col gap-3 border-b border-theme-soft pb-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="catalog-toolbar flex flex-col gap-3 border-b border-theme-soft pb-3 sm:flex-row sm:items-center sm:justify-between sm:pb-4">
             <p className="typ-label text-body">
               {FILTER_GRID_COPY.resultsSummary
                 .replace("{shown}", String(navigableProducts.length))
@@ -523,7 +523,7 @@ export function AdvancedFilterGridInner({
               {Array.from({ length: 6 }).map((_, index) => (
                 <div
                   key={index}
-                  className="aspect-[4/3] animate-pulse rounded-lg border border-theme-soft bg-muted sm:aspect-[4/5]"
+                  className="aspect-[4/3] animate-pulse rounded-lg border border-theme-soft bg-studio sm:aspect-[5/4]"
                 />
               ))}
             </div>

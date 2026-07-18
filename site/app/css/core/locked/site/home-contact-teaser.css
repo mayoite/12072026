@@ -261,7 +261,7 @@
 @utility contact-teaser__status { margin-top: 0.5rem; font-size: 0.8125rem; }
 
 .contact-teaser__status--success {
-  color: #15803d;
+  color: var(--color-success);
   background: var(--color-bronze-50);
   border: 1px solid var(--color-white-400);
   border-radius: var(--radius-default);
@@ -271,7 +271,7 @@
 }
 
 .contact-teaser__status--error {
-  color: #b91c1c;
+  color: var(--color-error-red);
   background: var(--color-ecru-50);
   border: 1px solid var(--color-ecru-200);
   border-radius: var(--radius-default);

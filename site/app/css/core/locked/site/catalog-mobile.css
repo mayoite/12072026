@@ -29,7 +29,7 @@
 
   .catalog-lane .catalog-toolbar {
     align-items: stretch;
-    gap: 0.75rem;
+    gap: var(--space-3);
   }
 
   .catalog-lane .home-heading {
@@ -117,6 +117,8 @@
   }
 
   .catalog-card--compact .catalog-card__compare {
+    min-height: var(--control-height-xs);
+    min-width: var(--control-height-xs);
     padding: 0.35rem 0.5rem;
   }
 
