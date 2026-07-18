@@ -197,14 +197,15 @@
   --surface-hover: var(--color-ecru-100);
   --surface-hover-soft: var(--color-ecru-200);
   --surface-focus: var(--color-ecru-200);
-  /* Studio neutral — product thumbs, PDP hero plate, catalog media only */
-  --surface-studio: #f3f4f6;
-  --surface-studio-highlight: #ffffff;
-  --surface-studio-edge: #e8eaed;
+  /* Studio neutral — product thumbs / catalog media only.
+     Compose from palette tokens only (cool white scale + support-mist). Never ecru. No raw hex. */
+  --surface-studio: var(--color-white-150);
+  --surface-studio-highlight: var(--color-white-50);
+  --surface-studio-edge: var(--color-white-250);
   --surface-studio-field: radial-gradient(
     120% 100% at 50% 18%,
     var(--surface-studio-highlight) 0%,
-    var(--surface-studio) 55%,
+    color-mix(in srgb, var(--color-support-mist) 55%, var(--surface-studio)) 55%,
     var(--surface-studio-edge) 100%
   );
   --surface-inverse: var(--color-dark-midnight-blue-900);

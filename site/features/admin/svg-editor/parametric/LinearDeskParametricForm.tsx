@@ -257,7 +257,7 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
               className="admin-linear-desk-preview"
               style={{
                 border: "1px solid #ccc",
-                background: "var(--surface-studio-field, #f3f4f6)",
+                background: "var(--surface-studio-field)",
                 padding: 12,
                 maxWidth: 480,
                 width: "100%",
