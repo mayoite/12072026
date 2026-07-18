@@ -28,8 +28,9 @@
 
 - Current execution: each track’s `plan/<Track>/CHECKLIST.md` (all-encompassing: evidence + phases).
 - Code maps: each track’s `plan/<Track>/FEATURES.md` (Admin, Planner, Site, TechStack).
-- Two docs per track only — CHECKLIST + FEATURES (no FINISH-PLAN / COMPLETION-CONTRACT).
-- Optional index: `docs/site/OUTSTANDING-ITEMS.md` → points at the four track pairs.
+- Two docs per track required — CHECKLIST + FEATURES (no FINISH-PLAN / COMPLETION-CONTRACT).
+- **Admin only** also keeps `IMPLEMENTATION-PLAN.md` + `REALITY-AND-STACK.md` — exactly four files under `plan/Admin/`.
+- Optional index: `docs/site/OUTSTANDING-ITEMS.md` → points at the track pairs (Admin = 4 files).
 - No work is deferred to a later decision bucket.
 - Product and architecture facts live in `docs/`.
 - Agent process lives in `Agents/`.

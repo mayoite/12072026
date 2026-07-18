@@ -6,7 +6,7 @@
 **Active blockers:** `../../Failures.md`  
 **Tasks:** `IMPLEMENTATION-PLAN.md` · **Stack:** `REALITY-AND-STACK.md`
 
-**How to read:** Part A = how to prove done. Part B = full work list. Part C = **linear desk parametric** priority ship.  
+**How to read (Admin pack):** Part C (run) → `IMPLEMENTATION-PLAN.md` (tasks) → `FEATURES.md` (paths) → `REALITY-AND-STACK.md` (why stack). Part A = proof rules. Part B = full Admin phases.  
 **Status honesty:** unit green + browser still open = **PARTIAL**, not PASS.
 
 ---
@@ -14,7 +14,7 @@
 ## Part A — Evidence and completion rules
 
 **Status:** OPEN  
-**Authority:** This file is the **execution contract** for finishing Admin.
+**Authority:** This file is the **execution spine** for finishing Admin.
 
 **Code maps:** `FEATURES.md`  
 **UI bar:** `docs/architecture/07-ADMIN-UI-BENCHMARK.md` · shared shell `docs/architecture/06-UI-BENCHMARK.md`  
@@ -366,6 +366,7 @@ Exit: Automated unauth gates proven with bypass mocked off. Deploy auth remains 
 ## Part C — Parametric furniture library (code-free client) — LONG TRACK
 
 **Status:** OPEN  
+**Live pen = template multipath (K1 OPEN). Locked pen = Maker.js.**  
 **Code map:** `FEATURES.md`  
 **Implementation tasks:** `IMPLEMENTATION-PLAN.md`  
 **Reality / stack:** `REALITY-AND-STACK.md`
@@ -374,6 +375,19 @@ Exit: Automated unauth gates proven with bypass mocked off. Deploy auth remains 
 
 **Honesty:** Current greys ≈ no brand library. This track is **months**, not a weekend. One type first.  
 **Code truth (re-verify):** form + compile + CLI call template `renderLinearDeskSvg` → `drawLinearDeskFromTemplate`. Maker recipes exist but are **not** the parametric pen yet. **K1 OPEN.**
+
+**NEXT (one action):** Close **K1** — wire form + CLI + publish to Maker-only `drawLinearDesk(fields)`.
+
+**Ship Linear desk v1 (done enough)** — all required before C5 polish / C6 types / C-AI product claim:
+
+| Gate | Required |
+|------|----------|
+| K1 + K2 | Maker-only pen; unit proves it |
+| K3 | Form knobs match schema (or explicit defaults policy) |
+| C3 browser | 160 cm → preview → publish → `svg-catalog` + descriptor |
+| C4 browser | Guest place + BOQ name/SKU at **1280** and **390** |
+
+Planner **toolbars stay** Fabric + Dockview + React Aria (no rebuild).
 
 ### Stack (locked — one line)
 
@@ -558,9 +572,11 @@ Source: `site/features/planner/asset-engine/svg/parametric/linearDeskFields.ts`
 
 ### C4. Planner consume
 
+**Load rule (define + implement before C4 PASS):** On publish, parametric product must become **guest-placeable** without demo pollution — e.g. set buyer/approved lifecycle (or explicit `planner_managed` / published pointer) so catalog loaders that already filter brand/approved include `{slug, previewUrl: /svg-catalog/{slug}.svg}`. Document the exact flag/path in FEATURES when coded. Until then C4 stays OPEN even if C3 disk write works.
+
 - [ ] Catalog loader includes approved parametric products (slug + preview URL).  
 - [ ] Guest filter still brand/approved only (no demo pollution).  
-- [ ] Place: Fabric paints published SVG (not Block2D miss for these slugs).  
+- [ ] Place: Fabric paints published SVG (not Block2D miss for these slugs) — **existing toolbars**, no new chrome.  
 - [ ] BOQ / review: **name · SKU** from product fields.  
 - [ ] **Browser gate:** proof **1280** and **390** — inventory thumb + place desk.  
 - [ ] Console errors 0 / failed SVG requests 0 on that journey.

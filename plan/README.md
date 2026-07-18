@@ -38,7 +38,7 @@ Admin **Part C** = parametric long track (Maker.js pen, forms, C0–C9, C-AI, K1
 - `results/` is not PASS proof.
 - Status: **OPEN**  /  **PARTIAL**  /  **DONE**  /  **FAIL**.
 - Disk is live SVG authority until cutover is browser-proved.
-- No third file per track (no OUTSTANDING / CHECKLIST Part B (phases) / CHECKLIST Part A (evidence)).
+- No third file per non-Admin track (no OUTSTANDING / FINISH-PLAN / COMPLETION-CONTRACT). Admin = exactly four files.
 
 ## How to work
 

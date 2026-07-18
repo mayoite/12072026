@@ -13,7 +13,7 @@
 _Evidence and completion rules. Wins on how to prove done._
 
 **Status:** OPEN  
-**Authority:** This file is the **execution contract** for finishing Planner.  
+**Authority:** This file is the **execution spine** for finishing Planner.  
 
 **Code maps:** `FEATURES.md` (live paths).  
 **UI bar:** `docs/architecture/06-UI-BENCHMARK.md`.  
@@ -66,7 +66,7 @@ A checklist item is **PASS** only when **all** that apply are true:
 
 ---
 
-## 3. Evidence protocol (exceeds CHECKLIST Part B (phases))
+## 3. Evidence protocol (exceeds this file Part B)
 
 ### 3.1 Gates (release acceptance)
 
@@ -132,7 +132,7 @@ Inbound links (Dashboard, Choose Product, Portal, Admin) tested as **entry contr
 
 ## 5. Product non-negotiables
 
-Carry forward from CHECKLIST Part B (phases), enforced here:
+Carry forward from this file Part B, enforced here:
 
 - Sketch-to-Plan stays; AI optional overlay, never required, never docked permanent.  
 - Layers not permanent customer panel; no customer `Panels` menu.  
@@ -151,14 +151,14 @@ Carry forward from CHECKLIST Part B (phases), enforced here:
 
 ## 6. External benchmark (capability only)
 
-Same spirit as CHECKLIST Part B (phases). **No** copying assets, code, layout, or trade dress.
+Same spirit as this file Part B. **No** copying assets, code, layout, or trade dress.
 
 | Source | Expectation |
 |--------|-------------|
 | AutoCAD | Snaps, units vs display, exact dims, grips, recovery, underlays, internal layers |
 | SmartDraw | Scratch/template/import, closed rooms, typed dims, wall openings, calibrate import, distance guides, BOQ/export |
 
-Official refs remain listed in `Part B (phase checklist in this file)` § External benchmark.
+Official refs remain listed in this file Part B § External benchmark.
 
 ---
 
@@ -169,7 +169,7 @@ Update only with fresh evidence.
 
 | ID | Failure | Bar to clear | Status seed |
 |----|---------|--------------|-------------|
-| PF-01–04 | Guest ID / draft isolation / tests | Browser two-UUID + unit | PASS (see CHECKLIST Part B (phases)) |
+| PF-01–04 | Guest ID / draft isolation / tests | Browser two-UUID + unit | PASS (see this file Part B) |
 | PF-05 | Room outline incomplete | Exact rectangle room + closed geometry + unit + browser | OPEN (impl unit) |
 | PF-06 | Persistent dimensions incomplete | Durable wall/room dims + zoom readable + browser | OPEN (impl unit) |
 | PF-07–08 | Sketch UI / guest auth | TopBar + guest CSRF | PASS (code); browser OPEN |
@@ -200,7 +200,7 @@ Add new PF ids rather than burying issues.
 
 ## 8. Execution phases
 
-Same phase ids as CHECKLIST Part B (phases) (P0–P17) so work maps 1:1.  
+Same phase ids as this file Part B (P0–P17) so work maps 1:1.  
 **Difference:** each phase has **Exit gate** + **Proof required** + **Stop condition**.
 
 ### P0  -  Test isolation
@@ -296,7 +296,7 @@ Every cell needs a **fresh** pass. Viewports:
 | Mobile portrait | 390×844 |
 | Mobile landscape | 844×390 |
 
-Copy journey rows from CHECKLIST Part B (phases) § P16. **No screenshots-only PASS.**
+Copy journey rows from this file Part B § P16. **No screenshots-only PASS.**
 
 ### P17  -  Final gates and docs
 
@@ -339,9 +339,9 @@ A blocker stops **only** direct dependants. Unrelated phases continue.
 
 ---
 
-## 11. How this exceeds `Part B (phase checklist in this file)`
+## 11. How this file Part A exceeds Part B alone
 
-| Area | CHECKLIST Part B (phases) | This contract |
+| Area | This file Part B | This file Part A |
 |------|-------------|----------------|
 | Evidence | Strong intent | Explicit PASS recipe + gate table |
 | Reports | Implicit | Short multi-file + INDEX mandatory |
@@ -352,8 +352,8 @@ A blocker stops **only** direct dependants. Unrelated phases continue.
 | False completion | Forbidden | Operationalized (PARTIAL vs PASS) |
 | Typecheck hygiene | Not stated | No PASS under `.next` type race |
 
-`Part B (phase checklist in this file)` remains the historical detailed checklist.  
-**Use this contract for new claims of done.**
+This file Part B remains the historical detailed checklist.  
+**Use this file Part A for new claims of done.**
 
 ---
 

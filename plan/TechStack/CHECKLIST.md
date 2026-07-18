@@ -13,12 +13,12 @@
 _Evidence and completion rules. Wins on how to prove done._
 
 **Status:** OPEN  
-**Authority:** This file is the **execution contract** for **toolchain, engines, workspace, CI, and dependency health**.  
+**Authority:** This file is the **execution spine** for **toolchain, engines, workspace, CI, and dependency health**.  
 **Relation to plan files:**  
-- `Part B (phase checklist in this file)`  -  same phase journey (**T0–T8**) and **TF** failure registry; detailed checklists  
-- `FEATURES.md`  -  live code map (engines, scripts, env **names**, CI → path → gap)  
-- Where this file and `Part B (phase checklist in this file)` conflict on **how to prove done**, **this file wins**  
-- Phase scope and TF ids stay **1:1** with `Part B (phase checklist in this file)`  
+- This file Part B — same phase journey (**T0–T8**) and **TF** failure registry; detailed checklists  
+- `FEATURES.md` — live code map (engines, scripts, env **names**, CI → path → gap)  
+- Where Part A and Part B conflict on **how to prove done**, **Part A wins**  
+- Phase scope and TF ids stay **1:1** with this file Part B  
 
 **Relation to fact docs:**  
 - `docs/Lockedfiles/03-dependencies-engines-current.md`  -  architectural limits  
@@ -200,8 +200,8 @@ No FINISH checkbox PASS without parent evidence in the same session.
 
 ## 7. Failure registry
 
-**Canonical ids for execution:** **TF-01…TF-24** in `Part B (phase checklist in this file)`.  
-**Synonyms:** **TS-01…TS-22** = TF-01…TF-22 (same bar). Prefer TF in finish reports.
+**Canonical ids for execution:** **TF-01…TF-24** in this file Part B.  
+**Synonyms:** **TS-01…TS-22** = TF-01…TF-22 (same bar). Prefer TF in reports.
 
 Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**.
 
@@ -234,9 +234,9 @@ Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**.
 
 ---
 
-## 8. Execution phases (T0–T8)  -  1:1 with Part B phases (phases)
+## 8. Execution phases (T0–T8) — 1:1 with this file Part B
 
-Checklists live in `Part B (phase checklist in this file)`. Contract summary:
+Checklists live in this file Part B. Part A summary:
 
 | Phase | Name | Exit |
 |-------|------|------|
@@ -281,9 +281,9 @@ T8 docs (continuous; gates release claim)
 
 ---
 
-## 10. How this exceeds Lockedfiles alone
+## 10. How this file exceeds Lockedfiles alone
 
-| Area | Lockedfiles / runtime docs | This contract + CHECKLIST Part B (phases) |
+| Area | Lockedfiles / runtime docs | This file Part A + Part B |
 |------|----------------------------|----------------------------|
 | Facts | Version/policy statements | **PASS recipe** + commands |
 | Engines | Table | Phase T2 + FEATURES paths + grep proof |

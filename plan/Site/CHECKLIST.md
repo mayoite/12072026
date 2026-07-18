@@ -13,10 +13,10 @@
 _Evidence and completion rules. Wins on how to prove done._
 
 **Status:** OPEN  
-**Authority:** This file is the **execution contract** for finishing the public **Site** track.  
+**Authority:** This file is the **execution spine** for finishing the public **Site** track.  
 
 **Code maps:** `FEATURES.md` (live paths).  
-**Detailed checklist:** `Part B (phase checklist in this file)` (S0–S7, SF registry, browser matrix).  
+**Detailed checklist:** this file Part B (S0–S7, SF registry, browser matrix).  
 **UI bar:** `docs/architecture/09-SITE-UI-BENCHMARK.md`  
 **Domain:** `docs/architecture/02-DOMAINS.md` (Site owns public visitors; not Planner layout or Admin inventory)  
 **Security bar:** `docs/architecture/10-SECURITY-BENCHMARK.md` (public forms, auth redirects, no secret leakage)  
@@ -114,7 +114,7 @@ Plus `agent-reports/YYYY-MM-DD-INDEX.md`.
 |------|------|
 | Implementer | Code + tests; no PASS without commands |
 | Parent | Re-run gates; write INDEX |
-| Never | Mark CHECKLIST Part B (phases) / SF items PASS without parent evidence |
+| Never | Mark this file Part B / SF items PASS without parent evidence |
 
 ---
 
@@ -186,7 +186,7 @@ No copying assets, layout, or trade dress. Stable requirement IDs: `09-SITE-UI-B
 ## 7. Failure registry (SF)  -  Site failures
 
 Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**.  
-Update only with fresh evidence. Seed mirrors `Part B (phase checklist in this file)` (2026-07-17 code read). **Not a browser PASS.**
+Update only with fresh evidence. Seed mirrors this file Part B (2026-07-17 code read). **Not a browser PASS.**
 
 | ID | Failure | Bar to clear | Status seed |
 |----|---------|--------------|-------------|
@@ -212,14 +212,14 @@ Update only with fresh evidence. Seed mirrors `Part B (phase checklist in this f
 | SF-20 | Cool monochrome / missing ecru on marketing | Surfaces use brand paper tokens where intended | OPEN until measured |
 | SF-21 | **NEW** Canonical host mismatch | Classification base, `SITE_URL`, robots host, and production agree | OPEN |
 
-Add new SF ids; do not bury issues. Keep CHECKLIST Part B (phases) SF table in sync when statuses change.
+Add new SF ids; do not bury issues. Keep this file Part B SF table in sync when statuses change.
 
 ---
 
 ## 8. Execution phases (S0–S7)
 
-**Same phase ids as `Part B (phase checklist in this file)` so work maps 1:1.**  
-**Difference:** each phase has **Exit gate** + **Proof required** + **Stop condition**. Detailed checkboxes live in Part B of this file (phases).
+**Same phase ids as this file Part B so work maps 1:1.**  
+**Difference:** each phase has **Exit gate** + **Proof required** + **Stop condition**. Detailed checkboxes live in this file Part B.
 
 ### S0  -  Measurement and isolation
 
@@ -274,7 +274,7 @@ Add new SF ids; do not bury issues. Keep CHECKLIST Part B (phases) SF table in s
 ## 9. Browser acceptance matrix
 
 Every cell needs a **fresh** pass. No screenshots-only PASS.  
-Copy journey rows from `Part B (phase checklist in this file)` § Browser acceptance matrix. Viewports:
+Copy journey rows from this file Part B § Browser acceptance matrix. Viewports:
 
 | Name | Size |
 |------|------|
@@ -332,9 +332,9 @@ A blocker stops **only** direct dependants. Unrelated phases continue.
 
 ---
 
-## 12. How this exceeds `Part B (phase checklist in this file)` and prior fragments
+## 12. How this file Part A exceeds Part B and prior fragments
 
-| Area | CHECKLIST Part B (phases) / FEATURES | This contract |
+| Area | This file Part B / FEATURES | This file Part A |
 |------|------------------------|---------------|
 | Evidence | Detailed checklists | Explicit PASS recipe + gates |
 | Reports | Implicit in plan | Short multi-file + INDEX mandatory |
@@ -342,10 +342,10 @@ A blocker stops **only** direct dependants. Unrelated phases continue.
 | Brand / ecru | SF-20 in plan | Same; measured before PASS |
 | False completion | Forbidden | PARTIAL vs PASS operationalized |
 | Typecheck hygiene | Stated in gates | No PASS under `.next` type race |
-| Phase files | Historical PHASES-* gone | S0–S7 1:1 with Part B phases (phases) |
+| Phase files | Historical PHASES-* gone | S0–S7 1:1 with this file Part B |
 
-`Part B (phase checklist in this file)` remains the detailed execution checklist.  
-**Use this contract for new claims of done.**
+This file Part B remains the detailed execution checklist.  
+**Use this file Part A for new claims of done.**
 
 ---
 
@@ -370,7 +370,7 @@ Site is **complete** only when:
 1. §3.1 all green.  
 2. Browser matrix §9: desktop + mobile portrait complete for primary commercial path; keyboard for nav + form or Planner entry.  
 3. No Critical SF open (SF-01–05, SF-04 asset, empty primary category without owner accept, SF-21 host).  
-4. `FEATURES.md` and `Part B (phase checklist in this file)` match live code and each other.  
+4. `FEATURES.md` and this file Part B match live code and each other.  
 5. Owner sign-off on production-like server (not only `next dev`).
 
 Until then: **Status remains OPEN.**

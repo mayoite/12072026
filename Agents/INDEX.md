@@ -12,8 +12,10 @@
 
 Admin, Planner, Site, and Security remain product tracks.
 
-Planner is the current execution track.
+**Execute** via each track’s `plan/<Track>/CHECKLIST.md` (+ `FEATURES.md` code map).  
+**Admin Part C** (parametric Maker pen, K1–K3 → C3/C4) is active — not code-map-only.  
+Admin also has `IMPLEMENTATION-PLAN.md` + `REALITY-AND-STACK.md` (exactly four files under `plan/Admin/`).
 
-Admin and Site retain verified code maps only.
+`agent-reports/` is status notes only — **not** PASS proof. Live code + same-session evidence win.
 
 Security requirements live in `docs/architecture/10-SECURITY-BENCHMARK.md`.
