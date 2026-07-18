@@ -1491,7 +1491,10 @@ describe("03-CAT-06b: Catalog Client", () => {
 
       const items = await client.loadFromApi("standard", 25);
 
-      expect(fetchMock).toHaveBeenCalledWith("/api/planner/catalog?limit=25");
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/planner/catalog/?limit=25",
+        undefined,
+      );
       expect(items).toHaveLength(1);
       expect(items[0].dimensions.widthMm).toBe(1200);
       expect(client.getById("raw-desk")?.provenance.source).toBe("planner_managed_products");
@@ -1511,7 +1514,10 @@ describe("03-CAT-06b: Catalog Client", () => {
 
       const items = await client.loadFromApi("configurator");
 
-      expect(fetchMock).toHaveBeenCalledWith("https://planner.example/api/planner/catalog/configurator?limit=200");
+      expect(fetchMock).toHaveBeenCalledWith(
+        "https://planner.example/api/planner/catalog/configurator/?limit=200",
+        undefined,
+      );
       expect(items[0].id).toBe("normalized");
       expect(client.getSource()).toBe("configurator");
     });

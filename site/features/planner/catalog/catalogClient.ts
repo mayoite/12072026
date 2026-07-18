@@ -314,18 +314,21 @@ export class PlannerCatalogClient {
   async loadFromApi(
     source: CatalogSource,
     limit = 200,
+    signal?: AbortSignal,
   ): Promise<PlannerCatalogItem[]> {
     const fetcher = this.options.fetchImpl ?? globalThis.fetch;
     if (typeof fetcher !== "function") {
       throw new Error("Catalog API loading requires fetch");
     }
 
+    // trailingSlash: true — avoid 308 hop on every catalog load.
     const path =
       source === "configurator"
-        ? "/api/planner/catalog/configurator"
-        : "/api/planner/catalog";
-    const url = `${this.options.apiBasePath}${path}?limit=${encodeURIComponent(String(limit))}`;
-    const response = await fetcher(url);
+        ? "/api/planner/catalog/configurator/"
+        : "/api/planner/catalog/";
+    const base = this.options.apiBasePath.replace(/\/$/, "");
+    const url = `${base}${path}?limit=${encodeURIComponent(String(limit))}`;
+    const response = await fetcher(url, signal ? { signal } : undefined);
     if (!response.ok) {
       throw new Error(`Catalog API request failed: ${response.status}`);
     }
@@ -745,14 +748,19 @@ export class PlannerCatalogClient {
    * Catalogue-first (descriptors primary source for items) + search parity + resolver wiring.
    * Cites BP-06, design §9/10, GS. Called from usePlannerWorkspaceCatalog + InventoryPanel.
    */
-  async loadDescriptorsFromLoader(): Promise<BlockDescriptor[]> {
+  async loadDescriptorsFromLoader(
+    signal?: AbortSignal,
+  ): Promise<BlockDescriptor[]> {
     const fetcher = this.options.fetchImpl ?? globalThis.fetch;
     if (typeof fetcher !== "function") {
       return this.loadedDescriptors;
     }
 
     try {
-      const response = await fetcher(this.resolveSvgBlocksUrl());
+      const response = await fetcher(
+        this.resolveSvgBlocksUrl(),
+        signal ? { signal } : undefined,
+      );
       if (!response.ok) {
         return this.loadedDescriptors;
       }
@@ -778,7 +786,8 @@ export class PlannerCatalogClient {
 
   private resolveSvgBlocksUrl(): string {
     const prefix = this.options.apiBasePath.replace(/\/$/, "");
-    const path = `${prefix}/api/planner/catalog/svg-blocks`;
+    // trailingSlash: true — avoid 308 hop on every guest inventory load.
+    const path = `${prefix}/api/planner/catalog/svg-blocks/`;
     if (prefix.startsWith("http")) {
       return path;
     }

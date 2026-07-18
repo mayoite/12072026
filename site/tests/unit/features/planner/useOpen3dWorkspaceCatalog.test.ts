@@ -16,6 +16,34 @@ function renderCatalogHook() {
   return renderHook(() => usePlannerWorkspaceCatalog(), { wrapper });
 }
 
+function brandHeroItem(
+  overrides: Partial<PlannerCatalogItem> & Pick<PlannerCatalogItem, "id" | "name">,
+): PlannerCatalogItem {
+  return {
+    slug: overrides.id,
+    sku: overrides.sku ?? overrides.id.toUpperCase(),
+    shortName: overrides.shortName ?? overrides.name,
+    description: overrides.description ?? "Brand hero",
+    category: "Furniture",
+    subCategory: "Desks & Workstations",
+    taxonomyPath: "Furniture > Desks & Workstations",
+    dimensions: { widthMm: 1600, depthMm: 800, heightMm: 750 },
+    displayUnit: "mm",
+    assets: { imageUrls: [], previewImageUrl: "/svg-catalog/hero.svg" },
+    material: { marketingMaterial: "Laminate", normalizedMaterial: "laminate" },
+    roomTags: ["Office"],
+    styleTags: ["Modern"],
+    availability: "in-stock",
+    assemblyType: "flat-pack",
+    flatPack: true,
+    tags: ["desk", "workstation"],
+    variants: [],
+    provenance: { source: "descriptor-loader" },
+    symbolOnly: false,
+    ...overrides,
+  };
+}
+
 describe("usePlannerWorkspaceCatalog", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
@@ -25,31 +53,13 @@ describe("usePlannerWorkspaceCatalog", () => {
     expect(usePlannerSvgCatalog).toBe(usePlannerWorkspaceCatalog);
   });
 
-  it("loads live catalog items from the configurator API", async () => {
-    const liveItem = {
-      id: "ws-1",
-      slug: "ws-1",
-      sku: "WS-1",
-      name: "2 Seater Workstation",
-      shortName: "2 Seater",
+  it("loads brand-hero items from svg-blocks / configurator API", async () => {
+    const liveItem = brandHeroItem({
+      id: "oando-fluid-desk-1600",
+      name: "Fluid Desk 1600",
+      sku: "OANDO-FLUID-DSK-1600",
       description: "Live workstation",
-      category: "Furniture",
-      subCategory: "Workstations",
-      taxonomyPath: "Furniture > Workstations",
-      dimensions: { widthMm: 2400, depthMm: 600, heightMm: 750 },
-      displayUnit: "mm",
-      assets: { imageUrls: [], previewImageUrl: "/img.svg" },
-      material: { marketingMaterial: "Laminate", normalizedMaterial: "laminate" },
-      roomTags: ["Office"],
-      styleTags: ["Modern"],
-      availability: "in-stock",
-      assemblyType: "flat-pack",
-      flatPack: true,
-      tags: ["workstation"],
-      variants: [],
-      provenance: { source: "configurator_api" },
-      symbolOnly: false,
-    };
+    });
 
     vi.stubGlobal(
       "fetch",
@@ -65,14 +75,17 @@ describe("usePlannerWorkspaceCatalog", () => {
       expect(result.current.status).toBe("ready");
     });
 
-    expect(result.current.items.some((item) => item.id === "ws-1")).toBe(true);
-    expect(result.current.resolveItem("ws-1")?.name).toBe("2 Seater Workstation");
+    expect(result.current.items.some((item) => item.id === "oando-fluid-desk-1600")).toBe(
+      true,
+    );
+    expect(result.current.resolveItem("oando-fluid-desk-1600")?.name).toBe(
+      "Fluid Desk 1600",
+    );
 
     vi.unstubAllGlobals();
   });
 
-  // TDD cycle 6 for hook: initial state before effect settles (loading + isLoading)
-  it("starts in loading state with isLoading true and demo items initially", async () => {
+  it("starts in loading state with isLoading true and empty guest list", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
@@ -82,15 +95,14 @@ describe("usePlannerWorkspaceCatalog", () => {
     );
     const { result } = renderCatalogHook();
     expect(result.current.status).toBe("loading");
-    expect(result.current.isLoading).toBe(true);  // GREEN
-    // demo items present initially (overwritten on load)
-    expect(result.current.items.length).toBeGreaterThan(0);
+    expect(result.current.isLoading).toBe(true);
+    // No demo pollution while loading (P18 / BQ4).
+    expect(result.current.items).toEqual([]);
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     vi.unstubAllGlobals();
   });
 
-  // TDD cycle 7 for hook: fallback path when loadFromApi returns empty (covers catch? and length==0)
-  it("falls back to demo items and status fallback when API returns no items", async () => {
+  it("falls back to honest empty list (no demo seed) when API returns no items", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
@@ -105,14 +117,13 @@ describe("usePlannerWorkspaceCatalog", () => {
       expect(result.current.status).not.toBe("loading");
     });
 
-    expect(result.current.status).toBe("fallback");  // GREEN: empty -> fallback
-    expect(result.current.items.length).toBeGreaterThan(0); // demo
+    expect(result.current.status).toBe("fallback");
+    expect(result.current.items).toEqual([]);
     expect(result.current.isLoading).toBe(false);
 
     vi.unstubAllGlobals();
   });
 
-  // TDD cycle 8: hook resolveItem returns undefined for missing (exercises client ?? items.find path)
   it("resolveItem returns undefined for unknown id after load", async () => {
     vi.stubGlobal(
       "fetch",
@@ -123,41 +134,51 @@ describe("usePlannerWorkspaceCatalog", () => {
     );
     const { result } = renderCatalogHook();
     await waitFor(() => expect(result.current.status).not.toBe("loading"));
-    expect(result.current.resolveItem("nonexistent-xyz")).toBeUndefined();  // GREEN
+    expect(result.current.resolveItem("nonexistent-xyz")).toBeUndefined();
     vi.unstubAllGlobals();
   });
 
-  // TDD for 0405/0419 loader primary wiring fix: call loadDescriptorsFromLoader (primary), check getAll path after (addresses [] return); falls to api
-  it("calls loadDescriptorsFromLoader for catalogue-first primary before api fallback", async () => {
-    const liveItem: PlannerCatalogItem = {
-      id: "ldr-1",
-      slug: "ldr-1",
-      sku: "LDR-1",
-      name: "Loader Item",
-      shortName: "LDR",
-      description: "d",
-      category: "Furniture",
-      subCategory: "Chairs",
-      taxonomyPath: "Furniture > Symbols > ldr",
-      dimensions: { widthMm: 100, depthMm: 100, heightMm: 100 },
-      displayUnit: "mm",
-      assets: { imageUrls: [] },
-      material: { marketingMaterial: "SVG", normalizedMaterial: "svg-symbol" },
-      roomTags: [],
-      styleTags: [],
-      availability: "in-stock",
-      assemblyType: "fully-assembled",
-      flatPack: false,
-      tags: ["descriptor"],
-      variants: [],
-      provenance: { source: "descriptor-loader" },
-      symbolOnly: true,
+  it("keeps brand heroes from loader primary and drops non-hero pollution", async () => {
+    const liveItem = brandHeroItem({
+      id: "oando-breeze-task-chair",
+      name: "Breeze Task Chair",
+      sku: "OANDO-BREEZE-CHR-TSK",
+    });
+    const pollution: PlannerCatalogItem = {
+      ...liveItem,
+      id: "sample-sofa-1",
+      slug: "sample-sofa-1",
+      sku: "SAMPLE-SOFA-1",
+      name: "Demo Sofa",
+      provenance: { source: "sample_data" },
     };
-    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ items: [liveItem] }) });
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ items: [liveItem, pollution] }),
+    });
     vi.stubGlobal("fetch", fetchMock);
     const { result } = renderCatalogHook();
     await waitFor(() => expect(result.current.status).not.toBe("loading"));
-    // loader call happened (primary path exercised even if client returns [])
+    expect(result.current.items.map((i) => i.id)).toEqual(["oando-breeze-task-chair"]);
+    expect(result.current.items.some((i) => i.id === "sample-sofa-1")).toBe(false);
+    vi.unstubAllGlobals();
+  });
+
+  it("does not report loading after data settles even when status is ready", async () => {
+    const liveItem = brandHeroItem({
+      id: "oando-fluid-desk-1600",
+      name: "Fluid Desk 1600",
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ items: [liveItem] }),
+      }),
+    );
+    const { result } = renderCatalogHook();
+    await waitFor(() => expect(result.current.status).toBe("ready"));
+    expect(result.current.isLoading).toBe(false);
     expect(result.current.items.length).toBeGreaterThan(0);
     vi.unstubAllGlobals();
   });

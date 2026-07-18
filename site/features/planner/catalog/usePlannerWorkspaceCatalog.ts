@@ -7,18 +7,16 @@ import { PlannerCatalogClient } from "./catalogClient";
 import type { PlannerCatalogItem } from "./catalogTypes";
 import { filterGuestInventoryCatalogItems } from "./catalogBuyerVisibility";
 import { loadPlannerCatalog, PLANNER_CATALOG_QUERY_KEY } from "./catalogQuery";
+import {
+  derivePlannerWorkspaceCatalogStatus,
+  type PlannerWorkspaceCatalogStatus,
+} from "./plannerCatalogStatus";
 
 // Catalogue-first (BP-06 / design §9-10 / REC-04 / phase-06 / 0419): loader primary via client for descriptors.
 // Empty remote → honest empty list (no demo-sofa / OFL pollution — P18/BQ4).
 // Guest list = oando-* brand heroes only (P10).
 
-export type PlannerWorkspaceCatalogStatus =
-  | "loading"
-  | "ready"
-  | "fallback"
-  | "stale"
-  | "offline"
-  | "error";
+export type { PlannerWorkspaceCatalogStatus };
 
 export function usePlannerWorkspaceCatalog() {
   const clientRef = useRef<PlannerCatalogClient | null>(null);
@@ -39,17 +37,15 @@ export function usePlannerWorkspaceCatalog() {
     return filterGuestInventoryCatalogItems(remoteItems);
   }, [query.data?.items]);
   const offline = typeof navigator !== "undefined" && navigator.onLine === false;
-  const status: PlannerWorkspaceCatalogStatus = offline
-    ? "offline"
-    : query.isError
-      ? "error"
-      : query.isPending
-        ? "loading"
-        : query.isFetching
-          ? "stale"
-          : query.data?.source === "fallback"
-            ? "fallback"
-            : "ready";
+  const hasData = query.data !== undefined;
+  const status: PlannerWorkspaceCatalogStatus = derivePlannerWorkspaceCatalogStatus({
+    offline,
+    isError: query.isError,
+    isPending: query.isPending,
+    isFetching: query.isFetching,
+    hasData,
+    source: query.data?.source,
+  });
 
   const resolveItem = useCallback(
     (id: string): PlannerCatalogItem | undefined =>
@@ -57,28 +53,33 @@ export function usePlannerWorkspaceCatalog() {
     [items],
   );
 
+  const isFetching = query.isFetching;
+  const refetch = query.refetch;
+
   // TTL stale UX (06-INV): background refresh when catalog data is past half TTL.
+  // Depend on stable flags/callbacks — never the whole query object (re-run thrash).
   useEffect(() => {
     if (typeof window === "undefined" || offline) return;
-    const client = clientRef.current;
-    if (!client) return;
+    const catalogClient = clientRef.current;
+    if (!catalogClient) return;
 
     const tick = () => {
-      if (client.shouldRevalidate() && !query.isFetching) {
-        void query.refetch();
+      if (catalogClient.shouldRevalidate() && !isFetching) {
+        void refetch();
       }
     };
 
     tick();
     const intervalId = window.setInterval(tick, 60_000);
     return () => window.clearInterval(intervalId);
-  }, [offline, query]);
+  }, [offline, isFetching, refetch]);
 
   return {
     items,
     status,
     resolveItem,
-    isLoading: query.isPending,
+    // Loading UI only while first fetch has no payload (not during background stale).
+    isLoading: query.isPending && !hasData,
     isStale: query.isStale,
     error: query.error,
     retry: query.refetch,

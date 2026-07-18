@@ -80,6 +80,23 @@ describe("isInternalCatalogItem", () => {
     ).toBe(true);
   });
 
+  it("does not treat brand-hero slug tags like proof as internal", () => {
+    // descriptor bridge splits oando-param-proof-* into tags including "proof"
+    const hero = minimalItem({
+      id: "oando-param-proof-linear-1600",
+      name: "Parametric Linear Desk",
+      slug: "oando-param-proof-linear-1600",
+      sku: "OANDO-PARAM-PROOF-LINEAR-1600",
+      tags: ["oando", "param", "proof", "linear", "descriptor", "svg"],
+      provenance: { source: "descriptor-loader" },
+    });
+    expect(isBrandHeroCatalogItem(hero)).toBe(true);
+    expect(isInternalCatalogItem(hero)).toBe(false);
+    expect(filterGuestInventoryCatalogItems([hero]).map((i) => i.id)).toEqual([
+      "oando-param-proof-linear-1600",
+    ]);
+  });
+
   it("allows normal buyer catalog item", () => {
     expect(
       isInternalCatalogItem(

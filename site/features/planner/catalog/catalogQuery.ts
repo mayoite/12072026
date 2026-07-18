@@ -23,15 +23,16 @@ export async function loadPlannerCatalog(
   client: PlannerCatalogClient,
   context?: Pick<QueryFunctionContext, "signal">,
 ): Promise<PlannerCatalogQueryData> {
-  if (context?.signal.aborted) throw new DOMException("Aborted", "AbortError");
-  await client.loadDescriptorsFromLoader();
+  const signal = context?.signal;
+  if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
+  await client.loadDescriptorsFromLoader(signal);
   const allItems = client.getAll();
   const hasSvgBlocks = allItems.some(
     (item) => item.provenance?.source === "descriptor-loader",
   );
   if (hasSvgBlocks) return { items: allItems, source: "remote" };
 
-  const loaded = await client.loadFromApi("configurator", 200);
+  const loaded = await client.loadFromApi("configurator", 200, signal);
   if (loaded.length > 0) return { items: loaded, source: "remote" };
   // Honest empty: no residential demo seed, no OFL toys, no systems-v0 junk.
   return { items: [], source: "fallback" };

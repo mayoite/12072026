@@ -112,6 +112,7 @@ import type {
   ReviewBoqLinePreview,
 } from "./ReviewQuotePanel";
 import { usePlannerSvgCatalog } from "@/features/planner/catalog/usePlannerWorkspaceCatalog";
+import { plannerCatalogStatusBarLabel } from "@/features/planner/catalog/plannerCatalogStatus";
 import { CommandPalette } from "./CommandPalette";
 import { CommandsPaletteTrigger } from "./CommandsPaletteTrigger";
 import workspaceStyles from "./workspace.module.css";
@@ -254,6 +255,7 @@ export function OOPlannerWorkspace({
     { hydrated, ownerId },
   );
   const catalog = usePlannerSvgCatalog();
+  const catalogStatusLabel = plannerCatalogStatusBarLabel(catalog.status);
   const restoreSnapshotRef = useRef(autosave.restoreSnapshot);
   useLayoutEffect(() => {
     restoreSnapshotRef.current = autosave.restoreSnapshot;
@@ -2328,11 +2330,9 @@ export function OOPlannerWorkspace({
                 Place workstation · library
               </span>
             ) : null}
-            {catalog.status !== "ready" ? (
+            {catalogStatusLabel ? (
               <span className="open3d-status-pill open3d-status-pill--muted">
-                {catalog.status === "fallback"
-                  ? "Offline catalog"
-                  : "Loading catalog…"}
+                {catalogStatusLabel}
               </span>
             ) : null}
             {validationResult.issues.length > 0 ? (
