@@ -1,7 +1,7 @@
 /**
- * C3 browser proof against Chrome Beta CDP (port 9222).
- * Usage: node scripts/c3-parametric-browser-proof.mjs
- * Requires: Chrome Beta with --remote-debugging-port=9222, dev on :3000
+ * C3 browser proof: Playwright Chromium (preferred) or Chrome Beta CDP :9222.
+ * Usage (repo root): node scripts/c3-parametric-browser-proof.mjs
+ * Requires: `pnpm --filter oando-site run test:browsers:install` once; dev on :3000
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -11,10 +11,25 @@ import { chromium } from "playwright";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sitePublic = path.join(root, "site", "public", "svg-catalog");
 
-async function main() {
+async function openBrowser() {
+  // Prefer bundled Playwright Chromium (installed via test:browsers:install)
+  try {
+    const browser = await chromium.launch({ headless: true });
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    return { browser, page, mode: "playwright-chromium" };
+  } catch (err) {
+    console.warn("playwright launch failed, trying CDP :9222", err?.message ?? err);
+  }
   const browser = await chromium.connectOverCDP("http://127.0.0.1:9222");
   const context = browser.contexts()[0] ?? (await browser.newContext());
   const page = context.pages()[0] ?? (await context.newPage());
+  return { browser, page, mode: "cdp-9222" };
+}
+
+async function main() {
+  const { browser, page, mode } = await openBrowser();
+  console.log(JSON.stringify({ browserMode: mode }));
 
   await page.goto("http://localhost:3000/admin/svg-editor/parametric", {
     waitUntil: "domcontentloaded",
