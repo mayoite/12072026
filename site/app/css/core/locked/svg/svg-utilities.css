@@ -1,0 +1,168 @@
+/**
+ * SVG-only utilities (LOCKED/svg).
+ * Use on Admin SVG studio / parametric / plan-symbol chrome.
+ * Does not redefine site-wide Tailwind utilities.
+ */
+
+/* ── Backgrounds ── */
+.svg-bg-studio {
+  background: var(--svg-studio-field);
+}
+.svg-bg-studio-solid {
+  background-color: var(--svg-studio-solid);
+}
+.svg-bg-paper {
+  background-color: var(--svg-ecru-50);
+}
+.svg-bg-midnight {
+  background-color: var(--svg-midnight-500);
+}
+.svg-bg-ocean {
+  background-color: var(--svg-ocean-500);
+}
+.svg-bg-bronze {
+  background-color: var(--svg-bronze-400);
+}
+.svg-bg-primary {
+  background-color: var(--svg-primary);
+}
+.svg-bg-accent {
+  background-color: var(--svg-accent);
+}
+
+/* ── Text / ink ── */
+.svg-ink {
+  color: var(--svg-ink);
+}
+.svg-ink-muted {
+  color: var(--svg-ink-muted);
+}
+.svg-ink-subtle {
+  color: var(--svg-ink-subtle);
+}
+.svg-ink-primary {
+  color: var(--svg-primary);
+}
+.svg-ink-accent {
+  color: var(--svg-accent);
+}
+.svg-ink-ocean {
+  color: var(--svg-ocean-600);
+}
+.svg-ink-midnight {
+  color: var(--svg-midnight-600);
+}
+
+/* ── Borders ── */
+.svg-border {
+  border-color: var(--svg-border);
+}
+.svg-border-strong {
+  border-color: var(--svg-border-strong);
+}
+.svg-border-primary {
+  border-color: var(--svg-primary);
+}
+.svg-border-accent {
+  border-color: var(--svg-accent);
+}
+
+/* ── Stroke / line weights (UI chrome around SVG) ── */
+.svg-line-hair {
+  stroke-width: var(--svg-line-hair);
+  border-width: var(--svg-line-hair);
+}
+.svg-line-thin {
+  stroke-width: var(--svg-line-thin);
+  border-width: var(--svg-line-thin);
+}
+.svg-line-base {
+  stroke-width: var(--svg-line-base);
+  border-width: var(--svg-line-base);
+}
+.svg-line-medium {
+  stroke-width: var(--svg-line-medium);
+  border-width: var(--svg-line-medium);
+}
+.svg-line-thick {
+  stroke-width: var(--svg-line-thick);
+  border-width: var(--svg-line-thick);
+}
+.svg-line-heavy {
+  stroke-width: var(--svg-line-heavy);
+  border-width: var(--svg-line-heavy);
+}
+.svg-line-bold {
+  stroke-width: var(--svg-line-bold);
+  border-width: var(--svg-line-bold);
+}
+.svg-line-display {
+  stroke-width: var(--svg-line-display);
+  border-width: var(--svg-line-display);
+}
+
+/* ── Plan role helpers (class on paths when CSS-themed) ── */
+.svg-role-top {
+  fill: var(--svg-plan-fill-top);
+  stroke: var(--svg-plan-stroke);
+}
+.svg-role-pedestal {
+  fill: var(--svg-plan-fill-pedestal);
+  stroke: var(--svg-plan-stroke);
+}
+.svg-role-modesty {
+  fill: var(--svg-plan-fill-modesty);
+  stroke: var(--svg-plan-stroke);
+}
+.svg-role-frame {
+  fill: none;
+  stroke: var(--svg-plan-stroke);
+}
+.svg-role-stroke {
+  stroke: var(--svg-plan-stroke);
+}
+
+/* ── Fill utilities (widest set — family mid + ends) ── */
+.svg-fill-ocean-100 { fill: var(--svg-ocean-100); }
+.svg-fill-ocean-300 { fill: var(--svg-ocean-300); }
+.svg-fill-ocean-500 { fill: var(--svg-ocean-500); }
+.svg-fill-ocean-700 { fill: var(--svg-ocean-700); }
+.svg-fill-ocean-900 { fill: var(--svg-ocean-900); }
+.svg-fill-midnight-100 { fill: var(--svg-midnight-100); }
+.svg-fill-midnight-300 { fill: var(--svg-midnight-300); }
+.svg-fill-midnight-500 { fill: var(--svg-midnight-500); }
+.svg-fill-midnight-700 { fill: var(--svg-midnight-700); }
+.svg-fill-midnight-900 { fill: var(--svg-midnight-900); }
+.svg-fill-white-50 { fill: var(--svg-white-50); }
+.svg-fill-white-150 { fill: var(--svg-white-150); }
+.svg-fill-white-250 { fill: var(--svg-white-250); }
+.svg-fill-ecru-50 { fill: var(--svg-ecru-50); }
+.svg-fill-ecru-200 { fill: var(--svg-ecru-200); }
+.svg-fill-bronze-300 { fill: var(--svg-bronze-300); }
+.svg-fill-bronze-400 { fill: var(--svg-bronze-400); }
+.svg-fill-bronze-500 { fill: var(--svg-bronze-500); }
+.svg-fill-sustain-300 { fill: var(--svg-sustain-300); }
+.svg-fill-sustain-500 { fill: var(--svg-sustain-500); }
+.svg-fill-none { fill: none; }
+
+/* ── Stroke color utilities ── */
+.svg-stroke-ocean-500 { stroke: var(--svg-ocean-500); }
+.svg-stroke-ocean-700 { stroke: var(--svg-ocean-700); }
+.svg-stroke-midnight-500 { stroke: var(--svg-midnight-500); }
+.svg-stroke-midnight-700 { stroke: var(--svg-midnight-700); }
+.svg-stroke-bronze-400 { stroke: var(--svg-bronze-400); }
+.svg-stroke-bronze-600 { stroke: var(--svg-bronze-600); }
+.svg-stroke-ink { stroke: var(--svg-ink); }
+.svg-stroke-primary { stroke: var(--svg-primary); }
+.svg-stroke-accent { stroke: var(--svg-accent); }
+
+/* ── Padding / radius (SVG chrome boxes) ── */
+.svg-pad-xs { padding: var(--svg-pad-xs); }
+.svg-pad-sm { padding: var(--svg-pad-sm); }
+.svg-pad-md { padding: var(--svg-pad-md); }
+.svg-pad-lg { padding: var(--svg-pad-lg); }
+.svg-pad-xl { padding: var(--svg-pad-xl); }
+.svg-radius-sm { border-radius: var(--svg-radius-sm); }
+.svg-radius-md { border-radius: var(--svg-radius-md); }
+.svg-radius-lg { border-radius: var(--svg-radius-lg); }
+.svg-radius-pill { border-radius: var(--svg-radius-pill); }
