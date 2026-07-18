@@ -4,6 +4,7 @@ import {
   defaultLinearDeskForm,
   formToLinearDeskRaw,
   parseLinearDeskForm,
+  syncIdentityAfterWidthChange,
 } from "@/features/admin/svg-editor/parametric/linearDeskFormModel";
 import { compileLinearDeskSvg } from "@/features/admin/svg-editor/parametric/compileLinearDeskSvg";
 
@@ -57,6 +58,25 @@ describe("linearDeskFormModel", () => {
   it("formToLinearDeskRaw is linear-desk type", () => {
     const raw = formToLinearDeskRaw(defaultLinearDeskForm("mm"));
     expect(raw.type).toBe("linear-desk");
+  });
+
+  it("syncs default slug/sku/name when width changes, keeps custom identity", () => {
+    const base = defaultLinearDeskForm("cm");
+    const synced = syncIdentityAfterWidthChange({ ...base, width: 140 });
+    expect(synced.slug).toBe("oando-linear-desk-1400");
+    expect(synced.sku).toBe("OANDO-LINEAR-DSK-1400");
+    expect(synced.name).toBe("Linear desk 1400");
+
+    const custom = syncIdentityAfterWidthChange({
+      ...base,
+      width: 140,
+      slug: "oando-client-special",
+      sku: "CUSTOM-1",
+      name: "Acme Desk",
+    });
+    expect(custom.slug).toBe("oando-client-special");
+    expect(custom.sku).toBe("CUSTOM-1");
+    expect(custom.name).toBe("Acme Desk");
   });
 
   it("maps pedestalTopGap and pedestalBackInset to mm schema fields (K3)", () => {

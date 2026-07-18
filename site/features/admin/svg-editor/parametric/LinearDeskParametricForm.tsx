@@ -4,13 +4,14 @@ import { useCallback, useMemo, useState, useTransition } from "react";
 import {
   convertLinearDeskFormUnit,
   defaultLinearDeskForm,
+  formToLinearDeskRaw,
   parseLinearDeskForm,
+  syncIdentityAfterWidthChange,
   type LinearDeskFormDisplay,
 } from "./linearDeskFormModel";
 /** K1: Maker-only pen (drawLinearDesk → compileMakerRecipeToPaths). */
 import { renderLinearDeskSvg } from "@/features/planner/asset-engine/svg/parametric";
 import { publishLinearDeskAction } from "./publishLinearDeskAction";
-import { formToLinearDeskRaw } from "./linearDeskFormModel";
 
 type Props = {
   readonly initialUnit?: "mm" | "cm";
@@ -39,10 +40,11 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
 
   const setNumber = useCallback((key: keyof LinearDeskFormDisplay, value: string) => {
     const n = Number(value);
-    setForm((prev) => ({
-      ...prev,
-      [key]: Number.isFinite(n) ? n : prev[key],
-    }));
+    setForm((prev) => {
+      if (!Number.isFinite(n)) return prev;
+      const next = { ...prev, [key]: n };
+      return key === "width" ? syncIdentityAfterWidthChange(next) : next;
+    });
   }, []);
 
   const onUnit = useCallback((unit: "mm" | "cm") => {

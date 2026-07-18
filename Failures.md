@@ -11,7 +11,15 @@ Zero permission holds. Keys rotated. DB + R2 granted.
 Intent: durable catalog = **Supabase + R2**.  
 `SVG_RELEASE_AUTHORITY=db` after parent-run place proof — not an owner hold.
 
-Parent: read env, run scripts, execute, commit, push. No “disk vs db” lectures.
+Parent: read env, run scripts, execute, commit, push. No “disk vs db” lectures.  
+**Do not wait on owner.** Blocker → note here → continue other work.
+
+---
+
+## Session note (agent)
+
+Chrome DevTools MCP: no Chrome stable binary on this host — browser C3/C4 via MCP blocked.  
+Workaround: API + unit/integration proof; browser when Chrome available.
 
 ---
 

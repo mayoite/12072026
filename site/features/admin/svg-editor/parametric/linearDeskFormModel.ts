@@ -12,6 +12,10 @@ import {
   type LinearDeskFields,
   type LinearDeskDisplayUnit,
 } from "@/features/planner/asset-engine/svg/parametric/linearDeskFields";
+import {
+  ensureCommercialSku,
+  ensureGuestVisibleSlug,
+} from "./linearDeskGuestIdentity";
 
 export type LinearDeskFormDisplay = {
   readonly displayUnit: LinearDeskDisplayUnit;
@@ -90,6 +94,32 @@ export function defaultLinearDeskForm(
     seriesId: "",
     // Guest inventory filters oando-* only
     slug: "oando-linear-desk-1600",
+  };
+}
+
+const DEFAULT_SLUG_RE = /^oando-linear-desk-\d+$/;
+const DEFAULT_SKU_RE = /^OANDO-LINEAR-DSK-\d+$/;
+const DEFAULT_NAME_RE = /^Linear desk \d+$/i;
+
+/**
+ * When width changes, refresh slug/sku/name only if they still match the
+ * auto pattern (never overwrite a custom client identity).
+ */
+export function syncIdentityAfterWidthChange(
+  form: LinearDeskFormDisplay,
+): LinearDeskFormDisplay {
+  const widthMm = Math.round(displayValueToMm(form.width, form.displayUnit));
+  const nextSlug = ensureGuestVisibleSlug(
+    `oando-linear-desk-${widthMm}`,
+    widthMm,
+  );
+  const nextSku = ensureCommercialSku("", widthMm);
+  const nextName = `Linear desk ${widthMm}`;
+  return {
+    ...form,
+    slug: DEFAULT_SLUG_RE.test(form.slug) ? nextSlug : form.slug,
+    sku: DEFAULT_SKU_RE.test(form.sku) ? nextSku : form.sku,
+    name: DEFAULT_NAME_RE.test(form.name) ? nextName : form.name,
   };
 }
 

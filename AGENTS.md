@@ -14,6 +14,7 @@
 ## Owner standing decisions (do not re-litigate)
 
 - **Full authority from owner.** Parent agent has **owner-level authority**. Zero owner blockers. Execute.
+- **Do not wait for the owner.** Keep proceeding every turn. If something blocks, log it in `Failures.md` and continue unrelated work. No idle permission loops.
 - **Evidence, then decide.** If the parent sees fresh evidence (command exit, code, browser), the parent **takes the call** — PASS / FAIL / ship / flip. Do not wait for owner rubber-stamp.
 - **Subagents encouraged** for explore / implement / test digs to **save parent context**. Use freely when parallel or heavy.
 - **No subagent product calls.** Subagents return evidence and drafts. Parent only decides PASS / cutover / ship / status.
