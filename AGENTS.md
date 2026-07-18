@@ -15,7 +15,8 @@
 
 - **Full authority from owner.** Parent agent has **owner-level authority**. Zero owner blockers. Execute.
 - **Evidence, then decide.** If the parent sees fresh evidence (command exit, code, browser), the parent **takes the call** — PASS / FAIL / ship / flip. Do not wait for owner rubber-stamp.
-- **No subagent decisions.** Subagents may explore or draft. They must **not** decide status, cutover, PASS, or product calls. Parent only.
+- **Subagents encouraged** for explore / implement / test digs to **save parent context**. Use freely when parallel or heavy.
+- **No subagent product calls.** Subagents return evidence and drafts. Parent only decides PASS / cutover / ship / status.
 - **No artificial owner blockers.** Keys rotated. DB + R2 granted. See `Failures.md` — owner blockers = NONE.
 - Do **not** re-explain disk vs `SVG_RELEASE_AUTHORITY` unless flipping cutover with evidence the parent has run.
 - Owner dual-write meaning: **Supabase (Products DB) + R2** for live durable catalog.
