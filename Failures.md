@@ -16,4 +16,4 @@ Live SVG authority = **disk**. Do not set `SVG_RELEASE_AUTHORITY=db` until brows
 
 Brand quality + place matter more than chrome. Greys ≠ brand done.
 
-Parametric desk (Admin PL-2/3) helps symbols; it does **not** clear this cutover alone.
+Parametric linear desk (Admin Part C / K1–C4) helps brand symbols. It does **not** clear this cutover alone. Form still draws via **template** multipath, not Maker, until K1.

@@ -26,23 +26,24 @@ export type PublishLinearDeskInput = Record<string, unknown>;
 function descriptorFromFields(
   fields: {
     slug?: string;
-    name?: string;
     sku?: string;
     widthMm: number;
     depthMm: number;
     heightMm: number;
   },
-  svg: string,
 ): BlockDescriptor {
   const slug = fields.slug ?? "linear-desk";
   const base = makeNewBlockDescriptorStub();
   const now = Math.floor(Date.now() / 1000);
+  const id =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : base.id;
   return {
     ...base,
-    id: base.id,
+    id,
     slug,
     sku: fields.sku,
-    name: fields.name,
     sourceProvenance: "native",
     geometry: {
       widthMm: fields.widthMm,
@@ -58,26 +59,18 @@ function descriptorFromFields(
     generatedAt: now,
     variant: "fixed",
     fixed: { sizingType: "fixed" },
-    // Keep stub shape; compile is injected with prebuilt SVG
-    themeTokens: { currentColor: "currentColor" },
   } as BlockDescriptor;
 }
 
 export async function publishLinearDeskAction(
   raw: PublishLinearDeskInput,
 ): Promise<PublishDescriptorResult & { readonly svgPath?: string }> {
-  try {
-    await resolveAuthContext("admin");
-  } catch {
-    return { success: false, error: "Admin access required" };
-  }
-
   let actorId = DEV_BYPASS_USER.id;
   try {
     const auth = await resolveAuthContext("admin");
     actorId = auth.user?.id ?? DEV_BYPASS_USER.id;
   } catch {
-    // already failed above if hard fail; keep bypass actor for local
+    return { success: false, error: "Admin access required" };
   }
 
   const compiled = compileLinearDeskSvg(raw);
@@ -86,7 +79,7 @@ export async function publishLinearDeskAction(
   }
 
   const { fields, svg } = compiled;
-  const descriptor = descriptorFromFields(fields, svg);
+  const descriptor = descriptorFromFields(fields);
 
   const dualWrite = await resolveSvgPublishDualWriteDeps();
 

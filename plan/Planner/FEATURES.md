@@ -11,7 +11,7 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 
 **Only two plan docs per track:** `CHECKLIST.md` + `FEATURES.md`.
 
-**Code roots:** `site/features/planner/` · `site/app/planner/` · `site/app/api/planner/` · `site/platform/drizzle/schema/planner.ts` · `site/inventory/descriptors/` · `site/public/svg-catalog/`
+**Code roots:** `site/features/planner/`  /  `site/app/planner/`  /  `site/app/api/planner/`  /  `site/platform/drizzle/schema/planner.ts`  /  `site/inventory/descriptors/`  /  `site/public/svg-catalog/`
 
 Table paths are relative to `site/features/planner/` unless they start with `site/`. `app/...` means `site/app/...`.
 
@@ -21,7 +21,7 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 
 ---
 
-## Phase 1 — start and BOQ
+## Phase 1  -  start and BOQ
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -29,8 +29,8 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 | Marketing, features, help | `landing/`, `help/`, `app/planner/(marketing)/` | Browser proof open |
 | Setup gate (one gate) | `onboarding/ProjectSetupGate.tsx`, `onboarding/ProjectSetupStep.tsx` | Project name is mandatory; no skip or edit-later path |
 | Onboarding coach | `onboarding/OnboardingCoach.tsx` | Browser proof open |
-| Guest permissions | `model/plannerPermissions.ts`, `lib/commands/plannerAccessContext.ts` | — |
-| Session / errors | `ui/PlannerSessionDialog.tsx`, `editor/PlannerErrorBoundary.tsx` | — |
+| Guest permissions | `model/plannerPermissions.ts`, `lib/commands/plannerAccessContext.ts` |  -  |
+| Session / errors | `ui/PlannerSessionDialog.tsx`, `editor/PlannerErrorBoundary.tsx` |  -  |
 | Project document (mm) | `model/` (`types.ts`, `units.ts`, `actions/`, `operations/`) | P2 PARTIAL: mm canonical, display units (mm/cm/m/in/ft-in), linear/angular/area/quantity precision via `PLANNER_PRECISION`. Wall centreline/joins in `wallContract.ts`. Remaining: fail-visibly on unsupported versions; preserve unknown safe data when schema permits |
 | Conversion events | `conversionContract.ts`, `OOPlannerWorkspace` | `BOQ_GENERATED`, `HANDOFF_INTENT` / `SUCCESS` / `FAILURE` emit from Review export and Send to Oando. `PROJECT_START` / `FIRST_PLACEMENT` still open |
 | Primary BOQ | `shared/export/projectFurnitureBoq.ts` | Live Review/export/handoff path. Legacy `workstationBoqV0` specialty export remains; `shared/boq/buildBoq` unused by live host |
@@ -39,7 +39,7 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 
 ---
 
-## Phase 2 — design workspace
+## Phase 2  -  design workspace
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -49,7 +49,7 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 | Walls / openings | `model/wallContract.ts`, `model/actions/walls.ts`, `model/actions/openings.ts`, `lib/geometry/wallGraph.ts`, `lib/geometry/roomOutline.ts`, `lib/geometry/dimensions.ts`, `lib/geometry/orthogonal.ts`, `lib/geometry/snapping.ts`, `lib/geometry/openingPlacement.ts`, `canvas/PlannerFabricStage.tsx`, `canvas/wallSnapMarker.ts`, `editor/ExactRoomPanel.tsx`, `editor/PropertiesPanel.tsx` | P2 PASS centreline/joins. P4 OPEN residual: exact room outline + auto wall/overall dims unit-landed (`roomOutline`/`dimensions`/ExactRoomPanel); sticky ortho OR Shift; dimension two-click tool; join-aware endpoint move (unit). Remaining: wall grips UI, opening drag reposition, browser proof (PF-05/PF-06) |
 | Edit / undo | `PropertiesPanel`, `alignDistribute`, `gridLayout` | Align/distribute + multi-select array (row / grid / 5-col); group/ungroup still absent; wall orthogonal sticky lock on tool rail |
 | Catalog UI | `editor/InventoryPanel.tsx`, `catalog/catalogSearch.ts`, `catalog/catalogBuyerVisibility.ts` | UI-CAT-* browser proof open |
-| Workstation config | `editor/WorkstationConfiguratorPanel.tsx`, `catalog/workstationConfiguratorV0.ts` | — |
+| Workstation config | `editor/WorkstationConfiguratorPanel.tsx`, `catalog/workstationConfiguratorV0.ts` |  -  |
 | Catalog APIs | `app/api/planner/catalog/route.ts`, `app/api/planner/catalog/configurator/route.ts`, `app/api/planner/catalog/svg-blocks/route.ts` | `svg-blocks` strictly dual-reads native and legacy DB rows and filters internal inventory; the live DB currently returns zero buyer-visible SVG items |
 | SVG on canvas | `canvas/fabricBlock2D.ts`, `catalog/resolvePlanSvgUrl.ts`, `svgPlanSymbolCache.ts` | Place stamps `/svg-catalog/{slug}.svg` when preview missing; paint prefers published SVG then Block2D; sparse disk set remains |
 | Asset publish | `asset-engine/`, `site/features/admin/svg-editor/publish/publishDescriptorWithPipeline.ts` | PNG thumb stub; consumer does not read committed revision artifact bytes |
@@ -62,7 +62,7 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 
 ---
 
-## Phase 3 — scale, validate, and price
+## Phase 3  -  scale, validate, and price
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -77,7 +77,7 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 
 ---
 
-## Phase 4 — deliver and handoff
+## Phase 4  -  deliver and handoff
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -115,7 +115,7 @@ Not a customer phase. Disk still supplies the live SVG bytes. Both Admin publish
 | `POST /api/planner/ai-advisor` | `app/api/planner/ai-advisor/route.ts` |
 | `POST /api/planner/sketch-to-plan` | `app/api/planner/sketch-to-plan/route.ts` |
 | `POST /api/planner/project-sketch` | `app/api/planner/project-sketch/route.ts` |
-| `POST /api/planner/generated-glb` | `app/api/planner/generated-glb/route.ts` — Supabase `catalog-assets/generated/*` or 501 |
+| `POST /api/planner/generated-glb` | `app/api/planner/generated-glb/route.ts`  -  Supabase `catalog-assets/generated/*` or 501 |
 | `POST /api/planner/handoff` | `app/api/planner/handoff/route.ts` |
 
 ---
@@ -131,10 +131,10 @@ Not a customer phase. Disk still supplies the live SVG bytes. Both Admin publish
 
 ## Tests
 
-`site/tests/unit/features/planner/` (incl. `cloud-store/`, `catalog-api/`) · `site/tests/integration/features/planner/`
+`site/tests/unit/features/planner/` (incl. `cloud-store/`, `catalog-api/`)  /  `site/tests/integration/features/planner/`
 
 ---
 
 ## Reference (not truth)
 
-`CHECKLIST.md` · `docs/architecture/06-UI-BENCHMARK.md` · `docs/architecture/08-DATABASE-SVG-CONTRACT.md`
+`CHECKLIST.md`  /  `docs/architecture/06-UI-BENCHMARK.md`  /  `docs/architecture/08-DATABASE-SVG-CONTRACT.md`

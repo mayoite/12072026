@@ -2,15 +2,15 @@
 
 **Status:** OPEN  
 **Pair:** `FEATURES.md` = live code map (feature → path → gap).  
-**This file:** all-encompassing execution document for the track — evidence rules **and** full phase checklist (what is required, what exists, what is open).  
+**This file:** all-encompassing execution document for the track  -  evidence rules **and** full phase checklist (what is required, what exists, what is open).  
 **Active blockers:** `../../Failures.md`  
 **Doc set:** only `CHECKLIST.md` + `FEATURES.md` per track.
 
 ---
 
-## Part A — Evidence and completion rules
+## Part A  -  Evidence and completion rules
 
-_Former COMPLETION-CONTRACT content. Wins on how to prove done._
+_Evidence and completion rules. Wins on how to prove done._
 
 **Status:** OPEN  
 **Authority:** This file is the **execution contract** for finishing Planner.  
@@ -19,7 +19,7 @@ _Former COMPLETION-CONTRACT content. Wins on how to prove done._
 **UI bar:** `docs/architecture/06-UI-BENCHMARK.md`.  
 **Security bar:** `docs/architecture/10-SECURITY-BENCHMARK.md`.  
 **Active blockers:** `../../Failures.md` (real unresolved only).  
-**Agent reports:** `../../agent-reports/` — short files + INDEX, never one mega dump.
+**Agent reports:** `../../agent-reports/`  -  short files + INDEX, never one mega dump.
 
 ---
 
@@ -57,7 +57,7 @@ A checklist item is **PASS** only when **all** that apply are true:
 
 1. **Code** exists on the claimed path (FEATURES or this file).  
 2. **Automated proof** for pure logic: focused vitest exit 0 with named files.  
-3. **Browser proof** for customer-visible behaviour: Playwright or documented Chromium session — route, viewport, steps, console errors = 0, failed requests = 0.  
+3. **Browser proof** for customer-visible behaviour: Playwright or documented Chromium session  -  route, viewport, steps, console errors = 0, failed requests = 0.  
 4. **Security-sensitive** behaviour: unit or integration that proves owner scoping / CSRF / role; browser if customer path.  
 5. **Command + exit** recorded in the same session that claims PASS.  
 6. Checkbox flipped **in the same change** as the proof, or left OPEN.
@@ -66,7 +66,7 @@ A checklist item is **PASS** only when **all** that apply are true:
 
 ---
 
-## 3. Evidence protocol (exceeds FINISH-PLAN)
+## 3. Evidence protocol (exceeds CHECKLIST Part B (phases))
 
 ### 3.1 Gates (release acceptance)
 
@@ -132,7 +132,7 @@ Inbound links (Dashboard, Choose Product, Portal, Admin) tested as **entry contr
 
 ## 5. Product non-negotiables
 
-Carry forward from FINISH-PLAN, enforced here:
+Carry forward from CHECKLIST Part B (phases), enforced here:
 
 - Sketch-to-Plan stays; AI optional overlay, never required, never docked permanent.  
 - Layers not permanent customer panel; no customer `Panels` menu.  
@@ -151,29 +151,29 @@ Carry forward from FINISH-PLAN, enforced here:
 
 ## 6. External benchmark (capability only)
 
-Same spirit as FINISH-PLAN. **No** copying assets, code, layout, or trade dress.
+Same spirit as CHECKLIST Part B (phases). **No** copying assets, code, layout, or trade dress.
 
 | Source | Expectation |
 |--------|-------------|
 | AutoCAD | Snaps, units vs display, exact dims, grips, recovery, underlays, internal layers |
 | SmartDraw | Scratch/template/import, closed rooms, typed dims, wall openings, calibrate import, distance guides, BOQ/export |
 
-Official refs remain listed in `this checklist (phase section)` § External benchmark.
+Official refs remain listed in `Part B (phase checklist in this file)` § External benchmark.
 
 ---
 
-## 7. Failure registry (PF) — status vocabulary
+## 7. Failure registry (PF)  -  status vocabulary
 
 Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**.  
 Update only with fresh evidence.
 
 | ID | Failure | Bar to clear | Status seed |
 |----|---------|--------------|-------------|
-| PF-01–04 | Guest ID / draft isolation / tests | Browser two-UUID + unit | PASS (see FINISH-PLAN) |
+| PF-01–04 | Guest ID / draft isolation / tests | Browser two-UUID + unit | PASS (see CHECKLIST Part B (phases)) |
 | PF-05 | Room outline incomplete | Exact rectangle room + closed geometry + unit + browser | OPEN (impl unit) |
 | PF-06 | Persistent dimensions incomplete | Durable wall/room dims + zoom readable + browser | OPEN (impl unit) |
 | PF-07–08 | Sketch UI / guest auth | TopBar + guest CSRF | PASS (code); browser OPEN |
-| PF-09 | Scene GLB export honesty | Real download **or** remove menu item / honest unsupported | PASS (honesty) — no menu claim; preflight unsupported; scene export still P11 OPEN |
+| PF-09 | Scene GLB export honesty | Real download **or** remove menu item / honest unsupported | PASS (honesty)  -  no menu claim; preflight unsupported; scene export still P11 OPEN |
 | PF-10 | Quote to Oando | Live CRM + browser reference | PARTIAL (API/code PASS; browser OPEN) |
 | PF-11 | Overlap / clearance validation | Outside room + clearance + unit | PASS (unit); browser OPEN |
 | PF-12 | Step completion awareness | Step state honest | PASS |
@@ -200,92 +200,92 @@ Add new PF ids rather than burying issues.
 
 ## 8. Execution phases
 
-Same phase ids as FINISH-PLAN (P0–P17) so work maps 1:1.  
+Same phase ids as CHECKLIST Part B (phases) (P0–P17) so work maps 1:1.  
 **Difference:** each phase has **Exit gate** + **Proof required** + **Stop condition**.
 
-### P0 — Test isolation
+### P0  -  Test isolation
 
 **Proof:** no canonical catalog mutation; SW/dev chunk proof; deterministic browser bootstrap.  
 **Exit:** Planner tests isolated; browser serves current source; baseline FAIL list reproducible.  
-**Stop:** if tests write `site/public` or inventory — fix isolation before features.
+**Stop:** if tests write `site/public` or inventory  -  fix isolation before features.
 
-### P1 — Entry, UUID, identity
+### P1  -  Entry, UUID, identity
 
 **Exit:** two guest UUIDs = two drafts; reload restores only that draft; no ID in source.  
 **Proof:** unit entry matrix + `tests/e2e/planner-entry-states.spec.ts` (or equivalent) green.
 
-### P2 — Document, units, precision
+### P2  -  Document, units, precision
 
 **Exit:** measured size stable across save/load/unit/export.  
 **Proof:** round-trip unit suite; unsupported schema fails visibly.
 
-### P3 — Workflow shell
+### P3  -  Workflow shell
 
 **Exit:** customer knows step and next action without menus.  
 **Proof:** desktop canvas ≥65% default; one save state; empty properties collapsed; mobile shell deliberate (portrait + landscape).
 
-### P4 — Draw room
+### P4  -  Draw room
 
 **Exit:** measured closed room + doors/windows without guessing scale.  
 **Proof:** unit geometry + browser “exact room” row in P16.  
 **Must clear:** PF-05, PF-06, orthogonal lock, grips or documented alternative.
 
-### P5 — Import, underlay, Sketch-to-Plan
+### P5  -  Import, underlay, Sketch-to-Plan
 
 **Exit:** guest upload → calibrate → preview → accept → undo.  
 **Proof:** CSRF/rate-limit unit; browser sketch journey; underlay scale survives reload.
 
-### P6 — Place furniture
+### P6  -  Place furniture
 
 **Exit:** workstation layout with exact spacing without endless drag.  
 **Proof:** align/distribute/array unit + browser place/configure row.
 
-### P7 — 2D/3D parity
+### P7  -  2D/3D parity
 
 **Exit:** same project equivalent in 2D and 3D after reload.  
 **Proof:** `sceneParity` unit + browser switch row; no site/public writes.
 
-### P8 — Validation and review
+### P8  -  Validation and review
 
 **Exit:** Review never Ready with known blocking errors.  
 **Proof:** outside-room + clearance + overlap unit; ReviewQuote tests; browser validation row.
 
-### P9 — BOQ truth
+### P9  -  BOQ truth
 
 **Exit:** same revision → same BOQ in every format.  
 **Proof:** one canonical builder; demo vs approved price separation; branded PDF wired + content test.
 
-### P10 — Send to Oando
+### P10  -  Send to Oando
 
 **Exit:** one send → verifiable Oando reference.  
 **Proof:** unit handoff + **live CRM browser** (API 200 alone insufficient for full PASS).
 
-### P11 — Export
+### P11  -  Export
 
 **Exit:** every menu export downloads valid file or is removed.  
 **Proof:** Chromium download tests; GLB implemented or removed; no empty corrupt files.
 
-### P12 — AI
+### P12  -  AI
 
 **Exit:** AI total failure does not block draw/place/BOQ/handoff.  
 **Proof:** optional overlay; keyboard usable; no invented SKUs/prices.
 
-### P13 — Persistence
+### P13  -  Persistence
 
 **Exit:** no silent loss on reload/crash/retry.  
 **Proof:** one save state machine; conflict UI; owner-scoped cloud save (PF-30).
 
-### P14 — A11y
+### P14  -  A11y
 
 **Exit:** axe no serious/critical on full journey; keyboard commercial outcome.  
 **Proof:** axe + keyboard matrix; dialogs trap focus; 44×44 frequent targets.
 
-### P15 — Performance / structure
+### P15  -  Performance / structure
 
 **Exit:** large-plan fixture usable; mobile entry not main-thread locked.  
 **Proof:** budgets measured; `OOPlannerWorkspace` split by workflow; dead paths removed.
 
-### P16 — Browser matrix
+### P16  -  Browser matrix
 
 Every cell needs a **fresh** pass. Viewports:
 
@@ -296,9 +296,9 @@ Every cell needs a **fresh** pass. Viewports:
 | Mobile portrait | 390×844 |
 | Mobile landscape | 844×390 |
 
-Copy journey rows from FINISH-PLAN § P16. **No screenshots-only PASS.**
+Copy journey rows from CHECKLIST Part B (phases) § P16. **No screenshots-only PASS.**
 
-### P17 — Final gates and docs
+### P17  -  Final gates and docs
 
 **Exit:** all gates in §3.1 green; FEATURES.md matches code; Failures.md only real blockers; stale plans removed after acceptance.
 
@@ -339,9 +339,9 @@ A blocker stops **only** direct dependants. Unrelated phases continue.
 
 ---
 
-## 11. How this exceeds `this checklist (phase section)`
+## 11. How this exceeds `Part B (phase checklist in this file)`
 
-| Area | FINISH-PLAN | This contract |
+| Area | CHECKLIST Part B (phases) | This contract |
 |------|-------------|----------------|
 | Evidence | Strong intent | Explicit PASS recipe + gate table |
 | Reports | Implicit | Short multi-file + INDEX mandatory |
@@ -352,7 +352,7 @@ A blocker stops **only** direct dependants. Unrelated phases continue.
 | False completion | Forbidden | Operationalized (PARTIAL vs PASS) |
 | Typecheck hygiene | Not stated | No PASS under `.next` type race |
 
-`this checklist (phase section)` remains the historical detailed checklist.  
+`Part B (phase checklist in this file)` remains the historical detailed checklist.  
 **Use this contract for new claims of done.**
 
 ---
@@ -361,13 +361,13 @@ A blocker stops **only** direct dependants. Unrelated phases continue.
 
 Do not reorder without owner alignment.
 
-1. **Stabilize gates** — layout, lint, typecheck (clean), focused planner tests.  
-2. **Hold security** — PF-30/31 stay green.  
-3. **P4 drawing** — PF-05 room, PF-06 dimensions, orthogonal.  
-4. **P8–P9 commercial** — validation outside-room, branded BOQ, Review tests.  
-5. **P3 shell** — one save state, empty properties, canvas share.  
-6. **P16 browser** — entry, draw, place, review, handoff (staging).  
-7. **P17 release** — full gates + build + Failures.md clean.
+1. **Stabilize gates**  -  layout, lint, typecheck (clean), focused planner tests.  
+2. **Hold security**  -  PF-30/31 stay green.  
+3. **P4 drawing**  -  PF-05 room, PF-06 dimensions, orthogonal.  
+4. **P8–P9 commercial**  -  validation outside-room, branded BOQ, Review tests.  
+5. **P3 shell**  -  one save state, empty properties, canvas share.  
+6. **P16 browser**  -  entry, draw, place, review, handoff (staging).  
+7. **P17 release**  -  full gates + build + Failures.md clean.
 
 ---
 
@@ -385,9 +385,9 @@ Until then: **Status remains OPEN.**
 
 ---
 
-## Part B — Phase checklist (full)
+## Part B  -  Phase checklist (full)
 
-_Former FINISH-PLAN content. Full required work: what is there and what is not._
+_Full phase checklist: what is required, what exists, what is open._
 
 Status: OPEN.
 

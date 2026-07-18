@@ -2,26 +2,26 @@
 
 **Status:** OPEN  
 **Pair:** `FEATURES.md` = live code map (feature → path → gap).  
-**This file:** all-encompassing execution document for the track — evidence rules **and** full phase checklist (what is required, what exists, what is open).  
+**This file:** evidence (Part A) + phases A0–A14 (Part B) + parametric long track (Part C).  
 **Active blockers:** `../../Failures.md`  
-**Doc set:** only `CHECKLIST.md` + `FEATURES.md` per track.
+**Tasks:** `IMPLEMENTATION-PLAN.md` · **Stack:** `REALITY-AND-STACK.md`
+
+**How to read:** Part A = how to prove done. Part B = full work list. Part C = **linear desk parametric** priority ship.  
+**Status honesty:** unit green + browser still open = **PARTIAL**, not PASS.
 
 ---
 
 ## Part A — Evidence and completion rules
 
-_Former COMPLETION-CONTRACT content. Wins on how to prove done._
-
 **Status:** OPEN  
-**Authority:** This file is the **execution contract** for finishing Admin.  
+**Authority:** This file is the **execution contract** for finishing Admin.
 
-**Code maps:** `FEATURES.md` (live paths; code-area sections may be finer than contract phase groups).  
-**Detailed checklist:** `this checklist (phase section)`.  
-**UI bar:** `docs/architecture/07-ADMIN-UI-BENCHMARK.md` · shared shell in `docs/architecture/06-UI-BENCHMARK.md`.  
-**Security bar:** `docs/architecture/10-SECURITY-BENCHMARK.md`.  
-**DB-SVG contract:** `docs/architecture/08-DATABASE-SVG-CONTRACT.md`.  
-**Active blockers:** `../../Failures.md` (real unresolved only).  
-**Agent reports:** `../../agent-reports/` — short slices + `ADMIN.md` (one track file). Never one mega dump.
+**Code maps:** `FEATURES.md`  
+**UI bar:** `docs/architecture/07-ADMIN-UI-BENCHMARK.md` · shared shell `docs/architecture/06-UI-BENCHMARK.md`  
+**Security bar:** `docs/architecture/10-SECURITY-BENCHMARK.md`  
+**DB-SVG contract:** `docs/architecture/08-DATABASE-SVG-CONTRACT.md`  
+**Active blockers:** `../../Failures.md`  
+**Agent reports:** `../../agent-reports/` · `ADMIN.md` (one track file). Never one mega dump.
 
 ---
 
@@ -32,7 +32,8 @@ Deliver a trustworthy **inventory + commercial admin** workflow:
 1. Author SVG symbols and descriptors from isolated drafts.  
 2. Publish to **disk** (live authority) with honest dual-write when DB+R2 ready.  
 3. Manage catalog lifecycle, families, price books, and ops surfaces.  
-4. Hand trusted inventory to Planner and Site consumers.
+4. Hand trusted inventory to Planner and Site consumers.  
+5. **Parametric brand library (Part C):** forms → Maker.js drawers → multipath SVG → Fabric place + BOQ.
 
 **Not:** Planner redesign, Site marketing redesign, production CRM backend, fake R2/DB cutover.
 
@@ -89,8 +90,8 @@ Run from repo root. All must exit **0** for release claim:
 | Layout | `pnpm run check:layout` |
 | Lint | `pnpm run lint` |
 | Typecheck | `pnpm run typecheck` |
-| Admin-focused unit | Named vitest files under `tests/unit/app/admin/`, `tests/unit/app/api/admin/`, `tests/unit/features/admin/` |
-| Admin browser (when claiming UI) | `pnpm --filter oando-site run` scripts for admin Playwright — only with honest auth mode recorded |
+| Admin-focused unit | Named vitest under `tests/unit/app/admin/`, `tests/unit/app/api/admin/`, `tests/unit/features/admin/` |
+| Admin browser (when claiming UI) | Playwright admin scripts — honest auth mode recorded |
 | Build | `pnpm run build` (or site production build) |
 
 Any gate FAIL → product phase may still progress; **release PASS is forbidden**.
@@ -115,7 +116,7 @@ Update `agent-reports/ADMIN.md` in place (Deploy auth, Done/Open next, Date).
 |------|------|
 | Implementer | Change code + tests; no PASS claim without commands |
 | Parent | Re-run focused tests; keep ADMIN.md honest |
-| Never | Mark FINISH checkboxes PASS without parent evidence; never fake R2/DB cutover |
+| Never | Mark checkboxes PASS without parent evidence; never fake R2/DB cutover |
 
 ---
 
@@ -127,6 +128,7 @@ Update `agent-reports/ADMIN.md` in place (Deploy auth, Done/Open next, Date).
 - `site/features/admin/**`
 - Admin-facing CRM shell routes under `/admin/crm/**` (demo store honesty)
 - SVG publish pipeline, lifecycle, price books, catalog managers, themes, analytics, plans
+- Parametric library under `features/planner/asset-engine/svg/parametric/` + Admin form (Part C)
 - Admin tests under `site/tests/**` that target admin
 - `plan/Admin/**`, `agent-reports/ADMIN.md`
 
@@ -149,7 +151,8 @@ Update `agent-reports/ADMIN.md` in place (Deploy auth, Done/Open next, Date).
 - Admin layout requires `requireAuthUser("/admin", "admin")`.  
 - Admin APIs require `requireAdminSession` or `withAuth({ role: "admin" })`.  
 - CSRF + rate limits on mutating admin routes stay fail-closed.  
-- UI admits disk authority where source is disk (`AdminSvgEditorListView` copy).
+- UI admits disk authority where source is disk (`AdminSvgEditorListView` copy).  
+- Parametric pen = **Maker.js only** (Part C). Forms only. No AI geometry.
 
 ---
 
@@ -158,311 +161,515 @@ Update `agent-reports/ADMIN.md` in place (Deploy auth, Done/Open next, Date).
 Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**.  
 Update only with fresh evidence.
 
-**Id scheme:** design prefix is **AF-** (`plan/_meta/DOC-SET-DESIGN.md`).  
+**Id scheme:** design prefix is **AF-**.  
 **ADM-*** ids are session aliases for auth/SVG slices (same bar). FEATURES gap rows may cite either.
 
 | ID | Alias | Failure | Bar to clear | Status seed |
 |----|-------|---------|--------------|-------------|
-| AF-10 / AF-01 | ADM-AUTH-01 | Unauth admin pages not proven | Unit + optional browser with bypass off → `/access` | PARTIAL (unit green 2026-07-17; browser OPEN) |
-| AF-10b / AF-03 | ADM-AUTH-02 | Unauth admin APIs not proven | Unit 401/403 with bypass off | PARTIAL (unit green 2026-07-17; browser OPEN) |
+| AF-10 / AF-01 | ADM-AUTH-01 | Unauth admin pages not proven | Unit + optional browser with bypass off → `/access` | PARTIAL (unit; browser OPEN) |
+| AF-10b / AF-03 | ADM-AUTH-02 | Unauth admin APIs not proven | Unit 401/403 with bypass off | PARTIAL (unit; browser OPEN) |
 | AF-10c / AF-04 | ADM-AUTH-03 | Deploy auth with real session | Preview/prod without bypass | OPEN |
 | AF-02 | ADM-SVG-DISK | Publish disk path regressions | Isolated unit + optional browser | OPEN |
-| AF-02 / AF-18 | ADM-SVG-DUAL | Dual-write honesty | `resolveSvgPublishDualWrite` modes unit green; no fake R2 success | PARTIAL (modes unit green) |
+| AF-02 / AF-18 | ADM-SVG-DUAL | Dual-write honesty | `resolveSvgPublishDualWrite` modes unit green; no fake R2 success | PARTIAL (modes unit) |
 | AF-18 | ADM-DB-SVG | Full cutover (DB-SVG-01..16) | Failures.md + 08-contract | OPEN |
-| AF-08 | ADM-CRM-HUB | CRM index hub vs redirect | Unit matches live hub page | PASS (unit hub + localStorage labels EXEC-6 2026-07-17); browser OPEN |
-| AF-07 | ADM-PRICE | Price book governance browser | Playwright with honest auth | OPEN (UI risk FAIL in benchmark seed) |
+| AF-08 | ADM-CRM-HUB | CRM index hub vs redirect | Unit matches live hub page | PARTIAL (unit; browser OPEN) |
+| AF-07 | ADM-PRICE | Price book governance browser | Playwright with honest auth | OPEN |
 | AF-09 | ADM-FAM | Family release browser journey | Browser proof | OPEN |
+| **K1** | ADM-PARAM-MAKER | Form/CLI/publish use template pen, not Maker | Single Maker `drawLinearDesk`; unit green | OPEN (code verified 2026-07-18) |
+| **K2** | ADM-PARAM-PROOF | “via Maker” claim without unit | Unit fails if template path used | OPEN |
+| **K3** | ADM-PARAM-FIELDS | Form UI ≠ full live Zod knobs | Form model maps schema; UI missing `pedestalTopGap` / `pedestalBackInset` | OPEN (schema + model; UI incomplete) |
 
-Other AF seeds from FEATURES/benchmark (not re-verified here): AF-05 bulk UX, AF-06 phone catalog, AF-11 AI SVG missing, AF-12 isolation hash gate, AF-13 internal language, AF-17 Planner consumer bytes.
+Other AF seeds: AF-05 bulk UX, AF-06 phone catalog, AF-11 AI SVG missing, AF-12 isolation hash gate, AF-13 internal language, AF-17 Planner consumer bytes.
 
 Add new **AF-** ids rather than burying issues.
 
 ---
 
-## 7. Execution phases (map to FINISH-PLAN)
+## 7. Execution phases (map to Part B)
 
-Same phase ids as `this checklist (phase section)` so work maps 1:1.  
-**Difference:** each phase has **Exit gate** + **Proof required** + **Stop condition**.
-
-### A0 — Test isolation
-
-**Proof:** no canonical catalog mutation; admin publish tests use tmp dirs.  
-**Exit:** Admin unit suites isolated; baseline FAIL list reproducible.  
-**Stop:** if tests write committed inventory — fix isolation first.
-
-### A1 — Auth gates
-
-**Exit:** unauth `/admin` → access (proxy + layout); unauth `/api/admin/*` → 401/403.  
-**Proof:** unit with bypass mocked **off**; document that local `DEV_AUTH_BYPASS=1` is expected for interactive admin work.  
-**Stop:** do not claim deploy auth from bypass-on sessions.
-
-### A2 — SVG author + publish (disk)
-
-**Exit:** compile → S4 disk → persist; rollback/idempotent paths unit-green.  
-**Proof:** focused publish unit; browser smoke optional.
-
-### A3 — Dual-write honesty (not cutover)
-
-**Exit:** modes `skipped_no_db` / `skipped_r2_unavailable` / `enabled` unit-proven; UI admits disk.  
-**Proof:** `resolveSvgPublishDualWrite.test.ts`.  
-**Stop:** never mark DB-SVG cutover PASS without R2 + revision authority proof.
-
-### A4 — Catalog lifecycle + families + price books
-
-**Exit:** lifecycle/bulk/price book code paths unit-green; browser OPEN until proven.  
-**Proof:** unit + optional Playwright.  
-**EXEC-5 (2026-07-17):** lifecycle draft→live→retire→restore, family authoring, price-book draft→approve→activate unit-green; ADM-PRICE / ADM-FAM browser remain OPEN.
-
-### A5 — Ops + CRM demo honesty
-
-**Exit:** CRM hub live; localStorage demo labelled; no production CRM claim.  
-**Proof:** hub unit + nav tests + page shells (EXEC-6 2026-07-17 unit green). Browser OPEN.
-
-### A6 — Release gates
-
-**Exit:** layout + lint + typecheck + focused admin tests + build as required by release policy.  
-**Proof:** `check:layout` PASS EXEC-6; focused CRM/ops unit + focused eslint PASS; full release:gate **not** claimed.
+| Phase | Focus | Exit |
+|-------|-------|------|
+| A0 | Test isolation | No canonical catalog mutation |
+| A1 | Auth gates | Unauth → access / 401/403 (unit) |
+| A2 | Excalidraw draft studio | Draft path only; not parametric authority |
+| A3 | Disk publish pipeline | Compile fail-closed; S4 disk |
+| A4–A6 | Lifecycle / families / price books | Unit green; browser OPEN |
+| A7–A8 | DB-SVG / consumer | Disk authority until cutover |
+| A9–A11 | Ops / CRM honesty / security | Demo honesty; auth matrix |
+| A12–A14 | Release gates / a11y / residual AF | `check:layout` + focused proof |
+| **Part C** | Parametric Maker library | K1–K3 → C3 browser → C4 place |
 
 ---
 
-## 8. Local auth note (operators)
+## Part B — Phase checklist
 
-- Interactive admin against a running dev server usually needs `DEV_AUTH_BYPASS=1` in repo-root `.env.local` (non-production).  
-- That flag is **local convenience only**.  
-- Proving production authorization requires restart/session **without** bypass (or a real admin Supabase session).  
-- Do **not** kill an owner’s running dev server to flip the flag; document OPEN instead.
+_Phase work list. Status claims need Part A evidence._
 
----
-
-## Part B — Phase checklist (full)
-
-_Former FINISH-PLAN content. Full required work: what is there and what is not._
-
-Status: OPEN.
-
-**Proof bar:** Evidence section above + FEATURES.md code paths. PASS needs same-session proof.
-
-Owner instruction: Admin track. Agents only when the owner asks; parent re-verifies gates.
-
-## Outcome
-
-Deliver a trustworthy inventory + commercial admin workflow.
-
-1. Author SVG symbols and descriptors.  
-2. Publish with disk as live authority (honest dual-write when ready).  
-3. Manage catalog lifecycle, families, and price books.  
-4. Serve Planner and Site consumers with trusted inventory.
-
-## Truth rules
-
-- Live code wins.
-- Fresh browser behaviour wins.
-- Every checklist item starts unchecked until proven in-session.
-- Unit tests do not prove UI acceptance alone.
-- Old reports do not prove completion.
-- `results/` contains raw output only.
-- Active blockers belong in `Failures.md`.
-- No Admin failure may be hidden behind a later phase.
-- No completed item may remain marked `OPEN`.
-- No unverified item may be marked complete.
-- Bypass-on probes are not production auth proof.
-
-## Scope boundary
-
-Included:
-
-- Admin routes and API routes.
-- SVG editor, publish pipeline, lifecycle, rollback, bulk import.
-- Catalog managers (standard / configurator / planner-facing).
-- Product families, price books, themes, analytics, plans, inventory views.
-- Admin CRM shell under `/admin/crm/**` (demo workspace honesty).
-- Admin auth gates (layout, proxy, API).
-- Admin tests and browser acceptance for Admin surfaces.
-- `plan/Admin/**` and `agent-reports/ADMIN.md`.
-
-Excluded:
-
-- Planner canvas/document redesign.
-- Site marketing redesign.
-- Full DB-SVG cutover faked as done.
-- Production CRM backend.
-- Tech-docs product work.
-- Commits/pushes unless owner asks.
-
-## Non-negotiable product decisions
-
-- Disk (`inventory/descriptors/`, `public/svg-catalog/`) is live publish authority until cutover is proven.
-- Products DB + R2 dual-write is optional and fail-soft for disk success when R2 is dead.
-- Dual-write stub payloads are not revision authority.
-- Tests never mutate canonical catalog files.
-- `requireAuthUser("/admin", "admin")` on admin layout.
-- Admin APIs use `requireAdminSession` or `withAuth({ role: "admin" })`.
-- CSRF + rate limits on mutations stay fail-closed.
-- UI copy admits disk authority while DB is not live authority.
-- `DEV_AUTH_BYPASS=1` is local/non-prod only (`isDevAuthBypassEnabled`).
-
-## Publish authority (live)
+### Publish authority (live)
 
 | Surface | Authority | Notes |
 |---------|-----------|--------|
 | `publishDescriptorWithPipeline.ts` | Disk | Optional `dbRepository` / artifact store |
 | `resolveSvgPublishDualWrite.ts` | Gate | enabled only if DB configured **and** R2 ready |
 | `publishSvgEditorAction.ts` / `POST /api/admin/svg-editor` | Disk + optional dual-write | Same injection rules |
+| Parametric publish | `publishLinearDeskAction.ts` | Disk via same pipeline; still template SVG until K1 |
 | Lifecycle / audit | `results/admin/catalog-ops/` | Not Products DB |
 
-Full cutover items remain OPEN in `Failures.md` (DB-SVG-01…16).
+Full cutover OPEN in `Failures.md`. **No `SVG_RELEASE_AUTHORITY=db` in this plan.**
 
-## Auth path (live)
+### Auth path (live)
 
 | Layer | Code | Unauth behaviour (bypass off) |
 |-------|------|-------------------------------|
-| Edge proxy | `site/proxy.ts` | `/admin/*` → redirect `/access?next=…` |
-| Admin layout | `site/app/admin/layout.tsx` | `requireAuthUser("/admin", "admin")` → access |
-| API helper | `site/app/api/admin/_lib/server.ts` | `requireAdminSession` → 401/403 JSON |
+| Edge proxy | `site/proxy.ts` | `/admin/*` → `/access?next=…` |
+| Admin layout | `site/app/admin/layout.tsx` | `requireAuthUser("/admin", "admin")` |
+| API helper | `site/app/api/admin/_lib/server.ts` | `requireAdminSession` → 401/403 |
 | withAuth | `site/features/shared/api/withAuth.ts` | role `admin` → 401/403 |
 
-Local: set `DEV_AUTH_BYPASS=1` for interactive admin without a real session. Do not claim deploy auth from that mode. Do not kill an owner’s running dev server to flip the flag.
-
-## Failure registry (AF)
-
-Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**. Update only with fresh evidence. Map also to `this checklist (evidence section)` ADM-* where noted.
+### Failure registry (AF)
 
 | ID | Failure | Bar to clear | Status |
 |----|---------|--------------|--------|
-| AF-01 | Unauth admin page gate unproven | Unit + optional browser, bypass off → `/access` | PASS (unit 2026-07-17 FIX-ADMIN); browser OPEN |
-| AF-02 | Dual-write / R2 honesty | Modes unit-green; no fake R2 success | PASS (unit EXEC-4 modes); live R2 probe OPEN |
-| AF-03 | Unauth `/api/admin/*` gate | 401/403 unit, bypass off | PASS (unit 2026-07-17 FIX-ADMIN); browser OPEN |
+| AF-01 | Unauth admin page gate | Unit + browser, bypass off → `/access` | PARTIAL (unit; browser OPEN) |
+| AF-02 | Disk publish path regressions | Isolated unit + optional browser | OPEN |
+| AF-03 | Unauth `/api/admin/*` gate | 401/403 unit, bypass off | PARTIAL (unit; browser OPEN) |
 | AF-04 | Deploy auth without bypass | Preview/prod real admin session | OPEN |
 | AF-05 | Bulk/advanced dominance on SVG list | UX rebalance + browser | OPEN |
-| AF-06 | Phone catalog layout | Admin UI benchmark mobile | PASS (unit A-W2 cards-priority/labels/≥44px); browser OPEN |
-| AF-07 | Price book raw minor units / risk weight | Governance UX + browser | PARTIAL (unit UX EXEC-5); browser OPEN |
-| AF-08 | CRM presented as production | Demo banners + hub honesty | PASS (unit hub + localStorage labels EXEC-6); browser OPEN |
-| AF-09 | Catalog isolation in tests | No canonical writes | PASS (unit EXEC-1 guard + A0 suite) |
+| AF-06 | Phone catalog layout | Browser 390×844 | PARTIAL (unit; browser OPEN) |
+| AF-07 | Price book governance UX | Browser draft→approve→activate | PARTIAL (unit; browser OPEN) |
+| AF-08 | CRM presented as production | Demo honesty + browser | PARTIAL (unit; browser OPEN) |
+| AF-09 | Catalog isolation in tests | No canonical writes | PARTIAL (unit guard) |
 | AF-10 | Production-auth smoke | `test:admin:production-auth` | OPEN |
-| AF-11 | AI SVG generate | Product decision or implement | Not implemented |
+| AF-11 | AI freeform SVG generate | Decision or implement | OPEN (not implemented; C-AI ≠ AF-11) |
 | AF-12 | CI canonical hash gate | Automated isolation gate | OPEN |
 | AF-13 | Internal language on SVG list | Customer-safe copy | OPEN |
-| AF-14 | Full CSRF/rate matrix | All mutation routes proven | PASS (unit static auto-discovery 2026-07-17 plan-A2); browser OPEN |
+| AF-14 | Full CSRF/rate matrix | Mutators + browser sample | PARTIAL (unit; browser OPEN) |
 | AF-15–17 | Planner consumer / artifact bytes | DB-SVG co-own | OPEN / PARTIAL |
-| AF-18 | Dual-write not cutover | Failures.md DB-SVG remains | OPEN (cutover) |
-
-## Execution order
-
-Dependencies are strict. A blocked item stops only its direct dependants. Phase ids match `FEATURES.md`.
+| AF-18a | Dual-write mode honesty | Modes unit-green; live R2 probe | PARTIAL (modes unit; R2 OPEN) |
+| AF-18 | Full DB-SVG cutover | Failures.md + browser place + flip | OPEN |
 
 ### A0. Test isolation
 
-- [PASS] Admin publish tests use temporary inventory roots only (EXEC-1 `catalogWriteIsolation` + A0 suite).
-- [PASS] No test writes committed `site/inventory/descriptors/` or released DB rows (guard throws under Vitest).
-- [PASS] No runtime test writes under `site/public/` except isolated fixtures with cleanup (guard + suite).
-- [PASS] Record every fresh failing admin test as `FAIL` (isolation suite fail-loud).
+- [ ] Admin publish tests use temporary inventory roots only.  
+- [ ] No test writes committed `site/inventory/descriptors/` or released DB rows.  
+- [ ] No runtime test writes under `site/public/` except isolated fixtures with cleanup.  
+- [ ] Isolation suite fail-loud on violation.
 
-Exit gate: Admin tests isolated; baseline FAIL list reproducible.
+Exit: Admin tests isolated; baseline FAIL list reproducible.  
+**Stop:** if tests write committed inventory — fix isolation first.
 
 ### A1. Shell, auth, navigation
 
-- [PASS] Proxy treats `/admin` as protected (`isProtectedPath`).
-- [PASS] Unit: unauth `/admin` redirects to `/access` when bypass off.
-- [PASS] Unit: `requireAuthUser("/admin", "admin")` redirects when unauthenticated (bypass off).
-- [PASS] Unit: non-admin member rejected from admin surface.
-- [PASS] Unit: admin layout calls `requireAuthUser("/admin", "admin")`.
-- [PASS] Unit: `requireAdminSession` 401 without session / 403 non-admin (bypass off).
-- [PASS] Unit: `resolveAuthContext("admin")` rejects unauth when bypass off.
-- [ ] Browser: unauth admin journey with bypass off (do not kill owner dev server).
-- [ ] Deploy/preview: real admin session without bypass (**AF-04 / AF-10** OPEN).
+- [ ] Proxy treats `/admin` as protected (`isProtectedPath`).  
+- [ ] Unit: unauth `/admin` redirects to `/access` when bypass off.  
+- [ ] Unit: `requireAuthUser("/admin", "admin")` redirects when unauthenticated.  
+- [ ] Unit: non-admin member rejected from admin surface.  
+- [ ] Unit: admin layout calls `requireAuthUser("/admin", "admin")`.  
+- [ ] Unit: `requireAdminSession` 401 without session / 403 non-admin.  
+- [ ] Unit: `resolveAuthContext("admin")` rejects unauth when bypass off.  
+- [ ] Browser: unauth admin journey with bypass off.  
+- [ ] Deploy/preview: real admin session without bypass (**AF-04 / AF-10**).  
 - [ ] Dashboard / nav browser re-proof.
 
-Exit gate: Automated unauth gates proven with bypass mocked off. Deploy auth remains OPEN.
+Exit: Automated unauth gates proven with bypass mocked off. Deploy auth remains OPEN until proven.
 
-### A2. Excalidraw-first authoring
+### A2. Excalidraw-first authoring (draft only)
 
-- [ ] Inventory list + studio shell remain primary authoring path.
-- [ ] Supported Excalidraw subset contracts unit-covered; full safe path open.
-- [ ] Form identity + legacy `sceneParts` bridge honesty.
-- [ ] AI SVG generate not claimed (AF-11).
-
-Exit gate: Code map in FEATURES; browser stage measurements open.
+- [ ] Inventory list + studio shell remain primary freehand draft path.  
+- [ ] Supported Excalidraw subset contracts unit-covered.  
+- [ ] Form identity + legacy `sceneParts` bridge honesty.  
+- [ ] AI freeform SVG generate not claimed (AF-11).  
+- [ ] Excalidraw is **not** parametric publish authority (Part C = Maker).
 
 ### A3. Publish pipeline (disk)
 
-- [PASS] Publish path: compile → S4 disk → persist; fail-closed on compile failure (code + unit path; browser OPEN).
-- [PASS] Rollback and stale-draft gates unit-green (existing suite; re-verify on change).
-- [ ] Browser publish smoke optional; isolation required.
-- [PASS] Supabase storage mirror remains best-effort (must not roll back disk) (code honesty).
-
-Exit gate: Disk authority honest in UI and comments. No canonical catalog mutation from tests.
+- [ ] Publish path: compile → S4 disk → persist; fail-closed on compile failure.  
+- [ ] Rollback and stale-draft gates unit-green (re-verify on change).  
+- [ ] Browser publish smoke optional; isolation required.  
+- [ ] Supabase storage mirror remains best-effort (must not roll back disk).
 
 ### A4. Catalog lifecycle and bulk
 
-- [PASS] Lifecycle draft/release/retire/restore paths unit-green (EXEC-5).
-- [ ] Bulk import advanced path; UX dominance open (AF-05).
-- [PASS] Phone layout unit-proven (AF-06 A-W2: cards-priority, cell labels, ≥44px actions + CSS contract); browser viewport OPEN.
+- [ ] Lifecycle draft/release/retire/restore paths unit-green.  
+- [ ] Bulk import advanced path; UX dominance open (AF-05).  
+- [ ] Phone layout unit-proven (AF-06); browser viewport OPEN.
 
 ### A5. Product families
 
-- [PASS] Family form unit-green (EXEC-5); browser release journey OPEN.
+- [ ] Family form unit-green; browser release journey OPEN.  
 - [ ] Workstation family → Planner parity open.
 
 ### A6. Price books / commercial governance
 
-- [PASS] Filesystem price book paths unit-green (draft → approve → activate + audit EXEC-5).
-- [ ] Browser draft → approve → activate OPEN until proven.
-- [PASS] AF-07 unit: currency primary + Advanced minor units + activate primary; browser OPEN.
+- [ ] Filesystem price book paths unit-green (draft → approve → activate + audit).  
+- [ ] Browser draft → approve → activate OPEN until proven.  
+- [ ] Currency primary + Advanced minor units honesty.
 
 ### A7. DB-SVG cutover
 
-- [PASS] Dual-write modes unit-honest (**AF-02** PASS unit EXEC-4: skipped_no_db / skipped_r2_unavailable / enabled).
-- [PASS] Do not claim R2 success without live probe (no false success; live probe OPEN).
-- [ ] Keep `Failures.md` DB-SVG cutover OPEN until revision authority + pointer + Planner bytes proved.
-
-Exit gate: Dual-write documented; cutover remains OPEN.
+- [ ] Dual-write modes unit-honest (**AF-18a**).  
+- [ ] Do not claim R2 success without live probe.  
+- [ ] Keep `Failures.md` DB-SVG cutover OPEN until browser place + authority flip.
 
 ### A8. Planner / consumer handoff
 
-- [ ] `svg-blocks` DB-aware load + disk fallback mapped.
+- [ ] `svg-blocks` DB-aware load + disk fallback mapped.  
 - [ ] Not artifact-byte authority until cutover.
 
 ### A9. Ops surfaces
 
-- [PASS] Plans, features, analytics, themes, inventory, settings reachable under admin shell (nav unit + page units EXEC-6).
+- [ ] Plans, features, analytics, themes, inventory, settings reachable under admin shell.  
 - [ ] Browser proof open per surface.
 
 ### A10. CRM (Admin-mounted)
 
-- [PASS] `/admin/crm` is pipeline hub (not redirect-only) — unit green (EXEC-6).
-- [PASS] CRM remains localStorage demo — labelled in UI (AF-08) (code/unit EXEC-6; browser OPEN).
-- [PASS] No production CRM claim (honest hub + banners; no backend claim). Customer-queries remain distinct server-backed manage auth.
+- [ ] `/admin/crm` is pipeline hub (not redirect-only).  
+- [ ] CRM remains localStorage demo — labelled in UI (AF-08).  
+- [ ] No production CRM claim. Customer-queries remain distinct server-backed manage auth.
 
 ### A11. Security matrix
 
-- [PASS] Auth unit gates (A1) — FIX-ADMIN 2026-07-17.
-- [PASS] CSRF + rate limits: all `app/api/admin/**` mutators auto-discovered in `mutation-route-safety.matrix.test.ts` + audit sample (plan-A2 2026-07-17). withAuth / enforceAdminRateLimit unit green. Browser OPEN.
+- [ ] Auth unit gates (A1).  
+- [ ] CSRF + rate limits: admin mutators matrix unit + audit sample.  
 - [ ] Production-auth smoke (AF-10).
 
 ### A12–A14. Release, a11y, residual polish
 
-- [PASS] `pnpm run check:layout` before completion claims (exit 0 EXEC-6 session).
-- [PASS] Focused lint + CRM/ops unit tests green for EXEC-6 slice (full repo lint/typecheck/build OPEN; planner lint noise exists outside scope).
-- [ ] Build when release-claiming.
-- [ ] A11y sample on changed admin routes when UI-claiming.
+- [ ] `pnpm run check:layout` before completion claims (re-run each session).  
+- [ ] Focused lint + admin unit for claimed slice.  
+- [ ] Build when release-claiming.  
+- [ ] A11y sample on changed admin routes when UI-claiming.  
 - [ ] Clear residual AF ids with evidence only.
 
-Exit gate: Release PASS only with gate table from COMPLETION-CONTRACT.
+### Reference code roots
 
-## Reference code roots
-
-- `site/features/admin/`
-- `site/app/admin/`
-- `site/app/api/admin/`
-- `site/features/crm/` (admin CRM shell)
-- `site/lib/auth/devAuthBypass.ts`, `session.ts`
-- `site/proxy.ts`
+- `site/features/admin/`  
+- `site/app/admin/`  
+- `site/app/api/admin/`  
+- `site/features/crm/`  
+- `site/features/planner/asset-engine/svg/` (parametric + Maker)  
+- `site/lib/auth/devAuthBypass.ts`, `session.ts`  
+- `site/proxy.ts`  
 - `site/inventory/descriptors/`, `site/public/svg-catalog/`
 
-## Related docs
+### Related docs
 
 - `FEATURES.md` — live code map  
-- `this checklist (evidence section)` — proof bar  
+- `IMPLEMENTATION-PLAN.md` — K1→C4 TDD tasks  
+- `REALITY-AND-STACK.md` — market + engines  
 - `docs/architecture/08-DATABASE-SVG-CONTRACT.md`  
 - `Failures.md` — active blockers  
-- `agent-reports/ADMIN.md` — track status
+- `agent-reports/ADMIN.md` — track notes  
+
+---
+
+## Part C — Parametric furniture library (code-free client) — LONG TRACK
+
+**Status:** OPEN  
+**Code map:** `FEATURES.md`  
+**Implementation tasks:** `IMPLEMENTATION-PLAN.md`  
+**Reality / stack:** `REALITY-AND-STACK.md`
+
+**Owner decision (2026-07-18):** Build in-house. Client = forms only (no code). Engine pen = **Maker.js**. Import drawers/pipeline from planner package paths in this monorepo. Canvas/chrome stay Fabric + Dockview + React Aria. **1 implementer max.**
+
+**Honesty:** Current greys ≈ no brand library. This track is **months**, not a weekend. One type first.  
+**Code truth (re-verify):** form + compile + CLI call template `renderLinearDeskSvg` → `drawLinearDeskFromTemplate`. Maker recipes exist but are **not** the parametric pen yet. **K1 OPEN.**
+
+### Stack (locked — one line)
+
+| Layer | Choice |
+|-------|--------|
+| **Engine pen** | **Maker.js** only — do not switch pens |
+| **Brain** | Eng type drawers (schema + draw functions) |
+| **Client** | Forms only (no code) |
+| **Canvas** | Fabric (keep) |
+| **Chrome** | Dockview + React Aria (keep) |
+| **AI** | Optional **field draft** only (C-AI). Never geometry. **A is not AI** |
+
+**One line:** Maker.js. Build drawers on it. Don't switch pens. AI may suggest fields after C2 — never paths.
+
+### GitHub / npm links (approved stack)
+
+| Component | Role | Link | Pin (site) |
+|-----------|------|------|------------|
+| **This monorepo** | Product + planner import paths | https://github.com/mayoite/12072026 | origin |
+| **Maker.js** | Geometry pen (only) | https://github.com/microsoft/maker.js · npm `makerjs` | `^0.19.2` |
+| **Fabric.js** | Planner canvas place (keep) | https://github.com/fabricjs/fabric.js · npm `fabric` | `7.4.0` |
+| **Excalidraw** | Admin draft studio only | https://github.com/excalidraw/excalidraw · npm `@excalidraw/excalidraw` | `^0.18.1` |
+| **Dockview** | Shell chrome (keep) | https://github.com/mathuo/dockview | lockfile |
+| **React Aria** | A11y chrome (keep) | https://github.com/adobe/react-spectrum | lockfile |
+
+**Do not add as product core:**
+
+| Avoid | Link (reference only) | Why |
+|-------|----------------------|-----|
+| react-planner | https://github.com/cvdlab/react-planner | Whole planner app — duplicates ours |
+| Free “furniture plan engines” | various GitHub | No fields→pro Oando library |
+
+### Import / reuse (planner + Maker) — locked
+
+**Meaning:** reuse **this monorepo’s planner packages** and **Maker.js from npm**.  
+**Not meaning:** pull in a whole GitHub floorplanner / react-planner / competitor app.
+
+| Source | Import / reuse | Do not |
+|--------|----------------|--------|
+| **Planner (repo)** | `features/planner/model/units.ts` (mm/cm) | Rebuild unit convert in Admin |
+| **Planner (repo)** | `features/planner/asset-engine/svg/*` (Maker recipes, makerJsToPath, normalize, compileSvgForPublish) | Fork a second asset-engine under admin-only |
+| **Planner (repo)** | Catalog types / publish IR (`svgTypes`, descriptors) | Invent a parallel product schema |
+| **Planner (repo)** | Fabric place path for C4 (published SVG URL) | Re-draw symbols on canvas |
+| **GitHub / npm** | **`makerjs` only** (already in `site/package.json`) | New geometry pen (Paper, Konva host, etc.) |
+| **GitHub apps** | — | react-planner, Sweet Home, Archilogic SDKs |
+
+**Rules:**
+
+- [ ] Admin parametric **imports** planner `units` + asset-engine draw/Maker — no duplicate convert/draw stacks.  
+- [ ] Form preview and publish call the **same** Maker drawer (`drawLinearDesk`).  
+- [ ] No new npm geometry engine without owner + Lockedfiles update.  
+- [ ] No vendor UI that replaces Dockview / Fabric / Admin shell.
+
+### C0. Product rules (non-negotiable)
+
+- [ ] Client never writes code, recipes, or path data.  
+- [ ] Client: pick **type** → fill **fields** → live preview → publish.  
+- [ ] Canonical storage unit = **mm** (matches planner document).  
+- [ ] UI may show/edit **mm or cm**; convert at boundary (`displayValueToMm` / `mmToDisplayValue` in `features/planner/model/units.ts`).  
+- [ ] Published SVG always mm viewBox + image-safe hex fills.  
+- [ ] Greys / old maker blobs not sold as "done" brand inventory.  
+- [ ] New type = new drawer + schema (eng). Client cannot invent unlimited topology without eng.  
+- [ ] Geometry pen = **Maker.js** only for this track (no Paper switch, no freehand publish truth).
+
+### C1. Units: mm and cm
+
+**Facts already in repo:**
+
+| API | Role |
+|-----|------|
+| Document / SVG / geometry | **mm** only |
+| `displayValueToMm` / unit mm\|cm\|m\|in | Form → canonical |
+| `mmToDisplayValue(mm, unit)` | Canonical → form |
+| `mmToPlannerCm` / `plannerCmToMm` | cm helpers |
+
+**Code:** `features/planner/model/units.ts` · form model `features/admin/svg-editor/parametric/linearDeskFormModel.ts`
+
+**Rules for Admin forms:**
+
+- [ ] Each linear field stores **mm** in product JSON / descriptor.  
+- [ ] Form control: label shows unit; input value in selected display unit.  
+- [ ] On blur/save: parse number → `displayValueToMm` → prefer whole mm.  
+- [ ] Prefer **cm** for marketing-friendly UX; always convert to mm before draw/publish.  
+- [ ] Height fields mm canonical; plan draw may ignore height until 3D.  
+- [ ] No dual storage of cm+mm that can drift.  
+- [ ] Unit tests: 160 cm → 1600 mm; 1400 mm → 140 cm; round-trip stable.
+
+### C2. Type 1 — Linear desk (fields + drawer)
+
+#### Critic blockers (must clear before C2/C3 PASS)
+
+| Id | Blocker | Required fix | Status |
+|----|---------|--------------|--------|
+| **K1** | Form/publish/CLI use template multipath, not Maker | One API: `drawLinearDesk(fields)` = Maker only; form + CLI + publish all call it | OPEN |
+| **K2** | Plan tick "via Maker.js" is false until K1 | Unit test fails if template path used for parametric desk | OPEN |
+| **K3** | Form UI missing schema knobs | Model has all mm fields; UI lacks pedestalTopGap + pedestalBackInset (defaults only) | OPEN |
+
+- [ ] **K1** closed: no second pen on parametric path  
+- [ ] **K2** closed: unit proves Maker path  
+- [ ] **K3** closed: form UI + model = schema 1:1 (every schema knob editable or explicit default policy)  
+
+#### Fields (exact live schema — v1)
+
+Source: `site/features/planner/asset-engine/svg/parametric/linearDeskFields.ts`  
+(`LinearDeskFieldsSchema`)
+
+| Field | Unit store | Notes (schema) |
+|-------|------------|----------------|
+| type | literal | `linear-desk` |
+| widthMm | mm | 600–3000 |
+| depthMm | mm | 400–1200 |
+| heightMm | mm | 400–1200; default 750; BOQ |
+| topThicknessMm | mm | plan worksurface strip; default 120 |
+| pedestalWidthMm | mm | each; default 200 |
+| pedestalInsetMm | mm | from side edges; default 120 |
+| pedestalTopGapMm | mm | below top band; default 40 |
+| pedestalBackInsetMm | mm | from back; default 80 |
+| pedestalCount | 0 or 2 | default 2 |
+| modesty | bool | default false |
+| seriesId | text | optional; max 64 |
+| name | text | optional; max 120 |
+| sku | text | optional; max 64 |
+| slug | text | optional; `/^[a-z][a-z0-9-]{1,63}$/` |
+| (display only) | mm or cm | form session unit — not stored as parallel geometry |
+
+**Fit constraints (Zod superRefine):** dual pedestals need width ≥ `2*inset + 2*pedestalWidth + 40`; depth ≥ `top + topGap + 40 + backInset`.
+
+- [ ] Zod `LinearDeskFieldsSchema` + constraints remain green.  
+- [ ] `drawLinearDesk(fields)` via **Maker.js only** → multipath parts (`desk-top`, `pedestal-l`/`pedestal-r`, modesty when set).  
+- [ ] Map full schema knobs into Maker recipe (today `buildLinearDeskMakerModel` hard-codes some insets — extend recipe).  
+- [ ] Quality bar: at **40px thumb** reads as desk; meet or beat `sample-desk-1`.  
+- [ ] `fields → SVG string` (sanitize via existing pipeline helpers).  
+- [ ] Unit: change width 1400→1800 regenerates different valid SVG.  
+- [ ] CLI: `scripts/render-linear-desk.mts` → isolation/`results` default; `--catalog` owner only.  
+- [ ] **Delete dual authority:** parametric form must not call `drawLinearDeskFromTemplate` / template `renderLinearDeskSvg` once Maker path is green.
+
+**Paths (live):**
+
+| Role | Path |
+|------|------|
+| Schema | `features/planner/asset-engine/svg/parametric/linearDeskFields.ts` |
+| Template draw (**today’s pen — remove after K1**) | `…/drawLinearDeskFromTemplate.ts` |
+| Barrel | `…/parametric/index.ts` (re-exports template today) |
+| Maker recipes | `features/planner/asset-engine/svg/makerJsRecipes.ts` — `buildLinearDeskMakerModel`, `buildLDeskMakerModel`, `buildMakerModel` |
+| Maker → path | `features/planner/asset-engine/svg/makerJsToPath.ts` — `compileMakerRecipeToPaths` |
+| Form model | `features/admin/svg-editor/parametric/linearDeskFormModel.ts` |
+| Form UI | `features/admin/svg-editor/parametric/LinearDeskParametricForm.tsx` |
+| Compile | `features/admin/svg-editor/parametric/compileLinearDeskSvg.ts` |
+| Publish | `features/admin/svg-editor/parametric/publishLinearDeskAction.ts` |
+| Route | `app/admin/svg-editor/parametric/page.tsx` → `/admin/svg-editor/parametric` |
+| CLI | `scripts/render-linear-desk.mts` |
+| Sample bar | `public/svg-catalog/sample-desk-1.svg` |
+| Units | `features/planner/model/units.ts` |
+
+### C3. Admin zero-code UI (client-facing)
+
+**Paths:** `features/admin/svg-editor/parametric/*` · route **`/admin/svg-editor/parametric`** · list CTA on SVG inventory (`AdminSvgEditorListView.tsx`).
+
+| UI element | Target behavior | Live today |
+|------------|-----------------|------------|
+| Type select | Only `linear-desk` until C6 | linear-desk only |
+| Linear inputs | Full C2 schema; show unit | Missing pedestalTopGap / pedestalBackInset controls (K3) |
+| Unit toggle | mm / cm via `units.ts` | Wired (form model) |
+| Live preview | Same **Maker** `drawLinearDesk` as publish | **Template** `renderLinearDeskSvg` (K1 OPEN) |
+| Validation | Zod under fields | Wired for bound fields |
+| Publish | Confirm → disk (+ dual-write if enabled) | Disk via `publishLinearDeskAction`; template SVG |
+| Suggest fields | **C-AI** after C2 | Not implemented |
+
+**Checklist:**
+
+- [ ] **Blocked on K1–K2:** do not mark C3 PASS while form/publish still use template draw.  
+- [ ] Form fields cover full C2 schema (exact Zod names / display aliases).  
+- [ ] mm/cm toggle wired to `units.ts`.  
+- [ ] Preview debounce; always code-drawn (**Maker** only).  
+- [ ] Publish disabled while invalid or preview failing.  
+- [ ] **Browser gate:** create desk width **160 cm** → preview OK → publish → file under `svg-catalog` + descriptor.  
+- [ ] Console errors = 0; failed requests = 0 on that journey.  
+- [ ] No client-side LLM keys.  
+- [ ] Auth: admin only (existing gates).  
+- [ ] Publish freezes SVG + identity; lifecycle draft→live policy unchanged.  
+- [ ] Guest visibility: published parametric product is buyer/approved-visible for C4.
+
+### C4. Planner consume
+
+- [ ] Catalog loader includes approved parametric products (slug + preview URL).  
+- [ ] Guest filter still brand/approved only (no demo pollution).  
+- [ ] Place: Fabric paints published SVG (not Block2D miss for these slugs).  
+- [ ] BOQ / review: **name · SKU** from product fields.  
+- [ ] **Browser gate:** proof **1280** and **390** — inventory thumb + place desk.  
+- [ ] Console errors 0 / failed SVG requests 0 on that journey.
+
+### C5. Finesse (professional bar — after C2 green)
+
+- [ ] Stroke width scales with min(W,D) (clamp e.g. 10–28 mm plan stroke).  
+- [ ] Role fills: top darker; pedestals mid; frame stroke-only.  
+- [ ] Series presets: Fluid vs Flex default field sets differ.  
+- [ ] Inventory thumb and canvas use **same** published SVG bytes.  
+- [ ] Form: clear errors when pedestals do not fit.  
+- [ ] No `currentColor` / `var(` in published fills.  
+- [ ] Optional outer frame stroke weight matches sample-desk readability.  
+- [ ] Document facing convention when chair type arrives (C6).
+
+### C6. Later types (gate: C2–C4 green for desk)
+
+Each type = **new schema + new Maker drawer + form switch**. No mega-generic drawer. No pen switch.
+
+| Order | Type | Template language (min) |
+|-------|------|-------------------------|
+| 1 | Meeting rect | Top + 4 leg posts (positive fills) |
+| 2 | Task chair | Seat + back + base; facing |
+| 3 | Storage bays | Carcass + door bays |
+| 4 | L-desk | Main + return (`buildLDeskMakerModel` exists) |
+
+- [ ] Do not start until linear desk client-usable (C3–C4).  
+- [ ] Each type: schema + Maker draw + unit + form option + one browser place.
+
+### C7. Non-goals (locked)
+
+- Rebuild Fabric toolbar / Dockview shell  
+- Paid $80k configurator  
+- Client invents unlimited topology without eng  
+- AI geometry / AF-11 freeform SVG generate as publish truth  
+- DB cutover / `SVG_RELEASE_AUTHORITY=db` as substitute for drawings  
+- "All possible fields for all furniture" on day one  
+- Photoreal 3D first  
+- Switching geometry pen off **Maker.js**  
+- Importing react-planner or full GitHub planner apps  
+
+### C-AI. AI assist (draft fields only — **not** the pen)
+
+**A is not AI.** Engine pen stays **Maker.js**. AI never owns geometry.
+
+| AI may | AI must not |
+|--------|-------------|
+| Suggest **fields** (JSON → Zod) | Emit path `d` / multipath / SVG as publish truth |
+| Suggest **name / SKU / slug** | Auto-publish or write `svg-catalog` |
+| Soft QA text | Invent new topology / types |
+| | Replace mm/cm convert (use `units.ts`) |
+| | Be required for form/preview/publish |
+
+**Flow (after C2 + form shell C3):**
+
+```text
+[Suggest fields] → LLM JSON (untrusted)
+    → LinearDeskFieldsSchema + fit
+    → if fail: show errors, no apply
+    → if ok: fill form as DRAFT (badge)
+    → human edits
+    → preview = Maker drawLinearDesk(fields) only
+    → publish = human + server freeze
+```
+
+- [ ] **C-AI.0** C2 unit green before AI on any publish-adjacent path.  
+- [ ] **C-AI.1** "Suggest fields" → untrusted JSON → Zod + fit → **form draft only**.  
+- [ ] **C-AI.2** Preview + publish use **only** Maker `drawLinearDesk` (same as C3).  
+- [ ] **C-AI.3** Publish only after human accept + preview OK; no silent apply.  
+- [ ] **C-AI.4** Unit: valid draft applies; invalid rejected; AI schema **excludes** path/SVG fields.  
+- [ ] **C-AI.5** Kill switch: if AI delays C2/C3, remove AI work; ship desk.  
+- [ ] **C-AI.6** (Later) Eng-only type-template assist off publish path + goldens.  
+- [ ] **C-AI.7** Admin works with AI disabled / missing keys (fail-open).
+
+**Verdict locked:** **DEFER-UNTIL-C2**, then **ADD-MINIMAL** only.
+
+### C8. Timeline honesty
+
+| Milestone | Rough |
+|-----------|--------|
+| C1+C2 desk fields + Maker drawer + script | days–weeks |
+| C3 Admin forms + preview | + weeks |
+| C4 browser place + BOQ | + weeks |
+| C5 finesse pass | ongoing |
+| **C-AI** suggest fields | After C2; small |
+| C6 few more types | months |
+
+**Forever if:** unlimited types + unlimited options + pro craft + zero eng budget.  
+**Not forever if:** type 1 done, then type 2 — scoped.
+
+**C2 alone ≠ weeks.** End-to-end client-usable (C3–C4) ≈ weeks.
+
+### C9. Agents / process
+
+- [ ] One implementer at a time on this track.  
+- [ ] Parent re-runs unit + browser when claiming.  
+- [ ] Update this Part C statuses only with evidence.  
+- [ ] FEATURES.md: keep "Parametric library" + Maker rows when code lands.  
+- [ ] C-AI does not block C2–C4 ship (C-AI.5 kill switch).  
+- [ ] Commits only if owner asked.
+
+### Commands
+
+```powershell
+pnpm --filter oando-site exec vitest run tests/unit/features/planner/asset-engine/svg/parametric tests/unit/features/admin/svg-editor/parametric tests/unit/features/planner/asset-engine/svg/makerJsRecipes.test.ts
+pnpm --filter oando-site run scripts:render-linear-desk -- scripts/generate-svg/_fixtures/linear-desk-param.json
+pnpm run dev
+# /admin/svg-editor/parametric
+# /planner/guest/
+pnpm run check:layout
+pnpm run check:plans-purity
+```

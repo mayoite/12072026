@@ -1,6 +1,6 @@
 # Tech stack features
 
-Repo-sourced index: **stack surface → code path → honest gap**. Live code, lockfile, and fresh command exits are authoritative.
+Repo-sourced index: **stack surface → code path → honest gap**. Live code and lockfile win. Engines policy: docs/Lockedfiles/03-dependencies-engines-current.md (not duplicated as fiction here). This FEATURES file is a hand-maintained code map until an auto-generator exists; keep gaps honest from live imports.
 
 | Doc | Role |
 |---|---|
@@ -46,9 +46,10 @@ Repo-sourced index: **stack surface → code path → honest gap**. Live code, l
 
 | Feature | Code | Gap |
 |---|---|---|
-| Fabric 2D | `site` dep `fabric@7.4.0`; planner canvas imports | Grep proof for second engine not automated in CI |
+| Fabric 2D | `site` dep `fabric@7.4.0`; planner canvas imports | Sole interactive 2D; grep for second canvas engine not automated in CI |
 | Three / R3F / Drei | `three`, `@react-three/fiber`, `@react-three/drei` | — |
-| Admin SVG embed | `@excalidraw/excalidraw` | Host owns publish; not client authority |
+| Admin SVG embed | `@excalidraw/excalidraw` `^0.18.1` | Host owns publish; not client authority; not parametric pen |
+| Parametric pen (Maker.js) | `makerjs` `^0.19.2` — `makerJsRecipes` / `makerJsToPath` | Locked Part C pen. Form still template multipath (**Admin K1 OPEN**). Not a second canvas engine |
 | No react-router in site product | Site uses Next app router | tech-docs may use SPA tooling — out of product |
 
 ---

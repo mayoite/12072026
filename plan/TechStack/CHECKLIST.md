@@ -2,30 +2,30 @@
 
 **Status:** OPEN  
 **Pair:** `FEATURES.md` = live code map (feature → path → gap).  
-**This file:** all-encompassing execution document for the track — evidence rules **and** full phase checklist (what is required, what exists, what is open).  
+**This file:** all-encompassing execution document for the track  -  evidence rules **and** full phase checklist (what is required, what exists, what is open).  
 **Active blockers:** `../../Failures.md`  
 **Doc set:** only `CHECKLIST.md` + `FEATURES.md` per track.
 
 ---
 
-## Part A — Evidence and completion rules
+## Part A  -  Evidence and completion rules
 
-_Former COMPLETION-CONTRACT content. Wins on how to prove done._
+_Evidence and completion rules. Wins on how to prove done._
 
 **Status:** OPEN  
 **Authority:** This file is the **execution contract** for **toolchain, engines, workspace, CI, and dependency health**.  
 **Relation to plan files:**  
-- `this checklist (phase section)` — same phase journey (**T0–T8**) and **TF** failure registry; detailed checklists  
-- `FEATURES.md` — live code map (engines, scripts, env **names**, CI → path → gap)  
-- Where this file and `this checklist (phase section)` conflict on **how to prove done**, **this file wins**  
-- Phase scope and TF ids stay **1:1** with `this checklist (phase section)`  
+- `Part B (phase checklist in this file)`  -  same phase journey (**T0–T8**) and **TF** failure registry; detailed checklists  
+- `FEATURES.md`  -  live code map (engines, scripts, env **names**, CI → path → gap)  
+- Where this file and `Part B (phase checklist in this file)` conflict on **how to prove done**, **this file wins**  
+- Phase scope and TF ids stay **1:1** with `Part B (phase checklist in this file)`  
 
 **Relation to fact docs:**  
-- `docs/Lockedfiles/03-dependencies-engines-current.md` — architectural limits  
-- `docs/architecture/11-RUNTIME-ARCHITECTURE.md` — live runtime shape  
-- `docs/architecture/08-DATABASE-SVG-CONTRACT.md` — DB/R2 SVG target  
-- `docs/architecture/10-SECURITY-BENCHMARK.md` — security release IDs  
-- Root / `site` `package.json` + lockfiles — **version authority**  
+- `docs/Lockedfiles/03-dependencies-engines-current.md`  -  architectural limits  
+- `docs/architecture/11-RUNTIME-ARCHITECTURE.md`  -  live runtime shape  
+- `docs/architecture/08-DATABASE-SVG-CONTRACT.md`  -  DB/R2 SVG target  
+- `docs/architecture/10-SECURITY-BENCHMARK.md`  -  security release IDs  
+- Root / `site` `package.json` + lockfiles  -  **version authority**  
 
 Where a fact doc and this file conflict on **how to prove done**, **this file wins**.  
 Where they conflict on **which package version is installed**, **lockfile wins**.
@@ -39,15 +39,15 @@ Where they conflict on **which package version is installed**, **lockfile wins**
 
 A **maintainable, installable, releasable monorepo** where:
 
-1. **One install path** — pnpm from repo root; Node and pnpm pins are real and **CI-aligned**.  
-2. **Engines stay singular** — one interactive 2D engine, one 3D stack, one admin SVG authoring embed, server owns publish.  
-3. **Dependencies earn their keep** — direct deps have live imports or documented build roles.  
-4. **Gates are honest** — layout, lint, typecheck, test, build, secrets, release:gate are runnable and green for release claims.  
-5. **Secrets and envs** — never in git; `.env.local` pattern enforced; names only in docs.  
-6. **Storage and DB clients** — match locked policy (Drizzle/postgres, R2 via S3 API, no new unauthorized stack for DB-SVG).  
-7. **Docs stay thin** — stack policy not duplicated as fiction; FEATURES tracks code.
+1. **One install path**  -  pnpm from repo root; Node and pnpm pins are real and **CI-aligned**.  
+2. **Engines stay singular**  -  one interactive 2D engine, one 3D stack, one admin SVG authoring embed, server owns publish.  
+3. **Dependencies earn their keep**  -  direct deps have live imports or documented build roles.  
+4. **Gates are honest**  -  layout, lint, typecheck, test, build, secrets, release:gate are runnable and green for release claims.  
+5. **Secrets and envs**  -  never in git; `.env.local` pattern enforced; names only in docs.  
+6. **Storage and DB clients**  -  match locked policy (Drizzle/postgres, R2 via S3 API, no new unauthorized stack for DB-SVG).  
+7. **Docs stay thin**  -  stack policy not duplicated as fiction; FEATURES tracks code.
 
-**Benchmark:** Stripe/Vercel-class monorepo hygiene (reproducible installs, strict CI, lockfile truth) — not their product UI.
+**Benchmark:** Stripe/Vercel-class monorepo hygiene (reproducible installs, strict CI, lockfile truth)  -  not their product UI.
 
 ---
 
@@ -72,10 +72,10 @@ A **maintainable, installable, releasable monorepo** where:
 All that apply:
 
 1. **Policy** written in Lockedfiles / architecture docs matches code.  
-2. **Automated proof** — named command exit 0.  
-3. **Dependency claim** — `pnpm why` / import grep / lockfile entry shown when asserting “in use” or “removed”.  
-4. **CI claim** — workflow file path + pin equals root `packageManager` intent + last green or local repro of same script.  
-5. **No silent pin drift** — root `packageManager` and CI pnpm pin agree.  
+2. **Automated proof**  -  named command exit 0.  
+3. **Dependency claim**  -  `pnpm why` / import grep / lockfile entry shown when asserting “in use” or “removed”.  
+4. **CI claim**  -  workflow file path + pin equals root `packageManager` intent + last green or local repro of same script.  
+5. **No silent pin drift**  -  root `packageManager` and CI pnpm pin agree.  
 6. Status flipped only with that evidence.
 
 **PARTIAL** = policy or code written, gate not green, or env-dependent.
@@ -92,7 +92,7 @@ From **repo root**. All exit **0** for a full stack PASS:
 |------|---------|
 | Layout | `pnpm run check:layout` |
 | Failures file | `pnpm run check:failures` |
-| Agents / docs purity | `pnpm run check:agents-md` · `check:agents-folder` · `check:active-docs` · `check:plans-purity` · `check:docs-purity` |
+| Agents / docs purity | `pnpm run check:agents-md`  /  `check:agents-folder`  /  `check:active-docs`  /  `check:plans-purity`  /  `check:docs-purity` |
 | Fast monorepo gate | `pnpm run gate` |
 | Lint | `pnpm run lint` |
 | Typecheck | `pnpm run typecheck` (stable; no missing `.next/dev/types` race) |
@@ -135,7 +135,7 @@ No FINISH checkbox PASS without parent evidence in the same session.
 | Package manager | Root `package.json` `packageManager`, `pnpm-workspace.yaml`, install guards |
 | Node engine | `engines.node` ≥24 |
 | Workspace packages | `site/` (`oando-site`), `tech-docs-generator/` (`oando-tech-docs`) |
-| Canvas / 3D / SVG engines | Fabric; Three + R3F + Drei; Excalidraw embed |
+| Canvas / 3D / SVG engines | Fabric (2D); Three + R3F + Drei (3D); Excalidraw (admin draft); Maker.js (parametric pen — Admin K1 OPEN, form still template) |
 | CSS toolchain | Tailwind / postcss / locked CSS tree under `site/app/css/` |
 | Next runtime | Next 16 app router, Vercel root = `site` |
 | Test runners | Vitest, Playwright configs under `site/config/build/` |
@@ -159,9 +159,9 @@ No FINISH checkbox PASS without parent evidence in the same session.
 
 | Dependency | Owner |
 |------------|--------|
-| DB-SVG cutover incomplete | Architecture + Failures.md — stack must not pretend R2/DB is live authority |
+| DB-SVG cutover incomplete | Architecture + Failures.md  -  stack must not pretend R2/DB is live authority |
 | DEV_AUTH_BYPASS | Stack must keep production-disabled; Site/Admin prove auth |
-| Windows dev | `pool: 'forks'` Vitest; PowerShell scripts — stack must not assume only Unix |
+| Windows dev | `pool: 'forks'` Vitest; PowerShell scripts  -  stack must not assume only Unix |
 
 ---
 
@@ -174,7 +174,8 @@ No FINISH checkbox PASS without parent evidence in the same session.
 | 2D | Fabric sole interactive engine |
 | 3D | Three.js + R3F + Drei helpers only |
 | Admin SVG UI | `@excalidraw/excalidraw` embed; host owns publish |
-| Publish truth | Server compile + sanitize — not client engine |
+| Parametric pen | Maker.js only (locked); not a second canvas. Form pen still template until Admin K1 |
+| Publish truth | Server compile + sanitize  -  not client engine |
 | Site i18n | `next-intl` only; Planner/Admin English only |
 | Catalog DB access | Drizzle + postgres for Products work; no new `.from()` catalog paths |
 | Artifacts | R2 via AWS S3 client for immutable artifacts (target); live SVG disk until cutover |
@@ -199,7 +200,7 @@ No FINISH checkbox PASS without parent evidence in the same session.
 
 ## 7. Failure registry
 
-**Canonical ids for execution:** **TF-01…TF-24** in `this checklist (phase section)`.  
+**Canonical ids for execution:** **TF-01…TF-24** in `Part B (phase checklist in this file)`.  
 **Synonyms:** **TS-01…TS-22** = TF-01…TF-22 (same bar). Prefer TF in finish reports.
 
 Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**.
@@ -214,7 +215,7 @@ Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**.
 | TS-06 / TF-06 | `release:gate` / `gate` not green | Fresh exit 0 | OPEN |
 | TS-07 / TF-07 | Typecheck flakes on `.next/dev/types` | Stable tsc story (exclude or generate) | OPEN |
 | TS-08 / TF-08 | Secrets in tree | `lint:secrets` exit 0; no committed secrets | OPEN |
-| TS-09 / TF-09 | Env example drift | `.env.example` covers required server keys (names only) | PARTIAL — FEATURES env table; OpenAI optional |
+| TS-09 / TF-09 | Env example drift | `.env.example` covers required server keys (names only) | PARTIAL  -  FEATURES env table; OpenAI optional |
 | TS-10 / TF-10 | DB-SVG marketed as live authority | Failures.md + Lockedfiles honest; disk live | PARTIAL |
 | TS-11 / TF-11 | Dual-write incomplete treated as PASS | Dual-write proved or OPEN | OPEN |
 | TS-12 / TF-12 | Tech-docs broken / unowned | tech-docs gate green or package optional documented | OPEN |
@@ -225,17 +226,17 @@ Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**.
 | TS-17 / TF-17 | i18n second framework introduced | next-intl only | PARTIAL |
 | TS-18 / TF-18 | Supabase client boundary violated | No new catalog `.from()` paths | OPEN |
 | TS-19 / TF-19 | Production GLB or publish writes `site/public` | Code path 501 / storage only | PARTIAL |
-| TS-20 / TF-20 | Docs budget broken / stack fiction in docs | Lockedfiles matches code; plan trio present | PARTIAL |
+| TS-20 / TF-20 | Docs budget broken / stack fiction in docs | Lockedfiles matches code; plan duo present | PARTIAL |
 | TS-21 / TF-21 | Install/docs claim pnpm@11.13 but CI differs | Align pins | **PASS** (T-W1) |
 | TS-22 / TF-22 | Hoisted monorepo phantom deps | No app import of undeclared package | OPEN |
-| TF-23 | CI logs under `site/results/` | Prefer root `results/` | PASS — workflows tee to `results/tooling` / `results/site` (90b55c74) |
+| TF-23 | CI logs under `site/results/` | Prefer root `results/` | PASS  -  workflows tee to `results/tooling` / `results/site` (90b55c74) |
 | TF-24 | Fast gate CI timeout | Job succeeds or timeout adjusted with proof | OPEN |
 
 ---
 
-## 8. Execution phases (T0–T8) — 1:1 with FINISH-PLAN
+## 8. Execution phases (T0–T8)  -  1:1 with Part B phases (phases)
 
-Checklists live in `this checklist (phase section)`. Contract summary:
+Checklists live in `Part B (phase checklist in this file)`. Contract summary:
 
 | Phase | Name | Exit |
 |-------|------|------|
@@ -282,14 +283,14 @@ T8 docs (continuous; gates release claim)
 
 ## 10. How this exceeds Lockedfiles alone
 
-| Area | Lockedfiles / runtime docs | This contract + FINISH-PLAN |
+| Area | Lockedfiles / runtime docs | This contract + CHECKLIST Part B (phases) |
 |------|----------------------------|----------------------------|
 | Facts | Version/policy statements | **PASS recipe** + commands |
 | Engines | Table | Phase T2 + FEATURES paths + grep proof |
 | Deps | Prefer existing | TF-05 + audit phase |
 | CI | Mentioned loosely | §3.1 + FEATURES CI table + TF-02 |
 | Failures | Failures.md generic | **TF/TS registry** |
-| Agents | — | Parent re-verify + short reports |
+| Agents |  -  | Parent re-verify + short reports |
 | False completion | Easy if MD outdated | Lockfile + exit 0 required |
 
 ---
@@ -297,13 +298,13 @@ T8 docs (continuous; gates release claim)
 ## 11. Immediate priority queue
 
 1. **T0** complete with recorded gate exits.  
-2. ~~**TF-02 / TF-21**~~ — CI pnpm **11.13.0** (**PASS**, T-W1).  
-3. **TF-07** — stabilize typecheck (`.next/dev/types` race).  
-4. **T4** — lint/typecheck/test green.  
-5. **T3** — dead direct deps.  
-6. **T6** — build + release:gate.  
-7. **T7** — keep DB-SVG honesty (TF-10/11).  
-8. **T8** — Lockedfiles sync when anything engine-related lands.
+2. ~~**TF-02 / TF-21**~~  -  CI pnpm **11.13.0** (**PASS**, T-W1).  
+3. **TF-07**  -  stabilize typecheck (`.next/dev/types` race).  
+4. **T4**  -  lint/typecheck/test green.  
+5. **T3**  -  dead direct deps.  
+6. **T6**  -  build + release:gate.  
+7. **T7**  -  keep DB-SVG honesty (TF-10/11).  
+8. **T8**  -  Lockedfiles sync when anything engine-related lands.
 
 ---
 
@@ -321,9 +322,9 @@ Until then: **Status remains OPEN.**
 
 ---
 
-## Part B — Phase checklist (full)
+## Part B  -  Phase checklist (full)
 
-_Former FINISH-PLAN content. Full required work: what is there and what is not._
+_Full phase checklist: what is required, what exists, what is open._
 
 Status: **OPEN**.
 
@@ -338,7 +339,7 @@ A maintainable, installable, releasable monorepo:
 1. One install path (pnpm root; Node ≥24).
 2. Singular engines (Fabric 2D, Three stack 3D, Excalidraw admin embed).
 3. Dependencies with live role or documented build role.
-4. Honest gates — exit 0 in the claiming session.
+4. Honest gates  -  exit 0 in the claiming session.
 5. Secrets only in `.env.local` / platform secrets.
 6. Data clients match Lockedfiles; **disk** remains live SVG authority until cutover proved.
 7. Thin docs; stack policy not fiction.
@@ -363,9 +364,9 @@ A maintainable, installable, releasable monorepo:
 
 ## Phase checklist
 
-Every item starts unchecked. Flip only with COMPLETION-CONTRACT proof.
+Every item starts unchecked. Flip only with CHECKLIST Part A (evidence) proof.
 
-### T0 — Inventory and honesty
+### T0  -  Inventory and honesty
 
 - [PASS] Snapshot root + site engines from package.json vs lockfile (FEATURES + FIX-TECHSTACK 2026-07-17).
 - [PASS] Confirm live Fabric / Three / Excalidraw imports (FEATURES inventory).
@@ -376,7 +377,7 @@ Every item starts unchecked. Flip only with COMPLETION-CONTRACT proof.
 **Exit:** Honest TF registry.  
 **Proof:** short inventory + commands in agent report.
 
-### T1 — Install and workspace
+### T1  -  Install and workspace
 
 - [PASS] Root-only install documented and guarded.
 - [PASS] Workspace packages only: `site`, `tech-docs-generator`.
@@ -386,27 +387,28 @@ Every item starts unchecked. Flip only with COMPLETION-CONTRACT proof.
 **Exit:** Clean install from lockfile reproduces.  
 **Proof:** `pnpm install` / frozen install exit 0; guard evidence.
 
-### T2 — Engine monoculture
+### T2  -  Engine monoculture
 
 - [PASS] Fabric only for interactive 2D.
 - [PASS] Three stack only for 3D.
 - [PASS] Excalidraw only for admin SVG studio embed.
+- [PARTIAL] Maker.js present for parametric recipes; Admin form still template multipath (Admin K1 OPEN — product track).
 - [PASS] No second i18n framework on Site.
 
 **Exit:** Grep policy clean.  
 **Proof:** import inventory in report.
 
-### T3 — Dependency hygiene
+### T3  -  Dependency hygiene
 
-- [PARTIAL] Every direct `site` dependency has import or build role. (48/49 USED; model-viewer BUILD_ROLE CDN; 8 idle devDeps NO_IMPORT — T1 2026-07-17)
-- [PARTIAL] Remove or justify dead deps. (idle listed in `agent-reports/2026-07-17-plan-T1.md`; none removed — owner cut/keep)
+- [PARTIAL] Every direct `site` dependency has import or build role. (48/49 USED; model-viewer BUILD_ROLE CDN; 8 idle devDeps NO_IMPORT  -  T1 2026-07-17)
+- [PARTIAL] Remove or justify dead deps. (idle listed in `agent-reports/2026-07-17-plan-T1.md`; none removed  -  owner cut/keep)
 - [PASS] License check on additions. (no additions this session)
 - [PASS] No competitor packages. (package-name scan clean)
 
 **Exit:** TF-05 clear for site package.  
 **Proof:** dep audit + lockfile.
 
-### T4 — Type, lint, unit stability
+### T4  -  Type, lint, unit stability
 
 - [ ] `pnpm run lint` exit 0 (max-warnings 0). (FAIL this session: Planner files)
 - [ ] `pnpm run typecheck` exit 0 (stable; no `.next/dev/types` race). (FAIL this session: PlannerFabricStage)
@@ -417,7 +419,7 @@ Every item starts unchecked. Flip only with COMPLETION-CONTRACT proof.
 **Exit:** lint + typecheck + focused/full unit as claimed.  
 **Proof:** command exits same session.
 
-### T5 — Security and secrets
+### T5  -  Security and secrets
 
 - [PASS] `pnpm run lint:secrets` exit 0 (T-W3 2026-07-17).
 - [PASS] `pnpm --filter oando-site run scan:secrets` exit 0 (T-W3).
@@ -429,7 +431,7 @@ Every item starts unchecked. Flip only with COMPLETION-CONTRACT proof.
 **Exit:** Secrets + env name contract honest.  
 **Proof:** secretlint + env table names only.
 
-### T6 — Build and release
+### T6  -  Build and release
 
 - [PASS] `pnpm run check-sharp` exit 0 (T-W3: sharp 0.35.2 / libvips 8.18.3).
 - [ ] `pnpm run build` exit 0.
@@ -439,7 +441,7 @@ Every item starts unchecked. Flip only with COMPLETION-CONTRACT proof.
 **Exit:** Production artifact builds.  
 **Proof:** build exit 0; deploy remains owner-only.
 
-### T7 — Data plane clients (boundary only)
+### T7  -  Data plane clients (boundary only)
 
 - [PASS] Drizzle schemas present for owned tables.
 - [PASS] R2 client uses intact S3 credential pair (names in FEATURES; preferred pair SET).
@@ -450,10 +452,10 @@ Every item starts unchecked. Flip only with COMPLETION-CONTRACT proof.
 **Exit:** Lockedfiles persistence table matches code; Failures.md DB-SVG honest.  
 **Proof:** paths + Failures.md + health unit.
 
-### T8 — Docs and ops closure
+### T8  -  Docs and ops closure
 
-- [PASS] Plan trio present: COMPLETION-CONTRACT, FEATURES, FINISH-PLAN.
-- [PASS] `check:plans-purity` allows TechStack and requires trio (exit 0 FIX-TECHSTACK).
+- [PASS] Plan duo present: CHECKLIST + FEATURES only.
+- [PASS] `check:plans-purity` allows TechStack duo CHECKLIST+FEATURES only (exit 0 FIX-TECHSTACK).
 - [ ] Lockedfiles updated when engines change.
 - [PASS] `pnpm run check:layout` exit 0 before claim done.
 - [PASS] Agent track file `agent-reports/TECH-STACK.md` honest (OPEN/PARTIAL until gates).
@@ -471,13 +473,13 @@ Every item starts unchecked. Flip only with COMPLETION-CONTRACT proof.
 | T3 | PARTIAL | Audit done (T1); 8 idle devDeps wait owner cut/keep; TF-05 OPEN |
 | T4 | FAIL | lint exit 1, typecheck exit 2 (Planner paths); health unit 0 |
 | T5 | PASS (T-W3 session) | lint:secrets 0; scan:secrets 0; launch:env 0; env names cover validate-launch + env.server + FEATURES |
-| T6 | PARTIAL | check-sharp **PASS** (T-W3); build + release:gate **not** run — no stack healthy claim |
+| T6 | PARTIAL | check-sharp **PASS** (T-W3); build + release:gate **not** run  -  no stack healthy claim |
 | T7 | PASS (honesty T-W3) | Health unit 0; disk SVG authority in Failures.md + Lockedfiles + .env.example |
-| T8 | PARTIAL | Plan trio + purity; layout 0 (T-W3); full docs closure open |
+| T8 | PARTIAL | Plan duo + purity; layout 0 (T-W3); full docs closure open |
 
-**Stack healthy claim:** **forbidden** until §3.1 of COMPLETION-CONTRACT is green or owner-waived in Failures.md.
+**Stack healthy claim:** **forbidden** until Part A gates (evidence) is green or owner-waived in Failures.md.
 
-## Failure registry (TF) — 1:1 with COMPLETION-CONTRACT
+## Failure registry (TF)  -  1:1 with Part A evidence (evidence)
 
 Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**. Prefer **TF** ids in finish reports. **TS-n** = **TF-n** for n≤22.
 
@@ -502,17 +504,17 @@ Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**. Prefer **TF** ids in fin
 | TF-17 | i18n second framework | next-intl only | PARTIAL |
 | TF-18 | Supabase client boundary violated | No new catalog `.from()` | OPEN |
 | TF-19 | Production GLB/publish writes `site/public` | 501 / storage only | PARTIAL |
-| TF-20 | Docs budget / stack fiction | Lockedfiles + plan trio | PARTIAL |
+| TF-20 | Docs budget / stack fiction | Lockedfiles + plan duo | PARTIAL |
 | TF-21 | Docs claim pnpm@11.13 but CI differs | Align pins | **PASS** (T-W1) |
 | TF-22 | Hoisted monorepo phantom deps | No undeclared app imports | OPEN |
-| TF-23 | CI logs under `site/results/` | Prefer root `results/` | PASS — workflows tee to `results/tooling` / `results/site` (90b55c74) |
+| TF-23 | CI logs under `site/results/` | Prefer root `results/` | PASS  -  workflows tee to `results/tooling` / `results/site` (90b55c74) |
 | TF-24 | Fast gate CI timeout | Job succeeds or timeout adjusted | OPEN |
 
 ## Cross-track blockers
 
 | Item | Owner |
 |---|---|
-| DB-SVG cutover incomplete | Architecture + `Failures.md` — stack must not pretend DB/R2 is live SVG authority |
+| DB-SVG cutover incomplete | Architecture + `Failures.md`  -  stack must not pretend DB/R2 is live SVG authority |
 | Product auth / DEV bypass | Site/Admin tracks prove auth; stack keeps production-disabled contract |
 | Planner/Site/Admin feature gaps | Their contracts |
 
@@ -523,4 +525,4 @@ Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**. Prefer **TF** ids in fin
 3. Dead direct deps (**T3 / TF-05**).
 4. Build + release:gate (**T6 / TF-06**).
 5. Keep DB-SVG honesty (**T7 / TF-10**).
-6. ~~Align CI pnpm pin~~ — **TF-02 / TF-21 PASS** (T-W1).
+6. ~~Align CI pnpm pin~~  -  **TF-02 / TF-21 PASS** (T-W1).

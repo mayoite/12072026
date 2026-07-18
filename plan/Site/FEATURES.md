@@ -10,7 +10,7 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 
 **Only two plan docs per track:** `CHECKLIST.md` + `FEATURES.md`.
 
-**Code roots:** `site/app/(site)/` · `site/app/sitemap.ts` · `site/app/robots.ts` · `site/components/` · `site/features/site/` · `site/lib/analytics/` · `site/lib/catalog/site/` · `site/i18n/`
+**Code roots:** `site/app/(site)/`  /  `site/app/sitemap.ts`  /  `site/app/robots.ts`  /  `site/components/`  /  `site/features/site/`  /  `site/lib/analytics/`  /  `site/lib/catalog/site/`  /  `site/i18n/`
 
 Table paths are relative to `site/` unless noted. `app/...` means `site/app/...`.
 
@@ -18,7 +18,7 @@ Table paths are relative to `site/` unless noted. `app/...` means `site/app/...`
 
 ---
 
-## S0 / S1 — measurement, routes, SEO
+## S0 / S1  -  measurement, routes, SEO
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -34,7 +34,7 @@ Table paths are relative to `site/` unless noted. `app/...` means `site/app/...`
 
 ---
 
-## S2 — commercial landing
+## S2  -  commercial landing
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -46,7 +46,7 @@ Table paths are relative to `site/` unless noted. `app/...` means `site/app/...`
 
 ---
 
-## S3 — chrome, nav, forms, consent
+## S3  -  chrome, nav, forms, consent
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -57,17 +57,17 @@ Table paths are relative to `site/` unless noted. `app/...` means `site/app/...`
 | Language switcher | `components/site/LanguageSwitcher.tsx`, `i18n/*` | Locales en/hi/fr/de/es; `localePrefix: 'never'`. Browser locale journey OPEN |
 | Cookie consent | `components/site/CookieConsentBar.tsx`, `lib/consent.ts`, `components/site/SiteAnalytics.tsx` | Accept/reject/timed accept set cookie; custom events queue until accept; VA/SI `beforeSend` null without consent (unit S-W3). Timed accept **browser OPEN** (SF-18). Legacy `components/ui/CookieConsent.tsx` is localStorage-only, not chrome-mounted. |
 | Contact form | `components/contact/CustomerQueryForm.tsx`, `ContactTeaser.tsx`, `features/shared/api/readApiErrorMessage.ts` | Labels, consent, success status, posts to customer-queries; nested API error envelopes unit-parsed (S-W3). **Delivery browser OPEN** (SF-09) |
-| Customer queries API | `app/api/customer-queries/route.ts` | Server intake; rate limit + honeypot; returns `queryId` + `followUp` — re-verify with form e2e |
+| Customer queries API | `app/api/customer-queries/route.ts` | Server intake; rate limit + honeypot; returns `queryId` + `followUp`  -  re-verify with form e2e |
 | Route chrome | `components/site/RouteChrome.tsx`, `RouteChromeSuspense.tsx`, `SiteConversionTracker.tsx` | Wires analytics tracker into layout |
 
 ---
 
-## S4 — product discovery and Planner entry
+## S4  -  product discovery and Planner entry
 
 | Feature | Code | Gap |
 |---|---|---|
 | Catalog source | `lib/catalog/site/getProducts.ts` → `lib/catalog/sources.ts` | Drizzle/live when configured; fixture/fallback when not. Empty category is **data** issue + Site empty UX (SF-03) |
-| Categories / filters | `lib/catalog/site/categories.ts`, `filters.ts`, `traits.ts`, `slugResolver.ts` | — |
+| Categories / filters | `lib/catalog/site/categories.ts`, `filters.ts`, `traits.ts`, `slugResolver.ts` |  -  |
 | Products landing | `app/(site)/products/page.tsx` | Category entry |
 | Category grid | `app/(site)/products/[category]/FilterGrid*.tsx`, `CategoryPageView.tsx` | Loading/error/empty states in code; stale/recovery thin (SF-16) |
 | Product detail | `app/(site)/products/[category]/[product]/page.tsx`, `ProductViewer.tsx` | JSON-LD via `buildProductJsonLd`; Design in Planner via `PlannerLaunchLink` with `productSlug` + `categoryId` |
@@ -79,7 +79,7 @@ Table paths are relative to `site/` unless noted. `app/...` means `site/app/...`
 
 ---
 
-## S5 — content and i18n
+## S5  -  content and i18n
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -91,7 +91,7 @@ Table paths are relative to `site/` unless noted. `app/...` means `site/app/...`
 
 ---
 
-## S6 — analytics and measurement
+## S6  -  analytics and measurement
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -103,14 +103,14 @@ Table paths are relative to `site/` unless noted. `app/...` means `site/app/...`
 
 ---
 
-## S7 — a11y, performance, release surfaces
+## S7  -  a11y, performance, release surfaces
 
 | Feature | Code | Gap |
 |---|---|---|
-| A11y smoke | `tests/e2e/site-a11y-smoke.spec.ts` | 10 routes; critical/serious only — not WCAG 2.2 AA (SF-13) |
+| A11y smoke | `tests/e2e/site-a11y-smoke.spec.ts` | 10 routes; critical/serious only  -  not WCAG 2.2 AA (SF-13) |
 | Other Site e2e | `site-navigation-smoke`, `site-locale-switch`, `site-chrome-parity`, `site-assistant-shell`, visual regression | Not claimed as matrix PASS |
 | Site layout | `app/(site)/layout.tsx` | metadata via `buildSiteMetadata`; RouteChrome; main landmark |
-| Error / loading / not-found | `app/(site)/error.tsx`, `loading.tsx`, `not-found.tsx` | — |
+| Error / loading / not-found | `app/(site)/error.tsx`, `loading.tsx`, `not-found.tsx` |  -  |
 | PWA SW register | `components/pwa/ServiceWorkerRegister.tsx` | Keep SW from masking marketing chunk truth (S0) |
 
 ---
@@ -132,12 +132,12 @@ Planner handoff API is **Planner track** (`/api/planner/handoff`).
 
 ## Tests (representative)
 
-Unit: `tests/unit/features/site/data/*` · `tests/unit/lib/analytics/*` · `tests/unit/lib/siteUrl.test.ts` · `tests/unit/app/(site)/sitemap.test.ts` · `robots.test.ts` · `solutions/[category]/page.test.tsx` · `readApiErrorMessage.test.ts` · contact form/teaser · broad `tests/unit/app/(site)/**` page tests
+Unit: `tests/unit/features/site/data/*`  /  `tests/unit/lib/analytics/*`  /  `tests/unit/lib/siteUrl.test.ts`  /  `tests/unit/app/(site)/sitemap.test.ts`  /  `robots.test.ts`  /  `solutions/[category]/page.test.tsx`  /  `readApiErrorMessage.test.ts`  /  contact form/teaser  /  broad `tests/unit/app/(site)/**` page tests
 
-E2E: `tests/e2e/site-a11y-smoke.spec.ts` · `site-navigation-smoke.spec.ts` · `site-locale-switch.spec.ts` · `site-chrome-parity.spec.ts`
+E2E: `tests/e2e/site-a11y-smoke.spec.ts`  /  `site-navigation-smoke.spec.ts`  /  `site-locale-switch.spec.ts`  /  `site-chrome-parity.spec.ts`
 
 ---
 
 ## Reference (not truth)
 
-`CHECKLIST.md` · `docs/architecture/09-SITE-UI-BENCHMARK.md` · `agent-reports/SITE.md` (status hints only)
+`CHECKLIST.md`  /  `docs/architecture/09-SITE-UI-BENCHMARK.md`  /  `agent-reports/SITE.md` (status hints only)

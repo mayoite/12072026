@@ -2,27 +2,27 @@
 
 **Status:** OPEN  
 **Pair:** `FEATURES.md` = live code map (feature → path → gap).  
-**This file:** all-encompassing execution document for the track — evidence rules **and** full phase checklist (what is required, what exists, what is open).  
+**This file:** all-encompassing execution document for the track  -  evidence rules **and** full phase checklist (what is required, what exists, what is open).  
 **Active blockers:** `../../Failures.md`  
 **Doc set:** only `CHECKLIST.md` + `FEATURES.md` per track.
 
 ---
 
-## Part A — Evidence and completion rules
+## Part A  -  Evidence and completion rules
 
-_Former COMPLETION-CONTRACT content. Wins on how to prove done._
+_Evidence and completion rules. Wins on how to prove done._
 
 **Status:** OPEN  
 **Authority:** This file is the **execution contract** for finishing the public **Site** track.  
 
 **Code maps:** `FEATURES.md` (live paths).  
-**Detailed checklist:** `this checklist (phase section)` (S0–S7, SF registry, browser matrix).  
+**Detailed checklist:** `Part B (phase checklist in this file)` (S0–S7, SF registry, browser matrix).  
 **UI bar:** `docs/architecture/09-SITE-UI-BENCHMARK.md`  
 **Domain:** `docs/architecture/02-DOMAINS.md` (Site owns public visitors; not Planner layout or Admin inventory)  
 **Security bar:** `docs/architecture/10-SECURITY-BENCHMARK.md` (public forms, auth redirects, no secret leakage)  
 **i18n bar:** `docs/Lockedfiles/03-dependencies-engines-current.md` + `site/i18n/`  
 **Active blockers:** `../../Failures.md` (real unresolved only)  
-**Agent reports:** `../../agent-reports/` — short files + INDEX, never one mega dump
+**Agent reports:** `../../agent-reports/`  -  short files + INDEX, never one mega dump
 
 ---
 
@@ -65,7 +65,7 @@ All that apply must be true:
 
 1. **Code** on the claimed path (`FEATURES.md` or this file).  
 2. **Unit** for pure logic: focused vitest exit 0, named files.  
-3. **Browser** for customer-visible behaviour: Playwright or documented Chromium — route, viewport, steps, console errors = 0, failed requests (document/XHR) = 0.  
+3. **Browser** for customer-visible behaviour: Playwright or documented Chromium  -  route, viewport, steps, console errors = 0, failed requests (document/XHR) = 0.  
 4. **SEO claims**: rendered HTML (title, canonical, robots, JSON-LD match visible fields).  
 5. **Forms / analytics**: success path proved against real or staging backend, or explicit FAIL when env missing (not silent PASS).  
 6. **Command + exit** in the same session as the PASS claim.  
@@ -79,7 +79,7 @@ All that apply must be true:
 
 ### 3.1 Gates (Site release acceptance)
 
-From repo root — all exit **0** for release claim:
+From repo root  -  all exit **0** for release claim:
 
 | Gate | Command |
 |------|---------|
@@ -114,7 +114,7 @@ Plus `agent-reports/YYYY-MM-DD-INDEX.md`.
 |------|------|
 | Implementer | Code + tests; no PASS without commands |
 | Parent | Re-run gates; write INDEX |
-| Never | Mark FINISH-PLAN / SF items PASS without parent evidence |
+| Never | Mark CHECKLIST Part B (phases) / SF items PASS without parent evidence |
 
 ---
 
@@ -136,7 +136,7 @@ Plus `agent-reports/YYYY-MM-DD-INDEX.md`.
 
 ### Out
 
-- Planner workspace implementation (see `plan/Planner/this checklist (evidence section)`)  
+- Planner workspace implementation (see `plan/Planner/Part A (evidence rules in this file)`)  
 - Admin catalog authoring / SVG editor redesign  
 - DB-SVG cutover ownership (Admin/architecture; Site only **consumes** released catalog)  
 - CRM ops UI  
@@ -183,27 +183,27 @@ No copying assets, layout, or trade dress. Stable requirement IDs: `09-SITE-UI-B
 
 ---
 
-## 7. Failure registry (SF) — Site failures
+## 7. Failure registry (SF)  -  Site failures
 
 Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**.  
-Update only with fresh evidence. Seed mirrors `this checklist (phase section)` (2026-07-17 code read). **Not a browser PASS.**
+Update only with fresh evidence. Seed mirrors `Part B (phase checklist in this file)` (2026-07-17 code read). **Not a browser PASS.**
 
 | ID | Failure | Bar to clear | Status seed |
 |----|---------|--------------|-------------|
-| SF-01 | Homepage accessible heading loses spaces | Accessible name matches visible words with spaces | PARTIAL (code: sr-only join) — browser OPEN |
-| SF-02 | Document titles double brand suffix | One brand segment in titles | PARTIAL (code: resolveDocumentTitle + absolute) — browser OPEN |
+| SF-01 | Homepage accessible heading loses spaces | Accessible name matches visible words with spaces | PARTIAL (code: sr-only join)  -  browser OPEN |
+| SF-02 | Document titles double brand suffix | One brand segment in titles | PARTIAL (code: resolveDocumentTitle + absolute)  -  browser OPEN |
 | SF-03 | Workstations / primary category 0 products | Real products or owner-accepted env story | OPEN / env FAIL |
-| SF-04 | `/catalog` → downloads hero image broken | Destination images 200 | PARTIAL (code: dmrc-hero; no hero-3 ref) — browser OPEN |
+| SF-04 | `/catalog` → downloads hero image broken | Destination images 200 | PARTIAL (code: dmrc-hero; no hero-3 ref)  -  browser OPEN |
 | SF-05 | Route group classification incomplete | Every `(site)` page classified + sitemap/robots agree on target host | PARTIAL (code + unit) |
 | SF-06 | Quote-cart / icon controls missing names | Accessible name on all header icons | OPEN (no quote-cart in header today) |
 | SF-07 | Commercial hierarchy unclear on home | One primary CTA hierarchy browser-proved | OPEN |
-| SF-08 | Planner handoff identity continuity unproved | Product/campaign params survive into Planner entry | PARTIAL (unit + PDP link) — browser OPEN |
+| SF-08 | Planner handoff identity continuity unproved | Product/campaign params survive into Planner entry | PARTIAL (unit + PDP link)  -  browser OPEN |
 | SF-09 | Conversion / form delivery unproved | Contact or query success + analytics receipt | OPEN |
 | SF-10 | CWV / heavy homepage unmeasured | Field or lab LCP on home + products | OPEN |
 | SF-11 | Planner conversion events never imported on Site path | Events that Site owns emit; document Planner-owned events as out of Site | OPEN |
 | SF-12 | i18n parity unproved | `check:i18n:parity` + spot browser locale | OPEN |
 | SF-13 | A11y = smoke only | No critical/serious axe on primary journey; WCAG 2.2 AA claim only after full proof | PARTIAL |
-| SF-14 | HomepageHero image error fallback | Broken image does not blank hero | PARTIAL (code: onError) — browser OPEN |
+| SF-14 | HomepageHero image error fallback | Broken image does not blank hero | PARTIAL (code: onError)  -  browser OPEN |
 | SF-15 | Compare / quote-cart incomplete | Buyer can compare and open quote cart with lines | OPEN |
 | SF-16 | Empty/error/stale catalog recovery thin | Loading/error/empty + recovery UI browser-proved | PARTIAL |
 | SF-17 | SEO unit-only | Rendered title/description/canonical/hreflang browser recheck | PARTIAL |
@@ -212,58 +212,58 @@ Update only with fresh evidence. Seed mirrors `this checklist (phase section)` (
 | SF-20 | Cool monochrome / missing ecru on marketing | Surfaces use brand paper tokens where intended | OPEN until measured |
 | SF-21 | **NEW** Canonical host mismatch | Classification base, `SITE_URL`, robots host, and production agree | OPEN |
 
-Add new SF ids; do not bury issues. Keep FINISH-PLAN SF table in sync when statuses change.
+Add new SF ids; do not bury issues. Keep CHECKLIST Part B (phases) SF table in sync when statuses change.
 
 ---
 
 ## 8. Execution phases (S0–S7)
 
-**Same phase ids as `this checklist (phase section)` so work maps 1:1.**  
-**Difference:** each phase has **Exit gate** + **Proof required** + **Stop condition**. Detailed checkboxes live in FINISH-PLAN.
+**Same phase ids as `Part B (phase checklist in this file)` so work maps 1:1.**  
+**Difference:** each phase has **Exit gate** + **Proof required** + **Stop condition**. Detailed checkboxes live in Part B of this file (phases).
 
-### S0 — Measurement and isolation
+### S0  -  Measurement and isolation
 
 **Proof:** no canonical catalog mutation; deterministic marketing browser bootstrap; baseline SF list reproducible.  
 **Exit:** Site tests isolated; browser serves current source.  
-**Stop:** if tests write inventory or released DB rows — fix isolation before features.
+**Stop:** if tests write inventory or released DB rows  -  fix isolation before features.
 
-### S1 — Route truth and SEO floor
+### S1  -  Route truth and SEO floor
 
 **Exit:** No indexable commercial dead-end; titles clean; sitemap/robots agree on target host.  
 **Proof:** browser titles/canonicals + unit classification + sitemap/robots tests.  
 **Must clear (or owner-accept):** SF-02, SF-04, SF-05, SF-19, SF-21.
 
-### S2 — Landing and commercial hierarchy
+### S2  -  Landing and commercial hierarchy
 
 **Exit:** First viewport works on 1440×900 and 390×844.  
 **Proof:** browser both viewports; axe home; no console/network fail on first load.  
 **Must clear:** SF-01, SF-07, SF-14; measure SF-20.
 
-### S3 — Navigation, chrome, forms
+### S3  -  Navigation, chrome, forms
 
 **Exit:** Visitor can complete contact without keyboard traps; consent before analytics.  
 **Proof:** form e2e or documented staging; a11y smoke on contact; named icon controls.  
 **Must clear:** SF-06, SF-09, SF-18.
 
-### S4 — Product discovery
+### S4  -  Product discovery
 
 **Exit:** Buyer finds a product and enters Planner with identity (target env).  
 **Proof:** browser products → detail → Planner entry; unit getProducts.  
 **Must clear:** SF-03, SF-08, SF-15, SF-16 (honest empty still required if env empty).
 
-### S5 — Content and i18n
+### S5  -  Content and i18n
 
 **Exit:** No half-translated primary nav locales claimed as complete.  
 **Proof:** `check:i18n:parity` + browser one secondary locale.  
 **Must clear:** SF-12; SF-19 residual thin pages.
 
-### S6 — Analytics and Site→Planner contract
+### S6  -  Analytics and Site→Planner contract
 
 **Exit:** Site-owned funnel events have a proof path.  
 **Proof:** unit emitters + browser network or staging sink.  
 **Must clear:** SF-08 continuity, SF-11 ownership boundary, SF-18 consent.
 
-### S7 — A11y, performance, release
+### S7  -  A11y, performance, release
 
 **Exit:** Site release claim allowed only with §3.1 green + S7 + matrix.  
 **Proof:** gates table + browser matrix §9 (desktop + mobile portrait minimum).  
@@ -274,7 +274,7 @@ Add new SF ids; do not bury issues. Keep FINISH-PLAN SF table in sync when statu
 ## 9. Browser acceptance matrix
 
 Every cell needs a **fresh** pass. No screenshots-only PASS.  
-Copy journey rows from `this checklist (phase section)` § Browser acceptance matrix. Viewports:
+Copy journey rows from `Part B (phase checklist in this file)` § Browser acceptance matrix. Viewports:
 
 | Name | Size |
 |------|------|
@@ -298,7 +298,7 @@ Copy journey rows from `this checklist (phase section)` § Browser acceptance ma
 | Locale switch (if UI exposes) | [ ] | [ ] | [ ] | [ ] |
 | `/catalog` redirect destination healthy | [ ] | [ ] | [ ] | [ ] |
 | Auth walls: dashboard/portal (redirect) | [ ] | [ ] | [ ] | [ ] |
-| Axe primary set | [ ] | [ ] | — | — |
+| Axe primary set | [ ] | [ ] |  -  |  -  |
 
 ---
 
@@ -332,9 +332,9 @@ A blocker stops **only** direct dependants. Unrelated phases continue.
 
 ---
 
-## 12. How this exceeds `this checklist (phase section)` and prior fragments
+## 12. How this exceeds `Part B (phase checklist in this file)` and prior fragments
 
-| Area | FINISH-PLAN / FEATURES | This contract |
+| Area | CHECKLIST Part B (phases) / FEATURES | This contract |
 |------|------------------------|---------------|
 | Evidence | Detailed checklists | Explicit PASS recipe + gates |
 | Reports | Implicit in plan | Short multi-file + INDEX mandatory |
@@ -342,9 +342,9 @@ A blocker stops **only** direct dependants. Unrelated phases continue.
 | Brand / ecru | SF-20 in plan | Same; measured before PASS |
 | False completion | Forbidden | PARTIAL vs PASS operationalized |
 | Typecheck hygiene | Stated in gates | No PASS under `.next` type race |
-| Phase files | Historical PHASES-* gone | S0–S7 1:1 with FINISH-PLAN |
+| Phase files | Historical PHASES-* gone | S0–S7 1:1 with Part B phases (phases) |
 
-`this checklist (phase section)` remains the detailed execution checklist.  
+`Part B (phase checklist in this file)` remains the detailed execution checklist.  
 **Use this contract for new claims of done.**
 
 ---
@@ -353,7 +353,7 @@ A blocker stops **only** direct dependants. Unrelated phases continue.
 
 Owner may reorder; default:
 
-1. **S0/S1** — isolation, route classification audit, titles (SF-02), host align (SF-21), catalog redirect assets (SF-04).  
+1. **S0/S1**  -  isolation, route classification audit, titles (SF-02), host align (SF-21), catalog redirect assets (SF-04).  
 2. **SF-01 / SF-14** homepage a11y + hero fallback browser.  
 3. **S2** commercial hierarchy first viewport.  
 4. **S4** product discovery in real env (or document FAIL + Failures.md).  
@@ -370,16 +370,16 @@ Site is **complete** only when:
 1. §3.1 all green.  
 2. Browser matrix §9: desktop + mobile portrait complete for primary commercial path; keyboard for nav + form or Planner entry.  
 3. No Critical SF open (SF-01–05, SF-04 asset, empty primary category without owner accept, SF-21 host).  
-4. `FEATURES.md` and `this checklist (phase section)` match live code and each other.  
+4. `FEATURES.md` and `Part B (phase checklist in this file)` match live code and each other.  
 5. Owner sign-off on production-like server (not only `next dev`).
 
 Until then: **Status remains OPEN.**
 
 ---
 
-## Part B — Phase checklist (full)
+## Part B  -  Phase checklist (full)
 
-_Former FINISH-PLAN content. Full required work: what is there and what is not._
+_Full phase checklist: what is required, what exists, what is open._
 
 Status: OPEN.
 
@@ -398,7 +398,7 @@ The product loop is:
 3. Visitor enters Planner with product / campaign identity.
 4. Customer designs, generates branded BOQ, sends to Oando.
 
-Site owns acquisition, discovery, contact, SEO, and Site→Planner entry continuity — not Planner layout or Admin inventory.
+Site owns acquisition, discovery, contact, SEO, and Site→Planner entry continuity  -  not Planner layout or Admin inventory.
 
 ## Truth rules
 
@@ -412,8 +412,8 @@ Site owns acquisition, discovery, contact, SEO, and Site→Planner entry continu
 - No Site failure may be hidden behind a later phase.
 - No completed item may remain marked `OPEN`.
 - No unverified item may be marked complete.
-- OPEN / FAIL / PASS / PARTIAL per `this checklist (evidence section)` §2.
-- Viewport / CWV / production SEO claims need current runs — never re-claim from old ticks.
+- OPEN / FAIL / PASS / PARTIAL per `Part A (evidence rules in this file)` §2.
+- Viewport / CWV / production SEO claims need current runs  -  never re-claim from old ticks.
 
 ## Scope boundary
 
@@ -457,7 +457,7 @@ Inbound Planner entry is a Site exit contract. Layout editing defects are Planne
 
 ## External benchmark
 
-Capability only — no copying assets, layout, or trade dress.
+Capability only  -  no copying assets, layout, or trade dress.
 
 | Source | Expectation |
 |--------|-------------|
@@ -482,14 +482,14 @@ Execution update: 2026-07-17 (FIX-SITE).
 | S6 | PARTIAL | Planner entry params unit-covered; production analytics receipt OPEN |
 | S7 | OPEN | Release gates + CWV + full browser matrix open |
 
-**Failure registry:** `this checklist (evidence section)` §7 (**SF-01–SF-21**). Update only with fresh evidence.  
-**Browser matrix:** `this checklist (evidence section)` §9. No screenshots-only PASS.
+**Failure registry:** `Part A (evidence rules in this file)` §7 (**SF-01–SF-21**). Update only with fresh evidence.  
+**Browser matrix:** `Part A (evidence rules in this file)` §9. No screenshots-only PASS.
 
-Fresh local unit (this session): robots/sitemap/siteUrl, footer no-admin, solutions hard-404, plannerEntry, CustomerQueryForm/ContactTeaser error parsing — run commands in agent fix report. **Not** production SEO pass. **Not** 6-viewport PASS.
+Fresh local unit (this session): robots/sitemap/siteUrl, footer no-admin, solutions hard-404, plannerEntry, CustomerQueryForm/ContactTeaser error parsing  -  run commands in agent fix report. **Not** production SEO pass. **Not** 6-viewport PASS.
 
 ## Execution phases (S0–S7)
 
-### S0 — Measurement and isolation
+### S0  -  Measurement and isolation
 
 - [ ] Site-only test run id / output under `results/site/` when used
 - [ ] No test mutates canonical catalog or released DB rows
@@ -499,20 +499,20 @@ Fresh local unit (this session): robots/sitemap/siteUrl, footer no-admin, soluti
 **Exit:** Site tests isolated; browser serves current source.  
 **Proof:** unit route classification + one Playwright list green.
 
-### S1 — Route truth and SEO floor
+### S1  -  Route truth and SEO floor
 
 - [PASS] Classify every `app/(site)` route (public / noindex / auth / redirect / dead) (classification module + unit; browser OPEN)
 - [PASS] `app/sitemap.ts` / `app/robots.ts` match classification (unit FIX-SITE 2026-07-17)
 - [ ] Fix double-brand titles (SF-02)
 - [ ] Fix broken redirect destinations (SF-04)
 - [ ] Canonical + hreflang correct for indexable locales
-- [PASS] Soft-404 / thin pages — solutions unknown slugs hard-404 (unit FIX-SITE)
+- [PASS] Soft-404 / thin pages  -  solutions unknown slugs hard-404 (unit FIX-SITE)
 - [ ] Production host SEO re-probe (robots/sitemap live)
 
 **Exit:** No indexable commercial dead-end; titles clean.  
 **Proof:** browser titles/canonicals + unit classification + sitemap test + production re-probe.
 
-### S2 — Landing and commercial hierarchy
+### S2  -  Landing and commercial hierarchy
 
 - [ ] Homepage: audience, value, proof, **one** primary next action above fold
 - [ ] SF-01 heading a11y spaces fixed
@@ -523,7 +523,7 @@ Fresh local unit (this session): robots/sitemap/siteUrl, footer no-admin, soluti
 **Exit:** First viewport works on 1440×900 and 390×844.  
 **Proof:** browser both viewports; axe home; no console/network fail on first load.
 
-### S3 — Navigation, chrome, forms
+### S3  -  Navigation, chrome, forms
 
 - [PASS] Header/mobile nav; public footer has no Admin link (unit FIX-SITE)
 - [PASS] Contact / customer query: labels, errors, success (envelope via `readApiErrorMessage`) unit S-W3; live delivery OPEN
@@ -533,7 +533,7 @@ Fresh local unit (this session): robots/sitemap/siteUrl, footer no-admin, soluti
 **Exit:** Visitor can complete contact without keyboard traps.  
 **Proof:** form e2e or documented staging; a11y smoke on contact.
 
-### S4 — Product discovery
+### S4  -  Product discovery
 
 - [ ] Category landing with real products in target env (or accepted fixture env)
 - [ ] Search, filter, sort, empty/loading/error
@@ -544,7 +544,7 @@ Fresh local unit (this session): robots/sitemap/siteUrl, footer no-admin, soluti
 **Exit:** Buyer finds a product and enters Planner with identity.  
 **Proof:** browser products → detail → Planner entry; unit getProducts.
 
-### S5 — Content and i18n
+### S5  -  Content and i18n
 
 - [ ] About, solutions, planning, etc. real content or noindex
 - [ ] Locale parity gate green
@@ -553,7 +553,7 @@ Fresh local unit (this session): robots/sitemap/siteUrl, footer no-admin, soluti
 **Exit:** No half-translated primary nav locales claimed as complete.  
 **Proof:** `check:i18n:parity` + browser one secondary locale.
 
-### S6 — Analytics and Site→Planner contract
+### S6  -  Analytics and Site→Planner contract
 
 - [PARTIAL] `PAGE_VIEW`, CTA, `PLANNER_ENTRY` emitters unit
 - [PARTIAL] Attribution cookies / query params unit
@@ -563,7 +563,7 @@ Fresh local unit (this session): robots/sitemap/siteUrl, footer no-admin, soluti
 **Exit:** Site-owned funnel events have a proof path.  
 **Proof:** unit emitters + browser network or staging sink.
 
-### S7 — A11y, performance, release
+### S7  -  A11y, performance, release
 
 - [ ] Primary journey axe: no critical/serious
 - [ ] Keyboard primary path (nav → products → contact or Planner)
@@ -574,7 +574,7 @@ Fresh local unit (this session): robots/sitemap/siteUrl, footer no-admin, soluti
 - [ ] FEATURES.md updated from code
 - [ ] Failures.md only real open blockers
 
-**Exit:** Site release claim allowed only with COMPLETION-CONTRACT §3.1 green + S7.  
+**Exit:** Site release claim allowed only with CHECKLIST Part A (evidence) §3.1 green + S7.  
 **Proof:** gates table + browser matrix in contract §9.
 
 ## Dependency order
@@ -591,7 +591,7 @@ S7 a11y/perf/release (continuous; gates release)
 
 ## Immediate priority queue
 
-1. **S0/S1** — production SEO re-probe; titles (SF-02); catalog redirect asset (SF-04).
+1. **S0/S1**  -  production SEO re-probe; titles (SF-02); catalog redirect asset (SF-04).
 2. **SF-01** homepage accessible heading.
 3. **S2** commercial hierarchy first viewport.
 4. **S4** product discovery in real env (or document FAIL + Failures.md).
@@ -601,6 +601,6 @@ S7 a11y/perf/release (continuous; gates release)
 
 ## Owner acceptance
 
-Site is **complete** only when COMPLETION-CONTRACT §14 is satisfied.
+Site is **complete** only when CHECKLIST Part A (evidence) §14 is satisfied.
 
 Until then: **Status remains OPEN.**

@@ -39,11 +39,16 @@ for (const f of markdown) {
   }
 }
 
+// Official duo required everywhere. Admin may keep extra supporting plan notes
+// (Part C archives, engines detail, implementa dumps) next to the duo.
+const tracksAllowingExtraMd = new Set(["Admin"]);
+
 for (const track of productTracks) {
   for (const file of ["CHECKLIST.md", "FEATURES.md"]) {
     const rel = `${track}/${file}`;
     if (!markdown.includes(rel)) violations.push(`missing: plan/${rel}`);
   }
+  if (tracksAllowingExtraMd.has(track)) continue;
   const trackMd = markdown.filter((f) => f.startsWith(`${track}/`) && f.endsWith(".md"));
   for (const f of trackMd) {
     const base = path.posix.basename(f);
@@ -71,4 +76,6 @@ if (violations.length) {
   process.exit(1);
 }
 
-console.log("check:plans-purity OK — each track: CHECKLIST.md + FEATURES.md only");
+console.log(
+  "check:plans-purity OK — each track: CHECKLIST.md + FEATURES.md (Admin may have extra supporting .md)",
+);

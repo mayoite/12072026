@@ -387,8 +387,16 @@ export function AdminSvgEditorListView({
             <time dateTime={refreshedAtLabel}>{refreshedAtLabel}</time>
           </p>
         </div>
-        {/* ADM-SHELL-02: only one primary action in the header */}
+        {/* Primary: studio new. Secondary: parametric field form. */}
         <div className="admin-page__actions" data-testid="admin-shell-actions">
+          <Link
+            href="/admin/svg-editor/parametric"
+            className="admin-btn"
+            data-testid="admin-shell-parametric-desk"
+            data-min-tap-px={minTapPx}
+          >
+            Linear desk fields
+          </Link>
           <Link
             href="/admin/svg-editor/new"
             className="admin-btn admin-btn--primary"

@@ -1,0 +1,123 @@
+# Admin — reality and stack
+
+**Status:** OPEN (policy)  
+**Pair:** execution spine = `CHECKLIST.md` Part C · tasks = `IMPLEMENTATION-PLAN.md` · code map = `FEATURES.md`
+
+---
+
+## Market reality
+
+There is **no free** package that does: *fields in → pro Oando furniture plan SVG out*.
+
+| Class | Examples | Creates SVG? | Many fields? | Use here |
+|-------|----------|--------------|--------------|----------|
+| **Pens** | **Maker.js (in repo)**, Paper.js, raw paths | Yes | Only if **you** write drawers | **Maker = only geometry pen** |
+| **Static packs** | CAD symbol packs, commissioned vectors | Pre-drawn | No auto matrix | Quality reference / license check |
+| **Full apps** | react-planner, Sweet Home 3D, Archilogic SDKs | Whole product | N/A | **Skip** — duplicates Planner |
+| **Paid** | ~$80k + $30k/yr configurators | Yes | Yes | Out of budget |
+
+**Implication:** Eng writes **type drawers** + Zod schemas. Client fills **forms only**. No free engine invents furniture topology.
+
+```text
+[Admin form: fields mm]
+        |
+        v
+[Eng drawer: Zod → Maker.js recipe → multipath SVG]
+        |
+        v
+[sanitise / pipeline → disk svg-catalog + descriptors]
+        |
+        v
+[Fabric places published SVG] → BOQ name/SKU
+```
+
+---
+
+## Locked stack (do not reopen)
+
+| Layer | Choice | Link |
+|-------|--------|------|
+| **Engine pen** | Maker.js **only** | https://github.com/microsoft/maker.js · npm `makerjs` `^0.19.2` |
+| **Brain** | Eng type drawers (schema + draw) | this monorepo |
+| **Client** | Forms only (no code) | Admin parametric route |
+| **Canvas** | Fabric (place/zoom) | https://github.com/fabricjs/fabric.js · npm `fabric` `7.4.0` |
+| **Chrome** | Dockview + React Aria | https://github.com/mathuo/dockview · React Aria |
+| **Draft studio** | Excalidraw (freehand only) | https://github.com/excalidraw/excalidraw · not parametric authority |
+| **AI** | Field draft only after C2 (**C-AI**). Never geometry | CHECKLIST Part C |
+| **Monorepo** | Product + planner import paths | https://github.com/mayoite/12072026 |
+
+**One line:** Maker.js. Build drawers on it. Don't switch pens. AI may suggest fields after C2 — never paths.
+
+---
+
+## Engine matrix (roles)
+
+| Role | Package / path | Authority for | Not authority for |
+|------|----------------|---------------|-------------------|
+| Interactive 2D place | Fabric · `features/planner/canvas/*` | Zoom, pan, place published SVG | Generating brand geometry |
+| 3D | Three + R3F | 3D view from same document | Plan SVG craft |
+| Admin freehand draft | Excalidraw · `ExcalidrawClient.tsx` | Studio draft UX | Publish truth for parametric |
+| Geometry pen | Maker.js · `makerJsRecipes.ts` · `makerJsToPath.ts` | Multipath plan SVG | Client freehand; AI paths |
+| Interim template draw | `drawLinearDeskFromTemplate.ts` | **Converge to Maker (K1 OPEN)** | Long-term dual pen |
+| Publish compile | `compileSvgForPublish` · `normalizeDescriptorForPipeline` · `pipelineCore` | S1–S3 sanitise | Client engines as release |
+| Disk write | `svgPipelineRunner` S4 · `persistBlockDescriptor` | Live SVG + descriptors | DB sole authority (until cutover) |
+| Units | `features/planner/model/units.ts` | mm store; mm/cm display | Parallel cm+mm that drift |
+| Isolation | `catalogWriteIsolation.ts` | Block test writes to canonical catalog | — |
+
+---
+
+## Code reality (parametric — re-verify)
+
+| Surface | Truth today |
+|---------|-------------|
+| Form preview | `LinearDeskParametricForm` → template `renderLinearDeskSvg` → `drawLinearDeskFromTemplate` |
+| Publish compile | `compileLinearDeskSvg` → same template path |
+| CLI | `scripts/render-linear-desk.mts` → same template path |
+| Maker recipes | Exist + unit tests; pipeline IR (`normalizeDescriptorForPipeline` optional `maker`); **not** form/CLI/publish pen |
+| Schema | `LinearDeskFieldsSchema` live with exact mm fields + fit refine |
+| Form model | Uses planner `units.ts` for mm/cm; maps full schema |
+| Form UI | Missing pedestalTopGap / pedestalBackInset controls (**K3 OPEN**) |
+
+**K1 job:** one Maker drawer; form + CLI + publish call only that. Delete dual-pen.
+
+---
+
+## Import / reuse (locked)
+
+| Source | Reuse | Do not |
+|--------|-------|--------|
+| This monorepo planner | `units.ts`, `asset-engine/svg/*`, catalog types | Second convert/draw stack under Admin-only |
+| npm | **`makerjs` only** (already in `site/package.json`) | New geometry pen (Paper host, Konva host) |
+| GitHub apps | — | Full planner apps |
+
+---
+
+## What not to import / rebuild
+
+| Forbidden | Why |
+|-----------|-----|
+| https://github.com/cvdlab/react-planner | Whole planner UI + catalog — duplicates ours |
+| Free “furniture plan engines” as product core | Greys / wrong product / not field-driven brand library |
+| Sweet Home 3D, Blueprint3d, Archilogic SDKs | Full product or commercial floor display |
+| Second interactive 2D canvas as host | Split brain with Fabric |
+| Paper.js / SVG.js as new pen | Owner locked Maker.js only |
+| `SVG_RELEASE_AUTHORITY=db` in this plan | Disk authority until Failures.md cutover proved |
+| AI path `d` / multipath / SVG as publish truth | Wrong mm confidence; C-AI is field draft only |
+| $80k paid configurator | Out of budget |
+| Rebuild Fabric toolbar / Dockview shell | Toolbars ready; don't rebuild |
+
+---
+
+## Publish authority (policy)
+
+- **Disk** (`site/inventory/descriptors/`, `site/public/svg-catalog/`) is live SVG authority.
+- Dual-write is optional fail-soft when Products DB + R2 ready — not cutover.
+- No DB authority flip in this plan. See `Failures.md` and `docs/architecture/08-DATABASE-SVG-CONTRACT.md`.
+
+---
+
+## Agents
+
+- **1 implementer max** on this track + parent evidence.
+- No 6-worker circus on one pipeline.
+- Commits only if owner asked.

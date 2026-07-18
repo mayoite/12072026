@@ -11,7 +11,8 @@
 | 2D canvas | Fabric | Sole interactive 2D engine |
 | 3D | Three.js + R3F + Drei | Bindings/helpers only |
 | Admin SVG authoring | `@excalidraw/excalidraw` | Embedded Excalidraw studio; host (`AdminSvgEditorShell`) owns dimensions, validation, draft state, compile, and publish |
-| Publish authority | Server compile + sanitize | Not client engines |
+| Parametric geometry pen (locked target) | `makerjs` (Maker.js) — https://github.com/microsoft/maker.js | Owner-locked Part C pen. Live: recipes + `makerJsToPath` on pipeline IR; form/CLI/publish still use template `drawLinearDeskFromTemplate` until **K1** (`plan/Admin/CHECKLIST.md` Part C). Not freehand publish authority |
+| Publish authority | Server compile + sanitize | Not client engines. Live SVG = **disk** until Failures.md cutover |
 
 No second general canvas engine.
 
