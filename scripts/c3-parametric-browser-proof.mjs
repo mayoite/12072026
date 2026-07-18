@@ -7,9 +7,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
+import { forceLocalhostOrigin } from "./lib/forceLocalhostOrigin.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sitePublic = path.join(root, "site", "public", "svg-catalog");
+const BASE = forceLocalhostOrigin(
+  process.env.C3_BASE_URL || process.env.PLAYWRIGHT_BASE_URL,
+);
 
 async function openBrowser() {
   // Prefer bundled Playwright Chromium (installed via test:browsers:install)
@@ -31,7 +35,7 @@ async function main() {
   const { browser, page, mode } = await openBrowser();
   console.log(JSON.stringify({ browserMode: mode }));
 
-  await page.goto("http://localhost:3000/admin/svg-editor/parametric", {
+  await page.goto(`${BASE}/admin/svg-editor/parametric`, {
     waitUntil: "domcontentloaded",
     timeout: 90_000,
   });
@@ -98,7 +102,7 @@ async function main() {
     };
   }
 
-  const apiRes = await fetch("http://localhost:3000/api/planner/catalog/svg-blocks/");
+  const apiRes = await fetch(`${BASE}/api/planner/catalog/svg-blocks/`);
   const apiBody = await apiRes.json();
   const items = apiBody.items ?? apiBody.data?.items ?? [];
   const hit = items.find((i) => i.slug === slug);
