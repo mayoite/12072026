@@ -57,3 +57,107 @@
   display: flex;
   flex-direction: column;
 }
+
+/* Parametric form+Maker stage inside Dockview (scrollable panel) */
+.admin-parametric-stage {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+  background: var(--color-surface-raised, var(--surface-panel));
+}
+
+.admin-parametric-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.85rem 1rem 1.25rem;
+  min-width: 0;
+}
+
+.admin-parametric-form__fieldset {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm, 0.35rem);
+  padding: 0.65rem 0.85rem;
+  margin: 0 0 0.65rem;
+}
+
+.admin-parametric-form__fieldset legend {
+  padding-inline: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.admin-parametric-form__inline {
+  margin-inline-end: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-body);
+}
+
+.admin-parametric-form__field {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-body);
+}
+
+.admin-parametric-form__control {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  min-height: 2rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm, 0.35rem);
+  background: var(--surface-page);
+  color: var(--text-strong);
+  font: inherit;
+}
+
+.admin-parametric-form__check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-body);
+}
+
+.admin-parametric-form__error {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.8rem;
+  color: var(--color-error, var(--text-danger, #a30));
+}
+
+.admin-parametric-details__dl {
+  margin: 0 0 0.75rem;
+  display: grid;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+}
+
+.admin-parametric-details__dl div {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0.35rem;
+  align-items: baseline;
+}
+
+.admin-parametric-details__dl dt {
+  margin: 0;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.admin-parametric-details__dl dd {
+  margin: 0;
+  color: var(--text-strong);
+  overflow-wrap: anywhere;
+}
+
+.admin-svg-engine-shell--dock .admin-linear-desk-preview {
+  max-width: none;
+}

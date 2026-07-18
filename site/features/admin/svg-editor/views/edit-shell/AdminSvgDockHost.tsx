@@ -2,7 +2,7 @@
 
 /**
  * Admin SVG studio chrome: dockview-react (same package as Planner).
- * Panels: preview | stage (Excalidraw own tools) | details.
+ * Panels: preview | stage (Excalidraw canvas OR form+Maker) | details.
  * Not Planner Fabric place toolbars.
  */
 
@@ -37,7 +37,26 @@ export type AdminSvgDockSlots = {
   readonly details: ReactNode;
 };
 
+export type AdminSvgDockPanelTitles = {
+  readonly preview: string;
+  readonly stage: string;
+  readonly details: string;
+};
+
+const DEFAULT_TITLES: AdminSvgDockPanelTitles = {
+  preview: "Preview",
+  stage: "Studio",
+  details: "Details",
+};
+
+type AdminSvgDockConfig = {
+  readonly stageScrollable: boolean;
+};
+
 const AdminSvgDockSlotsContext = createContext<AdminSvgDockSlots | null>(null);
+const AdminSvgDockConfigContext = createContext<AdminSvgDockConfig>({
+  stageScrollable: false,
+});
 
 function useSlot(slot: AdminSvgDockSlot): ReactNode {
   const slots = useContext(AdminSvgDockSlotsContext);
@@ -53,10 +72,14 @@ function SlotPanel({
   stage?: boolean;
 }) {
   const node = useSlot(slot);
+  const { stageScrollable } = useContext(AdminSvgDockConfigContext);
+  const fillClass =
+    stage && !stageScrollable ? styles.panelFillStage : styles.panelFill;
   return (
     <div
-      className={stage ? styles.panelFillStage : styles.panelFill}
+      className={fillClass}
       data-testid={`admin-svg-dock-panel-${slot}`}
+      data-stage-scrollable={stage ? String(stageScrollable) : undefined}
     >
       {node}
     </div>
@@ -85,20 +108,23 @@ const DOCK_COMPONENTS = {
   details: DetailsPanel,
 };
 
-function seedAdminSvgLayout(api: DockviewApi): void {
+function seedAdminSvgLayout(
+  api: DockviewApi,
+  titles: AdminSvgDockPanelTitles,
+): void {
   if (api.panels.length > 0) return;
 
   api.addPanel({
     id: "stage",
     component: "stage",
-    title: "Studio",
+    title: titles.stage,
     params: {},
   });
 
   api.addPanel({
     id: "preview",
     component: "preview",
-    title: "Preview",
+    title: titles.preview,
     position: { referencePanel: "stage", direction: "left" },
     initialWidth: 280,
     params: {},
@@ -107,7 +133,7 @@ function seedAdminSvgLayout(api: DockviewApi): void {
   api.addPanel({
     id: "details",
     component: "details",
-    title: "Details",
+    title: titles.details,
     position: { referencePanel: "stage", direction: "right" },
     initialWidth: 340,
     params: {},
@@ -117,36 +143,64 @@ function seedAdminSvgLayout(api: DockviewApi): void {
 export type AdminSvgDockHostProps = {
   readonly slots: AdminSvgDockSlots;
   readonly className?: string;
+  /** Tab titles. Defaults: Preview / Studio / Details. Parametric uses Form for stage. */
+  readonly titles?: Partial<AdminSvgDockPanelTitles>;
+  /**
+   * Stage scrolls (form+Maker engines). Default false = canvas fill (Excalidraw).
+   */
+  readonly stageScrollable?: boolean;
 };
 
 /**
  * Dockable Admin SVG chrome (Dockview + Phosphor tab titles via seed).
- * Excalidraw keeps its own sketch toolbar inside the stage panel.
+ * Freehand: Excalidraw inside stage. Parametric: field form inside stage.
  */
-export function AdminSvgDockHost({ slots, className }: AdminSvgDockHostProps) {
+export function AdminSvgDockHost({
+  slots,
+  className,
+  titles: titlesPartial,
+  stageScrollable = false,
+}: AdminSvgDockHostProps) {
   const apiRef = useRef<DockviewApi | null>(null);
   const disposablesRef = useRef<Array<{ dispose: () => void }>>([]);
 
-  const onReady = useCallback((event: DockviewReadyEvent) => {
-    apiRef.current = event.api;
-    for (const d of disposablesRef.current) d.dispose();
-    disposablesRef.current = [];
+  const titles = useMemo<AdminSvgDockPanelTitles>(
+    () => ({
+      preview: titlesPartial?.preview ?? DEFAULT_TITLES.preview,
+      stage: titlesPartial?.stage ?? DEFAULT_TITLES.stage,
+      details: titlesPartial?.details ?? DEFAULT_TITLES.details,
+    }),
+    [titlesPartial?.preview, titlesPartial?.stage, titlesPartial?.details],
+  );
 
-    seedAdminSvgLayout(event.api);
+  const dockConfig = useMemo<AdminSvgDockConfig>(
+    () => ({ stageScrollable }),
+    [stageScrollable],
+  );
 
-    disposablesRef.current.push(
-      event.api.onDidRemovePanel((removed) => {
-        if (removed.id === "stage" && event.api.getPanel("stage") == null) {
-          event.api.addPanel({
-            id: "stage",
-            component: "stage",
-            title: "Studio",
-            params: {},
-          });
-        }
-      }),
-    );
-  }, []);
+  const onReady = useCallback(
+    (event: DockviewReadyEvent) => {
+      apiRef.current = event.api;
+      for (const d of disposablesRef.current) d.dispose();
+      disposablesRef.current = [];
+
+      seedAdminSvgLayout(event.api, titles);
+
+      disposablesRef.current.push(
+        event.api.onDidRemovePanel((removed) => {
+          if (removed.id === "stage" && event.api.getPanel("stage") == null) {
+            event.api.addPanel({
+              id: "stage",
+              component: "stage",
+              title: titles.stage,
+              params: {},
+            });
+          }
+        }),
+      );
+    },
+    [titles],
+  );
 
   useEffect(() => {
     return () => {
@@ -158,28 +212,32 @@ export function AdminSvgDockHost({ slots, className }: AdminSvgDockHostProps) {
   const components = useMemo(() => DOCK_COMPONENTS, []);
 
   return (
-    <AdminSvgDockSlotsContext.Provider value={slots}>
-      <div
-        className={`${styles.host} dockview-theme-light ${className ?? ""}`}
-        data-testid="admin-svg-dock-host"
-        data-chrome="dockview-react"
-        aria-label="SVG studio dock"
-      >
-        {/* Phosphor icon legend for chrome (screen-reader + visual consistency with Planner) */}
-        <span className="sr-only">
-          Panels: Preview <Eye aria-hidden />, Studio <PencilSimple aria-hidden />,
-          Details <ListBullets aria-hidden />
-        </span>
-        <DockviewReact
-          className={styles.dockview}
-          components={components}
-          defaultTabComponent={AdminSvgDockTab}
-          onReady={onReady}
-          theme={themeLight}
-          disableFloatingGroups={false}
-          singleTabMode="fullwidth"
-        />
-      </div>
-    </AdminSvgDockSlotsContext.Provider>
+    <AdminSvgDockConfigContext.Provider value={dockConfig}>
+      <AdminSvgDockSlotsContext.Provider value={slots}>
+        <div
+          className={`${styles.host} dockview-theme-light ${className ?? ""}`.trim()}
+          data-testid="admin-svg-dock-host"
+          data-chrome="dockview-react"
+          data-stage-scrollable={String(stageScrollable)}
+          aria-label="SVG studio dock"
+        >
+          {/* Phosphor icon legend for chrome (screen-reader + visual consistency with Planner) */}
+          <span className="sr-only">
+            Panels: {titles.preview} <Eye aria-hidden />, {titles.stage}{" "}
+            <PencilSimple aria-hidden />, {titles.details}{" "}
+            <ListBullets aria-hidden />
+          </span>
+          <DockviewReact
+            className={styles.dockview}
+            components={components}
+            defaultTabComponent={AdminSvgDockTab}
+            onReady={onReady}
+            theme={themeLight}
+            disableFloatingGroups={false}
+            singleTabMode="fullwidth"
+          />
+        </div>
+      </AdminSvgDockSlotsContext.Provider>
+    </AdminSvgDockConfigContext.Provider>
   );
 }
