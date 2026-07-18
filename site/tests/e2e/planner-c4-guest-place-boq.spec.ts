@@ -151,7 +151,8 @@ async function openBoqAndAssertDesk(page: Page): Promise<void> {
       boqJson.click(),
     ]);
     const path = await download.path();
-    expect(path).toBeTruthy();
+    expect(path, "BOQ JSON download path").toEqual(expect.any(String));
+    expect(path!.length).toBeGreaterThan(0);
     const fs = await import("node:fs/promises");
     const text = await fs.readFile(path!, "utf8");
     expect(text).toMatch(new RegExp(DESK_SKU, "i"));
@@ -165,7 +166,8 @@ async function openBoqAndAssertDesk(page: Page): Promise<void> {
       boqCsv.click(),
     ]);
     const path = await download.path();
-    expect(path).toBeTruthy();
+    expect(path, "BOQ CSV download path").toEqual(expect.any(String));
+    expect(path!.length).toBeGreaterThan(0);
     const fs = await import("node:fs/promises");
     const text = await fs.readFile(path!, "utf8");
     expect(text).toMatch(new RegExp(DESK_SKU, "i"));
@@ -230,7 +232,7 @@ test.describe("C4 guest place brand desk + BOQ", () => {
     const desk = body.items?.find((i) => i.slug === DESK_SLUG);
     expect(desk, "svg-blocks must include brand parametric desk").toBeDefined();
     expect(desk!.sku).toBe(DESK_SKU);
-    expect(desk!.assets?.previewImageUrl).toBeTruthy();
+    expect(desk!.assets?.previewImageUrl).toEqual(expect.stringMatching(/\S/));
 
     await placeLinearDeskFromInventory(page);
     await openBoqAndAssertDesk(page);

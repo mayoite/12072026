@@ -36,7 +36,7 @@ When docs and code differ, **code wins** until cutover is proven.
 | Dual-write payload | Full revision + artifact bytes | When enabled: artifacts may write; **still not** sole release authority — enabled ≠ cutover |
 | Planner SVG read | DB revision bytes via API | `svg-blocks` DB-aware + disk fallback; published SVG gate still disk |
 | Parametric pen | Maker only | **Live:** `drawLinearDesk` / form+CLI+publish. Freehand Excalidraw = draft stage only |
-| Admin studio chrome | Dockview + Aria + Phosphor | **Live:** freehand + parametric `AdminSvgDockHost`; CSS under `locked/chrome` |
+| Admin studio chrome | Existing `AdminSvgDockHost` + Aria + Phosphor for freehand and factory modes | **Live:** freehand uses `AdminSvgDockHost`; parametric still uses a CSS grid + `CanvasToolRail` |
 | Marketing catalog | Products DB | Products DB — `catalog_products` |
 | Planner managed catalog | Products DB | Products DB — `planner_managed_products` |
 | Lifecycle + audit | Durable store | `results/admin/catalog-ops/` (filesystem) |
@@ -66,6 +66,7 @@ Active cutover / blockers: `../../Failures.md`. Contract: `08-DATABASE-SVG-CONTR
 | Security | `10-SECURITY-BENCHMARK.md` |
 | Live runtime | `11-RUNTIME-ARCHITECTURE.md` |
 | Dependencies / engines | `12-DEPENDENCIES-ENGINES.md` |
+| Parametric product factory | `13-PARAMETRIC-PRODUCT-FACTORY.md` |
 
 **Benchmarks are acceptance targets.** They are not PASS certificates. Execution lives under `plan/` as **duos** (CHECKLIST + FEATURES) per track; **Admin** also keeps `IMPLEMENTATION-PLAN.md` + `REALITY-AND-STACK.md` (exactly four files). One blockers file per track: `agent-reports/{PLANNER,ADMIN,SITE,TECH-STACK}.md`.
 

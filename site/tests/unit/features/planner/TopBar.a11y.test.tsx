@@ -37,7 +37,7 @@ describe("TopBar a11y — label-in-name (Focus / Density)", () => {
   });
 
   it('Density button aria-label includes visible word "Density"', () => {
-    render(<TopBar {...baseProps} />);
+    render(<TopBar {...baseProps} onToggleDensity={vi.fn()} />);
 
     const densityBtn = screen.getByRole("button", { name: /Density/i });
     const ariaLabel = densityBtn.getAttribute("aria-label");

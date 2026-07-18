@@ -2,7 +2,7 @@
 
 **Source of truth:** `site/app/api/**/route.ts`
 
-Generated from route handlers on 2026-07-17.
+Generated from route handlers on 2026-07-18.
 
 Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 
@@ -60,7 +60,7 @@ Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 | GET, POST | `/api/plans` |
 | GET | `/api/products/filter` |
 | GET | `/api/products` |
-| POST | `/api/recommendations` |
+| POST | `/api/recommendations` *(deprecated)* |
 | GET | `/api/theme/active` |
 | GET, POST | `/api/theme/manage` |
 | POST | `/api/tracking` |

@@ -163,6 +163,190 @@ describe("TopBar", () => {
     expect(onToggleHelp).toHaveBeenCalledTimes(1);
   });
 
+  it("commits inline project rename and cancels Escape edits", () => {
+    const onProjectNameChange = vi.fn();
+
+    render(
+      <TopBar
+        projectName="Original Plan"
+        viewMode="2d"
+        onProjectNameChange={onProjectNameChange}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("heading", { name: "Original Plan" }));
+    const input = screen.getByRole("textbox", { name: "Project name" });
+    fireEvent.change(input, { target: { value: "  Revised Plan  " } });
+    fireEvent.blur(input);
+    expect(onProjectNameChange).toHaveBeenCalledWith("Revised Plan");
+
+    fireEvent.click(screen.getByRole("heading", { name: "Original Plan" }));
+    const cancelInput = screen.getByRole("textbox", { name: "Project name" });
+    fireEvent.change(cancelInput, { target: { value: "Discard Me" } });
+    fireEvent.keyDown(cancelInput, { key: "Escape" });
+    expect(onProjectNameChange).toHaveBeenCalledTimes(1);
+  });
+
+  it("opens inline rename from keyboard and changes view mode", async () => {
+    const onViewModeChange = vi.fn();
+    const user = userEvent.setup();
+
+    render(
+      <TopBar
+        projectName="Keyboard Plan"
+        viewMode="2d"
+        onViewModeChange={onViewModeChange}
+      />,
+    );
+
+    fireEvent.keyDown(screen.getByRole("heading", { name: "Keyboard Plan" }), {
+      key: "Enter",
+    });
+    expect(screen.getByRole("textbox", { name: "Project name" })).toHaveValue(
+      "Keyboard Plan",
+    );
+
+    await user.click(screen.getByRole("radio", { name: "3D" }));
+    expect(onViewModeChange).toHaveBeenCalledWith("3d");
+  });
+
+  it("changes floor and display unit from desktop menus", () => {
+    const onFloorChange = vi.fn();
+    const onDisplayUnitChange = vi.fn();
+
+    render(
+      <TopBar
+        projectName="Floor Unit Plan"
+        viewMode="2d"
+        floors={[
+          { id: "ground", name: "Ground" },
+          { id: "upper", name: "Upper" },
+        ]}
+        activeFloorId="ground"
+        displayUnit="mm"
+        onFloorChange={onFloorChange}
+        onDisplayUnitChange={onDisplayUnitChange}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Active floor: Ground" }));
+    fireEvent.click(screen.getByRole("menuitemradio", { name: "Upper" }));
+    expect(onFloorChange).toHaveBeenCalledWith("upper");
+
+    fireEvent.click(screen.getByTestId("planner-display-unit"));
+    fireEvent.click(screen.getByRole("menuitemradio", { name: "cm" }));
+    expect(onDisplayUnitChange).toHaveBeenCalledWith("cm");
+  });
+
+  it("wires full-mode member file actions and export menu actions", () => {
+    const onImport = vi.fn();
+    const onSketchToPlan = vi.fn();
+    const onShowDockPanel = vi.fn();
+    const onResetLayout = vi.fn();
+    const onExport = vi.fn();
+
+    render(
+      <TopBar
+        projectName="Member Actions"
+        viewMode="2d"
+        onImport={onImport}
+        onSketchToPlan={onSketchToPlan}
+        onShowDockPanel={onShowDockPanel}
+        onResetLayout={onResetLayout}
+        onExport={onExport}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Import Planner JSON file" }));
+    expect(onImport).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(screen.getByTestId("planner-sketch-to-plan"));
+    expect(onSketchToPlan).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(screen.getByRole("button", { name: "Open properties panel" }));
+    expect(onShowDockPanel).toHaveBeenCalledWith("properties");
+
+    fireEvent.click(screen.getByRole("button", { name: "Reset panel layout" }));
+    expect(onResetLayout).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(screen.getByRole("button", { name: "Export — open export menu" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Export as PDF" }));
+    expect(onExport).toHaveBeenCalledWith("pdf");
+  });
+
+  it("runs guest export menu actions", () => {
+    const onExport = vi.fn();
+
+    render(
+      <TopBar
+        accessContext="guest"
+        projectName="Guest Export"
+        viewMode="2d"
+        onExport={onExport}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId("planner-guest-export"));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Download plan (SVG)" }));
+    expect(onExport).toHaveBeenCalledWith("svg");
+  });
+
+  it("wraps modular chrome packs with float and overflow controls", () => {
+    const onChromePlacement = vi.fn();
+    const onMoveChromePack = vi.fn();
+
+    render(
+      <TopBar
+        projectName="Modular Packs"
+        viewMode="2d"
+        chromePacks={[
+          { id: "history", placement: "topbar", x: 80, y: 56 },
+          { id: "view", placement: "topbar", x: 220, y: 56 },
+          { id: "file", placement: "topbar", x: 400, y: 56 },
+          { id: "prefs", placement: "topbar", x: 560, y: 56 },
+          { id: "layout", placement: "topbar", x: 680, y: 56 },
+        ]}
+        onChromePlacement={onChromePlacement}
+        onMoveChromePack={onMoveChromePack}
+      />,
+    );
+
+    expect(screen.getByTestId("chrome-pack-history")).toHaveAttribute(
+      "data-placement",
+      "topbar",
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Float History module" }));
+    expect(onChromePlacement).toHaveBeenCalledWith(
+      "history",
+      "floating",
+      expect.objectContaining({ y: 64 }),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Hide History into Layout menu" }));
+    expect(onChromePlacement).toHaveBeenCalledWith("history", "overflow");
+  });
+
+  it("restores overflow chrome packs to the topbar", () => {
+    const onChromePlacement = vi.fn();
+
+    render(
+      <TopBar
+        projectName="Overflow Packs"
+        viewMode="2d"
+        chromePacks={[
+          { id: "history", placement: "overflow", x: 80, y: 56 },
+          { id: "view", placement: "topbar", x: 220, y: 56 },
+          { id: "file", placement: "topbar", x: 400, y: 56 },
+          { id: "prefs", placement: "topbar", x: 560, y: 56 },
+          { id: "layout", placement: "topbar", x: 680, y: 56 },
+        ]}
+        onChromePlacement={onChromePlacement}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Restore history" }));
+    expect(onChromePlacement).toHaveBeenCalledWith("history", "topbar");
+  });
+
   describe("UI-MOB phone chrome (two-row top + 44px targets)", () => {
     it("declares two-row phone layout, 112px budget, and primary/tools row markers", () => {
       render(
@@ -275,6 +459,7 @@ describe("TopBar", () => {
 
       const helpDesktop = screen.getByTestId("planner-toggle-help-desktop");
       expect(helpDesktop).toHaveAttribute("aria-label", "Open help");
+      expect(helpDesktop).not.toHaveAttribute("title");
       expect(helpDesktop.className).toMatch(/desktopOnly/);
     });
 

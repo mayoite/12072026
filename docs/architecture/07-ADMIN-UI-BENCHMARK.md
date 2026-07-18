@@ -8,12 +8,12 @@ It is not an execution plan.
 
 It was refreshed on 2026-07-15.
 
-Two Admin SVG authoring paths (live code):
+Two Admin SVG authoring paths (live code; target noted where different):
 
 | Path | Stage engine | Chrome | Authority |
 |------|--------------|--------|-----------|
 | Freehand `/admin/svg-editor/[id]` | Excalidraw | Dockview (`AdminSvgDockHost`) + Aria/Phosphor | Draft / freehand; publish via server compile |
-| Parametric `/admin/svg-editor/parametric` | Form + **Maker** | Same dock host; form stage solid (not graph paper) | **Order factory** pen — multipath publish |
+| Parametric `/admin/svg-editor/parametric` | Form + **Maker** | Live CSS grid + shared `CanvasToolRail`; target extends `AdminSvgDockHost` factory preset | **Order factory** pen — multipath publish |
 
 Catalog and commercial governance support both.
 

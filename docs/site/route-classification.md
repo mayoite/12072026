@@ -1,6 +1,6 @@
 # Live route classification
 
-*Generated: 2026-07-17 — `node scripts/generate-route-classification.mjs`*
+*Generated: 2026-07-18 — `node scripts/generate-route-classification.mjs`*
 
 Canonical planner surface is **`/planner/**`** (`app/planner/`). Legacy `/oando-planner/**` and `/buddy-planner/**` redirect via `config/build/next.config.js`.
 
@@ -77,6 +77,7 @@ Canonical planner surface is **`/planner/**`** (`app/planner/`). Legacy `/oando-
 - `/admin/settings` → `app/admin/settings/page.tsx`
 - `/admin/svg-editor/[id]` → `app/admin/svg-editor/[id]/page.tsx`
 - `/admin/svg-editor` → `app/admin/svg-editor/page.tsx`
+- `/admin/svg-editor/parametric` → `app/admin/svg-editor/parametric/page.tsx`
 - `/admin/themes` → `app/admin/themes/page.tsx`
 - `/admin/workspace-catalog` → `app/admin/workspace-catalog/page.tsx`
 

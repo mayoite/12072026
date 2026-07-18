@@ -11,6 +11,7 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 | `docs/architecture/07-ADMIN-UI-BENCHMARK.md` | UI bar (not PASS proof) |
 | `docs/architecture/08-DATABASE-SVG-CONTRACT.md` | DB-SVG target IDs 01–20 |
 | `docs/architecture/10-SECURITY-BENCHMARK.md` | Security bar |
+| `docs/architecture/13-PARAMETRIC-PRODUCT-FACTORY.md` | Generic drawer, Dockview, React Aria, and publish contract |
 
 **Code roots:** `site/features/admin/` · `site/app/admin/` · `site/app/api/admin/` · `site/platform/drizzle/schema/catalog.ts` · `site/inventory/descriptors/` · `site/public/svg-catalog/` · `site/features/crm/` (Admin-mounted demo CRM)
 
@@ -42,6 +43,8 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 ---
 
 ### Parametric brand library (CHECKLIST Part C)
+
+**Target now:** generic product manifest/registries + existing `AdminSvgDockHost` factory preset + React Aria fields/dialogs + first production `desk-assembly` drawer. Live rows below remain linear-desk truth until implementation is verified.
 
 | Surface | Path | Gap |
 |---|---|---|

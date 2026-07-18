@@ -545,7 +545,6 @@ export function TopBar({
             data-testid="planner-toggle-help-desktop"
             aria-pressed={isHelpOpen}
             aria-label={isHelpOpen ? "Close help" : "Open help"}
-            title="Help (F1 or ?)"
             onPress={onToggleHelp}
           >
             <Question size={16} aria-hidden />

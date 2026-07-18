@@ -2,7 +2,7 @@
 
 Auto-generated file list and counts. Folder rules: `tests/CONTENTS.md`.
 
-*Updated: 2026-07-16 — run `npm run docs:sync` to refresh.*
+*Updated: 2026-07-18 — run `npm run docs:sync` to refresh.*
 
 ## Counts
 

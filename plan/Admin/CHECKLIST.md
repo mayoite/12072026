@@ -374,6 +374,7 @@ Exit: Automated unauth gates proven with bypass mocked off. Deploy auth remains 
 - `FEATURES.md` — live code map  
 - `IMPLEMENTATION-PLAN.md` — K1→C4 TDD tasks  
 - `REALITY-AND-STACK.md` — market + engines  
+- `../../docs/architecture/13-PARAMETRIC-PRODUCT-FACTORY.md` — generic factory contract
 - `docs/architecture/08-DATABASE-SVG-CONTRACT.md`  
 - `Failures.md` — active blockers  
 - `agent-reports/ADMIN.md` — track notes  
@@ -387,6 +388,8 @@ Exit: Automated unauth gates proven with bypass mocked off. Deploy auth remains 
 **Code map:** `FEATURES.md` · **Tasks:** `IMPLEMENTATION-PLAN.md` · **Stack:** `REALITY-AND-STACK.md`
 
 **Owner-aligned model:** exact client options close orders; form not free invent; library as you go; Maker only; reuse Planner place/BOQ; Supabase+R2 dual intent; **no owner blockers**.
+
+**Current owner lock:** generic product shell; existing `AdminSvgDockHost` factory preset; React Aria controls; Tailwind v4 with all new CSS under `site/app/css/core/locked/`; first production drawer = configurable desk assembly (linear/U, workstation count, aisle, dimensions, options). See `../../docs/architecture/13-PARAMETRIC-PRODUCT-FACTORY.md`.
 
 **Code truth:** form/CLI/publish → `drawLinearDesk` → Maker; guest `oando-…` slug/SKU + live lifecycle unit-green. **NEXT:** C3 browser (160 cm → publish → disk) → C4 place/BOQ.
 
@@ -449,7 +452,7 @@ Planner **toolbars stay** Fabric + Dockview + React Aria (no rebuild).
 **Rules:**
 
 - [ ] Admin parametric **imports** planner `units` + asset-engine draw/Maker — no duplicate convert/draw stacks.  
-- [ ] Form preview and publish call the **same** Maker drawer (`drawLinearDesk`).  
+- [ ] Form preview and publish call the **same selected** Maker drawer; current compatibility path is `drawLinearDesk`.
 - [ ] No new npm geometry engine without owner + `docs/architecture/12-DEPENDENCIES-ENGINES.md` update.  
 - [ ] No vendor UI that replaces Dockview / Fabric / Admin shell.
 
@@ -555,16 +558,16 @@ Source: `site/features/planner/asset-engine/svg/parametric/linearDeskFields.ts`
 | Sample bar | `public/svg-catalog/sample-desk-1.svg` |
 | Units | `features/planner/model/units.ts` |
 
-### C3. Admin zero-code UI (client-facing)
+### C3. Admin shared-shell operator UI
 
 **Paths:** `features/admin/svg-editor/parametric/*` · route **`/admin/svg-editor/parametric`** · list CTA on SVG inventory (`AdminSvgEditorListView.tsx`).
 
 | UI element | Target behavior | Live today |
 |------------|-----------------|------------|
-| Type select | Only `linear-desk` until C6 | linear-desk only |
-| Linear inputs | Full C2 schema; show unit | **K3 unit:** pedestalTopGap + pedestalBackInset bound |
+| Type select | Explicit product manifest/registry; production `desk-assembly` first | linear-desk only |
+| Product inputs | Drawer-defined sections; desk assembly covers linear/U, workstation count, aisle, dimensions, options | **K3 unit:** linear desk pedestal fields bound |
 | Unit toggle | mm / cm via `units.ts` | Wired (form model) |
-| Live preview | Same **Maker** `drawLinearDesk` as publish | Maker `renderLinearDeskSvg` (K1 unit) |
+| Live preview | Same selected **Maker** drawer as publish | Maker `renderLinearDeskSvg` (K1 unit) |
 | Validation | Zod under fields | Wired for bound fields |
 | Publish | Confirm → disk (+ dual-write if enabled) | Disk via `publishLinearDeskAction`; Maker SVG; **browser OPEN** |
 | Suggest fields | **C-AI** after C2 | Not implemented |
@@ -576,7 +579,7 @@ Source: `site/features/planner/asset-engine/svg/parametric/linearDeskFields.ts`
 - unit-green: mm/cm toggle wired to `units.ts`.  
 - unit-green: Preview always code-drawn (**Maker** only) — unit.  
 - unit-green: Publish disabled while invalid or preview failing (code).  
-- [ ] **Browser gate:** create desk width **160 cm** → preview OK → publish → file under `svg-catalog` + descriptor.  
+- [ ] **Browser gate:** create a U desk assembly with 12 workstations and 1200mm aisle → preview OK → publish → isolated SVG + descriptor.
 - [ ] Console errors = 0; failed requests = 0 on that journey.  
 - [ ] No client-side LLM keys.  
 - [ ] Auth: admin only (existing gates).  
@@ -616,7 +619,7 @@ Each type = **new schema + new Maker drawer + form switch**. No mega-generic dra
 | 3 | Storage bays | Carcass + door bays |
 | 4 | L-desk | Main + return (`buildLDeskMakerModel` exists) |
 
-- [ ] Do not start until linear desk client-usable (C3–C4).  
+- [ ] Do not start another production drawer until desk assembly is client-usable through C3–C4.
 - [ ] Each type: schema + Maker draw + unit + form option + one browser place.
 
 ### C7. Non-goals (locked)
