@@ -31,14 +31,27 @@ export const LinearDeskFieldsSchema = z
     pedestalCount: z.union([z.literal(0), z.literal(2)]).default(2),
     /** Optional modesty panel between pedestals. */
     modesty: z.boolean().default(false),
-    seriesId: z.string().trim().min(1).max(64).optional(),
-    name: z.string().trim().min(1).max(120).optional(),
-    sku: z.string().trim().min(1).max(64).optional(),
-    slug: z
-      .string()
-      .trim()
-      .regex(/^[a-z][a-z0-9-]{1,63}$/)
-      .optional(),
+    // Empty strings from forms → undefined (optional, not "too small")
+    seriesId: z.preprocess(
+      (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
+      z.string().trim().min(1).max(64).optional(),
+    ),
+    name: z.preprocess(
+      (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
+      z.string().trim().min(1).max(120).optional(),
+    ),
+    sku: z.preprocess(
+      (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
+      z.string().trim().min(1).max(64).optional(),
+    ),
+    slug: z.preprocess(
+      (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
+      z
+        .string()
+        .trim()
+        .regex(/^[a-z][a-z0-9-]{1,63}$/)
+        .optional(),
+    ),
   })
   .superRefine((value, ctx) => {
     if (value.pedestalCount === 0) return;

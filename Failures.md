@@ -21,10 +21,10 @@ Parent: read env, run scripts, execute, commit, push. No “disk vs db” lectur
 |------|--------|
 | Schema `published_svg_revision_id` | On Products DB — re-verify with script if needed |
 | R2 + DB credentials | **Owner done** (keys rotated; present in env) |
-| Dual-write publish path | Agent: prove publish → DB row + R2 bytes |
-| Revision API returns SVG | Agent: prove read path |
-| Browser place brand SVG on guest from DB/R2 path | **Agent OPEN** (not waiting on owner) |
-| Set `SVG_RELEASE_AUTHORITY=db` | Agent after place proof — **owner permission not required again** |
+| Dual-write publish path | **Ready (script):** `db_dual_write_readiness` → mode enabled, R2 ok (2026-07-18) |
+| Revision API returns SVG | **Evidence:** guest `svg-blocks` 22/22 items use `/api/planner/catalog/svg/…-r-…` (dev) |
+| Browser place brand SVG on guest from DB/R2 path | **PARTIAL** — guest loads revision SVG URLs (dev logs 200); full C3 parametric place still agent work |
+| Set `SVG_RELEASE_AUTHORITY=db` | After parametric C3 place proof — parent call, not owner hold |
 
 ---
 
