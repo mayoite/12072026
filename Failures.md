@@ -46,12 +46,11 @@ Screenshot shows status bar stuck on “Loading catalog…” while tour is open
 
 Dual-write readiness OK; authority still disk default until place proof + `SVG_RELEASE_AUTHORITY=db`.
 
-### 7. Admin SVG chrome not on shared packages — **OPEN**
+### 7. Admin SVG chrome shared packages — **IN PROGRESS / PARTIAL**
 
-**Intent:** same chrome stack as Planner — `dockview-react`, `react-aria-components`, `@phosphor-icons/react` for toolbars, dockable panels, icons.  
-**Not intent:** Planner Fabric place toolbars inside SVG editor.  
-**Live:** SVG edit shell = custom CSS rails + Excalidraw’s own sketch bar; Dockview unused on Admin SVG. Parametric = raw form.  
-**Fix direction:** wrap Admin SVG studio (and later parametric) in shared Dockview host / Aria toolbar patterns; keep Excalidraw/Maker as stage engines only.
+**Intent:** Dockview + React Aria + Phosphor for Admin SVG shell (toolbars / dockable panels / icons).  
+**Not intent:** Planner Fabric place tools. Stage engines stay Excalidraw (own sketch tools) / form+Maker.  
+**Live:** `AdminSvgDockHost` (dockview-react) + Aria toolbar strip + Phosphor; TopBar already Aria+Phosphor. Excalidraw keeps own draw tools inside stage panel. Parametric form still raw (next).
 
 ---
 
