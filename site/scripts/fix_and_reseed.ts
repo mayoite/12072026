@@ -41,10 +41,21 @@ async function fix() {
       path.resolve(__dirname, '../scripts/seed_data.sql'),
       'utf8'
     );
+    // Strip full-line `--` comments so header lines like `-- CATEGORIES SEED`
+    // do not drop the following INSERT (same fix as seed.ts).
     const statements = seedSql
       .split(/;\s*\n/)
-      .map((s: string) => s.trim())
-      .filter((s: string) => s.length > 0 && !s.startsWith('--'));
+      .map((s: string) =>
+        s
+          .split("\n")
+          .filter((line) => {
+            const t = line.trim();
+            return t.length > 0 && !t.startsWith("--");
+          })
+          .join("\n")
+          .trim(),
+      )
+      .filter((s: string) => s.length > 0);
 
     let ok = 0, fail = 0;
     for (const stmt of statements) {

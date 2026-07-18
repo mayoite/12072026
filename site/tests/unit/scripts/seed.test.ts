@@ -15,13 +15,17 @@ describe("seed (name-mirror)", () => {
     expect(src).toContain("PRODUCTS_DATABASE_URL");
     expect(src).toContain("seed_data.sql");
     expect(src).toContain("postgres");
+    expect(src).toContain("loadEnvLocal");
     expect(src).toMatch(/ssl:\s*['"]require['"]/);
+    // Must strip `--` comment lines before filtering statements — otherwise
+    // `-- CATEGORIES SEED` drops the oando-workstations category INSERT.
+    expect(src).toContain('!t.startsWith("--")');
     expect(fs.existsSync(seedSqlPath)).toBe(true);
   });
 
   it("parses connection URLs with special characters in password", () => {
     const src = fs.readFileSync(scriptPath, "utf8");
-    expect(src).toContain("parts.slice(0, parts.length - 1).join('@')");
+    expect(src).toMatch(/parts\.slice\(0,\s*parts\.length\s*-\s*1\)\.join\(["']@["']\)/);
     expect(src).toContain("decodeURIComponent");
     expect(src).toMatch(/duplicate key|23505/);
   });
