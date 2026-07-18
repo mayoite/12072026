@@ -262,7 +262,7 @@ export function ProductCard({
               width={1200}
               height={900}
               sizes="(max-width: 639px) 50vw, (max-width: 75rem) 50vw, (max-width: 96rem) 33vw, 25vw"
-              className="h-full w-full scale-[1.08] object-contain p-1.5 transition-transform duration-500 group-hover:scale-[1.13] sm:p-3"
+              className="catalog-card__media-img h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.03]"
               onError={() =>
                 setImgIndex((current) =>
                   current + 1 < imageCandidates.length ? current + 1 : current,

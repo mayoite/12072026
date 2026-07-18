@@ -4,62 +4,55 @@
 
 ## Owner blockers — NONE (full authority)
 
-Owner granted **full authority to the parent agent** (same as owner for execution calls).  
-Zero permission holds. Keys rotated. DB + R2 granted.  
-**Parent decides from evidence it has seen.** No subagent takes PASS/cutover/status calls.  
-**Do not re-ask** owner for dual-write / R2 / DB / cutover / commit permission.  
-Intent: durable catalog = **Supabase + R2**.  
-`SVG_RELEASE_AUTHORITY=db` after parent-run place proof — not an owner hold.
-
-Parent: read env, run scripts, execute, commit, push. No “disk vs db” lectures.  
-**Do not wait on owner.** Blocker → note here → continue other work.
+Owner granted full authority. Dual = Supabase + R2. Browser URL = **localhost only** (never 127.0.0.1).  
+Do not wait on owner. Log bugs here and continue.
 
 ---
 
-## Session note (agent)
+## MAJOR BUGS (2026-07-18, localhost + screenshots)
 
-Chrome: **Beta works** (`C:\Program Files\Google\Chrome Beta\Application\chrome.exe`). Stable path missing.  
-MCP plugin still defaults to stable until session reloads config with `--executablePath=...Chrome Beta...`.  
-Workaround used: Chrome Beta `--remote-debugging-port=9222` + Playwright CDP (`scripts/c3-parametric-browser-proof.mjs`).
-
-### C3 browser evidence (2026-07-18, Chrome Beta CDP)
+### 1. Workstations category empty — **FAIL**
 
 | Check | Result |
 |-------|--------|
-| Form `/admin/svg-editor/parametric` | Loaded (`data-testid=admin-linear-desk-parametric`) |
-| Preview multipath | OK (desk-top/pedestal in preview HTML) |
-| Publish | Success message; wrote `site/public/svg-catalog/oando-linear-desk-1600.svg` + descriptors |
-| Maker parts on disk | `id="desk-top"` + pedestals present |
-| Guest list | total 23 after publish; check `oando-linear-desk-1600` in svg-blocks |
+| Page `/products/workstations` | “No products are published in this category yet” |
+| `GET /api/products/filter/?category=workstations` | `total: 0`, `catalogTotal: 0` |
+| Live products by category | soft-seating 44, tables 20, chairs 5, other-seating 8, storage 8 — **no workstations / oando-workstations** |
+| Disk images | 8 series folders under `public/images/catalog/oando-workstations--*` exist |
 
-Note: slug fill raced with auto-identity sync in proof script — published default slug `oando-linear-desk-1600` (acceptable for C3).
+**Cause:** catalog product rows missing for workstations (data/seed/publish), not a missing page route.  
+**Fix direction:** reseed / import workstation products into Products DB (or enable fallback seed for that category), then revalidate catalog cache.
 
----
+### 2. Parametric desk preview looks wrong — **FAIL** (display)
 
-## DB-SVG cutover — agent work remaining (not owner-blocked)
+Screenshot `admin_admin_svg-editor_parametric.png`: plan symbol appears as a tall “I” strip.  
+**Cause:** inline SVG uses absolute mm `width`/`height` (e.g. 1600×800) without `max-width: 100%`, so the preview clips a vertical strip.  
+**Fix:** CSS `.admin-linear-desk-preview svg { width:100%; height:auto }` (in progress / applied).
 
-| Step | Status |
-|------|--------|
-| Schema `published_svg_revision_id` | On Products DB — re-verify with script if needed |
-| R2 + DB credentials | **Owner done** (keys rotated; present in env) |
-| Dual-write publish path | **Ready (script):** `db_dual_write_readiness` → mode enabled, R2 ok (2026-07-18) |
-| Revision API returns SVG | **Evidence:** guest `svg-blocks` 22/22 items use `/api/planner/catalog/svg/…-r-…` (dev) |
-| Browser place brand SVG on guest from DB/R2 path | **PARTIAL** — guest loads revision SVG URLs (dev logs 200); full C3 parametric place still agent work |
-| Set `SVG_RELEASE_AUTHORITY=db` | After parametric C3 place proof — parent call, not owner hold |
+### 3. Seating card media (yellow / product display) — **PARTIAL**
 
----
+Warm ecru media background made product photos look yellow; display cramped.  
+**Fix applied:** cool studio gradient + contain + less aggressive scale (catalog-card-media + FilterGrid). Re-screenshot after hard refresh.
 
-## Parametric desk (Admin Part C) — not a Failures owner block
+### 4. Guest planner “Loading catalog…” — **PARTIAL**
 
-Maker pen unit path exists (form/CLI/publish → `drawLinearDesk`).  
-Browser C3/C4 and guest identity are **product work**, not owner permission blockers.
+Screenshot shows status bar stuck on “Loading catalog…” while tour is open. Catalog API itself returns items; UI may race or stay on loading state. Investigate inventory load UX after Place step.
+
+### 5. Admin hydration mismatch — **OPEN**
+
+`/admin/plans` console: React hydration attribute mismatch (manifest).
+
+### 6. DB-SVG cutover — **OPEN** (not owner-blocked)
+
+Dual-write readiness OK; authority still disk default until place proof + `SVG_RELEASE_AUTHORITY=db`.
 
 ---
 
 ## Rule for agents
 
-| Ask owner only if | Do not ask owner for |
-|-------------------|----------------------|
-| True secret missing from env and cannot proceed | Re-explaining disk vs `SVG_RELEASE_AUTHORITY` |
-| Explicit deploy/prod push they must run | Permission to use DB+R2 (already granted) |
-| Business product decision | “Is dual-write OK?” (yes: Supabase + R2) |
+| Ask owner only if | Do not ask |
+|-------------------|------------|
+| True secret missing | Permission theatre |
+| Irreversible prod-only action host cannot do | localhost vs 127 lectures |
+
+**Browser base URL: only `http://localhost:3000`.**

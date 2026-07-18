@@ -65,11 +65,13 @@
   overflow: hidden;
   isolation: isolate;
   border-bottom: 1px solid var(--border-soft);
+  /* Cool studio (not ecru yellow) — product photos read cleanly */
   background:
     radial-gradient(
-      130% 110% at 50% 10%,
-      color-mix(in srgb, white 88%, var(--surface-muted)) 0%,
-      var(--surface-muted) 100%
+      120% 100% at 50% 18%,
+      #ffffff 0%,
+      #f3f4f6 55%,
+      #e8eaed 100%
     );
 }
 

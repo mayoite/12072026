@@ -254,11 +254,14 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
           {previewSvg ? (
             <div
               data-testid="linear-desk-preview"
+              className="admin-linear-desk-preview"
               style={{
                 border: "1px solid #ccc",
-                background: "#f7f5f2",
+                background: "#f3f4f6",
                 padding: 12,
                 maxWidth: 480,
+                width: "100%",
+                overflow: "hidden",
               }}
               // Preview from same draw* as publish — trusted code path, not user HTML
               dangerouslySetInnerHTML={{ __html: previewSvg }}

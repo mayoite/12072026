@@ -20,11 +20,13 @@
   overflow: hidden;
   isolation: isolate;
   border-bottom: 1px solid var(--border-soft);
+  /* Cool studio field — not warm ecru (reads as yellow behind product photos). */
   background:
     radial-gradient(
-      130% 110% at 50% 10%,
-      color-mix(in srgb, white 88%, var(--surface-muted)) 0%,
-      var(--surface-muted) 100%
+      120% 100% at 50% 18%,
+      #ffffff 0%,
+      #f3f4f6 55%,
+      #e8eaed 100%
     );
 }
 
@@ -33,22 +35,25 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
   pointer-events: none;
+  padding: 0.75rem;
 }
 
 /* next/image fill span (if used) — pin like home-media-layers */
 .catalog-card__media-layer > span:has(> img),
 .catalog-card__media > span:has(> img) {
   position: absolute !important;
-  inset: 0;
+  inset: 0.75rem;
   z-index: 0;
   display: block;
   overflow: hidden;
 }
 
-/* Sized product thumbs (width/height Image): one layer, fill the box */
+/* Sized product thumbs: full product in frame, no crop, no yellow wash */
 .catalog-card__media-layer > img,
 .catalog-card__media-layer img,
 .catalog-card__media > img {
@@ -56,8 +61,11 @@
   z-index: 0;
   height: 100%;
   width: 100%;
+  max-height: 100%;
+  max-width: 100%;
   display: block;
   object-fit: contain;
+  object-position: center;
 }
 
 /* Badges above media (z1) — home card chrome language */
@@ -138,7 +146,12 @@
 }
 
 .catalog-card--compact .catalog-card__media {
-  aspect-ratio: 1 / 1;
+  /* Slightly taller frame for chairs/desks so product is not cramped */
+  aspect-ratio: 5 / 4;
+}
+
+.catalog-card--compact .catalog-card__media-layer {
+  padding: 0.875rem;
 }
 
 .catalog-card--compact .catalog-card__body {
