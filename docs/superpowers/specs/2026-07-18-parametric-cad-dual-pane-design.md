@@ -1,6 +1,22 @@
 # Parametric Admin CAD dual-pane (32 + 35 + 37)
 
-**Status:** LOCKED (owner critical). Parent authority. No re-litigation.
+**Status:** **SUPERSEDED** — do **not** implement this mix.
+
+**Owner FINAL (2026-07-18):** `docs/ui-benchmarks/parametric-lock/32.jpg` **only**.  
+**Active plan:** `Agents/PLAN-parametric-cad-team.md`  
+**Team rule:** `Agents/Agents-10-TEAM-CYCLE.md`  
+
+Layout target now:
+
+```text
+TOOL RAIL | DESK PROPERTIES | PLAN CANVAS
+```
+
+35.jpg / 37.jpg = **archive only**. Do not score or re-open mix unless owner says so.
+
+---
+
+**Historical note (obsolete):** this file once locked 32+35+37 dual-pane. Kept for audit only.
 
 **Route:** `/admin/svg-editor/parametric`  
 **Primary surface:** `LinearDeskParametricForm`
@@ -9,13 +25,13 @@
 
 Admin configures an exact linear desk (mm + options), sees a live multipath plan, publishes for guest place + BOQ. Chrome must feel like the Planner CAD shell — not dock invent, not freehand Excalidraw chrome.
 
-## Scenario mix (locked)
+## Scenario mix (OBSOLETE — do not use)
 
 | Source | Keep |
 |--------|------|
-| **32** | CAD dual-pane craft: thin top bar, vertical **planner** tool rail on plan, plan reads as the drawing surface |
-| **35** | **Plan left (dominant)** · form right |
-| **37** | Status strip under top bar · summary chips in form · **no third dock column** |
+| **32** | **FINAL sole lock** — see README + PLAN-parametric-cad-team |
+| **35** | Archive only |
+| **37** | Archive only |
 
 ### Explicit non-goals
 

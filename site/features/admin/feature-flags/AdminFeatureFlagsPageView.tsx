@@ -92,7 +92,7 @@ export default function AdminFeatureFlagsPageView() {
           onClick={() => void loadFlags()}
           disabled={loading}
         >
-          {loading ? <Loader2 size={14} className="animate-spin" aria-hidden /> : <RefreshCw size={14} aria-hidden />}
+          {loading ? <Loader2 size={14} className="admin-icon-spin" aria-hidden /> : <RefreshCw size={14} className="admin-icon-static" aria-hidden />}
           Refresh
         </button>
       </header>
@@ -104,39 +104,37 @@ export default function AdminFeatureFlagsPageView() {
       ) : null}
 
       {loading && !flags ? (
-        <div className="admin-inline-row text-sm text-muted" role="status" aria-live="polite">
-          <Loader2 size={16} className="animate-spin" aria-hidden />
+        <div className="admin-status-line" role="status" aria-live="polite">
+          <Loader2 size={16} className="admin-icon-spin" aria-hidden />
           Loading flags…
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="admin-stack--loose">
           {grouped.map((group) => (
             <section key={group.group} className="admin-panel">
               <header className="admin-panel__header">
-                <h2 className="text-sm font-semibold text-strong">{group.group}</h2>
+                <h2 className="admin-type-section">{group.group}</h2>
               </header>
-              <ul className="divide-y divide-soft">
+              <ul className="admin-list-divide">
                 {group.flags.map((flag) => {
                   const enabled = flags?.[flag.name] ?? flag.defaultValue;
                   const busy = pendingKey === flag.name;
                   return (
-                    <li key={flag.name} className="flex items-center justify-between gap-4 px-4 py-3">
-                      <div>
-                        <p className="font-medium text-strong">{flag.description}</p>
-                        <p className="text-xs text-soft">{flag.name}</p>
+                    <li key={flag.name} className="admin-list-block admin-list-row admin-list-row--center">
+                      <div className="admin-list-row__main">
+                        <p className="admin-type-subsection">{flag.description}</p>
+                        <p className="admin-list-row__meta">{flag.name}</p>
                       </div>
                       <button
                         type="button"
                         role="switch"
                         aria-checked={enabled}
                         aria-label={flag.description}
-                        className={`inline-flex h-7 w-12 shrink-0 rounded-full transition-colors ${ enabled ? "bg-primary" : "bg-soft" } ${busy ? "opacity-60" : ""}`}
+                        className="admin-switch"
                         disabled={busy || !flags}
                         onClick={() => void toggleFlag(flag.name, !enabled)}
                       >
-                        <span
-                          className={`h-5 w-5 transform rounded-full bg-panel shadow transition-transform ${ enabled ? "translate-x-6" : "translate-x-1" }`}
-                        />
+                        <span className="admin-switch__thumb" />
                       </button>
                     </li>
                   );

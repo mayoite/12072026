@@ -38,6 +38,12 @@ vi.mock("@/platform/drizzle/databaseUrls", () => ({
 
 const tempDirs: string[] = [];
 
+/** Default disk authority so ambient .env.local db flip does not poison disk-path tests. */
+beforeEach(() => {
+  process.env.SVG_RELEASE_AUTHORITY = "disk";
+  isProductsDatabaseConfigured.mockReturnValue(false);
+});
+
 afterEach(() => {
   for (const dir of tempDirs.splice(0)) rmSync(dir, { recursive: true, force: true });
   delete process.env.SVG_RELEASE_AUTHORITY;

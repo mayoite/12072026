@@ -14,7 +14,7 @@ const GlbExtruderPreview = dynamic(
     ssr: false,
     loading: () => (
       <p className="admin-page__meta" role="status">
-        <Loader2 size={14} className="animate-spin" aria-hidden /> Loading
+        <Loader2 size={14} className="admin-icon-spin" aria-hidden /> Loading
         extruder...
       </p>
     ),
@@ -27,7 +27,7 @@ const ModelViewerPreview = dynamic(
     ssr: false,
     loading: () => (
       <p className="admin-page__meta" role="status">
-        <Loader2 size={14} className="animate-spin" aria-hidden /> Loading 3D
+        <Loader2 size={14} className="admin-icon-spin" aria-hidden /> Loading 3D
         preview...
       </p>
     ),
@@ -137,7 +137,7 @@ export function AdminSvgDetailsRail({
                   className="admin-alert admin-alert--info flex flex-wrap items-center gap-3"
                   aria-busy="true"
                 >
-                  <Loader2 size={14} className="animate-spin shrink-0" aria-hidden />
+                  <Loader2 size={14} className="admin-icon-spin" aria-hidden />
                   Uploading generated 3D model…
                 </div>
               ) : null}
@@ -146,7 +146,7 @@ export function AdminSvgDetailsRail({
                   role="alert"
                   className="admin-alert admin-alert--warn flex flex-wrap items-center gap-3"
                 >
-                  <WarningCircle size={14} className="shrink-0" aria-hidden />
+                  <WarningCircle size={14} className="admin-icon-static" aria-hidden />
                   <span>{glbUploadError}</span>
                 </div>
               ) : null}

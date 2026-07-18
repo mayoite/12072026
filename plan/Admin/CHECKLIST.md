@@ -189,8 +189,8 @@ Optional **ADM-*** aliases are 1:1 only (table below). FEATURES and Part B cite 
 | AF-11 | AI freeform SVG generate | Decision or implement (C-AI ≠ AF-11) | OPEN (not implemented) |
 | AF-12 | CI canonical hash gate | Automated isolation gate | OPEN |
 | AF-13 | Internal language on SVG list | Customer-safe copy | OPEN |
-| AF-14 | Full CSRF/rate matrix | Mutators + browser sample | PARTIAL (unit; browser OPEN) |
-| AF-15–17 | Planner consumer / artifact bytes | DB-SVG co-own | OPEN / PARTIAL |
+| AF-14 | Full CSRF/rate matrix | Mutators + browser sample | **PARTIAL→PASS unit + browser sample** (2026-07-18): `audit-api-route-safety` unit green; e2e `admin-csrf-matrix-af14.spec.ts` 2/2 — mutators fail-closed without CSRF (≥1× 403 + `x-csrf-rejected`); full Chromium tour of every mutator still optional |
+| AF-15–17 | Planner consumer / artifact bytes | DB-SVG co-own | **PARTIAL** (2026-07-18): place pins `sourceSvgRevisionId` when preview is revision API; unit `c4GuestPlaceLoadRule` + `svgPreviewAssets` green; live GET revision → `image/svg+xml` + immutable ETag. Still OPEN: disk fallback under db authority (DB-SVG-16), full pin on all place paths / save persistence browser |
 | AF-18a | Dual-write mode honesty | Modes unit-green; live R2 probe | PARTIAL (modes unit; R2 OPEN) |
 | AF-18 | Full DB-SVG cutover | Failures.md + browser place + flip | OPEN |
 | AF-19 | Family release browser journey | Browser family → Planner parity | OPEN |

@@ -488,6 +488,52 @@
   }
 }
 
+/* ── Modal (publish confirm / consequence dialogs) ──
+ * Tokens only — no Tailwind z-index / inset / max-w utilities in TSX.
+ */
+
+.admin-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--scrim-black-40);
+  box-sizing: border-box;
+}
+
+.admin-modal {
+  width: 100%;
+  max-width: 28rem;
+  box-shadow: var(--shadow-float);
+}
+
+.admin-modal--md {
+  max-width: 28rem;
+}
+
+.admin-modal--lg {
+  max-width: 36rem;
+}
+
+/* Phosphor / SVG loaders — prefer over Tailwind animate-spin */
+.admin-icon-spin {
+  flex-shrink: 0;
+  animation: admin-spin 0.6s linear infinite;
+}
+
+.admin-icon-static {
+  flex-shrink: 0;
+}
+
+/* Alert / feedback body fill (replaces min-w-0 flex-1 utilities) */
+.admin-flex-fill {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
 /* Dashboard KPI strip */
 .admin-kpi-grid {
   display: grid;

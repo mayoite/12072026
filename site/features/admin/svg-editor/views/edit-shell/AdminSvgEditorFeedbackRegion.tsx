@@ -38,8 +38,8 @@ export function AdminSvgEditorFeedbackRegion({
           className="admin-alert admin-alert--info admin-svg-engine-feedback__item"
           aria-busy="true"
         >
-          <Loader2 size={16} className="animate-spin shrink-0" aria-hidden />
-          <span className="min-w-0 flex-1">
+          <Loader2 size={16} className="admin-icon-spin" aria-hidden />
+          <span className="admin-flex-fill">
             Publishing <strong>{slug || "symbol"}</strong>… saving the draft and
             releasing the Planner symbol. Keep this page open until finish.
           </span>
@@ -52,8 +52,8 @@ export function AdminSvgEditorFeedbackRegion({
           className="admin-alert admin-alert--error admin-svg-engine-feedback__item"
           data-testid="admin-svg-publish-failure"
         >
-          <WarningCircle size={16} className="shrink-0" aria-hidden />
-          <span className="min-w-0 flex-1">{feedback.errorMessage}</span>
+          <WarningCircle size={16} className="admin-icon-static" aria-hidden />
+          <span className="admin-flex-fill">{feedback.errorMessage}</span>
           <button
             type="button"
             className="admin-btn admin-btn--outline admin-btn--compact"
@@ -72,8 +72,8 @@ export function AdminSvgEditorFeedbackRegion({
           className="admin-alert admin-alert--success admin-svg-engine-feedback__item"
           data-testid="admin-svg-publish-success"
         >
-          <CheckCircle size={16} className="shrink-0" aria-hidden />
-          <span className="min-w-0 flex-1">
+          <CheckCircle size={16} className="admin-icon-static" aria-hidden />
+          <span className="admin-flex-fill">
             {feedback.successMessage}
             {feedback.publishedSlug ? (
               <>

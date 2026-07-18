@@ -66,7 +66,7 @@ export function WorkstationFamilyAuthorFields({
           onChange={(event) => commit({ ...draft, familySlug: event.target.value })}
         />
       </AdminField>
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="admin-grid-2">
         <AdminField label="Version id">
           <AdminTextInput
             value={draft.versionId}
@@ -83,8 +83,8 @@ export function WorkstationFamilyAuthorFields({
         </AdminField>
       </div>
 
-      <div className="space-y-2">
-        <p className="text-sm font-medium text-strong">Topologies</p>
+      <div className="admin-stack--tight">
+        <p className="admin-type-subsection">Topologies</p>
         <AdminCheckbox
           checked={draft.linear2Seat}
           disabled={readOnly}
@@ -99,8 +99,8 @@ export function WorkstationFamilyAuthorFields({
         />
       </div>
 
-      <div className="space-y-2">
-        <p className="text-sm font-medium text-strong">Options</p>
+      <div className="admin-stack--tight">
+        <p className="admin-type-subsection">Options</p>
         <AdminCheckbox
           checked={draft.panelOption}
           disabled={readOnly}
@@ -115,8 +115,8 @@ export function WorkstationFamilyAuthorFields({
         />
       </div>
 
-      <div className="space-y-2">
-        <p className="text-sm font-medium text-strong">Length options (mm)</p>
+      <div className="admin-stack--tight">
+        <p className="admin-type-subsection">Length options (mm)</p>
         {[900, 1200, 1500].map((lengthMm) => (
           <AdminCheckbox
             key={lengthMm}
@@ -133,8 +133,8 @@ export function WorkstationFamilyAuthorFields({
         ))}
       </div>
 
-      <div className="space-y-2">
-        <p className="text-sm font-medium text-strong">Depth options (mm)</p>
+      <div className="admin-stack--tight">
+        <p className="admin-type-subsection">Depth options (mm)</p>
         {[600, 750].map((depthMm) => (
           <AdminCheckbox
             key={depthMm}
@@ -162,8 +162,8 @@ export function WorkstationFamilyAuthorFields({
       </AdminField>
 
       {needsMigration ? (
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-strong">Version migration</p>
+        <div className="admin-stack--tight">
+          <p className="admin-type-subsection">Version migration</p>
           <AdminCheckbox
             checked={draft.migrationChoice === "append"}
             disabled={readOnly}

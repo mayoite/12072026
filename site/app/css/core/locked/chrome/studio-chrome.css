@@ -3,6 +3,101 @@
  * locked/chrome (before locked/svg). Tokens only — no hex/rgb.
  */
 
+/*
+ * Admin CAD studio force-paint (token authority: theme.css cool CAD block).
+ * data-cad-studio="cool" on freehand + parametric. Guest planner untouched.
+ * Re-bind WorkspaceShell --ws-* locals so CSS modules cannot re-warm paper.
+ */
+.admin-page--svg-engine,
+.admin-parametric-workspace,
+[data-cad-studio="cool"],
+.admin-page--svg-engine [data-planner-surface="paper"],
+.admin-parametric-workspace [data-planner-surface="paper"],
+[data-cad-studio="cool"] [data-planner-surface="paper"] {
+  --ws-shell-bg: var(--color-white-150);
+  --ws-panel-bg: var(--color-white-50);
+  --ws-header-bg: var(--color-white-50);
+  --ws-status-bg: var(--color-white-100);
+  --ws-panel-border: var(--color-white-300);
+  --ws-text-primary: var(--text-strong);
+  --ws-text-secondary: var(--text-body);
+  --ws-text-muted: var(--text-muted);
+  --planner-surface-canvas: var(--color-white-200);
+  --planner-surface-panel: var(--color-white-50);
+  --planner-surface-subtle: var(--color-white-150);
+  --planner-grid-minor: var(--color-white-300);
+  --planner-grid-major: var(--color-white-450);
+  --color-canvas-bg: var(--color-white-200);
+  --color-canvas-grid: var(--color-white-350);
+  background: var(--surface-page, var(--color-white-150));
+  color: var(--text-body);
+}
+
+/* WorkspaceShell CSS module paints --ws-shell-bg; force cool under CAD studio */
+[data-cad-studio="cool"] [data-planner-surface="paper"],
+[data-cad-studio="cool"] .pw-topbar,
+.admin-parametric-workspace [data-planner-surface="paper"] {
+  background: var(--ws-shell-bg, var(--color-white-150)) !important;
+}
+
+[data-cad-studio="cool"] .pw-topbar,
+[data-cad-studio="cool"] header[data-testid="planner-topbar"],
+.admin-parametric-workspace .pw-topbar {
+  background: var(--surface-panel, var(--color-white-50)) !important;
+  border-bottom: 1px solid var(--border-soft, var(--color-white-300));
+  box-shadow: none;
+}
+
+[data-cad-studio="cool"] footer.pw-status-bar,
+.admin-parametric-workspace footer.pw-status-bar {
+  background: var(--ws-status-bg, var(--color-white-100)) !important;
+  border-top: 1px solid var(--border-soft, var(--color-white-300));
+}
+
+/* Dense CAD inspector form (cool studio baseline; shell rules tighten further) */
+[data-cad-studio="cool"] .admin-parametric-form {
+  gap: 0.55rem;
+  padding: 0.65rem 0.75rem 1rem;
+}
+
+[data-cad-studio="cool"] .admin-parametric-form__section {
+  padding: 0.55rem 0.65rem 0.65rem;
+  box-shadow: none;
+  border-color: var(--border-soft, var(--color-white-300));
+  background: var(--surface-panel, var(--color-white-50));
+}
+
+[data-cad-studio="cool"] .admin-parametric-form__control {
+  min-height: 2.1rem;
+  background: var(--surface-soft, var(--color-white-100));
+  border-color: var(--border-soft, var(--color-white-300));
+}
+
+/* Plan stage: full cool canvas, no product-card chrome */
+[data-cad-studio="cool"] .admin-parametric-plan-stage {
+  background-color: var(--planner-surface-canvas, var(--color-white-200));
+}
+
+[data-cad-studio="cool"] .admin-linear-desk-preview--stage {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  min-height: 0;
+}
+
+/* Quiet freehand rails under cool CAD (no ecru nested cards) */
+[data-cad-studio="cool"] .admin-svg-engine-shell__rail .admin-panel {
+  border-color: var(--border-soft, var(--color-white-300));
+  background: transparent;
+  box-shadow: none;
+}
+
+[data-cad-studio="cool"] .admin-svg-engine-shell__rail .admin-panel__header {
+  background: transparent;
+}
+
 .admin-svg-engine-shell__chrome-toolbar {
   display: inline-flex;
   align-items: center;
@@ -97,6 +192,94 @@
     --shadow-soft,
     0 1px 2px color-mix(in srgb, var(--text-strong) 4%, transparent)
   );
+}
+
+/*
+ * CAD inspector density — only when form sits in planner WorkspaceShell.
+ * Flat sections, tight padding, no stacked ecru cards.
+ */
+.admin-parametric-workspace .admin-parametric-stage .admin-parametric-form {
+  gap: 0.4rem;
+  padding: 0.45rem 0.55rem 0.75rem;
+  max-width: none;
+  margin-inline: 0;
+}
+
+.admin-parametric-workspace
+  .admin-parametric-stage
+  .admin-parametric-form__section {
+  gap: 0.35rem;
+  padding: 0.4rem 0.45rem 0.5rem;
+  border-radius: var(--radius-sm, 0.35rem);
+  background: transparent;
+  box-shadow: none;
+  border-color: color-mix(in srgb, var(--border-soft) 85%, transparent);
+}
+
+.admin-parametric-workspace
+  .admin-parametric-stage
+  .admin-parametric-form__section-title {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+}
+
+.admin-parametric-workspace
+  .admin-parametric-stage
+  .admin-parametric-form__grid {
+  gap: 0.4rem 0.45rem;
+}
+
+.admin-parametric-workspace
+  .admin-parametric-stage
+  .admin-parametric-form__field {
+  gap: 0.15rem;
+  font-size: 0.7rem;
+}
+
+.admin-parametric-workspace
+  .admin-parametric-stage
+  .admin-parametric-form__control {
+  min-height: 1.85rem;
+  padding: 0.28rem 0.45rem;
+  font-size: 0.8rem;
+  border-radius: var(--radius-sm, 0.3rem);
+  background: var(--surface-soft, var(--surface-page));
+}
+
+.admin-parametric-workspace
+  .admin-parametric-stage
+  .admin-parametric-form__unit {
+  min-width: 2.25rem;
+  min-height: 1.55rem;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.72rem;
+}
+
+.admin-parametric-workspace
+  .admin-parametric-stage
+  .admin-parametric-form__check {
+  min-height: 1.6rem;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  margin: 0.05rem 0 0;
+}
+
+.admin-parametric-workspace
+  .admin-parametric-stage
+  .admin-parametric-form__summary-chips {
+  gap: 0.3rem;
+  margin: 0 0 0.1rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.admin-parametric-workspace
+  .admin-parametric-stage
+  .admin-parametric-form__chip {
+  padding: 0.12rem 0.4rem;
+  font-size: 0.68rem;
+  border-radius: var(--radius-sm, 0.3rem);
+  background: transparent;
 }
 
 .admin-parametric-form__section-title {
@@ -361,56 +544,76 @@ select.admin-parametric-form__control {
   background: var(--surface-soft);
 }
 
-/* ── Dual pane lock: 32 CAD craft + 35 plan-left + 37 status/chips ── */
+/* ── Parametric on real planner WorkspaceShell (legacy; parametric uses .admin-cad lock-32) ── */
 
-.admin-svg-editor-workspace--dual-pane .admin-svg-engine-shell--dual-pane {
-  grid-area: workspace;
-  min-height: 0;
-  min-width: 0;
-  height: 100%;
+.admin-parametric-workspace {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  /* Cool CAD canvas via admin-scoped --planner-surface-canvas (theme.css). */
+  background: var(--planner-surface-canvas, var(--surface-page));
 }
 
-.admin-parametric-dual {
-  display: grid;
-  /* 32 craft: plan dominates; form is a tight inspector */
-  grid-template-columns: minmax(0, 1.85fr) minmax(17.5rem, 22.5rem);
-  grid-template-areas: "plan form";
-  flex: 1;
+.admin-parametric-workspace .admin-svg-engine-feedback {
+  flex-shrink: 0;
+}
+
+.admin-parametric-shell-host {
+  flex: 1 1 0%;
   min-height: 0;
   min-width: 0;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  /* Planner-width vars so CanvasToolRail matches guest planner */
+}
+
+.admin-parametric-shell-host > * {
+  flex: 1 1 0%;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* Plan host inside shell canvas: rail | stage (row, full height) */
+.admin-parametric-plan-host {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
   --planner-tool-rail-width: 3.25rem;
   --ws-rail-w: 3.25rem;
   --planner-control-target: 2.5rem;
 }
 
-.admin-parametric-dual__plan {
-  grid-area: plan;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  min-width: 0;
-  min-height: 0;
-  height: 100%;
-  overflow: hidden;
-  border-right: 1px solid var(--border-soft);
-  background: var(--surface-soft, var(--surface-page));
-}
-
-/* Planner rail fills plan column height (32 CAD rail) */
-.admin-parametric-dual__plan > [data-testid="canvas-tool-rail"],
-.admin-parametric-dual__plan > .pw-tool-rail {
+.admin-parametric-plan-host > [data-testid="canvas-tool-rail"],
+.admin-parametric-plan-host > .pw-tool-rail {
   align-self: stretch;
   height: 100%;
   min-height: 0;
   flex-shrink: 0;
 }
 
-.admin-parametric-dual__plan[data-grid="on"] .admin-parametric-dual__plan-stage {
+.admin-parametric-plan-stage {
+  flex: 1 1 0%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 0.5rem;
+}
+
+.admin-parametric-plan-host[data-grid="on"] .admin-parametric-plan-stage {
   background-image:
     linear-gradient(
       to right,
@@ -423,52 +626,205 @@ select.admin-parametric-form__control {
       transparent 1px
     );
   background-size: 24px 24px;
-  background-color: var(--surface-soft, var(--surface-page));
+  background-color: var(--planner-surface-canvas, var(--surface-soft));
 }
 
-.admin-parametric-dual__plan-stage {
-  flex: 1;
-  min-width: 0;
+/* Stage paint: full CAD surface, not a product card */
+.admin-linear-desk-preview--stage {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  max-width: 100%;
+  max-height: 100%;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.65rem 0.85rem 0.85rem;
-  overflow: auto;
-}
-
-.admin-parametric-dual__plan-stage .admin-linear-desk-preview {
-  flex: 1;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 14rem;
 }
 
-.admin-parametric-dual__plan-stage .admin-linear-desk-preview svg {
-  max-width: min(100%, 48rem);
-  max-height: min(100%, 70vh);
+.admin-linear-desk-preview--stage svg {
+  display: block;
+  /* Fill stage: width-first, height capped by available cell */
   width: 100%;
   height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  flex: 0 1 auto;
 }
 
-.admin-parametric-dual__form {
-  grid-area: form;
+/* Form as right panel content */
+.admin-parametric-stage {
   display: flex;
   flex-direction: column;
-  min-width: 0;
   min-height: 0;
   height: 100%;
   overflow: auto;
   background: var(--color-surface-raised, var(--surface-panel));
 }
 
-.admin-parametric-dual__form .admin-parametric-form {
+.admin-parametric-stage .admin-parametric-form {
   max-width: none;
   margin-inline: 0;
 }
 
-/* Scenario 37 summary chips inside form column */
+.admin-parametric-inventory-link {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.admin-parametric-inventory-link:hover {
+  color: var(--text-strong);
+  text-decoration: underline;
+}
+
+.admin-parametric-sr-only,
+.admin-parametric-sr-submit {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Freehand stage fills planner canvas cell */
+.admin-svg-engine-shell__stage--planner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.admin-svg-engine-shell__stage--planner > * {
+  flex: 1 1 0%;
+  min-height: 0;
+  min-width: 0;
+  height: 100%;
+}
+
+/* Excalidraw must own the full canvas cell (not a nested card) */
+.admin-svg-engine-shell__stage--planner .admin-svg-excalidraw-host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+}
+
+.admin-svg-engine-shell__stage--planner .admin-svg-excalidraw-canvas {
+  position: relative;
+  flex: 1 1 0%;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+}
+
+.admin-svg-engine-shell__stage--planner .admin-svg-excalidraw-canvas .excalidraw {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0;
+}
+
+/*
+ * Freehand side rails inside WorkspaceShell: inspector strips, not ecru card stack.
+ * Shell panel already provides the frame — nested .admin-panel cards are landfill.
+ */
+.admin-parametric-workspace .admin-svg-engine-shell__rail {
+  gap: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  height: 100%;
+  min-height: 0;
+}
+
+.admin-parametric-workspace .admin-svg-engine-shell__rail .admin-panel,
+.admin-parametric-workspace
+  .admin-svg-engine-shell__rail
+  details.admin-panel,
+.admin-parametric-workspace
+  .admin-svg-engine-shell__rail
+  article.admin-panel,
+.admin-parametric-workspace
+  .admin-svg-engine-shell__rail
+  section.admin-panel {
+  border: none;
+  border-bottom: 1px solid var(--border-soft);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.admin-parametric-workspace
+  .admin-svg-engine-shell__rail
+  .admin-panel:last-child {
+  border-bottom: none;
+}
+
+.admin-parametric-workspace
+  .admin-svg-engine-shell__rail
+  .admin-panel__header,
+.admin-parametric-workspace
+  .admin-svg-engine-shell__rail
+  .admin-panel
+  > summary.admin-panel__header {
+  padding: 0.45rem 0.65rem;
+  background: transparent;
+  border-bottom: 1px solid color-mix(in srgb, var(--border-soft) 70%, transparent);
+  font-size: 0.68rem;
+}
+
+.admin-parametric-workspace
+  .admin-svg-engine-shell__rail
+  .admin-panel__body {
+  padding: 0.5rem 0.65rem 0.65rem;
+  background: transparent;
+}
+
+.admin-parametric-workspace
+  .admin-svg-engine-shell__rail
+  .admin-page__meta {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.admin-parametric-workspace
+  .admin-svg-engine-shell__rail
+  .admin-svg-preview--panel {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm, 0.35rem);
+  background: var(--planner-surface-canvas, var(--surface-soft));
+  box-shadow: none;
+  padding: 0.35rem;
+}
+
+.admin-svg-shell-status-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Summary chips inside form column (footer chips preferred on lock-32) */
 .admin-parametric-form__summary-chips {
   display: flex;
   flex-wrap: wrap;
@@ -531,5 +887,487 @@ select.admin-parametric-form__control {
   .admin-parametric-form__control,
   .admin-parametric-form__unit {
     transition: none;
+  }
+}
+
+/* -- Parametric CAD lock-32 FINAL: rail | form | plan (32.jpg only; planner rail) -- */
+
+.admin-cad {
+  --planner-tool-rail-width: 3.25rem;
+  --ws-rail-w: 3.25rem;
+  --planner-control-target: 2.5rem;
+  --surface-page: var(--color-white-200);
+  --surface-soft: var(--color-white-250);
+  --surface-panel: var(--color-white-50);
+  --border-soft: var(--color-white-300);
+  --planner-surface-canvas: var(--color-white-200);
+
+  /* Flex so optional alert does not steal the 1fr body row (Seat2 #1) */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  background: var(--color-white-200);
+  color: var(--text-body);
+  box-sizing: border-box;
+  font-family: var(--font-sans, system-ui, sans-serif);
+}
+
+.admin-cad__top,
+.admin-cad__status,
+.admin-cad > .admin-alert {
+  flex-shrink: 0;
+}
+
+/* 32.jpg top bar — flat white, breadcrumb left, Publish right */
+.admin-cad__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 3rem;
+  padding: 0.4rem 1rem;
+  border-bottom: 1px solid var(--color-white-300);
+  background: var(--color-white-50);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--text-strong) 4%, transparent);
+}
+
+.admin-cad__crumb {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  flex-wrap: wrap;
+  font-size: 0.8125rem;
+}
+
+.admin-cad__crumb-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.admin-cad__crumb-link:hover {
+  color: var(--color-primary);
+}
+
+.admin-cad__crumb-sep {
+  color: var(--color-white-400);
+}
+
+.admin-cad__crumb-current {
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.admin-cad__sku {
+  margin-left: 0.25rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: var(--color-white-150);
+  border: 1px solid var(--color-white-300);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-cad__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.admin-cad__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+/* Green Publish — match 32.jpg primary */
+.admin-cad__publish {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 2.25rem;
+  padding: 0.4rem 1.1rem;
+  border: none;
+  border-radius: 0.45rem;
+  background: var(--color-primary);
+  color: var(--color-white-50);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--text-strong) 12%, transparent);
+}
+
+.admin-cad__publish:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.admin-cad__publish:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Compact status line (32.jpg — not a third column) */
+.admin-cad__status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  border-bottom: 1px solid var(--color-white-300);
+  background: var(--color-white-100);
+}
+
+.admin-cad__pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  max-width: 100%;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-white-300);
+  background: var(--color-white-50);
+  color: var(--text-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-cad__pill-key {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.admin-cad__pill-val {
+  color: var(--text-strong);
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.admin-cad__pill--strong {
+  color: var(--text-strong);
+  border-color: color-mix(in srgb, var(--color-primary) 35%, var(--color-white-300));
+}
+
+.admin-cad__pill--ok {
+  color: var(--color-primary);
+  border-color: color-mix(in srgb, var(--color-primary) 40%, var(--color-white-300));
+  background: color-mix(in srgb, var(--color-primary) 8%, var(--color-white-50));
+}
+
+.admin-cad > .admin-alert {
+  margin: 0;
+  border-radius: 0;
+}
+
+/* 32.jpg FINAL: TOOL RAIL | DESK PROPERTIES | PLAN CANVAS */
+.admin-cad__body {
+  display: grid;
+  grid-template-columns:
+    var(--planner-tool-rail-width, 3.25rem)
+    minmax(16.25rem, 18rem)
+    minmax(0, 1fr);
+  grid-template-areas: "rail form plan";
+  flex: 1 1 0%;
+  width: 100%;
+  max-width: none;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.admin-cad__rail {
+  grid-area: rail;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  border-right: 1px solid var(--color-white-300);
+  background: var(--color-white-50);
+}
+
+.admin-cad__rail > [data-testid="canvas-tool-rail"],
+.admin-cad__rail > .pw-tool-rail {
+  flex: 1 1 0%;
+  height: 100%;
+  min-height: 0;
+  align-self: stretch;
+}
+
+.admin-cad__form {
+  grid-area: form;
+}
+
+.admin-cad__plan {
+  grid-area: plan;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  border-left: 1px solid var(--color-white-300);
+  background: var(--color-white-250);
+}
+
+.admin-cad__plan-stage {
+  flex: 1 1 0%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.admin-cad__plan-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid var(--color-white-300);
+  background: color-mix(in srgb, var(--color-white-50) 88%, var(--color-white-200));
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.admin-cad__plan-meta {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.admin-cad__plan-board {
+  flex: 1 1 0%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  overflow: auto;
+}
+
+.admin-cad__plan[data-grid="on"] .admin-cad__plan-board {
+  background-color: var(--color-white-150);
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-white-350) 80%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-white-350) 80%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 20px 20px;
+}
+
+/* 32 plan surface: graph board only — no product-card plate */
+.admin-cad__preview {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  max-width: none;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-cad__preview svg {
+  max-width: 100%;
+  max-height: 100%;
+  width: min(100%, 56rem);
+  height: auto;
+  display: block;
+  margin-inline: auto;
+}
+
+/* 32 — Desk properties inspector (middle column) */
+.admin-cad__form {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-white-50);
+  box-shadow: none;
+  border-right: 1px solid var(--color-white-300);
+}
+
+.admin-cad__form-head {
+  flex-shrink: 0;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--color-white-300);
+  background: var(--color-white-50);
+}
+
+.admin-cad__form-title {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-strong);
+}
+
+.admin-cad__form-selected {
+  margin: 0.35rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.admin-cad__form-selected-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-cad__form-selected-sku {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-cad__form .admin-parametric-form {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow: auto;
+  max-width: none;
+  margin-inline: 0;
+  padding: 0.65rem 0.75rem 0.5rem;
+  gap: 0.55rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-cad__form-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  margin-top: auto;
+  padding: 0.65rem 0.85rem 0.85rem;
+  border-top: 1px solid var(--color-white-300);
+  background: var(--color-white-100);
+}
+
+.admin-cad__footer-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-white-300);
+  background: var(--color-white-50);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-cad__footer-chip:nth-child(1) {
+  border-color: color-mix(in srgb, var(--color-primary) 30%, var(--color-white-300));
+  background: color-mix(in srgb, var(--color-primary) 8%, var(--color-white-50));
+}
+
+.admin-cad__footer-chip:nth-child(2) {
+  border-color: color-mix(in srgb, var(--color-ocean-boat-blue-400, #3b82a0) 35%, var(--color-white-300));
+  background: color-mix(in srgb, var(--color-ocean-boat-blue-200, #93c5d4) 22%, var(--color-white-50));
+}
+
+.admin-cad__footer-chip:nth-child(3) {
+  border-color: color-mix(in srgb, var(--color-bronze-400, #b08968) 35%, var(--color-white-300));
+  background: color-mix(in srgb, var(--color-bronze-200, #e8d5c4) 25%, var(--color-white-50));
+}
+
+.admin-cad__footer-chip:nth-child(4) {
+  border-color: color-mix(in srgb, var(--color-primary) 25%, var(--color-white-300));
+}
+
+.admin-cad .admin-parametric-form__section {
+  box-shadow: none;
+  border-color: var(--color-white-300);
+  background: var(--color-white-50);
+  padding: 0.55rem 0.65rem 0.65rem;
+}
+
+.admin-cad .admin-parametric-form__section-title {
+  color: var(--text-muted);
+}
+
+.admin-cad .admin-parametric-form__chip {
+  border-radius: 999px;
+  font-size: 0.68rem;
+}
+
+@media (max-width: 900px) {
+  .admin-cad__body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(10rem, 38vh) minmax(0, 1fr);
+    grid-template-areas:
+      "rail"
+      "plan"
+      "form";
+  }
+
+  .admin-cad__rail {
+    flex-direction: row;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--color-white-300);
+  }
+
+  .admin-cad__plan {
+    border-right: none;
+    border-bottom: 1px solid var(--color-white-300);
   }
 }

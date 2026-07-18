@@ -46,7 +46,7 @@ Live durable intent: Supabase + R2. Owner blockers none.
 | **Client** | Forms only (no code) | Admin parametric route |
 | **Canvas** | Fabric (place/zoom) | https://github.com/fabricjs/fabric.js · npm `fabric` `7.4.0` |
 | **Chrome packages** | **Same as Planner:** `dockview-react`, `react-aria-components`, `@phosphor-icons/react` | Shared toolbars / dockable panels / icons — **not** Fabric place tools |
-| **Draft studio** | Excalidraw (freehand draw only) | Own sketch tools inside stage; **shell chrome** should still be Dockview + Aria + Phosphor |
+| **Draft studio** | Excalidraw (freehand draw only) | Own sketch tools inside freehand stage; freehand outer shell = Dockview; parametric shell = Planner WorkspaceShell + CanvasToolRail |
 | **AI** | Field draft only after C2 (**C-AI**). Never geometry | CHECKLIST Part C |
 | **Monorepo** | Product + planner import paths | https://github.com/mayoite/12072026 |
 
@@ -60,26 +60,36 @@ Live durable intent: Supabase + R2. Owner blockers none.
 |------|----------------|---------------|-------------------|
 | Interactive 2D place | Fabric · `features/planner/canvas/*` | Zoom, pan, place published SVG | Generating brand geometry |
 | 3D | Three + R3F | 3D view from same document | Plan SVG craft |
-| Admin freehand draft | Excalidraw · `ExcalidrawClient.tsx` | Sketch tools only | Publish truth for parametric; shell chrome |
-| Admin / Planner chrome | **dockview-react · react-aria · phosphor** (same npm) | Toolbars, dockable rails, icons | Geometry / place tools |
+| Admin freehand draft | Excalidraw · `ExcalidrawClient.tsx` | Sketch tools only | Publish truth for parametric |
+| Admin freehand shell | **dockview-react** · `AdminSvgDockHost` | Freehand Preview \| Studio \| Details | Parametric layout (different mode) |
+| Admin parametric shell | Planner **WorkspaceShell** + **CanvasToolRail** (same packages as Planner chrome) | Plan-left + form-right authoring chrome | Fabric place canvas; Dockview host |
+| Admin / Planner chrome packages | **dockview-react · react-aria · phosphor** (same npm) | Shared shell language | Geometry pens; Fabric place tools |
 | Geometry pen | Maker.js · `drawLinearDesk.ts` · `makerJsRecipes.ts` · `makerJsToPath.ts` | Multipath plan SVG (form/CLI/publish) | Client freehand; AI paths |
 | Template residual | `drawLinearDeskFromTemplate.ts` | Deprecated comparison only | Form/CLI/publish pen |
-
-### Chrome honesty (Admin SVG today vs target)
-
-| Surface | Target | Live today |
-|---------|--------|------------|
-| Icons | Phosphor | Partial (TopBar, list, some panels) |
-| Accessible controls | React Aria | Partial (TopBar export menu, DimensionPanel) |
-| Dockable panels | **dockview-react** (same package as Planner) | **Not used** — custom CSS rails (`AdminSvgPreviewRail` / stage / details) |
-| Sketch tools | Excalidraw internal toolbar | Excalidraw own chrome (expected for draw tools only) |
-| Parametric form | Admin form fields + Aria-ish | Raw fieldset HTML — not Dockview |
-
-**Meaning:** reuse the **same chrome packages** as Planner (dock / toolbar patterns / icons). Do **not** mount Planner Fabric tool rail or place tools into SVG editor. Do **not** grow a second dock system under admin-only CSS forever.
 | Publish compile | `compileSvgForPublish` · `normalizeDescriptorForPipeline` · `pipelineCore` | S1–S3 sanitise | Client engines as release |
 | Disk write | `svgPipelineRunner` S4 · `persistBlockDescriptor` | Live SVG + descriptors | DB sole authority (until cutover) |
 | Units | `features/planner/model/units.ts` | mm store; mm/cm display | Parallel cm+mm that drift |
 | Isolation | `catalogWriteIsolation.ts` | Block test writes to canonical catalog | — |
+
+### Chrome honesty (Admin SVG today vs target)
+
+**Two live layout modes** (same package family; not two geometry pens):
+
+| Mode | Route | Live shell | Live stage content |
+|------|-------|------------|--------------------|
+| Freehand | `/admin/svg-editor/[id]` | **Dockview** `AdminSvgDockHost` — Preview \| Studio \| Details | Excalidraw draw tools **inside** stage only |
+| Parametric | `/admin/svg-editor/parametric` | Planner **WorkspaceShell** + **CanvasToolRail** — plan left, form right (`data-stage-layout="planner-workspace-shell"`) | Maker plan SVG + form fields; **not** Dockview host |
+
+| Surface | Target | Live today |
+|---------|--------|------------|
+| Icons | Phosphor | **In use** on freehand + parametric chrome (prefer Phosphor only for shell icons) |
+| Accessible controls | React Aria | **Partial** — freehand TopBar (`Toolbar` / `ToggleButton`); parametric publish confirm still custom dialog (promote to Aria) |
+| Freehand dock panels | **dockview-react** (same as Planner dock) | **In use** — `AdminSvgDockHost` only on freehand shell |
+| Parametric layout | Planner workspace chrome package | **In use** — `WorkspaceShell` + `CanvasToolRail` (pinned); CSS under `locked/chrome` + admin parametric styles — **not** `AdminSvgDockHost` |
+| Sketch tools | Excalidraw internal toolbar | Freehand stage only (expected) |
+| Fabric place canvas | Planner only | **Never** imported under `features/admin` |
+
+**Meaning:** reuse the **same chrome packages** as Planner (dockview / Aria / Phosphor / WorkspaceShell / CanvasToolRail). Do **not** mount Fabric place/zoom canvas into Admin. Do **not** invent a third dock library. Freehand and parametric may use **different layout modes** as long as packages stay singular.
 
 ---
 
@@ -94,6 +104,7 @@ Live durable intent: Supabase + R2. Owner blockers none.
 | Schema | `LinearDeskFieldsSchema` live with exact mm fields + fit refine |
 | Form model | Uses planner `units.ts` for mm/cm; maps full schema |
 | Form UI | pedestalTopGap + pedestalBackInset controls bound (**K3 unit-green**) |
+| Parametric chrome | `WorkspaceShell` + `CanvasToolRail`; plan SVG via Maker; confirm dialog custom (Aria gap) |
 
 **K1–K3 unit-green:** one Maker drawer; form + CLI + publish call it; form knobs 1:1 schema. Template residual deprecated only. **Next: C3 browser.** Not browser PASS.
 

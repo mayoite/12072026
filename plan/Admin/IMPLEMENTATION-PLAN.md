@@ -2,12 +2,13 @@
 
 **Owner model:** exact fields → Maker SVG → publish → guest place → BOQ. Library as you go. No owner blockers. Supabase+R2 = live dual intent.
 
-**Goal (now):** Guest-visible publish identity + easy form → C3 browser → C4 place/BOQ.  
-**K1–K3 unit:** Maker pen done. Do not re-open dual-pen debates.
+**Goal (now):** **C3 browser** (160 cm → preview → publish) → **C4 browser** place/BOQ at 1280 + 390.  
+**Unit done (do not re-open):** K1–K3 Maker pen + form knobs; guest identity (`oando-` slug / SKU); C4 load-rule **code path** (buyer live + place→BOQ).  
+**Still OPEN:** C3 browser gate; C4 browser 1280/390; C4 unit may need authority-aware preview URL when `SVG_RELEASE_AUTHORITY=db`.
 
 **Architecture:** Form → Zod mm → `drawLinearDesk` → Maker paths → sanitise → `publishDescriptorWithPipeline` (disk + dual-write when ready) → Fabric place. Do not rebuild Planner.
 
-**Tech:** TypeScript, Maker.js, Fabric, Next.js, Vitest · **1 implementer** · commit verified slices; push only if owner asks.
+**Tech:** TypeScript, Maker.js, Fabric, Next.js, Vitest · **1 implementer** · commit verified slices; push when slice should land (see `Agents.md`).
 
 ---
 
@@ -55,148 +56,70 @@
 
 ```text
 DONE unit: K1–K3 Maker pen + form knobs
-  → NOW: guest identity (oando- slug, SKU) on publish
-  → C3 browser 160 cm publish
-  → C4 guest place + BOQ (1280 + 390)
+DONE unit: guest identity (oando- slug, SKU) on publish
+DONE unit path: C4 load rule code (live lifecycle + place→BOQ helpers) — browser OPEN
+  → NOW: C3 browser 160 cm publish
+  → NEXT: C4 guest place + BOQ (1280 + 390)
   → later families when a job needs a new drawer
   → C-AI field draft optional; kill if delays ship
 ```
 
+**Re-verify command (2026-07-18 parent):** Maker draw + form-model + guest-identity units green. **Not green same session:** `c4GuestPlaceLoadRule` (disk URL vs revision API under `SVG_RELEASE_AUTHORITY=db`); `publishLinearDeskIsolatedPath` (`result.success` false). Fix those before claiming C4 / isolated-publish unit PASS.
+
 ---
 
-## Task K1: Wire form / CLI / publish to Maker only
+## Task K1: Wire form / CLI / publish to Maker only — **DONE (unit)**
+
+**Evidence:** `drawLinearDesk.test.ts` · barrel Maker exports · form/compile/CLI → `renderLinearDeskSvg` · template residual only.  
+**Do not re-open dual-pen.**
+
+**Files (landed):**
+- `drawLinearDesk.ts`, parametric `index.ts`, `makerJsRecipes.ts`, `LinearDeskParametricForm.tsx`, `compileLinearDeskSvg.ts`, `scripts/render-linear-desk.mts`
+- Tests: `tests/unit/features/planner/asset-engine/svg/parametric/`
+
+- [x] **Step 1: Unit — parametric SVG uses Maker parts** — `drawLinearDesk.test.ts` (desk-top + pedestals; width regenerates; no currentColor)
+- [x] **Step 2: Run units** — parametric suite green (re-run on change)
+- [x] **Step 3: Single Maker drawer** — `fieldsToLinearDeskMakerRecipe` → `compileMakerRecipeToPaths`
+- [x] **Step 4: Form + compile + CLI** → Maker barrel only
+- [x] **Step 5: Units PASS** — Maker + form parametric suites
+- [x] **Step 6: Commit** — prior verified slices (historical)
+
+---
+
+## Task K2: Unit proves Maker path (no template authority) — **DONE (unit)**
+
+- [x] **Step 1: Compile/form path Maker part ids** — not template-only roles
+- [x] **Step 2: Units green**
+- [x] **Step 3: Template demoted** — `drawLinearDeskFromTemplate.ts` deprecated residual; form/CLI/publish unused
+- [x] **Step 4: Commit** — prior verified slices
+
+---
+
+## Task K3: Form fields = schema 1:1 — **DONE (unit)** · browser C3 OPEN
 
 **Files:**
-- Create or modify: `site/features/planner/asset-engine/svg/parametric/drawLinearDesk.ts` (or replace template export)
-- Modify: `site/features/planner/asset-engine/svg/parametric/index.ts`
-- Modify: `site/features/planner/asset-engine/svg/makerJsRecipes.ts` (map schema insets if missing)
-- Modify: `site/features/admin/svg-editor/parametric/LinearDeskParametricForm.tsx`
-- Modify: `site/features/admin/svg-editor/parametric/compileLinearDeskSvg.ts`
-- Modify: `site/scripts/render-linear-desk.mts`
-- Test: `site/tests/unit/features/planner/asset-engine/svg/parametric/` (new or extend)
-- Optionally thin-wrap or delete dual authority from `drawLinearDeskFromTemplate.ts` after green
+- `linearDeskFormModel.ts` · `LinearDeskParametricForm.tsx` · `linearDeskFormModel.test.ts`
 
-- [ ] **Step 1: Write failing unit — parametric SVG uses Maker parts**
-
-```typescript
-// site/tests/unit/features/planner/asset-engine/svg/parametric/drawLinearDesk.test.ts
-import { drawLinearDesk, renderLinearDeskSvg } from "@/features/planner/asset-engine/svg/parametric";
-import { parseLinearDeskFields } from "@/features/planner/asset-engine/svg/parametric/linearDeskFields";
-
-it("drawLinearDesk emits multipath ids from Maker (desk-top + pedestals)", () => {
-  const fields = parseLinearDeskFields({
-    type: "linear-desk",
-    widthMm: 1600,
-    depthMm: 800,
-    pedestalCount: 2,
-  });
-  const draw = drawLinearDesk(fields);
-  const ids = draw.parts.map((p) => p.id);
-  expect(ids).toEqual(expect.arrayContaining(["desk-top", "pedestal-l", "pedestal-r"]));
-});
-
-it("width change regenerates different path data", () => {
-  const a = renderLinearDeskSvg(parseLinearDeskFields({ type: "linear-desk", widthMm: 1400, depthMm: 800 }));
-  const b = renderLinearDeskSvg(parseLinearDeskFields({ type: "linear-desk", widthMm: 1800, depthMm: 800 }));
-  expect(a).not.toBe(b);
-  expect(a).toMatch(/viewBox="0 0 1400/);
-  expect(b).toMatch(/viewBox="0 0 1800/);
-});
-
-it("renderLinearDeskSvg has no currentColor / var(", () => {
-  const svg = renderLinearDeskSvg(parseLinearDeskFields({ type: "linear-desk", widthMm: 1600, depthMm: 800 }));
-  expect(svg).not.toMatch(/currentColor|var\s*\(/i);
-});
-```
-
-- [ ] **Step 2: Run — expect FAIL until Maker wired**
-
-```powershell
-pnpm --filter oando-site exec vitest run tests/unit/features/planner/asset-engine/svg/parametric --reporter=dot
-```
-
-- [ ] **Step 3: Implement single Maker drawer**
-
-1. Map `LinearDeskFields` → `LinearDeskMakerRecipe` (`recipe: "linear-desk"`, width/depth/top/pedestal flags from fields).
-2. Call `compileMakerRecipeToPaths` from `makerJsToPath.ts`.
-3. Assemble image-safe multipath SVG (reuse paint approach from template `linearDeskPartsToSvg` or pipeline-safe hex).
-4. Export `drawLinearDesk` + `renderLinearDeskSvg` from barrel; form/compile/CLI must import only that.
-5. Extend Maker recipe if schema insets (`pedestalInsetMm`, `pedestalTopGapMm`, `pedestalBackInsetMm`, modesty) are still hard-coded constants — schema is authority for parametric path.
-6. Ensure `renderLinearDeskSvg` is **not** a pure re-export of `drawLinearDeskFromTemplate` after this task.
-
-- [ ] **Step 4: Point Admin form + compile + CLI at Maker path only**
-
-- `LinearDeskParametricForm.tsx`: keep `renderLinearDeskSvg` import from parametric barrel (now Maker).
-- `compileLinearDeskSvg.ts`: same.
-- `scripts/render-linear-desk.mts`: same barrel; still default write under `results/admin/parametric/`; `--catalog` owner-only.
-
-- [ ] **Step 5: Run units — expect PASS**
-
-```powershell
-pnpm --filter oando-site exec vitest run tests/unit/features/planner/asset-engine/svg/parametric tests/unit/features/planner/asset-engine/svg/makerJsRecipes.test.ts tests/unit/features/admin/svg-editor/parametric --reporter=dot
-```
-
-- [ ] **Step 6: Commit** — after verified slice (push only if owner asks)
-
-```powershell
-git add site/features/planner/asset-engine/svg/parametric site/features/admin/svg-editor/parametric site/scripts/render-linear-desk.mts site/tests/unit/features/planner/asset-engine/svg/parametric
-git commit -m "feat(admin): parametric linear desk draw via Maker.js only (K1)"
-```
+- [x] **Step 1: Audit form keys vs `LinearDeskFieldsSchema`** — full mm knobs incl. pedestalTopGap / pedestalBackInset
+- [x] **Step 2: Unit tests for mm/cm via `units.ts`** — 160 cm → 1600 mm; round-trip
+- [x] **Step 3: Form UI binds gaps** — K3 unit PASS (2026-07-18)
+- [x] **Step 4: Commit** — prior verified slices
 
 ---
 
-## Task K2: Unit proves Maker path (no template authority)
+## Task GUEST-ID: Guest-visible slug / SKU — **DONE (unit)**
 
-**Files:**
-- Test: extend parametric unit suite
-- Optional: assert source/module of draw does not call template when `pedestalCount === 2`
+**Not “NOW”.** Code: `linearDeskGuestIdentity.ts` · used by `publishLinearDeskAction` / `buildLinearDeskPublishDescriptor`.  
+**Tests:** `linearDeskGuestIdentity.test.ts` · `linearDeskPublishDescriptor.test.ts`.
 
-- [ ] **Step 1: Failing test that template-only path is not used for publish compile**
-
-Spy or structural assert: `compileLinearDeskSvg` output part ids match Maker ids (`desk-top`, `pedestal-l`, `pedestal-r`) and fail if only frame/top/pedestal template roles without Maker path.
-
-- [ ] **Step 2: Run**
-
-```powershell
-pnpm --filter oando-site exec vitest run tests/unit/features/admin/svg-editor/parametric tests/unit/features/planner/asset-engine/svg/parametric --reporter=dot
-```
-
-- [ ] **Step 3: Remove or demote `drawLinearDeskFromTemplate` to deprecated helper unused by form/publish**
-
-- [ ] **Step 4: Commit** — after verified slice (push only if owner asks)
+- [x] `ensureGuestVisibleSlug` → `oando-*`
+- [x] `ensureCommercialSku` commercial default
+- [x] Width syncs default slug/SKU/name only while pattern-default (form model)
+- [x] Publish sets lifecycle **live** for guest visibility (`setCatalogLifecycle`)
 
 ---
 
-## Task K3: Form fields = schema 1:1
-
-**Files:**
-- `site/features/admin/svg-editor/parametric/linearDeskFormModel.ts`
-- `site/features/admin/svg-editor/parametric/LinearDeskParametricForm.tsx`
-- `site/tests/unit/features/admin/svg-editor/parametric/linearDeskFormModel.test.ts`
-
-- [ ] **Step 1: Audit form keys vs `LinearDeskFieldsSchema`**
-
-Exact schema names (live): `type`, `widthMm`, `depthMm`, `heightMm`, `topThicknessMm`, `pedestalWidthMm`, `pedestalInsetMm`, `pedestalTopGapMm`, `pedestalBackInsetMm`, `pedestalCount`, `modesty`, `seriesId`, `name`, `sku`, `slug`. Display unit is session-only.
-
-Form model keys today: `width`, `depth`, `height`, `topThickness`, `pedestalWidth`, `pedestalInset`, `pedestalTopGap`, `pedestalBackInset` (via `units.ts`) + pedestalCount, modesty, name, sku, seriesId, slug.
-
-**Live UI (re-verify 2026-07-18):** `LinearDeskParametricForm.tsx` binds `pedestalTopGap` + `pedestalBackInset` (K3 unit PASS). Browser C3 still OPEN.
-
-- [x] **Step 2: Unit tests for mm/cm convert via `units.ts`**
-
-```powershell
-pnpm --filter oando-site exec vitest run tests/unit/features/admin/svg-editor/parametric/linearDeskFormModel.test.ts --reporter=dot
-```
-
-Cases: 160 cm → 1600 mm; 1400 mm → 140 cm; round-trip stable; draw always receives mm.
-
-- [x] **Step 3: Fix gaps** — pedestalTopGap + pedestalBackInset controls bound; schema 1:1.
-
-- [ ] **Step 4: Commit** — after verified slice (push only if owner asks)
-
----
-
-## Task C3: Admin zero-code UI browser gate
+## Task C3: Admin zero-code UI browser gate — **NOW (OPEN)**
 
 **Files (exist):**
 - `site/app/admin/svg-editor/parametric/page.tsx`
@@ -204,7 +127,7 @@ Cases: 160 cm → 1600 mm; 1400 mm → 140 cm; round-trip stable; draw always re
 - `site/features/admin/svg-editor/parametric/publishLinearDeskAction.ts`
 - List CTA: `site/features/admin/svg-editor/views/AdminSvgEditorListView.tsx`
 
-**Blocked on:** K1–K2 green.
+**Unblocked:** K1–K3 + guest identity unit green. **Gate = browser only.**
 
 - [ ] **Step 1: Manual / Playwright browser**
 
@@ -220,27 +143,28 @@ Steps:
 2. Set width **160** cm (1600 mm).
 3. Preview shows multipath desk (not single grey slab).
 4. Publish succeeds.
-5. Artifact under disk catalog + descriptor (slug) — confirm paths; do not claim DB authority.
+5. Artifact / revision path recorded honestly (disk and/or DB+R2 per live authority) — no fake cutover claim.
 
 Record: console errors = 0, failed requests = 0.
 
-- [ ] **Step 2: Optional e2e** under `site/tests/e2e/` with isolation helpers (tmp catalog) if owner wants automation — never mutate canonical catalog from unit tests.
+- [ ] **Step 2: Optional e2e** under `site/tests/e2e/` with isolation helpers (tmp catalog) if wanted — never mutate canonical catalog from unit tests.
 
 - [ ] **Step 3: Update CHECKLIST Part C C3 statuses only with evidence**
 
-- [ ] **Step 4: Commit** — after verified slice (push only if owner asks)
+- [ ] **Step 4: Commit** — after verified slice
 
 ---
 
-## Task C4: Planner consume + browser place
+## Task C4: Planner consume + browser place — **NEXT (OPEN)**
 
-**Files (map before edit):**
+**Files:**
 - Planner SVG load: `site/app/api/planner/catalog/svg-blocks/route.ts`
 - Guest inventory / place: planner guest routes under `site/app/planner/`
-- BOQ name/SKU from product fields
+- BOQ: `projectFurnitureBoq` / place stamps
+- Unit: `tests/unit/features/planner/catalog/c4GuestPlaceLoadRule.test.ts`
 
-- [ ] **Step 1: Ensure published parametric slug is buyer/approved-visible for guest**
-
+- [x] **Step 1a: Code path** — publish → guest-visible slug + live lifecycle + catalog map (see FEATURES “C4 load rule”)
+- [ ] **Step 1b: Unit green under live authority** — 2026-07-18: can FAIL if test hard-codes `/svg-catalog/{slug}.svg` while DB authority returns `/api/planner/catalog/svg/{revisionId}` — make assertion authority-aware before claiming unit PASS
 - [ ] **Step 2: Browser place at 1280 and 390**
 
 ```powershell
@@ -252,7 +176,7 @@ Pass: Fabric paints published SVG (not Block2D miss); BOQ shows name + SKU; cons
 
 - [ ] **Step 3: Update CHECKLIST C4 with evidence**
 
-- [ ] **Step 4: Commit** — after verified slice (push only if owner asks)
+- [ ] **Step 4: Commit** — after verified slice
 
 ---
 
@@ -270,13 +194,15 @@ Further G4–G9 (more recipes, fixtures, preview honesty, soft quality gate, own
 
 ---
 
-## Task C-AI (defer until C2/K1 unit green)
+## Task C-AI (optional after C3; never blocks desk ship)
 
-- [ ] **C-AI.0** No AI on publish path before K1 unit green.
+K1 unit is **done** — do not treat “wait for K1” as current work.
+
+- [x] **C-AI.0** K1 unit green satisfied (historical gate).
 - [ ] **C-AI.1** "Suggest fields" → untrusted JSON → `LinearDeskFieldsSchema` → form draft only.
 - [ ] **C-AI.2** Preview + publish = Maker `drawLinearDesk` only.
 - [ ] **C-AI.3** Human gate; server keys; rate limit; no BOQ/PII in prompts.
-- [ ] **C-AI.5** Kill switch: if AI delays K1/C3, drop AI and ship desk.
+- [ ] **C-AI.5** Kill switch: if AI delays **C3**, drop AI and ship desk.
 
 ---
 
@@ -289,7 +215,7 @@ Further G4–G9 (more recipes, fixtures, preview honesty, soft quality gate, own
 - All furniture types day one
 - Photoreal 3D first
 - Canonical catalog mutation in tests
-- Commit/push unless owner asked
+- Leave verified slices uncommitted (Agents.md: commit; push when slice should land)
 
 ---
 
@@ -319,11 +245,12 @@ pnpm run check:plans-purity
 
 ## Done-enough ship slice
 
-1. K1–K3 unit green (Maker-only parametric path).  
-2. C3 browser: form → preview → publish desk (160 cm).  
-3. C4 browser: guest place at 1280 + 390; BOQ name/SKU.  
-4. Q4 no currentColor on that published SVG.  
-5. CHECKLIST Part C statuses updated with same-session evidence.
+1. ~~K1–K3 unit green (Maker-only parametric path).~~ **done**  
+2. ~~Guest identity unit (oando- slug / SKU / live).~~ **done**  
+3. **NOW** C3 browser: form → preview → publish desk (160 cm).  
+4. **NEXT** C4 browser: guest place at 1280 + 390; BOQ name/SKU.  
+5. Q4 no currentColor on that published SVG.  
+6. CHECKLIST Part C statuses updated with same-session evidence.
 
 Then: C5 finesse, G4+ recipes, C6 next types, optional C-AI.
 

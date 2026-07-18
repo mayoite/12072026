@@ -261,7 +261,7 @@ export function AdminSvgEditorTopBar({
           aria-label="Approve for buyers"
         >
           {approving ? (
-            <Loader2 size={14} className="animate-spin" aria-hidden />
+            <Loader2 size={14} className="admin-icon-spin" aria-hidden />
           ) : null}
           <span className="admin-svg-engine-shell__action-label-long">Approve for buyers</span>
           <span className="admin-svg-engine-shell__action-label-short" aria-hidden="true">Approve</span>
@@ -276,7 +276,7 @@ export function AdminSvgEditorTopBar({
           data-testid="admin-shell-primary-action"
         >
           {submitting ? (
-            <Loader2 size={14} className="animate-spin" aria-hidden />
+            <Loader2 size={14} className="admin-icon-spin" aria-hidden />
           ) : (
             <CheckCircle size={14} aria-hidden />
           )}

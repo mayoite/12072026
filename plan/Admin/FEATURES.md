@@ -134,7 +134,7 @@ Template `drawLinearDeskFromTemplate` remains as deprecated residual only (not f
 | 16 | OPEN | Disk can still be Planner fallback |
 | 17 | PARTIAL | `scripts/svg-disk-db-dry-run.ts` (report only) |
 | 18 | OPEN | No parity tooling before cutover |
-| 19 | PARTIAL | CSRF/rate limits; unit matrix; browser OPEN |
+| 19 | PARTIAL | CSRF/rate unit matrix green; browser sample PASS (`admin-csrf-matrix-af14.spec.ts`); not every mutator toured in Chromium |
 | 20 | PARTIAL | Tmp-dir unit/e2e; no automated canonical hash gate |
 
 ---
@@ -249,7 +249,8 @@ Template `drawLinearDeskFromTemplate` remains as deprecated residual only (not f
 | Feature | Code | Gap |
 |---|---|---|
 | Planner SVG blocks API | `app/api/planner/catalog/svg-blocks/route.ts` | DB-aware + disk fallback |
-| Buyer-visible loaders | `lifecycle/catalogLifecycle.ts`, `catalogLifecycle.db.server.ts` | Definition rows ≠ artifact bytes |
+| Buyer-visible loaders | `lifecycle/catalogLifecycle.ts`, `catalogLifecycle.db.server.ts` | Loads pointers; **artifact bytes** via `GET /api/planner/catalog/svg/{revisionId}` (`buildPublishedSvgResponse`) |
+| Place pin revision | `placementAction.ts` + `parsePublishedSvgRevisionId` | Stamps `sourceSvgRevisionId` when preview is revision API (AF-15 / DB-SVG-13) |
 | Portal SVG catalog | `app/(site)/portal/svg-catalog/page.tsx` | Disk load |
 
 ---
@@ -282,7 +283,7 @@ Template `drawLinearDeskFromTemplate` remains as deprecated residual only (not f
 
 | Feature | Code | Gap |
 |---|---|---|
-| CSRF + rate | admin mutators + shared API helpers | Unit matrix PARTIAL; browser OPEN |
+| CSRF + rate | admin mutators + shared API helpers | Unit matrix green (`audit-api-route-safety`); browser sample PASS AF-14 e2e |
 | Production-auth smoke | AF-10 | OPEN |
 
 ---

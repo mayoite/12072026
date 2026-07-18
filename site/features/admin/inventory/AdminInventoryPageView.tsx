@@ -100,9 +100,9 @@ export default function AdminInventoryPageView({ csv, generatedAt, rowCount }: P
           <p className="admin-page__copy">
             Route and API map for operators — not the product catalog or SVG
             symbol inventory. Live view of{" "}
-            <code className="text-xs">results/app-pages-inventory.csv</code> —
+            <code className="admin-type-code">results/app-pages-inventory.csv</code> —
             regenerate with{" "}
-            <code className="text-xs">node scripts/generate-app-inventory-csv.mjs</code>.
+            <code className="admin-type-code">node scripts/generate-app-inventory-csv.mjs</code>.
           </p>
           <p className="admin-page__meta">
             {rowCount} rows
@@ -144,7 +144,7 @@ export default function AdminInventoryPageView({ csv, generatedAt, rowCount }: P
           <h2 className="admin-empty__title">Inventory not generated</h2>
           <p className="admin-empty__copy">
             The live route map is empty until the generator writes{" "}
-            <code className="text-xs">results/app-pages-inventory.csv</code>.
+            <code className="admin-type-code">results/app-pages-inventory.csv</code>.
           </p>
           <p className="admin-empty__copy">
             From the repo root run:
@@ -182,10 +182,10 @@ export default function AdminInventoryPageView({ csv, generatedAt, rowCount }: P
                   {filtered.map((row) => (
                     <tr key={`${row.kind}-${row.urlRoute}-${row.file}`}>
                       <td data-label="Kind" className="text-muted">{row.kind}</td>
-                      <td data-label="Route" className="font-mono text-xs text-strong">{row.urlRoute || "—"}</td>
+                      <td data-label="Route" className="admin-type-code--strong">{row.urlRoute || "—"}</td>
                       <td data-label="Area" className="text-muted">{row.area}</td>
                       <td data-label="Auth" className="text-muted">{row.auth}</td>
-                      <td data-label="File" className="font-mono text-xs text-muted">{row.file}</td>
+                      <td data-label="File" className="admin-type-code admin-type-muted">{row.file}</td>
                       <td data-label="Summary" className="max-w-md text-muted">{row.summary}</td>
                     </tr>
                   ))}

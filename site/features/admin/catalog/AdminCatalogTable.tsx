@@ -172,7 +172,7 @@ export function AdminCatalogTable({
                         {busy ? (
                           <Loader2
                             size={14}
-                            className="animate-spin"
+                            className="admin-icon-spin"
                             aria-hidden
                           />
                         ) : (

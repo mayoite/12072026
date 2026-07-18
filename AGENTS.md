@@ -10,6 +10,7 @@
 - Clear goals are executed without ceremony.
 - Goal changes require owner alignment.
 - Quality floor: `Agents/Agents-01-STANDARD.md`.
+- **RULE (not optional): every task is a team task** — even one letter / one line. Follow `Agents/Agents-10-TEAM-CYCLE.md`. Owner is the only boss. Parent is a **team member**, not the boss. Five peer seats + team gate. No solo thrash. No soft-PASS over a peer FAIL.
 
 ## Owner standing decisions (do not re-litigate)
 

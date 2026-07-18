@@ -85,7 +85,7 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
     );
   });
 
-  it("AF-05/AF-13: primary journey is symbol authoring; bulk stays advanced; no internal jargon", () => {
+  it("AF-05/AF-13: primary journey is order-factory desk; bulk stays advanced; no internal jargon", () => {
     render(
       <AdminSvgEditorListView
         descriptors={[descriptor]}
@@ -101,14 +101,17 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
     );
 
     const journey = screen.getByTestId("admin-svg-journey-copy");
-    expect(journey).toHaveTextContent(/visual studio|publish/i);
+    expect(journey).toHaveTextContent(/linear desk|publish/i);
     expect(journey).toHaveTextContent(/do not need to edit/i);
     expect(journey).not.toHaveTextContent(/Zod|pipeline|schema|descriptor/i);
 
     expect(screen.getByTestId("admin-shell-title")).toHaveTextContent(
       /Product plan symbols|SVG symbols/i,
     );
-    expect(screen.getByTestId("admin-shell-primary-action")).toHaveTextContent(
+    const primary = screen.getByTestId("admin-shell-primary-action");
+    expect(primary).toHaveTextContent(/New linear desk/i);
+    expect(primary).toHaveAttribute("href", "/admin/svg-editor/parametric");
+    expect(screen.getByTestId("admin-shell-freehand-new")).toHaveTextContent(
       /New SVG symbol/i,
     );
 
@@ -118,13 +121,21 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
     expect(advanced).toHaveTextContent(/Migration tool only/i);
     expect(advanced).toHaveTextContent(/optional/i);
 
+    // Default hero source is product language (no dual-write jargon)
+    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
+      /Product inventory/i,
+    );
+    expect(screen.getByTestId("admin-shell-source").textContent ?? "").not.toMatch(
+      /Dual-write/i,
+    );
+
     const page = screen.getByTestId("admin-svg-primary-journey");
     expect(page.textContent).not.toMatch(/\bZod\b/);
     expect(page.textContent).not.toMatch(/atomic rename/i);
     expect(page.textContent).not.toMatch(/schemaVersion/i);
   });
 
-  it("shows empty source inventory with primary New SVG symbol CTA", () => {
+  it("shows empty source inventory with primary New linear desk CTA", () => {
     render(
       <AdminSvgEditorListView
         descriptors={[]}
@@ -135,13 +146,18 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
     );
     const empty = screen.getByTestId("admin-svg-inventory-empty-source");
     expect(empty).toHaveTextContent(/No SVG symbols yet/i);
-    expect(empty).toHaveTextContent(/visual studio/i);
+    expect(empty).toHaveTextContent(/linear desk|freehand/i);
     const cta = screen.getByTestId("admin-svg-primary-new-empty");
-    expect(cta).toHaveAttribute("href", "/admin/svg-editor/new");
+    expect(cta).toHaveAttribute("href", "/admin/svg-editor/parametric");
     expect(cta).toHaveClass("admin-btn--primary");
-    expect(screen.getByTestId("admin-shell-primary-action")).toHaveAttribute(
+    expect(cta).toHaveTextContent(/New linear desk/i);
+    expect(screen.getByTestId("admin-svg-secondary-freehand-empty")).toHaveAttribute(
       "href",
       "/admin/svg-editor/new",
+    );
+    expect(screen.getByTestId("admin-shell-primary-action")).toHaveAttribute(
+      "href",
+      "/admin/svg-editor/parametric",
     );
   });
 
@@ -160,13 +176,17 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
         dualWriteMode="enabled"
       />,
     );
+    // Default chrome stays product language
     const source = screen.getByTestId("admin-shell-source");
-    expect(source).toHaveTextContent(/Dual-write: enabled/);
-    expect(source).toHaveTextContent(
+    expect(source).toHaveTextContent(/Product inventory/i);
+    expect(source.textContent ?? "").not.toMatch(/Dual-write/i);
+    // Truthful dual-write detail is collapsible, never claims cutover
+    const releaseDetail = screen.getByTestId("admin-shell-release-source-detail");
+    expect(releaseDetail).toHaveTextContent(/Dual-write: enabled/);
+    expect(releaseDetail).toHaveTextContent(
       /live authority remains disk until cutover/i,
     );
-    expect(source).toHaveTextContent(/on-disk inventory/i);
-    expect(source.textContent ?? "").not.toMatch(
+    expect(releaseDetail.textContent ?? "").not.toMatch(
       /cutover complete|DB is live authority|Products DB is sole authority/i,
     );
   });

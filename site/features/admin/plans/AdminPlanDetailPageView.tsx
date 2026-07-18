@@ -133,7 +133,7 @@ export default function AdminPlanDetailPageView() {
   if (!planId) {
     return (
       <div className="admin-page">
-        <h1 className="text-2xl font-semibold text-strong">Plan detail</h1>
+        <h1 className="admin-type-page">Plan detail</h1>
         <div className="admin-alert admin-alert--error" role="alert">
           Missing plan id.
         </div>
@@ -143,21 +143,21 @@ export default function AdminPlanDetailPageView() {
 
   return (
     <div className="admin-page">
-      <Link href="/admin/plans" className="inline-flex gap-2 text-sm text-muted hover:text-strong">
+      <Link href="/admin/plans" className="admin-inline-gap admin-type-meta">
         <ArrowLeft size={14} aria-hidden />
         Back to plans
       </Link>
 
       {!plan ? (
-        <header>
-          <p className="text-xs uppercase tracking-wide text-soft">Plan review</p>
-          <h1 className="mt-1 text-2xl font-semibold text-strong">Plan detail</h1>
+        <header className="admin-stack--tight">
+          <p className="admin-type-label">Plan review</p>
+          <h1 className="admin-type-page">Plan detail</h1>
         </header>
       ) : null}
 
       {loading ? (
-        <div className="admin-inline-row text-sm text-muted" role="status" aria-live="polite">
-          <Loader2 size={16} className="animate-spin" aria-hidden />
+        <div className="admin-status-line" role="status" aria-live="polite">
+          <Loader2 size={16} className="admin-icon-spin" aria-hidden />
           Loading plan…
         </div>
       ) : null}
@@ -176,19 +176,19 @@ export default function AdminPlanDetailPageView() {
       ) : null}
 
       {plan ? (
-        <div className="space-y-6">
-          <header className="rounded-xl border border-soft bg-panel p-5">
-            <p className="text-xs uppercase tracking-wide text-soft">Plan review</p>
-            <h1 className="mt-1 text-2xl font-semibold text-strong">{plan.title}</h1>
-            <p className="mt-2 text-sm text-muted">
+        <div className="admin-stack--loose">
+          <header className="admin-hero-card">
+            <p className="admin-type-label">Plan review</p>
+            <h1 className="admin-hero-card__title">{plan.title}</h1>
+            <p className="admin-type-meta">
               {plan.project_name ?? "No project"} · {plan.client_name ?? "No client"} · Updated {formatTimestamp(plan.updated_at)}
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="admin-actions-row">
               <Link
                 href={buildPlannerCanvasHref(plan.id)}
                 className="admin-btn admin-btn--primary"
               >
-                <ExternalLink size={14} aria-hidden />
+                <ExternalLink size={14} className="admin-icon-static" aria-hidden />
                 Open in canvas
               </Link>
               <button
@@ -218,50 +218,50 @@ export default function AdminPlanDetailPageView() {
             </div>
           </header>
 
-          <section className="grid gap-4 md:grid-cols-2">
-            <div className="admin-panel p-4">
-              <h2 className="text-sm font-semibold text-strong">Document summary</h2>
-              <dl className="mt-3 space-y-2 text-sm">
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted">Room</dt>
+          <section className="admin-grid-2--md">
+            <div className="admin-panel admin-panel--padded">
+              <h2 className="admin-type-section">Document summary</h2>
+              <dl className="admin-dl">
+                <div className="admin-dl__row">
+                  <dt>Room</dt>
                   <dd>{plan.room_width_mm} × {plan.room_depth_mm} mm</dd>
                 </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted">Items</dt>
+                <div className="admin-dl__row">
+                  <dt>Items</dt>
                   <dd>{plan.item_count}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted">Seat target</dt>
+                <div className="admin-dl__row">
+                  <dt>Seat target</dt>
                   <dd>{plan.seat_target}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted">Units</dt>
+                <div className="admin-dl__row">
+                  <dt>Units</dt>
                   <dd>{plan.unit_system}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted">Status</dt>
+                <div className="admin-dl__row">
+                  <dt>Status</dt>
                   <dd>{plan.status}</dd>
                 </div>
               </dl>
             </div>
 
-            <div className="admin-panel p-4">
-              <h2 className="text-sm font-semibold text-strong">Fabric scene readiness</h2>
-              <dl className="mt-3 space-y-2 text-sm">
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted">Canonical scene</dt>
+            <div className="admin-panel admin-panel--padded">
+              <h2 className="admin-type-section">Fabric scene readiness</h2>
+              <dl className="admin-dl">
+                <div className="admin-dl__row">
+                  <dt>Canonical scene</dt>
                   <dd>{readiness.hasScene ? "Present" : "Missing"}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted">Fabric snapshot</dt>
+                <div className="admin-dl__row">
+                  <dt>Fabric snapshot</dt>
                   <dd>{readiness.hasFabricSnapshot ? "Present" : "Missing"}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted">Scene items</dt>
+                <div className="admin-dl__row">
+                  <dt>Scene items</dt>
                   <dd>{readiness.itemCount}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted">Scene room</dt>
+                <div className="admin-dl__row">
+                  <dt>Scene room</dt>
                   <dd>{readiness.roomLabel}</dd>
                 </div>
               </dl>
@@ -269,28 +269,28 @@ export default function AdminPlanDetailPageView() {
           </section>
 
           {scene?.items?.length ? (
-            <section className="admin-panel p-4">
-              <h2 className="text-sm font-semibold text-strong">Scene items</h2>
-              <ul className="mt-3 divide-y divide-soft text-sm">
+            <section className="admin-panel admin-panel--padded">
+              <h2 className="admin-type-section">Scene items</h2>
+              <ul className="admin-item-list">
                 {scene.items.slice(0, 12).map((item) => (
-                  <li key={item.id} className="flex flex-wrap justify-between gap-4 py-2">
-                    <span className="text-strong">{item.name}</span>
-                    <span className="text-muted">
+                  <li key={item.id}>
+                    <span className="admin-type-body--strong">{item.name}</span>
+                    <span className="admin-type-muted">
                       {item.category} · {item.sizeMm.widthMm} × {item.sizeMm.depthMm} mm
                     </span>
                   </li>
                 ))}
               </ul>
               {scene.items.length > 12 ? (
-                <p className="mt-2 text-xs text-soft">Showing first 12 of {scene.items.length} items.</p>
+                <p className="admin-type-soft">Showing first 12 of {scene.items.length} items.</p>
               ) : null}
             </section>
           ) : null}
 
-          <section className="admin-panel p-4">
-            <h2 className="text-sm font-semibold text-strong">Scene JSON</h2>
+          <section className="admin-panel admin-panel--padded">
+            <h2 className="admin-type-section">Scene JSON</h2>
             <pre
-              className="admin-preformatted mt-3 max-h-80 overflow-auto rounded-lg bg-subtle p-3 text-muted"
+              className="admin-preformatted admin-preformatted--scroll"
               role="region"
               aria-label="Scene JSON"
               tabIndex={0}

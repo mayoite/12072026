@@ -44,6 +44,21 @@ export function isPublishedSvgApiUrl(url: string): boolean {
 }
 
 /**
+ * Extract revision id from a published SVG API URL (AF-15/DB-SVG-13 pin source).
+ * Returns null for disk `/svg-catalog/` or non-revision URLs.
+ */
+export function parsePublishedSvgRevisionId(
+  url: string | null | undefined,
+): string | null {
+  if (typeof url !== "string") return null;
+  const path = url.split("?")[0]?.split("#")[0] ?? "";
+  const match = path.match(
+    /^\/api\/planner\/catalog\/svg\/([a-z][a-z0-9-]{1,127})$/i,
+  );
+  return match?.[1] ?? null;
+}
+
+/**
  * Supabase Storage mirror path (Admin publish best-effort upload).
  * Prefer disk `/svg-catalog/` for live paint; use this for CDN / cross-env import.
  */

@@ -244,7 +244,7 @@ export function AdminPriceBookPageView({
           data-testid="admin-price-book-loading"
         >
           <p className="admin-empty__title">
-            <Loader2 size={18} className="animate-spin" aria-hidden /> Loading
+            <Loader2 size={18} className="admin-icon-spin" aria-hidden /> Loading
             price book…
           </p>
           <p className="admin-empty__copy">

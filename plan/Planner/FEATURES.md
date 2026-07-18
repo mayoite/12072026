@@ -17,7 +17,17 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 
 **Live host:** `editor/OOPlannerWorkspace.tsx` wires canvas, catalog, export, AI, validation. Document kernel lives at planner root (`model/`, `store/`, `lib/`, `persistence/`, `catalog/`, `shared/`). Parallel trees (`catalog-api/`, `cloud-store/`) still serve APIs, portal, and legacy paths.
 
-**Execution status (2026-07-18):** brand inventory + dual-write ahead; guest place / BOQ browser / PDF craft OPEN. See `CHECKLIST.md`.
+**Execution status (2026-07-18):** C4 **desktop browser PASS** — place brand desk + BOQ JSON SKU (`planner-c4-guest-place-boq.spec.ts` 1280). Phone 390 place still open. Unit load rule green. See `CHECKLIST.md` · `Failures.md` #6.
+
+### Planner chrome / engines (stack honesty)
+
+| Layer | Live package / path | Not |
+|-------|---------------------|-----|
+| 2D place canvas | **Fabric** · `canvas/PlannerFabricStage.tsx` | Second canvas engine |
+| Shell panels | **dockview-react** · `editor/dock/PlannerDockHost.tsx` · `ModularPlannerShell` | Admin freehand dock is separate host same package |
+| Tool rail / workspace chrome | `CanvasToolRail` · TopBar · Aria/Phosphor | Fabric place tools are canvas, not Admin SVG geometry pen |
+| Parametric Admin reuses | `WorkspaceShell` + `CanvasToolRail` (Admin parametric route) | Does **not** put Fabric place into Admin publish |
+| Plan SVG symbols | Published URL (`/svg-catalog/…` or `/api/planner/catalog/svg/{revisionId}`) · `fabricBlock2D` fallback | Block2D as primary for brand inventory |
 
 ---
 
@@ -51,7 +61,8 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 | Catalog UI | `editor/InventoryPanel.tsx`, `catalog/catalogSearch.ts`, `catalog/catalogBuyerVisibility.ts` | UI-CAT-* browser proof open |
 | Workstation config | `editor/WorkstationConfiguratorPanel.tsx`, `catalog/workstationConfiguratorV0.ts` |  -  |
 | Catalog APIs | `app/api/planner/catalog/route.ts`, `app/api/planner/catalog/configurator/route.ts`, `app/api/planner/catalog/svg-blocks/route.ts` | `svg-blocks` strictly dual-reads native and legacy DB rows and filters internal inventory; the live DB currently returns zero buyer-visible SVG items |
-| SVG on canvas | `canvas/fabricBlock2D.ts`, `catalog/resolvePlanSvgUrl.ts`, `svgPlanSymbolCache.ts` | Place stamps `/svg-catalog/{slug}.svg` when preview missing; paint prefers published SVG then Block2D; sparse disk set remains |
+| SVG on canvas | `canvas/fabricBlock2D.ts`, `catalog/resolvePlanSvgUrl.ts`, `svgPlanSymbolCache.ts`, `svg/svgPreviewAssets.ts` | Prefers **revision API URL** when `publishedSvgRevisionId` set; else disk. Place stamps `sourceSvgRevisionId` (AF-15). **C4 unit green.** **C4 desktop browser PASS**. Phone 390 place OPEN |
+| Published SVG bytes API | `app/api/planner/catalog/svg/[revisionId]/route.ts` · `buildPublishedSvgResponse.server.ts` | Serves R2/DB artifact bytes as `image/svg+xml` + ETag/immutable (AF-15 consumer). Live probe green for linear-desk revision |
 | Asset publish | `asset-engine/`, `site/features/admin/svg-editor/publish/publishDescriptorWithPipeline.ts` | PNG thumb stub; consumer does not read committed revision artifact bytes |
 | 3D | `3d/ThreeLazyViewer`, `buildPlannerSceneNodes`, `sceneParity`, `loadGeneratedGlbObject` | Generated GLB uploads to Supabase `catalog-assets/generated/*` when service role set (never site/public). Doors/windows as 3D nodes. `checkSceneParity` matrix for walls/furniture/openings |
 | Persistence | `usePlannerWorkspaceAutosave`, `cloudPlanHydration`, `editor/PlannerSyncConflictDialog.tsx` | Conflict dialog (keep local / keep cloud) wired; pure `resolveConflict` remains source of truth. Immutable revisions + single save-state machine still open |

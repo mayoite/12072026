@@ -164,6 +164,55 @@ body:has(.admin-page--svg-engine) {
   flex-direction: column;
 }
 
+/* Full-bleed CAD studio — kill console padding + warm main radial wash.
+ * Surface tokens remapped cool under these scopes in theme.css. */
+.shell-admin-main:has(.admin-page--svg-engine),
+.shell-admin-main:has(.admin-parametric-workspace),
+.shell-admin-main:has(.admin-cad),
+.shell-admin-main:has([data-cad-studio="cool"]) {
+  padding: 0;
+  background: var(--surface-page);
+  background-image: none;
+}
+
+.shell-admin-layout:has(.admin-page--svg-engine),
+.shell-admin-layout:has(.admin-parametric-workspace),
+.shell-admin-layout:has(.admin-cad),
+.shell-admin-layout:has([data-cad-studio="cool"]),
+.shell-admin-frame:has(.admin-page--svg-engine),
+.shell-admin-frame:has(.admin-parametric-workspace),
+.shell-admin-frame:has(.admin-cad),
+.shell-admin-frame:has([data-cad-studio="cool"]) {
+  background: var(--surface-page);
+  background-image: none;
+}
+
+.shell-admin-main:has(.admin-page--svg-engine) > .admin-page--svg-engine,
+.shell-admin-main:has(.admin-parametric-workspace) > .admin-parametric-workspace,
+.shell-admin-main:has(.admin-cad) > .admin-cad {
+  flex: 1 1 0%;
+  min-height: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  background: var(--surface-page);
+}
+
+/* Cool console chrome while SVG CAD is mounted */
+.shell-admin-layout:has(.admin-page--svg-engine) .shell-admin-header--topbar,
+.shell-admin-layout:has(.admin-parametric-workspace) .shell-admin-header--topbar,
+.shell-admin-layout:has([data-cad-studio="cool"]) .shell-admin-header--topbar {
+  background: var(--surface-panel);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.shell-admin-layout:has(.admin-page--svg-engine) .shell-admin-sidebar,
+.shell-admin-layout:has(.admin-parametric-workspace) .shell-admin-sidebar,
+.shell-admin-layout:has([data-cad-studio="cool"]) .shell-admin-sidebar {
+  border-right: 1px solid var(--border-soft);
+  background: var(--surface-panel);
+}
+
 /* ── Phone / narrow inventory: cards-priority (ADM-MOB-01 / ADM-MOB-03) ──
  * Markup: data-phone-layout="cards-priority" + td[data-label].
  * Card hierarchy: preview + product header, then meta rows, then actions.
@@ -466,6 +515,15 @@ body:has(.admin-page--svg-engine) {
     padding: 1.35rem 1.75rem;
     gap: 1.1rem;
     max-width: 90rem;
+  }
+
+  /* CAD / SVG studio: never island at 90rem — full-bleed shell */
+  .admin-page.admin-page--svg-engine,
+  .admin-page.admin-cad {
+    max-width: none;
+    width: 100%;
+    padding: 0;
+    gap: 0;
   }
 
   .admin-page__header {

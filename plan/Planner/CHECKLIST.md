@@ -6,6 +6,18 @@
 **Active blockers:** `../../Failures.md`  
 **Doc set:** only `CHECKLIST.md` + `FEATURES.md` per track.
 
+### Ship now (order factory consumer)
+
+```text
+DONE:  C4 desktop place+BOQ PASS; PF browser matrix 8/8 PASS 2026-07-18
+       evidence: planner-c4-guest-place-boq (desktop); planner-pf-browser-matrix exit 0
+UNIT:  C4 load rule authority-aware — green
+NOW:   C4 phone 390 place; member handoff CRM; forced validation issues; conflict UI
+NEXT:  PF-19 workspace split; PF-27 3D parity browser
+LATER: group/ungroup, review links API, GLB scene download
+BLOCKED: owner NONE
+```
+
 ---
 
 ## Part A  -  Evidence and completion rules
@@ -170,17 +182,17 @@ Update only with fresh evidence.
 | ID | Failure | Bar to clear | Status seed |
 |----|---------|--------------|-------------|
 | PF-01–04 | Guest ID / draft isolation / tests | Browser two-UUID + unit | PASS (see this file Part B) |
-| PF-05 | Room outline incomplete | Exact rectangle room + closed geometry + unit + browser | OPEN (impl unit) |
-| PF-06 | Persistent dimensions incomplete | Durable wall/room dims + zoom readable + browser | OPEN (impl unit) |
-| PF-07–08 | Sketch UI / guest auth | TopBar + guest CSRF | PASS (code); browser OPEN |
+| PF-05 | Room outline incomplete | Exact rectangle room + closed geometry + unit + browser | **PARTIAL** — unit PASS; browser sample PASS 2026-07-18 (`planner-pf-browser-matrix` Room tool → “Create exact room”). Full closed-room measure journey still residual |
+| PF-06 | Persistent dimensions incomplete | Durable wall/room dims + zoom readable + browser | **PARTIAL** — unit PASS; browser sample PASS (Dimension tool live + activatable). Durable dim paint/zoom proof residual |
+| PF-07–08 | Sketch UI / guest auth | TopBar + guest CSRF | **PARTIAL** — code PASS; browser sample PASS (guest has sketch image input). Full convert/accept journey residual |
 | PF-09 | Scene GLB export honesty | Real download **or** remove menu item / honest unsupported | PASS (honesty)  -  no menu claim; preflight unsupported; scene export still P11 OPEN |
-| PF-10 | Quote to Oando | Live CRM + browser reference | PARTIAL (API/code PASS; browser OPEN) |
-| PF-11 | Overlap / clearance validation | Outside room + clearance + unit | PASS (unit); browser OPEN |
+| PF-10 | Quote to Oando | Live CRM + browser reference | **PARTIAL** — API PASS; browser guest gate PASS (Send disabled/hidden for guest). **Member live CRM Send still OPEN** |
+| PF-11 | Overlap / clearance validation | Outside room + clearance + unit | **PARTIAL** — unit PASS; browser sample PASS (Validation issues region on Quote). Forced-error issue list residual |
 | PF-12 | Step completion awareness | Step state honest | PASS |
-| PF-13 | Review & quote tests | Dedicated suite + behaviour | PASS (unit); browser OPEN |
-| PF-16–17 | Full browser / mobile | P16 matrix rows | OPEN |
-| PF-18–19 | Legacy layers / god workspace | Dead path gone; split host | OPEN |
-| PF-20 | Contradictory save state | One authoritative machine | PASS (code); conflict/offline browser OPEN |
+| PF-13 | Review & quote tests | Dedicated suite + behaviour | **PARTIAL** — unit PASS; browser sample PASS (`review-quote-lead` + summary). Full export/PDF residual |
+| PF-16–17 | Full browser / mobile | P16 matrix rows | **PARTIAL** — PF-16 smoke PASS (walls + desk search + quote); PF-17 phone canvas+workflow PASS. Not every P16 row |
+| PF-18–19 | Legacy layers / god workspace | Dead path gone; split host | **PARTIAL** — browser sample PASS (Fabric stage only; no `#planner-2d-canvas`). OOPlannerWorkspace size residual |
+| PF-20 | Contradictory save state | One authoritative machine | **PARTIAL** — code PASS; offline banner browser PASS; conflict UI residual |
 | PF-21 | Empty properties waste space | Collapse when no selection | PASS (code) |
 | PF-22 | Catalog compare weak | Family/filter/compare usable | FAIL |
 | PF-23 | Generic furniture quote path | All BOQ-eligible lines | PASS (unit); browser cart UI OPEN |
@@ -574,22 +586,22 @@ Fresh evidence:
 | PF-02 | A new guest URL can load an old guest draft. | PASS |
 | PF-03 | The guest route unit test fails after the redirect change. | PASS |
 | PF-04 | Onboarding tests still expect `Start placing furniture`. | PASS |
-| PF-05 | Room outline incomplete for full acceptance. | PASS (unit) | Room outline + grips unit 2026-07-17 Agent1. Browser exact-room OPEN. |
-| PF-06 | Persistent dimensions incomplete for full acceptance. | PASS (unit) | Dim drafts + opening-along-wall dims unit 2026-07-17. Browser OPEN. |
-| PF-07 | Sketch-to-Plan has no customer UI entry. | PASS |
-| PF-08 | Sketch-to-Plan requires member auth and blocks guests. | PASS |
+| PF-05 | Room outline incomplete for full acceptance. | PASS (unit) + browser sample | Room tool → Create exact room (`planner-pf-browser-matrix` 2026-07-18). Full closed-room acceptance residual. |
+| PF-06 | Persistent dimensions incomplete for full acceptance. | PASS (unit) + browser sample | Dimension tool live + activatable. Durable zoom-readable dims residual. |
+| PF-07 | Sketch-to-Plan has no customer UI entry. | PASS (code) + browser sample | Guest image input present. |
+| PF-08 | Sketch-to-Plan requires member auth and blocks guests. | PASS (code) + browser sample | Guest sketch path available (not member-only). |
 | PF-09 | Planner scene GLB export. | PASS (honesty) | No export menu item claims downloadable GLB; `preflightPlannerExport("glb")` returns unsupported; no fake binary. Full scene GLB remains P11 OPEN. |
-| PF-10 | Planner does not send a quote to Oando. | PASS (unit) | Handoff API + CRM env probe 2026-07-17 Agent3. Live browser Send OPEN. |
-| PF-11 | Live overlap validation is incomplete. | PASS (unit) | Overlap + wall-collision + room-boundary + aisle + opening-obstruction. Browser Review OPEN. |
+| PF-10 | Planner does not send a quote to Oando. | PASS (unit) + guest browser gate | Guest cannot Send (disabled/hidden). Member CRM Send still OPEN. |
+| PF-11 | Live overlap validation is incomplete. | PASS (unit) + browser sample | Quote step mounts Validation issues region. Forced multi-issue list residual. |
 | PF-12 | Step navigation is labelled but not completion-aware. | PASS |
-| PF-13 | Review and quote UI has no dedicated tests. | PASS (unit) | `ReviewQuotePanel.test.tsx`: send gating, guest block, demo confirm, BOQ/export disable on errors/empty, quote-cart wiring. Browser open. |
+| PF-13 | Review and quote UI has no dedicated tests. | PASS (unit) + browser sample | Unit + Quote step shows `review-quote-lead` / summary. Full PDF/export residual. |
 | PF-14 | Many browser scripts use the removed onboarding label. | PASS |
 | PF-15 | The original localhost origin served stale Planner chunks. | PASS |
-| PF-16 | Import, export, BOQ, quote, 3D, and AI lack one complete fresh browser pass. | OPEN |
-| PF-17 | Mobile has only partial smoke proof. | OPEN |
-| PF-18 | Legacy Layers and docking code remain in active Planner paths. | OPEN |
-| PF-19 | `OOPlannerWorkspace.tsx` owns too many unrelated concerns. | OPEN |
-| PF-20 | Save state is duplicated and contradictory. | PASS (code) | Live host: TopBar + `plannerSaveStatusLabel` only. Orphan `PlannerSaveIndicator` unused. Conflict/offline edge browser open. |
+| PF-16 | Import, export, BOQ, quote, 3D, and AI lack one complete fresh browser pass. | PARTIAL | Smoke: walls + desk search + quote (`planner-pf-browser-matrix`). Full P16 row set residual. |
+| PF-17 | Mobile has only partial smoke proof. | PARTIAL | Phone 390 canvas + Draw/Place/Quote workflow PASS. Deep mobile place residual. |
+| PF-18 | Legacy Layers and docking code remain in active Planner paths. | PARTIAL | Browser: live Fabric stage; archive `#planner-2d-canvas` absent. |
+| PF-19 | `OOPlannerWorkspace.tsx` owns too many unrelated concerns. | OPEN | Size/split residual (not browser). |
+| PF-20 | Save state is duplicated and contradictory. | PASS (code) + offline browser | Offline banner + recover PASS. Conflict UI residual. |
 | PF-21 | Empty properties consume customer workspace. | PASS (code) | Dock closes properties when no selection (not review); `PropertiesPanel` returns null when empty without underlay actions. |
 | PF-22 | Catalog comparison and family grouping are weak. | PASS (unit) | Family group/filter/compare + InventoryPanel unit 2026-07-17 Agent2. Browser OPEN. |
 | PF-23 | Generic furniture cannot complete the quote-cart path. | PASS (unit) | `furnitureBoqBridge` + `buildPlannerFurnitureBoq` include non-workstation lines into quote cart / PDF / handoff. Browser cart UI open. |

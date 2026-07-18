@@ -143,21 +143,28 @@ describe("ADM-SHELL-01 list page landmarks", () => {
     expect(screen.getByTestId("admin-shell-scope")).toHaveTextContent(
       /Inventory|SVG authoring|plan symbols/i,
     );
+    // Default source line is product language; release detail is collapsible
     expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
-      /on-disk inventory|local disk|Live authority/i,
+      /Product inventory|refreshed/i,
     );
-    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
-      /live authority|descriptors|svg-catalog/i,
+    expect(screen.getByTestId("admin-shell-source").textContent ?? "").not.toMatch(
+      /Dual-write/i,
     );
-    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
-      /Dual-write: skipped_no_db/i,
-    );
-    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
+    const releaseDetail = screen.getByTestId("admin-shell-release-source-detail");
+    expect(releaseDetail).toHaveTextContent(/Dual-write: skipped_no_db/i);
+    expect(releaseDetail).toHaveTextContent(
       /live authority remains disk until cutover/i,
     );
     expect(screen.getByTestId("admin-shell-state")).toHaveTextContent(/published/i);
     expect(screen.getByTestId("admin-shell-primary-action")).toHaveTextContent(
-      /New SVG symbol/i,
+      /New linear desk/i,
+    );
+    expect(screen.getByTestId("admin-shell-primary-action")).toHaveAttribute(
+      "href",
+      "/admin/svg-editor/parametric",
+    );
+    expect(screen.getByTestId("admin-shell-freehand-new")).toHaveClass(
+      "admin-btn--outline",
     );
   });
 });

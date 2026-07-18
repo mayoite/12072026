@@ -469,7 +469,7 @@ html.dark body.planner-workspace {
   --color-canvas-grid: #c4c4bc;
 }
 
-/* Admin console: same warm paper stack as brand (not cool white-only). */
+/* Admin console default: warm brand paper (inventory lists, CRM, non-CAD). */
 body.admin-shell,
 .admin-shell,
 [data-admin-shell="true"] {
@@ -483,6 +483,90 @@ body.admin-shell,
     var(--color-bronze-300) 14%,
     var(--color-ecru-100)
   );
+}
+
+/*
+ * Admin SVG / parametric CAD studio — cool professional chrome.
+ * Neutral grey canvas + clean white panels. Tokens only (white scale).
+ * Marker: data-cad-studio="cool" on freehand + parametric shells.
+ * Guest planner (body.planner-workspace without admin SVG) stays warm CAD paper.
+ * This block must stay AFTER body.planner-workspace so body:has() wins when both apply.
+ */
+body:has(.admin-page--svg-engine),
+body:has(.admin-parametric-workspace),
+body:has([data-cad-studio="cool"]),
+.shell-admin-layout:has(.admin-page--svg-engine),
+.shell-admin-layout:has(.admin-parametric-workspace),
+.shell-admin-layout:has([data-cad-studio="cool"]),
+.shell-admin-main:has(.admin-page--svg-engine),
+.shell-admin-main:has(.admin-parametric-workspace),
+.shell-admin-main:has([data-cad-studio="cool"]),
+.admin-page--svg-engine,
+.admin-parametric-workspace,
+[data-cad-studio="cool"],
+[data-admin-shell="edit"],
+[data-admin-shell="parametric"] {
+  /* Page + panels: cool studio, never ecru */
+  --surface-page: var(--color-white-150);
+  --surface-soft: var(--color-white-200);
+  --surface-muted: var(--color-white-200);
+  --surface-card: var(--color-white-50);
+  --surface-panel: var(--color-white-50);
+  --surface-panel-strong: var(--color-white-50);
+  --surface-panel-soft: var(--color-white-100);
+  --surface-hover: var(--color-white-200);
+  --surface-hover-soft: var(--color-white-250);
+  --surface-focus: var(--color-white-250);
+  --surface-accent-wash: color-mix(
+    in srgb,
+    var(--color-ocean-boat-blue-200) 18%,
+    var(--color-white-150)
+  );
+  --surface-glass: color-mix(in srgb, var(--color-white-50) 88%, transparent);
+  --surface-glass-strong: color-mix(in srgb, var(--color-white-50) 94%, transparent);
+  --surface-tint-soft: color-mix(in srgb, var(--color-white-100) 92%, transparent);
+  --surface-tint-muted: color-mix(in srgb, var(--color-white-200) 78%, transparent);
+  --surface-status-ok: color-mix(
+    in srgb,
+    var(--color-ocean-boat-blue-200) 28%,
+    var(--color-white-50)
+  );
+  --surface-status-bad: color-mix(
+    in srgb,
+    var(--color-bronze-200) 22%,
+    var(--color-white-50)
+  );
+
+  /* Cool hairlines (white scale), not warm ecru edges */
+  --border-soft: var(--color-white-300);
+  --border-muted: var(--color-white-400);
+
+  /* Model-space canvas: cool neutral grey (not warm #f4f4f0 paper) */
+  --planner-surface-canvas: var(--color-white-200);
+  --planner-grid-minor: var(--color-white-300);
+  --planner-grid-major: var(--color-white-450);
+  --planner-surface-panel: var(--color-white-50);
+  --planner-surface-subtle: var(--color-white-150);
+  --planner-border-default: var(--border-soft);
+  --color-canvas-bg: var(--planner-surface-canvas);
+  --color-canvas-grid: var(--planner-grid-minor);
+
+  /* WorkspaceShell module locals (cascade into .shell) */
+  --ws-shell-bg: var(--color-white-150);
+  --ws-panel-bg: var(--color-white-50);
+  --ws-header-bg: var(--color-white-50);
+  --ws-status-bg: var(--color-white-100);
+  --ws-panel-border: var(--color-white-300);
+
+  /* Legacy paper aliases → cool studio */
+  --color-paper: var(--surface-page);
+  --color-paper-raised: var(--surface-panel);
+  --color-paper-sunken: var(--surface-soft);
+  --color-paper-line: var(--border-soft);
+  --color-surface: var(--surface-page);
+  --color-surface-raised: var(--surface-panel);
+  --color-surface-sunken: var(--surface-soft);
+  --color-border: var(--border-soft);
 }
 
 /* ── Dark color scheme (html.dark via planner WorkspaceThemeProvider) ── */

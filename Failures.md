@@ -37,7 +37,8 @@ React hydration attribute mismatch (manifest). Not cutover.
 | Authority env | **`SVG_RELEASE_AUTHORITY=db`** set in repo-root `.env.local` (not committed) |
 | Revision API | `GET /api/planner/catalog/svg/{revisionId}/` → **200** `image/svg+xml` |
 | Disk | Local authoring residue may still exist; **not** desired long-term owner |
-| **Still OPEN** | Full guest **place + BOQ** browser at 1280/390 of this revision; deploy/preview env flip; full DB-SVG-01…20 matrix |
+| **Still OPEN** | Phone **390** place polish; deploy/preview env flip; full DB-SVG-01…20 matrix |
+| **C4 desktop place+BOQ** | **PASS** (2026-07-18 parent) — Playwright `tests/e2e/planner-c4-guest-place-boq.spec.ts` desktop 1280: place `oando-linear-desk-1600` (revision API preview), BOQ JSON contains `OANDO-LINEAR-DSK-1600`, failed SVG requests = 0 |
 
 ### 7. Admin SVG chrome — **PARTIAL**
 

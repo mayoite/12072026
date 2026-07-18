@@ -162,7 +162,7 @@ export function AdminSvgBulkImportPanel() {
             data-testid="admin-svg-bulk-import-preview"
           >
             {busy ? (
-              <Loader2 size={14} className="animate-spin" aria-hidden />
+              <Loader2 size={14} className="admin-icon-spin" aria-hidden />
             ) : (
               <Eye size={14} aria-hidden />
             )}
@@ -176,7 +176,7 @@ export function AdminSvgBulkImportPanel() {
             data-testid="admin-svg-bulk-import-submit"
           >
             {busy ? (
-              <Loader2 size={14} className="animate-spin" aria-hidden />
+              <Loader2 size={14} className="admin-icon-spin" aria-hidden />
             ) : (
               <UploadSimple size={14} aria-hidden />
             )}

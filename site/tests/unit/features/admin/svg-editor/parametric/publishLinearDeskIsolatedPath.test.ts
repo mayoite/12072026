@@ -14,7 +14,7 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { compileLinearDeskSvg } from "@/features/admin/svg-editor/parametric/compileLinearDeskSvg";
 import {
@@ -44,10 +44,17 @@ vi.mock("@/platform/drizzle/databaseUrls", () => ({
 
 const tempDirs: string[] = [];
 
+/** Isolate from ambient .env.local (SVG_RELEASE_AUTHORITY=db breaks disk-path unit). */
+beforeEach(() => {
+  process.env.SVG_RELEASE_AUTHORITY = "disk";
+  isProductsDatabaseConfigured.mockReturnValue(false);
+});
+
 afterEach(() => {
   for (const dir of tempDirs.splice(0)) {
     rmSync(dir, { recursive: true, force: true });
   }
+  delete process.env.SVG_RELEASE_AUTHORITY;
   isProductsDatabaseConfigured.mockReturnValue(false);
 });
 

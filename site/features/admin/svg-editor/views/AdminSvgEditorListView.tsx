@@ -377,34 +377,45 @@ export function AdminSvgEditorListView({
             Product plan symbols
           </h1>
           <p className="admin-page__copy" data-testid="admin-svg-journey-copy">
-            Find a product, open the studio, set identity and footprint, preview
-            the Planner symbol, then publish. Guests place these symbols on the
-            canvas. You do not need to edit source files by hand.
+            Start with a linear desk for guest place and BOQ, or draw another
+            symbol freehand. Set identity and footprint, preview the Planner
+            symbol, then publish. Guests place these on the canvas. You do not
+            need to edit source files by hand.
           </p>
           <p className="admin-page__meta" data-testid="admin-shell-source">
-            Live authority: on-disk inventory (descriptors + svg-catalog) ·{" "}
-            {formatSvgDualWriteListSourceMeta(dualWriteMode)} · refreshed{" "}
+            Product inventory · refreshed{" "}
             <time dateTime={refreshedAtLabel}>{refreshedAtLabel}</time>
           </p>
+          {/* Truthful release detail stays available; not first-read chrome. */}
+          <details
+            className="admin-page__meta admin-svg-release-source"
+            data-testid="admin-shell-release-source"
+          >
+            <summary>Release source</summary>
+            <p data-testid="admin-shell-release-source-detail">
+              Live symbols load from product inventory.{" "}
+              {formatSvgDualWriteListSourceMeta(dualWriteMode)}
+            </p>
+          </details>
         </div>
-        {/* Primary: studio new. Secondary: parametric field form. */}
+        {/* Primary: order-factory desk. Secondary: freehand studio. */}
         <div className="admin-page__actions" data-testid="admin-shell-actions">
           <Link
-            href="/admin/svg-editor/parametric"
-            className="admin-btn"
-            data-testid="admin-shell-parametric-desk"
+            href="/admin/svg-editor/new"
+            className="admin-btn admin-btn--outline"
+            data-testid="admin-shell-freehand-new"
             data-min-tap-px={minTapPx}
           >
-            Linear desk fields
+            New SVG symbol
           </Link>
           <Link
-            href="/admin/svg-editor/new"
+            href="/admin/svg-editor/parametric"
             className="admin-btn admin-btn--primary"
             data-testid="admin-shell-primary-action"
             data-min-tap-px={minTapPx}
           >
             <Plus size={16} aria-hidden />
-            New SVG symbol
+            New linear desk
           </Link>
         </div>
       </header>
@@ -465,18 +476,26 @@ export function AdminSvgEditorListView({
         >
           <p className="admin-empty__title">No SVG symbols yet</p>
           <p className="admin-empty__copy">
-            Create the first product symbol in the visual studio: set identity and
-            footprint, preview the Planner symbol, then publish. You do not need
-            JSON or source code. Bulk import stays under Advanced.
+            Create the first product with linear desk fields for guest place and
+            BOQ, or draw freehand. Set identity and footprint, preview the Planner
+            symbol, then publish. You do not need JSON or source code. Bulk import
+            stays under Advanced.
           </p>
           <div className="admin-empty__actions">
             <Link
               href="/admin/svg-editor/new"
+              className="admin-btn admin-btn--outline"
+              data-testid="admin-svg-secondary-freehand-empty"
+            >
+              New SVG symbol
+            </Link>
+            <Link
+              href="/admin/svg-editor/parametric"
               className="admin-btn admin-btn--primary"
               data-testid="admin-svg-primary-new-empty"
             >
               <Plus size={14} aria-hidden />
-              New SVG symbol
+              New linear desk
             </Link>
           </div>
         </div>
@@ -739,11 +758,18 @@ export function AdminSvgEditorListView({
                 ) : null}
                 <Link
                   href="/admin/svg-editor/new"
+                  className="admin-btn admin-btn--outline"
+                  data-testid="admin-svg-secondary-freehand-filtered-empty"
+                >
+                  New SVG symbol
+                </Link>
+                <Link
+                  href="/admin/svg-editor/parametric"
                   className="admin-btn admin-btn--primary"
                   data-testid="admin-svg-primary-new-filtered-empty"
                 >
                   <Plus size={14} aria-hidden />
-                  New SVG symbol
+                  New linear desk
                 </Link>
               </div>
             </div>
@@ -995,7 +1021,7 @@ export function AdminSvgEditorListView({
             <div className="admin-stack">
               <p className="admin-page__meta">
                 Migration tool only — paste spreadsheet rows, preview, then apply.
-                Day-to-day work uses Search and New SVG symbol above. Not required
+                Day-to-day work uses Search and New linear desk above. Not required
                 for authoring.
               </p>
               <p

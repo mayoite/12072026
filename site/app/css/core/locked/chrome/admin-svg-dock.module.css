@@ -79,15 +79,11 @@
   max-height: 100%;
 }
 
-/* Theme bridge — dockview-theme-light */
+/* Theme bridge — dockview-theme-light (cool studio; inherits admin CAD tokens) */
 .host:global(.dockview-theme-light) {
   --dv-background-color: var(--surface-page);
   --dv-group-view-background-color: var(--color-surface-raised, var(--surface-panel));
-  --dv-tabs-and-actions-container-background-color: color-mix(
-    in srgb,
-    var(--color-ecru-50, var(--surface-panel)) 88%,
-    var(--color-white-50)
-  );
+  --dv-tabs-and-actions-container-background-color: var(--surface-panel);
   --dv-activegroup-visiblepanel-tab-background-color: color-mix(
     in srgb,
     var(--color-primary) 12%,

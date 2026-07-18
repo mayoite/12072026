@@ -286,7 +286,7 @@ export function AdminCanvasConfigSection() {
   return (
     <section className="rounded-xl border border-soft bg-panel">
       <header className="border-b border-soft px-4 py-3">
-        <h2 className="text-sm font-semibold text-strong">Canvas configuration</h2>
+        <h2 className="admin-type-section">Canvas configuration</h2>
         <p className="mt-1 text-xs text-muted">
           From <code>config/planner-canvas.json</code> — edit in repo and redeploy to change bounds, scale, and viewport.
         </p>

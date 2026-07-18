@@ -46,10 +46,13 @@ Repo-sourced index: **stack surface → code path → honest gap**. Live code an
 
 | Feature | Code | Gap |
 |---|---|---|
-| Fabric 2D | `site` dep `fabric@7.4.0`; planner canvas imports | Sole interactive 2D; grep for second canvas engine not automated in CI |
-| Three / R3F / Drei | `three`, `@react-three/fiber`, `@react-three/drei` | — |
-| Admin SVG embed | `@excalidraw/excalidraw` `^0.18.1` | Host owns publish; not client authority; not parametric pen |
+| Fabric 2D | `site` dep `fabric@7.4.0`; imports only under `features/planner/canvas/*` | Sole interactive 2D place canvas; **no** Fabric under `features/admin`. Second-canvas CI grep still manual (TF-04 OPEN) |
+| Three / R3F / Drei | `three`, `@react-three/fiber`, `@react-three/drei` | 3D view only — not plan SVG craft |
+| Admin freehand SVG | `@excalidraw/excalidraw` `^0.18.1` · `ExcalidrawClient.tsx` | Stage tools only; not release authority; not parametric pen |
 | Parametric pen (Maker.js) | `makerjs` `^0.19.2` — `drawLinearDesk` / `makerJsRecipes` / `makerJsToPath` | Locked Part C pen. Form/CLI/publish use Maker (**Admin K1 unit-green**). Not a second canvas engine |
+| Shell chrome packages | `dockview-react` · `react-aria-components` · `@phosphor-icons/react` (same as Planner) | **In product.** Aria usage still Partial on parametric confirm |
+| Freehand Admin shell | `AdminSvgDockHost` + dockview-react | Dock mode: Preview \| Studio \| Details |
+| Parametric Admin shell | Planner `WorkspaceShell` + `CanvasToolRail` | Plan-left + form-right; **not** Dockview host; **not** Fabric place canvas |
 | No react-router in site product | Site uses Next app router | tech-docs may use SPA tooling — out of product |
 
 ---

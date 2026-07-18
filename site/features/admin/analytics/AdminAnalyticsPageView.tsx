@@ -160,7 +160,7 @@ export default function AdminAnalyticsPageView() {
             disabled={loading}
           >
             {loading ? (
-              <Loader2 size={14} className="animate-spin" aria-hidden />
+              <Loader2 size={14} className="admin-icon-spin" aria-hidden />
             ) : (
               <RefreshCw size={14} aria-hidden />
             )}
@@ -196,11 +196,11 @@ export default function AdminAnalyticsPageView() {
 
       {loading && !data ? (
         <div
-          className="admin-inline-row text-sm text-muted"
+          className="admin-status-line"
           role="status"
           aria-live="polite"
         >
-          <Loader2 size={16} className="animate-spin" aria-hidden />
+          <Loader2 size={16} className="admin-icon-spin" aria-hidden />
           Loading analytics…
         </div>
       ) : null}
@@ -209,7 +209,7 @@ export default function AdminAnalyticsPageView() {
         <div className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="admin-panel p-4">
-              <p className="text-xs uppercase tracking-wide text-soft">
+              <p className="admin-type-label">
                 Total plans
               </p>
               <p className="mt-1 text-2xl font-semibold text-strong">
@@ -217,7 +217,7 @@ export default function AdminAnalyticsPageView() {
               </p>
             </div>
             <div className="admin-panel p-4">
-              <p className="text-xs uppercase tracking-wide text-soft">
+              <p className="admin-type-label">
                 Avg items / plan
               </p>
               <p className="mt-1 text-2xl font-semibold text-strong">
@@ -225,7 +225,7 @@ export default function AdminAnalyticsPageView() {
               </p>
             </div>
             <div className="admin-panel p-4">
-              <p className="text-xs uppercase tracking-wide text-soft">
+              <p className="admin-type-label">
                 Avg area (m²)
               </p>
               <p className="mt-1 text-2xl font-semibold text-strong">
@@ -344,7 +344,7 @@ export default function AdminAnalyticsPageView() {
 
           <div className="grid gap-4 lg:grid-cols-2">
             <section className="admin-panel p-4">
-              <h2 className="text-sm font-semibold text-strong">Top furniture</h2>
+              <h2 className="admin-type-section">Top furniture</h2>
               {data?.furnitureSource === "catalog-sample" &&
               (data.topFurniture?.length ?? 0) > 0 ? (
                 <p className="admin-page__meta mt-1">
@@ -376,7 +376,7 @@ export default function AdminAnalyticsPageView() {
             </section>
 
             <section className="admin-panel p-4">
-              <h2 className="text-sm font-semibold text-strong">
+              <h2 className="admin-type-section">
                 Export breakdown
               </h2>
               {(data?.exports?.length ?? 0) > 0 ? (

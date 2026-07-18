@@ -1,5 +1,16 @@
 "use client";
 
+/**
+ * Basic parametric desk editor.
+ *
+ * FINAL layout lock: docs/ui-benchmarks/parametric-lock/32.jpg only.
+ * Simple CSS grid — not WorkspaceShell, not Dockview:
+ *   topbar | status | TOOL RAIL | DESK PROPERTIES | PLAN CANVAS
+ *
+ * Domain: fields → Maker multipath SVG → publish confirm → action.
+ * Rail: planner CanvasToolRail only. Freehand left alone.
+ */
+
 import Link from "next/link";
 import { useCallback, useId, useMemo, useState, useTransition } from "react";
 import { ArrowLeft, CircleNotch as Loader2 } from "@phosphor-icons/react";
@@ -19,10 +30,8 @@ import {
   linearDeskPublishedStatusLabel,
 } from "./linearDeskPublishConfirm";
 import { LinearDeskPublishConfirmDialog } from "./LinearDeskPublishConfirmDialog";
-/** K1: Maker-only pen (drawLinearDesk → compileMakerRecipeToPaths). */
 import { renderLinearDeskSvg } from "@/features/planner/asset-engine/svg/parametric";
 import { publishLinearDeskAction } from "./publishLinearDeskAction";
-/** Tool rail = planner only — same component + locked chrome CSS. */
 import { CanvasToolRail } from "@/features/planner/editor/CanvasToolRail";
 import type { PlannerTool } from "@/features/planner/editor/canvasTool";
 
@@ -35,43 +44,26 @@ type PublishRelease = {
   readonly sku: string;
 };
 
-type FeedbackKind = "info" | "success" | "error";
-
-/**
- * Parametric linear-desk authoring — LOCKED mix 32 + 35 + 37.
- * 32: CAD dual-pane craft + planner tool rail on plan
- * 35: plan left (dominant) + form right
- * 37: status strip under top bar + summary chips (no third dock)
- * Tool rail = planner CanvasToolRail only.
- * Spec: docs/superpowers/specs/2026-07-18-parametric-cad-dual-pane-design.md
- */
 export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
   const [form, setForm] = useState<LinearDeskFormDisplay>(() =>
     defaultLinearDeskForm(initialUnit),
   );
   const [message, setMessage] = useState<string | null>(null);
-  const [feedbackKind, setFeedbackKind] = useState<FeedbackKind>("info");
+  const [messageKind, setMessageKind] = useState<"ok" | "err" | "info">("info");
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [publishedRelease, setPublishedRelease] =
-    useState<PublishRelease | null>(null);
+  const [published, setPublished] = useState<PublishRelease | null>(null);
   const [pending, startTransition] = useTransition();
-  /** Same rail state surface as planner; plan preview is read-only. */
-  const [activeTool, setActiveTool] = useState<PlannerTool>("select");
-  const [gridEnabled, setGridEnabled] = useState(true);
-  const [snapEnabled, setSnapEnabled] = useState(true);
-  const [orthogonalLock, setOrthogonalLock] = useState(false);
+  const [tool, setTool] = useState<PlannerTool>("select");
+  const [gridOn, setGridOn] = useState(true);
+  const [snapOn, setSnapOn] = useState(true);
 
-  const clearPublishedOnEdit = useCallback(() => {
-    setPublishedRelease(null);
-  }, []);
+  const clearLive = useCallback(() => setPublished(null), []);
 
   const parsed = useMemo(() => parseLinearDeskForm(form), [form]);
-  const errorsByPath = useMemo(() => {
-    const map = new Map<string, string>();
-    if (!parsed.ok) {
-      for (const e of parsed.errors) map.set(e.path, e.message);
-    }
-    return map;
+  const errMap = useMemo(() => {
+    const m = new Map<string, string>();
+    if (!parsed.ok) for (const e of parsed.errors) m.set(e.path, e.message);
+    return m;
   }, [parsed]);
 
   const previewSvg = useMemo(() => {
@@ -82,29 +74,32 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
   const setNumber = useCallback(
     (key: keyof LinearDeskFormDisplay, value: string) => {
       const n = Number(value);
-      clearPublishedOnEdit();
+      if (!Number.isFinite(n)) return;
+      clearLive();
       setForm((prev) => {
-        if (!Number.isFinite(n)) return prev;
         const next = { ...prev, [key]: n };
         return key === "width" ? syncIdentityAfterWidthChange(next) : next;
       });
     },
-    [clearPublishedOnEdit],
+    [clearLive],
   );
 
   const onUnit = useCallback(
     (unit: "mm" | "cm") => {
-      clearPublishedOnEdit();
+      clearLive();
       setForm((prev) => convertLinearDeskFormUnit(prev, unit));
     },
-    [clearPublishedOnEdit],
+    [clearLive],
   );
 
-  const footprintLabel = parsed.ok
+  const footprint = parsed.ok
     ? `${parsed.fields.widthMm}×${parsed.fields.depthMm} mm`
     : "—";
-  const displaySlug = form.slug.trim() || "oando-…";
+  const slug = form.slug.trim() || "oando-…";
   const unit = form.displayUnit;
+  const hasPedestals = form.pedestalCount === 2;
+  const live = published !== null;
+  const canPublish = parsed.ok && !pending;
 
   const confirmCopy = useMemo(() => {
     if (!parsed.ok) return null;
@@ -112,141 +107,86 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
       name: form.name,
       sku: form.sku,
       slug: form.slug,
-      footprintMm: footprintLabel,
+      footprintMm: footprint,
     });
-  }, [parsed, form.name, form.sku, form.slug, footprintLabel]);
+  }, [parsed, form.name, form.sku, form.slug, footprint]);
 
-  const onRequestPublish = useCallback(() => {
+  const requestPublish = useCallback(() => {
     setMessage(null);
-    setFeedbackKind("info");
     if (!parsed.ok) {
       setMessage("Fix the highlighted fields, then publish.");
-      setFeedbackKind("error");
+      setMessageKind("err");
       return;
     }
     setConfirmOpen(true);
   }, [parsed]);
 
-  const onCancelConfirm = useCallback(() => {
-    if (pending) return;
-    setConfirmOpen(false);
-  }, [pending]);
-
-  const onConfirmPublish = useCallback(() => {
-    if (!parsed.ok) {
-      setConfirmOpen(false);
-      setMessage("Fix the highlighted fields, then publish.");
-      setFeedbackKind("error");
-      return;
-    }
+  const confirmPublish = useCallback(() => {
+    if (!parsed.ok) return;
     startTransition(async () => {
       const result = await publishLinearDeskAction(formToLinearDeskRaw(form));
       if (result.success) {
-        const slug = result.descriptor.slug;
-        const sku =
+        const nextSlug = result.descriptor.slug;
+        const nextSku =
           typeof result.descriptor.sku === "string"
             ? result.descriptor.sku
             : form.sku.trim();
-        setPublishedRelease({ slug, sku });
-        setMessage(
-          formatLinearDeskPublishSuccess({
-            slug,
-            sku,
-          }),
-        );
-        setFeedbackKind("success");
+        setPublished({ slug: nextSlug, sku: nextSku });
+        setMessage(formatLinearDeskPublishSuccess({ slug: nextSlug, sku: nextSku }));
+        setMessageKind("ok");
         setConfirmOpen(false);
       } else {
-        setPublishedRelease(null);
+        setPublished(null);
         setMessage(result.error);
-        setFeedbackKind("error");
+        setMessageKind("err");
         setConfirmOpen(false);
       }
     });
   }, [form, parsed]);
 
-  const err = (path: string) => errorsByPath.get(path);
-  const isPublished = publishedRelease !== null;
-  const canOpenConfirm = parsed.ok && !pending;
-  const hasPedestals = form.pedestalCount === 2;
-  const validationLabel = isPublished
-    ? "Live for guests"
-    : parsed.ok
-      ? "Draft ready"
-      : `${parsed.errors.length} issue${parsed.errors.length === 1 ? "" : "s"}`;
-  const lifecycleLabel = isPublished
-    ? linearDeskPublishedStatusLabel()
-    : linearDeskDraftStatusLabel();
-
-  const alertClass =
-    feedbackKind === "success"
-      ? "admin-alert admin-alert--success"
-      : feedbackKind === "error"
-        ? "admin-alert admin-alert--error"
-        : "admin-alert admin-alert--info";
+  const err = (path: string) => errMap.get(path);
 
   return (
     <div
-      className="admin-page admin-page--svg-engine admin-svg-editor-workspace admin-svg-editor-workspace--dual-pane"
+      className="admin-page admin-page--svg-engine admin-cad"
       data-testid="admin-linear-desk-parametric"
       data-admin-shell="parametric"
-      data-chrome="planner-canvas-tool-rail"
-      data-layout="plan-left-form-right"
-      data-layout-mix="32-35-37"
-      data-publish-state={isPublished ? "published" : "draft"}
+      data-chrome="lock-32"
+      data-lock-image="32"
+      data-cad-studio="cool"
+      data-publish-state={live ? "published" : "draft"}
     >
-      <header
-        className="admin-svg-engine-shell__topbar"
-        data-testid="admin-shell-header"
-      >
-        <Link
-          href="/admin/svg-editor"
-          className="admin-btn admin-btn--outline admin-btn--compact admin-svg-engine-shell__back"
-          data-testid="admin-shell-secondary-back"
-          aria-label="Back to SVG inventory"
-        >
-          <ArrowLeft size={14} aria-hidden />
-          <span>Inventory</span>
-        </Link>
-
-        <div className="admin-svg-engine-shell__divider" aria-hidden />
-
-        <div className="admin-svg-engine-shell__identity">
-          <p
-            className="admin-svg-engine-shell__eyebrow"
-            data-testid="admin-shell-scope"
+      {/* Final lock: docs/ui-benchmarks/parametric-lock/32.jpg only */}
+      <header className="admin-cad__top" data-testid="admin-shell-header">
+        <nav className="admin-cad__crumb" aria-label="Breadcrumb">
+          <Link
+            href="/admin/svg-editor"
+            className="admin-cad__crumb-link"
+            data-testid="admin-shell-secondary-back"
           >
-            Configure desk
-          </p>
-          <h1
-            className="admin-svg-engine-shell__title"
-            data-testid="admin-shell-title"
-          >
+            <ArrowLeft size={14} aria-hidden />
+            Inventory
+          </Link>
+          <span className="admin-cad__crumb-sep" aria-hidden>
+            ·
+          </span>
+          <span className="admin-cad__crumb-current" data-testid="admin-shell-title">
             Linear desk
-            {form.sku.trim() ? (
-              <span className="admin-svg-engine-shell__sku">
-                {form.sku.trim()}
-              </span>
-            ) : null}
-          </h1>
-          <p
-            className="admin-svg-engine-shell__source"
-            data-testid="admin-shell-source"
-          >
-            {displaySlug}
-          </p>
-        </div>
-
-        <div
-          className="admin-svg-engine-shell__actions"
-          data-testid="admin-shell-actions"
-        >
+          </span>
+          <span className="admin-cad__sku" data-testid="admin-shell-source">
+            {form.sku.trim() || slug}
+          </span>
+        </nav>
+        <p className="admin-cad__eyebrow admin-cad__sr" data-testid="admin-shell-scope">
+          Configure desk
+        </p>
+        <div className="admin-cad__actions" data-testid="admin-shell-actions">
           <button
             type="submit"
             form="linear-desk-parametric-form"
-            disabled={!canOpenConfirm}
-            className="admin-btn admin-btn--primary admin-btn--compact admin-svg-engine-shell__action-publish"
+            className="admin-cad__publish"
             data-testid="linear-desk-publish"
+            disabled={!canPublish}
           >
             {pending ? (
               <>
@@ -260,122 +200,349 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
         </div>
       </header>
 
-      {/* Scenario 37: status strip under top bar */}
+      {/* Compact status line under topbar (32.jpg) */}
       <div
-        className="admin-svg-engine-shell__status-band"
+        className="admin-cad__status"
         data-testid="admin-svg-studio-status"
         aria-label="Desk status"
       >
         <span
+          className={
+            live ? "admin-cad__pill admin-cad__pill--ok" : "admin-cad__pill admin-cad__pill--strong"
+          }
           data-testid="admin-svg-studio-status-draft"
-          data-lifecycle={isPublished ? "published" : "draft"}
+          data-lifecycle={live ? "published" : "draft"}
         >
-          {lifecycleLabel}
-        </span>
-        <span aria-hidden className="admin-svg-engine-shell__status-sep">
-          ·
-        </span>
-        <span data-testid="admin-svg-studio-status-validation">
-          {validationLabel}
-        </span>
-        <span aria-hidden className="admin-svg-engine-shell__status-sep">
-          ·
-        </span>
-        <span
-          className="admin-svg-engine-shell__status-detail"
-          data-testid="admin-svg-studio-status-footprint"
-        >
-          {footprintLabel}
-        </span>
-        {isPublished ? (
-          <span className="admin-badge admin-badge--active admin-badge--compact admin-svg-engine-shell__status-ready">
-            Live for guests
+          <span className="admin-cad__pill-key">Status</span>
+          <span className="admin-cad__pill-val">
+            {live ? linearDeskPublishedStatusLabel() : linearDeskDraftStatusLabel()}
           </span>
-        ) : canOpenConfirm ? (
-          <span className="admin-badge admin-badge--active admin-badge--compact admin-svg-engine-shell__status-ready">
-            Ready to publish
+        </span>
+        <span className="admin-cad__pill" data-testid="admin-svg-studio-status-validation">
+          <span className="admin-cad__pill-key">Check</span>
+          <span className="admin-cad__pill-val">
+            {live
+              ? "Live for guests"
+              : parsed.ok
+                ? "Draft ready"
+                : `${parsed.errors.length} issue(s)`}
           </span>
-        ) : (
-          <span className="admin-badge admin-badge--warn admin-badge--compact admin-svg-engine-shell__status-ready">
-            {pending ? "Publishing…" : "Blocked"}
+        </span>
+        <span className="admin-cad__pill" data-testid="admin-svg-studio-status-footprint">
+          <span className="admin-cad__pill-key">Size</span>
+          <span className="admin-cad__pill-val">{footprint}</span>
+        </span>
+        {canPublish && !live ? (
+          <span className="admin-cad__pill admin-cad__pill--ok">
+            <span className="admin-cad__pill-key">Publish</span>
+            <span className="admin-cad__pill-val">Ready</span>
           </span>
-        )}
+        ) : null}
       </div>
 
       {message ? (
         <div
-          className="admin-svg-engine-feedback"
-          data-testid="admin-svg-a11y-live-feedback"
+          className={
+            messageKind === "ok"
+              ? "admin-alert admin-alert--success"
+              : messageKind === "err"
+                ? "admin-alert admin-alert--error"
+                : "admin-alert admin-alert--info"
+          }
+          role="status"
+          data-testid="linear-desk-message"
         >
-          <div
-            role="status"
-            className={`${alertClass} admin-svg-engine-feedback__item`}
-            data-testid="linear-desk-message"
-          >
-            <p>{message}</p>
-            {isPublished && publishedRelease ? (
-              <div
-                className="admin-actions-row admin-section-top"
-                data-testid="linear-desk-publish-success-actions"
+          <p>{message}</p>
+          {live && published ? (
+            <div className="admin-actions-row" data-testid="linear-desk-publish-success-actions">
+              <Link
+                href="/admin/svg-editor"
+                className="admin-btn admin-btn--outline admin-btn--compact"
+                data-testid="linear-desk-open-inventory"
               >
-                <Link
-                  href="/admin/svg-editor"
-                  className="admin-btn admin-btn--outline admin-btn--compact"
-                  data-testid="linear-desk-open-inventory"
-                >
-                  Open in inventory
-                </Link>
-                <Link
-                  href="/planner/guest/"
-                  className="admin-btn admin-btn--outline admin-btn--compact"
-                  data-testid="linear-desk-verify-planner"
-                >
-                  Verify in Planner
-                </Link>
-              </div>
-            ) : null}
-          </div>
+                Open in inventory
+              </Link>
+              <Link
+                href="/planner/guest/"
+                className="admin-btn admin-btn--outline admin-btn--compact"
+                data-testid="linear-desk-verify-planner"
+              >
+                Verify in Planner
+              </Link>
+            </div>
+          ) : null}
         </div>
-      ) : (
-        <div className="admin-svg-engine-feedback" aria-hidden />
-      )}
+      ) : null}
 
-      {/* Scenario 35 mix: plan LEFT + form RIGHT. No dock, no third column. */}
+      {/* 32.jpg: TOOL RAIL | DESK PROPERTIES | PLAN CANVAS */}
       <div
-        className="admin-svg-engine-shell admin-svg-engine-shell--dual-pane"
+        className="admin-cad__body"
         data-testid="admin-svg-engine-shell"
-        data-stage-layout="dual-pane-plan-left"
+        data-stage-layout="lock-32"
         data-stage-engine="form-maker"
       >
-        <div
-          className="admin-parametric-dual"
-          data-testid="admin-parametric-dual"
+        <div className="admin-cad__rail" aria-label="Tool rail">
+          <CanvasToolRail
+            activeTool={tool}
+            onToolChange={setTool}
+            gridEnabled={gridOn}
+            snapEnabled={snapOn}
+            onToggleGrid={() => setGridOn((v) => !v)}
+            onToggleSnap={() => setSnapOn((v) => !v)}
+            pinned
+          />
+        </div>
+
+        <section
+          className="admin-cad__form"
+          aria-label="Desk configuration"
+          data-testid="admin-svg-engine-stage"
+          data-stage-engine="form-maker"
         >
-          <section
-            aria-label="Desk plan"
-            className="admin-parametric-dual__plan"
-            data-testid="admin-svg-preview-rail"
-            data-grid={gridEnabled ? "on" : "off"}
+          <header className="admin-cad__form-head">
+            <h2 className="admin-cad__form-title">Desk properties</h2>
+            <p className="admin-cad__form-selected">
+              <span className="admin-cad__form-selected-name">
+                {form.name.trim() || "Linear desk"}
+              </span>
+              <span className="admin-cad__form-selected-sku">
+                {form.sku.trim() || slug}
+              </span>
+            </p>
+          </header>
+          <form
+            id="linear-desk-parametric-form"
+            className="admin-parametric-form admin-cad__form-scroll"
+            noValidate
+            onSubmit={(e) => {
+              e.preventDefault();
+              requestPublish();
+            }}
           >
-            <CanvasToolRail
-              activeTool={activeTool}
-              onToolChange={setActiveTool}
-              gridEnabled={gridEnabled}
-              snapEnabled={snapEnabled}
-              orthogonalLock={orthogonalLock}
-              onToggleGrid={() => setGridEnabled((v) => !v)}
-              onToggleSnap={() => setSnapEnabled((v) => !v)}
-              onToggleOrthogonal={() => setOrthogonalLock((v) => !v)}
-              pinned
-            />
-            <div className="admin-parametric-dual__plan-stage">
-              <p className="admin-parametric-preview-plate__label">Plan</p>
+            <fieldset className="admin-parametric-form__section">
+              <legend className="admin-parametric-form__section-title">Units</legend>
+              <div
+                className="admin-parametric-form__unit-row"
+                role="radiogroup"
+                aria-label="Display unit"
+              >
+                <label className="admin-parametric-form__unit">
+                  <input
+                    type="radio"
+                    name="unit"
+                    checked={unit === "mm"}
+                    onChange={() => onUnit("mm")}
+                  />
+                  mm
+                </label>
+                <label className="admin-parametric-form__unit">
+                  <input
+                    type="radio"
+                    name="unit"
+                    checked={unit === "cm"}
+                    onChange={() => onUnit("cm")}
+                  />
+                  cm
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset className="admin-parametric-form__section">
+              <legend className="admin-parametric-form__section-title">Size</legend>
+              <div className="admin-parametric-form__grid">
+                <Field
+                  label={`Width (${unit})`}
+                  value={form.width}
+                  error={err("width")}
+                  onChange={(v) => setNumber("width", v)}
+                  testId="linear-desk-width"
+                />
+                <Field
+                  label={`Depth (${unit})`}
+                  value={form.depth}
+                  error={err("depth")}
+                  onChange={(v) => setNumber("depth", v)}
+                  testId="linear-desk-depth"
+                />
+                <Field
+                  label={`Height (${unit})`}
+                  value={form.height}
+                  error={err("height")}
+                  onChange={(v) => setNumber("height", v)}
+                  testId="linear-desk-height"
+                />
+                <Field
+                  label={`Top thickness (${unit})`}
+                  value={form.topThickness}
+                  error={err("topThickness")}
+                  onChange={(v) => setNumber("topThickness", v)}
+                />
+              </div>
+            </fieldset>
+
+            <fieldset className="admin-parametric-form__section">
+              <legend className="admin-parametric-form__section-title">
+                Pedestals
+              </legend>
+              <div className="admin-parametric-form__grid">
+                <label className="admin-parametric-form__field admin-parametric-form__field--span2">
+                  Pedestal layout
+                  <select
+                    className="admin-parametric-form__control"
+                    value={form.pedestalCount}
+                    onChange={(e) => {
+                      clearLive();
+                      setForm((p) => ({
+                        ...p,
+                        pedestalCount: Number(e.target.value) === 0 ? 0 : 2,
+                      }));
+                    }}
+                  >
+                    <option value={2}>Two pedestals</option>
+                    <option value={0}>No pedestals</option>
+                  </select>
+                </label>
+                {hasPedestals ? (
+                  <>
+                    <Field
+                      label={`Pedestal width (${unit})`}
+                      value={form.pedestalWidth}
+                      error={err("pedestalWidth")}
+                      onChange={(v) => setNumber("pedestalWidth", v)}
+                    />
+                    <Field
+                      label={`Side inset (${unit})`}
+                      value={form.pedestalInset}
+                      error={err("pedestalInset")}
+                      onChange={(v) => setNumber("pedestalInset", v)}
+                    />
+                    <Field
+                      label={`Gap under top (${unit})`}
+                      value={form.pedestalTopGap}
+                      error={err("pedestalTopGap")}
+                      onChange={(v) => setNumber("pedestalTopGap", v)}
+                      testId="linear-desk-pedestal-top-gap"
+                    />
+                    <Field
+                      label={`Back inset (${unit})`}
+                      value={form.pedestalBackInset}
+                      error={err("pedestalBackInset")}
+                      onChange={(v) => setNumber("pedestalBackInset", v)}
+                      testId="linear-desk-pedestal-back-inset"
+                    />
+                  </>
+                ) : null}
+              </div>
+              <label className="admin-parametric-form__check">
+                <input
+                  type="checkbox"
+                  checked={form.modesty}
+                  onChange={(e) => {
+                    clearLive();
+                    setForm((p) => ({ ...p, modesty: e.target.checked }));
+                  }}
+                />
+                Modesty panel
+              </label>
+            </fieldset>
+
+            <fieldset className="admin-parametric-form__section">
+              <legend className="admin-parametric-form__section-title">
+                Identity
+              </legend>
+              <div className="admin-parametric-form__grid">
+                <Field
+                  label="Name"
+                  value={form.name}
+                  error={err("name")}
+                  onChange={(v) => {
+                    clearLive();
+                    setForm((p) => ({ ...p, name: v }));
+                  }}
+                  text
+                  className="admin-parametric-form__field--span2"
+                />
+                <Field
+                  label="SKU"
+                  value={form.sku}
+                  error={err("sku")}
+                  onChange={(v) => {
+                    clearLive();
+                    setForm((p) => ({ ...p, sku: v }));
+                  }}
+                  text
+                />
+                <Field
+                  label="Series"
+                  value={form.seriesId}
+                  error={err("seriesId")}
+                  onChange={(v) => {
+                    clearLive();
+                    setForm((p) => ({ ...p, seriesId: v }));
+                  }}
+                  text
+                />
+                <Field
+                  label="Slug"
+                  value={form.slug}
+                  error={err("slug")}
+                  onChange={(v) => {
+                    clearLive();
+                    setForm((p) => ({ ...p, slug: v }));
+                  }}
+                  text
+                  testId="linear-desk-slug"
+                  className="admin-parametric-form__field--span2"
+                />
+              </div>
+            </fieldset>
+
+          </form>
+          <div
+            className="admin-cad__form-footer"
+            data-testid="linear-desk-summary-chips"
+            aria-label="Summary"
+          >
+            <span
+              className="admin-cad__footer-chip"
+              data-testid="linear-desk-details-slug"
+            >
+              {slug}
+            </span>
+            <span
+              className="admin-cad__footer-chip"
+              data-testid="linear-desk-details-footprint"
+            >
+              {footprint}
+            </span>
+            <span className="admin-cad__footer-chip">
+              {hasPedestals ? "2 pedestals" : "No pedestals"}
+            </span>
+            <span className="admin-cad__footer-chip">
+              {parsed.ok ? "Valid" : "Blocked"}
+            </span>
+          </div>
+        </section>
+
+        {/* 32 — PLAN CANVAS dominant right */}
+        <section
+          className="admin-cad__plan"
+          aria-label="Desk plan"
+          data-testid="admin-svg-preview-rail"
+          data-grid={gridOn ? "on" : "off"}
+        >
+          <div className="admin-cad__plan-stage">
+            <div className="admin-cad__plan-chrome">
+              <span className="admin-cad__plan-label">Plan canvas</span>
+              <span className="admin-cad__plan-meta">{footprint}</span>
+            </div>
+            <div className="admin-cad__plan-board">
               {previewSvg ? (
                 <div
                   data-testid="linear-desk-preview"
-                  className="admin-linear-desk-preview"
+                  className="admin-linear-desk-preview admin-linear-desk-preview--stage admin-cad__preview"
                   role="img"
-                  aria-label={`Linear desk plan ${footprintLabel}`}
+                  aria-label={`Linear desk plan ${footprint}`}
                   dangerouslySetInnerHTML={{ __html: previewSvg }}
                 />
               ) : (
@@ -384,233 +551,8 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
                 </p>
               )}
             </div>
-          </section>
-
-          <section
-            aria-label="Desk configuration"
-            className="admin-parametric-dual__form admin-parametric-stage"
-            data-testid="admin-svg-engine-stage"
-            data-region="form-column"
-            data-stage-engine="form-maker"
-          >
-            <form
-              id="linear-desk-parametric-form"
-              className="admin-parametric-form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                onRequestPublish();
-              }}
-              noValidate
-            >
-              {/* Scenario 37: summary chips in form (not a third dock panel) */}
-              <div
-                className="admin-parametric-form__summary-chips"
-                data-testid="admin-svg-details-rail"
-                aria-label="Summary"
-              >
-                <span
-                  className="admin-parametric-form__chip"
-                  data-testid="linear-desk-details-slug"
-                >
-                  {displaySlug}
-                </span>
-                <span
-                  className="admin-parametric-form__chip"
-                  data-testid="linear-desk-details-footprint"
-                >
-                  {footprintLabel}
-                </span>
-                {form.sku.trim() ? (
-                  <span className="admin-parametric-form__chip">
-                    {form.sku.trim()}
-                  </span>
-                ) : null}
-              </div>
-
-              <fieldset className="admin-parametric-form__section">
-                <legend className="admin-parametric-form__section-title">
-                  Units
-                </legend>
-                <div
-                  className="admin-parametric-form__unit-row"
-                  role="radiogroup"
-                  aria-label="Display unit"
-                >
-                  <label className="admin-parametric-form__unit">
-                    <input
-                      type="radio"
-                      name="unit"
-                      checked={form.displayUnit === "mm"}
-                      onChange={() => onUnit("mm")}
-                    />
-                    mm
-                  </label>
-                  <label className="admin-parametric-form__unit">
-                    <input
-                      type="radio"
-                      name="unit"
-                      checked={form.displayUnit === "cm"}
-                      onChange={() => onUnit("cm")}
-                    />
-                    cm
-                  </label>
-                </div>
-              </fieldset>
-
-              <fieldset className="admin-parametric-form__section">
-                <legend className="admin-parametric-form__section-title">
-                  Size
-                </legend>
-                <div className="admin-parametric-form__grid">
-                  <Field
-                    label={`Width (${unit})`}
-                    value={form.width}
-                    error={err("width")}
-                    onChange={(v) => setNumber("width", v)}
-                    testId="linear-desk-width"
-                  />
-                  <Field
-                    label={`Depth (${unit})`}
-                    value={form.depth}
-                    error={err("depth")}
-                    onChange={(v) => setNumber("depth", v)}
-                    testId="linear-desk-depth"
-                  />
-                  <Field
-                    label={`Height (${unit})`}
-                    value={form.height}
-                    error={err("height")}
-                    onChange={(v) => setNumber("height", v)}
-                    testId="linear-desk-height"
-                  />
-                  <Field
-                    label={`Top thickness (${unit})`}
-                    value={form.topThickness}
-                    error={err("topThickness")}
-                    onChange={(v) => setNumber("topThickness", v)}
-                  />
-                </div>
-              </fieldset>
-
-              <fieldset className="admin-parametric-form__section">
-                <legend className="admin-parametric-form__section-title">
-                  Pedestals
-                </legend>
-                <div className="admin-parametric-form__grid">
-                  <label className="admin-parametric-form__field admin-parametric-form__field--span2">
-                    Pedestal layout
-                    <select
-                      value={form.pedestalCount}
-                      onChange={(e) => {
-                        clearPublishedOnEdit();
-                        setForm((p) => ({
-                          ...p,
-                          pedestalCount: Number(e.target.value) === 0 ? 0 : 2,
-                        }));
-                      }}
-                      className="admin-parametric-form__control"
-                    >
-                      <option value={2}>Two pedestals</option>
-                      <option value={0}>No pedestals</option>
-                    </select>
-                  </label>
-                  {hasPedestals ? (
-                    <>
-                      <Field
-                        label={`Pedestal width (${unit})`}
-                        value={form.pedestalWidth}
-                        error={err("pedestalWidth")}
-                        onChange={(v) => setNumber("pedestalWidth", v)}
-                      />
-                      <Field
-                        label={`Side inset (${unit})`}
-                        value={form.pedestalInset}
-                        error={err("pedestalInset")}
-                        onChange={(v) => setNumber("pedestalInset", v)}
-                      />
-                      <Field
-                        label={`Gap under top (${unit})`}
-                        value={form.pedestalTopGap}
-                        error={err("pedestalTopGap")}
-                        onChange={(v) => setNumber("pedestalTopGap", v)}
-                        testId="linear-desk-pedestal-top-gap"
-                      />
-                      <Field
-                        label={`Back inset (${unit})`}
-                        value={form.pedestalBackInset}
-                        error={err("pedestalBackInset")}
-                        onChange={(v) => setNumber("pedestalBackInset", v)}
-                        testId="linear-desk-pedestal-back-inset"
-                      />
-                    </>
-                  ) : null}
-                </div>
-                <label className="admin-parametric-form__check">
-                  <input
-                    type="checkbox"
-                    checked={form.modesty}
-                    onChange={(e) => {
-                      clearPublishedOnEdit();
-                      setForm((p) => ({ ...p, modesty: e.target.checked }));
-                    }}
-                  />
-                  Modesty panel
-                </label>
-              </fieldset>
-
-              <fieldset className="admin-parametric-form__section">
-                <legend className="admin-parametric-form__section-title">
-                  Identity
-                </legend>
-                <div className="admin-parametric-form__grid">
-                  <Field
-                    label="Name"
-                    value={form.name}
-                    error={err("name")}
-                    onChange={(v) => {
-                      clearPublishedOnEdit();
-                      setForm((p) => ({ ...p, name: v }));
-                    }}
-                    text
-                    className="admin-parametric-form__field--span2"
-                  />
-                  <Field
-                    label="SKU"
-                    value={form.sku}
-                    error={err("sku")}
-                    onChange={(v) => {
-                      clearPublishedOnEdit();
-                      setForm((p) => ({ ...p, sku: v }));
-                    }}
-                    text
-                  />
-                  <Field
-                    label="Series"
-                    value={form.seriesId}
-                    error={err("seriesId")}
-                    onChange={(v) => {
-                      clearPublishedOnEdit();
-                      setForm((p) => ({ ...p, seriesId: v }));
-                    }}
-                    text
-                  />
-                  <Field
-                    label="Slug"
-                    value={form.slug}
-                    error={err("slug")}
-                    onChange={(v) => {
-                      clearPublishedOnEdit();
-                      setForm((p) => ({ ...p, slug: v }));
-                    }}
-                    text
-                    testId="linear-desk-slug"
-                    className="admin-parametric-form__field--span2"
-                  />
-                </div>
-              </fieldset>
-            </form>
-          </section>
-        </div>
+          </div>
+        </section>
       </div>
 
       {confirmCopy ? (
@@ -618,8 +560,10 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
           open={confirmOpen}
           copy={confirmCopy}
           pending={pending}
-          onCancel={onCancelConfirm}
-          onConfirm={onConfirmPublish}
+          onCancel={() => {
+            if (!pending) setConfirmOpen(false);
+          }}
+          onConfirm={confirmPublish}
         />
       ) : null}
     </div>

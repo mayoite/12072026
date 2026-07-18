@@ -190,7 +190,7 @@ export default function AdminPlansPageView() {
           disabled={loading}
         >
           {loading ? (
-            <Loader2 size={14} className="animate-spin" aria-hidden />
+            <Loader2 size={14} className="admin-icon-spin" aria-hidden />
           ) : (
             <RefreshCw size={14} aria-hidden />
           )}
@@ -291,8 +291,8 @@ export default function AdminPlansPageView() {
       ) : null}
 
       {loading ? (
-        <div className="admin-inline-row text-sm text-muted" role="status" aria-live="polite">
-          <Loader2 size={16} className="animate-spin" aria-hidden />
+        <div className="admin-status-line" role="status" aria-live="polite">
+          <Loader2 size={16} className="admin-icon-spin" aria-hidden />
           Loading plans…
         </div>
       ) : plans.length === 0 ? (
@@ -325,7 +325,7 @@ export default function AdminPlansPageView() {
                     >
                       {plan.title}
                     </Link>
-                    <p className="text-xs text-soft">
+                    <p className="admin-type-soft">
                       {plan.project_name ?? plan.client_name ?? "No project metadata"}
                     </p>
                   </td>

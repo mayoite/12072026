@@ -1,14 +1,26 @@
 # Parametric CAD Dual-Pane Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans (or subagent-driven-development) to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+**Status:** **SUPERSEDED** — do **not** execute this dual-pane mix plan.
 
-**Goal:** Ship locked Admin parametric CAD dual-pane: plan left + planner `CanvasToolRail` + form right + status strip + summary chips (scenarios 32 + 35 + 37).
+**Owner FINAL (2026-07-18):** `docs/ui-benchmarks/parametric-lock/32.jpg` only  
+→ `TOOL RAIL | DESK PROPERTIES | PLAN CANVAS`  
+**Active plan:** `Agents/PLAN-parametric-cad-team.md`  
+**Team:** `Agents/Agents-10-TEAM-CYCLE.md`  
+35/37 = archive. No mix.
 
-**Architecture:** Drop dockview for parametric. One dual-pane shell owns plan|form. Tool rail is imported from Planner only. Publish path unchanged (Maker multipath + confirm action).
+---
+
+# Historical dual-pane plan (obsolete)
+
+> Do not implement steps below as active work. Audit trail only.
+
+**Goal (obsolete):** dual-pane plan left + form right (32+35+37 mix).
+
+**Architecture:** Drop dockview for parametric. Tool rail from Planner only. Publish path Maker multipath + confirm.
 
 **Tech Stack:** Next.js admin route, React 19, React Aria, Phosphor, locked chrome CSS modules, Vitest.
 
-**Spec:** `docs/superpowers/specs/2026-07-18-parametric-cad-dual-pane-design.md`
+**Spec (superseded):** `docs/superpowers/specs/2026-07-18-parametric-cad-dual-pane-design.md`
 
 ---
 

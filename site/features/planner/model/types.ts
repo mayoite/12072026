@@ -120,11 +120,17 @@ export interface PlannerFurnitureItem {
   /** Optional GLB URL alias — only loaded if policy allows. */
   glbUrl?: string;
   /**
-   * S7 — published catalog preview consumed at place time (e.g. `/svg-catalog/{slug}.svg`).
+   * S7 — published catalog preview consumed at place time (e.g. `/svg-catalog/{slug}.svg`
+   * or `/api/planner/catalog/svg/{revisionId}`).
    * Inventory shows this URL; place stamps it onto the furniture entity.
    * Plan canvas paints this SVG via `getSvgPlanImage`; Block2D is fallback while loading or on miss.
    */
   previewImageUrl?: string;
+  /**
+   * AF-15 / DB-SVG-13 — immutable SVG revision pin when placed from DB-backed catalog.
+   * Prefer over re-resolving slug→disk when authority is `db`.
+   */
+  sourceSvgRevisionId?: string;
 }
 
 export interface PlannerStair {

@@ -19,6 +19,7 @@
   height: 100dvh;
   min-height: 0;
   overflow: hidden;
+  /* Cool studio page (admin CAD token remap in theme.css) */
   background: var(--surface-page);
   /* Override generic admin-page padding so the studio fills the viewport */
   padding: 0;
@@ -86,7 +87,7 @@
   min-height: 0;
 }
 
-/* Planner TopBar package: brand | center | actions, ecru panel, flat chrome. */
+/* CAD topbar: clean white panel, cool hairline (studio tokens). */
 .admin-svg-engine-shell__topbar {
   grid-area: topbar;
   display: grid;
@@ -95,8 +96,8 @@
   min-height: 2.75rem;
   padding: 0.25rem 0.75rem;
   flex-shrink: 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-ecru-300) 55%, var(--border-soft));
-  background: color-mix(in srgb, var(--color-ecru-50) 88%, var(--color-white-50));
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--surface-panel);
   box-shadow: none;
   z-index: 20;
   grid-template-columns: auto minmax(0, 1fr) auto;

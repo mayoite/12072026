@@ -113,7 +113,7 @@ export function DescriptorRevisionPanel({ slug }: Props) {
         </p>
         {loading ? (
           <p className="admin-page__meta" role="status">
-            <Loader2 size={14} className="animate-spin" aria-hidden /> Loading revisions…
+            <Loader2 size={14} className="admin-icon-spin" aria-hidden /> Loading revisions…
           </p>
         ) : revisions.length === 0 ? (
           <p className="admin-table__secondary">No prior releases recorded yet.</p>
@@ -135,7 +135,7 @@ export function DescriptorRevisionPanel({ slug }: Props) {
                     title={`Restore revision v${revision.version} and re-publish it`}
                   >
                     {busyVersion === revision.version ? (
-                      <Loader2 size={14} className="animate-spin" aria-hidden />
+                      <Loader2 size={14} className="admin-icon-spin" aria-hidden />
                     ) : (
                       <ArrowCounterClockwise size={14} aria-hidden />
                     )}

@@ -20,7 +20,7 @@
 | 3D | Three.js + R3F + Drei | Bindings/helpers only |
 | Freehand Admin SVG | `@excalidraw/excalidraw` | Stage only — not release authority |
 | Parametric geometry | `makerjs` | **Only** pen for form/CLI/publish: `drawLinearDesk` / `renderLinearDeskSvg` → `compileMakerRecipeToPaths` |
-| Admin / Planner shell chrome | Dockview + React Aria + Phosphor | Shell only. Do not rebuild Planner. No Fabric in Admin |
+| Admin / Planner shell chrome | Dockview + React Aria + Phosphor (+ Planner WorkspaceShell / CanvasToolRail for parametric Admin) | Shell only. Freehand Admin = Dockview host; parametric Admin = planner workspace chrome, not Fabric place canvas. No second geometry pen |
 | Publish | Server compile + sanitize | Client engines do not authorize release |
 
 No second general canvas engine. No pen switch for parametric.

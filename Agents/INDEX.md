@@ -9,6 +9,7 @@
 | Documentation | `Agents-07-docs.md` |
 | Architecture | `Agents-08-architecture.md` |
 | CSS | `Agents-09-css.md` |
+| **Five-agent team cycle (LOCKED promise)** | `Agents-10-TEAM-CYCLE.md` |
 
 Admin, Planner, Site, and Security remain product tracks.
 
@@ -20,5 +21,7 @@ Forms client · Fabric place · Dockview + React Aria chrome · AI fields after 
 Admin also has `IMPLEMENTATION-PLAN.md` + `REALITY-AND-STACK.md` (exactly four files under `plan/Admin/`).
 
 `agent-reports/` is status notes only — **not** PASS proof. Live code + same-session evidence win.
+
+**Team cycle (RULE):** `Agents-10-TEAM-CYCLE.md` — **every task is a team task** (even one letter). Not optional. Owner is only boss; parent is team member; five peer seats; team gate before ship.
 
 Security requirements live in `docs/architecture/10-SECURITY-BENCHMARK.md`.

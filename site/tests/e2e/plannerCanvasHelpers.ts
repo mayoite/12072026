@@ -307,11 +307,20 @@ export async function selectPlannerTool(page: Page, toolName: string): Promise<v
 }
 
 export async function getObjectCount(page: Page): Promise<number> {
-  const text = await page
-    .locator(".pw-status-bar > span")
-    .filter({ hasText: /^\d+ objects$/ })
-    .textContent();
-  const match = text?.match(/^(\d+)\s+objects/i);
+  const bar = page.locator(".pw-status-bar");
+  if (await bar.isVisible().catch(() => false)) {
+    const span = bar.locator("span").filter({ hasText: /\d+\s+objects/i }).first();
+    if (await span.isVisible().catch(() => false)) {
+      const text = await span.textContent();
+      const match = text?.match(/(\d+)\s+objects/i);
+      if (match) return Number.parseInt(match[1], 10);
+    }
+    const barText = await bar.innerText().catch(() => "");
+    const m = barText.match(/(\d+)\s+objects/i);
+    if (m) return Number.parseInt(m[1], 10);
+  }
+  const body = await page.locator("body").innerText();
+  const match = body.match(/(\d+)\s+objects/i);
   return match ? Number.parseInt(match[1], 10) : 0;
 }
 
@@ -416,13 +425,28 @@ export async function setPlannerSnapEnabled(
   );
 }
 
-/** Status-bar furniture metric only — no body-text fallback (CP-07 / false-green bar). */
+/**
+ * Furniture metric — status bar first, then body (new WorkspaceShell may not use
+ * `.pw-status-bar > span` exact children).
+ */
 export async function getFurnitureCount(page: Page): Promise<number> {
-  const text = await page
-    .locator(".pw-status-bar > span")
-    .filter({ hasText: /^\d+ furniture$/ })
-    .textContent();
-  const match = text?.match(/^(\d+)\s+furniture/i);
+  const bar = page.locator(".pw-status-bar");
+  if (await bar.isVisible().catch(() => false)) {
+    const span = bar
+      .locator("span")
+      .filter({ hasText: /\d+\s+furniture/i })
+      .first();
+    if (await span.isVisible().catch(() => false)) {
+      const text = await span.textContent();
+      const match = text?.match(/(\d+)\s+furniture/i);
+      if (match) return Number.parseInt(match[1], 10);
+    }
+    const barText = await bar.innerText().catch(() => "");
+    const m = barText.match(/(\d+)\s+furniture/i);
+    if (m) return Number.parseInt(m[1], 10);
+  }
+  const body = await page.locator("body").innerText();
+  const match = body.match(/(\d+)\s+furniture/i);
   return match ? Number.parseInt(match[1], 10) : 0;
 }
 

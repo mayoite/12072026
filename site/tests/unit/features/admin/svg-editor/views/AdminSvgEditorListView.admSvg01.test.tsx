@@ -40,7 +40,7 @@ const descriptor = {
 } as unknown as BlockDescriptor;
 
 describe("ADM-SVG-01 primary no-code SVG journey", () => {
-  it("presents visual authoring as primary and keeps bulk CSV advanced", () => {
+  it("presents order-factory desk as primary and keeps bulk CSV advanced", () => {
     render(
       <AdminSvgEditorListView
         descriptors={[descriptor]}
@@ -61,14 +61,20 @@ describe("ADM-SVG-01 primary no-code SVG journey", () => {
 
     expect(screen.getByTestId("admin-svg-primary-journey")).toBeInTheDocument();
     const copy = screen.getByTestId("admin-svg-journey-copy");
-    expect(copy).toHaveTextContent(/studio|publish/i);
+    expect(copy).toHaveTextContent(/linear desk|publish/i);
     expect(copy).toHaveTextContent(/do not need to edit/i);
     expect(copy.textContent ?? "").not.toMatch(/Zod|atomic-rename|pipeline/i);
 
     const primary = screen.getByTestId("admin-shell-primary-action");
-    expect(primary).toHaveAttribute("href", "/admin/svg-editor/new");
+    expect(primary).toHaveAttribute("href", "/admin/svg-editor/parametric");
     expect(primary).toHaveClass("admin-btn--primary");
-    expect(primary).toHaveTextContent(/New SVG symbol/);
+    expect(primary).toHaveTextContent(/New linear desk/);
+
+    const freehand = screen.getByTestId("admin-shell-freehand-new");
+    expect(freehand).toHaveAttribute("href", "/admin/svg-editor/new");
+    expect(freehand).toHaveClass("admin-btn--outline");
+    expect(freehand).not.toHaveClass("admin-btn--primary");
+    expect(freehand).toHaveTextContent(/New SVG symbol/);
 
     const advanced = screen.getByTestId("admin-svg-advanced-import");
     expect(advanced.tagName.toLowerCase()).toBe("details");
@@ -84,19 +90,26 @@ describe("ADM-SVG-01 primary no-code SVG journey", () => {
     expect(screen.getByTestId("admin-svg-bulk-import-submit")).not.toHaveClass(
       "admin-btn--primary",
     );
+    // Default hero source is product language only
     const source = screen.getByTestId("admin-shell-source");
-    expect(source).toHaveTextContent(/on-disk inventory|Live authority/i);
-    expect(source).toHaveTextContent(/Dual-write: skipped_no_db/i);
-    expect(source).toHaveTextContent(
-      /live authority remains disk until cutover/i,
-    );
+    expect(source).toHaveTextContent(/Product inventory/i);
+    expect(source).toHaveTextContent(/refreshed/i);
     expect(source.textContent ?? "").not.toMatch(
-      /block-descriptor|Zod|pipeline|atomic-rename|cutover complete/i,
+      /Dual-write|block-descriptor|Zod|pipeline|atomic-rename|cutover complete/i,
+    );
+    // Truthful dual-write detail stays collapsible
+    const release = screen.getByTestId("admin-shell-release-source");
+    expect(release.tagName.toLowerCase()).toBe("details");
+    expect(release).not.toHaveAttribute("open");
+    const releaseDetail = screen.getByTestId("admin-shell-release-source-detail");
+    expect(releaseDetail).toHaveTextContent(/Dual-write: skipped_no_db/i);
+    expect(releaseDetail).toHaveTextContent(
+      /live authority remains disk until cutover/i,
     );
 
     const edit = screen.getByTestId("admin-svg-edit-side-table-001");
     expect(edit).toHaveAttribute("href", "/admin/svg-editor/side-table-001");
-    // Row edit must not compete with header "New SVG symbol"
+    // Row edit must not compete with header primary
     expect(edit).toHaveClass("admin-btn--outline");
     expect(edit).not.toHaveClass("admin-btn--primary");
 
@@ -111,7 +124,7 @@ describe("ADM-SVG-01 primary no-code SVG journey", () => {
     );
     expect(screen.getByTestId("admin-svg-last-change-side-table-001")).toBeInTheDocument();
 
-    // Only header New symbol is primary on the list surface
+    // Only header New linear desk is primary on the list surface
     const primaries = document.querySelectorAll(".admin-btn--primary");
     expect(primaries).toHaveLength(1);
     expect(primaries[0]).toHaveAttribute(

@@ -121,7 +121,7 @@ export default function AdminLayoutShell({
     <div className="shell-admin-layout" data-admin-layout>
       <a
         href="#main-content"
-        className="admin-btn admin-btn--primary fixed start-4 top-4 z-[60] -translate-y-24 focus:translate-y-0"
+        className="admin-btn admin-btn--primary admin-skip-link"
       >
         Skip to main content
       </a>

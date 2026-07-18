@@ -4,8 +4,8 @@ import type { ReactNode } from "react";
 
 export function AdminFieldGroup({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <fieldset className="space-y-3 rounded-lg border border-soft bg-subtle/40 p-4">
-      <legend className="px-1 text-xs font-semibold uppercase tracking-wide text-soft">{title}</legend>
+    <fieldset className="admin-field-group">
+      <legend className="admin-field-group__legend">{title}</legend>
       {children}
     </fieldset>
   );
@@ -26,12 +26,12 @@ export function AdminField({
     <label className={`admin-field${className ? ` ${className}` : ""}`}>
       <span className="admin-field__label">{label}</span>
       {children}
-      {hint ? <span className="text-xs text-soft">{hint}</span> : null}
+      {hint ? <span className="admin-field__hint">{hint}</span> : null}
     </label>
   );
 }
 
-const inputClass = "admin-field__control admin-field__input w-full";
+const inputClass = "admin-field__control admin-field__input";
 
 export function AdminTextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
   const { className, ...rest } = props;
@@ -51,9 +51,10 @@ export function AdminNumberInput(props: React.InputHTMLAttributes<HTMLInputEleme
 
 export function AdminTextarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   const { className, ...rest } = props;
+  const base = `${inputClass} admin-field__control--textarea-code`;
   return (
     <textarea
-      className={className ? `${inputClass} min-h-[5.5rem] font-mono text-xs ${className}` : `${inputClass} min-h-[5.5rem] font-mono text-xs`}
+      className={className ? `${base} ${className}` : base}
       {...rest}
     />
   );
@@ -76,10 +77,10 @@ export function AdminCheckbox({
   disabled?: boolean;
 }) {
   return (
-    <label className="inline-flex cursor-pointer items-center gap-2 text-sm text-strong">
+    <label className="admin-checkbox">
       <input
         type="checkbox"
-        className="h-4 w-4 rounded border-soft"
+        className="admin-checkbox__input"
         checked={checked}
         disabled={disabled}
         onChange={(e) => onChange(e.target.checked)}
