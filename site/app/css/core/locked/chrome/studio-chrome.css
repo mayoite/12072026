@@ -323,7 +323,8 @@ select.admin-parametric-form__control {
 }
 
 /* Preview plate host (paint lives in locked/svg) */
-.admin-svg-engine-shell--dock .admin-linear-desk-preview {
+.admin-svg-engine-shell--dock .admin-linear-desk-preview,
+.admin-svg-engine-shell--dual-pane .admin-linear-desk-preview {
   max-width: 100%;
   width: 100%;
 }
@@ -347,7 +348,8 @@ select.admin-parametric-form__control {
   color: var(--text-muted);
 }
 
-.admin-parametric-preview-plate [role="status"] {
+.admin-parametric-preview-plate [role="status"],
+.admin-parametric-dual__plan-stage [role="status"] {
   margin: 0;
   padding: 1rem 0.75rem;
   font-size: 0.85rem;
@@ -357,6 +359,153 @@ select.admin-parametric-form__control {
   border: 1px dashed var(--border-soft);
   border-radius: var(--radius-md, 0.5rem);
   background: var(--surface-soft);
+}
+
+/* ── Dual pane lock: 32 CAD craft + 35 plan-left + 37 status/chips ── */
+
+.admin-svg-editor-workspace--dual-pane .admin-svg-engine-shell--dual-pane {
+  grid-area: workspace;
+  min-height: 0;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-parametric-dual {
+  display: grid;
+  /* 32 craft: plan dominates; form is a tight inspector */
+  grid-template-columns: minmax(0, 1.85fr) minmax(17.5rem, 22.5rem);
+  grid-template-areas: "plan form";
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  /* Planner-width vars so CanvasToolRail matches guest planner */
+  --planner-tool-rail-width: 3.25rem;
+  --ws-rail-w: 3.25rem;
+  --planner-control-target: 2.5rem;
+}
+
+.admin-parametric-dual__plan {
+  grid-area: plan;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  border-right: 1px solid var(--border-soft);
+  background: var(--surface-soft, var(--surface-page));
+}
+
+/* Planner rail fills plan column height (32 CAD rail) */
+.admin-parametric-dual__plan > [data-testid="canvas-tool-rail"],
+.admin-parametric-dual__plan > .pw-tool-rail {
+  align-self: stretch;
+  height: 100%;
+  min-height: 0;
+  flex-shrink: 0;
+}
+
+.admin-parametric-dual__plan[data-grid="on"] .admin-parametric-dual__plan-stage {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--border-soft) 55%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--border-soft) 55%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 24px 24px;
+  background-color: var(--surface-soft, var(--surface-page));
+}
+
+.admin-parametric-dual__plan-stage {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem 0.85rem;
+  overflow: auto;
+}
+
+.admin-parametric-dual__plan-stage .admin-linear-desk-preview {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 14rem;
+}
+
+.admin-parametric-dual__plan-stage .admin-linear-desk-preview svg {
+  max-width: min(100%, 48rem);
+  max-height: min(100%, 70vh);
+  width: 100%;
+  height: auto;
+}
+
+.admin-parametric-dual__form {
+  grid-area: form;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+  background: var(--color-surface-raised, var(--surface-panel));
+}
+
+.admin-parametric-dual__form .admin-parametric-form {
+  max-width: none;
+  margin-inline: 0;
+}
+
+/* Scenario 37 summary chips inside form column */
+.admin-parametric-form__summary-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 0.15rem;
+}
+
+.admin-parametric-form__chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  background: var(--surface-soft, var(--surface-page));
+  color: var(--text-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .admin-parametric-dual {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(14rem, 45vh) minmax(0, 1fr);
+    grid-template-areas:
+      "plan"
+      "form";
+  }
+
+  .admin-parametric-dual__plan {
+    border-right: none;
+    border-bottom: 1px solid var(--border-soft);
+  }
 }
 
 /* Quiet status band on parametric shell */

@@ -25,6 +25,15 @@
   gap: 0;
 }
 
+/* Parametric CAD dual-pane (32+35+37): status strip sits under topbar */
+.admin-svg-editor-workspace--dual-pane[data-admin-shell="parametric"] {
+  grid-template-areas:
+    "topbar"
+    "status"
+    "feedback"
+    "workspace";
+}
+
 .admin-svg-editor-workspace--dock .admin-svg-engine-shell--dock {
   grid-area: workspace;
   min-height: 0;

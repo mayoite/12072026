@@ -25,31 +25,22 @@ vi.mock("next/link", () => ({
   ),
 }));
 
-/** Dockview needs a real layout engine; unit tests stub chrome host only. */
-vi.mock("@/features/admin/svg-editor/views/edit-shell/AdminSvgDockHost", () => ({
-  AdminSvgDockHost: ({
-    slots,
-    titles,
-    stageScrollable,
+/** Planner rail is mounted live; unit tests only need presence + a11y shell. */
+vi.mock("@/features/planner/editor/CanvasToolRail", () => ({
+  CanvasToolRail: ({
+    pinned,
+    activeTool,
   }: {
-    slots: {
-      preview: React.ReactNode;
-      stage: React.ReactNode;
-      details: React.ReactNode;
-    };
-    titles?: { preview?: string; stage?: string; details?: string };
-    stageScrollable?: boolean;
+    pinned?: boolean;
+    activeTool?: string;
   }) => (
     <div
-      data-testid="admin-svg-dock-host"
-      data-chrome="dockview-react"
-      data-stage-scrollable={String(Boolean(stageScrollable))}
-      data-titles={`${titles?.preview ?? "Preview"}|${titles?.stage ?? "Studio"}|${titles?.details ?? "Details"}`}
-    >
-      <div data-testid="admin-svg-dock-panel-preview">{slots.preview}</div>
-      <div data-testid="admin-svg-dock-panel-stage">{slots.stage}</div>
-      <div data-testid="admin-svg-dock-panel-details">{slots.details}</div>
-    </div>
+      data-testid="canvas-tool-rail"
+      data-pinned={String(Boolean(pinned))}
+      data-active-tool={activeTool ?? "select"}
+      role="toolbar"
+      aria-label="Canvas tools"
+    />
   ),
 }));
 
@@ -66,7 +57,7 @@ vi.mock("@/features/admin/svg-editor/parametric/publishLinearDeskAction", () => 
   publishLinearDeskAction,
 }));
 
-describe("LinearDeskParametricForm dock chrome", () => {
+describe("LinearDeskParametricForm dual-pane (32+35+37 lock)", () => {
   beforeEach(() => {
     publishLinearDeskAction.mockReset();
   });
@@ -74,9 +65,8 @@ describe("LinearDeskParametricForm dock chrome", () => {
   it("exposes form sections: Units · Size · Pedestals · Identity", () => {
     render(<LinearDeskParametricForm />);
 
-    const stage = screen.getByTestId("admin-svg-dock-panel-stage");
-    // Prefer legends (fieldset section titles); fall back to section-title text.
-    const legends = within(stage)
+    const formCol = screen.getByTestId("admin-svg-engine-stage");
+    const legends = within(formCol)
       .queryAllByRole("group")
       .flatMap((group) => {
         const legend = group.querySelector("legend");
@@ -86,14 +76,13 @@ describe("LinearDeskParametricForm dock chrome", () => {
       legends.length > 0
         ? legends
         : Array.from(
-            stage.querySelectorAll(".admin-parametric-form__section-title"),
+            formCol.querySelectorAll(".admin-parametric-form__section-title"),
           ).map((el) => el.textContent?.trim() ?? "");
 
     expect(sectionTitles).toEqual(
       expect.arrayContaining(["Units", "Size", "Pedestals", "Identity"]),
     );
 
-    // Size / pedestals controls present
     expect(screen.getByTestId("linear-desk-width")).toBeInTheDocument();
     expect(screen.getByTestId("linear-desk-depth")).toBeInTheDocument();
     expect(screen.getByTestId("linear-desk-height")).toBeInTheDocument();
@@ -102,13 +91,15 @@ describe("LinearDeskParametricForm dock chrome", () => {
     expect(screen.getByLabelText(/Display unit/i)).toBeInTheDocument();
   });
 
-  it("uses calm product chrome: one publish, read-only details, dock panels", () => {
+  it("uses plan-left dual pane, status strip, planner rail, summary chips", () => {
     render(<LinearDeskParametricForm />);
 
     const root = screen.getByTestId("admin-linear-desk-parametric");
     expect(root).toHaveAttribute("data-admin-shell", "parametric");
-    expect(root.getAttribute("data-chrome")).toMatch(/dockview-react/);
-    expect(root).toHaveClass("admin-svg-editor-workspace--dock");
+    expect(root).toHaveAttribute("data-chrome", "planner-canvas-tool-rail");
+    expect(root).toHaveAttribute("data-layout", "plan-left-form-right");
+    expect(root).toHaveAttribute("data-layout-mix", "32-35-37");
+    expect(root).toHaveClass("admin-svg-editor-workspace--dual-pane");
 
     expect(screen.getByTestId("admin-shell-header")).toBeInTheDocument();
     expect(screen.getByTestId("admin-shell-secondary-back")).toHaveAttribute(
@@ -117,43 +108,49 @@ describe("LinearDeskParametricForm dock chrome", () => {
     );
     expect(screen.getByTestId("admin-shell-title")).toHaveTextContent(/Linear desk/i);
 
-    // No decorative Dock toggle / icon legend
+    // No dock invent, no decorative chrome toolbar
+    expect(screen.queryByTestId("admin-svg-dock-host")).not.toBeInTheDocument();
     expect(screen.queryByTestId("admin-svg-chrome-toolbar")).not.toBeInTheDocument();
     expect(screen.queryByLabelText(/Dock layout/i)).not.toBeInTheDocument();
-    // No engineer slogans in status
     expect(screen.queryByTestId("admin-svg-studio-status-engine")).not.toBeInTheDocument();
     expect(screen.queryByText(/form \+ Maker/i)).not.toBeInTheDocument();
 
-    const dock = screen.getByTestId("admin-svg-dock-host");
-    expect(dock).toHaveAttribute("data-stage-scrollable", "true");
-    // U titles: Preview | Form | Summary (details panel is product Summary)
-    expect(dock.getAttribute("data-titles")).toMatch(
-      /^Preview\|Form\|(Summary|Details)$/,
-    );
-
+    // Dual pane shell
     expect(screen.getByTestId("admin-svg-engine-shell")).toHaveAttribute(
       "data-stage-layout",
-      "dockview",
+      "dual-pane-plan-left",
     );
+    expect(screen.getByTestId("admin-parametric-dual")).toBeInTheDocument();
     expect(screen.getByTestId("admin-svg-engine-stage")).toHaveAttribute(
       "data-stage-engine",
       "form-maker",
     );
+
+    // Planner tool rail (real component path)
+    const rail = screen.getByTestId("canvas-tool-rail");
+    expect(rail).toHaveAttribute("data-pinned", "true");
+    expect(rail).toHaveAttribute("aria-label", "Canvas tools");
+
+    // Plan + form
     expect(screen.getByTestId("linear-desk-width")).toBeInTheDocument();
     expect(screen.getByTestId("linear-desk-preview")).toBeInTheDocument();
 
-    // One primary Publish (top bar only)
+    // Status strip (scenario 37)
+    expect(screen.getByTestId("admin-svg-studio-status")).toBeInTheDocument();
+
+    // One primary Publish
     expect(screen.getByTestId("linear-desk-publish")).toBeInTheDocument();
     expect(screen.queryByTestId("linear-desk-publish-top")).not.toBeInTheDocument();
     expect(screen.getAllByTestId("linear-desk-publish")).toHaveLength(1);
     expect(screen.getAllByRole("button", { name: /^Publish$/i })).toHaveLength(1);
 
-    // Details = read-only mirror (no second Publish, no editable fields)
-    const details = screen.getByTestId("admin-svg-dock-panel-details");
-    expect(within(details).getByTestId("linear-desk-details-slug")).toBeInTheDocument();
-    expect(within(details).queryAllByRole("textbox")).toHaveLength(0);
-    expect(within(details).queryAllByRole("spinbutton")).toHaveLength(0);
-    expect(within(details).queryByRole("button")).not.toBeInTheDocument();
+    // Summary chips in form column (not third dock panel with inputs)
+    const summary = screen.getByTestId("admin-svg-details-rail");
+    expect(within(summary).getByTestId("linear-desk-details-slug")).toBeInTheDocument();
+    expect(within(summary).getByTestId("linear-desk-details-footprint")).toBeInTheDocument();
+    expect(within(summary).queryAllByRole("textbox")).toHaveLength(0);
+    expect(within(summary).queryAllByRole("spinbutton")).toHaveLength(0);
+    expect(within(summary).queryByRole("button")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Publish to disk/i })).not.toBeInTheDocument();
   });
 
@@ -161,7 +158,6 @@ describe("LinearDeskParametricForm dock chrome", () => {
     render(<LinearDeskParametricForm />);
     expect(screen.getByText(/Ready to publish/i)).toBeInTheDocument();
     const validation = screen.getByTestId("admin-svg-studio-status-validation");
-    // U may say "Ready" or legacy "Draft ready"
     expect(validation).toHaveTextContent(/Ready/i);
   });
 
@@ -170,14 +166,12 @@ describe("LinearDeskParametricForm dock chrome", () => {
 
     const preview = screen.getByTestId("linear-desk-preview");
     const html = preview.innerHTML;
-    // Live pen — not a grey rect stub
     expect(html).toMatch(/^<svg[\s>]/i);
     expect(html).toContain('id="desk-top"');
     expect(html).toContain('id="pedestal-l"');
     expect(html).toContain('id="pedestal-r"');
     expect(html).not.toContain('id="frame"');
     expect(html).not.toMatch(/currentColor|var\s*\(/i);
-    // Footprint identity: default cm form = 160 cm → 1600 mm
     expect(screen.getByTestId("linear-desk-details-footprint")).toHaveTextContent(
       "1600×800 mm",
     );
@@ -186,7 +180,7 @@ describe("LinearDeskParametricForm dock chrome", () => {
     );
   });
 
-  it("Publish passes form → action args: widthMm 1600, guest slug, commercial SKU", async () => {
+  it("Publish opens confirm; confirm does not call action until Publish for guests", async () => {
     const slug = defaultLinearDeskSlug(1600);
     const sku = defaultLinearDeskSku(1600);
     publishLinearDeskAction.mockResolvedValue({
@@ -197,6 +191,24 @@ describe("LinearDeskParametricForm dock chrome", () => {
     render(<LinearDeskParametricForm />);
 
     fireEvent.click(screen.getByTestId("linear-desk-publish"));
+
+    const dialog = await screen.findByTestId("linear-desk-publish-confirm");
+    expect(dialog).toHaveAttribute("role", "dialog");
+    expect(publishLinearDeskAction).not.toHaveBeenCalled();
+
+    expect(screen.getByTestId("linear-desk-confirm-name")).toHaveTextContent(
+      /Linear desk/i,
+    );
+    expect(screen.getByTestId("linear-desk-confirm-sku")).toHaveTextContent(sku);
+    expect(screen.getByTestId("linear-desk-confirm-slug")).toHaveTextContent(
+      slug,
+    );
+    expect(screen.getByTestId("linear-desk-confirm-footprint")).toHaveTextContent(
+      "1600×800 mm",
+    );
+    expect(dialog).toHaveTextContent(/guests can place/i);
+
+    fireEvent.click(screen.getByTestId("linear-desk-publish-confirm-submit"));
 
     await waitFor(() => {
       expect(publishLinearDeskAction).toHaveBeenCalledTimes(1);
@@ -221,24 +233,29 @@ describe("LinearDeskParametricForm dock chrome", () => {
 
     await waitFor(() => {
       const msg = screen.getByTestId("linear-desk-message");
-      // Accept current U copy or formatLinearDeskPublishSuccess style
-      expect(msg).toHaveTextContent(new RegExp(slug.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+      expect(msg).toHaveTextContent(
+        new RegExp(slug.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+      );
       expect(msg).toHaveTextContent(/Published/i);
+      expect(msg).toHaveTextContent(sku);
     });
-  });
 
-  it("marks broken width with aria-invalid and blocks publish", () => {
-    render(<LinearDeskParametricForm />);
+    const lifecycle = screen.getByTestId("admin-svg-studio-status-draft");
+    expect(lifecycle).toHaveTextContent(/Published/i);
+    expect(lifecycle).toHaveTextContent(/live for guests/i);
+    expect(lifecycle).toHaveAttribute("data-lifecycle", "published");
+    expect(screen.getByTestId("admin-linear-desk-parametric")).toHaveAttribute(
+      "data-publish-state",
+      "published",
+    );
 
-    const width = screen.getByTestId("linear-desk-width");
-    // Default unit is cm: 10 cm = 100 mm < min 600 mm → invalid
-    fireEvent.change(width, { target: { value: "10" } });
+    const inventory = screen.getByTestId("linear-desk-open-inventory");
+    expect(inventory).toHaveAttribute("href", "/admin/svg-editor");
+    const planner = screen.getByTestId("linear-desk-verify-planner");
+    expect(planner).toHaveAttribute("href", "/planner/guest/");
 
-    expect(width).toHaveAttribute("aria-invalid", "true");
-    expect(screen.getByRole("alert")).toBeInTheDocument();
-    expect(screen.getByTestId("linear-desk-publish")).toBeDisabled();
-    expect(screen.getByTestId("linear-desk-preview-blocked")).toBeInTheDocument();
-    expect(screen.queryByTestId("linear-desk-preview")).not.toBeInTheDocument();
-    expect(screen.getByText(/Blocked/i)).toBeInTheDocument();
+    expect(
+      screen.queryByTestId("linear-desk-publish-confirm"),
+    ).not.toBeInTheDocument();
   });
 });
