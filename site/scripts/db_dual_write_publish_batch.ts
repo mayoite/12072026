@@ -1,5 +1,5 @@
 /**
- * Dual-write publish the 22 buyer hero slugs (docs/OUTSTANDING-ITEMS.md §1).
+ * Dual-write publish the 22 buyer hero slugs (see plan/Admin/CHECKLIST.md + plan/TechStack/CHECKLIST.md).
  * Does NOT set SVG_RELEASE_AUTHORITY=db.
  *
  * Usage: pnpm --filter oando-site exec tsx scripts/db_dual_write_publish_batch.ts
@@ -15,7 +15,7 @@ require("./loadEnvLocal.cjs").loadEnvLocal();
 const packageRoot = process.cwd();
 const dir = path.join(packageRoot, "inventory", "descriptors");
 
-/** Canonical buyer hero set — keep in sync with docs/OUTSTANDING-ITEMS.md. */
+/** Canonical buyer hero set — keep in sync with brand inventory in plan checklists. */
 const BUYER_HERO_SLUGS = [
   "oando-fluid-desk-1400",
   "oando-fluid-desk-1600",

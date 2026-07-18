@@ -7,6 +7,8 @@ import {
   shouldPlaceModularWithGeneratedGlb,
   simpleRectPathD,
   extrudeSvgGeneratedSlug,
+  parseLinearDeskFields,
+  renderLinearDeskSvg,
 } from "@/features/planner/asset-engine";
 
 describe("asset-engine/index barrel", () => {
@@ -33,5 +35,16 @@ describe("asset-engine/index barrel", () => {
         id: "desk",
       }),
     ).toMatch(/desk/);
+  });
+
+  it("re-exports Plan+A parametric linear desk", () => {
+    const fields = parseLinearDeskFields({
+      type: "linear-desk",
+      widthMm: 1600,
+      depthMm: 800,
+    });
+    const svg = renderLinearDeskSvg(fields);
+    expect(svg).toContain('data-product-type="linear-desk"');
+    expect(svg).toContain('viewBox="0 0 1600 800"');
   });
 });

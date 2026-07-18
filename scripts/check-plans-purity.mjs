@@ -4,15 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const planRoot = path.join(root, "plan");
-const allowedRoots = new Set([
-  "Admin",
-  "Planner",
-  "Site",
-  "Security",
-  "TechStack",
-  "svgblunder",
-  "_meta",
-]);
+const allowedRoots = new Set(["Admin", "Planner", "Site", "TechStack"]);
 const productTracks = ["Admin", "Planner", "Site", "TechStack"];
 const violations = [];
 
@@ -35,6 +27,18 @@ if (!markdown.includes("README.md")) {
   violations.push("missing: plan/README.md");
 }
 
+for (const f of markdown) {
+  if (f === "README.md") continue;
+  const parts = f.split("/");
+  if (parts.length === 1) {
+    violations.push(`extra plan root doc (only README.md allowed at plan/): plan/${f}`);
+    continue;
+  }
+  if (parts.length !== 2 || !allowedRoots.has(parts[0])) {
+    violations.push(`extra or misplaced plan doc: plan/${f}`);
+  }
+}
+
 for (const track of productTracks) {
   for (const file of ["CHECKLIST.md", "FEATURES.md"]) {
     const rel = `${track}/${file}`;
@@ -50,7 +54,7 @@ for (const track of productTracks) {
 }
 
 for (const f of markdown) {
-  if (/\/(OUTSTANDING|FINISH-PLAN|COMPLETION-CONTRACT)\.md$/i.test(f)) {
+  if (/(^|\/)(OUTSTANDING(-ITEMS)?|FINISH-PLAN|COMPLETION-CONTRACT)\.md$/i.test(f)) {
     violations.push(`retired plan doc name: plan/${f}`);
   }
 }

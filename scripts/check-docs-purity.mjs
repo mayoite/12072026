@@ -4,7 +4,9 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const forbidden = [
-  /plan\/(Buyer|UI|Site|SEO|Security)\//i,
+  // Site is a live product track (plan/Site/). Buyer/UI/SEO are retired plan roots.
+  /plan\/(Buyer|UI|SEO)\//i,
+  /plan\/Security\//i,
   /plan\/[^\s)`]+\/PHASE-/i,
   /ayushdocs\//i,
   /agents-work\/reports/i,

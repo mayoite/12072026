@@ -76,4 +76,4 @@ WCAG 2.2 AA · OWASP ASVS L2 (risk-based) · LCP ≤2.5s · INP ≤200ms · CLS 
 Live `site/` decision tree: **`docs/site/ARCHITECTURE.md`**.  
 Features: **`docs/site/features.md`**. Tests: **`docs/site/tests.md`**.  
 Stack engines/deps: **`docs/Lockedfiles/03-dependencies-engines-current.md`**.  
-Stack proof bar: **`plan/TechStack/COMPLETION-CONTRACT.md`**.
+Stack proof bar: **`plan/TechStack/CHECKLIST.md`** (evidence + phases) + **`plan/TechStack/FEATURES.md`**.
