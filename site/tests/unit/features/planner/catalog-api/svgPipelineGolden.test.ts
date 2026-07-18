@@ -19,8 +19,8 @@
  * Performance budget (provisional, quality-gates.md §Performance):
  *   - Each fixture pipeline run < 200 ms.
  *
- * 03-SVG-GS-01: all token values in themeTokens reference 'currentColor'
- *   or CSS var() references — no hardcoded #hex literals.
+ * 03-SVG-GS-01: fixture themeTokens may use currentColor/var; published
+ *   pipeline output must be image-safe hex (no currentColor/var in guest SVG).
  *
  * Type Safety (AGENTS.md): no any, no @ts-ignore, no eslint suppress.
  */
@@ -126,24 +126,36 @@ describe("03-TEST-01: SVG pipeline structural invariants", () => {
   });
 });
 
-// ── 03-SVG-GS-01: Semantic tokens only (no hardcoded hex) ────────────────────
+// ── 03-SVG-GS-01: published paint is image-safe (Task 2′) ────────────────────
+// Descriptor themeTokens may still use currentColor/var; pipeline must resolve
+// to hex literals so Fabric/img raster can paint symbols.
 
-describe("03-SVG-GS-01: semantic tokens only", () => {
-  const HEX_LITERAL_RE = /#[0-9a-fA-F]{3,8}\b/;
-
-  it("no hardcoded #hex literals in any pipeline output SVG", async () => {
+describe("03-SVG-GS-01: image-safe published paints", () => {
+  it("pipeline output has no fill/stroke currentColor or var(", async () => {
     for (const fixture of GOLDEN_FIXTURES) {
       const descriptor = readFixture(fixture.name);
       const output = await runPipelineCore(descriptor);
-      expect(output).not.toMatch(HEX_LITERAL_RE);
+      expect(output).not.toMatch(/fill\s*=\s*["']currentColor/i);
+      expect(output).not.toMatch(/stroke\s*=\s*["']currentColor/i);
+      expect(output).not.toMatch(/fill\s*=\s*["']var\(/i);
+      expect(output).not.toMatch(/stroke\s*=\s*["']var\(/i);
     }
   });
 
-  it("theme tokens in fixtures reference currentColor or var(--*)", () => {
+  it("pipeline output uses hex fills for path geometry", async () => {
+    for (const fixture of GOLDEN_FIXTURES) {
+      const descriptor = readFixture(fixture.name);
+      const output = await runPipelineCore(descriptor);
+      expect(output).toMatch(/fill="#[0-9a-fA-F]{3,8}"/);
+    }
+  });
+
+  it("theme tokens in fixtures may still reference currentColor or var(--*)", () => {
     for (const fixture of GOLDEN_FIXTURES) {
       const descriptor = readFixture(fixture.name);
       const tokens = descriptor.themeTokens ?? {};
       for (const [, value] of Object.entries(tokens)) {
+        if (value === undefined) continue;
         const isSemanticToken =
           value === "currentColor" ||
           /^var\(--[a-z0-9-]/.test(value);

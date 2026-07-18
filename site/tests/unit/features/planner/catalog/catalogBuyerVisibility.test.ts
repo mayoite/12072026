@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
 import {
   filterBuyerFacingCatalogItems,
+  filterGuestInventoryCatalogItems,
+  isBrandHeroCatalogItem,
   isInternalCatalogItem,
   prioritizeOfficeSystemsBrowse,
 } from "@/features/planner/catalog/catalogBuyerVisibility";
@@ -62,5 +64,20 @@ describe("catalogBuyerVisibility", () => {
     const ordered = prioritizeOfficeSystemsBrowse(items);
     expect(ordered.length).toBe(2);
     expect(ordered[0]!.id === "ws" || ordered.map((i) => i.id).includes("ws")).toBe(true);
+  });
+
+  it("guest inventory keeps only oando brand heroes", () => {
+    const items = [
+      minimalItem({ id: "sample-sofa-1", name: "Sofa" }),
+      minimalItem({
+        id: "oando-fluid-desk-1600",
+        name: "Fluid Desk",
+        sku: "OANDO-FLUID-DSK-1600",
+      }),
+    ];
+    expect(isBrandHeroCatalogItem(items[1]!)).toBe(true);
+    expect(filterGuestInventoryCatalogItems(items).map((i) => i.id)).toEqual([
+      "oando-fluid-desk-1600",
+    ]);
   });
 });

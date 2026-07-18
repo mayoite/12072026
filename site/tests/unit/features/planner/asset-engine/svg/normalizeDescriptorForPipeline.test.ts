@@ -4,6 +4,14 @@ import {
   resolveBooleanVariant,
 } from "@/features/planner/asset-engine/svg/normalizeDescriptorForPipeline";
 
+const POSITIVE_PARTS = [
+  { id: "tabletop", x: 0, y: 0, width: 1800, depth: 900 },
+  { id: "leg-nw", x: 80, y: 80, width: 60, depth: 60 },
+  { id: "leg-ne", x: 1660, y: 80, width: 60, depth: 60 },
+  { id: "leg-sw", x: 80, y: 760, width: 60, depth: 60 },
+  { id: "leg-se", x: 1660, y: 760, width: 60, depth: 60 },
+];
+
 describe("normalizeDescriptorForPipeline (SVG S1)", () => {
   it("maps blocks[].depth to height and fixed multi-block to difference", () => {
     const normalized = normalizeDescriptorForPipeline({
@@ -55,6 +63,99 @@ describe("normalizeDescriptorForPipeline (SVG S1)", () => {
       ],
     });
     expect(normalized.variant).toBe("union");
+  });
+
+  it("fixed meeting tabletop + leg-* → union", () => {
+    const n = normalizeDescriptorForPipeline({
+      slug: "oando-classy-meeting-1800",
+      variant: "fixed",
+      viewBox: { x: 0, y: 0, width: 1800, height: 900 },
+      blocks: POSITIVE_PARTS,
+    });
+    expect(n.variant).toBe("union");
+  });
+
+  it("fixed chair seat/backrest/base → union", () => {
+    const n = normalizeDescriptorForPipeline({
+      slug: "chair",
+      variant: "fixed",
+      viewBox: { x: 0, y: 0, width: 650, height: 650 },
+      blocks: [
+        { id: "seat", x: 100, y: 140, width: 450, depth: 380 },
+        { id: "backrest", x: 100, y: 100, width: 450, depth: 80 },
+        { id: "base", x: 200, y: 500, width: 250, depth: 80 },
+      ],
+    });
+    expect(n.variant).toBe("union");
+  });
+
+  it("plural legs/arms tokens count as positive", () => {
+    const n = normalizeDescriptorForPipeline({
+      slug: "sofa",
+      variant: "fixed",
+      viewBox: { x: 0, y: 0, width: 2200, height: 900 },
+      blocks: [
+        { id: "seat", x: 100, y: 200, width: 2000, depth: 500 },
+        { id: "arms", x: 50, y: 180, width: 80, depth: 540 },
+        { id: "legs", x: 120, y: 720, width: 60, depth: 60 },
+      ],
+    });
+    expect(n.variant).toBe("union");
+  });
+
+  it("leg-cutout-* + tabletop fixed → difference", () => {
+    const n = normalizeDescriptorForPipeline({
+      slug: "cutout-table",
+      variant: "fixed",
+      viewBox: { x: 0, y: 0, width: 600, height: 900 },
+      blocks: [
+        { id: "tabletop", x: 0, y: 0, width: 600, depth: 600 },
+        { id: "leg-cutout-nw", x: 25, y: 25, width: 50, depth: 50 },
+      ],
+    });
+    expect(n.variant).toBe("difference");
+  });
+
+  it("id cut + tabletop fixed → difference", () => {
+    const n = normalizeDescriptorForPipeline({
+      slug: "side-table-001",
+      variant: "fixed",
+      viewBox: { x: 0, y: 0, width: 600, height: 600 },
+      blocks: [
+        { id: "tabletop", x: 0, y: 0, width: 600, depth: 600 },
+        { id: "cut", x: 25, y: 25, width: 50, depth: 50 },
+      ],
+    });
+    expect(n.variant).toBe("difference");
+  });
+
+  it("explicit variant difference wins over positive ids", () => {
+    expect(
+      resolveBooleanVariant("difference", [
+        { x: 0, y: 0, width: 100, height: 100, id: "seat" },
+        { x: 10, y: 10, width: 20, height: 20, id: "leg-1" },
+      ]),
+    ).toBe("difference");
+  });
+
+  it("unknown maker recipe throws", () => {
+    expect(() =>
+      normalizeDescriptorForPipeline({
+        slug: "x",
+        viewBox: { x: 0, y: 0, width: 1, height: 1 },
+        maker: { recipe: "not-a-real-recipe", widthMm: 1, depthMm: 1 },
+      }),
+    ).toThrow(/Unknown maker recipe/i);
+  });
+
+  it("incomplete linear-desk maker throws", () => {
+    expect(() =>
+      normalizeDescriptorForPipeline({
+        slug: "x",
+        viewBox: { x: 0, y: 0, width: 100, height: 100 },
+        maker: { recipe: "linear-desk" },
+      }),
+    ).toThrow(/Invalid maker recipe/i);
   });
 
   it("single block fixed → union", () => {

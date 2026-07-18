@@ -11,7 +11,10 @@
 import { mkdirSync, readdirSync, unlinkSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-import { resolveBlockDescriptorsDir } from "../lib/paths/sitePackageRoot";
+import {
+  resolveBlockDescriptorsDir,
+  resolvePublicDir,
+} from "../lib/paths/sitePackageRoot";
 import {
   clearLoaderCache,
   loadAll,
@@ -363,9 +366,11 @@ function buildDescriptor(seed: SeedInput) {
     viewBox: seed.viewBox,
     mounting: ["floor"] as const,
     themeTokens: {
-      // Image-safe literals — currentColor paints black in Fabric/<img>
-      "fill-primary": "#8a8680",
-      "stroke-accent": "#2c2a28",
+      // Schema-legal keys/values only (currentColor | --kebab; no #hex).
+      // Pipeline resolves image-safe greys at paint time.
+      currentColor: "currentColor",
+      "--fill-primary": "var(--color-surface-raised)",
+      "--stroke-accent": "var(--color-border)",
     },
     rovingFocus: seed.rovingFocus ?? [],
     liveAnnouncementCategories: ["status"] as const,
@@ -423,6 +428,32 @@ function main(): void {
       unlinkSync(path.join(dir, entry));
       console.log(`removed legacy ${entry}`);
     }
+  }
+
+  // B13: drop retired OFL plan SVGs that conflict with the brand set.
+  // Keep: seed slugs, sample-* demo art, demo/systems residuals still referenced in code.
+  const svgKeepExtra = new Set([
+    "cabinet-v0",
+    "workstation-linear",
+    "desk-linear-1200-001", // Failures.md dual-write proof residual
+    "side-table-001", // admin e2e residual
+    "chaise-lounge-001", // open3d e2e residual
+  ]);
+  const svgDir = path.join(resolvePublicDir(), "svg-catalog");
+  try {
+    for (const entry of readdirSync(svgDir)) {
+      if (!entry.endsWith(".svg")) continue;
+      const slug = entry.slice(0, -".svg".length);
+      if (keep.has(slug)) continue;
+      if (slug.startsWith("sample-")) continue;
+      if (slug.startsWith("_")) continue;
+      if (svgKeepExtra.has(slug)) continue;
+      unlinkSync(path.join(svgDir, entry));
+      console.log(`removed legacy svg ${entry}`);
+    }
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn(`svg-catalog cleanup skipped: ${message}`);
   }
 
   clearLoaderCache();

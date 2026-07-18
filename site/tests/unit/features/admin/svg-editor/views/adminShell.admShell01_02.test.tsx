@@ -69,7 +69,7 @@ const listDescriptor = {
 
 const editDescriptor = JSON.parse(
   fs.readFileSync(
-    path.join(process.cwd(), "inventory/descriptors/side-table-001.json"),
+    path.join(process.cwd(), "inventory/descriptors/oando-classy-meeting-1800.json"),
     "utf8",
   ),
 ) as BlockDescriptor;

@@ -11,7 +11,7 @@ import type { NextRequest } from "next/server";
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 import { success } from "@/features/shared/api/apiResponse";
 import { mapDescriptorsToCatalogItems } from "@/features/planner/catalog/svg/descriptorCatalogBridge.server";
-import { filterBuyerFacingCatalogItems } from "@/features/planner/catalog/catalogBuyerVisibility";
+import { filterGuestInventoryCatalogItems } from "@/features/planner/catalog/catalogBuyerVisibility";
 import { loadBuyerVisibleDescriptorsWithDb } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server";
 import { readSvgArtifactStatus } from "@/features/admin/svg-editor/publish/svgArtifactStatus.server";
 import { isDbSvgReleaseAuthority } from "@/features/admin/svg-editor/publish/svgReleaseAuthority";
@@ -37,7 +37,8 @@ export async function GET(req: NextRequest) {
   if (rateError) return rateError;
 
   const descriptors = await loadBuyerVisibleDescriptorsWithDb();
-  const items = filterBuyerFacingCatalogItems(
+  // Guest / buyer inventory = oando-* brand heroes only (P10); no OFL toys / demo junk.
+  const items = filterGuestInventoryCatalogItems(
     mapDescriptorsToCatalogItems(descriptors),
   ).filter(isBuyerPublishedCatalogItem);
 

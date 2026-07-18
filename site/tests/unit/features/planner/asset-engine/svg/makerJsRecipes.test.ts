@@ -6,7 +6,7 @@ import {
 } from "@/features/planner/asset-engine/svg/makerJsRecipes";
 
 describe("makerJsRecipes", () => {
-  it("builds linear desk viewBox", () => {
+  it("builds linear desk viewBox with sample pedestals", () => {
     const { viewBox, model } = buildLinearDeskMakerModel({
       recipe: "linear-desk",
       widthMm: 1200,
@@ -15,6 +15,10 @@ describe("makerJsRecipes", () => {
     });
     expect(viewBox).toEqual({ x: 0, y: 0, width: 1200, height: 600 });
     expect(model.models).toBeDefined();
+    expect(Object.keys(model.models ?? {})).toEqual(
+      expect.arrayContaining(["desk-top", "pedestal-l", "pedestal-r"]),
+    );
+    expect(Object.keys(model.models ?? {})).not.toContain("desk-knee-space");
   });
 
   it("builds L-desk spanning main + return", () => {

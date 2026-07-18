@@ -187,11 +187,112 @@ describe("InventoryPanel", () => {
       <InventoryPanel catalogItems={[]} catalogStatus="error" isLoading={false} />,
     );
 
-    // empty external catalog falls back to demo items when status ready;
-    // with status error and zero displayed after filter, show error shell.
-    // When demo fallback still populates, at least chrome remains.
+    // Empty external catalog stays empty (no demo pollution). Error shell + chrome.
     expect(screen.getByRole("region", { name: "Inventory panel" })).toBeInTheDocument();
+    expect(screen.getByText("Could not load inventory")).toBeInTheDocument();
   });
+
+  it("empty guest inventory stays empty — no demo-sofa pollution (BQ4/P18)", () => {
+    render(
+      <InventoryPanel
+        catalogItems={[]}
+        catalogStatus="fallback"
+        isLoading={false}
+        officeSystemsInventory
+      />,
+    );
+    expect(screen.getByText("No products available")).toBeInTheDocument();
+    expect(screen.queryByText(/sofa/i)).not.toBeInTheDocument();
+    expect(screen.queryByText("Modern 3-Seater Sofa")).not.toBeInTheDocument();
+  });
+
+  it("office-systems mode drops non-brand sample items (P10)", () => {
+    render(
+      <InventoryPanel
+        catalogItems={[
+          sampleItem({
+            id: "sample-sofa-1",
+            slug: "sample-sofa-1",
+            name: "Modern 3-Seater Sofa",
+            shortName: "Sofa",
+          }),
+          sampleItem({
+            id: "oando-fluid-desk-1600",
+            slug: "oando-fluid-desk-1600",
+            sku: "OANDO-FLUID-DSK-1600",
+            name: "Fluid Desk 1600",
+            shortName: "Fluid 1600",
+          }),
+        ]}
+        catalogStatus="ready"
+        isLoading={false}
+        officeSystemsInventory
+      />,
+    );
+    expect(screen.getByText("Fluid Desk 1600")).toBeInTheDocument();
+    expect(screen.queryByText("Modern 3-Seater Sofa")).not.toBeInTheDocument();
+  });
+
+  it("focusProductSlug selects matching catalog item without placing", () => {
+    const onItemSelect = vi.fn();
+    const onItemPlace = vi.fn();
+    const hero = sampleItem({
+      id: "oando-fluid-desk-1400",
+      slug: "oando-fluid-desk-1400",
+      sku: "OANDO-FLUID-DSK-1400",
+      name: "Fluid Desk 1400",
+      shortName: "Fluid 1400",
+    });
+    const other = sampleItem({
+      id: "other-desk",
+      slug: "other-desk",
+      name: "Other Desk",
+      shortName: "Other",
+    });
+
+    render(
+      <InventoryPanel
+        catalogItems={[other, hero]}
+        catalogStatus="ready"
+        isLoading={false}
+        officeSystemsInventory={false}
+        focusProductSlug="oando-fluid-desk"
+        onItemSelect={onItemSelect}
+        onItemPlace={onItemPlace}
+      />,
+    );
+
+    const focused = document.querySelector(
+      'article[data-site-product-focus="true"]',
+    );
+    expect(focused).not.toBeNull();
+    expect(focused).toHaveAttribute("data-selected", "true");
+    // data-catalog-name uses shortName when present
+    expect(focused).toHaveAttribute("data-catalog-name", "Fluid 1400");
+    expect(onItemSelect).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "oando-fluid-desk-1400" }),
+      null,
+    );
+    expect(onItemPlace).not.toHaveBeenCalled();
+  });
+
+  it("focusProductSlug is a no-op when no catalog match", () => {
+    const onItemSelect = vi.fn();
+    render(
+      <InventoryPanel
+        catalogItems={[sampleItem()]}
+        catalogStatus="ready"
+        isLoading={false}
+        officeSystemsInventory={false}
+        focusProductSlug="super-chair-missing"
+        onItemSelect={onItemSelect}
+      />,
+    );
+
+    expect(document.querySelector('article[data-site-product-focus="true"]')).toBeNull();
+    expect(onItemSelect).not.toHaveBeenCalled();
+  });
+
 
   it("groups by family, filters by family chip, and compares two products", () => {
     const deskA = sampleItem({
@@ -319,9 +420,11 @@ describe("InventoryPanel", () => {
   });
 
   it("hides advanced filters until More filters is opened (first paint)", () => {
+    // Guest / office-systems inventory is brand-hero only (P10).
     const deskA = sampleItem({
-      id: "desk-a",
-      sku: "DESK-A",
+      id: "oando-flex-desk-1200",
+      slug: "oando-flex-desk-1200",
+      sku: "OANDO-FLEX-DSK-1200",
       name: "Desk Alpha",
       shortName: "Desk Alpha",
       material: { marketingMaterial: "Oak", normalizedMaterial: "oak" },
@@ -329,8 +432,9 @@ describe("InventoryPanel", () => {
       dimensions: { widthMm: 900, depthMm: 700, heightMm: 750 },
     });
     const deskB = sampleItem({
-      id: "desk-b",
-      sku: "DESK-B",
+      id: "oando-fluid-desk-1600",
+      slug: "oando-fluid-desk-1600",
+      sku: "OANDO-FLUID-DSK-1600",
       name: "Desk Beta",
       shortName: "Desk Beta",
       material: { marketingMaterial: "Walnut", normalizedMaterial: "walnut" },
@@ -375,6 +479,9 @@ describe("InventoryPanel", () => {
       <InventoryPanel
         catalogItems={[
           sampleItem({
+            id: "oando-fluid-desk-1600",
+            slug: "oando-fluid-desk-1600",
+            sku: "OANDO-FLUID-DSK-1600",
             category: "Furniture",
             subCategory: "Desks & Workstations",
           }),

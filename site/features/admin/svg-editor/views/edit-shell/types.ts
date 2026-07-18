@@ -24,6 +24,12 @@ export interface AdminSvgEditorShellProps {
   readonly coreFieldIssuesCount: number;
   readonly preview: AdminSvgPreviewResult | null;
   readonly previewPending: boolean;
+  /** Maker recipe name when publish geometry is maker-driven (descriptor). */
+  readonly makerRecipe?: string | null;
+  /** IR identity strip: `maker: linear-desk` or `N blocks · variant`. */
+  readonly publishIrStrip?: string;
+  /** Excalidraw export for secondary studio sketch only — not release geometry. */
+  readonly studioSketchSvg?: string;
   readonly feedback: FeedbackState;
   readonly authoringLifecycle: AuthoringLifecycle;
   readonly lifecycle: CatalogLifecycleState;

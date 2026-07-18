@@ -37,6 +37,9 @@ export function AdminSvgEditorShell({
   coreFieldIssuesCount,
   preview,
   previewPending,
+  makerRecipe,
+  publishIrStrip,
+  studioSketchSvg,
   feedback,
   authoringLifecycle,
   lifecycle,
@@ -163,6 +166,9 @@ export function AdminSvgEditorShell({
           preview={preview}
           previewPending={previewPending}
           artifactStatus={artifactStatus}
+          makerRecipe={makerRecipe}
+          publishIrStrip={publishIrStrip}
+          studioSketchSvg={studioSketchSvg}
         />
 
         <section

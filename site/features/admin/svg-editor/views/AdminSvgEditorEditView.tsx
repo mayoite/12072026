@@ -3,9 +3,9 @@
 /**
  * A4 — Admin SVG Editor per-slug edit view (canvas-first shell).
  *
- * Primary surface: visual studio (SvgSceneDocument). Secondary rail: live
- * compile preview, published artifact, and advanced block metadata form.
- * Publish: formState (sceneParts → blocks) → publishDescriptorWithPipeline.
+ * Publish preview = server compile via useDebouncedCompile (same path as Publish).
+ * Studio sketch is secondary drawing aid only — not release geometry.
+ * Publish: formState (blocks/maker IR) → publishDescriptorWithPipeline.
  *
  * GS: semantic tokens only; no hex in tsx. Catalog publish SVG != Fabric plan-draw.
  *
@@ -37,16 +37,13 @@ import {
   confirmDiscardUnsavedNavigation,
   confirmResetToPublished,
 } from "../contracts/destructiveConfirmMessages";
-import {
-  countActiveExcalidrawElements,
-  isBlankExcalidrawSvg,
-} from "../editor/excalidrawDocumentGuards";
+import { countActiveExcalidrawElements } from "../editor/excalidrawDocumentGuards";
 import { AdminSvgEditorShell } from "./edit-shell/AdminSvgEditorShell";
 import {
   type AdminSvgStudioDocument,
   useAdminSvgEditorPublish,
 } from "./edit-shell/useAdminSvgEditorPublish";
-import type { SvgPreviewResult } from "../publish/previewSvgEditorAction";
+import { useDebouncedCompile } from "../publish/useDebouncedCompile";
 
 export interface AdminSvgEditorEditViewProps {
   readonly slug: string;
@@ -94,40 +91,89 @@ export function AdminSvgEditorEditView({
     setForm(resolved);
   }, []);
 
-  // Studio SVG from Excalidraw — blank welcome exports must not look "ready".
+  // Studio sketch SVG (drawing aid only — not publish geometry authority).
   const [excalidrawSvg, setExcalidrawSvg] = useState("");
 
-  const preview = useMemo((): SvgPreviewResult | null => {
-    if (!excalidrawSvg.trim()) return null;
-    if (isBlankExcalidrawSvg(excalidrawSvg)) {
-      return {
-        ok: false,
-        phase: "validate",
-        error: "Draw at least one shape in the visual studio before publishing.",
-        issues: [
-          {
-            path: "excalidrawElements",
-            message: "Studio has no drawable shapes",
-          },
-        ],
-      };
-    }
+  // Compile-relevant IR only. Omit studio sketch elements so Excalidraw redraw
+  // does not thrash the server preview debounce.
+  const formForCompile = useMemo((): SvgEditorFormState => {
     return {
-      ok: true,
-      phase: "ok",
-      svg: excalidrawSvg,
-      issues: [],
+      variant: form.variant,
+      slug: form.slug,
+      sku: form.sku,
+      sourceProvenance: form.sourceProvenance,
+      createdBy: form.createdBy,
+      geometry: form.geometry,
+      viewBox: form.viewBox,
+      mounting: form.mounting,
+      liveAnnouncementCategories: form.liveAnnouncementCategories,
+      rovingFocus: form.rovingFocus,
+      mountingPoints: form.mountingPoints,
+      blocks: form.blocks,
+      themeTokens: form.themeTokens,
+      configurableSizingType: form.configurableSizingType,
+      configurableSizeOptions: form.configurableSizeOptions,
+      parameterSchema: form.parameterSchema,
+      assetsGlbUrl: form.assetsGlbUrl,
+      assetsSvgUrl: form.assetsSvgUrl,
+      sceneViewBox: form.sceneViewBox,
+      sceneParts: form.sceneParts,
+      openedBaselineGeneratedAt: form.openedBaselineGeneratedAt,
     };
-  }, [excalidrawSvg]);
-  const previewPending = false;
+  }, [
+    form.assetsGlbUrl,
+    form.assetsSvgUrl,
+    form.blocks,
+    form.configurableSizeOptions,
+    form.configurableSizingType,
+    form.createdBy,
+    form.geometry,
+    form.liveAnnouncementCategories,
+    form.mounting,
+    form.mountingPoints,
+    form.openedBaselineGeneratedAt,
+    form.parameterSchema,
+    form.rovingFocus,
+    form.sceneParts,
+    form.sceneViewBox,
+    form.sku,
+    form.slug,
+    form.sourceProvenance,
+    form.themeTokens,
+    form.variant,
+    form.viewBox,
+  ]);
 
-  // SVG â†’ GLB flow, fed by the just-compiled preview SVG (no file picker).
+  const { result: preview, pending: previewPending } = useDebouncedCompile(
+    slug,
+    formForCompile,
+    { delayMs: 300 },
+  );
+
+  // SVG → GLB flow, fed by the server-compiled preview SVG (no file picker).
   const [glbSourceSvg, setGlbSourceSvg] = useState<string | null>(null);
   const [glbUrl, setGlbUrl] = useState<string>("");
   const [glbUploading, setGlbUploading] = useState(false);
   const [glbUploadError, setGlbUploadError] = useState<string | null>(null);
 
-  const compiledSvg = preview?.ok === true ? (preview.svg ?? null) : null;
+  const compiledSvg =
+    preview?.ok === true && typeof preview.svg === "string" && preview.svg.trim()
+      ? preview.svg
+      : null;
+
+  const makerRecipe =
+    descriptor.maker && typeof descriptor.maker.recipe === "string"
+      ? descriptor.maker.recipe
+      : null;
+
+  const blockCount =
+    form.blocks.length > 0
+      ? form.blocks.length
+      : (form.sceneParts?.length ?? 0);
+
+  const publishIrStrip = makerRecipe
+    ? `maker: ${makerRecipe}`
+    : `${blockCount} blocks · ${form.variant}`;
 
   const startGlbConversion = useCallback(() => {
     if (compiledSvg) setGlbSourceSvg(compiledSvg);
@@ -321,8 +367,9 @@ export function AdminSvgEditorEditView({
         return;
       }
       if (action === "download-svg") {
+        // Prefer server-compiled publish SVG; studio sketch is last resort only.
         const svg =
-          (preview?.ok === true ? preview.svg : null) ||
+          (preview?.ok === true && preview.svg?.trim() ? preview.svg : null) ||
           (excalidrawSvg.trim() ? excalidrawSvg : null);
         if (!svg) {
           window.open(publishArtifactHref(productSlug), "_blank", "noopener,noreferrer");
@@ -390,12 +437,15 @@ export function AdminSvgEditorEditView({
     ];
   }, [coreFieldIssues, preview?.issues]);
 
+  // Publish gate: server compile ok + svg payload. Do not require Excalidraw
+  // non-blank when blocks/maker exist — studio sketch is not release geometry.
   const canPublish =
     Boolean(onPublishAction) &&
     (formDirty || artifactStatus.state !== "published") &&
     !feedback.submitting &&
     !previewPending &&
     preview?.ok === true &&
+    Boolean(preview.svg?.trim()) &&
     footprintProof.aligned &&
     coreFieldIssues.length === 0;
 
@@ -430,6 +480,9 @@ export function AdminSvgEditorEditView({
       coreFieldIssuesCount={coreFieldIssues.length}
       preview={preview}
       previewPending={previewPending}
+      makerRecipe={makerRecipe}
+      publishIrStrip={publishIrStrip}
+      studioSketchSvg={excalidrawSvg}
       feedback={feedback}
       authoringLifecycle={authoringLifecycle}
       lifecycle={lifecycle}

@@ -121,8 +121,22 @@ describe("makerJsToPath", () => {
     });
     expect(parts.length).toBeGreaterThanOrEqual(3);
     expect(parts.map((p) => p.id)).toEqual(
-      expect.arrayContaining(["desk-top", "desk-body", "desk-knee-space"]),
+      expect.arrayContaining(["desk-top", "pedestal-l", "pedestal-r"]),
     );
+    expect(parts.map((p) => p.id)).not.toContain("desk-knee-space");
+  });
+
+  it("linear-desk emits desk-top + pedestal-l + pedestal-r (no knee slab)", () => {
+    const { parts } = compileMakerRecipeToPaths({
+      recipe: "linear-desk",
+      widthMm: 1600,
+      depthMm: 800,
+      topThicknessMm: 80,
+    });
+    const ids = parts.map((p) => p.id);
+    expect(ids).toEqual(expect.arrayContaining(["desk-top", "pedestal-l", "pedestal-r"]));
+    expect(ids).not.toContain("desk-knee-space");
+    expect(ids).not.toContain("desk-body");
   });
 
   it("compiles L-desk path", () => {

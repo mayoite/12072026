@@ -5,23 +5,22 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 | Doc | Role |
 |---|---|
 | This file | Current code map and known gaps |
-| `FINISH-PLAN.md` | Required work and verification status (**execution A0–A6**) |
-| `COMPLETION-CONTRACT.md` | How to prove done (wins on evidence) |
+| `CHECKLIST.md` | Open / partial work only |
 | `docs/architecture/07-ADMIN-UI-BENCHMARK.md` | UI bar (not PASS proof) |
 | `docs/architecture/08-DATABASE-SVG-CONTRACT.md` | DB-SVG target IDs 01–20 |
 | `docs/architecture/10-SECURITY-BENCHMARK.md` | Security bar |
 
-**Historical:** `PHASES-01-02.md`, `PHASES-03-04.md`, `CHECKLIST.md` are **absent**. Not authority.
+**Only two plan docs per track:** `CHECKLIST.md` + `FEATURES.md`.
 
 **Code roots:** `site/features/admin/` · `site/app/admin/` · `site/app/api/admin/` · `site/platform/drizzle/schema/catalog.ts` · `site/inventory/descriptors/` · `site/public/svg-catalog/` · `site/features/crm/` (Admin-mounted demo CRM)
 
 **Manual SVG editor:** `@excalidraw/excalidraw` via `svg-editor/editor/ExcalidrawClient.tsx`. Retired: `SvgStudioCanvas` (archived tests only). Not active: SVG-Edit iframe (`plan/svgblunder/` reference only).
 
-**Section labels A0–A11 below** are code-map areas. **Execution phases** in FINISH-PLAN/COMPLETION-CONTRACT are **A0–A6** (auth, publish, dual-write, catalog/prices, ops/CRM, release). Map areas into the nearest execution phase; do not invent extra PASS.
+**Section labels A0–A11 below** are code-map areas. Open work lives in `CHECKLIST.md`.
 
-**Status vocabulary:** OPEN / PARTIAL / FAIL / PASS. PASS only with fresh commands. FEATURES never grants PASS alone.
+**Status vocabulary:** OPEN / PARTIAL / FAIL / DONE. FEATURES never grants DONE alone.
 
-**Execution status (mirrors FINISH-PLAN, 2026-07-17):** A0–A5 PARTIAL · A6 OPEN. Disk is live SVG authority.
+**Execution status (2026-07-18):** dual-write batch 22/22 on owner env; disk live SVG authority; browser Admin smoke OPEN. See `CHECKLIST.md`.
 
 ---
 
@@ -96,7 +95,7 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 
 ## A2 — Excalidraw-first authoring
 
-Plan phase: A2 in FINISH-PLAN / COMPLETION-CONTRACT.
+Plan phase: see `CHECKLIST.md`.
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -254,4 +253,4 @@ Plan phase: A2 in FINISH-PLAN / COMPLETION-CONTRACT.
 
 ## Reference (not PASS proof)
 
-`COMPLETION-CONTRACT.md` · `FINISH-PLAN.md` · `07-ADMIN-UI-BENCHMARK.md` · `08-DATABASE-SVG-CONTRACT.md` · `10-SECURITY-BENCHMARK.md` · `../../Failures.md`
+`CHECKLIST.md` · `07-ADMIN-UI-BENCHMARK.md` · `08-DATABASE-SVG-CONTRACT.md` · `10-SECURITY-BENCHMARK.md` · `../../Failures.md`

@@ -1,24 +1,23 @@
 # Active Blockers and Failures
 
-- **DB-SVG cutover (authority).** Live release authority remains **disk**. Dual-write is **proven for one SKU** (not cutover).
+- **DB-SVG cutover (authority).** Live release authority remains **disk**. Dual-write is **proven for 22 brand heroes** on owner env (not cutover — browser place still OPEN).
 
   **Schema (done):** `published_svg_revision_id` applied 2026-07-18 (`db:apply`). Verify: `scripts/db_verify_published_svg_pointer.ts`.
 
-  **Step 1 dual-write publish (done for one product, 2026-07-18):**  
-  `pnpm --filter oando-site exec tsx scripts/db_dual_write_publish_proof.ts`  
-  → `desk-linear-1200-001` revision `desk-linear-1200-001-r-e85ab01e78e21e8b18b3`  
-  → artifacts descriptor+svg+png on R2; product pointer set on `managed-desk-linear-1200-001`.
+  **Step 1 dual-write publish (done for 22 brand heroes + legacy desk, 2026-07-18):**  
+  `pnpm --filter oando-site exec tsx scripts/db_dual_write_publish_batch.ts` → **ok=22 fail=0**.  
+  Sample: `oando-fluid-desk-1600-r-86a867f48fcd557ba426` (+ full set printed by batch).  
+  Legacy proof remains: `desk-linear-1200-001-r-e85ab01e78e21e8b18b3`.
 
-  **Step 2 Planner revision bytes (done for that SKU):**  
-  `GET /api/planner/catalog/svg/{revisionId}` → 200 SVG  
-  `svg-blocks` `previewImageUrl` uses `/api/planner/catalog/svg/...` for that desk.  
-  Disk authority **merges** full disk inventory + revision pointers (partial dual-write no longer shrinks catalog to DB-only rows).
+  **Step 2 Planner revision bytes (API proven for dual-write path):**  
+  `GET /api/planner/catalog/svg/{revisionId}` → 200 SVG (legacy + brand revisions written).  
+  Disk authority **merges** full disk inventory + revision pointers.
 
   **Still OPEN for full cutover:**  
-  1. Dual-write publish **all buyer plan SKUs** (or accepted multi-hero set ≥5–30 brand SVGs) with pointers.  
-  2. Browser place of revision-URL symbol on guest canvas (not only API JSON).  
+  1. ~~Dual-write all buyer heroes~~ **DONE** (owner env batch 22/22).  
+  2. Browser place of brand / revision-URL symbol on guest canvas (not only API JSON).  
   3. Preview env `SVG_RELEASE_AUTHORITY=db` smoke, then optional prod flip.  
-  **Do not set `SVG_RELEASE_AUTHORITY=db` until (1)+(2) for the full buyer set.**
+  **Do not set `SVG_RELEASE_AUTHORITY=db` until (2) is browser-proved for the buyer set.**
 
   **Product score ceiling:** SVG **brand** quality (names, families, marketing join) — see `docs/superpowers/specs/2026-07-18-four-module-svg-brand-design.md`. Generic OFL plan kit remains the main 8.5 blocker, not chrome.
 

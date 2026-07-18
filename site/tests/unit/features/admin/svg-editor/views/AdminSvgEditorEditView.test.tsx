@@ -1,5 +1,6 @@
 /**
  * Interaction coverage for AdminSvgEditorEditView beyond shell landmarks.
+ * Task 6: Publish preview is server compile via useDebouncedCompile — not Excalidraw.
  */
 
 import fs from "node:fs";
@@ -11,13 +12,14 @@ import userEvent from "@testing-library/user-event";
 import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import { AdminSvgEditorEditView } from "@/features/admin/svg-editor/views/AdminSvgEditorEditView";
 
-const { refresh, uploadAssetToSupabase } = vi.hoisted(() => ({
+const { refresh, uploadAssetToSupabase, useDebouncedCompile } = vi.hoisted(() => ({
   refresh: vi.fn(),
   uploadAssetToSupabase: vi.fn(),
+  useDebouncedCompile: vi.fn(),
 }));
 
 vi.mock("next/navigation", () => ({
-  useRouter: () => ({ refresh }),
+  useRouter: () => ({ refresh, replace: vi.fn(), push: vi.fn() }),
 }));
 
 vi.mock("next/dynamic", () => ({
@@ -45,8 +47,27 @@ vi.mock("@/features/admin/svg-editor/form/SvgEditorForm", () => ({
   SvgEditorForm: () => <div data-testid="mock-form" />,
 }));
 
+vi.mock("@/features/admin/svg-editor/publish/useDebouncedCompile", () => ({
+  useDebouncedCompile,
+}));
+
 vi.mock("@/features/admin/svg-editor/publish/LiveCompiledSvgPreview", () => ({
-  LiveCompiledSvgPreview: () => null,
+  LiveCompiledSvgPreview: ({
+    result,
+    pending,
+  }: {
+    result: { ok?: boolean; svg?: string } | null;
+    pending: boolean;
+  }) => (
+    <div
+      data-testid="admin-svg-livepreview"
+      data-compiler-authority="compileSvgForPublish"
+      data-pending={pending ? "true" : "false"}
+      data-from-hook={result?.ok === true && result.svg === "<svg data-server='1'/>" ? "true" : "false"}
+    >
+      {result?.ok ? "server-ok" : "server-idle"}
+    </div>
+  ),
 }));
 
 vi.mock("@/features/admin/svg-editor/publish/PublishedSvgPreview", () => ({
@@ -66,12 +87,19 @@ vi.mock("@/lib/api/browserApi", () => ({
   browserApiFetch: vi.fn(async () => ({ ok: true })),
 }));
 
-const descriptor = JSON.parse(
-  fs.readFileSync(
-    path.join(process.cwd(), "inventory/descriptors/side-table-001.json"),
-    "utf8",
-  ),
-) as BlockDescriptor;
+const HOOK_SVG = "<svg data-server='1'/>";
+
+function loadDescriptor(slugFile: string): BlockDescriptor {
+  return JSON.parse(
+    fs.readFileSync(
+      path.join(process.cwd(), "inventory/descriptors", slugFile),
+      "utf8",
+    ),
+  ) as BlockDescriptor;
+}
+
+const descriptor = loadDescriptor("oando-classy-meeting-1800.json");
+const makerDescriptor = loadDescriptor("oando-fluid-desk-1600.json");
 
 const artifactStatus = {
   state: "published" as const,
@@ -86,12 +114,77 @@ describe("AdminSvgEditorEditView", () => {
   beforeEach(() => {
     refresh.mockReset();
     uploadAssetToSupabase.mockReset();
+    useDebouncedCompile.mockReset();
+    useDebouncedCompile.mockReturnValue({
+      result: {
+        ok: true,
+        phase: "ok",
+        svg: HOOK_SVG,
+        issues: [],
+      },
+      pending: false,
+    });
     window.confirm = vi.fn(() => true);
   });
 
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
+  });
+
+  it("uses useDebouncedCompile for publish preview (not Excalidraw SVG)", () => {
+    render(
+      <AdminSvgEditorEditView
+        slug={descriptor.slug}
+        descriptor={descriptor}
+        updatedAtLabel="today"
+        artifactStatus={artifactStatus}
+        catalogLifecycle="draft"
+        onPublishAction={vi.fn()}
+      />,
+    );
+
+    expect(useDebouncedCompile).toHaveBeenCalled();
+    const [slugArg, formArg, optsArg] = useDebouncedCompile.mock.calls[0] as [
+      string,
+      Record<string, unknown>,
+      { delayMs?: number },
+    ];
+    expect(slugArg).toBe(descriptor.slug);
+    expect(optsArg).toEqual({ delayMs: 300 });
+    // Compile form must not thrash on studio sketch elements alone.
+    expect(formArg).not.toHaveProperty("excalidrawElements");
+    expect(formArg).toHaveProperty("blocks");
+    expect(formArg).toHaveProperty("variant", "fixed");
+
+    const live = screen.getByTestId("admin-svg-livepreview");
+    expect(live).toHaveAttribute("data-from-hook", "true");
+    expect(live).toHaveAttribute("data-compiler-authority", "compileSvgForPublish");
+    expect(live).toHaveTextContent("server-ok");
+    expect(screen.getByText("Publish preview")).toBeInTheDocument();
+    expect(screen.getByTestId("admin-svg-studio-sketch")).not.toHaveAttribute(
+      "data-compiler-authority",
+    );
+  });
+
+  it("shows maker banner and IR strip when descriptor has maker", () => {
+    render(
+      <AdminSvgEditorEditView
+        slug={makerDescriptor.slug}
+        descriptor={makerDescriptor}
+        updatedAtLabel="today"
+        artifactStatus={artifactStatus}
+        catalogLifecycle="draft"
+        onPublishAction={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByTestId("admin-svg-maker-geometry-banner")).toHaveTextContent(
+      /Publish geometry is maker recipe/i,
+    );
+    expect(screen.getByTestId("admin-svg-publish-ir-strip")).toHaveTextContent(
+      /maker:\s*linear-desk/,
+    );
   });
 
   it("renders the edit shell with publish primary action", () => {
@@ -185,23 +278,22 @@ describe("AdminSvgEditorEditView", () => {
       success: true,
       descriptor,
     });
+    // Unpublished so canPublish is true without form dirty.
+    const draftArtifact = { ...artifactStatus, state: "missing" as const };
 
     render(
       <AdminSvgEditorEditView
         slug={descriptor.slug}
         descriptor={descriptor}
         updatedAtLabel="today"
-        artifactStatus={artifactStatus}
+        artifactStatus={draftArtifact}
         catalogLifecycle="draft"
         onPublishAction={onPublishAction}
       />,
     );
 
     const publish = screen.getByTestId("admin-shell-primary-action");
-    if (publish.hasAttribute("disabled")) {
-      expect(onPublishAction).not.toHaveBeenCalled();
-      return;
-    }
+    expect(publish).not.toBeDisabled();
 
     await user.click(publish);
     await waitFor(() => {
@@ -210,5 +302,30 @@ describe("AdminSvgEditorEditView", () => {
     await waitFor(() => {
       expect(onPublishAction).toHaveBeenCalled();
     });
+  });
+
+  it("does not fabricate preview from Excalidraw when hook returns null", () => {
+    useDebouncedCompile.mockReturnValue({
+      result: null,
+      pending: true,
+    });
+
+    render(
+      <AdminSvgEditorEditView
+        slug={descriptor.slug}
+        descriptor={descriptor}
+        updatedAtLabel="today"
+        artifactStatus={{ ...artifactStatus, state: "missing" }}
+        catalogLifecycle="draft"
+        onPublishAction={vi.fn()}
+      />,
+    );
+
+    expect(useDebouncedCompile).toHaveBeenCalled();
+    expect(screen.getByTestId("admin-svg-livepreview")).toHaveAttribute(
+      "data-from-hook",
+      "false",
+    );
+    expect(screen.getByTestId("admin-shell-primary-action")).toBeDisabled();
   });
 });

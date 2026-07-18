@@ -5,13 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 
 import { PlannerCatalogClient } from "./catalogClient";
 import type { PlannerCatalogItem } from "./catalogTypes";
-import { PLANNER_DEMO_CATALOG_ITEMS } from "@/features/planner/editor/demoCatalogItems";
+import { filterGuestInventoryCatalogItems } from "./catalogBuyerVisibility";
 import { loadPlannerCatalog, PLANNER_CATALOG_QUERY_KEY } from "./catalogQuery";
 
-// Catalogue-first (BP-06 / design §9-10 / REC-04 / phase-06 / 0419): loader primary via client for descriptors (fallback to API/demo).
-// Resolver blocks wired through catalogClient.loadDescriptorsFromLoader + resolveBlocks.
-// Search parity (cursor, license/animated/staffPicked etc) flows to inventory.
-// GS: BP-06 + design §9 (catalogue-first, resolver), §10. Full Phase 06 integration.
+// Catalogue-first (BP-06 / design §9-10 / REC-04 / phase-06 / 0419): loader primary via client for descriptors.
+// Empty remote → honest empty list (no demo-sofa / OFL pollution — P18/BQ4).
+// Guest list = oando-* brand heroes only (P10).
 
 export type PlannerWorkspaceCatalogStatus =
   | "loading"
@@ -36,14 +35,8 @@ export function usePlannerWorkspaceCatalog() {
   });
   const items = useMemo(() => {
     const remoteItems = query.data?.items ?? [];
-    return remoteItems.length > 0
-      ? [
-          ...remoteItems,
-          ...PLANNER_DEMO_CATALOG_ITEMS.filter(
-            (seed) => !remoteItems.some((item) => item.id === seed.id),
-          ),
-        ]
-      : PLANNER_DEMO_CATALOG_ITEMS;
+    // Never merge PLANNER_DEMO_CATALOG_ITEMS — demo seed is tests/offline only (P18).
+    return filterGuestInventoryCatalogItems(remoteItems);
   }, [query.data?.items]);
   const offline = typeof navigator !== "undefined" && navigator.onLine === false;
   const status: PlannerWorkspaceCatalogStatus = offline
@@ -54,7 +47,7 @@ export function usePlannerWorkspaceCatalog() {
         ? "loading"
         : query.isFetching
           ? "stale"
-          : query.data.source === "fallback"
+          : query.data?.source === "fallback"
             ? "fallback"
             : "ready";
 

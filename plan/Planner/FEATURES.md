@@ -5,9 +5,11 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 | Doc | Role |
 |---|---|
 | This file | Current code map and known gaps |
-| `FINISH-PLAN.md` | Required work and fresh verification status |
+| `CHECKLIST.md` | Open / partial work only |
 | `docs/architecture/06-UI-BENCHMARK.md` | Planner UI acceptance contract |
 | `docs/architecture/08-DATABASE-SVG-CONTRACT.md` | Target database SVG contract |
+
+**Only two plan docs per track:** `CHECKLIST.md` + `FEATURES.md`.
 
 **Code roots:** `site/features/planner/` · `site/app/planner/` · `site/app/api/planner/` · `site/platform/drizzle/schema/planner.ts` · `site/inventory/descriptors/` · `site/public/svg-catalog/`
 
@@ -15,7 +17,7 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 
 **Live host:** `editor/OOPlannerWorkspace.tsx` wires canvas, catalog, export, AI, validation. Document kernel lives at planner root (`model/`, `store/`, `lib/`, `persistence/`, `catalog/`, `shared/`). Parallel trees (`catalog-api/`, `cloud-store/`) still serve APIs, portal, and legacy paths.
 
-**Execution status (mirrors `FINISH-PLAN.md`, 2026-07-17):** P0 PARTIAL · P1 PASS · P2–P9 PARTIAL · P10 PARTIAL (handoff delivery) · P11 PARTIAL (no scene GLB menu claim / no full scene export; modular GLB **storage** when configured) · P12 PARTIAL (bridge-only AI apply) · P13 PARTIAL (conflict dialog) · P14–P15 PARTIAL · P16–P17 OPEN.
+**Execution status (2026-07-18):** brand inventory + dual-write ahead; guest place / BOQ browser / PDF craft OPEN. See `CHECKLIST.md`.
 
 ---
 
@@ -135,4 +137,4 @@ Not a customer phase. Disk still supplies the live SVG bytes. Both Admin publish
 
 ## Reference (not truth)
 
-`FINISH-PLAN.md` · `docs/architecture/06-UI-BENCHMARK.md` · `docs/architecture/08-DATABASE-SVG-CONTRACT.md`
+`CHECKLIST.md` · `docs/architecture/06-UI-BENCHMARK.md` · `docs/architecture/08-DATABASE-SVG-CONTRACT.md`

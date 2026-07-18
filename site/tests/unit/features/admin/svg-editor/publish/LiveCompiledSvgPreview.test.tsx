@@ -11,6 +11,13 @@ describe("LiveCompiledSvgPreview", () => {
     );
   });
 
+  it("empty state does not claim visual studio as sole path", () => {
+    render(<LiveCompiledSvgPreview result={null} pending={false} />);
+    const empty = screen.getByTestId("admin-svg-livepreview-empty");
+    expect(empty).toHaveTextContent(/server compile|blocks or maker/i);
+    expect(empty).not.toHaveTextContent(/Draw a shape in the visual studio/i);
+  });
+
   it("renders successful svg result", () => {
     render(
       <LiveCompiledSvgPreview

@@ -2,12 +2,15 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  PLAN_SVG_DEFAULT_FILL,
+  PLAN_SVG_DEFAULT_STROKE,
   PlannerPipelineError,
   assertViewBoxStable,
   blockToPolygon,
   buildFallbackSvg,
   buildSvgString,
   polygonsToPath,
+  resolvePlanSvgPaint,
   runPipelineCore,
   sanitiseSvg,
   validateSlug,
@@ -61,6 +64,21 @@ describe("pipelineCore (name-mirror)", () => {
     expect(d).toContain("Z");
   });
 
+  it("resolvePlanSvgPaint rejects currentColor/var and defaults to plan greys", () => {
+    const unsafe = resolvePlanSvgPaint({
+      "fill-primary": "currentColor",
+      "stroke-accent": "var(--block-stroke-accent, currentColor)",
+    });
+    expect(unsafe.fill).toBe(PLAN_SVG_DEFAULT_FILL);
+    expect(unsafe.stroke).toBe(PLAN_SVG_DEFAULT_STROKE);
+    const safe = resolvePlanSvgPaint({
+      "fill-primary": "#aabbcc",
+      "stroke-accent": "#112233",
+    });
+    expect(safe.fill).toBe("#aabbcc");
+    expect(safe.stroke).toBe("#112233");
+  });
+
   it("buildSvgString embeds slug title and path", () => {
     const svg = buildSvgString(
       "demo-block",
@@ -77,7 +95,10 @@ describe("pipelineCore (name-mirror)", () => {
     expect(svg).toContain('data-block-variant="union"');
     // currentColor is unsafe for Fabric/img — defaults to plan grey
     expect(svg).not.toMatch(/fill="currentColor"/i);
+    expect(svg).not.toMatch(/stroke=["']currentColor/i);
+    expect(svg).not.toMatch(/stroke=["']var\(/i);
     expect(svg).toMatch(/fill="#[0-9a-f]{6}"/i);
+    expect(svg).toMatch(/stroke="#[0-9a-f]{6}"/i);
   });
 
   it("buildSvgString uses evenodd on difference variants", () => {
@@ -96,7 +117,9 @@ describe("pipelineCore (name-mirror)", () => {
   it("buildFallbackSvg emits cross-hatch geometry missing marker", () => {
     const svg = buildFallbackSvg({ x: 0, y: 0, width: 100, height: 100 });
     expect(svg).toContain("Fallback - geometry missing");
-    expect(svg).toContain('stroke="currentColor"');
+    // Image-safe stroke (Fabric/img cannot resolve currentColor)
+    expect(svg).not.toMatch(/stroke=["']currentColor/i);
+    expect(svg).toMatch(/stroke="#[0-9a-f]{6}"/i);
   });
 
   it("runPipelineCore returns sanitized fallback when blocks are empty", async () => {

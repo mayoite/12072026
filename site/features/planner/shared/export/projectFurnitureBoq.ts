@@ -16,6 +16,7 @@ import {
 import { workstationConfigFromOptions } from "../../catalog/workstationMeshV0";
 import { workstationV0UnitPriceInr, WORKSTATION_V0_GST_RATE } from "../../catalog/workstationBoqV0";
 import { sha256Hex } from "../../catalog/svg/sha256";
+import { resolveCatalogDisplayName } from "../../catalog/catalogLabelUtils";
 
 export const PLANNER_FURNITURE_BOQ_KIND = "open3d-furniture-boq-v1" as const;
 export const PLANNER_FURNITURE_BOQ_GST_RATE = WORKSTATION_V0_GST_RATE;
@@ -106,16 +107,6 @@ function roundMoneyInr(value: number): number {
   return Math.round(value);
 }
 
-function humanizeCatalogId(catalogId: string): string {
-  const trimmed = catalogId.trim();
-  if (!trimmed) return "Furniture";
-  return trimmed
-    .replace(/^ws-v0-/i, "Workstation ")
-    .replace(/[-_]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
 function resolveWorkstationConfig(item: PlannerFurnitureItem): WorkstationConfigV0 | null {
   if (item.workstationOptions) {
     return workstationConfigFromOptions(item.workstationOptions);
@@ -190,10 +181,18 @@ function resolveIdentity(item: PlannerFurnitureItem): {
         ? "workstation"
         : "furniture";
 
+  const sku = item.sourceSku?.trim() ?? "";
+  // Brand series label from slug/SKU (oando-* / OANDO-*), never raw slug-only.
+  const name = resolveCatalogDisplayName({
+    slug: item.sourceSlug,
+    sku: sku || undefined,
+    catalogId,
+  });
+
   return {
     catalogId,
-    name: humanizeCatalogId(item.sourceSlug || catalogId),
-    sku: item.sourceSku ?? "",
+    name,
+    sku,
     category,
     geometryMode,
     unitPriceInr: 0,

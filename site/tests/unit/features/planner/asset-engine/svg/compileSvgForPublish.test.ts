@@ -100,11 +100,13 @@ describe("compileSvgForPublish", () => {
   });
 
   it("compiles admin descriptor without disk I/O", async () => {
+    // Fixture-only: brand seed no longer keeps OFL side-table in inventory/.
     const adminPath = path.join(
       siteRoot,
-      "inventory",
-      "descriptors",
-      "side-table-001.json",
+      "scripts",
+      "generate-svg",
+      "_fixtures",
+      "side-table.json",
     );
     const raw = JSON.parse(readFileSync(adminPath, "utf8")) as unknown;
     const result = await compileSvgForPublish(raw);
@@ -159,12 +161,12 @@ describe("compileSvgForPublish", () => {
     }
   });
 
-  it("committed desk-linear-1600-001.svg has no negative-Y line-to patterns", () => {
+  it("committed oando-fluid-desk-1600.svg has no negative-Y line-to patterns", () => {
     const svgPath = path.join(
       siteRoot,
       "public",
       "svg-catalog",
-      "desk-linear-1600-001.svg",
+      "oando-fluid-desk-1600.svg",
     );
     expect(existsSync(svgPath)).toBe(true);
     const svg = readFileSync(svgPath, "utf8");

@@ -4,6 +4,7 @@ export * from "./catalogSearch";
 export * from "./catalogFamilyBrowse";
 export * from "./proofCatalog";
 export * from "./catalogBuyerVisibility";
+export * from "./matchCatalogItemBySiteProduct";
 export * from "./placementAction";
 export * from "./workstationSystemV0";
 export * from "./workstationMeshV0";

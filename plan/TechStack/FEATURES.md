@@ -5,15 +5,16 @@ Repo-sourced index: **stack surface → code path → honest gap**. Live code, l
 | Doc | Role |
 |---|---|
 | This file | Current stack map and known gaps |
-| `FINISH-PLAN.md` | Phase checklist T0–T8 + TF registry |
-| `COMPLETION-CONTRACT.md` | How to prove done (wins on evidence) |
+| `CHECKLIST.md` | Open / partial work only |
 | `docs/Lockedfiles/03-dependencies-engines-current.md` | Architectural limits (not PASS proof) |
 | `docs/architecture/11-RUNTIME-ARCHITECTURE.md` | Runtime shape |
 | `docs/architecture/08-DATABASE-SVG-CONTRACT.md` | DB/R2 SVG **target** (disk is live) |
 
+**Only two plan docs per track:** `CHECKLIST.md` + `FEATURES.md`.
+
 **Code roots:** root `package.json` · `pnpm-workspace.yaml` · `scripts/` · `site/package.json` · `site/lib/env.server.ts` · `site/app/api/health/` · `tech-docs-generator/` · `.github/workflows/`
 
-**Stack status (2026-07-17):** **OPEN / PARTIAL**. Plan trio present. Full `release:gate` not claimed. DB-SVG authority remains disk.
+**Stack status (2026-07-18):** dual-write 22/22 owner env; disk authority; cutover OPEN. Full `release:gate` not claimed. See `CHECKLIST.md`.
 
 ---
 
@@ -111,7 +112,7 @@ Repo-sourced index: **stack surface → code path → honest gap**. Live code, l
 
 | Feature | Code | Gap |
 |---|---|---|
-| Plan trio | `plan/TechStack/{COMPLETION-CONTRACT,FEATURES,FINISH-PLAN}.md` | Present; checkboxes OPEN |
+| Plan duo | `plan/TechStack/{CHECKLIST,FEATURES}.md` | Present; see CHECKLIST |
 | Plans purity allows TechStack | `scripts/check-plans-purity.mjs` | Required trio enforced |
 | Docs budget / purity | `check:docs-purity`, `check:active-docs` | Continuous |
 | Agent reports | `agent-reports/TECH-STACK.md` | Track status only; not PASS proof |
@@ -153,4 +154,4 @@ Never commit values. Load from repo-root `.env.local` (see `.env.example`).
 
 ## Reference (not truth alone)
 
-`COMPLETION-CONTRACT.md` · `FINISH-PLAN.md` · `docs/Lockedfiles/03-dependencies-engines-current.md` · `Failures.md` · lockfiles
+`CHECKLIST.md` · `docs/Lockedfiles/03-dependencies-engines-current.md` · `Failures.md` · lockfiles

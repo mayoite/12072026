@@ -5,15 +5,16 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 | Doc | Role |
 |---|---|
 | This file | Current code map and known gaps |
-| `FINISH-PLAN.md` | Required work and fresh verification status (S0–S7) |
-| `COMPLETION-CONTRACT.md` | How to prove done (wins on evidence; SF registry + browser matrix) |
+| `CHECKLIST.md` | Open / partial work only |
 | `docs/architecture/09-SITE-UI-BENCHMARK.md` | UI / journey benchmark (not PASS proof) |
+
+**Only two plan docs per track:** `CHECKLIST.md` + `FEATURES.md`.
 
 **Code roots:** `site/app/(site)/` · `site/app/sitemap.ts` · `site/app/robots.ts` · `site/components/` · `site/features/site/` · `site/lib/analytics/` · `site/lib/catalog/site/` · `site/i18n/`
 
 Table paths are relative to `site/` unless noted. `app/...` means `site/app/...`.
 
-**Execution status (mirrors `FINISH-PLAN.md`, 2026-07-17):** S0 OPEN · S1–S6 PARTIAL (code/unit only) · S7 OPEN. No browser release claim.
+**Execution status (2026-07-18):** CTA/PDP entry DONE; siteProduct join + PDP plan thumb PARTIAL (unit); browser OPEN. See `CHECKLIST.md`.
 
 ---
 
@@ -139,4 +140,4 @@ E2E: `tests/e2e/site-a11y-smoke.spec.ts` · `site-navigation-smoke.spec.ts` · `
 
 ## Reference (not truth)
 
-`FINISH-PLAN.md` · `COMPLETION-CONTRACT.md` · `docs/architecture/09-SITE-UI-BENCHMARK.md` · `agent-reports/SITE.md` (status hints only)
+`CHECKLIST.md` · `docs/architecture/09-SITE-UI-BENCHMARK.md` · `agent-reports/SITE.md` (status hints only)

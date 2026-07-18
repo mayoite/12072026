@@ -99,6 +99,7 @@ import {
   furnitureBoqToPdfRows,
   furnitureBoqToQuoteCartItems,
 } from "@/features/planner/shared/export/furnitureBoqBridge";
+import { formatBoqLineDisplayName } from "@/features/planner/catalog/catalogLabelUtils";
 import { exportBoqOnly } from "@/features/planner/shared/export/brandedPdfExport";
 import { summarizeWorkstationBoqV0 } from "@/features/planner/catalog/workstationBoqV0";
 import { useQuoteCart } from "@/lib/store/quoteCart";
@@ -2077,7 +2078,8 @@ export function OOPlannerWorkspace({
   const reviewBoqPreview = useMemo(() => {
     const summary = buildPlannerFurnitureBoq(workspaceCanvas.project);
     const boqLines: ReviewBoqLinePreview[] = summary.lines.map((line) => ({
-      name: line.name,
+      // Brand series name + commercial SKU when present (B11).
+      name: formatBoqLineDisplayName(line.name, line.sku),
       quantity: line.quantity,
       unitNote: line.priced ? "demo list" : "unpriced",
     }));

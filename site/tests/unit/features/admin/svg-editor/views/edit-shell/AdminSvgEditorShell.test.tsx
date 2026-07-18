@@ -129,6 +129,8 @@ describe("AdminSvgEditorShell", () => {
     expect(screen.getByTestId("admin-svg-engine-stage")).toBeInTheDocument();
     expect(screen.getByTestId("mock-excalidraw-canvas")).toBeInTheDocument();
     expect(screen.getByLabelText("Draft and released previews")).toBeInTheDocument();
+    expect(screen.getByText("Publish preview")).toBeInTheDocument();
+    expect(screen.getByTestId("admin-svg-studio-sketch")).toBeInTheDocument();
     expect(
       screen.getByLabelText("Product details and history"),
     ).toBeInTheDocument();

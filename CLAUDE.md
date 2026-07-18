@@ -104,7 +104,7 @@ Site marketing uses `next-intl` (locales `en`, `hi`, `fr`, `de`, `es`; `localePr
 
 ## Key pointers
 
-- Current execution: `plan/README.md` and `plan/Planner/CHECKLIST.md`.
+- Current execution: `plan/README.md` and each track’s `CHECKLIST.md` + `FEATURES.md`.
 - Architecture & data facts: `docs/INDEX.md`, `docs/site/ARCHITECTURE.md` ("where do I edit?" decision tree).
 - Active blockers & release gate policy: `Failures.md`.
 - Agent process & quality bar: `Agents/INDEX.md`, `Agents/Agents-01-STANDARD.md`.

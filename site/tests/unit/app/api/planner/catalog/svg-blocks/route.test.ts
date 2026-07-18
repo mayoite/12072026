@@ -63,12 +63,19 @@ describe("app/api/planner/catalog/svg-blocks/route.ts", () => {
     expect(body.total).toBe(0);
   });
 
-  it("returns mapped svg-block catalog items", async () => {
+  it("returns mapped brand-hero svg-block catalog items", async () => {
     vi.mocked(loadBuyerVisibleDescriptorsWithDb).mockResolvedValue([
-      { slug: "desk-a" },
+      { slug: "oando-fluid-desk-1600" },
     ] as never);
     vi.mocked(mapDescriptorsToCatalogItems).mockReturnValue([
-      { id: "desk-a", name: "Desk A" },
+      {
+        id: "oando-fluid-desk-1600",
+        slug: "oando-fluid-desk-1600",
+        sku: "OANDO-FLUID-DSK-1600",
+        name: "Fluid Desk 1600",
+        tags: [],
+        provenance: { source: "descriptor-loader" },
+      },
     ] as never);
 
     const res = await GET(
@@ -77,9 +84,44 @@ describe("app/api/planner/catalog/svg-blocks/route.ts", () => {
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.success).toBe(true);
-    expect(body.items).toEqual([{ id: "desk-a", name: "Desk A" }]);
+    expect(body.items).toHaveLength(1);
+    expect(body.items[0].id).toBe("oando-fluid-desk-1600");
     expect(body.source).toBe("svg-blocks");
     expect(body.total).toBe(1);
+  });
+
+  it("drops non-brand demo/OFL pollution from guest inventory (P10/BQ4)", async () => {
+    vi.mocked(loadBuyerVisibleDescriptorsWithDb).mockResolvedValue([
+      { slug: "sample-sofa-1" },
+      { slug: "oando-fluid-desk-1600" },
+    ] as never);
+    vi.mocked(mapDescriptorsToCatalogItems).mockReturnValue([
+      {
+        id: "sample-sofa-1",
+        slug: "sample-sofa-1",
+        sku: "SOFA-001",
+        name: "Modern 3-Seater Sofa",
+        tags: ["sofa"],
+        roomTags: ["Living Room"],
+        provenance: { source: "sample_data" },
+      },
+      {
+        id: "oando-fluid-desk-1600",
+        slug: "oando-fluid-desk-1600",
+        sku: "OANDO-FLUID-DSK-1600",
+        name: "Fluid Desk 1600",
+        tags: ["desk"],
+        provenance: { source: "descriptor-loader" },
+      },
+    ] as never);
+
+    const res = await GET(
+      new NextRequest("http://localhost/api/planner/catalog/svg-blocks"),
+    );
+    const body = await res.json();
+    expect(body.items.map((i: { id: string }) => i.id)).toEqual([
+      "oando-fluid-desk-1600",
+    ]);
   });
 
   it("does not expose internal SVG fixtures through the public catalog", async () => {
@@ -176,16 +218,22 @@ describe("app/api/planner/catalog/svg-blocks/route.ts", () => {
   it("SVG_RELEASE_AUTHORITY=db: immutable revision API URLs remain buyer-visible", async () => {
     process.env.SVG_RELEASE_AUTHORITY = "db";
     vi.mocked(loadBuyerVisibleDescriptorsWithDb).mockResolvedValue([
-      { slug: "db-block", publishedSvgRevisionId: "db-block-r-abc123def4567890" },
+      {
+        slug: "oando-fluid-desk-1600",
+        publishedSvgRevisionId: "oando-fluid-desk-1600-r-abc123def4567890",
+      },
     ] as never);
     vi.mocked(mapDescriptorsToCatalogItems).mockReturnValue([
       {
-        id: "db-block",
-        slug: "db-block",
-        name: "DB Block",
+        id: "oando-fluid-desk-1600",
+        slug: "oando-fluid-desk-1600",
+        sku: "OANDO-FLUID-DSK-1600",
+        name: "Fluid Desk 1600",
+        tags: [],
+        provenance: { source: "descriptor-loader" },
         assets: {
           previewImageUrl:
-            "/api/planner/catalog/svg/db-block-r-abc123def4567890",
+            "/api/planner/catalog/svg/oando-fluid-desk-1600-r-abc123def4567890",
         },
       },
     ] as never);
@@ -197,7 +245,7 @@ describe("app/api/planner/catalog/svg-blocks/route.ts", () => {
 
     expect(body.success).toBe(true);
     expect(body.items).toHaveLength(1);
-    expect(body.items[0].slug).toBe("db-block");
+    expect(body.items[0].slug).toBe("oando-fluid-desk-1600");
     expect(body.source).toBe("svg-blocks");
     expect(readSvgArtifactStatus).not.toHaveBeenCalled();
   });

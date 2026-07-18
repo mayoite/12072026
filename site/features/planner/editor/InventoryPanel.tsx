@@ -48,9 +48,11 @@ import type {
 } from "@/features/planner/catalog/catalogTypes";
 import {
   filterBuyerFacingCatalogItems,
+  filterGuestInventoryCatalogItems,
   formatCatalogFootprint,
   prioritizeOfficeSystemsBrowse,
 } from "@/features/planner/catalog/catalogBuyerVisibility";
+import { matchCatalogItemBySiteProduct } from "@/features/planner/catalog/matchCatalogItemBySiteProduct";
 import {
   PLANNER_CATALOG_COMPARE_MAX,
   buildCatalogCompareTable,
@@ -67,7 +69,7 @@ import {
 } from "@/features/planner/catalog/catalogFamilyBrowse";
 import type { PlannerDisplayUnit } from "@/features/planner/model/types";
 import type { WorkstationConfigV0 } from "@/features/planner/catalog/workstationSystemV0";
-import { PLANNER_DEMO_CATALOG_ITEMS } from "./demoCatalogItems";
+
 import { isSvgAssetUrl } from "@/features/planner/catalog/svg/svgPreviewAssets";
 import { usePlannerSvgCatalog } from "@/features/planner/catalog/usePlannerWorkspaceCatalog";
 import { WorkstationConfiguratorPanel } from "./WorkstationConfiguratorPanel";
@@ -116,6 +118,12 @@ export interface InventoryPanelProps {
   officeSystemsInventory?: boolean;
   /** Workspace display unit for footprint labels (document stays mm). */
   displayUnit?: PlannerDisplayUnit;
+  /**
+   * Site continuity: `siteProduct` query (or explicit override).
+   * When set and a matching catalog item exists, select + focus that card once.
+   * Does not auto-place.
+   */
+  focusProductSlug?: string | null;
 }
 
 export const InventoryPanel = memo(function InventoryPanel({
@@ -130,9 +138,11 @@ export const InventoryPanel = memo(function InventoryPanel({
   catalogStatus = "ready",
   officeSystemsInventory = true,
   displayUnit = "mm",
+  focusProductSlug = null,
 }: InventoryPanelProps) {
   const id = useId();
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const siteProductFocusAppliedRef = useRef<string | null>(null);
   const hasExternalCatalog = catalogItems !== undefined;
   const productMode = officeSystemsInventory ? "office-systems" : "full";
   const roomGroups = useMemo(
@@ -164,18 +174,20 @@ export const InventoryPanel = memo(function InventoryPanel({
   const [moreFiltersExpanded, setMoreFiltersExpanded] = useState(false);
 
   const indexedItems = useMemo(() => {
-    const raw: PlannerCatalogItem[] = (() => {
-      if (hasExternalCatalog) {
-        const external = catalogItems ?? [];
-        return external.length > 0 ? external : PLANNER_DEMO_CATALOG_ITEMS;
-      }
-      return svgCatalog.items.length > 0
-        ? svgCatalog.items
-        : PLANNER_DEMO_CATALOG_ITEMS;
-    })();
-    // P-UI-1: never show proof / missing-geom fallback SKUs in buyer inventory.
-    return filterBuyerFacingCatalogItems(raw);
-  }, [hasExternalCatalog, catalogItems, svgCatalog.items]);
+    // Honest empty when remote is empty — never inject demo-sofa / OFL pollution (BQ4/P18).
+    const raw: PlannerCatalogItem[] = hasExternalCatalog
+      ? (catalogItems ?? [])
+      : svgCatalog.items;
+    // Office-systems / guest: brand heroes only (P10). Full mode: buyer-facing only.
+    return officeSystemsInventory
+      ? filterGuestInventoryCatalogItems(raw)
+      : filterBuyerFacingCatalogItems(raw);
+  }, [
+    hasExternalCatalog,
+    catalogItems,
+    svgCatalog.items,
+    officeSystemsInventory,
+  ]);
 
   const effectiveStatus = hasExternalCatalog ? catalogStatus : svgCatalog.status;
   const effectiveLoading = hasExternalCatalog
@@ -192,6 +204,53 @@ export const InventoryPanel = memo(function InventoryPanel({
   const dispatch = useCallback((command: InventoryCommand) => {
     setState((current) => reduceInventoryCommand(current, command));
   }, []);
+
+  // P11 / S7: siteProduct → select/focus matching brand plan item when present.
+  useEffect(() => {
+    const slug =
+      typeof focusProductSlug === "string" ? focusProductSlug.trim() : "";
+    if (!slug) return;
+    if (indexedItems.length === 0) return;
+    if (siteProductFocusAppliedRef.current === slug) return;
+
+    const match = matchCatalogItemBySiteProduct(indexedItems, slug);
+    siteProductFocusAppliedRef.current = slug;
+    if (!match) return;
+
+    setSelectedItemId(match.item.id);
+    setFocusedIndex(0);
+    dispatch({
+      type: "SET_SEARCH_QUERY",
+      query: match.item.slug || match.item.name,
+    });
+    dispatch({
+      type: "SET_FOCUSED_ITEM",
+      item: { itemId: match.item.id, variantId: null },
+    });
+    dispatch({
+      type: "SET_SCROLL_ANCHOR",
+      item: { itemId: match.item.id, variantId: null },
+    });
+    onItemSelect?.(match.item, null);
+
+    // Scroll after paint so the card is in the DOM under the search filter.
+    const itemId = match.item.id;
+    const frame = window.requestAnimationFrame(() => {
+      const safeId =
+        typeof CSS !== "undefined" && typeof CSS.escape === "function"
+          ? CSS.escape(itemId)
+          : itemId.replace(/["\\]/g, "");
+      const node = document.querySelector(`[data-catalog-item="${safeId}"]`);
+      if (node instanceof HTMLElement) {
+        node.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        const card = node.querySelector("article");
+        if (card instanceof HTMLElement) {
+          card.focus({ preventScroll: true });
+        }
+      }
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [dispatch, focusProductSlug, indexedItems, onItemSelect]);
 
   // Handle search input change
   const handleSearchValueChange = useCallback(
@@ -1153,6 +1212,11 @@ export const InventoryPanel = memo(function InventoryPanel({
                             tabIndex={focusedIndex === index ? 0 : -1}
                             data-selected={
                               selectedItemId === item.id ? "true" : "false"
+                            }
+                            data-site-product-focus={
+                              selectedItemId === item.id && focusProductSlug
+                                ? "true"
+                                : undefined
                             }
                             data-catalog-name={listMeta.name}
                             data-family={listMeta.family}

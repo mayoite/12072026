@@ -206,6 +206,36 @@ describe("publishDescriptorWithPipeline (fail-closed)", () => {
     expect(result.error).toContain("backup cleanup denied");
   });
 
+  it("returns quality_gate failure and skips pipeline+persist when SVG has currentColor fill", async () => {
+    const compileSvg = vi.fn(async (): Promise<SvgCompileStagesResult> => ({
+      ok: true,
+      stages: ["svg-s1-normalize", "svg-s2-compile", "svg-s3-sanitize-optimize"],
+      normalized: {
+        slug: "test-block",
+        variant: "union",
+        viewBox: { x: 0, y: 0, width: 100, height: 100 },
+        blocks: [{ x: 0, y: 0, width: 100, height: 100, id: "body" }],
+      },
+      svg: '<svg xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M0 0h1v1H0z"/></svg>',
+    }));
+    const runPipeline = vi.fn(async () => pipelineOk());
+    const persist = vi.fn(() => persistOk());
+
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg,
+      runPipeline,
+      persist,
+    });
+
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error).toMatch(/^quality_gate:/);
+    expect(result.error).toMatch(/image-unsafe paint/);
+    expect(runPipeline).not.toHaveBeenCalled();
+    expect(persist).not.toHaveBeenCalled();
+  });
+
   it("returns success:false and skips pipeline+persist when compileSvg !ok", async () => {
     const compileSvg = vi.fn(async () => compileErr("empty blocks"));
     const runPipeline = vi.fn(async () => pipelineOk());

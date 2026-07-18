@@ -38,6 +38,28 @@ describe("catalog/svg/descriptorCatalogBridge.server.ts", () => {
     expect(item.symbolOnly).toBe(false);
   });
 
+  it("maps oando brand slug + OANDO SKU to human series inventory name (B4)", () => {
+    const item = mod.mapDescriptorToCatalogItem({
+      id: "a81e3a1b-16f4-4000-8000-000000000002",
+      slug: "oando-fluid-desk-1600",
+      sku: "OANDO-FLUID-DSK-1600",
+      geometry: { widthMm: 1600, depthMm: 800, heightMm: 750 },
+    });
+    expect(item.name).toBe("Fluid Desk 1600");
+    expect(item.sku).toBe("OANDO-FLUID-DSK-1600");
+    expect(item.shortName).toBe("Fluid Desk 1600");
+    expect(item.description).toContain("Fluid Desk 1600");
+
+    const fromSkuOnly = mod.mapDescriptorToCatalogItem({
+      id: "sku-only",
+      slug: "OANDO-OMNIA-DSK-1800",
+      sku: "OANDO-OMNIA-DSK-1800",
+      geometry: { widthMm: 1800, depthMm: 900, heightMm: 750 },
+    });
+    // Slug path still humanizes commercial SKU-shaped identifiers.
+    expect(fromSkuOnly.name).toBe("Omnia Desk 1800");
+  });
+
   it("infers seating and storage taxonomy from slug", () => {
     expect(mod.inferCatalogTaxonomyFromSlug("task-chair-650-001").subCategory).toMatch(
       /Chair/i,

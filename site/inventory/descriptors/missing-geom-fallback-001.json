@@ -30,14 +30,15 @@
   ],
   "themeTokens": {
     "currentColor": "currentColor",
-    "--fill-primary": "var(--color-surface-raised)"
+    "--fill-primary": "var(--color-surface-raised)",
+    "--stroke-accent": "var(--color-border)"
   },
   "rovingFocus": [],
   "liveAnnouncementCategories": [
     "status"
   ],
   "generatedAt": 1752000099,
-  "checksum": "4dfcaeca2028bb3d7a7050048c0a687efac485d4e344bac7994a4bbf43af04a5",
+  "checksum": "7b5fe970461f97ffec6cbdf4801227d70dc13b37699e230552f5f699dc87bc19",
   "variant": "fixed",
   "fixed": {
     "sizingType": "fixed"

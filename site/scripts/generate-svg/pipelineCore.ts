@@ -451,11 +451,12 @@ export interface PipelineDescriptor {
 export function buildFallbackSvg(viewBox: ViewBox): string {
   const vb = `0 0 ${viewBox.width} ${viewBox.height}`;
   const FALLBACK_D_PATH = "M 10 10 L 90 90 M 90 10 L 10 90 M 50 10 L 50 90 M 10 50 L 90 50";
+  // Image-safe stroke: Fabric/img cannot resolve currentColor/var.
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}">`,
     `<title>Fallback - geometry missing</title>`,
     `<desc>Block geometry not provided; cross-hatched fallback rendered.</desc>`,
-    `<path d="${FALLBACK_D_PATH}" fill="none" stroke="currentColor" stroke-width="2"/>`,
+    `<path d="${FALLBACK_D_PATH}" fill="none" stroke="${PLAN_SVG_DEFAULT_STROKE}" stroke-width="2"/>`,
     `</svg>`,
   ].join("");
 }

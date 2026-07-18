@@ -347,6 +347,8 @@ export const BlockDescriptorMakerSchema = z.discriminatedUnion("recipe", [
     widthMm: z.number().finite().positive(),
     depthMm: z.number().finite().positive(),
     topThicknessMm: z.number().finite().positive().optional(),
+    pedestalWidthMm: z.number().finite().positive().optional(),
+    pedestals: z.boolean().optional(),
   }),
   z.object({
     recipe: z.literal("l-desk"),

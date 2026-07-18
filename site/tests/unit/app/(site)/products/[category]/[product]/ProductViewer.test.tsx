@@ -184,6 +184,34 @@ describe('ProductViewer Component', () => {
     expect(screen.getByTestId('mock-gallery')).toBeInTheDocument();
     expect(screen.getByTestId('mock-reviews')).toBeInTheDocument();
     expect(screen.getByTestId('mock-compare-dock')).toBeInTheDocument();
+    expect(screen.queryByTestId('pdp-plan-svg-thumb')).toBeNull();
+  });
+
+  it('shows plan SVG thumb when published plan artifact URL is provided', async () => {
+    render(
+      <ProductViewer
+        product={dummyProduct}
+        categoryRoute="/products/seating"
+        categoryName="Seating"
+        productRoute="/products/seating/super-chair"
+        planSvgThumbUrl="/svg-catalog/oando-breeze-task-chair.svg"
+      />,
+    );
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith('/model-red.glb', { method: 'HEAD' });
+    });
+    await act(async () => {});
+
+    const thumb = screen.getByTestId('pdp-plan-svg-thumb');
+    expect(thumb).toHaveAttribute(
+      'data-plan-svg-url',
+      '/svg-catalog/oando-breeze-task-chair.svg',
+    );
+    expect(screen.getByText('Plan symbol')).toBeInTheDocument();
+    expect(screen.getByAltText('Plan symbol for Super Chair')).toHaveAttribute(
+      'src',
+      expect.stringContaining('oando-breeze-task-chair.svg'),
+    );
   });
 
   it('handles add to quote', async () => {

@@ -2,7 +2,7 @@ import "server-only";
 
 import {
   catalogSlugSearchTags,
-  humanizeCatalogSlug,
+  resolveCatalogDisplayName,
 } from "../catalogLabelUtils";
 import type { PlannerCatalogItem } from "../catalogTypes";
 import { buildShortName } from "../catalogTaxonomy";
@@ -131,10 +131,11 @@ export function mapDescriptorToCatalogItem(
       : buildSvgCatalogPublicUrl(slug);
   const preferredName = "name" in descriptor ? descriptor.name : undefined;
   const descriptorTags = "tags" in descriptor ? descriptor.tags : undefined;
-  const displayName =
-    typeof preferredName === "string" && preferredName.trim() !== ""
-      ? preferredName.trim()
-      : humanizeCatalogSlug(slug);
+  const displayName = resolveCatalogDisplayName({
+    name: preferredName,
+    slug,
+    sku: descriptor.sku,
+  });
   const shortName = buildShortName(displayName);
   const slugTags = catalogSlugSearchTags(slug);
   const taxonomy = inferCatalogTaxonomyFromSlug(slug);

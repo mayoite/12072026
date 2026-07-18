@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
 import {
   filterBuyerFacingCatalogItems,
+  filterGuestInventoryCatalogItems,
   formatCatalogFootprintCm,
+  isBrandHeroCatalogItem,
+  isGuestInventoryPollution,
   isInternalCatalogItem,
   prioritizeOfficeSystemsBrowse,
 } from "@/features/planner/catalog/catalogBuyerVisibility";
@@ -105,6 +108,104 @@ describe("filterBuyerFacingCatalogItems", () => {
     for (const item of filtered) {
       expect(isInternalCatalogItem(item)).toBe(false);
     }
+  });
+});
+
+describe("brand heroes + guest inventory (P10 / BQ4 / P18)", () => {
+  it("recognizes oando-* brand heroes by id, slug, or sku", () => {
+    expect(
+      isBrandHeroCatalogItem(
+        minimalItem({ id: "oando-fluid-desk-1600", name: "Fluid Desk" }),
+      ),
+    ).toBe(true);
+    expect(
+      isBrandHeroCatalogItem(
+        minimalItem({
+          id: "legacy-id",
+          name: "Fluid",
+          slug: "oando-fluid-desk-1600",
+        }),
+      ),
+    ).toBe(true);
+    expect(
+      isBrandHeroCatalogItem(
+        minimalItem({
+          id: "x",
+          name: "Fluid",
+          sku: "OANDO-FLUID-DSK-1600",
+        }),
+      ),
+    ).toBe(true);
+    expect(
+      isBrandHeroCatalogItem(
+        minimalItem({ id: "sample-sofa-1", name: "Modern 3-Seater Sofa" }),
+      ),
+    ).toBe(false);
+  });
+
+  it("flags demo-sofa, sample, OFL, and residential pollution", () => {
+    expect(
+      isGuestInventoryPollution(
+        minimalItem({
+          id: "sample-sofa-1",
+          name: "Modern 3-Seater Sofa",
+          roomTags: ["Living Room"],
+        }),
+      ),
+    ).toBe(true);
+    expect(
+      isGuestInventoryPollution(
+        minimalItem({
+          id: "desk-linear-1200",
+          name: "Linear Desk",
+          sku: "OFL-DSK-001",
+        }),
+      ),
+    ).toBe(true);
+    expect(
+      isGuestInventoryPollution(
+        minimalItem({
+          id: "oando-fluid-desk-1600",
+          name: "Fluid Desk 1600",
+          sku: "OANDO-FLUID-DSK-1600",
+        }),
+      ),
+    ).toBe(false);
+  });
+
+  it("guest filter keeps only brand heroes — drops demo catalog pollution", () => {
+    const heroes = [
+      minimalItem({
+        id: "oando-fluid-desk-1600",
+        name: "Fluid Desk 1600",
+        sku: "OANDO-FLUID-DSK-1600",
+      }),
+      minimalItem({
+        id: "oando-breeze-task-chair",
+        name: "Breeze Task Chair",
+        sku: "OANDO-BREEZE-CHR-TSK",
+      }),
+    ];
+    const mixed = [
+      ...heroes,
+      ...PLANNER_DEMO_CATALOG_ITEMS,
+      minimalItem({
+        id: "ofl-desk-1",
+        name: "OFL Desk",
+        sku: "OFL-DSK-001",
+      }),
+    ];
+    const filtered = filterGuestInventoryCatalogItems(mixed);
+    expect(filtered.map((i) => i.id).sort()).toEqual(
+      heroes.map((i) => i.id).sort(),
+    );
+    expect(filtered.some((i) => i.id === "sample-sofa-1")).toBe(false);
+    expect(filtered.some((i) => /^ofl/i.test(i.sku ?? ""))).toBe(false);
+  });
+
+  it("guest filter returns empty honest list when no brand heroes", () => {
+    const filtered = filterGuestInventoryCatalogItems(PLANNER_DEMO_CATALOG_ITEMS);
+    expect(filtered).toEqual([]);
   });
 });
 

@@ -18,6 +18,7 @@ import type {
 } from "./projectFurnitureBoq";
 import type { BoqSummary } from "../boq/types";
 import type { PlannerHandoffBoq } from "../handoff/handoffTypes";
+import { formatBoqLineDisplayName } from "@/features/planner/catalog/catalogLabelUtils";
 
 export type FurnitureQuoteCartItem = {
   id: string;
@@ -41,7 +42,7 @@ export function furnitureBoqToQuoteCartItems(
 ): FurnitureQuoteCartItem[] {
   return summary.lines.map((line) => ({
     id: `planner-boq:${line.catalogId}|${line.sku}|${line.widthMm}x${line.depthMm}x${line.heightMm}|${line.geometryMode}`,
-    name: line.name,
+    name: formatBoqLineDisplayName(line.name, line.sku),
     sku: line.sku,
     qty: line.quantity,
     unitPriceInr: line.unitPriceInr,
@@ -58,6 +59,7 @@ export function furnitureBoqToPdfRows(
 ): PdfBoqRow[] {
   return summary.lines.map((line) => ({
     sku: line.sku || line.catalogId,
+    // PDF table also prints SKU column; name stays brand display only.
     name: line.name,
     category: line.category,
     quantity: line.quantity,

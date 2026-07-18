@@ -12,7 +12,7 @@ import {
 import { normalizeDescriptorForPipeline } from "@/features/planner/asset-engine/svg/normalizeDescriptorForPipeline";
 
 describe("makerJsRecipes", () => {
-  it("builds linear desk with top + body rects", () => {
+  it("builds linear desk with top + pedestals viewBox", () => {
     const { viewBox } = buildLinearDeskMakerModel({
       recipe: "linear-desk",
       widthMm: 1200,
@@ -51,8 +51,9 @@ describe("makerJsRecipes", () => {
     });
     expect(parts.length).toBeGreaterThanOrEqual(3);
     expect(parts.map((part) => part.id)).toEqual(
-      expect.arrayContaining(["desk-top", "desk-body", "desk-knee-space"]),
+      expect.arrayContaining(["desk-top", "pedestal-l", "pedestal-r"]),
     );
+    expect(parts.map((part) => part.id)).not.toContain("desk-knee-space");
   });
 });
 
@@ -96,7 +97,8 @@ describe("maker + pipelineCore publish", () => {
     expect(result.svg).toContain('viewBox="0 0 1200 600"');
     expect(result.svg).toContain('class="desk-linear-1200"');
     expect(result.svg).toContain('id="desk-top"');
-    expect(result.svg).toContain('id="desk-body"');
-    expect(result.svg).toContain('id="desk-knee-space"');
+    expect(result.svg).toContain('id="pedestal-l"');
+    expect(result.svg).toContain('id="pedestal-r"');
+    expect(result.svg).not.toContain('id="desk-knee-space"');
   });
 });

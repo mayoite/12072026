@@ -26,8 +26,9 @@
 
 ## Layout
 
-- Current execution lives in `plan/Planner/FINISH-PLAN.md`.
-- Verified code maps live in `plan/Admin/FEATURES.md`, `plan/Planner/FEATURES.md`, and `plan/Site/FEATURES.md`.
+- Current execution: each track’s `plan/<Track>/CHECKLIST.md` (open work only).
+- Code maps: each track’s `plan/<Track>/FEATURES.md` (Admin, Planner, Site, TechStack).
+- Two docs per track only — CHECKLIST + FEATURES (no FINISH-PLAN / COMPLETION-CONTRACT / OUTSTANDING).
 - No work is deferred to a later decision bucket.
 - Product and architecture facts live in `docs/`.
 - Agent process lives in `Agents/`.

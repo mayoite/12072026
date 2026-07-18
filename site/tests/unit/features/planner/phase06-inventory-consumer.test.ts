@@ -12,7 +12,7 @@ import { loadPlannerCatalog } from "@/features/planner/catalog/catalogQuery";
 import type { PlannerCatalogItem } from "@/features/planner/catalog/catalogTypes";
 import { clearLoaderCache } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import { loadBuyerVisibleDescriptors } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
-import { filterBuyerFacingCatalogItems } from "@/features/planner/catalog/catalogBuyerVisibility";
+import { filterGuestInventoryCatalogItems } from "@/features/planner/catalog/catalogBuyerVisibility";
 import { mapDescriptorsToCatalogItems } from "@/features/planner/catalog/svg/descriptorCatalogBridge.server";
 import { GET as getSvgBlocks } from "@/app/api/planner/catalog/svg-blocks/route";
 
@@ -199,7 +199,7 @@ describe("Phase 06 — 06-TEST-01 corrupt / absent / present fallback", () => {
     expect(client.getById("present-1")?.slug).toBe("present-1");
   });
 
-  it("absent: empty svg-blocks and API fall back to demo catalog", async () => {
+  it("absent: empty svg-blocks and API stay empty (no demo pollution, P18)", async () => {
     vi.stubGlobal(
       "fetch",
       vi
@@ -212,7 +212,8 @@ describe("Phase 06 — 06-TEST-01 corrupt / absent / present fallback", () => {
     const result = await loadPlannerCatalog(client);
 
     expect(result.source).toBe("fallback");
-    expect(result.items.length).toBeGreaterThan(0);
+    expect(result.items).toEqual([]);
+    expect(result.items.some((i) => i.id === "sample-sofa-1")).toBe(false);
   });
 
   it("corrupt: malformed svg-blocks entries are filtered without throwing", async () => {
@@ -248,12 +249,14 @@ describe("Phase 06 — portal → planner sync evidence", () => {
     const apiSlugs = (body.data?.items ?? body.items ?? [])
       .map((item) => item.slug)
       .sort();
-    const loaderSlugs = filterBuyerFacingCatalogItems(
+    // API applies guest brand-hero filter (P10); mirror that on disk loader view.
+    const loaderSlugs = filterGuestInventoryCatalogItems(
       mapDescriptorsToCatalogItems(loadBuyerVisibleDescriptors()),
     )
       .map((item) => item.slug)
       .sort();
 
     expect(apiSlugs).toEqual(loaderSlugs);
+    expect(apiSlugs.every((slug) => slug.startsWith("oando-"))).toBe(true);
   });
 });

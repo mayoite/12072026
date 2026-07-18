@@ -23,6 +23,7 @@ import {
   buildPageMetadata,
   buildProductJsonLd,
 } from "@/features/site/data/seo";
+import { resolvePdpPlanSvgThumbFromDisk } from "@/features/site/planSvg/resolvePdpPlanSvgThumb.server";
 import { sanitizeJsonForScript } from "@/lib/security/sanitize";
 
 const BASE_URL = SITE_URL;
@@ -336,6 +337,21 @@ async function ProductContent({
     category: getCatalogCategoryLabel(resolvedCategoryId, resolvedCategoryId),
   });
 
+  const sourceSlug = getSourceSlug(p as CategoryResolutionRow);
+  const metadataRecord =
+    p.metadata && typeof p.metadata === "object"
+      ? (p.metadata as Record<string, unknown>)
+      : null;
+  const planSlugFromMeta =
+    metadataRecord && typeof metadataRecord.planSlug === "string"
+      ? metadataRecord.planSlug.trim()
+      : "";
+  const planSvgThumb = resolvePdpPlanSvgThumbFromDisk({
+    productSlug: p.slug || canonicalProductUrlKey,
+    sourceSlug: sourceSlug || null,
+    planSlug: planSlugFromMeta || null,
+  });
+
   return (
     <>
       <script
@@ -352,6 +368,7 @@ async function ProductContent({
         categoryId={resolvedCategoryId}
         categoryName={getCatalogCategoryLabel(resolvedCategoryId, resolvedCategoryId)}
         productRoute={`/products/${resolvedCategoryId}/${canonicalProductUrlKey}`}
+        planSvgThumbUrl={planSvgThumb?.url ?? null}
       />
     </>
   );

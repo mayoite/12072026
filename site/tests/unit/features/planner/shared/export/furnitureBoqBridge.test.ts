@@ -65,7 +65,9 @@ describe("furnitureBoqBridge", () => {
     const items = furnitureBoqToQuoteCartItems(sample);
     expect(items).toHaveLength(1);
     expect(items[0]?.qty).toBe(3);
-    expect(items[0]?.name).toBe("Task Chair");
+    // Quote cart display includes brand name + SKU when SKU is present.
+    expect(items[0]?.name).toBe("Task Chair · CH-1");
+    expect(items[0]?.sku).toBe("CH-1");
     expect(items[0]?.priced).toBe(false);
     expect(items[0]?.plannerFamily).toBe("furniture");
   });
@@ -165,9 +167,54 @@ describe("furnitureBoqBridge", () => {
     expect(cart).toHaveLength(2);
     expect(cart.map((c) => c.sku).sort()).toEqual(["CHAIR-01", "TBL-01"]);
     expect(cart.every((c) => c.source === "planner")).toBe(true);
+    expect(cart.some((c) => c.name.includes("CHAIR-01"))).toBe(true);
+    expect(cart.some((c) => c.name.includes("TBL-01"))).toBe(true);
 
     const pdfRows = furnitureBoqToPdfRows(summary);
     expect(pdfRows).toHaveLength(2);
     expect(pdfRows.every((r) => r.spec.includes("unpriced"))).toBe(true);
+  });
+
+  it("maps brand oando lines with name + SKU into quote cart (B11)", () => {
+    let project = createRectangularRoomProject({
+      name: "Brand quote",
+      widthMm: 6000,
+      depthMm: 5000,
+      idFactory: ids("floor", "project", "w1", "w2", "w3", "w4"),
+    });
+    project = addPlannerFurniture(
+      project,
+      {
+        catalogId: "fluid-id",
+        position: { x: 1000, y: 1000 },
+        rotation: 0,
+        scale: { x: 1, y: 1, z: 1 },
+        width: 1600,
+        depth: 800,
+        height: 750,
+        sourceSlug: "oando-fluid-desk-1600",
+        sourceSku: "OANDO-FLUID-DSK-1600",
+        geometryMode: "box",
+      },
+      ids("f-fluid"),
+    );
+
+    const summary = buildPlannerFurnitureBoq(project, {
+      now: "2026-07-18T00:00:00.000Z",
+    });
+    expect(summary.lines[0]?.name).toBe("Fluid Desk 1600");
+    expect(summary.lines[0]?.sku).toBe("OANDO-FLUID-DSK-1600");
+
+    const cart = furnitureBoqToQuoteCartItems(summary);
+    expect(cart[0]?.name).toBe("Fluid Desk 1600 · OANDO-FLUID-DSK-1600");
+    expect(cart[0]?.sku).toBe("OANDO-FLUID-DSK-1600");
+
+    const pdf = furnitureBoqToPdfRows(summary);
+    expect(pdf[0]?.name).toBe("Fluid Desk 1600");
+    expect(pdf[0]?.sku).toBe("OANDO-FLUID-DSK-1600");
+
+    const handoff = furnitureBoqToHandoffPayload(summary);
+    expect(handoff.lines[0]?.name).toBe("Fluid Desk 1600");
+    expect(handoff.lines[0]?.sku).toBe("OANDO-FLUID-DSK-1600");
   });
 });

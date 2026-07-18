@@ -21,6 +21,8 @@ export interface PlannerEntryContext {
  *
  * Guest draft-id redirect preserves `PLANNER_ENTRY_QUERY_KEYS`.
  * Guest UI banner (`SiteProductContinuityNotice`) reads `siteProduct`.
+ * Inventory focus: `WorkspaceLeftPanel` → `InventoryPanel` `focusProductSlug`
+ * via `matchCatalogItemBySiteProduct` (select/highlight only; no auto-place).
  */
 export const GUEST_PLANNER_WORKSPACE_HREF = "/planner/guest";
 export const GUEST_PLANNER_CHOOSER_HREF = "/choose-product?mode=guest";

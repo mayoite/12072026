@@ -51,6 +51,11 @@ interface ProductViewerProps {
   categoryId?: string;
   categoryName: string;
   productRoute: string;
+  /**
+   * Published plan-symbol SVG when disk `/svg-catalog/{slug}.svg` or revision URL exists.
+   * Optional continuity thumb next to marketing gallery (S8).
+   */
+  planSvgThumbUrl?: string | null;
 }
 
 const LazyThreeViewer = dynamic(() => import("@/components/ThreeViewer"), {
@@ -104,6 +109,7 @@ export function ProductViewer({
   categoryId,
   categoryName,
   productRoute,
+  planSvgThumbUrl = null,
 }: ProductViewerProps) {
   const addItem = useQuoteCart((state) => state.addItem);
   const compareItems = useProductCompare((state) => state.items);
@@ -520,6 +526,25 @@ export function ProductViewer({
               productName={displayName}
             />
           </div>
+          {planSvgThumbUrl ? (
+            <div
+              className="pdp-plan-svg-thumb mt-3 rounded-2xl border border-soft bg-panel/80 p-3"
+              data-testid="pdp-plan-svg-thumb"
+              data-plan-svg-url={planSvgThumbUrl}
+            >
+              <p className="typ-label text-muted mb-2">Plan symbol</p>
+              <div className="relative mx-auto flex h-28 w-full max-w-[12rem] items-center justify-center">
+                <Image
+                  src={planSvgThumbUrl}
+                  alt={`Plan symbol for ${displayName}`}
+                  width={192}
+                  height={112}
+                  className="max-h-full max-w-full object-contain"
+                  unoptimized
+                />
+              </div>
+            </div>
+          ) : null}
           {/* 3D viewer toggle wrapper */}
           {hasModelPath && (
             <div className="pdp-viewer-panel group">

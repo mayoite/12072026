@@ -67,7 +67,7 @@ describe("SVG compile authority (publish vs V1)", () => {
   });
 
   it("compileSvgForPublish is THE no-I/O publish entry (same stages as runSvgCompileStages)", async () => {
-    const adminPath = path.join(siteRoot, "inventory", "descriptors", "side-table-001.json");
+    const adminPath = path.join(siteRoot, "scripts", "generate-svg", "_fixtures", "side-table.json");
     const raw = JSON.parse(readFileSync(adminPath, "utf8")) as unknown;
 
     const result = await compileSvgForPublish(raw);

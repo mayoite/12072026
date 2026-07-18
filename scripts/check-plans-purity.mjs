@@ -11,9 +11,9 @@ const allowedRoots = new Set([
   "Security",
   "TechStack",
   "svgblunder",
-  // Docs design notes only — not a product track checklist root
   "_meta",
 ]);
+const productTracks = ["Admin", "Planner", "Site", "TechStack"];
 const violations = [];
 
 function collect(dir) {
@@ -30,32 +30,36 @@ for (const entry of fs.readdirSync(planRoot, { withFileTypes: true })) {
 }
 
 const markdown = collect(planRoot).filter((file) => file.endsWith(".md"));
-for (const required of [
-  "README.md",
-  "Planner/FINISH-PLAN.md",
-  "Planner/FEATURES.md",
-  "Admin/FEATURES.md",
-  "Site/FEATURES.md",
-  "TechStack/COMPLETION-CONTRACT.md",
-  "TechStack/FEATURES.md",
-  "TechStack/FINISH-PLAN.md",
-]) {
-  if (!markdown.includes(required)) violations.push(`missing: plan/${required}`);
+
+if (!markdown.includes("README.md")) {
+  violations.push("missing: plan/README.md");
 }
 
-const checklists = markdown.filter((file) => file.endsWith("CHECKLIST.md"));
-if (checklists.length !== 0) {
-  violations.push("stale CHECKLIST.md found; Planner/FINISH-PLAN.md is the active execution plan");
+for (const track of productTracks) {
+  for (const file of ["CHECKLIST.md", "FEATURES.md"]) {
+    const rel = `${track}/${file}`;
+    if (!markdown.includes(rel)) violations.push(`missing: plan/${rel}`);
+  }
+  const trackMd = markdown.filter((f) => f.startsWith(`${track}/`) && f.endsWith(".md"));
+  for (const f of trackMd) {
+    const base = path.posix.basename(f);
+    if (base !== "CHECKLIST.md" && base !== "FEATURES.md") {
+      violations.push(`extra plan doc (only CHECKLIST+FEATURES allowed): plan/${f}`);
+    }
+  }
 }
-for (const file of ["Planner/FINISH-PLAN.md"]) {
+
+for (const f of markdown) {
+  if (/\/(OUTSTANDING|FINISH-PLAN|COMPLETION-CONTRACT)\.md$/i.test(f)) {
+    violations.push(`retired plan doc name: plan/${f}`);
+  }
+}
+
+for (const track of productTracks) {
+  const file = `${track}/CHECKLIST.md`;
+  if (!markdown.includes(file)) continue;
   const text = fs.readFileSync(path.join(planRoot, file), "utf8");
   if (/\[x\]/i.test(text)) violations.push(`checked item: plan/${file}`);
-}
-
-// Recovery plan may keep task [x] marks; it is not a product-track checklist.
-// Still forbid accidental CHECKLIST.md under svgblunder.
-for (const file of markdown.filter((f) => f.startsWith("svgblunder/") && f.endsWith("CHECKLIST.md"))) {
-  violations.push(`svgblunder must not use product CHECKLIST.md: plan/${file}`);
 }
 
 if (violations.length) {
@@ -63,4 +67,4 @@ if (violations.length) {
   process.exit(1);
 }
 
-console.log("check:plans-purity OK");
+console.log("check:plans-purity OK — each track: CHECKLIST.md + FEATURES.md only");

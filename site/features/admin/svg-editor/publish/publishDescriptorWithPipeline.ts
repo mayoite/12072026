@@ -1,9 +1,11 @@
 /**
- * Fail-closed publish: asset-engine compile (S1–S3) → disk pipeline (S4) → persist (S6).
+ * Fail-closed publish: asset-engine compile (S1–S3) → quality gate → disk (S4) → persist (S6).
  *
  * Mirrors POST /api/admin/svg-editor ordering so no authoring surface can report
  * success when compilation fails. Pure of Next server-action surface — injectable
  * deps for unit tests.
+ *
+ * Quality gate (hard): empty SVG or fill currentColor/var → Result error, no throw.
  *
  * Disk-path publish with optional Products DB dual-write (enabled ≠ cutover):
  * - Live authority: disk (`inventory/descriptors/`, `public/svg-catalog/`) until
@@ -43,6 +45,7 @@ import {
   assertDescriptorPublishable,
   buildReleasedProductFromPublish,
 } from "@/features/admin/svg-editor/publish/releasedCatalogPublishGate";
+import { assertPlanSvgQuality } from "@/features/admin/svg-editor/publish/planSvgQualityGate";
 import { getDbReleaseAuthorityDualWriteBlockError } from "@/features/admin/svg-editor/publish/svgReleaseAuthority";
 import type { ImmutableSvgRevisionRepository } from "@/features/admin/svg-editor/svgRevisionRepository.server";
 import type { SvgBlockDefinitionV1 } from "@/features/admin/svg-editor/contracts/svgBlockSchemas";
@@ -384,6 +387,19 @@ export async function publishDescriptorWithPipeline(
       success: false,
       error: `compiler_failed: Backend SVG compilation failed. ${compile.error} (failedAt=${compile.failedAt})`,
     };
+  }
+
+  // Hard quality gate after compile, before S4 disk write (Result dialect).
+  const partIds = compile.normalized.blocks
+    .map((b) => b.id)
+    .filter((id): id is string => typeof id === "string" && id.trim().length > 0);
+  const quality = assertPlanSvgQuality(compile.svg, {
+    slug: descriptor.slug,
+    variant: compile.normalized.variant,
+    partIds: partIds.length > 0 ? partIds : undefined,
+  });
+  if (!quality.ok) {
+    return { success: false, error: `quality_gate: ${quality.error}` };
   }
 
   const revisionId = buildReleaseRevisionId(descriptor, compile.svg);

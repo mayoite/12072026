@@ -9,7 +9,7 @@ const siteRoot = path.resolve(__dirname, "../../../../../../");
 
 describe("runSvgCompileStages (SVG S1–S3)", () => {
   it("compiles admin-shaped side-table BlockDescriptor to non-empty SVG", async () => {
-    const adminPath = path.join(siteRoot, "inventory", "descriptors", "side-table-001.json");
+    const adminPath = path.join(siteRoot, "scripts", "generate-svg", "_fixtures", "side-table.json");
     const raw = JSON.parse(readFileSync(adminPath, "utf8")) as unknown;
 
     const result = await runSvgCompileStages(raw);
@@ -26,7 +26,7 @@ describe("runSvgCompileStages (SVG S1–S3)", () => {
   });
 
   it("admin side-table via runSvgCompileStages still works (authority gate)", async () => {
-    const adminPath = path.join(siteRoot, "inventory", "descriptors", "side-table-001.json");
+    const adminPath = path.join(siteRoot, "scripts", "generate-svg", "_fixtures", "side-table.json");
     const raw = JSON.parse(readFileSync(adminPath, "utf8")) as unknown;
 
     const viaStages = await runSvgCompileStages(raw);
