@@ -8,69 +8,34 @@
 import { revalidatePath } from "next/cache";
 import { resolveAuthContext } from "@/features/shared/api/withAuth";
 import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
-import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/newBlockDescriptorStub";
 import {
   publishDescriptorWithPipeline,
   type PublishDescriptorResult,
 } from "@/features/admin/svg-editor/publish/publishDescriptorWithPipeline";
 import { resolveSvgPublishDualWriteDeps } from "@/features/admin/svg-editor/publish/resolveSvgPublishDualWrite";
 import { setCatalogLifecycle } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
-import { compileLinearDeskSvg } from "./compileLinearDeskSvg";
-import {
-  ensureCommercialSku,
-  ensureGuestVisibleSlug,
-} from "./linearDeskGuestIdentity";
+import { tryLoad } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
 import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import type { SvgCompileStagesResult } from "@/features/planner/asset-engine/svg/runSvgCompileStages";
+import { normalizeDescriptorForPipeline } from "@/features/planner/asset-engine/svg/normalizeDescriptorForPipeline";
+import { compileLinearDeskSvg } from "./compileLinearDeskSvg";
 import {
-  normalizeDescriptorForPipeline,
-} from "@/features/planner/asset-engine/svg/normalizeDescriptorForPipeline";
+  buildLinearDeskPublishDescriptor,
+  type ExistingLinearDeskIdentity,
+} from "./linearDeskPublishDescriptor";
+import { ensureGuestVisibleSlug } from "./linearDeskGuestIdentity";
 
 export type PublishLinearDeskInput = Record<string, unknown>;
 
-function descriptorFromFields(
-  fields: {
-    slug?: string;
-    sku?: string;
-    widthMm: number;
-    depthMm: number;
-    heightMm: number;
-  },
-): BlockDescriptor {
-  // BOQ display: humanize(slug) + sku (BlockDescriptor has no name field yet).
-  const slug = ensureGuestVisibleSlug(fields.slug, fields.widthMm);
-  const sku = ensureCommercialSku(fields.sku, fields.widthMm);
-  const base = makeNewBlockDescriptorStub();
-  const id =
-    typeof crypto !== "undefined" && "randomUUID" in crypto
-      ? crypto.randomUUID()
-      : base.id;
-  // Persist freezes generatedAt and rejects changing it on republish — never send a new one.
+function loadExistingIdentity(slug: string): ExistingLinearDeskIdentity | null {
+  const loaded = tryLoad(slug);
+  if (!loaded.ok) return null;
+  const { id, generatedAt } = loaded.value;
+  if (typeof id !== "string" || id.trim().length === 0) return null;
   return {
-    schemaVersion: base.schemaVersion,
     id,
-    slug,
-    sku,
-    sourceProvenance: "native",
-    geometry: {
-      widthMm: fields.widthMm,
-      depthMm: fields.depthMm,
-      heightMm: fields.heightMm,
-    },
-    viewBox: {
-      x: 0,
-      y: 0,
-      width: fields.widthMm,
-      height: fields.depthMm,
-    },
-    mounting: base.mounting,
-    themeTokens: base.themeTokens,
-    rovingFocus: base.rovingFocus,
-    liveAnnouncementCategories: base.liveAnnouncementCategories,
-    checksum: base.checksum,
-    variant: "fixed",
-    fixed: { sizingType: "fixed" },
-  } as BlockDescriptor;
+    ...(typeof generatedAt === "number" ? { generatedAt } : {}),
+  };
 }
 
 export async function publishLinearDeskAction(
@@ -90,7 +55,10 @@ export async function publishLinearDeskAction(
   }
 
   const { fields, svg } = compiled;
-  const descriptor = descriptorFromFields(fields);
+  // Same slug → same product id (place stamps catalogId; dual-write thrash otherwise).
+  const guestSlug = ensureGuestVisibleSlug(fields.slug, fields.widthMm);
+  const existing = loadExistingIdentity(guestSlug);
+  const descriptor = buildLinearDeskPublishDescriptor(fields, existing);
 
   const dualWrite = await resolveSvgPublishDualWriteDeps();
 

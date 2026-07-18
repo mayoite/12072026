@@ -1,7 +1,11 @@
-import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, expect, it, vi, beforeEach } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { LinearDeskParametricForm } from "@/features/admin/svg-editor/parametric/LinearDeskParametricForm";
+import {
+  defaultLinearDeskSku,
+  defaultLinearDeskSlug,
+} from "@/features/admin/svg-editor/parametric/linearDeskGuestIdentity";
 
 vi.mock("next/link", () => ({
   default: ({
@@ -21,7 +25,7 @@ vi.mock("next/link", () => ({
   ),
 }));
 
-/** Dockview needs a real layout engine; unit tests stub chrome host. */
+/** Dockview needs a real layout engine; unit tests stub chrome host only. */
 vi.mock("@/features/admin/svg-editor/views/edit-shell/AdminSvgDockHost", () => ({
   AdminSvgDockHost: ({
     slots,
@@ -49,16 +53,24 @@ vi.mock("@/features/admin/svg-editor/views/edit-shell/AdminSvgDockHost", () => (
   ),
 }));
 
-vi.mock("@/features/planner/asset-engine/svg/parametric", () => ({
-  renderLinearDeskSvg: () =>
-    '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><rect width="100" height="50"/></svg>',
-}));
+/**
+ * Live Maker path — do NOT stub renderLinearDeskSvg to a grey rect.
+ * Preview multipath claims must fail if Maker draw regresses.
+ */
 
-vi.mock("@/features/admin/svg-editor/parametric/publishLinearDeskAction", () => ({
+const { publishLinearDeskAction } = vi.hoisted(() => ({
   publishLinearDeskAction: vi.fn(),
 }));
 
+vi.mock("@/features/admin/svg-editor/parametric/publishLinearDeskAction", () => ({
+  publishLinearDeskAction,
+}));
+
 describe("LinearDeskParametricForm dock chrome", () => {
+  beforeEach(() => {
+    publishLinearDeskAction.mockReset();
+  });
+
   it("uses shared dock shell language (topbar, status, dock host, form stage)", () => {
     render(<LinearDeskParametricForm />);
 
@@ -104,5 +116,67 @@ describe("LinearDeskParametricForm dock chrome", () => {
     expect(screen.getByTestId("admin-svg-studio-status-validation")).toHaveTextContent(
       /Draft ready/i,
     );
+  });
+
+  it("live Maker preview for default 1600 mm desk is multipath (desk-top + pedestals)", () => {
+    render(<LinearDeskParametricForm />);
+
+    const preview = screen.getByTestId("linear-desk-preview");
+    const html = preview.innerHTML;
+    // Live pen — not a grey rect stub
+    expect(html).toMatch(/^<svg[\s>]/i);
+    expect(html).toContain('id="desk-top"');
+    expect(html).toContain('id="pedestal-l"');
+    expect(html).toContain('id="pedestal-r"');
+    expect(html).not.toContain('id="frame"');
+    expect(html).not.toMatch(/currentColor|var\s*\(/i);
+    // Footprint identity: default cm form = 160 cm → 1600 mm
+    expect(screen.getByTestId("linear-desk-details-footprint")).toHaveTextContent(
+      "1600×800 mm",
+    );
+    expect(screen.getByTestId("linear-desk-details-slug")).toHaveTextContent(
+      defaultLinearDeskSlug(1600),
+    );
+  });
+
+  it("Publish passes form → action args: widthMm 1600, guest slug, commercial SKU", async () => {
+    publishLinearDeskAction.mockResolvedValue({
+      success: true,
+      descriptor: {
+        slug: defaultLinearDeskSlug(1600),
+        sku: defaultLinearDeskSku(1600),
+      },
+    });
+
+    render(<LinearDeskParametricForm />);
+
+    fireEvent.click(screen.getByTestId("linear-desk-publish"));
+
+    await waitFor(() => {
+      expect(publishLinearDeskAction).toHaveBeenCalledTimes(1);
+    });
+
+    const raw = publishLinearDeskAction.mock.calls[0]?.[0] as Record<
+      string,
+      unknown
+    >;
+    expect(raw).toEqual(
+      expect.objectContaining({
+        type: "linear-desk",
+        widthMm: 1600,
+        depthMm: 800,
+        heightMm: 750,
+        pedestalCount: 2,
+        slug: defaultLinearDeskSlug(1600),
+        sku: defaultLinearDeskSku(1600),
+      }),
+    );
+    expect(String(raw.slug)).toMatch(/^oando-/);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("linear-desk-message")).toHaveTextContent(
+        /Published oando-linear-desk-1600/i,
+      );
+    });
   });
 });
