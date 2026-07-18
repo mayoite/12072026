@@ -18,8 +18,9 @@ Parent: read env, run scripts, execute, commit, push. No “disk vs db” lectur
 
 ## Session note (agent)
 
-Chrome DevTools MCP: no Chrome stable binary on this host — browser C3/C4 via MCP blocked.  
-Workaround: API + unit/integration proof; browser when Chrome available.
+Chrome: **Beta works** (`Chrome Beta` under Program Files). Stable path missing.  
+MCP: `~/.grok/config.toml` → chrome-devtools `--channel=beta`.  
+If MCP still fails, restart session so MCP reloads; or run Beta with remote debugging.
 
 ---
 
