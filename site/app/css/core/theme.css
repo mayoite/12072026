@@ -185,8 +185,8 @@
   --color-whatsapp-footer-hover: var(--color-ocean-boat-blue-700);
 
   /* ── Surfaces (Light theme) ──
-     Paper stack uses ecru (warm brand neutral), not cool pure-white/mist.
-     Cards/panels sit slightly lighter than page so hierarchy still reads. */
+     Page paper = ecru (warm brand). Product photo fields = studio neutral (cool).
+     Never use ecru under product photography — it reads yellow. */
   --surface-page: var(--color-ecru-50);
   --surface-soft: var(--color-ecru-100);
   --surface-muted: var(--color-ecru-100);
@@ -197,6 +197,16 @@
   --surface-hover: var(--color-ecru-100);
   --surface-hover-soft: var(--color-ecru-200);
   --surface-focus: var(--color-ecru-200);
+  /* Studio neutral — product thumbs, PDP hero plate, catalog media only */
+  --surface-studio: #f3f4f6;
+  --surface-studio-highlight: #ffffff;
+  --surface-studio-edge: #e8eaed;
+  --surface-studio-field: radial-gradient(
+    120% 100% at 50% 18%,
+    var(--surface-studio-highlight) 0%,
+    var(--surface-studio) 55%,
+    var(--surface-studio-edge) 100%
+  );
   --surface-inverse: var(--color-dark-midnight-blue-900);
   --surface-inverse-soft: var(--color-dark-midnight-blue-800);
   --surface-canvas: var(--color-dark-midnight-blue-950);

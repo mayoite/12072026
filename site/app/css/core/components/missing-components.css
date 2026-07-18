@@ -31,7 +31,8 @@
   width: 100%;
   overflow: hidden;
   border-radius: var(--radius-2xl);
-  background: var(--surface-soft);
+  /* Studio neutral under product photos — not ecru paper */
+  background: var(--surface-studio-field);
 }
 
 .product-gallery__count {

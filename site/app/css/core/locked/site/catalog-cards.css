@@ -65,14 +65,8 @@
   overflow: hidden;
   isolation: isolate;
   border-bottom: 1px solid var(--border-soft);
-  /* Cool studio (not ecru yellow) — product photos read cleanly */
-  background:
-    radial-gradient(
-      120% 100% at 50% 18%,
-      #ffffff 0%,
-      #f3f4f6 55%,
-      #e8eaed 100%
-    );
+  /* Studio neutral — product photos only (page paper stays ecru) */
+  background: var(--surface-studio-field);
 }
 
 /* Keep product photo under chrome (badges/compare) */

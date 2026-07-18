@@ -20,14 +20,8 @@
   overflow: hidden;
   isolation: isolate;
   border-bottom: 1px solid var(--border-soft);
-  /* Cool studio field — not warm ecru (reads as yellow behind product photos). */
-  background:
-    radial-gradient(
-      120% 100% at 50% 18%,
-      #ffffff 0%,
-      #f3f4f6 55%,
-      #e8eaed 100%
-    );
+  /* Studio neutral token — never ecru under photos */
+  background: var(--surface-studio-field);
 }
 
 /* Single image paint layer under chrome (badges / compare). */
