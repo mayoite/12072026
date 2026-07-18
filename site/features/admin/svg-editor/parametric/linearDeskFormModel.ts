@@ -13,8 +13,12 @@ import {
   type LinearDeskDisplayUnit,
 } from "@/features/planner/asset-engine/svg/parametric/linearDeskFields";
 import {
-  ensureCommercialSku,
-  ensureGuestVisibleSlug,
+  defaultLinearDeskName,
+  defaultLinearDeskSku,
+  defaultLinearDeskSlug,
+  isDefaultLinearDeskName,
+  isDefaultLinearDeskSku,
+  isDefaultLinearDeskSlug,
 } from "./linearDeskGuestIdentity";
 
 export type LinearDeskFormDisplay = {
@@ -89,37 +93,34 @@ export function defaultLinearDeskForm(
     pedestalBackInset: mmToDisplayValue(mm.pedestalBackInsetMm, unit),
     pedestalCount: 2,
     modesty: false,
-    name: "Linear desk 1600",
-    sku: "OANDO-LINEAR-DSK-1600",
+    name: defaultLinearDeskName(mm.widthMm),
+    sku: defaultLinearDeskSku(mm.widthMm),
     seriesId: "",
     // Guest inventory filters oando-* only
-    slug: "oando-linear-desk-1600",
+    slug: defaultLinearDeskSlug(mm.widthMm),
   };
 }
 
-const DEFAULT_SLUG_RE = /^oando-linear-desk-\d+$/;
-const DEFAULT_SKU_RE = /^OANDO-LINEAR-DSK-\d+$/;
-const DEFAULT_NAME_RE = /^Linear desk \d+$/i;
-
 /**
  * When width changes, refresh slug/sku/name only if they still match the
- * auto pattern (never overwrite a custom client identity).
+ * factory default pattern. Custom client edits are never overwritten.
+ * Call after `width` on the form has already been updated.
  */
 export function syncIdentityAfterWidthChange(
   form: LinearDeskFormDisplay,
 ): LinearDeskFormDisplay {
   const widthMm = Math.round(displayValueToMm(form.width, form.displayUnit));
-  const nextSlug = ensureGuestVisibleSlug(
-    `oando-linear-desk-${widthMm}`,
-    widthMm,
-  );
-  const nextSku = ensureCommercialSku("", widthMm);
-  const nextName = `Linear desk ${widthMm}`;
   return {
     ...form,
-    slug: DEFAULT_SLUG_RE.test(form.slug) ? nextSlug : form.slug,
-    sku: DEFAULT_SKU_RE.test(form.sku) ? nextSku : form.sku,
-    name: DEFAULT_NAME_RE.test(form.name) ? nextName : form.name,
+    slug: isDefaultLinearDeskSlug(form.slug)
+      ? defaultLinearDeskSlug(widthMm)
+      : form.slug,
+    sku: isDefaultLinearDeskSku(form.sku)
+      ? defaultLinearDeskSku(widthMm)
+      : form.sku,
+    name: isDefaultLinearDeskName(form.name)
+      ? defaultLinearDeskName(widthMm)
+      : form.name,
   };
 }
 

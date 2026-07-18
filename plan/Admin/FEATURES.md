@@ -20,7 +20,7 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 
 **Status vocabulary:** OPEN / PARTIAL / FAIL / DONE. FEATURES never grants DONE alone.
 
-**Execution status:** order factory fields → Maker SVG → publish → place. Maker pen unit green. Guest identity + C3/C4 browser OPEN. Owner dual = Supabase+R2; owner blockers NONE. Do not rebuild Planner.
+**Execution status:** order factory fields → Maker SVG → publish → place. Maker pen unit green. Guest identity + width→default slug/SKU sync unit-green. C3/C4 browser OPEN. Owner dual = Supabase+R2; owner blockers NONE. Do not rebuild Planner.
 
 ---
 
@@ -52,10 +52,11 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 | Maker → path `d` | `features/planner/asset-engine/svg/makerJsToPath.ts` — `compileMakerRecipeToPaths` | PARTIAL (unit); used by form pen + pipeline IR |
 | Parametric barrel | `features/planner/asset-engine/svg/parametric/index.ts` | PARTIAL — exports Maker `drawLinearDesk` / `renderLinearDeskSvg`; template deprecated export only |
 | CLI JSON → SVG | `scripts/render-linear-desk.mts` · `scripts:render-linear-desk` | PARTIAL — Maker `renderLinearDeskSvg`; default `results/admin/parametric/` |
-| Form model mm/cm | `features/admin/svg-editor/parametric/linearDeskFormModel.ts` | PARTIAL (unit) — uses `units.ts`; maps full schema incl. topGap/backInset |
+| Form model mm/cm | `features/admin/svg-editor/parametric/linearDeskFormModel.ts` | PARTIAL (unit) — uses `units.ts`; width syncs default slug/SKU/name only while pattern-default |
+| Guest identity | `features/admin/svg-editor/parametric/linearDeskGuestIdentity.ts` | PARTIAL (unit) — `oando-…` slug + commercial SKU defaults |
 | Compile + sanitise | `features/admin/svg-editor/parametric/compileLinearDeskSvg.ts` | PARTIAL (unit) — Maker draw |
-| Form UI + preview | `features/admin/svg-editor/parametric/LinearDeskParametricForm.tsx` | PARTIAL — browser OPEN; preview = **Maker**; K3 unit: pedestalTopGap + pedestalBackInset controls bound |
-| Publish action | `features/admin/svg-editor/parametric/publishLinearDeskAction.ts` | PARTIAL — browser OPEN; disk pipeline; Maker SVG |
+| Form UI + preview | `features/admin/svg-editor/parametric/LinearDeskParametricForm.tsx` | PARTIAL — browser OPEN; preview = **Maker**; width→identity sync; K3 unit: topGap/backInset bound |
+| Publish action | `features/admin/svg-editor/parametric/publishLinearDeskAction.ts` | PARTIAL — browser OPEN; disk pipeline; Maker SVG; lifecycle live on success |
 | Route | `app/admin/svg-editor/parametric/page.tsx` | PARTIAL |
 | List CTA | `svg-editor/views/AdminSvgEditorListView.tsx` | PARTIAL |
 | Units | `features/planner/model/units.ts` — `displayValueToMm`, `mmToDisplayValue` | DONE (API) |
@@ -272,6 +273,9 @@ Template `drawLinearDeskFromTemplate` remains as deprecated residual only (not f
 | Suite | Path |
 |---|---|
 | Form model | `tests/unit/features/admin/svg-editor/parametric/linearDeskFormModel.test.ts` |
+| Guest identity | `tests/unit/features/admin/svg-editor/parametric/linearDeskGuestIdentity.test.ts` |
+| Publish action | `tests/unit/features/admin/svg-editor/parametric/publishLinearDeskAction.test.ts` |
+| Isolated publish path | `tests/unit/features/admin/svg-editor/parametric/publishLinearDeskIsolatedPath.test.ts` |
 | Template draw | `tests/unit/features/planner/asset-engine/svg/parametric/drawLinearDeskFromTemplate.test.ts` |
 | Maker recipes | `tests/unit/features/planner/asset-engine/svg/makerJsRecipes.test.ts` |
 | Maker → path | `tests/unit/features/planner/asset-engine/svg/makerJsToPath.test.ts` |

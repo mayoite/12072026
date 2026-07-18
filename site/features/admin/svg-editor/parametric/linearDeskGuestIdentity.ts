@@ -5,13 +5,53 @@
 
 const GUEST_BRAND_PREFIX = "oando-";
 
+/** Factory default slug pattern: oando-linear-desk-{widthMm}. */
+const DEFAULT_SLUG_PATTERN = /^oando-linear-desk-\d+$/;
+/** Factory default SKU pattern: OANDO-LINEAR-DSK-{widthMm}. */
+const DEFAULT_SKU_PATTERN = /^OANDO-LINEAR-DSK-\d+$/;
+/** Factory default display name: Linear desk {widthMm}. */
+const DEFAULT_NAME_PATTERN = /^Linear desk \d+$/;
+
+function roundedWidthMm(widthMm: number): number {
+  return Number.isFinite(widthMm) ? Math.round(widthMm) : 1600;
+}
+
+/** Default guest-visible slug from width (mm). */
+export function defaultLinearDeskSlug(widthMm: number): string {
+  return `${GUEST_BRAND_PREFIX}linear-desk-${roundedWidthMm(widthMm)}`;
+}
+
+/** Default commercial SKU from width (mm). */
+export function defaultLinearDeskSku(widthMm: number): string {
+  return `OANDO-LINEAR-DSK-${roundedWidthMm(widthMm)}`;
+}
+
+/** Default human name from width (mm). */
+export function defaultLinearDeskName(widthMm: number): string {
+  return `Linear desk ${roundedWidthMm(widthMm)}`;
+}
+
+/** True when slug still matches the factory default pattern (any width). */
+export function isDefaultLinearDeskSlug(slug: string): boolean {
+  return DEFAULT_SLUG_PATTERN.test(slug.trim().toLowerCase());
+}
+
+/** True when SKU still matches the factory default pattern (any width). */
+export function isDefaultLinearDeskSku(sku: string): boolean {
+  return DEFAULT_SKU_PATTERN.test(sku.trim());
+}
+
+/** True when name still matches the factory default pattern (any width). */
+export function isDefaultLinearDeskName(name: string): boolean {
+  return DEFAULT_NAME_PATTERN.test(name.trim());
+}
+
 /** Ensure slug is guest-visible (oando-*) and valid-ish for catalog. */
 export function ensureGuestVisibleSlug(
   rawSlug: string | undefined,
   widthMm: number,
 ): string {
-  const width = Number.isFinite(widthMm) ? Math.round(widthMm) : 1600;
-  const fallback = `${GUEST_BRAND_PREFIX}linear-desk-${width}`;
+  const fallback = defaultLinearDeskSlug(widthMm);
   const trimmed = (rawSlug ?? "").trim().toLowerCase();
   if (!trimmed) return fallback;
 
@@ -41,8 +81,7 @@ export function ensureCommercialSku(
 ): string {
   const trimmed = (rawSku ?? "").trim();
   if (trimmed.length > 0) return trimmed.slice(0, 120);
-  const width = Number.isFinite(widthMm) ? Math.round(widthMm) : 1600;
-  return `OANDO-LINEAR-DSK-${width}`;
+  return defaultLinearDeskSku(widthMm);
 }
 
 export function isGuestVisibleSlug(slug: string): boolean {

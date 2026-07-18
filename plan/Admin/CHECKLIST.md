@@ -373,13 +373,13 @@ Exit: Automated unauth gates proven with bypass mocked off. Deploy auth remains 
 
 ## Part C — Order factory (fields → SVG → place) — GROW AS NEEDED
 
-**Status:** PARTIAL (Maker pen unit green; guest identity + C3/C4 browser OPEN)  
+**Status:** PARTIAL (Maker pen + guest identity unit green; C3/C4 browser OPEN)  
 **Live pen = Maker.js.** Template residual only.  
 **Code map:** `FEATURES.md` · **Tasks:** `IMPLEMENTATION-PLAN.md` · **Stack:** `REALITY-AND-STACK.md`
 
 **Owner-aligned model:** exact client options close orders; form not free invent; library as you go; Maker only; reuse Planner place/BOQ; Supabase+R2 dual intent; **no owner blockers**.
 
-**Code truth:** form/CLI/publish → `drawLinearDesk` → Maker. **NEXT:** guest-safe `oando-…` slug + SKU → C3 browser → C4 place/BOQ.
+**Code truth:** form/CLI/publish → `drawLinearDesk` → Maker; guest `oando-…` slug/SKU + live lifecycle unit-green. **NEXT:** C3 browser (160 cm → publish → disk) → C4 place/BOQ.
 
 **Ship Linear desk v1 (done enough)** — all required before C5 polish / C6 types / C-AI product claim:
 
