@@ -20,6 +20,9 @@ import {
   type CanvasStatusSnapshot,
 } from "@/features/planner/canvas";
 import {
+  consumePendingCatalogItemId,
+  findFurnitureOnProject,
+  mergePlacedFurnitureOntoProject,
   placeCatalogItemInProject,
   placeWorkstationConfigOnProject,
   placeWorkstationInstancesOnProject,
@@ -1270,18 +1273,23 @@ export function OOPlannerWorkspace({
         return;
       }
 
-      if (!pendingCatalogItemId) return;
-      const item = catalog.resolveItem(pendingCatalogItemId);
+      // Consume-once before resolve/place so double pointer-up cannot re-place.
+      const { itemId: catalogItemId } = consumePendingCatalogItemId(
+        pendingCatalogItemId,
+      );
+      setPendingCatalogItemId(null);
+      if (!catalogItemId) return;
+      const item = catalog.resolveItem(catalogItemId);
       if (!item) {
-        setPendingCatalogItemId(null);
         return;
       }
 
       // cabinet-v0 only: write+stamp so G8 can load; other items stay procedural.
       if (shouldPlaceModularWithGeneratedGlb(item)) {
         const catalogItem = item;
+        // Snapshot only for the async place pipeline; merge onto live after await
+        // so walls/furniture drawn during GLB export are not discarded.
         const baseProject = workspaceCanvas.project;
-        setPendingCatalogItemId(null);
         setWorkspaceMessage(
           `Placing ${catalogItem.shortName ?? catalogItem.name} (GLB)…`,
         );
@@ -1295,7 +1303,18 @@ export function OOPlannerWorkspace({
               // back to procedural mesh if the write API returns not_configured.
               { placedFrom: "click", writeToPublic: true },
             );
-            workspaceCanvas.updateProject(() => result.project);
+            const placedOnSnapshot = findFurnitureOnProject(
+              result.project,
+              result.furnitureId,
+            );
+            workspaceCanvas.updateProject((live) => {
+              if (!placedOnSnapshot) return live;
+              return mergePlacedFurnitureOntoProject(
+                live,
+                placedOnSnapshot.furniture,
+                placedOnSnapshot.floorId,
+              );
+            });
             const placedId =
               typeof result.furnitureId === "string"
                 ? result.furnitureId
@@ -1365,7 +1384,6 @@ export function OOPlannerWorkspace({
               : null;
         return placed.result.project;
       });
-      setPendingCatalogItemId(null);
       if (placedId) {
         workspaceCanvas.setSelection({ type: "furniture", ids: [placedId] });
         setActiveTool("select");

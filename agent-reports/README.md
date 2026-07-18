@@ -1,6 +1,6 @@
 # Agent reports
 
-Four short status files only. **Not proof.**
+Four short **track status** files. **Not proof.**
 
 | Track | Status file | Plan |
 |-------|-------------|------|
@@ -8,5 +8,7 @@ Four short status files only. **Not proof.**
 | Planner | `PLANNER.md` | `plan/Planner/CHECKLIST.md` + `FEATURES.md` |
 | Site | `SITE.md` | `plan/Site/CHECKLIST.md` + `FEATURES.md` |
 | TechStack | `TECH-STACK.md` | `plan/TechStack/CHECKLIST.md` + `FEATURES.md` |
+
+**Session blunder reports** (multi-agent review, still not PASS): [`blunders/`](./blunders/).
 
 Index rollup: `docs/site/OUTSTANDING-ITEMS.md`. Blockers: `Failures.md`.

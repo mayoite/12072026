@@ -1,8 +1,9 @@
 # Runtime architecture
 
-This document describes the live repository on 2026-07-17.
+This document describes the live repository on 2026-07-18.
 Target-state differences are stated explicitly.
 Code wins when this document and the implementation differ.
+Operate: `docs/approach.md`. Engines: `12-DEPENDENCIES-ENGINES.md`.
 
 ## Workspace boundaries
 

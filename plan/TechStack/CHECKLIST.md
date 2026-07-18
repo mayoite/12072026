@@ -21,7 +21,7 @@ _Evidence and completion rules. Wins on how to prove done._
 - Phase scope and TF ids stay **1:1** with this file Part B  
 
 **Relation to fact docs:**  
-- `docs/Lockedfiles/03-dependencies-engines-current.md`  -  architectural limits  
+- `docs/architecture/12-DEPENDENCIES-ENGINES.md`  -  architectural limits  
 - `docs/architecture/11-RUNTIME-ARCHITECTURE.md`  -  live runtime shape  
 - `docs/architecture/08-DATABASE-SVG-CONTRACT.md`  -  DB/R2 SVG target  
 - `docs/architecture/10-SECURITY-BENCHMARK.md`  -  security release IDs  
@@ -71,7 +71,7 @@ A **maintainable, installable, releasable monorepo** where:
 
 All that apply:
 
-1. **Policy** written in Lockedfiles / architecture docs matches code.  
+1. **Policy** written in 12-DEPENDENCIES-ENGINES / architecture docs matches code.  
 2. **Automated proof**  -  named command exit 0.  
 3. **Dependency claim**  -  `pnpm why` / import grep / lockfile entry shown when asserting “in use” or “removed”.  
 4. **CI claim**  -  workflow file path + pin equals root `packageManager` intent + last green or local repro of same script.  
@@ -216,7 +216,7 @@ Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**.
 | TS-07 / TF-07 | Typecheck flakes on `.next/dev/types` | Stable tsc story (exclude or generate) | OPEN |
 | TS-08 / TF-08 | Secrets in tree | `lint:secrets` exit 0; no committed secrets | OPEN |
 | TS-09 / TF-09 | Env example drift | `.env.example` covers required server keys (names only) | PARTIAL  -  FEATURES env table; OpenAI optional |
-| TS-10 / TF-10 | DB-SVG marketed as live authority | Failures.md + Lockedfiles honest; disk live | PARTIAL |
+| TS-10 / TF-10 | DB-SVG marketed as live authority | Failures.md + 12-DEPENDENCIES-ENGINES honest; disk live | PARTIAL |
 | TS-11 / TF-11 | Dual-write incomplete treated as PASS | Dual-write proved or OPEN | OPEN |
 | TS-12 / TF-12 | Tech-docs broken / unowned | tech-docs gate green or package optional documented | OPEN |
 | TS-13 / TF-13 | Sharp / native binary broken on Windows | `check-sharp` + build | OPEN |
@@ -226,7 +226,7 @@ Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**.
 | TS-17 / TF-17 | i18n second framework introduced | next-intl only | PARTIAL |
 | TS-18 / TF-18 | Supabase client boundary violated | No new catalog `.from()` paths | OPEN |
 | TS-19 / TF-19 | Production GLB or publish writes `site/public` | Code path 501 / storage only | PARTIAL |
-| TS-20 / TF-20 | Docs budget broken / stack fiction in docs | Lockedfiles matches code; plan duo present | PARTIAL |
+| TS-20 / TF-20 | Docs budget broken / stack fiction in docs | 12-DEPENDENCIES-ENGINES matches code; plan duo present | PARTIAL |
 | TS-21 / TF-21 | Install/docs claim pnpm@11.13 but CI differs | Align pins | **PASS** (T-W1) |
 | TS-22 / TF-22 | Hoisted monorepo phantom deps | No app import of undeclared package | OPEN |
 | TF-23 | CI logs under `site/results/` | Prefer root `results/` | PASS  -  workflows tee to `results/tooling` / `results/site` (90b55c74) |
@@ -247,7 +247,7 @@ Checklists live in this file Part B. Part A summary:
 | **T4** | Type, lint, unit stability | lint + typecheck + test exit 0 |
 | **T5** | Security and secrets | secretlint + env contract |
 | **T6** | Build and release | build + release:gate honest |
-| **T7** | Data plane clients | Lockedfiles persistence matches code; disk SVG honesty |
+| **T7** | Data plane clients | 12-DEPENDENCIES-ENGINES persistence matches code; disk SVG honesty |
 | **T8** | Docs and ops closure | Reproducible from Readme + lockfile |
 
 ### Order
@@ -275,15 +275,15 @@ T8 docs (continuous; gates release claim)
 | “Node 24” | engines field + CI node version |
 | “Fabric only 2D” | No konva/paper/pixi interactive imports in site |
 | “No public GLB write” | Route/storage tests exit 0 |
-| “Deps clean” | Each direct dep: import path or BUILD-ROLE note in Lockedfiles |
+| “Deps clean” | Each direct dep: import path or BUILD-ROLE note in 12-DEPENDENCIES-ENGINES |
 | “Release ready stack” | §3.1 full table green |
 | “DB is SVG authority” | **Forbidden** until 08-contract cutover proved |
 
 ---
 
-## 10. How this file exceeds Lockedfiles alone
+## 10. How this file exceeds 12-DEPENDENCIES-ENGINES alone
 
-| Area | Lockedfiles / runtime docs | This file Part A + Part B |
+| Area | 12-DEPENDENCIES-ENGINES / runtime docs | This file Part A + Part B |
 |------|----------------------------|----------------------------|
 | Facts | Version/policy statements | **PASS recipe** + commands |
 | Engines | Table | Phase T2 + FEATURES paths + grep proof |
@@ -304,7 +304,7 @@ T8 docs (continuous; gates release claim)
 5. **T3**  -  dead direct deps.  
 6. **T6**  -  build + release:gate.  
 7. **T7**  -  keep DB-SVG honesty (TF-10/11).  
-8. **T8**  -  Lockedfiles sync when anything engine-related lands.
+8. **T8**  -  12-DEPENDENCIES-ENGINES sync when anything engine-related lands.
 
 ---
 
@@ -314,7 +314,7 @@ Tech stack is **complete** (healthy for release) only when:
 
 1. §3.1 gates all green (or each miss is an active `Failures.md` item with owner accept).  
 2. No Critical TF open (nested install, secret leak, second canvas engine, false DB authority, **silent pin drift**).  
-3. Lockedfiles + 11-RUNTIME match live imports and lockfile.  
+3. 12-DEPENDENCIES-ENGINES + 11-RUNTIME match live imports and lockfile.  
 4. `FEATURES.md` paths still resolve.  
 5. Another engineer can install and pass `pnpm run gate` from clean clone instructions in `Readme.md`.
 
@@ -341,7 +341,7 @@ A maintainable, installable, releasable monorepo:
 3. Dependencies with live role or documented build role.
 4. Honest gates  -  exit 0 in the claiming session.
 5. Secrets only in `.env.local` / platform secrets.
-6. Data clients match Lockedfiles; **disk** remains live SVG authority until cutover proved.
+6. Data clients match 12-DEPENDENCIES-ENGINES; **disk** remains live SVG authority until cutover proved.
 7. Thin docs; stack policy not fiction.
 
 ## Truth rules
@@ -371,7 +371,7 @@ Every item starts unchecked. Flip only with CHECKLIST Part A (evidence) proof.
 - [PASS] Snapshot root + site engines from package.json vs lockfile (FEATURES + FIX-TECHSTACK 2026-07-17).
 - [PASS] Confirm live Fabric / Three / Excalidraw imports (FEATURES inventory).
 - [PASS] List stack-related `Failures.md` blockers (DB-SVG disk live).
-- [PASS] Diff Lockedfiles persistence/engines vs code (FEATURES).
+- [PASS] Diff 12-DEPENDENCIES-ENGINES persistence/engines vs code (FEATURES).
 - [PASS] Record pnpm root pin vs CI pin (TF-02 cleared 2026-07-17 T-W1: CI 11.13.0).
 
 **Exit:** Honest TF registry.  
@@ -445,18 +445,18 @@ Every item starts unchecked. Flip only with CHECKLIST Part A (evidence) proof.
 
 - [PASS] Drizzle schemas present for owned tables.
 - [PASS] R2 client uses intact S3 credential pair (names in FEATURES; preferred pair SET).
-- [PASS] Live vs target SVG authority documented: **disk live** (Failures.md, Lockedfiles, `.env.example` `SVG_RELEASE_AUTHORITY`).
+- [PASS] Live vs target SVG authority documented: **disk live** (Failures.md, 12-DEPENDENCIES-ENGINES, `.env.example` `SVG_RELEASE_AUTHORITY`).
 - [PASS] No false claim that Products DB/R2 is SVG release authority.
 - [PASS] `GET /api/health` returns `{ ok: true }` without secrets (unit T-W3 exit 0).
 
-**Exit:** Lockedfiles persistence table matches code; Failures.md DB-SVG honest.  
+**Exit:** 12-DEPENDENCIES-ENGINES persistence table matches code; Failures.md DB-SVG honest.  
 **Proof:** paths + Failures.md + health unit.
 
 ### T8  -  Docs and ops closure
 
 - [PASS] Plan duo present: CHECKLIST + FEATURES only.
 - [PASS] `check:plans-purity` allows TechStack duo CHECKLIST+FEATURES only (exit 0 FIX-TECHSTACK).
-- [ ] Lockedfiles updated when engines change.
+- [ ] 12-DEPENDENCIES-ENGINES updated when engines change.
 - [PASS] `pnpm run check:layout` exit 0 before claim done.
 - [PASS] Agent track file `agent-reports/TECH-STACK.md` honest (OPEN/PARTIAL until gates).
 
@@ -474,7 +474,7 @@ Every item starts unchecked. Flip only with CHECKLIST Part A (evidence) proof.
 | T4 | FAIL | lint exit 1, typecheck exit 2 (Planner paths); health unit 0 |
 | T5 | PASS (T-W3 session) | lint:secrets 0; scan:secrets 0; launch:env 0; env names cover validate-launch + env.server + FEATURES |
 | T6 | PARTIAL | check-sharp **PASS** (T-W3); build + release:gate **not** run  -  no stack healthy claim |
-| T7 | PASS (honesty T-W3) | Health unit 0; disk SVG authority in Failures.md + Lockedfiles + .env.example |
+| T7 | PASS (honesty T-W3) | Health unit 0; disk SVG authority in Failures.md + 12-DEPENDENCIES-ENGINES + .env.example |
 | T8 | PARTIAL | Plan duo + purity; layout 0 (T-W3); full docs closure open |
 
 **Stack healthy claim:** **forbidden** until Part A gates (evidence) is green or owner-waived in Failures.md.
@@ -494,7 +494,7 @@ Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**. Prefer **TF** ids in fin
 | TF-07 | Typecheck flakes on `.next/dev/types` | Stable tsc story | OPEN |
 | TF-08 | Secrets in tree | `lint:secrets` exit 0 | **PASS** (T-W3: lint:secrets + scan:secrets) |
 | TF-09 | Env example drift | `.env.example` covers required names | **PASS** (T-W3: validate-launch + env.server + FEATURES incl. DEV_AUTH_BYPASS) |
-| TF-10 | DB-SVG marketed as live authority | Failures.md + Lockedfiles; disk live | **PASS** (honesty; disk still live; cutover remains open via TF-11) |
+| TF-10 | DB-SVG marketed as live authority | Failures.md + 12-DEPENDENCIES-ENGINES; disk live | **PASS** (honesty; disk still live; cutover remains open via TF-11) |
 | TF-11 | Dual-write incomplete treated as PASS | Dual-write proved or OPEN | OPEN |
 | TF-12 | Tech-docs broken / unowned | tech-docs gate or optional doc | OPEN |
 | TF-13 | Sharp / native broken on Windows | `check-sharp` + build | PARTIAL (check-sharp PASS T-W3; build not run) |
@@ -504,7 +504,7 @@ Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**. Prefer **TF** ids in fin
 | TF-17 | i18n second framework | next-intl only | PARTIAL |
 | TF-18 | Supabase client boundary violated | No new catalog `.from()` | OPEN |
 | TF-19 | Production GLB/publish writes `site/public` | 501 / storage only | PARTIAL |
-| TF-20 | Docs budget / stack fiction | Lockedfiles + plan duo | PARTIAL |
+| TF-20 | Docs budget / stack fiction | 12-DEPENDENCIES-ENGINES + plan duo | PARTIAL |
 | TF-21 | Docs claim pnpm@11.13 but CI differs | Align pins | **PASS** (T-W1) |
 | TF-22 | Hoisted monorepo phantom deps | No undeclared app imports | OPEN |
 | TF-23 | CI logs under `site/results/` | Prefer root `results/` | PASS  -  workflows tee to `results/tooling` / `results/site` (90b55c74) |

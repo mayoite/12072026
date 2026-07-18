@@ -5,6 +5,7 @@ import {
   defaultLinearDeskSlug,
   ensureCommercialSku,
   ensureGuestVisibleSlug,
+  formatLinearDeskPublishSuccess,
   isDefaultLinearDeskName,
   isDefaultLinearDeskSku,
   isDefaultLinearDeskSlug,
@@ -51,5 +52,19 @@ describe("linearDeskGuestIdentity", () => {
     expect(isDefaultLinearDeskSku("CUSTOM-1")).toBe(false);
     expect(isDefaultLinearDeskName("Linear desk 1600")).toBe(true);
     expect(isDefaultLinearDeskName("Acme Desk")).toBe(false);
+  });
+
+  it("success copy surfaces stable slug + SKU", () => {
+    expect(
+      formatLinearDeskPublishSuccess({
+        slug: "oando-linear-desk-1600",
+        sku: "OANDO-LINEAR-DSK-1600",
+      }),
+    ).toBe(
+      "Published oando-linear-desk-1600 · SKU OANDO-LINEAR-DSK-1600 (live, guest-visible). SVG /svg-catalog/oando-linear-desk-1600.svg",
+    );
+    expect(
+      formatLinearDeskPublishSuccess({ slug: "oando-linear-desk-1600" }),
+    ).toMatch(/^Published oando-linear-desk-1600 \(live/);
   });
 });

@@ -62,7 +62,26 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 | Units | `features/planner/model/units.ts` — `displayValueToMm`, `mmToDisplayValue` | DONE (API) |
 | Catalog write isolation | `svg-editor/storage/catalogWriteIsolation.ts` | DONE (unit A0) |
 | Sample bar | `public/svg-catalog/sample-desk-1.svg` | reference |
-| Planner place + BOQ | guest inventory / place | OPEN (C4) |
+| Planner place + BOQ | guest inventory / place · `placementAction` · `projectFurnitureBoq` | PARTIAL (C4) — unit load rule + place→BOQ; browser 1280/390 OPEN until parent-seen |
+
+### C4 load rule (guest place — exact path)
+
+On parametric publish success (`publishLinearDeskAction`):
+
+1. **Identity:** `ensureGuestVisibleSlug` → `oando-*`; `ensureCommercialSku` → commercial SKU; stable product `id`/`generatedAt` on same-slug republish (`buildLinearDeskPublishDescriptor`).
+2. **Lifecycle:** `setCatalogLifecycle(slug, "live")` (buyer-visible). Freehand studio publish still defaults draft.
+3. **Artifact:** disk write `public/svg-catalog/{slug}.svg` + descriptor under `inventory/descriptors/` (authority until DB cutover).
+4. **Guest catalog loader** `GET /api/planner/catalog/svg-blocks`:
+   - `loadBuyerVisibleDescriptorsWithDb` (manifest live / legacy no-entry)
+   - `mapDescriptorsToCatalogItems` → `{ slug, sku, name: humanize(slug), assets.previewImageUrl }`
+     - disk: `/svg-catalog/{slug}.svg`
+     - DB pointer: `/api/planner/catalog/svg/{revisionId}`
+   - `filterGuestInventoryCatalogItems` → **oando-\* brand only** (drops sample/demo/OFL)
+   - `isBuyerPublishedCatalogItem` → published disk artifact or revision API URL
+5. **Place:** `placeCatalogItemInProject` stamps `sourceSlug` / `sourceSku` / `previewImageUrl`.
+6. **BOQ / Review:** `buildPlannerFurnitureBoq` + `formatBoqLineDisplayName` → `Linear Desk 1600 · OANDO-LINEAR-DSK-1600` (name from humanize(slug); SKU from product field).
+
+Unit: `tests/unit/features/planner/catalog/c4GuestPlaceLoadRule.test.ts`.
 
 **Verified call chain (K1 unit-green):**
 

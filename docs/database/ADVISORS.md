@@ -4,7 +4,8 @@ The `pnpm --filter oando-site run db:advisors` script (`site/scripts/db_advisors
 
 Lint definitions are sourced from [supabase/splinter](https://github.com/supabase/splinter) — the open-source linter that powers the advisors UI and MCP tool.
 
-> **Prerequisites**: Repo-root `.env.local` via `loadEnvLocal.cjs` (`PRODUCTS_DATABASE_URL` or `SUPABASE_DB_URL`). Use `pnpm --filter oando-site run db:advisors` from repo root.
+> **Prerequisites**: Repo-root `.env.local` via `loadEnvLocal.cjs` (`PRODUCTS_DATABASE_URL` or `SUPABASE_DB_URL`). Use `pnpm --filter oando-site run db:advisors` from repo root.  
+> **Not PASS proof** of production health — findings are live against the linked DB only.
 
 ---
 

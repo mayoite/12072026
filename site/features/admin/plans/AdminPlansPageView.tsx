@@ -50,10 +50,22 @@ const SORT_OPTIONS = [
   { value: "created_at:asc", label: "Oldest created" },
 ] as const;
 
-function formatTimestamp(value: string) {
+/**
+ * Fixed locale + timezone so SSR/client never diverge on date attributes/text
+ * (browser locale variance was a hydration attribute mismatch source).
+ */
+export function formatAdminPlanTimestamp(value: string): string {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleString();
+  return date.toLocaleString("en-IN", {
+    timeZone: "UTC",
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
 }
 
 function statusLabel(status: AdminPlanSummary["status"]) {
@@ -187,7 +199,7 @@ export default function AdminPlansPageView() {
       </header>
 
       <div className="admin-toolbar">
-        <label className="admin-field min-w-0 flex-1 sm:min-w-[12rem]">
+        <label className="admin-field min-w-0 flex-1 sm:min-w-[12rem]" htmlFor="admin-plans-search">
           <span className="admin-field__label">Search</span>
           <span className="relative">
             <Search
@@ -196,17 +208,22 @@ export default function AdminPlansPageView() {
               aria-hidden
             />
             <input
+              id="admin-plans-search"
+              name="admin-plans-search"
               type="search"
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
               placeholder="Title, project, client…"
               className="admin-field__control w-full pl-9"
+              autoComplete="off"
             />
           </span>
         </label>
-        <label className="admin-field">
+        <label className="admin-field" htmlFor="admin-plans-status">
           <span className="admin-field__label">Status</span>
           <select
+            id="admin-plans-status"
+            name="admin-plans-status"
             className="admin-field__control"
             value={statusFilter}
             onChange={(event) =>
@@ -220,9 +237,11 @@ export default function AdminPlansPageView() {
             ))}
           </select>
         </label>
-        <label className="admin-field">
+        <label className="admin-field" htmlFor="admin-plans-sort">
           <span className="admin-field__label">Sort</span>
           <select
+            id="admin-plans-sort"
+            name="admin-plans-sort"
             className="admin-field__control"
             value={sortValue}
             onChange={(event) =>
@@ -322,7 +341,7 @@ export default function AdminPlansPageView() {
                     </span>
                   </td>
                   <td data-label="Updated" className="text-muted">
-                    {formatTimestamp(plan.updated_at)}
+                    {formatAdminPlanTimestamp(plan.updated_at)}
                   </td>
                   <td data-label="Actions">
                     <Link

@@ -14,6 +14,7 @@
 import type { PlannerCatalogItem, PlannerCatalogVariant, PlannerPlacedConfiguration } from "./catalogTypes";
 import type {
   PlannerFurnitureGeometryMode,
+  PlannerFurnitureItem,
   PlannerModularCabinetV0Options,
   PlannerProject,
 } from "../model/types";
@@ -36,6 +37,90 @@ import { resolvePlanSvgUrl } from "./resolvePlanSvgUrl";
 
 /** Catalog id/slug that maps to modular cabinet-v0 multi-part mesh. */
 export const MODULAR_CABINET_V0_CATALOG_ID = "cabinet-v0";
+
+/**
+ * Consume-once for catalog place arm.
+ * Returns the armed id and always clears pending so a second pointer-up
+ * before re-render cannot double-place.
+ */
+export function consumePendingCatalogItemId(
+  pendingCatalogItemId: string | null,
+): { itemId: string | null; nextPending: null } {
+  return {
+    itemId: pendingCatalogItemId,
+    nextPending: null,
+  };
+}
+
+/**
+ * Locate a furniture entity by id across floors.
+ */
+export function findFurnitureOnProject(
+  project: PlannerProject,
+  furnitureId: string,
+): { floorId: string; furniture: PlannerFurnitureItem } | null {
+  for (const floor of project.floors) {
+    const furniture = floor.furniture.find((f) => f.id === furnitureId);
+    if (furniture) {
+      return { floorId: floor.id, furniture };
+    }
+  }
+  return null;
+}
+
+/**
+ * Merge a furniture entity placed against a stale project snapshot onto the
+ * live project. Concurrent walls / other furniture survive async GLB place.
+ *
+ * - Same id already on live → replace that instance (stamp refresh).
+ * - Prefer `preferredFloorId` when that floor exists; else active floor.
+ * - Idempotent append: never duplicates the same furniture id.
+ */
+export function mergePlacedFurnitureOntoProject(
+  liveProject: PlannerProject,
+  placedFurniture: PlannerFurnitureItem,
+  preferredFloorId?: string,
+): PlannerProject {
+  const existing = findFurnitureOnProject(liveProject, placedFurniture.id);
+  if (existing) {
+    return {
+      ...liveProject,
+      floors: liveProject.floors.map((floor) =>
+        floor.id !== existing.floorId
+          ? floor
+          : {
+              ...floor,
+              furniture: floor.furniture.map((f) =>
+                f.id === placedFurniture.id ? { ...placedFurniture } : f,
+              ),
+            },
+      ),
+    };
+  }
+
+  const targetFloorId =
+    preferredFloorId &&
+    liveProject.floors.some((floor) => floor.id === preferredFloorId)
+      ? preferredFloorId
+      : liveProject.activeFloorId;
+
+  const hasTarget = liveProject.floors.some((floor) => floor.id === targetFloorId);
+  if (!hasTarget) {
+    return liveProject;
+  }
+
+  return {
+    ...liveProject,
+    floors: liveProject.floors.map((floor) =>
+      floor.id !== targetFloorId
+        ? floor
+        : {
+            ...floor,
+            furniture: [...floor.furniture, { ...placedFurniture }],
+          },
+    ),
+  };
+}
 
 function isModularCabinetV0CatalogItem(item: PlannerCatalogItem): boolean {
   if (item.geometryMode === "modular-cabinet-v0") return true;

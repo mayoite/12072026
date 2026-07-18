@@ -26,7 +26,7 @@ They may exist as migration inputs or test fixtures.
 
 They must not silently override database truth.
 
-## Current gap (live 2026-07-17)
+## Current gap (live 2026-07-18)
 
 | Surface | Live truth |
 |---|---|

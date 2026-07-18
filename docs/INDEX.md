@@ -3,35 +3,39 @@
 **Budget: ≤24 live files under `docs/`.** Process → `Agents/`. Execution → `plan/`. Commands → `Readme.md`.  
 Allowed exception inside budget: `site/OUTSTANDING-ITEMS.md` (thin index → track CHECKLISTs; not a fifth plan file).
 
+**How to operate (ship discipline):** [`approach.md`](./approach.md) — factory loop first; no soft PASS; hardcoding/CSS gates.
+
 Start: `architecture/README.md` (vision + **current vs target** table). Live SVG = disk; dual-write optional when Products DB + R2 ready ≠ cutover; target = Products DB (`08-DATABASE-SVG-CONTRACT.md`). Active cutover: `../Failures.md`. One blockers file per track: `../agent-reports/{PLANNER,ADMIN,SITE,TECH-STACK}.md`.
 
-## Architecture (12)
+## Architecture (13)
 
 | Doc | Content |
 |---|---|
-| `architecture/README.md` | Vision, tracks, boundaries, benchmarks, quality |
+| `architecture/README.md` | Vision, tracks, **current vs target**, benchmarks |
 | `architecture/01-MODULE-LAYOUT.md` | Code ownership, product roots |
 | `architecture/02-DOMAINS.md` | Site, Admin, Planner, contracts |
 | `architecture/03-MODULE-UI-CONTRACT.md` | Interface quality |
-| `architecture/04-CSS-SOLUTION.md` | Styling ownership |
+| `architecture/04-CSS-SOLUTION.md` | Styling ownership (`locked/chrome`, `locked/svg`, …) |
 | `architecture/05-DATA_FLOW.md` | Live disk path + target DB flow, BOQ |
 | `architecture/06-UI-BENCHMARK.md` | Planner acceptance |
-| `architecture/07-ADMIN-UI-BENCHMARK.md` | Admin SVG acceptance |
+| `architecture/07-ADMIN-UI-BENCHMARK.md` | Admin SVG (freehand + parametric) acceptance |
 | `architecture/08-DATABASE-SVG-CONTRACT.md` | DB SVG publication contract |
 | `architecture/09-SITE-UI-BENCHMARK.md` | Site acceptance |
 | `architecture/10-SECURITY-BENCHMARK.md` | Security acceptance |
-| `architecture/11-RUNTIME-ARCHITECTURE.md` | Live runtime, boundaries, Planner flow, dependency policy |
+| `architecture/11-RUNTIME-ARCHITECTURE.md` | Live runtime, boundaries, Planner flow |
+| `architecture/12-DEPENDENCIES-ENGINES.md` | Engines, i18n, persistence, CSS homes |
+
+(Removed wrong path: `docs/Lockedfiles/` — was a one-file oddity.)
 
 ## Technical (6)
 
 | Doc | Content |
 |---|---|
 | `api/ROUTE-INDEX.md` | API sources + generated route table — `pnpm --filter oando-site run docs:sync:routes` |
-| `database/SCHEMA.md` | Tables, indexes, RLS |
-| `database/SEEDING.md` | Seed commands |
+| `database/SCHEMA.md` | Two DBs, catalog + SVG tables honesty, Drizzle paths |
+| `database/SEEDING.md` | Seed / apply commands (root env, no proof pollution) |
 | `database/ADVISORS.md` | DB security/performance lints |
 | `database/RESTORE-RUNBOOK.md` | Backup, restore, degraded mode |
-| `Lockedfiles/03-dependencies-engines-current.md` | Engines, i18n, persistence, licenses |
 | *(execution, not under docs/)* `plan/TechStack/CHECKLIST.md` + `FEATURES.md` | Stack health checklist + code map — install, gates, deps, CI |
 
 ## Site package maps (5) — `docs/site/`

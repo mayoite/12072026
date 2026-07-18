@@ -169,27 +169,52 @@ Update `agent-reports/ADMIN.md` in place (Deploy auth, Done/Open next, Date).
 Statuses: **PASS** | **PARTIAL** | **FAIL** | **OPEN**.  
 Update only with fresh evidence.
 
-**Id scheme:** design prefix is **AF-**.  
-**ADM-*** ids are session aliases for auth/SVG slices (same bar). FEATURES gap rows may cite either.
+**Id scheme:** design prefix is **AF-**. **One ID = one failure = one bar.** Never reuse an ID for a second meaning.  
+Optional **ADM-*** aliases are 1:1 only (table below). FEATURES and Part B cite **AF-** ids only.
 
-| ID | Alias | Failure | Bar to clear | Status seed |
-|----|-------|---------|--------------|-------------|
-| AF-10 / AF-01 | ADM-AUTH-01 | Unauth admin pages not proven | Unit + optional browser with bypass off → `/access` | PARTIAL (unit; browser OPEN) |
-| AF-10b / AF-03 | ADM-AUTH-02 | Unauth admin APIs not proven | Unit 401/403 with bypass off | PARTIAL (unit; browser OPEN) |
-| AF-10c / AF-04 | ADM-AUTH-03 | Deploy auth with real session | Preview/prod without bypass | OPEN |
-| AF-02 | ADM-SVG-DISK | Publish disk path regressions | Isolated unit + optional browser | OPEN |
-| AF-02 / AF-18 | ADM-SVG-DUAL | Dual-write honesty | `resolveSvgPublishDualWrite` modes unit green; no fake R2 success | PARTIAL (modes unit) |
-| AF-18 | ADM-DB-SVG | Full cutover (DB-SVG-01..16) | Failures.md + 08-contract | OPEN |
-| AF-08 | ADM-CRM-HUB | CRM index hub vs redirect | Unit matches live hub page | PARTIAL (unit; browser OPEN) |
-| AF-07 | ADM-PRICE | Price book governance browser | Playwright with honest auth | OPEN |
-| AF-09 | ADM-FAM | Family release browser journey | Browser proof | OPEN |
-| **K1** | ADM-PARAM-MAKER | Form/CLI/publish must use Maker only | Single Maker `drawLinearDesk`; unit green | unit-green (2026-07-18) — browser C3 still OPEN |
-| **K2** | ADM-PARAM-PROOF | “via Maker” claim needs unit | Unit proves Maker ids; template not form pen | unit-green (2026-07-18) — residual template file only |
-| **K3** | ADM-PARAM-FIELDS | Form UI must bind full Zod knobs | Form model + UI bind all schema mm knobs incl. topGap/backInset | unit-green (2026-07-18) — browser OPEN |
+### Canonical AF registry (single source)
 
-Other AF seeds: AF-05 bulk UX, AF-06 phone catalog, AF-11 AI SVG missing, AF-12 isolation hash gate, AF-13 internal language, AF-17 Planner consumer bytes.
+| ID | Failure | Bar to clear | Status |
+|----|---------|--------------|--------|
+| AF-01 | Unauth admin page gate | Unit + browser, bypass off → `/access` | PARTIAL (unit; browser OPEN) |
+| AF-02 | Disk publish path regressions | Isolated unit + optional browser | OPEN |
+| AF-03 | Unauth `/api/admin/*` gate | 401/403 unit, bypass off | PARTIAL (unit; browser OPEN) |
+| AF-04 | Deploy auth without bypass | Preview/prod real admin session | OPEN |
+| AF-05 | Bulk/advanced dominance on SVG list | UX rebalance + browser | OPEN |
+| AF-06 | Phone catalog layout | Browser 390×844 | PARTIAL (unit; browser OPEN) |
+| AF-07 | Price book governance UX | Browser draft→approve→activate | PARTIAL (unit; browser OPEN) |
+| AF-08 | CRM presented as production | Demo honesty + browser | PARTIAL (unit; browser OPEN) |
+| AF-09 | Catalog isolation in tests | No canonical writes | PARTIAL (unit guard) |
+| AF-10 | Production-auth smoke | `test:admin:production-auth` | OPEN |
+| AF-11 | AI freeform SVG generate | Decision or implement (C-AI ≠ AF-11) | OPEN (not implemented) |
+| AF-12 | CI canonical hash gate | Automated isolation gate | OPEN |
+| AF-13 | Internal language on SVG list | Customer-safe copy | OPEN |
+| AF-14 | Full CSRF/rate matrix | Mutators + browser sample | PARTIAL (unit; browser OPEN) |
+| AF-15–17 | Planner consumer / artifact bytes | DB-SVG co-own | OPEN / PARTIAL |
+| AF-18a | Dual-write mode honesty | Modes unit-green; live R2 probe | PARTIAL (modes unit; R2 OPEN) |
+| AF-18 | Full DB-SVG cutover | Failures.md + browser place + flip | OPEN |
+| AF-19 | Family release browser journey | Browser family → Planner parity | OPEN |
+| **K1** | Form/CLI/publish must use Maker only | Single Maker `drawLinearDesk`; unit green | unit-green (2026-07-18) — browser C3 still OPEN |
+| **K2** | “via Maker” claim needs unit | Unit proves Maker ids; template not form pen | unit-green (2026-07-18) — residual template only |
+| **K3** | Form UI must bind full Zod knobs | Model + UI bind all schema mm knobs | unit-green (2026-07-18) — browser OPEN |
 
-Add new **AF-** ids rather than burying issues.
+### Optional session aliases (1:1 — do not invent new meanings)
+
+| Alias | = AF |
+|-------|------|
+| ADM-AUTH-01 | AF-01 |
+| ADM-AUTH-02 | AF-03 |
+| ADM-AUTH-03 | AF-04 |
+| ADM-AUTH-SMOKE | AF-10 |
+| ADM-SVG-DISK | AF-02 |
+| ADM-SVG-DUAL | AF-18a |
+| ADM-DB-SVG | AF-18 |
+| ADM-CRM-HUB | AF-08 |
+| ADM-PRICE | AF-07 |
+| ADM-FAM | AF-19 |
+| ADM-PARAM-MAKER / PROOF / FIELDS | K1 / K2 / K3 |
+
+Add new **AF-** ids rather than burying issues or reusing a number.
 
 ---
 
@@ -236,25 +261,8 @@ Full cutover OPEN in `Failures.md`. **No `SVG_RELEASE_AUTHORITY=db` in this plan
 
 ### Failure registry (AF)
 
-| ID | Failure | Bar to clear | Status |
-|----|---------|--------------|--------|
-| AF-01 | Unauth admin page gate | Unit + browser, bypass off → `/access` | PARTIAL (unit; browser OPEN) |
-| AF-02 | Disk publish path regressions | Isolated unit + optional browser | OPEN |
-| AF-03 | Unauth `/api/admin/*` gate | 401/403 unit, bypass off | PARTIAL (unit; browser OPEN) |
-| AF-04 | Deploy auth without bypass | Preview/prod real admin session | OPEN |
-| AF-05 | Bulk/advanced dominance on SVG list | UX rebalance + browser | OPEN |
-| AF-06 | Phone catalog layout | Browser 390×844 | PARTIAL (unit; browser OPEN) |
-| AF-07 | Price book governance UX | Browser draft→approve→activate | PARTIAL (unit; browser OPEN) |
-| AF-08 | CRM presented as production | Demo honesty + browser | PARTIAL (unit; browser OPEN) |
-| AF-09 | Catalog isolation in tests | No canonical writes | PARTIAL (unit guard) |
-| AF-10 | Production-auth smoke | `test:admin:production-auth` | OPEN |
-| AF-11 | AI freeform SVG generate | Decision or implement | OPEN (not implemented; C-AI ≠ AF-11) |
-| AF-12 | CI canonical hash gate | Automated isolation gate | OPEN |
-| AF-13 | Internal language on SVG list | Customer-safe copy | OPEN |
-| AF-14 | Full CSRF/rate matrix | Mutators + browser sample | PARTIAL (unit; browser OPEN) |
-| AF-15–17 | Planner consumer / artifact bytes | DB-SVG co-own | OPEN / PARTIAL |
-| AF-18a | Dual-write mode honesty | Modes unit-green; live R2 probe | PARTIAL (modes unit; R2 OPEN) |
-| AF-18 | Full DB-SVG cutover | Failures.md + browser place + flip | OPEN |
+Canonical list lives in **Part A §6** only. Do not redefine AF ids here.  
+When flipping status, edit §6 (and FEATURES gap text if it cites that id).
 
 ### A0. Test isolation
 
@@ -276,7 +284,8 @@ Exit: Admin tests isolated; baseline FAIL list reproducible.
 - [ ] Unit: `requireAdminSession` 401 without session / 403 non-admin.  
 - [ ] Unit: `resolveAuthContext("admin")` rejects unauth when bypass off.  
 - [ ] Browser: unauth admin journey with bypass off.  
-- [ ] Deploy/preview: real admin session without bypass (**AF-04 / AF-10**).  
+- [ ] Deploy/preview: real admin session without bypass (**AF-04**).  
+- [ ] Production-auth smoke script (**AF-10**).  
 - [ ] Dashboard / nav browser re-proof.
 
 Exit: Automated unauth gates proven with bypass mocked off. Deploy auth remains OPEN until proven.
@@ -304,8 +313,8 @@ Exit: Automated unauth gates proven with bypass mocked off. Deploy auth remains 
 
 ### A5. Product families
 
-- [ ] Family form unit-green; browser release journey OPEN.  
-- [ ] Workstation family → Planner parity open.
+- [ ] Family form unit-green; browser release journey OPEN (**AF-19**).  
+- [ ] Workstation family → Planner parity open (**AF-19**).
 
 ### A6. Price books / commercial governance
 
@@ -441,7 +450,7 @@ Planner **toolbars stay** Fabric + Dockview + React Aria (no rebuild).
 
 - [ ] Admin parametric **imports** planner `units` + asset-engine draw/Maker — no duplicate convert/draw stacks.  
 - [ ] Form preview and publish call the **same** Maker drawer (`drawLinearDesk`).  
-- [ ] No new npm geometry engine without owner + Lockedfiles update.  
+- [ ] No new npm geometry engine without owner + `docs/architecture/12-DEPENDENCIES-ENGINES.md` update.  
 - [ ] No vendor UI that replaces Dockview / Fabric / Admin shell.
 
 ### C0. Product rules (non-negotiable)

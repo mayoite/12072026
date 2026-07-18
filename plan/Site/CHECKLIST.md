@@ -20,7 +20,7 @@ _Evidence and completion rules. Wins on how to prove done._
 **UI bar:** `docs/architecture/09-SITE-UI-BENCHMARK.md`  
 **Domain:** `docs/architecture/02-DOMAINS.md` (Site owns public visitors; not Planner layout or Admin inventory)  
 **Security bar:** `docs/architecture/10-SECURITY-BENCHMARK.md` (public forms, auth redirects, no secret leakage)  
-**i18n bar:** `docs/Lockedfiles/03-dependencies-engines-current.md` + `site/i18n/`  
+**i18n bar:** `docs/architecture/12-DEPENDENCIES-ENGINES.md` + `site/i18n/`  
 **Active blockers:** `../../Failures.md` (real unresolved only)  
 **Agent reports:** `../../agent-reports/`  -  short files + INDEX, never one mega dump
 

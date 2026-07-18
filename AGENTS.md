@@ -71,6 +71,6 @@ fields + options → eng drawer (Maker) → multipath SVG → publish (disk now;
 - Process: `Agents/INDEX.md`.
 - Execute: `plan/README.md`.
 - Facts/ops: `Readme.md`.
-- Licenses: `docs/Lockedfiles/03-dependencies-engines-current.md`.
+- Licenses: `docs/architecture/12-DEPENDENCIES-ENGINES.md`.
 
 Run `pnpm run check:layout` before completion.

@@ -8,17 +8,24 @@ It is not an execution plan.
 
 It was refreshed on 2026-07-15.
 
-Excalidraw-first SVG authoring is the primary Admin workflow.
+Two Admin SVG authoring paths (live code):
 
-Catalog and commercial governance support it.
+| Path | Stage engine | Chrome | Authority |
+|------|--------------|--------|-----------|
+| Freehand `/admin/svg-editor/[id]` | Excalidraw | Dockview (`AdminSvgDockHost`) + Aria/Phosphor | Draft / freehand; publish via server compile |
+| Parametric `/admin/svg-editor/parametric` | Form + **Maker** | Same dock host; form stage solid (not graph paper) | **Order factory** pen — multipath publish |
+
+Catalog and commercial governance support both.
 
 ## Verdict
 
-The current Admin is not ready for production use.
+The current Admin is not ready for production use as a full suite.
 
-The shell is coherent.
+The shell is coherent. Dock chrome and parametric form craft exist in code.
 
-The Excalidraw studio shell still needs fresh browser proof on draw, dimensions, compile preview, and publish.
+**Ship bar for orders** is still browser: C3 publish + C4 guest place/BOQ (not unit-green alone).
+
+The Excalidraw freehand path still needs fresh browser proof on draw, dimensions, compile preview, and publish where claimed.
 
 Bulk JSON dominates its entry page.
 

@@ -87,7 +87,7 @@ Tests must never mutate canonical catalog (committed descriptors or released DB 
 
 ## i18n
 
-Site marketing: `next-intl`; locales `en`, `hi`, `fr`, `de`, `es`; `localePrefix: 'never'`. Planner and Admin UI: English only. Details: `docs/Lockedfiles/03-dependencies-engines-current.md`.
+Site marketing: `next-intl`; locales `en`, `hi`, `fr`, `de`, `es`; `localePrefix: 'never'`. Planner and Admin UI: English only. Details: `docs/architecture/12-DEPENDENCIES-ENGINES.md`.
 
 ## Commands
 
@@ -174,4 +174,4 @@ R2 bucket: `oando-asset-cdn`. Lifecycle/audit → `results/admin/catalog-ops/`, 
 
 - Execution: `plan/README.md`
 - Architecture: `docs/INDEX.md`
-- Engines / persistence: `docs/Lockedfiles/03-dependencies-engines-current.md`
+- Engines / persistence: `docs/architecture/12-DEPENDENCIES-ENGINES.md`

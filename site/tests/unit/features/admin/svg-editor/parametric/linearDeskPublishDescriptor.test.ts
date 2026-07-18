@@ -48,4 +48,14 @@ describe("buildLinearDeskPublishDescriptor", () => {
     expect(first.generatedAt).toBe(generatedAt);
     expect(second.generatedAt).toBe(generatedAt);
   });
+
+  it("mints new id when existing identity is blank (not a fake reuse)", () => {
+    const minted = buildLinearDeskPublishDescriptor(
+      { widthMm: 1600, depthMm: 800, heightMm: 750 },
+      { id: "   " },
+    );
+    expect(minted.id.trim().length).toBeGreaterThan(0);
+    expect(minted.id).not.toBe("   ");
+    expect(minted.generatedAt).toBeUndefined();
+  });
 });

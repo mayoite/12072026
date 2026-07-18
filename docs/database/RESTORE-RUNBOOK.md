@@ -3,9 +3,9 @@
 **Scope:** Products + Admin Supabase Postgres, immutable SVG artifacts, catalog degraded mode, and maintenance mode.
 **Architecture:** 2 Supabase + Cloudflare R2 + Vercel.
 
-The SVG database tables and release pointer are planned. They are not live yet.
+SVG revision **tables may exist** on Products DB (migrations + Drizzle); **release authority is still disk** until cutover (`Failures.md`, `docs/architecture/08-DATABASE-SVG-CONTRACT.md`). Dual-write ≠ cutover.
 
-After migration, Products DB backups must include definitions, revisions, artifact metadata, and release pointers.
+After cutover, Products DB backups must include definitions, revisions, artifact metadata, and release pointers.
 
 ---
 

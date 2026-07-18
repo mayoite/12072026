@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import type { ReactNode } from "react";
 import {
   Excalidraw,
@@ -49,7 +49,20 @@ export default function ExcalidrawClient({
 }: ExcalidrawClientProps) {
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawAPI | null>(null);
 
-  const debouncer = useRef<NodeJS.Timeout | null>(null);
+  const debouncer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Avoid calling onDocument/onError after unmount from a pending debounce.
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      if (debouncer.current) {
+        clearTimeout(debouncer.current);
+        debouncer.current = null;
+      }
+    };
+  }, []);
 
   const handleChange: NonNullable<ExcalidrawProps["onChange"]> = (
     elements,
@@ -57,13 +70,17 @@ export default function ExcalidrawClient({
     files,
   ) => {
     if (debouncer.current) clearTimeout(debouncer.current);
-    debouncer.current = setTimeout(async () => {
-      try {
-        const svgElement = await exportToSvg({ elements, appState, files });
-        onDocument(svgElement.outerHTML, elements);
-      } catch (err) {
-        onError(err instanceof Error ? err.message : String(err));
-      }
+    debouncer.current = setTimeout(() => {
+      void (async () => {
+        try {
+          const svgElement = await exportToSvg({ elements, appState, files });
+          if (!mountedRef.current) return;
+          onDocument(svgElement.outerHTML, elements);
+        } catch (err) {
+          if (!mountedRef.current) return;
+          onError(err instanceof Error ? err.message : String(err));
+        }
+      })();
     }, 300);
   };
 

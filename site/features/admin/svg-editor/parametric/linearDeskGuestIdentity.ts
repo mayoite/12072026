@@ -88,3 +88,20 @@ export function isGuestVisibleSlug(slug: string): boolean {
   const n = slug.trim().toLowerCase();
   return n.startsWith("oando-") || n.startsWith("oando_");
 }
+
+/**
+ * Publish success copy — stable guest slug + commercial SKU (order factory identity).
+ * Pure; form surfaces this after publishLinearDeskAction succeeds.
+ */
+export function formatLinearDeskPublishSuccess(parts: {
+  readonly slug: string;
+  readonly sku?: string | null;
+}): string {
+  const slug = parts.slug.trim();
+  const sku =
+    typeof parts.sku === "string" && parts.sku.trim().length > 0
+      ? parts.sku.trim()
+      : null;
+  const skuBit = sku ? ` · SKU ${sku}` : "";
+  return `Published ${slug}${skuBit} (live, guest-visible). SVG /svg-catalog/${slug}.svg`;
+}

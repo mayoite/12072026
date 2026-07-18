@@ -1,7 +1,7 @@
 # Tech stack
 
 **Plan:** `plan/TechStack/CHECKLIST.md` + `FEATURES.md` only.  
-**Engines fact:** `docs/Lockedfiles/03-dependencies-engines-current.md`.  
+**Engines fact:** `docs/architecture/12-DEPENDENCIES-ENGINES.md`.  
 **Not proof.**
 
 **Open:** full `release:gate` not claimed green · DB-SVG cutover OPEN (disk authority).  

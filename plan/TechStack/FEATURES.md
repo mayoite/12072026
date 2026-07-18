@@ -1,12 +1,12 @@
 # Tech stack features
 
-Repo-sourced index: **stack surface → code path → honest gap**. Live code and lockfile win. Engines policy: docs/Lockedfiles/03-dependencies-engines-current.md (not duplicated as fiction here). This FEATURES file is a hand-maintained code map until an auto-generator exists; keep gaps honest from live imports.
+Repo-sourced index: **stack surface → code path → honest gap**. Live code and lockfile win. Engines policy: docs/architecture/12-DEPENDENCIES-ENGINES.md (not duplicated as fiction here). This FEATURES file is a hand-maintained code map until an auto-generator exists; keep gaps honest from live imports.
 
 | Doc | Role |
 |---|---|
 | This file | Current stack map and known gaps |
 | `CHECKLIST.md` | Open / partial work only |
-| `docs/Lockedfiles/03-dependencies-engines-current.md` | Architectural limits (not PASS proof) |
+| `docs/architecture/12-DEPENDENCIES-ENGINES.md` | Architectural limits (not PASS proof) |
 | `docs/architecture/11-RUNTIME-ARCHITECTURE.md` | Runtime shape |
 | `docs/architecture/08-DATABASE-SVG-CONTRACT.md` | DB/R2 SVG **target** (disk is live) |
 
@@ -27,7 +27,7 @@ Repo-sourced index: **stack surface → code path → honest gap**. Live code an
 | Nested install guard | `scripts/guard-workspace-install.mjs`, site `preinstall` | Guard present; CI root-only install OPEN until grepped as claim |
 | Layout gate | `scripts/check-repo-layout.mjs` → `pnpm run check:layout` | Run fresh each claim |
 | Failures registry | `Failures.md` + `scripts/check-failures.mjs` | DB-SVG disk authority line must stay honest |
-| Lockedfiles vs code | `docs/Lockedfiles/03-dependencies-engines-current.md` | Sync when engines change; do not claim PASS from MD alone |
+| 12-DEPENDENCIES-ENGINES vs code | `docs/architecture/12-DEPENDENCIES-ENGINES.md` | Sync when engines change; do not claim PASS from MD alone |
 
 ---
 
@@ -59,8 +59,8 @@ Repo-sourced index: **stack surface → code path → honest gap**. Live code an
 | Feature | Code | Gap |
 |---|---|---|
 | Direct deps | `site/package.json` + `scripts/audit-site-deps.mjs` | **T1 re-verified** (2026-07-17): `node scripts/audit-site-deps.mjs` → 48/49 deps USED; `@google/model-viewer` BUILD_ROLE (CDN pin, no npm import). Idle NO_IMPORT (8, not removed): `fast-check`, `whatwg-fetch`, `lighthouse`, `wrangler`, `prettier`, `prettier-plugin-tailwindcss`, `@types/istanbul-lib-report`, `@types/istanbul-reports`. Report: `agent-reports/2026-07-17-plan-T1.md`. Artifact: `results/tooling/site-dep-audit.json`. TF-05 **OPEN** until owner cut or keep |
-| Licenses | Lockedfiles policy | No automated license gate in root scripts; no adds this session |
-| No competitor packages | Policy in Lockedfiles | Package-name scan **PASS** (T1); comment-only research names not packages |
+| Licenses | 12-DEPENDENCIES-ENGINES policy | No automated license gate in root scripts; no adds this session |
+| No competitor packages | Policy in 12-DEPENDENCIES-ENGINES | Package-name scan **PASS** (T1); comment-only research names not packages |
 
 ---
 
@@ -155,4 +155,4 @@ Never commit values. Load from repo-root `.env.local` (see `.env.example`).
 
 ## Reference (not truth alone)
 
-`CHECKLIST.md` · `docs/Lockedfiles/03-dependencies-engines-current.md` · `Failures.md` · lockfiles
+`CHECKLIST.md` · `docs/architecture/12-DEPENDENCIES-ENGINES.md` · `Failures.md` · lockfiles

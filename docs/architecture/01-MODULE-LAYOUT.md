@@ -9,7 +9,7 @@
 | `site/components/` | Shared and marketing presentation |
 | `site/lib/` | Utilities, shared data, server helpers |
 | `site/platform/` | DB and platform clients (`drizzle/`, `supabase/`) |
-| `site/app/css/` | Shared styling |
+| `site/app/css/` | Shared styling (`core/theme.css`, `core/locked/{site,admin,chrome,svg,planner}/`) |
 | `site/config/` | Build, lint, Playwright, route contract |
 | `site/i18n/` | next-intl locales + messages |
 | `site/tests/` | Unit (name-mirror), integration, browser tests |

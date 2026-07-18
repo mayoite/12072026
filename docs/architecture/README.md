@@ -29,18 +29,21 @@ UI, accessibility, and performance apply inside product tracks.
 
 When docs and code differ, **code wins** until cutover is proven.
 
-| Area | Target | Live (2026-07-17) |
+| Area | Target | Live (2026-07-18) |
 |---|---|---|
 | Released SVG | Products DB + immutable R2 artifact bytes | **Disk** — `inventory/descriptors/`, `public/svg-catalog/` |
-| Admin publish | One DB transaction + product pointer | Disk first; dual-write **only** when Products DB configured **and** R2 ListObjects succeeds (`resolveSvgPublishDualWriteDeps`) |
-| Dual-write payload | Full `PublishedRevisionV1` + artifact bytes | Artifacts may write when enabled; **still not** sole release authority — enabled dual-write ≠ cutover |
+| Admin publish | One DB transaction + product pointer | Disk first; dual-write **only** when Products DB + R2 probe + pointer column (`resolveSvgPublishDualWriteDeps`) |
+| Dual-write payload | Full revision + artifact bytes | When enabled: artifacts may write; **still not** sole release authority — enabled ≠ cutover |
 | Planner SVG read | DB revision bytes via API | `svg-blocks` DB-aware + disk fallback; published SVG gate still disk |
+| Parametric pen | Maker only | **Live:** `drawLinearDesk` / form+CLI+publish. Freehand Excalidraw = draft stage only |
+| Admin studio chrome | Dockview + Aria + Phosphor | **Live:** freehand + parametric `AdminSvgDockHost`; CSS under `locked/chrome` |
 | Marketing catalog | Products DB | Products DB — `catalog_products` |
 | Planner managed catalog | Products DB | Products DB — `planner_managed_products` |
 | Lifecycle + audit | Durable store | `results/admin/catalog-ops/` (filesystem) |
 | BOQ handoff | Traceable CRM + staff notify | `POST /api/planner/handoff` → `customer_queries` + optional Resend |
+| Order factory (Part C) | C3 publish + C4 place/BOQ browser | Code paths exist; **ship bar = browser evidence** (see `plan/Admin/`, `docs/approach.md`) |
 
-Active cutover blocker: `../../Failures.md`. Contract: `08-DATABASE-SVG-CONTRACT.md`.
+Active cutover / blockers: `../../Failures.md`. Contract: `08-DATABASE-SVG-CONTRACT.md`. Operate: `../approach.md`.
 
 ## Boundaries (target)
 
@@ -62,6 +65,7 @@ Active cutover blocker: `../../Failures.md`. Contract: `08-DATABASE-SVG-CONTRACT
 | Site UI | `09-SITE-UI-BENCHMARK.md` |
 | Security | `10-SECURITY-BENCHMARK.md` |
 | Live runtime | `11-RUNTIME-ARCHITECTURE.md` |
+| Dependencies / engines | `12-DEPENDENCIES-ENGINES.md` |
 
 **Benchmarks are acceptance targets.** They are not PASS certificates. Execution lives under `plan/` as **duos** (CHECKLIST + FEATURES) per track; **Admin** also keeps `IMPLEMENTATION-PLAN.md` + `REALITY-AND-STACK.md` (exactly four files). One blockers file per track: `agent-reports/{PLANNER,ADMIN,SITE,TECH-STACK}.md`.
 
@@ -75,5 +79,5 @@ WCAG 2.2 AA · OWASP ASVS L2 (risk-based) · LCP ≤2.5s · INP ≤200ms · CLS 
 
 Live `site/` decision tree: **`docs/site/ARCHITECTURE.md`**.  
 Features: **`docs/site/features.md`**. Tests: **`docs/site/tests.md`**.  
-Stack engines/deps: **`docs/Lockedfiles/03-dependencies-engines-current.md`**.  
+Stack engines/deps: **`docs/architecture/12-DEPENDENCIES-ENGINES.md`**.  
 Stack proof bar: **`plan/TechStack/CHECKLIST.md`** (evidence + phases) + **`plan/TechStack/FEATURES.md`**.

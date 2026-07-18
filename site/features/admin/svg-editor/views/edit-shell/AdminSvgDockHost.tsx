@@ -2,7 +2,7 @@
 
 /**
  * Admin SVG studio chrome: dockview-react (same package as Planner).
- * Panels: preview | stage (Excalidraw canvas OR form+Maker) | details.
+ * Panels: Preview | stage (Studio canvas or Form) | Details.
  * Not Planner Fabric place toolbars.
  */
 
@@ -25,7 +25,6 @@ import {
   type IDockviewPanelProps,
 } from "dockview-react";
 import "dockview-react/dist/styles/dockview.css";
-import { Eye, PencilSimple, ListBullets } from "@phosphor-icons/react";
 
 import styles from "@/app/css/core/locked/chrome/admin-svg-dock.module.css";
 
@@ -221,11 +220,8 @@ export function AdminSvgDockHost({
           data-stage-scrollable={String(stageScrollable)}
           aria-label="SVG studio dock"
         >
-          {/* Phosphor icon legend for chrome (screen-reader + visual consistency with Planner) */}
           <span className="sr-only">
-            Panels: {titles.preview} <Eye aria-hidden />, {titles.stage}{" "}
-            <PencilSimple aria-hidden />, {titles.details}{" "}
-            <ListBullets aria-hidden />
+            Panels: {titles.preview}, {titles.stage}, {titles.details}
           </span>
           <DockviewReact
             className={styles.dockview}
