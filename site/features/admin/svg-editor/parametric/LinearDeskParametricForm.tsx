@@ -58,7 +58,10 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
     startTransition(async () => {
       const result = await publishLinearDeskAction(formToLinearDeskRaw(form));
       if (result.success) {
-        setMessage(`Published ${parsed.fields.slug ?? "desk"} to disk catalog.`);
+        const slug = result.descriptor.slug;
+        setMessage(
+          `Published ${slug} (live, guest-visible). SVG /svg-catalog/${slug}.svg`,
+        );
       } else {
         setMessage(result.error);
       }

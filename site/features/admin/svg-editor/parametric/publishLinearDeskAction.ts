@@ -14,6 +14,7 @@ import {
   type PublishDescriptorResult,
 } from "@/features/admin/svg-editor/publish/publishDescriptorWithPipeline";
 import { resolveSvgPublishDualWriteDeps } from "@/features/admin/svg-editor/publish/resolveSvgPublishDualWrite";
+import { setCatalogLifecycle } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
 import { compileLinearDeskSvg } from "./compileLinearDeskSvg";
 import {
   ensureCommercialSku,
@@ -114,8 +115,12 @@ export async function publishLinearDeskAction(
   });
 
   if (result.success) {
+    // Order factory: published parametric product is guest-placeable (live).
+    // (Studio freehand path still sets draft; this path is intentional ship.)
+    setCatalogLifecycle(result.descriptor.slug, "live");
     revalidatePath("/admin/svg-editor");
     revalidatePath("/admin/svg-editor/parametric");
+    revalidatePath("/planner/guest");
   }
 
   return result;
