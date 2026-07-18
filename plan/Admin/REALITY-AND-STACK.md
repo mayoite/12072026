@@ -45,8 +45,8 @@ Live durable intent: Supabase + R2. Owner blockers none.
 | **Brain** | Eng type drawers (schema + draw) | this monorepo |
 | **Client** | Forms only (no code) | Admin parametric route |
 | **Canvas** | Fabric (place/zoom) | https://github.com/fabricjs/fabric.js · npm `fabric` `7.4.0` |
-| **Chrome** | Dockview + React Aria | https://github.com/mathuo/dockview · React Aria |
-| **Draft studio** | Excalidraw (freehand only) | https://github.com/excalidraw/excalidraw · not parametric authority |
+| **Chrome packages** | **Same as Planner:** `dockview-react`, `react-aria-components`, `@phosphor-icons/react` | Shared toolbars / dockable panels / icons — **not** Fabric place tools |
+| **Draft studio** | Excalidraw (freehand draw only) | Own sketch tools inside stage; **shell chrome** should still be Dockview + Aria + Phosphor |
 | **AI** | Field draft only after C2 (**C-AI**). Never geometry | CHECKLIST Part C |
 | **Monorepo** | Product + planner import paths | https://github.com/mayoite/12072026 |
 
@@ -60,9 +60,22 @@ Live durable intent: Supabase + R2. Owner blockers none.
 |------|----------------|---------------|-------------------|
 | Interactive 2D place | Fabric · `features/planner/canvas/*` | Zoom, pan, place published SVG | Generating brand geometry |
 | 3D | Three + R3F | 3D view from same document | Plan SVG craft |
-| Admin freehand draft | Excalidraw · `ExcalidrawClient.tsx` | Studio draft UX | Publish truth for parametric |
+| Admin freehand draft | Excalidraw · `ExcalidrawClient.tsx` | Sketch tools only | Publish truth for parametric; shell chrome |
+| Admin / Planner chrome | **dockview-react · react-aria · phosphor** (same npm) | Toolbars, dockable rails, icons | Geometry / place tools |
 | Geometry pen | Maker.js · `drawLinearDesk.ts` · `makerJsRecipes.ts` · `makerJsToPath.ts` | Multipath plan SVG (form/CLI/publish) | Client freehand; AI paths |
 | Template residual | `drawLinearDeskFromTemplate.ts` | Deprecated comparison only | Form/CLI/publish pen |
+
+### Chrome honesty (Admin SVG today vs target)
+
+| Surface | Target | Live today |
+|---------|--------|------------|
+| Icons | Phosphor | Partial (TopBar, list, some panels) |
+| Accessible controls | React Aria | Partial (TopBar export menu, DimensionPanel) |
+| Dockable panels | **dockview-react** (same package as Planner) | **Not used** — custom CSS rails (`AdminSvgPreviewRail` / stage / details) |
+| Sketch tools | Excalidraw internal toolbar | Excalidraw own chrome (expected for draw tools only) |
+| Parametric form | Admin form fields + Aria-ish | Raw fieldset HTML — not Dockview |
+
+**Meaning:** reuse the **same chrome packages** as Planner (dock / toolbar patterns / icons). Do **not** mount Planner Fabric tool rail or place tools into SVG editor. Do **not** grow a second dock system under admin-only CSS forever.
 | Publish compile | `compileSvgForPublish` · `normalizeDescriptorForPipeline` · `pipelineCore` | S1–S3 sanitise | Client engines as release |
 | Disk write | `svgPipelineRunner` S4 · `persistBlockDescriptor` | Live SVG + descriptors | DB sole authority (until cutover) |
 | Units | `features/planner/model/units.ts` | mm store; mm/cm display | Parallel cm+mm that drift |
