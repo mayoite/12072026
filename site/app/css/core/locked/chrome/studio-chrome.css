@@ -1,8 +1,6 @@
 /**
- * Admin studio chrome helpers (global classes).
- * Home: locked/chrome (shared before locked/svg).
- * Dock modules + tool rail: same folder. Map: ./index.css
- * Tokens only — no hex.
+ * Admin studio chrome — parametric form craft + dock helpers.
+ * locked/chrome (before locked/svg). Tokens only — no hex/rgb.
  */
 
 .admin-svg-engine-shell__chrome-toolbar {
@@ -58,85 +56,233 @@
   flex-direction: column;
 }
 
-/* Parametric form+Maker stage inside Dockview (scrollable panel) */
+/* ── Parametric form stage — solid panel (reinforce; shell wins cascade) ── */
+
+.admin-svg-engine-shell__stage.admin-parametric-stage,
+.admin-svg-engine-shell__stage[data-stage-engine="form-maker"],
 .admin-parametric-stage {
   display: flex;
   flex-direction: column;
   min-height: 0;
   height: 100%;
   overflow: auto;
+  /* Solid only — freehand keeps graph paper on bare .admin-svg-engine-shell__stage */
   background: var(--color-surface-raised, var(--surface-panel));
+  color: var(--text-body);
 }
+
+/* ── Parametric form (product craft) ── */
 
 .admin-parametric-form {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
-  padding: 0.85rem 1rem 1.25rem;
+  gap: 0.75rem;
+  padding: 1rem 1.15rem 1.5rem;
   min-width: 0;
+  max-width: 28rem;
+  width: 100%;
+  margin-inline: auto;
 }
 
-.admin-parametric-form__fieldset {
+.admin-parametric-form__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0.8rem 0.95rem 0.9rem;
   border: 1px solid var(--border-soft);
-  border-radius: var(--radius-sm, 0.35rem);
-  padding: 0.65rem 0.85rem;
-  margin: 0 0 0.65rem;
+  border-radius: var(--radius-md, 0.5rem);
+  background: var(--surface-panel);
+  box-shadow: var(
+    --shadow-soft,
+    0 1px 2px color-mix(in srgb, var(--text-strong) 4%, transparent)
+  );
 }
 
-.admin-parametric-form__fieldset legend {
-  padding-inline: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 600;
+.admin-parametric-form__section-title {
+  margin: 0;
+  padding: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
   color: var(--text-muted);
 }
 
-.admin-parametric-form__inline {
-  margin-inline-end: 1rem;
-  font-size: 0.85rem;
-  color: var(--text-body);
+.admin-parametric-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem 0.7rem;
+}
+
+.admin-parametric-form__grid .admin-parametric-form__field--span2 {
+  grid-column: 1 / -1;
+}
+
+/* Unit segment control */
+.admin-parametric-form__unit-row {
+  display: inline-flex;
+  padding: 0.15rem;
+  gap: 0.1rem;
+  border-radius: var(--radius-sm, 0.35rem);
+  background: var(--surface-soft);
+  border: 1px solid var(--border-soft);
+  width: fit-content;
+}
+
+.admin-parametric-form__unit {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 1.9rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: calc(var(--radius-sm, 0.35rem) - 1px);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    color 0.12s ease,
+    background-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.admin-parametric-form__unit:has(input:checked) {
+  background: var(--surface-panel);
+  color: var(--text-strong);
+  box-shadow:
+    0 0 0 1px var(--border-soft),
+    0 1px 2px color-mix(in srgb, var(--text-strong) 6%, transparent);
+}
+
+.admin-parametric-form__unit:focus-within {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+/* Visually hide radio; keep focusable for keyboard */
+.admin-parametric-form__unit input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .admin-parametric-form__field {
-  display: block;
-  margin-bottom: 0.75rem;
-  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.28rem;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25;
   color: var(--text-body);
 }
 
 .admin-parametric-form__control {
   display: block;
   width: 100%;
-  margin-top: 0.25rem;
-  min-height: 2rem;
-  padding: 0.3rem 0.5rem;
+  min-height: 2.35rem;
+  padding: 0.45rem 0.65rem;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-sm, 0.35rem);
-  background: var(--surface-page);
+  background: var(--surface-studio-highlight, var(--surface-page));
   color: var(--text-strong);
   font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.3;
+  appearance: none;
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+select.admin-parametric-form__control {
+  padding-inline-end: 2rem;
+  background-image: linear-gradient(
+      45deg,
+      transparent 50%,
+      var(--text-muted) 50%
+    ),
+    linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 0.85rem) 50%,
+    calc(100% - 0.55rem) 50%;
+  background-size: 0.35rem 0.35rem, 0.35rem 0.35rem;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.admin-parametric-form__control:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 35%, var(--border-soft));
+}
+
+.admin-parametric-form__control:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 22%, transparent);
+}
+
+.admin-parametric-form__control[aria-invalid="true"] {
+  border-color: var(--color-error-red);
+}
+
+.admin-parametric-form__control[aria-invalid="true"]:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error-red) 20%, transparent);
 }
 
 .admin-parametric-form__check {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-  font-size: 0.85rem;
+  gap: 0.55rem;
+  margin: 0.1rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 500;
   color: var(--text-body);
+  cursor: pointer;
+  min-height: 2rem;
+}
+
+.admin-parametric-form__check input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.admin-parametric-form__check:focus-within {
+  outline: none;
+}
+
+.admin-parametric-form__check input:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .admin-parametric-form__error {
   display: block;
-  margin-top: 0.2rem;
-  font-size: 0.8rem;
-  color: var(--color-error, var(--text-danger, #a30));
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-error-red);
 }
 
+/* Details summary — read-only mirror */
 .admin-parametric-details__dl {
-  margin: 0 0 0.75rem;
+  margin: 0;
   display: grid;
-  gap: 0.45rem;
-  font-size: 0.82rem;
+  gap: 0.5rem;
+  font-size: 0.85rem;
 }
 
 .admin-parametric-details__dl div {
@@ -144,20 +290,97 @@
   grid-template-columns: 5.5rem minmax(0, 1fr);
   gap: 0.35rem;
   align-items: baseline;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.admin-parametric-details__dl div:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .admin-parametric-details__dl dt {
   margin: 0;
   color: var(--text-muted);
   font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .admin-parametric-details__dl dd {
   margin: 0;
   color: var(--text-strong);
+  font-weight: 500;
   overflow-wrap: anywhere;
 }
 
+.admin-parametric-details__note {
+  margin: 0.85rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+/* Preview plate host (paint lives in locked/svg) */
 .admin-svg-engine-shell--dock .admin-linear-desk-preview {
-  max-width: none;
+  max-width: 100%;
+  width: 100%;
+}
+
+.admin-parametric-preview-plate {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  height: 100%;
+  min-height: 0;
+  padding: 0.85rem;
+  background: var(--color-surface-raised, var(--surface-panel));
+}
+
+.admin-parametric-preview-plate__label {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.admin-parametric-preview-plate [role="status"] {
+  margin: 0;
+  padding: 1rem 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+  text-align: center;
+  border: 1px dashed var(--border-soft);
+  border-radius: var(--radius-md, 0.5rem);
+  background: var(--surface-soft);
+}
+
+/* Quiet status band on parametric shell */
+.admin-svg-editor-workspace[data-admin-shell="parametric"]
+  .admin-svg-engine-shell__status-band {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  background: color-mix(
+    in srgb,
+    var(--color-surface-raised) 94%,
+    var(--surface-muted)
+  );
+}
+
+.admin-svg-editor-workspace[data-admin-shell="parametric"]
+  .admin-svg-engine-shell__status-detail {
+  color: var(--text-body);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-parametric-form__control,
+  .admin-parametric-form__unit {
+    transition: none;
+  }
 }

@@ -359,7 +359,7 @@
   vertical-align: middle;
 }
 
-/* ── Canvas stage ── */
+/* ── Canvas stage (freehand / sketch) — graph paper OK ── */
 .admin-svg-engine-shell__stage {
   grid-area: stage;
   min-width: 0;
@@ -373,6 +373,17 @@
     linear-gradient(90deg, color-mix(in srgb, var(--border-soft) 45%, transparent) 1px, transparent 1px),
     var(--surface-muted);
   background-size: 24px 24px;
+}
+
+/*
+ * Parametric form stage — solid panel only (never graph paper).
+ * This file loads after locked/chrome; the stage graph-paper rule above
+ * would otherwise win. Shorthand `background` fully resets grid layers.
+ */
+.admin-svg-engine-shell__stage.admin-parametric-stage,
+.admin-svg-engine-shell__stage[data-stage-engine="form-maker"] {
+  overflow: auto;
+  background: var(--color-surface-raised, var(--surface-panel));
 }
 
 /* ── Collapsible panels inside rails ── */

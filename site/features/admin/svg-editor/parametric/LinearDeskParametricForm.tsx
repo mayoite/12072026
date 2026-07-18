@@ -1,16 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useMemo, useState, useTransition } from "react";
-import {
-  ArrowLeft,
-  CircleNotch as Loader2,
-  Eye,
-  ListBullets,
-  PencilSimple,
-  SquaresFour,
-} from "@phosphor-icons/react";
-import { Toolbar, ToggleButton } from "react-aria-components";
+import { useCallback, useId, useMemo, useState, useTransition } from "react";
+import { ArrowLeft, CircleNotch as Loader2 } from "@phosphor-icons/react";
 
 import {
   convertLinearDeskFormUnit,
@@ -20,6 +12,7 @@ import {
   syncIdentityAfterWidthChange,
   type LinearDeskFormDisplay,
 } from "./linearDeskFormModel";
+import { formatLinearDeskPublishSuccess } from "./linearDeskGuestIdentity";
 /** K1: Maker-only pen (drawLinearDesk → compileMakerRecipeToPaths). */
 import { renderLinearDeskSvg } from "@/features/planner/asset-engine/svg/parametric";
 import { publishLinearDeskAction } from "./publishLinearDeskAction";
@@ -31,8 +24,7 @@ type Props = {
 
 /**
  * Parametric linear-desk authoring.
- * Chrome: same Dockview + Aria + Phosphor package language as freehand studio.
- * Stage engine: field form + Maker compile (not Excalidraw / not Fabric).
+ * Product UI: configure desk → publish. Preview | Form | Details.
  */
 export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
   const [form, setForm] = useState<LinearDeskFormDisplay>(() =>
@@ -71,15 +63,17 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
   const onPublish = useCallback(() => {
     setMessage(null);
     if (!parsed.ok) {
-      setMessage("Fix field errors before publish.");
+      setMessage("Fix the highlighted fields, then publish.");
       return;
     }
     startTransition(async () => {
       const result = await publishLinearDeskAction(formToLinearDeskRaw(form));
       if (result.success) {
-        const slug = result.descriptor.slug;
         setMessage(
-          `Published ${slug} (live, guest-visible). SVG /svg-catalog/${slug}.svg`,
+          formatLinearDeskPublishSuccess({
+            slug: result.descriptor.slug,
+            sku: result.descriptor.sku,
+          }),
         );
       } else {
         setMessage(result.error);
@@ -89,47 +83,43 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
 
   const err = (path: string) => errorsByPath.get(path);
   const canPublish = parsed.ok && !pending;
+  const hasPedestals = form.pedestalCount === 2;
   const footprintLabel = parsed.ok
     ? `${parsed.fields.widthMm}×${parsed.fields.depthMm} mm`
     : "—";
   const validationLabel = parsed.ok
     ? "Draft ready"
-    : `${parsed.errors.length} field issue${parsed.errors.length === 1 ? "" : "s"}`;
+    : `${parsed.errors.length} issue${parsed.errors.length === 1 ? "" : "s"}`;
   const displaySlug = form.slug.trim() || "oando-…";
+  const unit = form.displayUnit;
 
   const previewSlot = (
     <aside
-      aria-label="Plan symbol preview"
-      className="admin-svg-engine-shell__rail admin-svg-engine-shell__rail--preview"
+      aria-label="Desk plan preview"
+      className="admin-svg-engine-shell__rail admin-svg-engine-shell__rail--preview admin-parametric-preview-plate"
       data-testid="admin-svg-preview-rail"
     >
-      <div className="admin-panel admin-svg-engine-shell__panel">
-        <div className="admin-panel__header">Plan SVG</div>
-        <div className="admin-panel__body">
-          <p className="admin-page__meta admin-svg-engine-shell__rail-hint">
-            Same Maker draw path as publish.
-          </p>
-          {previewSvg ? (
-            <div
-              data-testid="linear-desk-preview"
-              className="admin-linear-desk-preview"
-              // Preview from same draw* as publish — trusted code path, not user HTML
-              // Styles: app/css/core/locked/svg/svg-preview.css
-              dangerouslySetInnerHTML={{ __html: previewSvg }}
-            />
-          ) : (
-            <p role="status" data-testid="linear-desk-preview-blocked">
-              Fix fields to preview.
-            </p>
-          )}
-        </div>
-      </div>
+      <p className="admin-parametric-preview-plate__label">Plan preview</p>
+      {previewSvg ? (
+        <div
+          data-testid="linear-desk-preview"
+          className="admin-linear-desk-preview"
+          role="img"
+          aria-label={`Linear desk plan ${footprintLabel}`}
+          // Same Maker path as publish — trusted compile, not user HTML
+          dangerouslySetInnerHTML={{ __html: previewSvg }}
+        />
+      ) : (
+        <p role="status" data-testid="linear-desk-preview-blocked">
+          Fix highlighted fields to show the plan.
+        </p>
+      )}
     </aside>
   );
 
   const stageSlot = (
     <section
-      aria-label="Linear desk fields"
+      aria-label="Desk configuration"
       className="admin-svg-engine-shell__stage admin-svg-engine-shell__stage--dock admin-parametric-stage"
       data-testid="admin-svg-engine-stage"
       data-region="stage-column"
@@ -144,149 +134,181 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
         }}
         noValidate
       >
-        <fieldset className="admin-parametric-form__fieldset">
-          <legend>Display unit</legend>
-          <label className="admin-parametric-form__inline">
+        <fieldset className="admin-parametric-form__section">
+          <legend className="admin-parametric-form__section-title">Units</legend>
+          <div
+            className="admin-parametric-form__unit-row"
+            role="radiogroup"
+            aria-label="Display unit"
+          >
+            <label className="admin-parametric-form__unit">
+              <input
+                type="radio"
+                name="unit"
+                checked={form.displayUnit === "mm"}
+                onChange={() => onUnit("mm")}
+              />
+              mm
+            </label>
+            <label className="admin-parametric-form__unit">
+              <input
+                type="radio"
+                name="unit"
+                checked={form.displayUnit === "cm"}
+                onChange={() => onUnit("cm")}
+              />
+              cm
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset className="admin-parametric-form__section">
+          <legend className="admin-parametric-form__section-title">Size</legend>
+          <div className="admin-parametric-form__grid">
+            <Field
+              label={`Width (${unit})`}
+              value={form.width}
+              error={err("width")}
+              onChange={(v) => setNumber("width", v)}
+              testId="linear-desk-width"
+            />
+            <Field
+              label={`Depth (${unit})`}
+              value={form.depth}
+              error={err("depth")}
+              onChange={(v) => setNumber("depth", v)}
+              testId="linear-desk-depth"
+            />
+            <Field
+              label={`Height (${unit})`}
+              value={form.height}
+              error={err("height")}
+              onChange={(v) => setNumber("height", v)}
+              testId="linear-desk-height"
+            />
+            <Field
+              label={`Top thickness (${unit})`}
+              value={form.topThickness}
+              error={err("topThickness")}
+              onChange={(v) => setNumber("topThickness", v)}
+            />
+          </div>
+        </fieldset>
+
+        <fieldset className="admin-parametric-form__section">
+          <legend className="admin-parametric-form__section-title">
+            Pedestals
+          </legend>
+          <div className="admin-parametric-form__grid">
+            <label className="admin-parametric-form__field admin-parametric-form__field--span2">
+              Pedestal layout
+              <select
+                value={form.pedestalCount}
+                onChange={(e) =>
+                  setForm((p) => ({
+                    ...p,
+                    pedestalCount: Number(e.target.value) === 0 ? 0 : 2,
+                  }))
+                }
+                className="admin-parametric-form__control"
+              >
+                <option value={2}>Two pedestals</option>
+                <option value={0}>No pedestals</option>
+              </select>
+            </label>
+            {hasPedestals ? (
+              <>
+                <Field
+                  label={`Pedestal width (${unit})`}
+                  value={form.pedestalWidth}
+                  error={err("pedestalWidth")}
+                  onChange={(v) => setNumber("pedestalWidth", v)}
+                />
+                <Field
+                  label={`Side inset (${unit})`}
+                  value={form.pedestalInset}
+                  error={err("pedestalInset")}
+                  onChange={(v) => setNumber("pedestalInset", v)}
+                />
+                <Field
+                  label={`Gap under top (${unit})`}
+                  value={form.pedestalTopGap}
+                  error={err("pedestalTopGap")}
+                  onChange={(v) => setNumber("pedestalTopGap", v)}
+                  testId="linear-desk-pedestal-top-gap"
+                />
+                <Field
+                  label={`Back inset (${unit})`}
+                  value={form.pedestalBackInset}
+                  error={err("pedestalBackInset")}
+                  onChange={(v) => setNumber("pedestalBackInset", v)}
+                  testId="linear-desk-pedestal-back-inset"
+                />
+              </>
+            ) : null}
+          </div>
+          <label className="admin-parametric-form__check">
             <input
-              type="radio"
-              name="unit"
-              checked={form.displayUnit === "mm"}
-              onChange={() => onUnit("mm")}
-            />{" "}
-            mm
-          </label>
-          <label className="admin-parametric-form__inline">
-            <input
-              type="radio"
-              name="unit"
-              checked={form.displayUnit === "cm"}
-              onChange={() => onUnit("cm")}
-            />{" "}
-            cm
+              type="checkbox"
+              checked={form.modesty}
+              onChange={(e) =>
+                setForm((p) => ({ ...p, modesty: e.target.checked }))
+              }
+            />
+            Modesty panel
           </label>
         </fieldset>
 
-        <Field
-          label={`Width (${form.displayUnit})`}
-          value={form.width}
-          error={err("width")}
-          onChange={(v) => setNumber("width", v)}
-          testId="linear-desk-width"
-        />
-        <Field
-          label={`Depth (${form.displayUnit})`}
-          value={form.depth}
-          error={err("depth")}
-          onChange={(v) => setNumber("depth", v)}
-          testId="linear-desk-depth"
-        />
-        <Field
-          label={`Height (${form.displayUnit})`}
-          value={form.height}
-          error={err("height")}
-          onChange={(v) => setNumber("height", v)}
-          testId="linear-desk-height"
-        />
-        <Field
-          label={`Top thickness (${form.displayUnit})`}
-          value={form.topThickness}
-          error={err("topThickness")}
-          onChange={(v) => setNumber("topThickness", v)}
-        />
-        <Field
-          label={`Pedestal width (${form.displayUnit})`}
-          value={form.pedestalWidth}
-          error={err("pedestalWidth")}
-          onChange={(v) => setNumber("pedestalWidth", v)}
-        />
-        <Field
-          label={`Pedestal inset (${form.displayUnit})`}
-          value={form.pedestalInset}
-          error={err("pedestalInset")}
-          onChange={(v) => setNumber("pedestalInset", v)}
-        />
-        <Field
-          label={`Pedestal top gap (${form.displayUnit})`}
-          value={form.pedestalTopGap}
-          error={err("pedestalTopGap")}
-          onChange={(v) => setNumber("pedestalTopGap", v)}
-          testId="linear-desk-pedestal-top-gap"
-        />
-        <Field
-          label={`Pedestal back inset (${form.displayUnit})`}
-          value={form.pedestalBackInset}
-          error={err("pedestalBackInset")}
-          onChange={(v) => setNumber("pedestalBackInset", v)}
-          testId="linear-desk-pedestal-back-inset"
-        />
-
-        <label className="admin-parametric-form__field">
-          Pedestals
-          <select
-            value={form.pedestalCount}
-            onChange={(e) =>
-              setForm((p) => ({
-                ...p,
-                pedestalCount: Number(e.target.value) === 0 ? 0 : 2,
-              }))
-            }
-            className="admin-parametric-form__control"
-          >
-            <option value={2}>Dual (2)</option>
-            <option value={0}>None (0)</option>
-          </select>
-        </label>
-
-        <label className="admin-parametric-form__check">
-          <input
-            type="checkbox"
-            checked={form.modesty}
-            onChange={(e) => setForm((p) => ({ ...p, modesty: e.target.checked }))}
-          />
-          Modesty panel
-        </label>
-
-        <Field
-          label="Name"
-          value={form.name}
-          error={err("name")}
-          onChange={(v) => setForm((p) => ({ ...p, name: v }))}
-          text
-        />
-        <Field
-          label="SKU"
-          value={form.sku}
-          error={err("sku")}
-          onChange={(v) => setForm((p) => ({ ...p, sku: v }))}
-          text
-        />
-        <Field
-          label="Slug"
-          value={form.slug}
-          error={err("slug")}
-          onChange={(v) => setForm((p) => ({ ...p, slug: v }))}
-          text
-          testId="linear-desk-slug"
-        />
-        <Field
-          label="Series id"
-          value={form.seriesId}
-          error={err("seriesId")}
-          onChange={(v) => setForm((p) => ({ ...p, seriesId: v }))}
-          text
-        />
+        <fieldset className="admin-parametric-form__section">
+          <legend className="admin-parametric-form__section-title">
+            Identity
+          </legend>
+          <div className="admin-parametric-form__grid">
+            <Field
+              label="Name"
+              value={form.name}
+              error={err("name")}
+              onChange={(v) => setForm((p) => ({ ...p, name: v }))}
+              text
+              className="admin-parametric-form__field--span2"
+            />
+            <Field
+              label="SKU"
+              value={form.sku}
+              error={err("sku")}
+              onChange={(v) => setForm((p) => ({ ...p, sku: v }))}
+              text
+            />
+            <Field
+              label="Series"
+              value={form.seriesId}
+              error={err("seriesId")}
+              onChange={(v) => setForm((p) => ({ ...p, seriesId: v }))}
+              text
+            />
+            <Field
+              label="Slug"
+              value={form.slug}
+              error={err("slug")}
+              onChange={(v) => setForm((p) => ({ ...p, slug: v }))}
+              text
+              testId="linear-desk-slug"
+              className="admin-parametric-form__field--span2"
+            />
+          </div>
+        </fieldset>
       </form>
     </section>
   );
 
   const detailsSlot = (
     <aside
-      aria-label="Publish and identity"
+      aria-label="Details"
       className="admin-svg-engine-shell__rail admin-svg-engine-shell__rail--details"
       data-testid="admin-svg-details-rail"
     >
       <div className="admin-panel admin-svg-engine-shell__panel">
-        <div className="admin-panel__header">Identity</div>
+        <div className="admin-panel__header">Summary</div>
         <div className="admin-panel__body">
           <dl className="admin-parametric-details__dl">
             <div>
@@ -302,48 +324,16 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
               <dd data-testid="linear-desk-details-slug">{displaySlug}</dd>
             </div>
             <div>
-              <dt>Footprint</dt>
-              <dd data-testid="linear-desk-details-footprint">{footprintLabel}</dd>
+              <dt>Size</dt>
+              <dd data-testid="linear-desk-details-footprint">
+                {footprintLabel}
+              </dd>
             </div>
           </dl>
-          <p className="admin-page__meta">
-            Stored as millimetres. Slug must stay <code>oando-…</code> for guest
-            place.
+          <p className="admin-parametric-details__note">
+            Change sizes and name in Form. Publish puts the desk in inventory
+            for guests.
           </p>
-        </div>
-      </div>
-      <div className="admin-panel admin-svg-engine-shell__panel">
-        <div className="admin-panel__header">Publish</div>
-        <div className="admin-panel__body">
-          <p className="admin-page__meta">
-            Engine: form fields → Maker pen → multipath plan SVG → disk (live
-            guest-visible).
-          </p>
-          <button
-            type="submit"
-            form="linear-desk-parametric-form"
-            disabled={!canPublish}
-            className="admin-btn admin-btn--primary admin-btn--compact admin-svg-engine-shell__action-publish"
-            data-testid="linear-desk-publish"
-          >
-            {pending ? (
-              <>
-                <Loader2 size={14} className="animate-spin" aria-hidden />{" "}
-                Publishing…
-              </>
-            ) : (
-              "Publish to disk"
-            )}
-          </button>
-          {message ? (
-            <p
-              role="status"
-              data-testid="linear-desk-message"
-              className="admin-alert admin-alert--info"
-            >
-              {message}
-            </p>
-          ) : null}
         </div>
       </div>
     </aside>
@@ -354,7 +344,7 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
       className="admin-page admin-page--svg-engine admin-svg-editor-workspace admin-svg-editor-workspace--dock"
       data-testid="admin-linear-desk-parametric"
       data-admin-shell="parametric"
-      data-chrome="dockview-react aria phosphor"
+      data-chrome="dockview-react phosphor"
     >
       <header
         className="admin-svg-engine-shell__topbar"
@@ -377,7 +367,7 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
             className="admin-svg-engine-shell__eyebrow"
             data-testid="admin-shell-scope"
           >
-            Admin · Parametric
+            Configure desk
           </p>
           <h1
             className="admin-svg-engine-shell__title"
@@ -385,11 +375,11 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
           >
             Linear desk
             {form.sku.trim() ? (
-              <span className="admin-svg-engine-shell__sku">SKU {form.sku.trim()}</span>
+              <span className="admin-svg-engine-shell__sku">{form.sku.trim()}</span>
             ) : null}
           </h1>
           <p className="admin-svg-engine-shell__source" data-testid="admin-shell-source">
-            Field-driven Maker SVG · {displaySlug}
+            {displaySlug}
           </p>
         </div>
 
@@ -399,9 +389,16 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
             form="linear-desk-parametric-form"
             disabled={!canPublish}
             className="admin-btn admin-btn--primary admin-btn--compact admin-svg-engine-shell__action-publish"
-            data-testid="linear-desk-publish-top"
+            data-testid="linear-desk-publish"
           >
-            {pending ? "Publishing…" : "Publish to disk"}
+            {pending ? (
+              <>
+                <Loader2 size={14} className="animate-spin" aria-hidden />{" "}
+                Publishing…
+              </>
+            ) : (
+              "Publish"
+            )}
           </button>
         </div>
       </header>
@@ -414,7 +411,7 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
           <p
             role="status"
             className="admin-alert admin-alert--info admin-svg-engine-feedback__item"
-            data-testid="linear-desk-message-band"
+            data-testid="linear-desk-message"
           >
             {message}
           </p>
@@ -426,28 +423,9 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
       <div
         className="admin-svg-engine-shell__status-band"
         data-testid="admin-svg-studio-status"
-        aria-label="Parametric draft status"
+        aria-label="Desk status"
       >
-        <Toolbar
-          aria-label="Studio chrome"
-          className="admin-svg-engine-shell__chrome-toolbar"
-          data-testid="admin-svg-chrome-toolbar"
-        >
-          <ToggleButton
-            isSelected
-            className="admin-svg-engine-shell__chrome-btn"
-            aria-label="Dock layout: preview, form, details"
-          >
-            <SquaresFour size={16} aria-hidden />
-            <span className="admin-svg-engine-shell__chrome-btn-label">Dock</span>
-          </ToggleButton>
-          <span className="admin-svg-engine-shell__chrome-legend" aria-hidden>
-            <Eye size={14} />
-            <PencilSimple size={14} />
-            <ListBullets size={14} />
-          </span>
-        </Toolbar>
-        <span data-testid="admin-svg-studio-status-draft">Parametric draft</span>
+        <span data-testid="admin-svg-studio-status-draft">Draft</span>
         <span aria-hidden className="admin-svg-engine-shell__status-sep">
           ·
         </span>
@@ -459,16 +437,7 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
           className="admin-svg-engine-shell__status-detail"
           data-testid="admin-svg-studio-status-footprint"
         >
-          Footprint {footprintLabel}
-        </span>
-        <span aria-hidden className="admin-svg-engine-shell__status-sep">
-          ·
-        </span>
-        <span
-          className="admin-svg-engine-shell__status-detail"
-          data-testid="admin-svg-studio-status-engine"
-        >
-          form + Maker
+          {footprintLabel}
         </span>
         {canPublish ? (
           <span className="admin-badge admin-badge--active admin-badge--compact admin-svg-engine-shell__status-ready">
@@ -476,7 +445,7 @@ export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
           </span>
         ) : (
           <span className="admin-badge admin-badge--warn admin-badge--compact admin-svg-engine-shell__status-ready">
-            {pending ? "Publishing…" : "Publish blocked"}
+            {pending ? "Publishing…" : "Blocked"}
           </span>
         )}
       </div>
@@ -508,9 +477,19 @@ function Field(props: {
   onChange: (v: string) => void;
   text?: boolean;
   testId?: string;
+  className?: string;
 }) {
+  const uid = useId();
+  const errorId = `${uid}-err`;
+  const invalid = Boolean(props.error);
   return (
-    <label className="admin-parametric-form__field">
+    <label
+      className={
+        props.className
+          ? `admin-parametric-form__field ${props.className}`
+          : "admin-parametric-form__field"
+      }
+    >
       {props.label}
       <input
         type={props.text ? "text" : "number"}
@@ -519,9 +498,11 @@ function Field(props: {
         data-testid={props.testId}
         className="admin-parametric-form__control"
         step={props.text ? undefined : "any"}
+        aria-invalid={invalid || undefined}
+        aria-describedby={invalid ? errorId : undefined}
       />
       {props.error ? (
-        <span role="alert" className="admin-parametric-form__error">
+        <span id={errorId} role="alert" className="admin-parametric-form__error">
           {props.error}
         </span>
       ) : null}
