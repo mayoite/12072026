@@ -18,9 +18,21 @@ Parent: read env, run scripts, execute, commit, push. No “disk vs db” lectur
 
 ## Session note (agent)
 
-Chrome: **Beta works** (`Chrome Beta` under Program Files). Stable path missing.  
-MCP: `~/.grok/config.toml` → chrome-devtools `--channel=beta`.  
-If MCP still fails, restart session so MCP reloads; or run Beta with remote debugging.
+Chrome: **Beta works** (`C:\Program Files\Google\Chrome Beta\Application\chrome.exe`). Stable path missing.  
+MCP plugin still defaults to stable until session reloads config with `--executablePath=...Chrome Beta...`.  
+Workaround used: Chrome Beta `--remote-debugging-port=9222` + Playwright CDP (`scripts/c3-parametric-browser-proof.mjs`).
+
+### C3 browser evidence (2026-07-18, Chrome Beta CDP)
+
+| Check | Result |
+|-------|--------|
+| Form `/admin/svg-editor/parametric` | Loaded (`data-testid=admin-linear-desk-parametric`) |
+| Preview multipath | OK (desk-top/pedestal in preview HTML) |
+| Publish | Success message; wrote `site/public/svg-catalog/oando-linear-desk-1600.svg` + descriptors |
+| Maker parts on disk | `id="desk-top"` + pedestals present |
+| Guest list | total 23 after publish; check `oando-linear-desk-1600` in svg-blocks |
+
+Note: slug fill raced with auto-identity sync in proof script — published default slug `oando-linear-desk-1600` (acceptable for C3).
 
 ---
 
