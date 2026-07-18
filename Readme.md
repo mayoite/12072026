@@ -80,7 +80,7 @@ Do not write under `site/results/` or `site/test-results/`. Cache/tooling dirs (
 | Planner SVG API | DB-aware when configured, disk fallback | `loadBuyerVisibleDescriptorsWithDb()` — not revision artifact bytes |
 | Marketing catalog | Products DB | `catalog_products` |
 | Planner managed catalog | Products DB | `planner_managed_products` |
-| DB dual-write | Best-effort stub when `PRODUCTS_DATABASE_URL` set | Both `publishSvgEditorAction.ts` and `POST /api/admin/svg-editor` inject `dbRepository`; disk remains authority |
+| DB dual-write | Optional when Products DB + R2 ready (`resolveSvgPublishDualWriteDeps`) | Both Admin publish entrypoints may inject repo + R2 put; disk remains authority; ≠ cutover |
 | Lifecycle + audit | `results/admin/catalog-ops/` | `_catalog-lifecycle.json`, `_descriptor-audit.jsonl` |
 
 Tests must never mutate canonical catalog (committed descriptors or released DB rows).

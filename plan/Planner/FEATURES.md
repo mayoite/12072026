@@ -94,7 +94,7 @@ Table paths are relative to `site/features/planner/` unless they start with `sit
 
 ## Admin dependency (blocks live catalog / SVG / prices)
 
-Not a customer phase. Disk still supplies the live SVG bytes. Both Admin publish entrypoints also write Products DB records when configured. The DB stores artifact metadata, not artifact bytes.
+Not a customer phase. Disk still supplies the live SVG bytes. Dual-write injects only when Products DB + R2 ready (`resolveSvgPublishDualWriteDeps`); enabled ≠ cutover. Artifact-byte release authority remains disk until Failures.md cutover.
 
 | Area | Code | Gap |
 |---|---|---|

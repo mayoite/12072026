@@ -109,14 +109,16 @@ export {
   type ExtrudeSvgProfile,
 } from "./mesh/extrudeSvgPlan";
 
-/** Plan+A parametric templates (fields → multipath SVG). */
+/** Plan+A parametric linear desk (Maker pen — K1). */
 export {
   LinearDeskFieldsSchema,
   LinearDeskDisplayUnitSchema,
   parseLinearDeskFields,
-  drawLinearDeskFromTemplate,
+  drawLinearDesk,
+  fieldsToLinearDeskMakerRecipe,
   linearDeskPartsToSvg,
   renderLinearDeskSvg,
+  drawLinearDeskFromTemplate,
   type LinearDeskFields,
   type LinearDeskDisplayUnit,
   type LinearDeskDrawResult,

@@ -12,7 +12,7 @@ SEO floor: `app/robots.ts` + `app/sitemap.ts` at App Router root, driven by rout
 
 Internal role. Owns catalog identity, availability, SVG authoring/publication, families/options, revisions, rollback, audit, and the released catalog contract for Planner and Site.
 
-**Live:** disk publish (`inventory/descriptors/`, `public/svg-catalog/`). Dual-write only when Products DB **and** R2 ListObjects succeed; stub payload; disk still authority. UI copy must admit disk authority. Shell chrome uses **ecru paper stack** and Planner-style topbar package (brand | center | actions). **Target:** Products DB transaction — `08-DATABASE-SVG-CONTRACT.md`. Does not own customer layout.
+**Live:** disk publish (`inventory/descriptors/`, `public/svg-catalog/`). Dual-write only when Products DB **and** R2 ListObjects succeed; enabled dual-write ≠ cutover; disk still authority. UI copy must admit disk authority. Shell chrome uses **ecru paper stack** and Planner-style topbar package (brand | center | actions). **Target:** Products DB transaction — `08-DATABASE-SVG-CONTRACT.md`. Does not own customer layout.
 
 Routes: `app/admin/**`. Behavior: `features/admin/**`. Auth: proxy + `requireAuthUser(..., "admin")` + `requireAdminSession` / `withAuth({ role: "admin" })`. `DEV_AUTH_BYPASS=1` is local/non-prod only — not deploy proof.
 

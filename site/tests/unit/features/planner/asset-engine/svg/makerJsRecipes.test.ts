@@ -21,6 +21,33 @@ describe("makerJsRecipes", () => {
     expect(Object.keys(model.models ?? {})).not.toContain("desk-knee-space");
   });
 
+  it("honours pedestalInsetMm / topGap / backInset and modesty", () => {
+    const withModesty = buildLinearDeskMakerModel({
+      recipe: "linear-desk",
+      widthMm: 1800,
+      depthMm: 800,
+      topThicknessMm: 120,
+      pedestalWidthMm: 200,
+      pedestalInsetMm: 100,
+      pedestalTopGapMm: 40,
+      pedestalBackInsetMm: 80,
+      pedestals: true,
+      modesty: true,
+    });
+    const ids = Object.keys(withModesty.model.models ?? {});
+    expect(ids).toEqual(
+      expect.arrayContaining(["desk-top", "pedestal-l", "pedestal-r", "modesty"]),
+    );
+
+    const noPed = buildLinearDeskMakerModel({
+      recipe: "linear-desk",
+      widthMm: 900,
+      depthMm: 500,
+      pedestals: false,
+    });
+    expect(Object.keys(noPed.model.models ?? {})).toEqual(["desk-top"]);
+  });
+
   it("builds L-desk spanning main + return", () => {
     const { viewBox } = buildLDeskMakerModel({
       recipe: "l-desk",

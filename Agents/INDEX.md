@@ -13,7 +13,10 @@
 Admin, Planner, Site, and Security remain product tracks.
 
 **Execute** via each track’s `plan/<Track>/CHECKLIST.md` (+ `FEATURES.md` code map).  
-**Admin Part C** (parametric Maker pen, K1–K3 → C3/C4) is active — not code-map-only.  
+**Admin Part C** is active — not code-map-only.  
+**Live pen** = Maker.js (`drawLinearDesk` / `renderLinearDeskSvg` → `compileMakerRecipeToPaths`). Template file is deprecated residual only.  
+Forms client · Fabric place · Dockview + React Aria chrome · AI fields after C2 only.  
+**NEXT:** C3/C4 browser (K1–K3 unit-green only); keep disk SVG authority honesty.  
 Admin also has `IMPLEMENTATION-PLAN.md` + `REALITY-AND-STACK.md` (exactly four files under `plan/Admin/`).
 
 `agent-reports/` is status notes only — **not** PASS proof. Live code + same-session evidence win.

@@ -1,11 +1,11 @@
 # Current execution
 
-**Shape:** every product track has **exactly two** core docs (CHECKLIST + FEATURES). **Admin** also keeps two supporting plans (IMPLEMENTATION-PLAN + REALITY-AND-STACK) — four files only under `plan/Admin/`.
+**Shape:** each track has **CHECKLIST + FEATURES**. **Admin** also has `IMPLEMENTATION-PLAN.md` + `REALITY-AND-STACK.md` (four files only).
 
 | Doc | Role |
 |-----|------|
-| **`CHECKLIST.md`** | **All-encompassing** track document: evidence rules (Part A) + full phase checklist (Part B). What is required, what exists, what is open. Admin adds **Part C** parametric long track. |
-| **`FEATURES.md`** | Live code map: feature → path → honest gap. |
+| **CHECKLIST.md** | Evidence + phases. Admin Part C = parametric order factory. |
+| **FEATURES.md** | Live code map: feature → path → gap. |
 
 ## Tracks
 
@@ -16,33 +16,28 @@
 | **Site** | [`Site/CHECKLIST.md`](./Site/CHECKLIST.md) | [`Site/FEATURES.md`](./Site/FEATURES.md) |
 | **TechStack** | [`TechStack/CHECKLIST.md`](./TechStack/CHECKLIST.md) | [`TechStack/FEATURES.md`](./TechStack/FEATURES.md) |
 
-**Index rollup:** [`docs/site/OUTSTANDING-ITEMS.md`](../docs/site/OUTSTANDING-ITEMS.md)  
-**Active blockers:** [`Failures.md`](../Failures.md)  
-**Security:** `docs/architecture/10-SECURITY-BENCHMARK.md` (no plan duo yet)
+**Blockers:** [`Failures.md`](../Failures.md) — **owner blockers NONE**. Agent cutover/parametric work only.  
+**Owner rules:** [`AGENTS.md`](../Agents.md).
 
-## How to read each CHECKLIST
+## Admin operating model (owner-aligned)
 
-| Part | Meaning |
-|------|---------|
-| **Part A** | Evidence rules - how to prove PASS |
-| **Part B** | Full phase checklist - required work |
-| **FEATURES.md** | Code paths |
-
-Admin **Part C** = parametric long track (Maker.js pen, forms, C0–C9, C-AI, K1–K3).  
-**Admin plan set (exactly 4):** [`Admin/CHECKLIST.md`](./Admin/CHECKLIST.md) · [`Admin/FEATURES.md`](./Admin/FEATURES.md) · [`Admin/IMPLEMENTATION-PLAN.md`](./Admin/IMPLEMENTATION-PLAN.md) · [`Admin/REALITY-AND-STACK.md`](./Admin/REALITY-AND-STACK.md).
+```text
+Daily orders: fields → Maker drawer → SVG → publish → guest place → BOQ
+Library: grow as needed (not all types day one)
+Live durable intent: Supabase + R2 (dual). Code default disk until SVG_RELEASE_AUTHORITY=db — agent proof, not owner hold.
+Do not rebuild Planner. Exact config only — not “close enough.”
+```
 
 ## Rules
 
-- Live code wins over docs.
-- Unit ≠ browser.
-- `results/` is not PASS proof.
-- Status: **OPEN**  /  **PARTIAL**  /  **DONE**  /  **FAIL**.
-- Disk is live SVG authority until cutover is browser-proved.
-- No third file per non-Admin track (no OUTSTANDING / FINISH-PLAN / COMPLETION-CONTRACT). Admin = exactly four files.
+- Live code wins. Unit ≠ browser. `results/` is not PASS.
+- Status: **OPEN** / **PARTIAL** / **DONE** / **FAIL**.
+- No third file per non-Admin track. Admin = exactly four files.
+- Do not re-litigate dual-write lectures or invent owner permission gates.
 
 ## How to work
 
 1. Read track `CHECKLIST.md`.  
 2. Map code via `FEATURES.md`.  
-3. Fix → verify in the same session.  
-4. Update that track’s `CHECKLIST.md` only when status is re-verified.
+3. Fix → verify same session.  
+4. Update checklist only with fresh evidence.

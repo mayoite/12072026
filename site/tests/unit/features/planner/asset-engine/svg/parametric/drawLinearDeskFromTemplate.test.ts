@@ -3,7 +3,6 @@ import { parseLinearDeskFields } from "@/features/planner/asset-engine/svg/param
 import {
   drawLinearDeskFromTemplate,
   linearDeskPartsToSvg,
-  renderLinearDeskSvg,
 } from "@/features/planner/asset-engine/svg/parametric/drawLinearDeskFromTemplate";
 
 function fields(partial: {
@@ -81,11 +80,15 @@ describe("drawLinearDeskFromTemplate", () => {
   });
 });
 
-describe("linearDeskPartsToSvg / renderLinearDeskSvg", () => {
-  it("assembles SVG with viewBox, multipath, and product type", () => {
-    const svg = renderLinearDeskSvg(
+describe("linearDeskPartsToSvg (template draw → SVG assembly)", () => {
+  it("assembles SVG with viewBox, multipath frame + product type", () => {
+    const draw = drawLinearDeskFromTemplate(
       fields({ widthMm: 1600, depthMm: 800, slug: "sample-desk-param", name: "Sample" }),
     );
+    const svg = linearDeskPartsToSvg(draw, {
+      slug: "sample-desk-param",
+      title: "Sample",
+    });
     expect(svg).toMatch(/^<svg /);
     expect(svg).toContain('viewBox="0 0 1600 800"');
     expect(svg).toContain('data-product-type="linear-desk"');

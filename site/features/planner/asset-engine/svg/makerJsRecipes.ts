@@ -13,11 +13,19 @@ export type LinearDeskMakerRecipe = {
   readonly topThicknessMm?: number;
   /** Pedestal post width (plan X). Default 200mm (~sample-desk-1). */
   readonly pedestalWidthMm?: number;
+  /** Inset from left/right outer edge to pedestal (mm). Default 120. */
+  readonly pedestalInsetMm?: number;
+  /** Gap below top band before pedestals start (mm). Default 0. */
+  readonly pedestalTopGapMm?: number;
+  /** Inset from back edge under pedestals (mm). Default 80. */
+  readonly pedestalBackInsetMm?: number;
   /**
    * When true (default), emit desk-top + pedestal-l + pedestal-r.
    * When false, emit desk-top band only (no knee slab, no pedestals).
    */
   readonly pedestals?: boolean;
+  /** Optional modesty panel between dual pedestals. Default false. */
+  readonly modesty?: boolean;
 };
 
 export type LDeskMakerRecipe = {
@@ -50,8 +58,9 @@ function assertPositiveMm(value: number, label: string): number {
 
 /**
  * Linear workstation footprint in sample-desk-1 language:
- * full-width top band + dual rect pedestals (no knee slab).
+ * full-width top band + dual rect pedestals (no knee slab) + optional modesty.
  * Maker model Y grows +depth from the top edge; exporter maps to plan Y-down.
+ * Schema insets (pedestalInsetMm / pedestalTopGapMm / pedestalBackInsetMm) override sample defaults.
  */
 export function buildLinearDeskMakerModel(recipe: LinearDeskMakerRecipe): MakerModelResult {
   const widthMm = assertPositiveMm(recipe.widthMm, "widthMm");
@@ -61,6 +70,15 @@ export function buildLinearDeskMakerModel(recipe: LinearDeskMakerRecipe): MakerM
     Math.max(40, recipe.topThicknessMm ?? 80),
   );
   const usePedestals = recipe.pedestals !== false;
+  const pedestalInsetMm = Math.max(
+    0,
+    recipe.pedestalInsetMm ?? SAMPLE_PEDESTAL_INSET_X_MM,
+  );
+  const pedestalTopGapMm = Math.max(0, recipe.pedestalTopGapMm ?? 0);
+  const pedestalBackInsetMm = Math.max(
+    0,
+    recipe.pedestalBackInsetMm ?? SAMPLE_PEDESTAL_BOTTOM_INSET_MM,
+  );
 
   const top = new makerjs.models.Rectangle(widthMm, topThicknessMm);
   top.origin = [0, 0];
@@ -71,21 +89,24 @@ export function buildLinearDeskMakerModel(recipe: LinearDeskMakerRecipe): MakerM
 
   if (usePedestals) {
     const rawPedW = recipe.pedestalWidthMm ?? DEFAULT_PEDESTAL_WIDTH_MM;
-    const maxPedW = Math.max(40, Math.floor((widthMm - 2 * SAMPLE_PEDESTAL_INSET_X_MM) / 2));
+    const maxPedW = Math.max(40, Math.floor((widthMm - 2 * pedestalInsetMm) / 2));
     const pedestalWidthMm = Math.min(
       Math.max(40, rawPedW),
       maxPedW,
-      Math.max(40, widthMm - 2 * SAMPLE_PEDESTAL_INSET_X_MM),
+      Math.max(40, widthMm - 2 * pedestalInsetMm),
     );
 
+    const pedestalY = topThicknessMm + pedestalTopGapMm;
     const bottomInset = Math.min(
-      SAMPLE_PEDESTAL_BOTTOM_INSET_MM,
-      Math.max(0, depthMm - topThicknessMm - 40),
+      pedestalBackInsetMm,
+      Math.max(0, depthMm - pedestalY - 40),
     );
-    const pedestalHeightMm = Math.max(40, depthMm - topThicknessMm - bottomInset);
-    const pedestalY = topThicknessMm;
-    const leftX = Math.min(SAMPLE_PEDESTAL_INSET_X_MM, Math.max(0, widthMm - pedestalWidthMm));
-    const rightX = Math.max(0, widthMm - SAMPLE_PEDESTAL_INSET_X_MM - pedestalWidthMm);
+    const pedestalHeightMm = Math.max(40, depthMm - pedestalY - bottomInset);
+    const leftX = Math.min(pedestalInsetMm, Math.max(0, widthMm - pedestalWidthMm - 40));
+    const rightX = Math.max(
+      leftX + pedestalWidthMm + 40,
+      widthMm - pedestalInsetMm - pedestalWidthMm,
+    );
 
     const pedestalL = new makerjs.models.Rectangle(pedestalWidthMm, pedestalHeightMm);
     pedestalL.origin = [leftX, pedestalY];
@@ -95,6 +116,19 @@ export function buildLinearDeskMakerModel(recipe: LinearDeskMakerRecipe): MakerM
 
     models["pedestal-l"] = pedestalL;
     models["pedestal-r"] = pedestalR;
+
+    if (recipe.modesty === true) {
+      const gap = rightX - (leftX + pedestalWidthMm);
+      if (gap > 80) {
+        const modestyW = gap * 0.7;
+        const modestyH = pedestalHeightMm * 0.2;
+        const modestyX = leftX + pedestalWidthMm + gap * 0.15;
+        const modestyY = pedestalY + pedestalHeightMm * 0.15;
+        const modesty = new makerjs.models.Rectangle(modestyW, modestyH);
+        modesty.origin = [modestyX, modestyY];
+        models.modesty = modesty;
+      }
+    }
   }
 
   const model: makerjs.IModel = { models };

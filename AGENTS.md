@@ -4,66 +4,68 @@
 
 - The user wins.
 - Re-read this file before each task.
-- Do not lie.
-- Say the brutal truth.
+- Do not lie. Say the brutal truth.
 - Verify code. Never trust old ticks or reports.
 - Keep sentences short.
 - Clear goals are executed without ceremony.
 - Goal changes require owner alignment.
 - Quality floor: `Agents/Agents-01-STANDARD.md`.
 
+## Owner standing decisions (do not re-litigate)
+
+- **Full authority from owner.** Zero owner blockers. Execute. Do not pause for permission theatre.
+- **No artificial owner blockers.** Keys rotated. DB + R2 granted. See `Failures.md` — owner blockers = NONE.
+- Do **not** re-explain disk vs `SVG_RELEASE_AUTHORITY` unless flipping cutover with evidence.
+- Owner dual-write meaning: **Supabase (Products DB) + R2** for live durable catalog.
+- Code may still default disk until `SVG_RELEASE_AUTHORITY=db` — that is **agent proof work**, not permission-seeking.
+- Do not invent “wait for owner” gates. Commit verified slices. Push when the slice should land on remote. Ask only for true missing secrets or irreversible production-only actions the host cannot do.
+
 ## Product
 
-- Admin manages trusted public inventory.
-- Site informs public visitors and sends qualified customers to Planner.
-- Planner serves any external customer.
-- Security verifies protected data, permissions, integrations, and releases.
-- The customer designs with available inventory.
-- The customer generates a branded BOQ.
-- The customer sends the BOQ to Oando.
-- UI and accessibility are acceptance concerns.
-- They are not separate product tracks.
+- Admin manages trusted inventory (exact client configs, not “close enough”).
+- Site informs visitors and sends customers to Planner.
+- Planner places published symbols and produces branded BOQ.
+- Security verifies data, permissions, integrations, releases.
+- UI and a11y are acceptance concerns, not separate tracks.
+
+### Daily order factory (Admin primary)
+
+```text
+fields + options → eng drawer (Maker) → multipath SVG → publish (disk now; DB+R2 when enabled)
+  → guest place → BOQ name/SKU
+```
+
+- Library **as you go** (desk first; lockers/etc. when a real job needs a new drawer).
+- Not magic. Not five designers per permutation.
+- Do **not** rebuild Planner chrome (Fabric / Dockview / Aria).
+- Freehand / AI-from-image = draft assist only; human locks mm + options before publish.
+- Exact config closes orders. Nearest stock photo does not.
 
 ## Layout
 
-- Current execution: each track’s `plan/<Track>/CHECKLIST.md` (all-encompassing: evidence + phases).
-- Code maps: each track’s `plan/<Track>/FEATURES.md` (Admin, Planner, Site, TechStack).
-- Two docs per track required — CHECKLIST + FEATURES (no FINISH-PLAN / COMPLETION-CONTRACT).
-- **Admin only** also keeps `IMPLEMENTATION-PLAN.md` + `REALITY-AND-STACK.md` — exactly four files under `plan/Admin/`.
-- Optional index: `docs/site/OUTSTANDING-ITEMS.md` → points at the track pairs (Admin = 4 files).
-- No work is deferred to a later decision bucket.
-- Product and architecture facts live in `docs/`.
-- Agent process lives in `Agents/`.
-- Agent-authored reports belong only in `agent-reports/`.
-- Active blockers live in `Failures.md`.
-- `results/` is tool output only.
-- Do not write Markdown reports under `results/`.
-- Never use `results/` as proof of PASS or completion.
-- Never write under `site/results/` or `site/test-results/`.
-- `site/` contains product code only.
-- `websites/` and `archive/` are reference only.
-- `PROTECTED/` is private. Never open, edit, or cite it.
+- Execute: each track’s `plan/<Track>/CHECKLIST.md` + `FEATURES.md`.
+- **Admin only:** also `IMPLEMENTATION-PLAN.md` + `REALITY-AND-STACK.md` (exactly four under `plan/Admin/`).
+- Optional index: `docs/site/OUTSTANDING-ITEMS.md`.
+- Product facts: `docs/`. Process: `Agents/`. Agent notes: `agent-reports/` (not PASS proof).
+- Active blockers: `Failures.md` only — no fake owner holds.
+- `results/` = tool output only. Never PASS proof. Never under `site/results/`.
+- `site/` = product code. `websites/` / `archive/` reference only. `PROTECTED/` never open/edit/cite.
 
 ## Execution
 
-- Test isolation is the first plan task.
-- Tests never mutate canonical catalog files.
-- Block only the exact dependent item.
-- Continue unrelated work.
-- Use `pnpm` from the repository root.
-- Never run package installation inside `site/` or `tech-docs-generator/`.
-- No `any` in handwritten code.
-- No plagiarism.
-- Secrets belong in `.env.local` only.
-- No suppressed tests or silent passes.
-- No commit or push unless the owner asks.
-- No worktrees.
+- Test isolation first. Tests never mutate canonical catalog.
+- Block only the exact dependent item. Continue unrelated work.
+- `pnpm` from repo root. No install inside `site/` or `tech-docs-generator/`.
+- No handwritten `any`. No plagiarism. Secrets only in `.env.local`.
+- No suppressed tests. No worktrees.
+- **Commits:** save finished slices so work is not lost. Prefer one clear commit when a slice is verified. Do not force-push or rewrite shared history.
+- **Push / PR / deploy:** only when the owner asks.
 
 ## Start
 
 - Process: `Agents/INDEX.md`.
 - Execute: `plan/README.md`.
-- Facts, tests, and operations: `Readme.md`.
+- Facts/ops: `Readme.md`.
 - Licenses: `docs/Lockedfiles/03-dependencies-engines-current.md`.
 
 Run `pnpm run check:layout` before completion.

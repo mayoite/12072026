@@ -228,7 +228,11 @@ function parseMakerRecipe(raw: unknown): MakerRecipe | undefined {
     }
     const topThicknessMm = finiteNumber(o.topThicknessMm) ?? undefined;
     const pedestalWidthMm = finiteNumber(o.pedestalWidthMm) ?? undefined;
+    const pedestalInsetMm = finiteNumber(o.pedestalInsetMm) ?? undefined;
+    const pedestalTopGapMm = finiteNumber(o.pedestalTopGapMm) ?? undefined;
+    const pedestalBackInsetMm = finiteNumber(o.pedestalBackInsetMm) ?? undefined;
     const pedestals = typeof o.pedestals === "boolean" ? o.pedestals : undefined;
+    const modesty = typeof o.modesty === "boolean" ? o.modesty : undefined;
     return {
       recipe: "linear-desk",
       widthMm,
@@ -239,7 +243,17 @@ function parseMakerRecipe(raw: unknown): MakerRecipe | undefined {
       ...(pedestalWidthMm !== undefined && pedestalWidthMm > 0
         ? { pedestalWidthMm }
         : {}),
+      ...(pedestalInsetMm !== undefined && pedestalInsetMm >= 0
+        ? { pedestalInsetMm }
+        : {}),
+      ...(pedestalTopGapMm !== undefined && pedestalTopGapMm >= 0
+        ? { pedestalTopGapMm }
+        : {}),
+      ...(pedestalBackInsetMm !== undefined && pedestalBackInsetMm >= 0
+        ? { pedestalBackInsetMm }
+        : {}),
       ...(pedestals !== undefined ? { pedestals } : {}),
+      ...(modesty !== undefined ? { modesty } : {}),
     };
   }
 

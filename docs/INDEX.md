@@ -3,7 +3,7 @@
 **Budget: ≤24 live files under `docs/`.** Process → `Agents/`. Execution → `plan/`. Commands → `Readme.md`.  
 Allowed exception inside budget: `site/OUTSTANDING-ITEMS.md` (thin index → track CHECKLISTs; not a fifth plan file).
 
-Start: `architecture/README.md` (vision + **current vs target** table). Live SVG = disk; dual-write optional stub when DB+R2 ready ≠ cutover; target = Products DB (`08-DATABASE-SVG-CONTRACT.md`). Active cutover: `../Failures.md`. One blockers file per track: `../agent-reports/{PLANNER,ADMIN,SITE,TECH-STACK}.md`.
+Start: `architecture/README.md` (vision + **current vs target** table). Live SVG = disk; dual-write optional when Products DB + R2 ready ≠ cutover; target = Products DB (`08-DATABASE-SVG-CONTRACT.md`). Active cutover: `../Failures.md`. One blockers file per track: `../agent-reports/{PLANNER,ADMIN,SITE,TECH-STACK}.md`.
 
 ## Architecture (12)
 
@@ -44,6 +44,6 @@ Product code stays in `site/`. Package docs live here only.
 | `site/features.md` | Planner / site / admin feature maps |
 | `site/tests.md` | Name-mirror rules + inventory counts |
 | `site/route-classification.md` | Generated live page/API routes |
-| `site/OUTSTANDING-ITEMS.md` | Thin outstanding index → `plan/<Track>/` (K1–K3 OPEN; not PASS proof) |
+| `site/OUTSTANDING-ITEMS.md` | Thin outstanding index → `plan/<Track>/` (K1–K3 unit-green; C3/C4 browser OPEN; not PASS proof) |
 
 Execution: `../plan/README.md`. Commands / ops / testing: `../Readme.md`.

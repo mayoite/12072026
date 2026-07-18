@@ -65,7 +65,7 @@ A **maintainable, installable, releasable monorepo** where:
 | No second canvas engine | Fabric only for interactive 2D |
 | No competitor stack | No competitor packages, assets, or trade dress |
 | Secrets | `.env.local` / platform secrets only |
-| Plan ticks ≠ PASS | FEATURES/FINISH checkboxes need §2.1 evidence |
+| Plan ticks ≠ PASS | CHECKLIST/FEATURES status rows need §2.1 evidence |
 
 ### 2.1 What counts as PASS
 
@@ -122,7 +122,7 @@ Done / Not done
 
 Implementer changes toolchain or deps → parent re-runs install-from-clean reasoning, `gate`, and dependency proof.  
 No “removed unused package” PASS without lockfile + import grep evidence.  
-No FINISH checkbox PASS without parent evidence in the same session.
+No CHECKLIST PASS without parent evidence in the same session.
 
 ---
 
@@ -135,7 +135,7 @@ No FINISH checkbox PASS without parent evidence in the same session.
 | Package manager | Root `package.json` `packageManager`, `pnpm-workspace.yaml`, install guards |
 | Node engine | `engines.node` ≥24 |
 | Workspace packages | `site/` (`oando-site`), `tech-docs-generator/` (`oando-tech-docs`) |
-| Canvas / 3D / SVG engines | Fabric (2D); Three + R3F + Drei (3D); Excalidraw (admin draft); Maker.js (parametric pen — Admin K1 OPEN, form still template) |
+| Canvas / 3D / SVG engines | Fabric (2D); Three + R3F + Drei (3D); Excalidraw (admin draft); Maker.js (parametric pen — Admin form/CLI/publish Maker; K1 unit-green) |
 | CSS toolchain | Tailwind / postcss / locked CSS tree under `site/app/css/` |
 | Next runtime | Next 16 app router, Vercel root = `site` |
 | Test runners | Vitest, Playwright configs under `site/config/build/` |
@@ -174,7 +174,7 @@ No FINISH checkbox PASS without parent evidence in the same session.
 | 2D | Fabric sole interactive engine |
 | 3D | Three.js + R3F + Drei helpers only |
 | Admin SVG UI | `@excalidraw/excalidraw` embed; host owns publish |
-| Parametric pen | Maker.js only (locked); not a second canvas. Form pen still template until Admin K1 |
+| Parametric pen | Maker.js only (locked); not a second canvas. Form pen = Maker `drawLinearDesk` (Admin K1 unit-green) |
 | Publish truth | Server compile + sanitize  -  not client engine |
 | Site i18n | `next-intl` only; Planner/Admin English only |
 | Catalog DB access | Drizzle + postgres for Products work; no new `.from()` catalog paths |
@@ -392,7 +392,7 @@ Every item starts unchecked. Flip only with CHECKLIST Part A (evidence) proof.
 - [PASS] Fabric only for interactive 2D.
 - [PASS] Three stack only for 3D.
 - [PASS] Excalidraw only for admin SVG studio embed.
-- [PARTIAL] Maker.js present for parametric recipes; Admin form still template multipath (Admin K1 OPEN — product track).
+- [PARTIAL] Maker.js present; Admin form/CLI/publish use Maker `drawLinearDesk` (K1 unit-green — product track; K3/C3 still open).
 - [PASS] No second i18n framework on Site.
 
 **Exit:** Grep policy clean.  

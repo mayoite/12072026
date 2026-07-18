@@ -11,7 +11,7 @@
 | 2D canvas | Fabric | Sole interactive 2D engine |
 | 3D | Three.js + R3F + Drei | Bindings/helpers only |
 | Admin SVG authoring | `@excalidraw/excalidraw` | Embedded Excalidraw studio; host (`AdminSvgEditorShell`) owns dimensions, validation, draft state, compile, and publish |
-| Parametric geometry pen (locked target) | `makerjs` (Maker.js) — https://github.com/microsoft/maker.js | Owner-locked Part C pen. Live: recipes + `makerJsToPath` on pipeline IR; form/CLI/publish still use template `drawLinearDeskFromTemplate` until **K1** (`plan/Admin/CHECKLIST.md` Part C). Not freehand publish authority |
+| Parametric geometry pen (locked) | `makerjs` (Maker.js) — https://github.com/microsoft/maker.js | Owner-locked Part C pen. **Live form/CLI/publish** = Maker `drawLinearDesk` / `renderLinearDeskSvg` → `compileMakerRecipeToPaths` (`plan/Admin/CHECKLIST.md` Part C; K1–K3 unit-green; C3 browser OPEN). Template multipath deprecated residual only. Not freehand publish authority. Do not switch pens |
 | Publish authority | Server compile + sanitize | Not client engines. Live SVG = **disk** until Failures.md cutover |
 
 No second general canvas engine.
@@ -48,7 +48,7 @@ Verify use before remove; verify license before add. Prefer existing platform li
 | Browser boundary | Server API only |
 | New packages | None approved for DB-SVG cutover work |
 | **Live SVG** | **Disk** — `inventory/descriptors/`, `public/svg-catalog/` |
-| DB dual-write | Optional on both Admin publish entrypoints when `PRODUCTS_DATABASE_URL` is set — not authority; payload and released revision pointers are not fully wired |
+| DB dual-write | Optional when Products DB configured **and** R2 ListObjects ok **and** pointer column present (`resolveSvgPublishDualWriteDeps`) — not release authority; cutover still OPEN |
 | Cutover | `DB-SVG-01` … `05` in `docs/architecture/08-DATABASE-SVG-CONTRACT.md` |
 
 ## Catalog assets

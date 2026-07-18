@@ -1,5 +1,5 @@
 /**
- * Plan+A C2 CLI: JSON fields → linear-desk SVG (dev isolation).
+ * Plan+A C2 CLI: JSON fields → linear-desk SVG via Maker (K1).
  *
  * Default: writes under repo `results/admin/parametric/` (gitignored tool output).
  * Never mutates canonical catalog unless `--catalog` is passed explicitly.

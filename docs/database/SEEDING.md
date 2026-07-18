@@ -89,7 +89,7 @@ Not a data seed. Schema: `platform/supabase/migrations.admin/` → apply with `d
 
 ## SVG seeds and tests
 
-SVG revision tables are planned, not live. Routine seeds must not create published revisions. Disk descriptors = migration input only. Migration: dry-run, conflict/checksum report, non-prod targets, normal publish transaction. Tests: temporary rows, unique storage prefixes; never mutate released rows. Document commands only when in `site/package.json`. Contract: [08-DATABASE-SVG-CONTRACT.md](../architecture/08-DATABASE-SVG-CONTRACT.md).
+SVG revision tables exist in schema; released SVG **live authority is still disk** until cutover (`Failures.md`). Routine seeds must not create published revisions as if DB were sole authority. After cutover, disk descriptors become migration/fixture input only. Migration: dry-run, conflict/checksum report, non-prod targets, normal publish transaction. Tests: temporary rows, unique storage prefixes; never mutate released rows. Document commands only when in `site/package.json`. Contract: [08-DATABASE-SVG-CONTRACT.md](../architecture/08-DATABASE-SVG-CONTRACT.md).
 
 ## Idempotency
 

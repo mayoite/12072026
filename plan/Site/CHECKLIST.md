@@ -136,7 +136,7 @@ Plus `agent-reports/YYYY-MM-DD-INDEX.md`.
 
 ### Out
 
-- Planner workspace implementation (see `plan/Planner/Part A (evidence rules in this file)`)  
+- Planner workspace implementation (see `plan/Planner/CHECKLIST.md`)  
 - Admin catalog authoring / SVG editor redesign  
 - DB-SVG cutover ownership (Admin/architecture; Site only **consumes** released catalog)  
 - CRM ops UI  

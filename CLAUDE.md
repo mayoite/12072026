@@ -88,7 +88,7 @@ There is a deliberate split between the current live state and the target. **Whe
 | Planner managed catalog | Products DB — `planner_managed_products` | (same) |
 | Lifecycle + audit | `results/admin/catalog-ops/` (gitignored) | Durable store |
 
-DB dual-write is a best-effort stub: both `publishSvgEditorAction.ts` and `POST /api/admin/svg-editor` inject `dbRepository` when `PRODUCTS_DATABASE_URL` is set (upserting `svg_revisions` + `block_descriptors`), but with a stub payload — disk stays the real authority. Cutover requirements live in `docs/architecture/08-DATABASE-SVG-CONTRACT.md`; active blockers live in `Failures.md`.
+DB dual-write injects only when Products DB is configured **and** R2 ListObjects succeeds **and** the pointer column is present (`resolveSvgPublishDualWriteDeps`). Enabled dual-write is **not** cutover — disk stays live SVG authority. Cutover requirements live in `docs/architecture/08-DATABASE-SVG-CONTRACT.md`; active blockers live in `Failures.md`.
 
 ### i18n
 

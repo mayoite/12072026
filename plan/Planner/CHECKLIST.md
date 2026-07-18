@@ -107,7 +107,7 @@ When the owner authorizes agents:
 |------|------|
 | Implementer | Change code + tests; no PASS claim without commands |
 | Parent | Re-run lint/typecheck/focused tests; write INDEX |
-| Never | Mark FINISH checkboxes PASS without parent evidence |
+| Never | Mark CHECKLIST items PASS without parent evidence |
 
 ---
 

@@ -49,7 +49,7 @@ Repo-sourced index: **stack surface → code path → honest gap**. Live code an
 | Fabric 2D | `site` dep `fabric@7.4.0`; planner canvas imports | Sole interactive 2D; grep for second canvas engine not automated in CI |
 | Three / R3F / Drei | `three`, `@react-three/fiber`, `@react-three/drei` | — |
 | Admin SVG embed | `@excalidraw/excalidraw` `^0.18.1` | Host owns publish; not client authority; not parametric pen |
-| Parametric pen (Maker.js) | `makerjs` `^0.19.2` — `makerJsRecipes` / `makerJsToPath` | Locked Part C pen. Form still template multipath (**Admin K1 OPEN**). Not a second canvas engine |
+| Parametric pen (Maker.js) | `makerjs` `^0.19.2` — `drawLinearDesk` / `makerJsRecipes` / `makerJsToPath` | Locked Part C pen. Form/CLI/publish use Maker (**Admin K1 unit-green**). Not a second canvas engine |
 | No react-router in site product | Site uses Next app router | tech-docs may use SPA tooling — out of product |
 
 ---
@@ -114,7 +114,7 @@ Repo-sourced index: **stack surface → code path → honest gap**. Live code an
 | Feature | Code | Gap |
 |---|---|---|
 | Plan duo | `plan/TechStack/{CHECKLIST,FEATURES}.md` | Present; see CHECKLIST |
-| Plans purity allows TechStack | `scripts/check-plans-purity.mjs` | Required trio enforced |
+| Plans purity allows TechStack | `scripts/check-plans-purity.mjs` | Required **duo** (CHECKLIST + FEATURES); Admin may keep two extra supporting plans |
 | Docs budget / purity | `check:docs-purity`, `check:active-docs` | Continuous |
 | Agent reports | `agent-reports/TECH-STACK.md` | Track status only; not PASS proof |
 

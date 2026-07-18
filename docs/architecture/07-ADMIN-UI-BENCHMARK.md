@@ -48,13 +48,14 @@ It covered these viewports:
 
 The reviewed implementation includes:
 
-- `site/features/admin/svg-editor/AdminSvgEditorListView.tsx`
-- `site/features/admin/svg-editor/AdminSvgEditorEditView.tsx`
+- `site/features/admin/svg-editor/views/AdminSvgEditorListView.tsx`
+- `site/features/admin/svg-editor/views/AdminSvgEditorEditView.tsx`
 - `site/features/admin/svg-editor/views/edit-shell/AdminSvgEditorShell.tsx`
 - `site/features/admin/svg-editor/editor/ExcalidrawClient.tsx`
-- `site/features/admin/svg-editor/SvgEditorForm.tsx`
-- `site/features/admin/AdminCatalogTable.tsx`
+- `site/features/admin/svg-editor/form/SvgEditorForm.tsx`
+- `site/features/admin/catalog/AdminCatalogTable.tsx`
 - `site/features/admin/pricing/AdminPriceBookPageView.tsx`
+- Parametric (Part C): `site/features/admin/svg-editor/parametric/` · route `/admin/svg-editor/parametric` — live pen = **Maker.js** (`drawLinearDesk` / `renderLinearDeskSvg`); template multipath deprecated residual only; K1–K3 unit-green; browser C3 still open
 
 The routes returned a page.
 

@@ -1,26 +1,23 @@
 /**
- * Plan+A hybrid: sample-desk-1 visual language + field-driven mm layout.
- * Pen: explicit rect paths (Maker-compatible multipath). Not freehand.
+ * @deprecated Template multipath (pre-K1). Not the parametric pen.
+ * Form / CLI / publish use Maker-only `drawLinearDesk` / `renderLinearDeskSvg`
+ * from `./drawLinearDesk` (or the parametric barrel). Do not import this for publish.
  */
 
 import type { LinearDeskFields } from "./linearDeskFields";
+import type {
+  LinearDeskDrawResult,
+  LinearDeskPart,
+} from "./drawLinearDesk";
 
-export type LinearDeskPartRole = "frame" | "top" | "pedestal" | "modesty";
+export type {
+  LinearDeskDrawResult,
+  LinearDeskPart,
+  LinearDeskPartRole,
+} from "./drawLinearDesk";
 
-export type LinearDeskPart = {
-  readonly id: string;
-  readonly role: LinearDeskPartRole;
-  readonly dPath: string;
-  readonly fill: string | "none";
-  readonly stroke: string;
-  readonly strokeWidth: number;
-};
-
-export type LinearDeskDrawResult = {
-  readonly viewBox: { readonly x: number; readonly y: number; readonly width: number; readonly height: number };
-  readonly parts: readonly LinearDeskPart[];
-  readonly fields: LinearDeskFields;
-};
+/** Shared SVG assembly (also used by Maker pen). Prefer barrel `linearDeskPartsToSvg`. */
+export { linearDeskPartsToSvg } from "./drawLinearDesk";
 
 const STROKE = "#2c2a28";
 const FILL_TOP = "#4a4642";
@@ -45,11 +42,7 @@ function strokeForSize(widthMm: number, depthMm: number): number {
 }
 
 /**
- * sample-desk-1 structure fitted to fields:
- * - outer frame (stroke only)
- * - worksurface band near top
- * - dual pedestals (optional)
- * - optional modesty between pedestals
+ * sample-desk-1 structure fitted to fields (legacy template, not publish pen).
  */
 export function drawLinearDeskFromTemplate(fields: LinearDeskFields): LinearDeskDrawResult {
   const w = fields.widthMm;
@@ -137,45 +130,4 @@ export function drawLinearDeskFromTemplate(fields: LinearDeskFields): LinearDesk
     parts,
     fields,
   };
-}
-
-function escXml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
-/** Assemble publishable plan SVG (image-safe paints). */
-export function linearDeskPartsToSvg(
-  draw: LinearDeskDrawResult,
-  options?: { readonly title?: string; readonly slug?: string },
-): string {
-  const { viewBox, parts, fields } = draw;
-  const slug = options?.slug ?? fields.slug ?? "linear-desk";
-  const title = options?.title ?? fields.name ?? slug;
-  const vb = `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`;
-  const inner = parts
-    .map((part) => {
-      const fillAttr =
-        part.fill === "none" ? ` fill="none"` : ` fill="${escXml(part.fill)}"`;
-      return (
-        `<path d="${part.dPath}"${fillAttr}` +
-        ` stroke="${escXml(part.stroke)}" stroke-width="${part.strokeWidth}"` +
-        ` id="${escXml(part.id)}" class="${escXml(slug)}"/>`
-      );
-    })
-    .join("");
-  return (
-    `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"` +
-    ` viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}"` +
-    ` data-product-type="linear-desk">` +
-    `<title>${escXml(title)}</title>` +
-    `<g>${inner}</g></svg>`
-  );
-}
-
-export function renderLinearDeskSvg(fields: LinearDeskFields): string {
-  return linearDeskPartsToSvg(drawLinearDeskFromTemplate(fields));
 }

@@ -7,6 +7,7 @@ import {
   parseLinearDeskForm,
   type LinearDeskFormDisplay,
 } from "./linearDeskFormModel";
+/** K1: Maker-only pen (drawLinearDesk → compileMakerRecipeToPaths). */
 import { renderLinearDeskSvg } from "@/features/planner/asset-engine/svg/parametric";
 import { publishLinearDeskAction } from "./publishLinearDeskAction";
 import { formToLinearDeskRaw } from "./linearDeskFormModel";
@@ -15,7 +16,7 @@ type Props = {
   readonly initialUnit?: "mm" | "cm";
 };
 
-export function LinearDeskParametricForm({ initialUnit = "mm" }: Props) {
+export function LinearDeskParametricForm({ initialUnit = "cm" }: Props) {
   const [form, setForm] = useState<LinearDeskFormDisplay>(() =>
     defaultLinearDeskForm(initialUnit),
   );
@@ -73,8 +74,8 @@ export function LinearDeskParametricForm({ initialUnit = "mm" }: Props) {
           <p className="admin-page__eyebrow">Admin · SVG</p>
           <h1 className="admin-page__title">Linear desk (parametric)</h1>
           <p className="admin-page__meta">
-            Fill sizes → live preview from code → publish to disk. No drawing required.
-            Stored as millimetres.
+            Client sizes and options → live plan SVG → publish. Exact config only.
+            Stored as millimetres. Slug must stay <code>oando-…</code> for guest place.
           </p>
         </div>
       </header>
@@ -155,6 +156,20 @@ export function LinearDeskParametricForm({ initialUnit = "mm" }: Props) {
             value={form.pedestalInset}
             error={err("pedestalInset")}
             onChange={(v) => setNumber("pedestalInset", v)}
+          />
+          <Field
+            label={`Pedestal top gap (${form.displayUnit})`}
+            value={form.pedestalTopGap}
+            error={err("pedestalTopGap")}
+            onChange={(v) => setNumber("pedestalTopGap", v)}
+            testId="linear-desk-pedestal-top-gap"
+          />
+          <Field
+            label={`Pedestal back inset (${form.displayUnit})`}
+            value={form.pedestalBackInset}
+            error={err("pedestalBackInset")}
+            onChange={(v) => setNumber("pedestalBackInset", v)}
+            testId="linear-desk-pedestal-back-inset"
           />
 
           <label style={{ display: "block", marginBottom: "0.75rem" }}>

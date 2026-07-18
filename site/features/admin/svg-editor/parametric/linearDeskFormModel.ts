@@ -61,7 +61,7 @@ const MM_FIELD: Record<LinearKey, keyof LinearDeskFields> = {
 };
 
 export function defaultLinearDeskForm(
-  unit: LinearDeskDisplayUnit = "mm",
+  unit: LinearDeskDisplayUnit = "cm",
 ): LinearDeskFormDisplay {
   const mm = {
     widthMm: 1600,
@@ -85,10 +85,11 @@ export function defaultLinearDeskForm(
     pedestalBackInset: mmToDisplayValue(mm.pedestalBackInsetMm, unit),
     pedestalCount: 2,
     modesty: false,
-    name: "Linear desk",
-    sku: "",
+    name: "Linear desk 1600",
+    sku: "OANDO-LINEAR-DSK-1600",
     seriesId: "",
-    slug: "linear-desk",
+    // Guest inventory filters oando-* only
+    slug: "oando-linear-desk-1600",
   };
 }
 

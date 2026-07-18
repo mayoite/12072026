@@ -17,6 +17,7 @@ Feature maps: `features.md`. Tests: `tests.md`. Live routes: `route-classificati
 | Planner document / canvas state | **`features/planner/project/`** (`model/`, `store/`, `persistence/`, `catalog/`) |
 | Planner save / review persistence API | `features/planner/cloud-store/` + `features/planner/persistence/` |
 | Admin SVG editor, publish, lifecycle | **`features/admin/svg-editor/`** |
+| Admin parametric linear desk (Part C) | `features/admin/svg-editor/parametric/` + planner `asset-engine/svg/parametric/` — **live Maker pen** (`drawLinearDesk`); template residual deprecated only |
 | Admin shell / dashboard chrome | `features/admin/` page views + `features/admin/ui/` |
 | Admin route page | `app/admin/` — import from `features/admin/` |
 | Admin API | `app/api/admin/` — handlers often in `features/admin/api/` |

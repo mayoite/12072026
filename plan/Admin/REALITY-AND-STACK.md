@@ -1,7 +1,9 @@
 # Admin — reality and stack
 
-**Status:** OPEN (policy)  
-**Pair:** execution spine = `CHECKLIST.md` Part C · tasks = `IMPLEMENTATION-PLAN.md` · code map = `FEATURES.md`
+**Status:** policy locked with owner  
+**Pair:** `CHECKLIST.md` Part C · `IMPLEMENTATION-PLAN.md` · `FEATURES.md` · `../../Agents.md`
+
+**Business reality:** orders need **exact** configs; photos in `public/images` change per client and cannot close alone; cannot staff five designers per permutation. Build **fields → drawer → SVG** and grow drawers as jobs need them.
 
 ---
 
@@ -25,10 +27,12 @@ There is **no free** package that does: *fields in → pro Oando furniture plan 
 [Eng drawer: Zod → Maker.js recipe → multipath SVG]
         |
         v
-[sanitise / pipeline → disk svg-catalog + descriptors]
+[sanitise / pipeline → publish (disk + dual-write DB/R2 when ready)]
         |
         v
 [Fabric places published SVG] → BOQ name/SKU
+
+Live durable intent: Supabase + R2. Owner blockers none.
 ```
 
 ---
@@ -57,8 +61,8 @@ There is **no free** package that does: *fields in → pro Oando furniture plan 
 | Interactive 2D place | Fabric · `features/planner/canvas/*` | Zoom, pan, place published SVG | Generating brand geometry |
 | 3D | Three + R3F | 3D view from same document | Plan SVG craft |
 | Admin freehand draft | Excalidraw · `ExcalidrawClient.tsx` | Studio draft UX | Publish truth for parametric |
-| Geometry pen | Maker.js · `makerJsRecipes.ts` · `makerJsToPath.ts` | Multipath plan SVG | Client freehand; AI paths |
-| Interim template draw | `drawLinearDeskFromTemplate.ts` | **Converge to Maker (K1 OPEN)** | Long-term dual pen |
+| Geometry pen | Maker.js · `drawLinearDesk.ts` · `makerJsRecipes.ts` · `makerJsToPath.ts` | Multipath plan SVG (form/CLI/publish) | Client freehand; AI paths |
+| Template residual | `drawLinearDeskFromTemplate.ts` | Deprecated comparison only | Form/CLI/publish pen |
 | Publish compile | `compileSvgForPublish` · `normalizeDescriptorForPipeline` · `pipelineCore` | S1–S3 sanitise | Client engines as release |
 | Disk write | `svgPipelineRunner` S4 · `persistBlockDescriptor` | Live SVG + descriptors | DB sole authority (until cutover) |
 | Units | `features/planner/model/units.ts` | mm store; mm/cm display | Parallel cm+mm that drift |
@@ -70,15 +74,15 @@ There is **no free** package that does: *fields in → pro Oando furniture plan 
 
 | Surface | Truth today |
 |---------|-------------|
-| Form preview | `LinearDeskParametricForm` → template `renderLinearDeskSvg` → `drawLinearDeskFromTemplate` |
-| Publish compile | `compileLinearDeskSvg` → same template path |
-| CLI | `scripts/render-linear-desk.mts` → same template path |
-| Maker recipes | Exist + unit tests; pipeline IR (`normalizeDescriptorForPipeline` optional `maker`); **not** form/CLI/publish pen |
+| Form preview | `LinearDeskParametricForm` → Maker `renderLinearDeskSvg` → `drawLinearDesk` |
+| Publish compile | `compileLinearDeskSvg` → same Maker path |
+| CLI | `scripts/render-linear-desk.mts` → same Maker path |
+| Maker recipes | Form pen + pipeline IR (`normalizeDescriptorForPipeline` optional `maker`) |
 | Schema | `LinearDeskFieldsSchema` live with exact mm fields + fit refine |
 | Form model | Uses planner `units.ts` for mm/cm; maps full schema |
-| Form UI | Missing pedestalTopGap / pedestalBackInset controls (**K3 OPEN**) |
+| Form UI | pedestalTopGap + pedestalBackInset controls bound (**K3 unit-green**) |
 
-**K1 job:** one Maker drawer; form + CLI + publish call only that. Delete dual-pen.
+**K1–K3 unit-green:** one Maker drawer; form + CLI + publish call it; form knobs 1:1 schema. Template residual deprecated only. **Next: C3 browser.** Not browser PASS.
 
 ---
 
@@ -120,4 +124,4 @@ There is **no free** package that does: *fields in → pro Oando furniture plan 
 
 - **1 implementer max** on this track + parent evidence.
 - No 6-worker circus on one pipeline.
-- Commits only if owner asked.
+- Commit verified slices so work is not lost; push only if owner asks.

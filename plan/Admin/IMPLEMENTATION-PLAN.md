@@ -1,12 +1,13 @@
-# Admin Parametric Linear Desk + Maker Pen Implementation Plan
+# Admin order factory — linear desk first
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+**Owner model:** exact fields → Maker SVG → publish → guest place → BOQ. Library as you go. No owner blockers. Supabase+R2 = live dual intent.
 
-**Goal:** Wire parametric linear desk form, CLI, and publish to **Maker.js only** (close K1–K3), then Admin browser publish (C3) and Planner place + BOQ (C4). Stop shipping greys and dual-pen lies as brand inventory.
+**Goal (now):** Guest-visible publish identity + easy form → C3 browser → C4 place/BOQ.  
+**K1–K3 unit:** Maker pen done. Do not re-open dual-pen debates.
 
-**Architecture:** Client Admin form (fields only) → Zod `LinearDeskFields` (mm) → single `drawLinearDesk(fields)` that maps fields → `buildLinearDeskMakerModel` / `compileMakerRecipeToPaths` → multipath SVG → `sanitiseSvg` → disk publish via existing `publishDescriptorWithPipeline`. Fabric places published SVG. Disk remains live authority. AI field draft (C-AI) only after C2 green; never geometry.
+**Architecture:** Form → Zod mm → `drawLinearDesk` → Maker paths → sanitise → `publishDescriptorWithPipeline` (disk + dual-write when ready) → Fabric place. Do not rebuild Planner.
 
-**Tech Stack:** TypeScript, Maker.js, Fabric, Next.js, Vitest
+**Tech:** TypeScript, Maker.js, Fabric, Next.js, Vitest · **1 implementer** · commit verified slices; push only if owner asks.
 
 ---
 
@@ -14,20 +15,20 @@
 
 | Claim | Live code | Status |
 |-------|-----------|--------|
-| Form uses Maker | `LinearDeskParametricForm.tsx` calls `renderLinearDeskSvg` → **template** `drawLinearDeskFromTemplate` | **K1 OPEN** |
-| Compile uses Maker | `compileLinearDeskSvg.ts` → `renderLinearDeskSvg` (template) | **K1 OPEN** |
-| CLI uses Maker | `scripts/render-linear-desk.mts` → `renderLinearDeskSvg` (template) | **K1 OPEN** |
+| Form uses Maker | `LinearDeskParametricForm.tsx` → barrel `renderLinearDeskSvg` → `drawLinearDesk` → Maker | **K1 unit-green** |
+| Compile uses Maker | `compileLinearDeskSvg.ts` → same Maker path | **K1 unit-green** |
+| CLI uses Maker | `scripts/render-linear-desk.mts` → same Maker path | **K1 unit-green** |
 | Schema fields | `linearDeskFields.ts`: type, widthMm, depthMm, heightMm, topThicknessMm, pedestalWidthMm, pedestalInsetMm, pedestalTopGapMm, pedestalBackInsetMm, pedestalCount 0\|2, modesty, seriesId, name, sku, slug | DONE (unit) |
-| Form model vs schema | `linearDeskFormModel.ts` maps all mm fields via `units.ts` | PARTIAL — model complete |
-| Form UI knobs | `LinearDeskParametricForm.tsx` | **K3 OPEN** — no controls for pedestalTopGap / pedestalBackInset (defaults only) |
-| Maker recipes | `makerJsRecipes.ts`: `buildLinearDeskMakerModel`, `buildLDeskMakerModel`, `buildMakerModel`; recipe has fewer knobs than schema (inset hard-coded) | PARTIAL |
-| Maker → path | `makerJsToPath.ts` `compileMakerRecipeToPaths` | PARTIAL (unit) — pipeline IR only; not form pen |
+| Form model vs schema | `linearDeskFormModel.ts` maps all mm fields via `units.ts` | DONE (unit) |
+| Form UI knobs | `LinearDeskParametricForm.tsx` | **K3 unit-green** — pedestalTopGap + pedestalBackInset controls bound; browser OPEN |
+| Maker recipes | `makerJsRecipes.ts`: `buildLinearDeskMakerModel`, `buildLDeskMakerModel`, `buildMakerModel`; form maps schema insets via `fieldsToLinearDeskMakerRecipe` | PARTIAL (unit) |
+| Maker → path | `makerJsToPath.ts` `compileMakerRecipeToPaths` | PARTIAL (unit) — form pen + pipeline IR |
 | Route | `site/app/admin/svg-editor/parametric/page.tsx` → `LinearDeskParametricForm` | PARTIAL |
-| Publish | `publishLinearDeskAction.ts` → `compileLinearDeskSvg` → template SVG → pipeline | PARTIAL (not Maker) |
+| Publish | `publishLinearDeskAction.ts` → `compileLinearDeskSvg` → Maker SVG → pipeline | PARTIAL (browser OPEN) |
 | Units | `features/planner/model/units.ts` `displayValueToMm` / `mmToDisplayValue` | DONE |
 | Isolation | `catalogWriteIsolation.ts` + A0 unit suite | DONE (unit) |
 
-**Barrel today:** `features/planner/asset-engine/svg/parametric/index.ts` re-exports template `renderLinearDeskSvg` only.
+**Barrel today:** `features/planner/asset-engine/svg/parametric/index.ts` exports Maker `drawLinearDesk` / `renderLinearDeskSvg`; template is deprecated residual only.
 
 **GitHub pins:** Maker.js https://github.com/microsoft/maker.js · Fabric https://github.com/fabricjs/fabric.js · monorepo https://github.com/mayoite/12072026 · Excalidraw draft only https://github.com/excalidraw/excalidraw · **no** react-planner.
 
@@ -53,16 +54,13 @@
 ## Task order (strict)
 
 ```text
-K1 Maker-only draw API
-  → K2 unit proves Maker path
-  → K3 form fields = schema 1:1
-  → C3 browser Admin publish (160 cm)
-  → C4 Planner place + BOQ (1280 + 390)
-  → C5 finesse / Track G greys (parallel only after K1 if not blocking)
-  → C-AI field draft (after C2 unit green; kill switch if delays ship)
+DONE unit: K1–K3 Maker pen + form knobs
+  → NOW: guest identity (oando- slug, SKU) on publish
+  → C3 browser 160 cm publish
+  → C4 guest place + BOQ (1280 + 390)
+  → later families when a job needs a new drawer
+  → C-AI field draft optional; kill if delays ship
 ```
-
-**1 implementer max.** Commits **only if owner asked**.
 
 ---
 
@@ -138,7 +136,7 @@ pnpm --filter oando-site exec vitest run tests/unit/features/planner/asset-engin
 pnpm --filter oando-site exec vitest run tests/unit/features/planner/asset-engine/svg/parametric tests/unit/features/planner/asset-engine/svg/makerJsRecipes.test.ts tests/unit/features/admin/svg-editor/parametric --reporter=dot
 ```
 
-- [ ] **Step 6: Commit** — **only if owner asked**
+- [ ] **Step 6: Commit** — after verified slice (push only if owner asks)
 
 ```powershell
 git add site/features/planner/asset-engine/svg/parametric site/features/admin/svg-editor/parametric site/scripts/render-linear-desk.mts site/tests/unit/features/planner/asset-engine/svg/parametric
@@ -165,7 +163,7 @@ pnpm --filter oando-site exec vitest run tests/unit/features/admin/svg-editor/pa
 
 - [ ] **Step 3: Remove or demote `drawLinearDeskFromTemplate` to deprecated helper unused by form/publish**
 
-- [ ] **Step 4: Commit** — only if owner asked
+- [ ] **Step 4: Commit** — after verified slice (push only if owner asks)
 
 ---
 
@@ -182,9 +180,9 @@ Exact schema names (live): `type`, `widthMm`, `depthMm`, `heightMm`, `topThickne
 
 Form model keys today: `width`, `depth`, `height`, `topThickness`, `pedestalWidth`, `pedestalInset`, `pedestalTopGap`, `pedestalBackInset` (via `units.ts`) + pedestalCount, modesty, name, sku, seriesId, slug.
 
-**Live UI gap (re-verify):** `LinearDeskParametricForm.tsx` does **not** bind `pedestalTopGap` or `pedestalBackInset` — defaults only. K3 stays OPEN until those controls exist (or owner accepts permanent defaults).
+**Live UI (re-verify 2026-07-18):** `LinearDeskParametricForm.tsx` binds `pedestalTopGap` + `pedestalBackInset` (K3 unit PASS). Browser C3 still OPEN.
 
-- [ ] **Step 2: Unit tests for mm/cm convert via `units.ts`**
+- [x] **Step 2: Unit tests for mm/cm convert via `units.ts`**
 
 ```powershell
 pnpm --filter oando-site exec vitest run tests/unit/features/admin/svg-editor/parametric/linearDeskFormModel.test.ts --reporter=dot
@@ -192,9 +190,9 @@ pnpm --filter oando-site exec vitest run tests/unit/features/admin/svg-editor/pa
 
 Cases: 160 cm → 1600 mm; 1400 mm → 140 cm; round-trip stable; draw always receives mm.
 
-- [ ] **Step 3: Fix gaps** — every schema field editable or explicitly defaulted; no phantom fields in plan docs. Wire missing form controls: **pedestalTopGap**, **pedestalBackInset**.
+- [x] **Step 3: Fix gaps** — pedestalTopGap + pedestalBackInset controls bound; schema 1:1.
 
-- [ ] **Step 4: Commit** — only if owner asked
+- [ ] **Step 4: Commit** — after verified slice (push only if owner asks)
 
 ---
 
@@ -230,7 +228,7 @@ Record: console errors = 0, failed requests = 0.
 
 - [ ] **Step 3: Update CHECKLIST Part C C3 statuses only with evidence**
 
-- [ ] **Step 4: Commit** — only if owner asked
+- [ ] **Step 4: Commit** — after verified slice (push only if owner asks)
 
 ---
 
@@ -254,7 +252,7 @@ Pass: Fabric paints published SVG (not Block2D miss); BOQ shows name + SKU; cons
 
 - [ ] **Step 3: Update CHECKLIST C4 with evidence**
 
-- [ ] **Step 4: Commit** — only if owner asked
+- [ ] **Step 4: Commit** — after verified slice (push only if owner asks)
 
 ---
 

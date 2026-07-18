@@ -20,7 +20,7 @@
 | Live SVG authority = **disk** | Policy |
 | Browser place brand SVG | OPEN |
 | `SVG_RELEASE_AUTHORITY=db` | OPEN — blocked on browser place |
-| Brand SVG + parametric linear desk | `plan/Admin/CHECKLIST.md` Part C · `IMPLEMENTATION-PLAN.md` — form/CLI/publish = **template** pen · Maker recipes exist · **K1/K2/K3 OPEN** · C3/C4 browser OPEN |
+| Brand SVG + parametric linear desk | `plan/Admin/CHECKLIST.md` Part C · `IMPLEMENTATION-PLAN.md` · `REALITY-AND-STACK.md` — **live pen = Maker** (`renderLinearDeskSvg` → `drawLinearDesk`) · template residual deprecated · K1–K3 unit-green · C3/C4 browser OPEN · toolbars stay Fabric+Dockview+Aria |
 | Commit + push | Owner only |
 
 **Blockers:** [`Failures.md`](../../Failures.md)

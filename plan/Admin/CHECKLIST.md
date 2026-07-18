@@ -1,13 +1,15 @@
 # Admin checklist
 
-**Status:** OPEN  
-**Pair:** `FEATURES.md` = live code map (feature → path → gap).  
-**This file:** evidence (Part A) + phases A0–A14 (Part B) + parametric long track (Part C).  
-**Active blockers:** `../../Failures.md`  
-**Tasks:** `IMPLEMENTATION-PLAN.md` · **Stack:** `REALITY-AND-STACK.md`
+**Status:** PARTIAL  
+**Pair:** `FEATURES.md` = live code map.  
+**This file:** evidence (Part A) + phases A0–A14 (Part B) + **order factory** Part C.  
+**Blockers:** `../../Failures.md` — **owner blockers NONE**.  
+**Tasks:** `IMPLEMENTATION-PLAN.md` · **Stack:** `REALITY-AND-STACK.md`  
+**Owner rules:** `../../Agents.md`
 
-**How to read (Admin pack):** Part C (run) → `IMPLEMENTATION-PLAN.md` (tasks) → `FEATURES.md` (paths) → `REALITY-AND-STACK.md` (why stack). Part A = proof rules. Part B = full Admin phases.  
-**Status honesty:** unit green + browser still open = **PARTIAL**, not PASS.
+**How to read:** Part C first (ship) → IMPLEMENTATION-PLAN → FEATURES → REALITY.  
+**Status honesty:** unit green + browser open = **PARTIAL**, not PASS.  
+**Do not invent owner permission gates.**
 
 ---
 
@@ -27,15 +29,21 @@
 
 ## 1. Outcome
 
-Deliver a trustworthy **inventory + commercial admin** workflow:
+**Primary — daily order factory (exact client configs):**
 
-1. Author SVG symbols and descriptors from isolated drafts.  
-2. Publish to **disk** (live authority) with honest dual-write when DB+R2 ready.  
-3. Manage catalog lifecycle, families, price books, and ops surfaces.  
-4. Hand trusted inventory to Planner and Site consumers.  
-5. **Parametric brand library (Part C):** forms → Maker.js drawers → multipath SVG → Fabric place + BOQ.
+```text
+fields + options → Maker drawer → multipath SVG → publish
+  → guest place → BOQ name/SKU
+```
 
-**Not:** Planner redesign, Site marketing redesign, production CRM backend, fake R2/DB cutover.
+- Close on **exact** size/options (not nearest photo).  
+- Grow library **as needed** (desk first; new drawer only when a job needs a new shape).  
+- Durable live intent: **Supabase + R2**. Code disk default until agent flips `SVG_RELEASE_AUTHORITY=db` after place proof — **not an owner hold**.  
+- Do **not** rebuild Planner.
+
+**Also:** draft freehand (Excalidraw), lifecycle, price books, ops — secondary to the factory loop.
+
+**Not:** Planner redesign, “all furniture types day one”, AI geometry as publish truth, fake cutover claims, five designers per permutation.
 
 ---
 
@@ -146,7 +154,7 @@ Update `agent-reports/ADMIN.md` in place (Deploy auth, Done/Open next, Date).
 
 - **Disk is live SVG publish authority** until DB-SVG cutover is proven end-to-end.  
 - Dual-write attaches only when Products DB is configured **and** R2 ListObjects succeeds; dead R2 must not roll back disk publish.  
-- Dual-write payload may still be stub/incomplete — do not claim revision authority.  
+- Dual-write when enabled still ≠ release authority — do not claim DB cutover.  
 - Tests never mutate `site/inventory/descriptors/` or released catalog rows.  
 - Admin layout requires `requireAuthUser("/admin", "admin")`.  
 - Admin APIs require `requireAdminSession` or `withAuth({ role: "admin" })`.  
@@ -175,9 +183,9 @@ Update only with fresh evidence.
 | AF-08 | ADM-CRM-HUB | CRM index hub vs redirect | Unit matches live hub page | PARTIAL (unit; browser OPEN) |
 | AF-07 | ADM-PRICE | Price book governance browser | Playwright with honest auth | OPEN |
 | AF-09 | ADM-FAM | Family release browser journey | Browser proof | OPEN |
-| **K1** | ADM-PARAM-MAKER | Form/CLI/publish use template pen, not Maker | Single Maker `drawLinearDesk`; unit green | OPEN (code verified 2026-07-18) |
-| **K2** | ADM-PARAM-PROOF | “via Maker” claim without unit | Unit fails if template path used | OPEN |
-| **K3** | ADM-PARAM-FIELDS | Form UI ≠ full live Zod knobs | Form model maps schema; UI missing `pedestalTopGap` / `pedestalBackInset` | OPEN (schema + model; UI incomplete) |
+| **K1** | ADM-PARAM-MAKER | Form/CLI/publish must use Maker only | Single Maker `drawLinearDesk`; unit green | unit-green (2026-07-18) — browser C3 still OPEN |
+| **K2** | ADM-PARAM-PROOF | “via Maker” claim needs unit | Unit proves Maker ids; template not form pen | unit-green (2026-07-18) — residual template file only |
+| **K3** | ADM-PARAM-FIELDS | Form UI must bind full Zod knobs | Form model + UI bind all schema mm knobs incl. topGap/backInset | unit-green (2026-07-18) — browser OPEN |
 
 Other AF seeds: AF-05 bulk UX, AF-06 phone catalog, AF-11 AI SVG missing, AF-12 isolation hash gate, AF-13 internal language, AF-17 Planner consumer bytes.
 
@@ -212,7 +220,7 @@ _Phase work list. Status claims need Part A evidence._
 | `publishDescriptorWithPipeline.ts` | Disk | Optional `dbRepository` / artifact store |
 | `resolveSvgPublishDualWrite.ts` | Gate | enabled only if DB configured **and** R2 ready |
 | `publishSvgEditorAction.ts` / `POST /api/admin/svg-editor` | Disk + optional dual-write | Same injection rules |
-| Parametric publish | `publishLinearDeskAction.ts` | Disk via same pipeline; still template SVG until K1 |
+| Parametric publish | `publishLinearDeskAction.ts` | Disk via same pipeline; Maker SVG via `compileLinearDeskSvg` |
 | Lifecycle / audit | `results/admin/catalog-ops/` | Not Products DB |
 
 Full cutover OPEN in `Failures.md`. **No `SVG_RELEASE_AUTHORITY=db` in this plan.**
@@ -363,20 +371,15 @@ Exit: Automated unauth gates proven with bypass mocked off. Deploy auth remains 
 
 ---
 
-## Part C — Parametric furniture library (code-free client) — LONG TRACK
+## Part C — Order factory (fields → SVG → place) — GROW AS NEEDED
 
-**Status:** OPEN  
-**Live pen = template multipath (K1 OPEN). Locked pen = Maker.js.**  
-**Code map:** `FEATURES.md`  
-**Implementation tasks:** `IMPLEMENTATION-PLAN.md`  
-**Reality / stack:** `REALITY-AND-STACK.md`
+**Status:** PARTIAL (Maker pen unit green; guest identity + C3/C4 browser OPEN)  
+**Live pen = Maker.js.** Template residual only.  
+**Code map:** `FEATURES.md` · **Tasks:** `IMPLEMENTATION-PLAN.md` · **Stack:** `REALITY-AND-STACK.md`
 
-**Owner decision (2026-07-18):** Build in-house. Client = forms only (no code). Engine pen = **Maker.js**. Import drawers/pipeline from planner package paths in this monorepo. Canvas/chrome stay Fabric + Dockview + React Aria. **1 implementer max.**
+**Owner-aligned model:** exact client options close orders; form not free invent; library as you go; Maker only; reuse Planner place/BOQ; Supabase+R2 dual intent; **no owner blockers**.
 
-**Honesty:** Current greys ≈ no brand library. This track is **months**, not a weekend. One type first.  
-**Code truth (re-verify):** form + compile + CLI call template `renderLinearDeskSvg` → `drawLinearDeskFromTemplate`. Maker recipes exist but are **not** the parametric pen yet. **K1 OPEN.**
-
-**NEXT (one action):** Close **K1** — wire form + CLI + publish to Maker-only `drawLinearDesk(fields)`.
+**Code truth:** form/CLI/publish → `drawLinearDesk` → Maker. **NEXT:** guest-safe `oando-…` slug + SKU → C3 browser → C4 place/BOQ.
 
 **Ship Linear desk v1 (done enough)** — all required before C5 polish / C6 types / C-AI product claim:
 
@@ -481,13 +484,13 @@ Planner **toolbars stay** Fabric + Dockview + React Aria (no rebuild).
 
 | Id | Blocker | Required fix | Status |
 |----|---------|--------------|--------|
-| **K1** | Form/publish/CLI use template multipath, not Maker | One API: `drawLinearDesk(fields)` = Maker only; form + CLI + publish all call it | OPEN |
-| **K2** | Plan tick "via Maker.js" is false until K1 | Unit test fails if template path used for parametric desk | OPEN |
-| **K3** | Form UI missing schema knobs | Model has all mm fields; UI lacks pedestalTopGap + pedestalBackInset (defaults only) | OPEN |
+| **K1** | Form/publish/CLI must use Maker only | One API: `drawLinearDesk(fields)` = Maker; form + CLI + publish all call it | unit-green |
+| **K2** | “via Maker” needs unit proof | Unit proves Maker part ids; template not form pen | unit-green |
+| **K3** | Form UI missing schema knobs | Model + UI bind all schema mm knobs incl. topGap/backInset | unit-green — browser OPEN |
 
-- [ ] **K1** closed: no second pen on parametric path  
-- [ ] **K2** closed: unit proves Maker path  
-- [ ] **K3** closed: form UI + model = schema 1:1 (every schema knob editable or explicit default policy)  
+- unit-green: **K1** closed: no second pen on parametric path (unit: `drawLinearDesk.test.ts` + compile)  
+- unit-green: **K2** closed: unit proves Maker path (`compileLinearDeskSvg` asserts Maker ids, no frame)  
+- unit-green: **K3** closed: form UI + model = schema 1:1 (pedestalTopGap + pedestalBackInset controls)  
 
 #### Fields (exact live schema — v1)
 
@@ -515,22 +518,23 @@ Source: `site/features/planner/asset-engine/svg/parametric/linearDeskFields.ts`
 
 **Fit constraints (Zod superRefine):** dual pedestals need width ≥ `2*inset + 2*pedestalWidth + 40`; depth ≥ `top + topGap + 40 + backInset`.
 
-- [ ] Zod `LinearDeskFieldsSchema` + constraints remain green.  
-- [ ] `drawLinearDesk(fields)` via **Maker.js only** → multipath parts (`desk-top`, `pedestal-l`/`pedestal-r`, modesty when set).  
-- [ ] Map full schema knobs into Maker recipe (today `buildLinearDeskMakerModel` hard-codes some insets — extend recipe).  
-- [ ] Quality bar: at **40px thumb** reads as desk; meet or beat `sample-desk-1`.  
-- [ ] `fields → SVG string` (sanitize via existing pipeline helpers).  
-- [ ] Unit: change width 1400→1800 regenerates different valid SVG.  
-- [ ] CLI: `scripts/render-linear-desk.mts` → isolation/`results` default; `--catalog` owner only.  
-- [ ] **Delete dual authority:** parametric form must not call `drawLinearDeskFromTemplate` / template `renderLinearDeskSvg` once Maker path is green.
+- unit-green: Zod `LinearDeskFieldsSchema` + constraints remain green.  
+- unit-green: `drawLinearDesk(fields)` via **Maker.js only** → multipath parts (`desk-top`, `pedestal-l`/`pedestal-r`, modesty when set).  
+- unit-green: Map full schema knobs into Maker recipe (`fieldsToLinearDeskMakerRecipe` → recipe insets).  
+- [ ] Quality bar: at **40px thumb** reads as desk; meet or beat `sample-desk-1` (browser / visual OPEN).  
+- unit-green: `fields → SVG string` (sanitize via existing pipeline helpers).  
+- unit-green: Unit: change width 1400→1800 regenerates different valid SVG.  
+- unit-green: CLI: `scripts/render-linear-desk.mts` → isolation/`results` default; `--catalog` owner only.  
+- unit-green: **Delete dual authority:** form/CLI/publish use Maker only; template deprecated residual only.
 
 **Paths (live):**
 
 | Role | Path |
 |------|------|
 | Schema | `features/planner/asset-engine/svg/parametric/linearDeskFields.ts` |
-| Template draw (**today’s pen — remove after K1**) | `…/drawLinearDeskFromTemplate.ts` |
-| Barrel | `…/parametric/index.ts` (re-exports template today) |
+| Template draw (**deprecated residual — not publish pen**) | `…/drawLinearDeskFromTemplate.ts` |
+| Maker draw (**live pen**) | `…/drawLinearDesk.ts` — `drawLinearDesk` / `renderLinearDeskSvg` |
+| Barrel | `…/parametric/index.ts` (Maker pen) |
 | Maker recipes | `features/planner/asset-engine/svg/makerJsRecipes.ts` — `buildLinearDeskMakerModel`, `buildLDeskMakerModel`, `buildMakerModel` |
 | Maker → path | `features/planner/asset-engine/svg/makerJsToPath.ts` — `compileMakerRecipeToPaths` |
 | Form model | `features/admin/svg-editor/parametric/linearDeskFormModel.ts` |
@@ -549,20 +553,20 @@ Source: `site/features/planner/asset-engine/svg/parametric/linearDeskFields.ts`
 | UI element | Target behavior | Live today |
 |------------|-----------------|------------|
 | Type select | Only `linear-desk` until C6 | linear-desk only |
-| Linear inputs | Full C2 schema; show unit | Missing pedestalTopGap / pedestalBackInset controls (K3) |
+| Linear inputs | Full C2 schema; show unit | **K3 unit:** pedestalTopGap + pedestalBackInset bound |
 | Unit toggle | mm / cm via `units.ts` | Wired (form model) |
-| Live preview | Same **Maker** `drawLinearDesk` as publish | **Template** `renderLinearDeskSvg` (K1 OPEN) |
+| Live preview | Same **Maker** `drawLinearDesk` as publish | Maker `renderLinearDeskSvg` (K1 unit) |
 | Validation | Zod under fields | Wired for bound fields |
-| Publish | Confirm → disk (+ dual-write if enabled) | Disk via `publishLinearDeskAction`; template SVG |
+| Publish | Confirm → disk (+ dual-write if enabled) | Disk via `publishLinearDeskAction`; Maker SVG; **browser OPEN** |
 | Suggest fields | **C-AI** after C2 | Not implemented |
 
 **Checklist:**
 
-- [ ] **Blocked on K1–K2:** do not mark C3 PASS while form/publish still use template draw.  
-- [ ] Form fields cover full C2 schema (exact Zod names / display aliases).  
-- [ ] mm/cm toggle wired to `units.ts`.  
-- [ ] Preview debounce; always code-drawn (**Maker** only).  
-- [ ] Publish disabled while invalid or preview failing.  
+- unit-green: **K1–K2 unit unblocked** form/publish use Maker draw (browser C3 still required).  
+- unit-green: Form fields cover full C2 schema (exact Zod names / display aliases).  
+- unit-green: mm/cm toggle wired to `units.ts`.  
+- unit-green: Preview always code-drawn (**Maker** only) — unit.  
+- unit-green: Publish disabled while invalid or preview failing (code).  
 - [ ] **Browser gate:** create desk width **160 cm** → preview OK → publish → file under `svg-catalog` + descriptor.  
 - [ ] Console errors = 0; failed requests = 0 on that journey.  
 - [ ] No client-side LLM keys.  
@@ -676,7 +680,7 @@ Each type = **new schema + new Maker drawer + form switch**. No mega-generic dra
 - [ ] Update this Part C statuses only with evidence.  
 - [ ] FEATURES.md: keep "Parametric library" + Maker rows when code lands.  
 - [ ] C-AI does not block C2–C4 ship (C-AI.5 kill switch).  
-- [ ] Commits only if owner asked.
+- [ ] Commit verified slices so work is not lost; push only if owner asks.
 
 ### Commands
 

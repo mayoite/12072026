@@ -10,7 +10,7 @@
    - `skipped_no_db` — no Products DB URL
    - `skipped_r2_unavailable` — DB set, R2 ListObjects fail (disk publish not rolled back at resolve)
    - `enabled` — DB + R2 probe ok → inject repository + artifact put
-6. When dual-write **enabled**, payload is still **stub/incomplete** (not full revision authority). Disk remains live authority.
+6. When dual-write **enabled**, artifacts may write — still **not** sole revision/release authority. Disk remains live authority.
 7. Optional best-effort Supabase catalog mirror after disk success; mirror failure must not undo disk.
 8. Planner `svg-blocks`: DB-aware read of usable descriptors when configured, **disk fallback**. Not revision artifact-byte authority. `Block2D` = load/missing fallback only.
 
@@ -39,7 +39,7 @@ Env names (values never in docs): `NEXT_ADMIN_SUPABASE_URL`, `SUPABASE_ADMIN_SER
 
 | Layer | Target role | Live (2026-07-17) |
 |---|---|---|
-| Products DB | Release identity + pointer | Marketing + managed catalog; SVG dual-write optional stub |
+| Products DB | Release identity + pointer | Marketing + managed catalog; SVG dual-write optional when DB+R2 ready (≠ cutover) |
 | R2 artifacts | Immutable SVG bytes | Dual-write put when probe ok; not release authority yet |
 | Disk descriptors + svg-catalog | Migration/fixtures after cutover | **Live SVG authority** |
 | Lifecycle filesystem | — | `results/admin/catalog-ops/` |

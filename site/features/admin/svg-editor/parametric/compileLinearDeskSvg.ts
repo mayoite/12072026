@@ -1,6 +1,6 @@
 /**
- * Fields → multipath SVG → sanitise (publish-path safety).
- * Same draw* as Admin preview.
+ * Fields → Maker multipath SVG → sanitise (publish-path safety).
+ * Same drawLinearDesk / renderLinearDeskSvg as Admin preview (K1).
  */
 
 import { sanitiseSvg } from "@/scripts/generate-svg/pipelineCore";

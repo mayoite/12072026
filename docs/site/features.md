@@ -130,7 +130,26 @@ Name-mirror under `tests/unit/features/site/`. Locales: `tests/unit/i18n/`.
 
 ---
 
-## Admin local runtime data (`features/admin/` data files)
+## Admin (`features/admin/`)
+
+Full Admin code map + Part C spine: `plan/Admin/FEATURES.md` · `plan/Admin/CHECKLIST.md`.  
+Supporting (Admin only): `IMPLEMENTATION-PLAN.md` · `REALITY-AND-STACK.md` (exactly four files under `plan/Admin/`).
+
+### Parametric linear desk (Part C — re-verify)
+
+| Surface | Path | Truth |
+|---------|------|--------|
+| Form UI | `svg-editor/parametric/LinearDeskParametricForm.tsx` | Preview via Maker `renderLinearDeskSvg` → `drawLinearDesk` |
+| Compile / publish | `compileLinearDeskSvg.ts` · `publishLinearDeskAction.ts` | Same Maker path; disk authority |
+| Maker pen (**live**) | `…/parametric/drawLinearDesk.ts` + `makerJsRecipes.ts` · `makerJsToPath.ts` | K1 unit-green |
+| Template residual | `…/parametric/drawLinearDeskFromTemplate.ts` | Deprecated; not form pen |
+| Route | `app/admin/svg-editor/parametric/page.tsx` → `/admin/svg-editor/parametric` | PARTIAL |
+| CLI | `scripts/render-linear-desk.mts` | Maker via barrel |
+
+**Locked:** Maker.js only. Forms client. Fabric place. Dockview + React Aria chrome. AI fields only after C2 (**C-AI**), never geometry.  
+**Open:** C3 Admin browser · C4 guest place 1280 + 390 (K1–K3 unit-green only).
+
+### Admin local runtime data
 
 Mutable files for dev and E2E. **Not** catalog or SVG descriptor authority.
 

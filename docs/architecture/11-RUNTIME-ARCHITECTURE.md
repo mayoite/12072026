@@ -97,7 +97,7 @@ Live SVG descriptors are under `site/inventory/descriptors/`.
 Live SVG bytes are under `site/public/svg-catalog/`.
 Dual-write injects only when Products DB is configured and R2 ListObjects succeeds.
 Dead R2 at the resolve gate skips dual-write without rolling back disk.
-Dual-write payload remains incomplete — **not** cutover.
+Enabled dual-write is not sole release authority — **not** cutover.
 Planner `svg-blocks` is DB-aware with disk fallback; artifact-byte authority is target-only.
 
 Products database plus immutable R2 artifacts is the target authority.

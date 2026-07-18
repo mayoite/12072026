@@ -33,7 +33,7 @@ When docs and code differ, **code wins** until cutover is proven.
 |---|---|---|
 | Released SVG | Products DB + immutable R2 artifact bytes | **Disk** — `inventory/descriptors/`, `public/svg-catalog/` |
 | Admin publish | One DB transaction + product pointer | Disk first; dual-write **only** when Products DB configured **and** R2 ListObjects succeeds (`resolveSvgPublishDualWriteDeps`) |
-| Dual-write payload | Full `PublishedRevisionV1` + artifact bytes | **Stub / incomplete** — enabled dual-write ≠ cutover |
+| Dual-write payload | Full `PublishedRevisionV1` + artifact bytes | Artifacts may write when enabled; **still not** sole release authority — enabled dual-write ≠ cutover |
 | Planner SVG read | DB revision bytes via API | `svg-blocks` DB-aware + disk fallback; published SVG gate still disk |
 | Marketing catalog | Products DB | Products DB — `catalog_products` |
 | Planner managed catalog | Products DB | Products DB — `planner_managed_products` |
@@ -63,7 +63,7 @@ Active cutover blocker: `../../Failures.md`. Contract: `08-DATABASE-SVG-CONTRACT
 | Security | `10-SECURITY-BENCHMARK.md` |
 | Live runtime | `11-RUNTIME-ARCHITECTURE.md` |
 
-**Benchmarks are acceptance targets.** They are not PASS certificates. Execution checklists live under `plan/` (Planner / Admin / Site / TechStack trios). One blockers file per track: `agent-reports/{PLANNER,ADMIN,SITE,TECH-STACK}.md`.
+**Benchmarks are acceptance targets.** They are not PASS certificates. Execution lives under `plan/` as **duos** (CHECKLIST + FEATURES) per track; **Admin** also keeps `IMPLEMENTATION-PLAN.md` + `REALITY-AND-STACK.md` (exactly four files). One blockers file per track: `agent-reports/{PLANNER,ADMIN,SITE,TECH-STACK}.md`.
 
 References: [Configura CET](https://www.configura.com/products/cet/commercial-interiors) · [pCon.planner](https://docs.pcon-solutions.com/pCon/planner/8.14/pCon.planner_8.14_Features_EN.pdf) · [WCAG 2.2](https://www.w3.org/TR/WCAG22/) · [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) · [Core Web Vitals](https://web.dev/articles/defining-core-web-vitals-thresholds) · [Google Search](https://developers.google.com/search/docs)
 

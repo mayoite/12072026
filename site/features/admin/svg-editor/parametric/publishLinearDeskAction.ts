@@ -15,6 +15,10 @@ import {
 } from "@/features/admin/svg-editor/publish/publishDescriptorWithPipeline";
 import { resolveSvgPublishDualWriteDeps } from "@/features/admin/svg-editor/publish/resolveSvgPublishDualWrite";
 import { compileLinearDeskSvg } from "./compileLinearDeskSvg";
+import {
+  ensureCommercialSku,
+  ensureGuestVisibleSlug,
+} from "./linearDeskGuestIdentity";
 import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
 import type { SvgCompileStagesResult } from "@/features/planner/asset-engine/svg/runSvgCompileStages";
 import {
@@ -32,7 +36,9 @@ function descriptorFromFields(
     heightMm: number;
   },
 ): BlockDescriptor {
-  const slug = fields.slug ?? "linear-desk";
+  // BOQ display: humanize(slug) + sku (BlockDescriptor has no name field yet).
+  const slug = ensureGuestVisibleSlug(fields.slug, fields.widthMm);
+  const sku = ensureCommercialSku(fields.sku, fields.widthMm);
   const base = makeNewBlockDescriptorStub();
   const now = Math.floor(Date.now() / 1000);
   const id =
@@ -43,7 +49,7 @@ function descriptorFromFields(
     ...base,
     id,
     slug,
-    sku: fields.sku,
+    sku,
     sourceProvenance: "native",
     geometry: {
       widthMm: fields.widthMm,
