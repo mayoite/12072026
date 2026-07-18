@@ -52,7 +52,7 @@ import {
   railSnapFromPoint,
   type RailLayoutConfig,
 } from "./workspaceLayout";
-import styles from "@/app/css/core/locked/planner/canvas-tool-rail.module.css";
+import styles from "@/app/css/core/locked/chrome/canvas-tool-rail.module.css";
 
 const TOOL_ICONS: Record<PlannerTool, Icon> = {
   select: Cursor,

@@ -1,12 +1,14 @@
 /**
- * Locked SVG surface — isolated from site base theme churn.
+ * Locked SVG paint only — palette, plan roles, line sizes, previews.
  *
- * Base theme.css = whole site (leave stable).
- * Everything custom for SVG lives HERE: palette mirrors, line sizes,
- * utilities, preview, chrome. Safe to expand freely.
+ * Shared tool/dock chrome lives in locked/chrome (import that first).
+ * Do not put tool rails or Dockview modules here.
+ *
+ *   svg-theme-palette.css   Family mirrors, plan roles, line scales
+ *   svg-utilities.css       .svg-* paint helpers (token-only)
+ *   svg-preview.css         Parametric + plan-symbol previews
  */
 @reference "../../../index.css";
 @import "./svg-theme-palette.css";
 @import "./svg-utilities.css";
 @import "./svg-preview.css";
-@import "./svg-studio-chrome.css";

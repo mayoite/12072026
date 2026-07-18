@@ -1,6 +1,8 @@
 /**
- * Admin SVG studio chrome helpers (Dockview host lives in module CSS).
- * Tokens only.
+ * Admin studio chrome helpers (global classes).
+ * Home: locked/chrome (shared before locked/svg).
+ * Dock modules + tool rail: same folder. Map: ./index.css
+ * Tokens only — no hex.
  */
 
 .admin-svg-engine-shell__chrome-toolbar {

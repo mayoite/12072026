@@ -1,5 +1,6 @@
 /**
  * Admin SVG Dockview host — same package as Planner (dockview-react).
+ * Home: locked/chrome (map: index.css). Consumer: AdminSvgDockHost.tsx
  * Stage engine stays Excalidraw; this is shell chrome only.
  */
 

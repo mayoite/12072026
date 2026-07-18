@@ -4,7 +4,8 @@
 @import "./admin.css";
 @import "./admin-primitives.css";
 @import "./admin-pages.css";
-/* Full SVG theme palette + previews + chrome (locked/svg) */
+/* Shared chrome first, then SVG paint only */
+@import "../chrome/index.css";
 @import "../svg/index.css";
 @import "./svg-editor-previews.css";
 @import "./svg-editor-inventory.css";

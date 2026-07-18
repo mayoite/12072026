@@ -1,0 +1,24 @@
+/**
+ * Locked shared chrome — tool rails, docks, studio shell helpers.
+ *
+ * Order: chrome (shared) first, then locked/svg (paint only).
+ * Domain panels stay co-located next to features.
+ *
+ * ── Global (imported here) ────────────────────────────────────────────────
+ *   studio-chrome.css           Admin SVG chrome toolbar helpers
+ *
+ * ── CSS modules (TSX imports these paths only) ────────────────────────────
+ *   canvas-tool-rail.module.css → features/planner/editor/CanvasToolRail.tsx
+ *   planner-dock.module.css     → features/planner/editor/dock/PlannerDockHost.tsx
+ *   admin-svg-dock.module.css   → features/admin/svg-editor/.../AdminSvgDockHost.tsx
+ *
+ * Rule: new shared tool/dock chrome → here.
+ *       SVG palette / plan paint / preview → locked/svg only.
+ *
+ * Shell layout (not here):
+ *   locked/planner/planner-tokens.css, planner-shell.css
+ *   locked/admin/svg-editor-shell.css
+ *   features/planner/editor/workspace.module.css
+ */
+@reference "../../../index.css";
+@import "./studio-chrome.css";

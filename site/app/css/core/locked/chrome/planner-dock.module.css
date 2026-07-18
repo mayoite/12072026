@@ -1,5 +1,6 @@
 /**
  * Planner Dockview theme — maps to workspace/planner tokens.
+ * Home: locked/chrome (map: index.css). Consumer: PlannerDockHost.tsx
  * Import dockview.css in PlannerDockHost; this overrides colors only.
  */
 

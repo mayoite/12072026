@@ -27,7 +27,7 @@ import {
 import "dockview-react/dist/styles/dockview.css";
 import { Eye, PencilSimple, ListBullets } from "@phosphor-icons/react";
 
-import styles from "./admin-svg-dock.module.css";
+import styles from "@/app/css/core/locked/chrome/admin-svg-dock.module.css";
 
 export type AdminSvgDockSlot = "preview" | "stage" | "details";
 

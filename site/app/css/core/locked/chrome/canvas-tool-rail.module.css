@@ -1,5 +1,6 @@
 /**
  * RAC canvas tool rail — sole tool chrome styles.
+ * Home: locked/chrome (map: index.css). Consumer: CanvasToolRail.tsx
  * Specificity intentionally beats body.planner-workspace .pw-tool-rail legacy shell rules.
  */
 

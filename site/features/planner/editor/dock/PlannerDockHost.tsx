@@ -23,7 +23,7 @@ import {
   usePlannerDockSlot,
   type PlannerDockSlots,
 } from "./plannerDockSlots";
-import styles from "./planner-dock.module.css";
+import styles from "@/app/css/core/locked/chrome/planner-dock.module.css";
 
 type Disposable = { dispose: () => void };
 
