@@ -60,10 +60,11 @@ fields + options → eng drawer (Maker) → multipath SVG → publish (disk now;
 - Test isolation first. Tests never mutate canonical catalog.
 - Block only the exact dependent item. Continue unrelated work.
 - `pnpm` from repo root. No install inside `site/` or `tech-docs-generator/`.
+- **Browser URL: only `http://localhost:3000`** — never `127.0.0.1` (Next treats them as different origins; owner and agent will see two apps). Use `scripts/lib/forceLocalhostOrigin.mjs`.
 - No handwritten `any`. No plagiarism. Secrets only in `.env.local`.
 - No suppressed tests. No worktrees.
 - **Commits:** save finished slices so work is not lost. Prefer one clear commit when a slice is verified. Do not force-push or rewrite shared history.
-- **Push / PR / deploy:** only when the owner asks.
+- **Push / PR / deploy:** owner granted full authority — push verified slices.
 
 ## Start
 
