@@ -66,7 +66,7 @@ Table paths are relative to `site/` unless noted. `app/...` means `site/app/...`
 
 | Feature | Code | Gap |
 |---|---|---|
-| Catalog source | `lib/catalog/site/getProducts.ts` → `lib/catalog/sources.ts` | Drizzle/live when configured; fixture/fallback when not. Empty category is **data** issue + Site empty UX (SF-03) |
+| Catalog source | `lib/catalog/site/getProducts.ts` → `lib/catalog/sources.ts` | Drizzle/live when configured; fixture/fallback when not. Workstations non-empty (SF-03 PASS 2026-07-18: API total 17, browser 14 cards); other empty categories still data + honest empty UX |
 | Categories / filters | `lib/catalog/site/categories.ts`, `filters.ts`, `traits.ts`, `slugResolver.ts` |  -  |
 | Products landing | `app/(site)/products/page.tsx` | Category entry |
 | Category grid | `app/(site)/products/[category]/FilterGrid*.tsx`, `CategoryPageView.tsx` | Loading/error/empty states in code; stale/recovery thin (SF-16) |

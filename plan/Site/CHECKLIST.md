@@ -192,7 +192,7 @@ Update only with fresh evidence. Seed mirrors this file Part B (2026-07-17 code 
 |----|---------|--------------|-------------|
 | SF-01 | Homepage accessible heading loses spaces | Accessible name matches visible words with spaces | PARTIAL (code: sr-only join)  -  browser OPEN |
 | SF-02 | Document titles double brand suffix | One brand segment in titles | PARTIAL (code: resolveDocumentTitle + absolute)  -  browser OPEN |
-| SF-03 | Workstations / primary category 0 products | Real products or owner-accepted env story | OPEN / env FAIL |
+| SF-03 | Workstations / primary category 0 products | Real products or owner-accepted env story | PASS (2026-07-18: API `/api/products/filter/?category=workstations` total 17; browser `/products/workstations` 14 cards; Failures.md item 1 PASS; `results/site/verify-workstations.png`) |
 | SF-04 | `/catalog` → downloads hero image broken | Destination images 200 | PARTIAL (code: dmrc-hero; no hero-3 ref)  -  browser OPEN |
 | SF-05 | Route group classification incomplete | Every `(site)` page classified + sitemap/robots agree on target host | PARTIAL (code + unit) |
 | SF-06 | Quote-cart / icon controls missing names | Accessible name on all header icons | OPEN (no quote-cart in header today) |
@@ -356,7 +356,7 @@ Owner may reorder; default:
 1. **S0/S1**  -  isolation, route classification audit, titles (SF-02), host align (SF-21), catalog redirect assets (SF-04).  
 2. **SF-01 / SF-14** homepage a11y + hero fallback browser.  
 3. **S2** commercial hierarchy first viewport.  
-4. **S4** product discovery in real env (or document FAIL + Failures.md).  
+4. **S4** residual product discovery (SF-08 browser, SF-15, SF-16) — SF-03 workstations PASS.  
 5. **S3** forms + consent.  
 6. **S6** Planner entry continuity.  
 7. **S7** release gates + CWV + matrix.
@@ -477,7 +477,7 @@ Execution update: 2026-07-17 (FIX-SITE).
 | S1 | PARTIAL | robots/sitemap unit PASS (FIX-SITE); host via SITE_URL; production re-probe OPEN |
 | S2 | OPEN / PARTIAL | Landing hierarchy + SF-01 heading a11y not re-proved this session |
 | S3 | PARTIAL | Footer no-admin + contact error envelope unit PASS; live form delivery OPEN |
-| S4 | PARTIAL | Planner entry unit green; product discovery env-dependent |
+| S4 | PARTIAL | SF-03 workstations non-empty (API 17 / browser 14 cards 2026-07-18); Planner entry unit green; detail/compare/empty-path still open |
 | S5 | OPEN | Content + i18n parity proof open |
 | S6 | PARTIAL | Planner entry params unit-covered; production analytics receipt OPEN |
 | S7 | OPEN | Release gates + CWV + full browser matrix open |
@@ -535,7 +535,7 @@ Fresh local unit (this session): robots/sitemap/siteUrl, footer no-admin, soluti
 
 ### S4  -  Product discovery
 
-- [ ] Category landing with real products in target env (or accepted fixture env)
+- [PASS] Category landing with real products in target env (SF-03 workstations 2026-07-18: API total 17; browser 14 cards on `/products/workstations`)
 - [ ] Search, filter, sort, empty/loading/error
 - [ ] Product detail: identity, dimensions, media, JSON-LD = visible
 - [PASS] Design in Planner CTA with continuous product params (unit SF-08 / plannerEntry FIX-SITE)
@@ -594,7 +594,7 @@ S7 a11y/perf/release (continuous; gates release)
 1. **S0/S1**  -  production SEO re-probe; titles (SF-02); catalog redirect asset (SF-04).
 2. **SF-01** homepage accessible heading.
 3. **S2** commercial hierarchy first viewport.
-4. **S4** product discovery in real env (or document FAIL + Failures.md).
+4. **S4** residual (SF-08 browser, SF-15, SF-16) — SF-03 workstations PASS 2026-07-18.
 5. **S3** forms live delivery + consent browser.
 6. **S6** Planner entry browser continuity.
 7. **S7** release gates + CWV.
