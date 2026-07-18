@@ -13,12 +13,14 @@
 
 ## Owner standing decisions (do not re-litigate)
 
-- **Full authority from owner.** Zero owner blockers. Execute. Do not pause for permission theatre.
+- **Full authority from owner.** Parent agent has **owner-level authority**. Zero owner blockers. Execute.
+- **Evidence, then decide.** If the parent sees fresh evidence (command exit, code, browser), the parent **takes the call** — PASS / FAIL / ship / flip. Do not wait for owner rubber-stamp.
+- **No subagent decisions.** Subagents may explore or draft. They must **not** decide status, cutover, PASS, or product calls. Parent only.
 - **No artificial owner blockers.** Keys rotated. DB + R2 granted. See `Failures.md` — owner blockers = NONE.
-- Do **not** re-explain disk vs `SVG_RELEASE_AUTHORITY` unless flipping cutover with evidence.
+- Do **not** re-explain disk vs `SVG_RELEASE_AUTHORITY` unless flipping cutover with evidence the parent has run.
 - Owner dual-write meaning: **Supabase (Products DB) + R2** for live durable catalog.
-- Code may still default disk until `SVG_RELEASE_AUTHORITY=db` — that is **agent proof work**, not permission-seeking.
-- Do not invent “wait for owner” gates. Commit verified slices. Push when the slice should land on remote. Ask only for true missing secrets or irreversible production-only actions the host cannot do.
+- Code may still default disk until `SVG_RELEASE_AUTHORITY=db` — parent flips after **parent-seen** place proof.
+- Commit verified slices. Push when the slice should land. Ask only if a secret is missing or the host truly cannot act.
 
 ## Product
 

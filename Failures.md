@@ -4,12 +4,14 @@
 
 ## Owner blockers — NONE (full authority)
 
-Owner granted **full authority**. Zero permission holds (keys rotated; DB + R2 granted).  
-**Do not re-ask** for dual-write / R2 / DB / cutover / commit permission.  
-Env has Products DB + R2. Intent: durable catalog = **Supabase + R2**.  
-Code default remains disk until `SVG_RELEASE_AUTHORITY=db` after agent-proven place — **agent execution**, not an owner hold.
+Owner granted **full authority to the parent agent** (same as owner for execution calls).  
+Zero permission holds. Keys rotated. DB + R2 granted.  
+**Parent decides from evidence it has seen.** No subagent takes PASS/cutover/status calls.  
+**Do not re-ask** owner for dual-write / R2 / DB / cutover / commit permission.  
+Intent: durable catalog = **Supabase + R2**.  
+`SVG_RELEASE_AUTHORITY=db` after parent-run place proof — not an owner hold.
 
-Agents: read `.env.local` / run scripts. Execute. Commit. Do not loop the owner on “disk vs db” lectures.
+Parent: read env, run scripts, execute, commit, push. No “disk vs db” lectures.
 
 ---
 
