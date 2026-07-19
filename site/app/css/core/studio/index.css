@@ -1,0 +1,8 @@
+/*
+ * Studio shell — shared authoring layout (topbar / rail / panels / canvas / dock).
+ * Structural dimension vars are scoped to .studio-shell; all colors and font
+ * sizes reference existing semantic + typography tokens.
+ */
+@import "./shell.css";
+@import "./side-panels.css";
+@import "./tool-rail.css";
