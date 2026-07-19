@@ -22,7 +22,7 @@ import type { PlannerPersistStorage } from "../workspaceStatusLabels";
 import type { WorkspacePlanMetrics } from "../workspacePlanMetrics";
 import { WorkspaceShell } from "../WorkspaceShell";
 import { useIsMobile } from "../../hooks/useIsMobile";
-import styles from "../workspace.module.css";
+import styles from "@/app/css/core/locked/planner/workspace-shell.module.css";
 import { PlannerDockHost, type DockviewApi } from "./PlannerDockHost";
 import {
   clearPersistedDockLayout,
@@ -497,7 +497,7 @@ export function ModularPlannerShell({
       )}
       data-fill-parent={fillParent ? "true" : undefined}
       data-planner-density={density}
-      data-planner-surface="paper"
+      data-planner-surface="studio"
       data-modular-dock="true"
       data-chrome-mode="slim"
       id={`modular-shell-${id.replace(/:/g, "")}`}

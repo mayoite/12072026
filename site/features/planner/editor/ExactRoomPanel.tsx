@@ -8,7 +8,7 @@ import {
   parseLengthInput,
 } from "@/features/planner/model/units";
 
-import styles from "./workspace.module.css";
+import styles from "@/app/css/core/locked/planner/workspace-shell.module.css";
 
 export interface ExactRoomDimensions {
   widthMm: number;

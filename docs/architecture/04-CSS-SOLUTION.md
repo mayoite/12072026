@@ -22,7 +22,7 @@ Shared system: `site/app/css/`.
 | Shared studio chrome (docks, tool rail, studio helpers) | `site/app/css/core/locked/chrome/` |
 | SVG paint / plan preview tokens & plates | `site/app/css/core/locked/svg/` |
 | Planner shell / marketing planner | `site/app/css/core/locked/planner/` |
-| Planner domain UI | Co-located CSS modules next to features (e.g. `workspace.module.css`) — **not** shared dock/tool-rail chrome |
+| Planner domain UI | `site/app/css/core/locked/planner/*.module.css` — panels, shell grid, canvas/3D modules |
 
 ## Import order (Admin)
 

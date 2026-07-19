@@ -1,7 +1,7 @@
 "use client";
 
 import type { DockEdge } from "./workspaceLayout";
-import styles from "./workspace.module.css";
+import styles from "@/app/css/core/locked/planner/workspace-shell.module.css";
 
 export interface DockDropZonesProps {
   activeEdge: DockEdge | null;

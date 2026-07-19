@@ -1,6 +1,11 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { ChooseProductPage } from "@/features/shared/entry/ChooseProductPage";
+
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/choose-product",
+  useSearchParams: () => new URLSearchParams(),
+}));
 
 describe("ChooseProductPage", () => {
   it("renders guest mode with the guest canvas entry link", () => {
@@ -14,6 +19,10 @@ describe("ChooseProductPage", () => {
     );
     expect(entry.getAttribute("href")).toContain("siteSource=");
     expect(screen.queryByRole("link", { name: "Open portal" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Browse products" })).toHaveAttribute(
+      "href",
+      "/products",
+    );
   });
 
   it("renders member mode with authenticated portal link", () => {
@@ -29,6 +38,10 @@ describe("ChooseProductPage", () => {
     expect(screen.getByRole("link", { name: "Open portal" })).toHaveAttribute(
       "href",
       "/portal",
+    );
+    expect(screen.getByRole("link", { name: "Browse products" })).toHaveAttribute(
+      "href",
+      "/products",
     );
   });
 

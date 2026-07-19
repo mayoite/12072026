@@ -118,7 +118,7 @@ import { usePlannerSvgCatalog } from "@/features/planner/catalog/usePlannerWorks
 import { plannerCatalogStatusBarLabel } from "@/features/planner/catalog/plannerCatalogStatus";
 import { CommandPalette } from "./CommandPalette";
 import { CommandsPaletteTrigger } from "./CommandsPaletteTrigger";
-import workspaceStyles from "./workspace.module.css";
+import workspaceStyles from "@/app/css/core/locked/planner/workspace-shell.module.css";
 import { PropertiesPanel } from "./PropertiesPanel";
 import {
   ExactRoomPanel,
@@ -328,6 +328,8 @@ export function OOPlannerWorkspace({
   );
   const [workspaceMessage, setWorkspaceMessage] = useState<string | null>(null);
   const armedToolRef = useRef<PlannerTool>("select");
+  /** Ignore Fabric selection:cleared for a beat after place (rebuild/tool swap races). */
+  const ignoreSelectionClearUntilRef = useRef(0);
 
   useEffect(() => {
     const intent = takePlannerStartupIntent(guestMode, planId);
@@ -957,6 +959,12 @@ export function OOPlannerWorkspace({
         id: string;
       } | null,
     ) => {
+      if (
+        !selection &&
+        Date.now() < ignoreSelectionClearUntilRef.current
+      ) {
+        return;
+      }
       workspaceCanvas.setSelection(
         selection
           ? { type: selection.type, ids: [selection.id] }
@@ -965,6 +973,10 @@ export function OOPlannerWorkspace({
     },
     [workspaceCanvas],
   );
+
+  const retainSelectionAfterPlace = useCallback(() => {
+    ignoreSelectionClearUntilRef.current = Date.now() + 500;
+  }, []);
 
   const handleDeleteEntity = useCallback(
     (collection: PlannerEntityCollection, id: string) => {
@@ -1264,6 +1276,7 @@ export function OOPlannerWorkspace({
           return placed.project;
         });
         if (placedId) {
+          retainSelectionAfterPlace();
           workspaceCanvas.setSelection({ type: "furniture", ids: [placedId] });
           setActiveTool("select");
           armedToolRef.current = "select";
@@ -1320,6 +1333,7 @@ export function OOPlannerWorkspace({
                 ? result.furnitureId
                 : null;
             if (placedId) {
+              retainSelectionAfterPlace();
               workspaceCanvas.setSelection({
                 type: "furniture",
                 ids: [placedId],
@@ -1350,6 +1364,7 @@ export function OOPlannerWorkspace({
               return placed.result.project;
             });
             if (placedId) {
+              retainSelectionAfterPlace();
               workspaceCanvas.setSelection({
                 type: "furniture",
                 ids: [placedId],
@@ -1385,6 +1400,7 @@ export function OOPlannerWorkspace({
         return placed.result.project;
       });
       if (placedId) {
+        retainSelectionAfterPlace();
         workspaceCanvas.setSelection({ type: "furniture", ids: [placedId] });
         setActiveTool("select");
         armedToolRef.current = "select";
@@ -1392,7 +1408,7 @@ export function OOPlannerWorkspace({
       }
       setWorkspaceMessage(`Placed ${item.shortName ?? item.name}`);
     },
-    [pendingCatalogItemId, workspaceCanvas, catalog],
+    [catalog, pendingCatalogItemId, retainSelectionAfterPlace, workspaceCanvas],
   );
 
   const handleFloorChange = useCallback(

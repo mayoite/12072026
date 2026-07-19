@@ -61,10 +61,9 @@ describe("ProjectSetupStep", () => {
 
     const city = screen.getByLabelText("City");
     const floorArea = screen.getByLabelText("Floor area (sq ft)");
-    const row = city.closest(".grid");
+    const row = screen.getByTestId("project-setup-detail-grid");
 
-    expect(row).toHaveClass("sm:grid-cols-2");
-    expect(row).toHaveClass("lg:grid-cols-3");
+    expect(row).toContainElement(city);
     expect(row).toContainElement(floorArea);
     expect(screen.queryByLabelText(/target seat count/i)).not.toBeInTheDocument();
     expect(

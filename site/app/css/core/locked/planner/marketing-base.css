@@ -36,11 +36,7 @@
 }
 
 @utility home-section--white {
-  background: linear-gradient(
-    180deg,
-    var(--surface-page) 0%,
-    color-mix(in srgb, var(--color-ecru-50) 70%, var(--surface-page)) 100%
-  );
+  background: var(--surface-relief);
 }
 
 @utility home-section--dark {

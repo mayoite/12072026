@@ -12,7 +12,7 @@ import {
 } from "@/features/planner/editor/plannerStep";
 import type { PlannerAccessContext } from "@/features/planner/lib/commands/plannerAccessContext";
 import type { WorkspacePlanMetrics } from "@/features/planner/editor/workspacePlanMetrics";
-import styles from "./workspace.module.css";
+import styles from "@/app/css/core/locked/planner/workspace-shell.module.css";
 
 /** Shorter guest titles — drop long product essays from the strip. */
 const PLANNER_STEP_LABELS_GUEST: Record<PlannerStep, string> = {

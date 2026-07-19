@@ -21,7 +21,7 @@ import {
   writeFurnitureEntityId,
   type FurnitureDocumentPoseUpdate,
 } from "./furnitureFabricMapper";
-import styles from "./furnitureFabricLayer.module.css";
+import styles from "@/app/css/core/locked/planner/furniture-fabric-layer.module.css";
 
 export type FurnitureFabricLayerProps = {
   furniture: readonly PlannerFurnitureItem[];

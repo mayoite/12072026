@@ -8,7 +8,7 @@ import {
   type SketchToPlanResponse,
 } from "@/features/planner/ai/sketchToPlanShared";
 
-import styles from "./sketch-to-plan-dialog.module.css";
+import styles from "@/app/css/core/locked/planner/sketch-to-plan-dialog.module.css";
 
 export type SketchUnderlayPayload = {
   dataUrl: string;

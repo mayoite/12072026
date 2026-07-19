@@ -8,7 +8,7 @@ import {
   within,
 } from "@testing-library/react";
 import { WorkspaceShell } from "@/features/planner/editor/WorkspaceShell";
-import workspaceStyles from "@/features/planner/editor/workspace.module.css";
+import workspaceStyles from "@/app/css/core/locked/planner/workspace-shell.module.css";
 
 afterEach(() => cleanup());
 
@@ -33,9 +33,9 @@ describe("WorkspaceShell", () => {
         <div>canvas</div>
       </WorkspaceShell>,
     );
-    const shell = container.querySelector("[data-planner-surface='paper']");
+    const shell = container.querySelector("[data-planner-surface='studio']");
     expect(shell).not.toBeNull();
-    expect(shell).toHaveAttribute("data-planner-surface", "paper");
+    expect(shell).toHaveAttribute("data-planner-surface", "studio");
     // CSS module must own paper tokens — not a cool pure-white hard-code.
     expect(typeof workspaceStyles.shell).toBe("string");
     expect(workspaceStyles.shell.length).toBeGreaterThan(0);

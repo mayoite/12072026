@@ -10,11 +10,11 @@ describe("PlannerSkeleton", () => {
     expect(screen.getByRole("status")).toBeDefined();
   });
 
-  it("reserves denser paper shell chrome (top + workflow + status, no save claim)", () => {
+  it("reserves denser studio shell chrome (top + workflow + status, no save claim)", () => {
     const { container } = render(<PlannerSkeleton />);
     const root = container.querySelector(".planner-skeleton");
     expect(root).not.toBeNull();
-    expect(root).toHaveAttribute("data-planner-surface", "paper");
+    expect(root).toHaveAttribute("data-planner-surface", "studio");
     expect(root).toHaveAttribute("data-planner-density", "compact");
     expect(root).toHaveAttribute("data-chrome-mode", "slim");
     expect(screen.getByText("Loading workspace…")).toBeInTheDocument();

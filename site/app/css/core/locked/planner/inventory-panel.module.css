@@ -1,15 +1,16 @@
 /* Inventory Panel — ordinary tool density (one results scrollport). */
 
 .panel {
-  --inv-panel-bg: var(--surface-panel);
-  --inv-panel-border: var(--border-soft);
+  --inv-panel-bg: var(--planner-chrome-panel, var(--color-white-50));
+  --inv-panel-border: var(--planner-border-default);
   --inv-text-primary: var(--text-strong);
   --inv-text-secondary: var(--text-body);
   --inv-text-muted: var(--text-muted);
   --inv-accent: var(--color-primary);
   --inv-accent-subtle: var(--color-accent-soft);
-  --inv-surface-soft: var(--surface-soft);
-  --inv-surface-page: var(--surface-page);
+  --inv-surface-soft: var(--planner-chrome-subtle, var(--color-white-200));
+  --inv-surface-page: var(--planner-chrome-page);
+  --inv-thumb-bg: var(--planner-chrome-thumb);
   --inv-focus-ring: var(--focus-ring);
   --inv-radius-sm: var(--radius-sm);
   --inv-radius-md: var(--radius-md);
@@ -494,7 +495,7 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--inv-radius-sm);
-  background: var(--inv-surface-page);
+  background: var(--inv-thumb-bg, var(--planner-chrome-thumb));
   border: 1px solid color-mix(in srgb, var(--inv-panel-border) 80%, transparent);
   overflow: hidden;
   margin: 0;
@@ -717,7 +718,7 @@
   padding: 0;
   border: none;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--surface-panel) 92%, transparent);
+  background: color-mix(in srgb, var(--inv-panel-bg) 92%, transparent);
   color: var(--inv-text-muted);
   cursor: pointer;
   opacity: 0;

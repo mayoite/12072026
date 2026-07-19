@@ -17,6 +17,14 @@ interface ChooseProductPageProps {
 
 const PLANNER = PRODUCT_SUITE.planner;
 
+const WORKFLOW_STEPS = [
+  { id: "preview", label: "2D & 3D preview" },
+  { id: "catalog", label: "Catalog placement" },
+  { id: "boq", label: "BOQ export" },
+] as const;
+
+type WorkflowStepId = (typeof WORKFLOW_STEPS)[number]["id"];
+
 export function ChooseProductPage({
   guestMode,
   authenticated,
@@ -29,7 +37,6 @@ export function ChooseProductPage({
 
   const rawEntryHref =
     guestMode || !authenticated ? PLANNER.routes.guest : PLANNER.routes.canvas;
-  // Carry Site continuity into guest canvas after this chooser step.
   const entryHref =
     guestMode || !authenticated
       ? buildPlannerEntryHref(rawEntryHref, {
@@ -51,29 +58,34 @@ export function ChooseProductPage({
       ? "Open workspace planner"
       : "Continue to guest planner";
 
+  const stepLinks: Record<WorkflowStepId, { href: string; label: string }> = {
+    preview: { href: landingHref, label: "View planner overview" },
+    catalog: { href: "/products", label: "Browse products" },
+    boq: authenticated
+      ? { href: PLANNER.routes.portal, label: "Open portal" }
+      : { href: "/planning", label: "BOQ planning service" },
+  };
+
   return (
-    <section className="bg-[var(--surface-page)] pt-16" aria-labelledby="choose-product-heading">
-      <div className="grid lg:min-h-[calc(100vh-4rem)] lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="relative flex min-h-[30rem] items-end overflow-hidden bg-[var(--surface-inverse)] px-7 py-10 text-[var(--text-inverse)] md:min-h-[34rem] md:px-12 lg:min-h-full">
+    <section className="choose-product-page" aria-labelledby="choose-product-heading">
+      <div className="choose-product-split">
+        <div className="choose-product-hero">
           <Image
             src={DEFAULT_HERO_FALLBACK}
             alt="Office furniture workspace layout preview in planning view"
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 48vw"
-            className="object-cover opacity-70"
+            className="choose-product-hero__media"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/10" aria-hidden="true" />
-          <div className="relative z-10 max-w-xl">
-            <p className="typ-label mb-5 text-[var(--color-bronze-300)]">{sessionLabel}</p>
-            <h1
-              id="choose-product-heading"
-              className="home-heading !text-[clamp(2.4rem,5vw,4.5rem)] !text-[var(--text-inverse)]"
-            >
+          <div className="choose-product-hero__scrim" aria-hidden="true" />
+          <div className="choose-product-hero__copy">
+            <p className="typ-label choose-product-hero__session">{sessionLabel}</p>
+            <h1 id="choose-product-heading" className="home-heading choose-product-hero__title">
               Start planning office furniture{" "}
               <span className="text-accent-italic-on-dark">for real spaces.</span>
             </h1>
-            <p className="page-copy mt-6 max-w-lg text-[var(--text-inverse-body)]">
+            <p className="page-copy choose-product-hero__body">
               {guestMode
                 ? "Step 1 of planner: open the canvas, upload a floor plan (JPG/PNG/SVG), place catalog furniture, and export a BOQ. Guest drafts stay in this browser until you sign in."
                 : authenticated
@@ -82,7 +94,7 @@ export function ChooseProductPage({
             </p>
             {guestMode ? (
               <p
-                className="typ-label mt-4 text-[var(--color-bronze-300)]"
+                className="typ-label choose-product-hero__guest-note"
                 data-testid="choose-product-guest-step"
               >
                 Guest path · no account required
@@ -91,13 +103,16 @@ export function ChooseProductPage({
           </div>
         </div>
 
-        <div className="flex items-center px-7 py-12 md:px-12 lg:px-16">
-          <div className="w-full max-w-2xl">
-            <div className="border-b border-[var(--border-soft)] pb-8">
-              <p className="typ-label text-[var(--color-bronze-500)]">Workspace entry</p>
-              <h2 className="home-heading mt-4">Choose how you enter the planner.</h2>
-              <p className="page-copy-sm mt-4 text-body">
-                One workspace for layout, catalog furniture (including systems from brands we supply), and BOQ handoff to Oando.
+        <div className="choose-product-panel">
+          <div className="choose-product-panel__inner">
+            <div className="choose-product-intro">
+              <p className="typ-label choose-product-intro__eyebrow">Workspace entry</p>
+              <h2 className="home-heading choose-product-intro__title">
+                Choose how you enter the planner.
+              </h2>
+              <p className="page-copy-sm choose-product-intro__copy">
+                One workspace for layout, catalog furniture (including systems from brands we
+                supply), and BOQ handoff to Oando.
               </p>
             </div>
 
@@ -107,62 +122,52 @@ export function ChooseProductPage({
               label={PLANNER.label}
               aria-label={`${primaryLabel}: ${PLANNER.label}`}
               data-testid="choose-product-planner-launch"
-              className="group mt-8 grid min-h-[5.5rem] gap-6 border border-[var(--border-soft)] bg-[var(--surface-page)] p-6 transition-colors hover:bg-[var(--surface-soft)] md:grid-cols-[4rem_1fr_auto] md:items-center"
+              className="choose-product-launch group"
             >
-              <span className="flex h-16 w-16 items-center justify-center border border-[var(--border-soft)] text-[var(--color-bronze-500)]">
+              <span className="choose-product-launch__icon">
                 <CompassTool size={30} weight="light" aria-hidden="true" />
               </span>
               <span>
-                <span className="typ-label text-[var(--color-bronze-500)]">{primaryLabel}</span>
-                <span className="typ-h3 mt-2 block text-strong">{PLANNER.label}</span>
-                <span className="page-copy-sm mt-3 block text-body">{PLANNER.description}</span>
+                <span className="typ-label choose-product-launch__kicker">{primaryLabel}</span>
+                <span className="typ-h3 choose-product-launch__title">{PLANNER.label}</span>
+                <span className="page-copy-sm choose-product-launch__desc">{PLANNER.description}</span>
               </span>
-              <span className="flex h-11 min-h-11 min-w-11 w-11 items-center justify-center border border-[var(--border-soft)] text-strong transition-transform group-hover:translate-x-1">
+              <span className="choose-product-launch__arrow">
                 <ArrowRight size={18} weight="bold" aria-hidden="true" />
               </span>
             </PlannerLaunchLink>
 
-            <ul className="mt-8 grid list-none gap-4 p-0 md:grid-cols-3">
-              {[
-                "2D edit and 3D preview",
-                "Catalog furniture placement",
-                "BOQ-ready export path",
-              ].map((item, index) => (
-                <li key={item} className="border-t border-[var(--border-soft)] pt-4">
-                  <p className="text-[var(--color-bronze-500)]" aria-hidden="true">
-                    0{index + 1}
-                  </p>
-                  <p className="page-copy-sm mt-2 text-body">{item}</p>
-                </li>
-              ))}
+            <ul className="choose-product-steps">
+              {WORKFLOW_STEPS.map((step, index) => {
+                const link = stepLinks[step.id];
+                return (
+                  <li key={step.id} className="choose-product-step">
+                    <p className="choose-product-step__index" aria-hidden="true">
+                      0{index + 1}
+                    </p>
+                    <p className="page-copy-sm choose-product-step__label">{step.label}</p>
+                    <Link href={link.href} className="choose-product-step__link">
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
 
-            <nav className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2" aria-label="Related workspace links">
-              <Link href={landingHref} className="typ-body-sm text-primary hover:underline min-h-11 inline-flex items-center">
-                View planner overview
-              </Link>
-              {authenticated ? (
-                <Link href="/portal" className="typ-body-sm text-primary hover:underline min-h-11 inline-flex items-center">
-                  Open portal
-                </Link>
-              ) : (
+            {!guestMode && !authenticated ? (
+              <nav className="choose-product-auth-nav" aria-label="Account entry options">
                 <Link
                   href="/access?next=%2Fchoose-product%3Fmode%3Dguest"
-                  className="typ-body-sm text-primary hover:underline min-h-11 inline-flex items-center gap-1.5"
+                  className="choose-product-auth-nav__link"
                 >
                   <SignIn size={16} weight="bold" aria-hidden="true" />
                   Sign in
                 </Link>
-              )}
-              {!guestMode && !authenticated ? (
-                <Link
-                  href="/choose-product?mode=guest"
-                  className="typ-body-sm text-primary hover:underline min-h-11 inline-flex items-center"
-                >
+                <Link href="/choose-product?mode=guest" className="choose-product-auth-nav__link">
                   Continue as guest
                 </Link>
-              ) : null}
-            </nav>
+              </nav>
+            ) : null}
           </div>
         </div>
       </div>

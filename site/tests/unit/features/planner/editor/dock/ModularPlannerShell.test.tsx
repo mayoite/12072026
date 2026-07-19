@@ -67,15 +67,15 @@ describe("ModularPlannerShell mobile chrome (P3)", () => {
     expect(rail).toHaveAttribute("data-orientation", "horizontal");
 
     expect(
-      document.querySelector("[data-planner-surface='paper']"),
+      document.querySelector("[data-planner-surface='studio']"),
     ).not.toBeNull();
     expect(screen.getByTestId("plan-stage")).toHaveTextContent("plan");
   });
 
-  it("keeps paper surface honesty on the WorkspaceShell mobile host", async () => {
+  it("keeps studio surface honesty on the WorkspaceShell mobile host", async () => {
     const { container } = render(
       <ModularPlannerShell
-        projectName="Paper phone"
+        projectName="Studio phone"
         inventory={<div>inv</div>}
         properties={<div>props</div>}
         activeTool="wall"
@@ -86,7 +86,9 @@ describe("ModularPlannerShell mobile chrome (P3)", () => {
     );
 
     await waitFor(() => {
-      expect(container.querySelector("[data-planner-surface='paper']")).not.toBeNull();
+      expect(
+        document.querySelector("[data-planner-surface='studio']"),
+      ).not.toBeNull();
     });
     expect(container.querySelector("[data-chrome-mode='slim']")).not.toBeNull();
   });

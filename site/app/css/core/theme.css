@@ -208,6 +208,14 @@
     color-mix(in srgb, var(--color-support-mist) 55%, var(--surface-studio)) 55%,
     var(--surface-studio-edge) 100%
   );
+  /* Cool relief bands — split-layout text columns, “white” sections. Not ecru. */
+  --surface-content-column: var(--color-white-100);
+  --surface-content-elevated: var(--color-white-50);
+  --surface-relief: linear-gradient(
+    180deg,
+    var(--color-white-50) 0%,
+    var(--color-white-150) 100%
+  );
   --surface-inverse: var(--color-dark-midnight-blue-900);
   --surface-inverse-soft: var(--color-dark-midnight-blue-800);
   --surface-canvas: var(--color-dark-midnight-blue-950);
@@ -437,27 +445,37 @@
   --color-blueprint-line: var(--color-primary);
 }
 
-/* Planner: chrome can theme; drawing canvas stays CAD light paper. */
+/* Planner: cool studio chrome; CAD canvas stays light paper (never ecru shell). */
 body.planner-workspace {
   --color-accent: var(--color-primary);
   --color-accent-hover: var(--color-primary-hover);
-  --color-accent-soft: var(--surface-accent-wash);
-  --surface-page: var(--color-ecru-50);
-  --surface-soft: var(--color-ecru-100);
-  --surface-panel: color-mix(in srgb, var(--color-white-50) 55%, var(--color-ecru-50));
-  --surface-panel-strong: color-mix(in srgb, var(--color-white-50) 70%, var(--color-ecru-50));
-  --surface-panel-soft: var(--color-ecru-100);
+  --color-accent-soft: color-mix(in srgb, var(--color-primary) 10%, var(--color-white-100));
+  --surface-page: var(--color-white-150);
+  --surface-soft: var(--color-white-200);
+  --surface-muted: var(--color-white-200);
+  --surface-card: var(--color-white-50);
+  --surface-panel: var(--color-white-50);
+  --surface-panel-strong: var(--color-white-50);
+  --surface-panel-soft: var(--color-white-100);
+  --surface-hover: var(--color-white-200);
+  --surface-hover-soft: var(--color-white-250);
+  --surface-focus: var(--color-white-250);
   --surface-accent-wash: color-mix(
     in srgb,
-    var(--color-bronze-300) 16%,
-    var(--color-ecru-100)
+    var(--color-ocean-boat-blue-100) 35%,
+    var(--color-white-150)
   );
+  --border-soft: color-mix(in srgb, var(--color-white-350) 70%, var(--color-ocean-boat-blue-150));
+  --border-muted: color-mix(in srgb, var(--color-white-400) 55%, var(--color-ocean-boat-blue-200));
   /* Model-space paper (not inverted with html.dark). */
   --planner-surface-canvas: #f4f4f0;
   --planner-grid-minor: #c4c4bc;
   --planner-grid-major: #8f8f86;
   --color-canvas-bg: #f4f4f0;
   --color-canvas-grid: #c4c4bc;
+  --planner-chrome-page: var(--color-white-150);
+  --planner-chrome-panel: var(--color-white-50);
+  --planner-chrome-subtle: var(--color-white-200);
 }
 
 /* Dark chrome must not paint the plan black — CAD stays light paper. */

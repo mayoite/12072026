@@ -73,7 +73,7 @@ import type { WorkstationConfigV0 } from "@/features/planner/catalog/workstation
 import { isSvgAssetUrl } from "@/features/planner/catalog/svg/svgPreviewAssets";
 import { usePlannerSvgCatalog } from "@/features/planner/catalog/usePlannerWorkspaceCatalog";
 import { WorkstationConfiguratorPanel } from "./WorkstationConfiguratorPanel";
-import styles from "./inventory.module.css";
+import styles from "@/app/css/core/locked/planner/inventory-panel.module.css";
 
 // Wiring for PLAN-FAIL-0405/0419: inventory consumer calls svgBlockDescriptorLoader via catalogClient (catalogue-first primary descriptors, resolver blocks, search parity facets).
 // Phase 06: usePlannerSvgCatalog in panel when catalogItems prop is omitted; workspace may still pass live items.

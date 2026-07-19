@@ -190,14 +190,18 @@ function plannerToolNamePattern(toolName: string): RegExp {
 
 export function plannerToolButton(page: Page, toolName: string): Locator {
   const pattern = plannerToolNamePattern(toolName);
-  // Live CanvasToolRail uses role=radio under Navigation / Drawing radiogroups.
-  const canvasTools = page.getByRole("navigation", { name: "Canvas tools" });
+  // Live CanvasToolRail: role=toolbar "Canvas tools" (also legacy navigation).
+  const canvasTools = page
+    .getByRole("toolbar", { name: "Canvas tools" })
+    .or(page.getByRole("navigation", { name: "Canvas tools" }));
   const radio = canvasTools.getByRole("radio", { name: pattern });
-  // Legacy fallbacks: button in nav or Drawing tools group.
   const plannerButton = canvasTools.getByRole("button", { name: pattern });
   const drawingGroup = page
     .getByRole("group", { name: "Drawing tools" })
-    .getByRole("button", { name: pattern });
+    .getByRole("radio", { name: pattern })
+    .or(
+      page.getByRole("group", { name: "Drawing tools" }).getByRole("button", { name: pattern }),
+    );
   return radio.or(plannerButton).or(drawingGroup);
 }
 
@@ -306,6 +310,21 @@ export async function selectPlannerTool(page: Page, toolName: string): Promise<v
   await waitForPlannerCanvas(page);
 }
 
+type LivePlannerFloor = {
+  id: string;
+  walls?: unknown[];
+  furniture?: unknown[];
+  openings?: unknown[];
+  zones?: unknown[];
+  dimensions?: unknown[];
+};
+
+type LivePlannerProject = {
+  activeFloorId?: string;
+  floors?: LivePlannerFloor[];
+};
+
+/** Guest chrome hides the object census — read live project when status bar has no count. */
 export async function getObjectCount(page: Page): Promise<number> {
   const bar = page.locator(".pw-status-bar");
   if (await bar.isVisible().catch(() => false)) {
@@ -319,18 +338,41 @@ export async function getObjectCount(page: Page): Promise<number> {
     const m = barText.match(/(\d+)\s+objects/i);
     if (m) return Number.parseInt(m[1], 10);
   }
-  const body = await page.locator("body").innerText();
-  const match = body.match(/(\d+)\s+objects/i);
-  return match ? Number.parseInt(match[1], 10) : 0;
+  return page.evaluate(() => {
+    const project = (window as unknown as { __plannerLiveProject?: LivePlannerProject })
+      .__plannerLiveProject;
+    const floor =
+      project?.floors?.find((candidate) => candidate.id === project.activeFloorId) ??
+      project?.floors?.[0];
+    if (!floor) return 0;
+    return (
+      (floor.walls?.length ?? 0) +
+      (floor.furniture?.length ?? 0) +
+      (floor.openings?.length ?? 0) +
+      (floor.zones?.length ?? 0) +
+      (floor.dimensions?.length ?? 0)
+    );
+  });
 }
 
 export async function getWallCount(page: Page): Promise<number> {
-  const text = await page
-    .locator(".pw-status-bar > span")
-    .filter({ hasText: /^\d+ walls$/ })
-    .textContent();
-  const match = text?.match(/^(\d+)\s+walls/i);
-  return match ? Number.parseInt(match[1], 10) : 0;
+  const bar = page.locator(".pw-status-bar");
+  if (await bar.isVisible().catch(() => false)) {
+    const span = bar.locator("span").filter({ hasText: /\d+\s+walls/i }).first();
+    if (await span.isVisible().catch(() => false)) {
+      const text = await span.textContent();
+      const match = text?.match(/(\d+)\s+walls/i);
+      if (match) return Number.parseInt(match[1], 10);
+    }
+  }
+  return page.evaluate(() => {
+    const project = (window as unknown as { __plannerLiveProject?: LivePlannerProject })
+      .__plannerLiveProject;
+    const floor =
+      project?.floors?.find((candidate) => candidate.id === project.activeFloorId) ??
+      project?.floors?.[0];
+    return floor?.walls?.length ?? 0;
+  });
 }
 
 /** Default plan grid spacing (mm) — matches snapDrawingPoint / fabricStageGridOverlay. */
@@ -426,8 +468,7 @@ export async function setPlannerSnapEnabled(
 }
 
 /**
- * Furniture metric — status bar first, then body (new WorkspaceShell may not use
- * `.pw-status-bar > span` exact children).
+ * Furniture metric — status bar first (signed-in), then live project (guest hides census).
  */
 export async function getFurnitureCount(page: Page): Promise<number> {
   const bar = page.locator(".pw-status-bar");
@@ -445,9 +486,20 @@ export async function getFurnitureCount(page: Page): Promise<number> {
     const m = barText.match(/(\d+)\s+furniture/i);
     if (m) return Number.parseInt(m[1], 10);
   }
-  const body = await page.locator("body").innerText();
-  const match = body.match(/(\d+)\s+furniture/i);
-  return match ? Number.parseInt(match[1], 10) : 0;
+  return page.evaluate(() => {
+    const project = (
+      window as unknown as {
+        __plannerLiveProject?: {
+          activeFloorId?: string;
+          floors?: Array<{ id: string; furniture?: unknown[] }>;
+        };
+      }
+    ).__plannerLiveProject;
+    const floor =
+      project?.floors?.find((candidate) => candidate.id === project.activeFloorId) ??
+      project?.floors?.[0];
+    return floor?.furniture?.length ?? 0;
+  });
 }
 
 /**

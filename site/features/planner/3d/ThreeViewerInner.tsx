@@ -5,7 +5,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { PlannerFloor } from "@/features/planner/model/types";
-import styles from "./threeViewerInner.module.css";
+import styles from "@/app/css/core/locked/planner/three-viewer-inner.module.css";
 import type {
   Group,
   PerspectiveCamera,

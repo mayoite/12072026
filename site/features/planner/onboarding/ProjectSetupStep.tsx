@@ -32,6 +32,7 @@ import {
 } from "@/features/planner/ai/spaceSuggest";
 import { PLANNER_MAX_CANVAS_MM, PLANNER_MAX_CANVAS_METERS } from "@/features/planner/lib/canvasBounds";
 import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
+import styles from "@/app/css/core/locked/planner/project-setup.module.css";
 
 export { GUEST_DEFAULT_PROJECT_NAME, resolveGuestSetupSubmit } from "./projectSetup";
 
@@ -48,31 +49,13 @@ const PURPOSE_SUMMARIES: Record<PlannerPrimaryPurpose, string> = {
   mixed: "Balanced office mix",
 };
 
-/** Full-width row: label + control side-by-side (project name). */
-const SETUP_FIELD_SHELL_INLINE =
-  "flex min-h-[var(--planner-touch-target,2.75rem)] items-center gap-3 rounded-[var(--radius-sm)] border border-[color:var(--border-soft)] bg-[color:var(--surface-soft)] px-4 py-3 transition-[border-color,box-shadow] focus-within:border-[color:var(--color-primary)] focus-within:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-primary)_16%,transparent)]";
-/**
- * Grid cells: label above control so long labels (e.g. Floor area) cannot
- * collapse the input to 0 width in 2–3 column layouts.
- */
-const SETUP_FIELD_SHELL_STACK =
-  "flex min-h-[var(--planner-touch-target,2.75rem)] min-w-0 flex-col gap-1.5 rounded-[var(--radius-sm)] border border-[color:var(--border-soft)] bg-[color:var(--surface-soft)] px-3 py-2.5 transition-[border-color,box-shadow] focus-within:border-[color:var(--color-primary)] focus-within:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-primary)_16%,transparent)]";
-const SETUP_FIELD_LABEL =
-  "shrink-0 text-[0.8125rem] font-semibold text-[color:var(--text-body)]";
-const SETUP_FIELD_INPUT =
-  "min-h-9 min-w-[6rem] w-full flex-1 border-none bg-transparent text-start text-[0.9375rem] font-medium text-[color:var(--text-strong)] outline-none";
-const SETUP_FIELDSET =
-  "rounded-[var(--radius-md)] border border-[color:var(--border-soft)] bg-[color:var(--surface-soft)] p-4";
-
 export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplete }: ProjectSetupStepProps) {
   const [draft, setDraft] = useState<PlannerProjectSetupDraft>(() =>
     createDefaultProjectSetupDraft({ guestMode }),
   );
   const [error, setError] = useState<string | null>(null);
-  // Template first — blank canvas is the weaker default for first-time guests (UI benchmark).
   const [startingMode, setStartingMode] = useState<PlannerStartingMode>("template");
   const [isHydrated, setIsHydrated] = useState(false);
-  /** Guest: optional fields stay collapsed so one-tap Open planner is the default path. */
   const [guestShowDetails, setGuestShowDetails] = useState(false);
 
   useEffect(() => {
@@ -100,7 +83,6 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
     let seatTarget: number;
 
     if (guestMode) {
-      // Guest: empty name → "Guest plan"; invalid size/seats → defaults. One-tap continue.
       const resolved = resolveGuestSetupSubmit(draft);
       projectName = resolved.projectName;
       floorAreaSqFt = resolved.floorAreaSqFt;
@@ -170,64 +152,54 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
   };
 
   const showDetailFields = !guestMode || guestShowDetails;
+  const cardClass = guestMode ? `${styles.card} ${styles.cardGuest}` : `${styles.card} ${styles.cardFull}`;
 
   return (
-    <div className="planner-setup-overlay bg-[color:var(--surface-inverse)]/88 backdrop-blur-sm">
-      <div
-        className={`grid max-h-[min(100dvh,52rem)] w-full overflow-y-auto rounded-[var(--radius-xl)] border border-[color:var(--border-soft)] bg-[color:var(--surface-panel-strong)] shadow-[var(--shadow-soft)] sm:max-h-none ${
-          guestMode
-            ? "max-w-lg"
-            : "max-w-5xl lg:grid-cols-[1fr_1.05fr]"
-        }`}
-      >
+    <div className={styles.overlay}>
+      <div className={cardClass}>
         {!guestMode ? (
-          <aside className="hidden flex-col gap-8 border-b border-[color:var(--border-soft)] bg-[color:var(--surface-accent-wash)] p-6 sm:flex sm:p-8 lg:border-b-0 lg:border-r">
+          <aside className={styles.aside}>
             <div>
-              <p className="typ-eyebrow text-[color:var(--color-bronze-500)]">Project setup</p>
-              <h1 className="typ-h2 mt-3 text-[color:var(--text-strong)]">
+              <p className="typ-eyebrow">Project setup</p>
+              <h1 className="typ-h2 mt-3">
                 Set up your space in <span className="text-accent-italic">30 seconds</span>
               </h1>
-              <p className="page-copy-sm max-w-md text-[color:var(--text-muted)]">
+              <p className="page-copy-sm max-w-md">
                 Add the basics once. We size the grid and tailor the planner to this layout.
               </p>
             </div>
 
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3">
-                <span className="scheme-accent-wash h-10 w-10 shrink-0 rounded-xl text-[color:var(--color-primary)]">
+            <ul className={styles.featureList}>
+              <li className={styles.featureItem}>
+                <span className={styles.featureIcon}>
                   <Building2 className="h-5 w-5" aria-hidden="true" />
                 </span>
                 <div>
-                  <p className="typ-label text-[color:var(--text-strong)]">India-ready defaults</p>
-                  <p className="typ-caption-lg text-[color:var(--text-muted)]">Local cities and seat counts.</p>
+                  <p className="typ-label">India-ready defaults</p>
+                  <p className="typ-caption-lg">Local cities and seat counts.</p>
                 </div>
               </li>
-              <li className="flex items-start gap-3">
-                <span className="scheme-accent-wash h-10 w-10 shrink-0 rounded-xl text-[color:var(--color-primary)]">
+              <li className={styles.featureItem}>
+                <span className={styles.featureIcon}>
                   <Ruler className="h-5 w-5" aria-hidden="true" />
                 </span>
                 <div>
-                  <p className="typ-label text-[color:var(--text-strong)]">Scaled grid</p>
-                  <p className="typ-caption-lg text-[color:var(--text-muted)]">Auto-tuned to your floor size.</p>
+                  <p className="typ-label">Scaled grid</p>
+                  <p className="typ-caption-lg">Auto-tuned to your floor size.</p>
                 </div>
               </li>
             </ul>
           </aside>
         ) : null}
 
-        <form
-          className="flex flex-col gap-4 p-4 sm:gap-5 sm:p-8"
-          onSubmit={handleSubmit}
-          aria-label="Project setup"
-          aria-busy={!isHydrated}
-        >
-          <div className={guestMode ? undefined : "sm:hidden"}>
-            <p className="typ-eyebrow text-[color:var(--color-bronze-500)]">
-              {guestMode ? "Guest planner" : "Project setup"}
-            </p>
-            <h1 className="typ-h3 mt-2 text-[color:var(--text-strong)]">
+        <form className={styles.form} onSubmit={handleSubmit} aria-label="Project setup" aria-busy={!isHydrated}>
+          <div className={guestMode ? styles.formHeader : styles.formHeaderHiddenDesktop}>
+            <p className="typ-eyebrow">{guestMode ? "Guest planner" : "Project setup"}</p>
+            <h1 className="typ-h3 mt-2">
               {guestMode ? (
-                <>Open the canvas in <span className="text-accent-italic">one tap</span></>
+                <>
+                  Open the canvas in <span className="text-accent-italic">one tap</span>
+                </>
               ) : (
                 <>
                   Set up in <span className="text-accent-italic">30 seconds</span>
@@ -235,18 +207,19 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
               )}
             </h1>
             {guestMode ? (
-              <p className="page-copy-sm mt-2 text-[color:var(--text-muted)]">
+              <p className="page-copy-sm mt-2">
                 Defaults are ready ({GUEST_DEFAULT_PROJECT_NAME}, 1000 sq ft). Customize only if you need to.
               </p>
             ) : null}
           </div>
-          <div className={SETUP_FIELD_SHELL_INLINE}>
-            <label className={SETUP_FIELD_LABEL} htmlFor="project-setup-name">
+
+          <div className={styles.fieldShellInline}>
+            <label className={styles.fieldLabel} htmlFor="project-setup-name">
               Project name{guestMode ? " (optional)" : ""}
             </label>
             <input
               id="project-setup-name"
-              className={`${SETUP_FIELD_INPUT} text-end`}
+              className={`${styles.fieldInput} ${styles.fieldInputEnd}`}
               placeholder={guestMode ? GUEST_DEFAULT_PROJECT_NAME : "TVS Bihar Office — 2nd Floor"}
               value={draft.projectName}
               onChange={(event) => updateDraft("projectName", event.target.value)}
@@ -260,7 +233,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
           {guestMode && !guestShowDetails ? (
             <button
               type="button"
-              className="typ-caption-lg self-start text-[color:var(--color-primary)] underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-primary)]"
+              className={`typ-caption-lg ${styles.customizeLink}`}
               onClick={() => setGuestShowDetails(true)}
             >
               Customize city, size, and start mode
@@ -269,19 +242,16 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
 
           {showDetailFields ? (
             <>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <div className={SETUP_FIELD_SHELL_STACK}>
-                  <label className={SETUP_FIELD_LABEL} htmlFor="project-setup-city">
+              <div className={styles.detailGrid} data-testid="project-setup-detail-grid">
+                <div className={styles.fieldShellStack}>
+                  <label className={styles.fieldLabel} htmlFor="project-setup-city">
                     City
                   </label>
-                  <div className="relative min-w-0 w-full">
-                    <MapPin
-                      className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-muted)]"
-                      aria-hidden="true"
-                    />
+                  <div className={styles.fieldInputIconWrap}>
+                    <MapPin className={styles.fieldIcon} aria-hidden="true" />
                     <select
                       id="project-setup-city"
-                      className={`${SETUP_FIELD_INPUT} pl-6`}
+                      className={`${styles.fieldInput} ${styles.fieldInputWithIcon}`}
                       value={draft.city}
                       onChange={(event) => updateDraft("city", event.target.value)}
                     >
@@ -294,14 +264,14 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
                   </div>
                 </div>
 
-                <div className="min-w-0">
-                  <div className={SETUP_FIELD_SHELL_STACK}>
-                    <label className={SETUP_FIELD_LABEL} htmlFor="project-setup-area">
+                <div className={styles.detailCell}>
+                  <div className={styles.fieldShellStack}>
+                    <label className={styles.fieldLabel} htmlFor="project-setup-area">
                       Floor area (sq ft)
                     </label>
                     <input
                       id="project-setup-area"
-                      className={SETUP_FIELD_INPUT}
+                      className={styles.fieldInput}
                       type="number"
                       min={100}
                       step={50}
@@ -309,17 +279,17 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
                       onChange={(event) => updateDraft("floorAreaSqFt", Number(event.target.value))}
                     />
                   </div>
-                  <p className="typ-caption mt-1 px-2 text-[color:var(--text-muted)]">Start with 1000 sq ft if unsure.</p>
+                  <p className={`typ-caption ${styles.fieldHint}`}>Start with 1000 sq ft if unsure.</p>
                 </div>
 
-                <div className="min-w-0 sm:col-span-2 lg:col-span-1">
-                  <div className={SETUP_FIELD_SHELL_STACK}>
-                    <label className={SETUP_FIELD_LABEL} htmlFor="project-setup-seats">
+                <div className={styles.detailGridSpan2}>
+                  <div className={styles.fieldShellStack}>
+                    <label className={styles.fieldLabel} htmlFor="project-setup-seats">
                       People to seat
                     </label>
                     <input
                       id="project-setup-seats"
-                      className={SETUP_FIELD_INPUT}
+                      className={styles.fieldInput}
                       type="number"
                       min={1}
                       step={1}
@@ -327,35 +297,36 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
                       onChange={(event) => updateDraft("seatTarget", Number(event.target.value))}
                     />
                   </div>
-                  <p className="typ-caption mt-1 px-2 text-[color:var(--text-muted)]">Used to size the room grid.</p>
+                  <p className={`typ-caption ${styles.fieldHint}`}>Used to size the room grid.</p>
                 </div>
               </div>
 
-              <fieldset className={SETUP_FIELDSET}>
-                <legend id="project-setup-purpose-label" className="px-1 text-[0.8125rem] font-semibold text-[color:var(--text-body)]">
+              <fieldset className={styles.fieldset}>
+                <legend id="project-setup-purpose-label" className={styles.legend}>
                   Primary purpose
                 </legend>
                 <div
-                  className="mt-3 grid gap-3 sm:grid-cols-2"
+                  className={styles.choiceGridPurpose}
                   role="radiogroup"
                   aria-labelledby="project-setup-purpose-label"
                 >
                   {PLANNER_PRIMARY_PURPOSE_OPTIONS.map((option) => {
                     const selected = draft.primaryPurpose === option.value;
                     return (
-                        <label
-                          key={option.value}
-                          className={`flex flex-col items-start gap-1 cursor-pointer rounded-[var(--radius-lg)] border px-3 py-3 transition-[border-color,box-shadow] focus-within:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-primary)_30%,transparent)] ${ selected ? "border-[color:color-mix(in_srgb,var(--color-primary)_45%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]" : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]" }`}
-                        >
-                          <input
-                            type="radio"
-                            name="project-setup-purpose"
-                            className="sr-only"
-                            checked={selected}
-                            onChange={() => updateDraft("primaryPurpose", option.value as PlannerPrimaryPurpose)}
-                          />
-                        <span className="typ-label text-[color:var(--text-strong)]">{option.label}</span>
-                        <span className="typ-caption mt-0.5 text-[color:var(--text-muted)]">
+                      <label
+                        key={option.value}
+                        className={styles.choiceCard}
+                        data-selected={selected ? "true" : "false"}
+                      >
+                        <input
+                          type="radio"
+                          name="project-setup-purpose"
+                          className={styles.srOnly}
+                          checked={selected}
+                          onChange={() => updateDraft("primaryPurpose", option.value as PlannerPrimaryPurpose)}
+                        />
+                        <span className="typ-label">{option.label}</span>
+                        <span className="typ-caption mt-0.5">
                           {PURPOSE_SUMMARIES[option.value as PlannerPrimaryPurpose]}
                         </span>
                       </label>
@@ -364,48 +335,51 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
                 </div>
               </fieldset>
 
-              <fieldset className={SETUP_FIELDSET} aria-labelledby="project-setup-start-label">
-                <legend id="project-setup-start-label" className="px-1 text-[0.8125rem] font-semibold text-[color:var(--text-body)]">
+              <fieldset className={styles.fieldset} aria-labelledby="project-setup-start-label">
+                <legend id="project-setup-start-label" className={styles.legend}>
                   Start with
                 </legend>
-                <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                  {([
-                    {
-                      value: "template",
-                      label: "Starter layout",
-                      description: "Purpose-based desks and rooms you can edit.",
-                      icon: Layout,
-                    },
-                    {
-                      value: "scratch",
-                      label: "Blank canvas",
-                      description: "Empty room — draw walls yourself.",
-                      icon: PencilSimpleLine,
-                    },
-                    {
-                      value: "import-trace",
-                      label: "Import / trace",
-                      description: "Open the workspace, then import a plan.",
-                      icon: FileArrowUp,
-                    },
-                  ] as const).map((option) => {
+                <div className={styles.choiceGridStart}>
+                  {(
+                    [
+                      {
+                        value: "template",
+                        label: "Starter layout",
+                        description: "Purpose-based desks and rooms you can edit.",
+                        icon: Layout,
+                      },
+                      {
+                        value: "scratch",
+                        label: "Blank canvas",
+                        description: "Empty room — draw walls yourself.",
+                        icon: PencilSimpleLine,
+                      },
+                      {
+                        value: "import-trace",
+                        label: "Import / trace",
+                        description: "Open the workspace, then import a plan.",
+                        icon: FileArrowUp,
+                      },
+                    ] as const
+                  ).map((option) => {
                     const selected = startingMode === option.value;
                     const Icon = option.icon;
                     return (
                       <label
                         key={option.value}
-                        className={`flex flex-col items-start gap-1 cursor-pointer rounded-[var(--radius-lg)] border p-3 transition-[border-color,box-shadow] focus-within:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-primary)_30%,transparent)] ${selected ? "border-[color:color-mix(in_srgb,var(--color-primary)_45%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]" : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]"}`}
+                        className={styles.choiceCard}
+                        data-selected={selected ? "true" : "false"}
                       >
                         <input
                           type="radio"
                           name="project-starting-mode"
-                          className="sr-only"
+                          className={styles.srOnly}
                           checked={selected}
                           onChange={() => setStartingMode(option.value)}
                         />
-                        <Icon className="mb-2 h-5 w-5 text-[color:var(--color-primary)]" aria-hidden="true" />
-                        <span className="typ-label text-[color:var(--text-strong)]">{option.label}</span>
-                        <span className="typ-caption mt-1 text-[color:var(--text-muted)]">{option.description}</span>
+                        <Icon className={styles.choiceIcon} aria-hidden="true" />
+                        <span className="typ-label">{option.label}</span>
+                        <span className="typ-caption mt-1">{option.description}</span>
                       </label>
                     );
                   })}
@@ -415,19 +389,14 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
           ) : null}
 
           {error ? (
-            <p
-              id="project-setup-error"
-              className="typ-caption-lg text-[color:var(--color-danger,#dc2626)]"
-              role="alert"
-              aria-live="assertive"
-            >
+            <p id="project-setup-error" className={`typ-caption-lg ${styles.error}`} role="alert" aria-live="assertive">
               {error}
             </p>
           ) : null}
 
           <button
             type="submit"
-            className="btn-primary typ-cta mt-auto inline-flex min-h-11 w-full items-center justify-center gap-2 px-6 py-3 sm:w-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-primary)]"
+            className={`btn-primary typ-cta ${styles.submit}`}
             disabled={!isHydrated}
             aria-label={isHydrated ? "Open planner" : "Preparing workspace"}
           >

@@ -26,7 +26,7 @@ import {
   type PaletteCommand,
   type PaletteCommandHandlers,
 } from "@/features/planner/lib/commands/paletteCommands";
-import styles from "./command-palette.module.css";
+import styles from "@/app/css/core/locked/planner/command-palette.module.css";
 
 export interface CommandPaletteProps {
   open: boolean;

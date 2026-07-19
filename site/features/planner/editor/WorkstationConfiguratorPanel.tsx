@@ -22,7 +22,7 @@ import {
   toggleConfiguratorModule,
   type WorkstationConfiguratorDraftV0,
 } from "@/features/planner/catalog/workstationConfiguratorV0";
-import styles from "./workstationConfigurator.module.css";
+import styles from "@/app/css/core/locked/planner/workstation-configurator.module.css";
 
 export type WorkstationConfiguratorPanelProps = {
   /** Arm placement with this resolved config (canvas click places). */

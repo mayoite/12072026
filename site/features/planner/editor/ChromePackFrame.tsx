@@ -11,7 +11,7 @@ import {
 } from "react";
 
 import type { ChromePackId, ChromePackPlacement } from "./workspaceLayout";
-import styles from "./workspace.module.css";
+import styles from "@/app/css/core/locked/planner/workspace-shell.module.css";
 
 const TEAR_THRESHOLD = 8;
 

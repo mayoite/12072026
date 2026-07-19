@@ -34,7 +34,7 @@ import {
   resolvePlannerSaveChrome,
   type PlannerPersistStorage,
 } from "./workspaceStatusLabels";
-import styles from "./workspace.module.css";
+import styles from "@/app/css/core/locked/planner/workspace-shell.module.css";
 
 /**
  * Prop contract for WorkspaceShell / OOPlanner wiring:

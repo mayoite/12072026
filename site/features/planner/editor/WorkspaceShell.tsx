@@ -11,7 +11,7 @@ import type { PlannerDisplayUnit } from "@/features/planner/model/types";
 import type { PlannerSaveStatus } from "@/features/planner/persistence/usePlannerWorkspaceAutosave";
 import type { PlannerPersistStorage } from "./workspaceStatusLabels";
 import type { WorkspacePlanMetrics } from "./workspacePlanMetrics";
-import styles from "./workspace.module.css";
+import styles from "@/app/css/core/locked/planner/workspace-shell.module.css";
 
 export interface WorkspaceShellProps {
   /** Planner access context — guests must not see persist/import/export actions */
@@ -344,7 +344,7 @@ export function WorkspaceShell({
       data-bottom-panel-open={bottomPanelOpen ? "true" : undefined}
       data-fill-parent={fillParent ? "true" : undefined}
       data-planner-density={density}
-      data-planner-surface="paper"
+      data-planner-surface="studio"
       data-layout-preset={presetId}
       data-chrome-mode={chromeMode}
       /* Phone: shell grid is auto | minmax(0,1fr) | auto — workspace row grows canvas */
@@ -398,7 +398,7 @@ export function WorkspaceShell({
 
       {/* Main workspace with panels */}
       <div
-        className={styles.workspace}
+        className={`pw-workspace ${styles.workspace}`}
         data-viewport={dataViewport}
         data-bottom-panel-open={bottomPanelOpen ? "true" : undefined}
         style={
@@ -411,7 +411,7 @@ export function WorkspaceShell({
       >
         {/* small-screen .panelBackdrop + activePanel (from useDockingSystem) + mobile actions via TopBar.
          * Resolves PLAN-FAIL-0414. GS: design §7, benchmark BP-04/BP-05 + Figma minimize + anti-copy (no donor).
-         * CSS locked in workspace.module.css + planner-responsive.css. Canonical ref: editor/ + puck registry for admin UI.
+         * CSS locked in app/css/core/locked/planner/workspace-shell.module.css + planner-responsive.css. Canonical ref: editor/ + puck registry for admin UI.
          */}
         {viewportTier === "small" && (activePanel === "left" || activePanel === "right") && (
           <button

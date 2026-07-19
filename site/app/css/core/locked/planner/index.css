@@ -1,0 +1,8 @@
+/**
+ * Planner workspace CSS package — single import for (workspace) layout.
+ *
+ * Modules (workspace-shell, project-setup, panels, …) are TSX-imported.
+ * This bundle loads global workspace leaves in dependency order.
+ */
+@reference "../../../index.css";
+@import "./open3d-workspace.css";

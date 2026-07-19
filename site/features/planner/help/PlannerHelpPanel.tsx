@@ -15,7 +15,7 @@ import {
   PLANNER_HELP_SECTIONS,
   type HelpSection,
 } from "./helpSections";
-import styles from "./PlannerHelpPanel.module.css";
+import styles from "@/app/css/core/locked/planner/planner-help-panel.module.css";
 
 export type PlannerHelpPanelProps = {
   accessContext?: PlannerAccessContext;

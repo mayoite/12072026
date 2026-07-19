@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, type ReactNode } from "react";
-import styles from "./bottom-sheet.module.css";
+import styles from "@/app/css/core/locked/planner/bottom-sheet.module.css";
 
 interface BottomSheetProps {
   open: boolean;

@@ -14,7 +14,7 @@ import {
   type PlannerLayerCategory,
   type PlannerLayerVisibility,
 } from "./layerVisibility";
-import styles from "./layers-panel.module.css";
+import styles from "@/app/css/core/locked/planner/layers-panel.module.css";
 
 export interface LayersPanelProps {
   floor: PlannerFloor;

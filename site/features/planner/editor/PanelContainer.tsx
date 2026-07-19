@@ -10,7 +10,7 @@ import {
   type MouseEvent,
   type ReactNode,
 } from "react";
-import styles from "./workspace.module.css";
+import styles from "@/app/css/core/locked/planner/workspace-shell.module.css";
 
 export type PanelSide = "left" | "right" | "bottom";
 
@@ -340,7 +340,7 @@ export function PanelContainer({
       onKeyDown={handleKeyDown}
       onFocus={handleFocus}
       onBlur={handleBlur}
-      className={`${styles.panel} ${id === "left" ? styles.panelLeft : ""} ${id === "right" ? styles.panelRight : ""} ${id === "bottom" ? styles.panelBottom : ""}`}
+      className={`${styles.panel} ${id === "left" ? `${styles.panelLeft} pw-left-panel` : ""} ${id === "right" ? `${styles.panelRight} pw-right-panel` : ""} ${id === "bottom" ? styles.panelBottom : ""}`}
       data-state={state}
       data-panel-id={id}
       data-dock-edge={dockEdge ?? (id === "bottom" ? "bottom" : id)}

@@ -16,7 +16,7 @@ function workspaceCssSource(): string {
   return readFileSync(
     path.resolve(
       process.cwd(),
-      "features/planner/editor/workspace.module.css",
+      "app/css/core/locked/planner/workspace-shell.module.css",
     ),
     "utf8",
   );

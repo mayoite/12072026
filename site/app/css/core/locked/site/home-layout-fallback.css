@@ -108,11 +108,7 @@
 }
 
 .home-section--white {
-  background: linear-gradient(
-    180deg,
-    var(--surface-page) 0%,
-    color-mix(in srgb, var(--color-ecru-50) 70%, var(--surface-page)) 100%
-  );
+  background: var(--surface-relief);
 }
 
 .home-section--soft {
@@ -135,8 +131,8 @@
 .scheme-page {
   background: linear-gradient(
     180deg,
-    var(--surface-page) 0%,
-    color-mix(in srgb, var(--color-ecru-50) 70%, var(--surface-page)) 100%
+    var(--color-white-50) 0%,
+    color-mix(in srgb, var(--color-ecru-50) 22%, var(--color-white-150)) 100%
   );
   color: var(--text-body);
 }

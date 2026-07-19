@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, type CSSProperties } from "react";
 import { X, CaretRight as ChevronRight, CaretLeft as ChevronLeft, Lightbulb, Sparkle as Sparkles, Armchair, ArrowsOutCardinal as Move, MagnifyingGlassPlus as ZoomIn } from "@phosphor-icons/react";
 import { BottomSheet } from "@/features/planner/ui/BottomSheet";
 import { useIsMobile } from "@/features/planner/hooks/useIsMobile";
-import styles from "./onboarding-coach.module.css";
+import styles from "@/app/css/core/locked/planner/onboarding-coach.module.css";
 
 export type CoachStep = {
   id: string;

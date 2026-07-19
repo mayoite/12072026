@@ -6,7 +6,7 @@ import type { ValidationResult } from "@/features/planner/lib/validation/runVali
 import type { ValidationIssue } from "@/features/planner/lib/validation/types";
 import { ValidationPanel } from "./ValidationPanel";
 
-import styles from "./review-quote-panel.module.css";
+import styles from "@/app/css/core/locked/planner/review-quote-panel.module.css";
 
 export type HandoffContactDraft = {
   name: string;

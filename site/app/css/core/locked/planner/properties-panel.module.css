@@ -2,15 +2,15 @@
 
 /* CSS custom properties scoped to this module */
 .panel {
-  --prop-panel-bg: var(--surface-panel);
-  --prop-panel-border: var(--border-soft);
+  --prop-panel-bg: var(--planner-chrome-panel, var(--color-white-50));
+  --prop-panel-border: var(--planner-border-default);
   --prop-text-primary: var(--text-strong);
   --prop-text-secondary: var(--text-body);
   --prop-text-muted: var(--text-muted);
   --prop-accent: var(--color-primary);
   --prop-accent-subtle: var(--color-accent-soft);
-  --prop-surface-soft: var(--surface-soft);
-  --prop-surface-page: var(--surface-page);
+  --prop-surface-soft: var(--planner-chrome-subtle, var(--color-white-200));
+  --prop-surface-page: var(--planner-chrome-page);
   --prop-focus-ring: var(--focus-ring);
   --prop-radius-sm: var(--radius-sm);
   --prop-radius-md: var(--radius-md);
@@ -154,7 +154,7 @@
 .multiActionBtn:hover {
   background: var(--prop-surface-soft);
   border-color: var(--border-hover);
-  color: var(--prop-text);
+  color: var(--prop-text-primary);
 }
 
 .multiActionBtn:focus-visible {
@@ -181,7 +181,7 @@
 .multiActionBtnWide:hover:not(:disabled) {
   background: var(--prop-surface-soft);
   border-color: var(--border-hover);
-  color: var(--prop-text);
+  color: var(--prop-text-primary);
 }
 
 .multiActionBtnWide:focus-visible {

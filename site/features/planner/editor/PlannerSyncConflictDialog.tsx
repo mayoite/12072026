@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef } from "react";
 
-import styles from "./planner-sync-conflict-dialog.module.css";
+import styles from "@/app/css/core/locked/planner/planner-sync-conflict-dialog.module.css";
 
 export type SyncConflictDetails = {
   localUpdatedAt?: string;

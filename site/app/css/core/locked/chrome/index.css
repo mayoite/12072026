@@ -17,9 +17,8 @@
  *       SVG palette / plan paint / preview → locked/svg only.
  *
  * Shell layout (not here):
- *   locked/planner/planner-tokens.css, planner-shell.css
+ *   locked/planner/planner-tokens.css, planner-shell.css, workspace-shell.module.css
  *   locked/admin/svg-editor-shell.css
- *   features/planner/editor/workspace.module.css
  */
 @reference "../../../index.css";
 @import "./studio-chrome.css";

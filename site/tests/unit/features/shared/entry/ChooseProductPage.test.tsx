@@ -26,6 +26,14 @@ describe("ChooseProductPage", () => {
     expect(entry.getAttribute("href")).toContain("/planner/guest");
     expect(entry.getAttribute("href")).toContain("siteSource=");
     expect(screen.queryByRole("link", { name: "Open portal" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Browse products" })).toHaveAttribute(
+      "href",
+      "/products",
+    );
+    expect(screen.getByRole("link", { name: "BOQ planning service" })).toHaveAttribute(
+      "href",
+      "/planning",
+    );
   });
 
   it("renders member mode with canvas entry and portal link", () => {
@@ -42,6 +50,10 @@ describe("ChooseProductPage", () => {
     expect(screen.getByRole("link", { name: "View planner overview" })).toHaveAttribute(
       "href",
       "/planner",
+    );
+    expect(screen.getByRole("link", { name: "Browse products" })).toHaveAttribute(
+      "href",
+      "/products",
     );
   });
 

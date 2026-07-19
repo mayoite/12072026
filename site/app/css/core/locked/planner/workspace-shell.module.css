@@ -4,12 +4,16 @@
    3) overflow clipped so dock/canvas cannot blow past the shell */
 
 .shell {
-  /* PF-32: paper stack via planner surface tokens (light theme maps to ecru). */
-  --ws-shell-bg: var(--planner-surface-canvas);
-  --ws-panel-bg: var(--planner-surface-panel);
+  /* Cool studio chrome around CAD paper canvas — not ecru marketing paper. */
+  --ws-shell-bg: var(--planner-chrome-page, var(--color-white-150));
+  --ws-panel-bg: var(--planner-chrome-panel, var(--color-white-50));
   --ws-panel-border: var(--planner-border-default);
-  --ws-header-bg: var(--planner-surface-panel);
-  --ws-status-bg: color-mix(in srgb, var(--planner-surface-panel) 94%, var(--planner-surface-subtle));
+  --ws-header-bg: var(--planner-chrome-panel, var(--color-white-50));
+  --ws-status-bg: color-mix(
+    in srgb,
+    var(--planner-chrome-subtle, var(--color-white-200)) 88%,
+    var(--planner-chrome-panel, var(--color-white-50))
+  );
   --ws-text-primary: var(--planner-text-primary);
   --ws-text-secondary: var(--planner-text-secondary);
   --ws-text-muted: var(--planner-text-muted);
@@ -45,8 +49,8 @@
     "status";
 }
 
-/* Honesty marker for unit + browser: shell paints paper tokens, not cool monochrome. */
-.shell[data-planner-surface="paper"] {
+/* Honesty marker: shell paints cool studio chrome; canvas child owns CAD paper. */
+.shell[data-planner-surface="studio"] {
   background: var(--ws-shell-bg);
 }
 
@@ -404,7 +408,7 @@
   padding: 0 var(--space-2);
   border-radius: var(--radius-pill);
   border: 1px solid var(--ws-panel-border);
-  background: color-mix(in srgb, var(--surface-soft) 90%, var(--ws-panel-bg));
+  background: color-mix(in srgb, var(--planner-chrome-subtle) 90%, var(--ws-panel-bg));
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -457,7 +461,7 @@
 }
 
 .saveStatus[data-status="idle"] {
-  background: color-mix(in srgb, var(--surface-soft) 90%, var(--ws-panel-bg));
+  background: color-mix(in srgb, var(--planner-chrome-subtle) 90%, var(--ws-panel-bg));
   border-color: var(--ws-panel-border);
   color: var(--ws-text-muted);
 }
@@ -536,7 +540,7 @@
   min-height: 0;
 }
 
-/* Soft inset so plan grid is not flush against dock tabs / properties. */
+/* Canvas inset — minimal gutter; shell/dockStage own chrome, child owns CAD paper. */
 .planCanvasInset {
   display: flex;
   flex-direction: column;
@@ -544,9 +548,9 @@
   height: 100%;
   min-width: 0;
   min-height: 0;
-  padding: var(--space-2);
+  padding: var(--space-1);
   box-sizing: border-box;
-  background: var(--planner-surface-canvas, var(--surface-page));
+  background: transparent;
 }
 
 .planCanvasInset > * {
@@ -558,7 +562,7 @@
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--ws-panel-border);
-  background: var(--planner-surface-canvas, var(--surface-page));
+  background: var(--planner-surface-canvas, var(--color-canvas-bg));
 }
 
 .layersOverlay {
@@ -1034,7 +1038,7 @@
   gap: var(--space-1);
   padding: var(--space-2);
   border-bottom: 1px solid var(--ws-panel-border);
-  background: color-mix(in srgb, var(--surface-soft) 92%, var(--ws-panel-bg));
+  background: color-mix(in srgb, var(--planner-chrome-subtle) 92%, var(--ws-panel-bg));
 }
 
 .leftPanelTab {
@@ -1190,7 +1194,7 @@
   min-height: var(--ws-panel-title-h, 2.25rem);
   padding: var(--space-1) var(--space-3);
   border-bottom: 1px solid var(--ws-panel-border);
-  background: color-mix(in srgb, var(--surface-soft) 92%, var(--ws-panel-bg));
+  background: color-mix(in srgb, var(--planner-chrome-subtle) 92%, var(--ws-panel-bg));
   flex-shrink: 0;
   cursor: grab;
   user-select: none;
@@ -1386,7 +1390,7 @@
 }
 
 .panelActionBtn:hover {
-  background: var(--surface-soft);
+  background: var(--planner-chrome-subtle);
   color: var(--ws-text-primary);
 }
 
@@ -1487,7 +1491,7 @@
 }
 
 .chromePackBtn:hover {
-  background: var(--surface-soft);
+  background: var(--planner-chrome-subtle);
   color: var(--ws-text-primary);
 }
 
@@ -1639,7 +1643,7 @@
 }
 
 .bottomTab[data-active="true"] {
-  background: var(--surface-soft);
+  background: var(--planner-chrome-subtle);
   font-weight: 600;
 }
 
@@ -1812,7 +1816,7 @@
 
 .btn:hover,
 .btn[data-hovered] {
-  background: var(--surface-soft);
+  background: var(--planner-chrome-subtle);
   border-color: var(--border-hover);
 }
 
@@ -1948,8 +1952,7 @@
     --ws-phone-topbar-max-h: 7rem; /* 112px hard band without notch safe-area */
   }
 
-  /* Beat legacy locked `.planner-workspace .pw-topbar` one-row grid.
-   * data-phone-layout="two-row": primary (brand|actions) + tools (center). */
+  /* Phone top chrome: two-row layout (brand|actions + tools). */
   :global(body.planner-workspace) .header:global(.pw-topbar),
   .header,
   .header[data-phone-layout="two-row"] {

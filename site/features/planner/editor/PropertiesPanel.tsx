@@ -29,7 +29,7 @@ import {
   UNDERLAY_KNOWN_WIDTH_10M_MM,
   UNDERLAY_KNOWN_WIDTH_5M_MM,
 } from "@/features/planner/lib/underlayCalibrate";
-import styles from "./properties.module.css";
+import styles from "@/app/css/core/locked/planner/properties-panel.module.css";
 
 /**
  * Represents a selected entity in the workspace.

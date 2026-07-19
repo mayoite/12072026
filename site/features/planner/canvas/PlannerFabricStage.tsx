@@ -113,7 +113,7 @@ import {
   resolveOpeningRepositionOnHostWall,
   type OpeningPlacementRejectReason,
 } from "@/features/planner/lib/geometry/openingPlacement";
-import styles from "./plannerFabricStage.module.css";
+import styles from "@/app/css/core/locked/planner/planner-fabric-stage.module.css";
 
 type CanvasEntityType = FabricCanvasEntityType;
 
@@ -1477,7 +1477,15 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         applyCanvasSelection(next);
       };
 
+      const handleSelectionCleared = () => {
+        // Rebuild after place/draw clears Fabric's active object; ignore so the
+        // workspace selection just applied by onPlaceAtPoint is not wiped.
+        if (rebuildingRef.current) return;
+        applyCanvasSelection(null);
+      };
+
       const handleSelection = () => {
+        if (rebuildingRef.current) return;
         const target = canvas.getActiveObject();
         const gripMeta = readWallGripMeta(
           target as Parameters<typeof readWallGripMeta>[0],
@@ -1489,8 +1497,6 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         const next = selectionFromFabricTarget(target);
         if (next) applyCanvasSelection(next);
       };
-
-      const handleSelectionCleared = () => applyCanvasSelection(null);
 
       const clearPlacementGuides = () => {
         clearDistanceGuideOverlay(canvas, distanceGuideHandleRef.current);
@@ -2048,7 +2054,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     return (
       <div
         ref={hostRef}
-        className={`open3d-canvas-embedded ${styles.root} ${gridEnabled ? styles.rootWithGrid : ""} ${cursorClass}`}
+        className={`open3d-canvas-embedded pw-canvas-surface ${styles.root} ${gridEnabled ? styles.rootWithGrid : ""} ${cursorClass}`}
         data-testid="planner-fabric-stage"
         data-grid-enabled={gridEnabled ? "true" : "false"}
         data-snap-enabled={snapEnabled ? "true" : "false"}

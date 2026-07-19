@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import type { ValidationResult } from "@/features/planner/lib/validation/runValidation";
 import type { ValidationIssue } from "@/features/planner/lib/validation/types";
-import styles from "./validation-panel.module.css";
+import styles from "@/app/css/core/locked/planner/validation-panel.module.css";
 
 export interface ValidationPanelProps {
   result: ValidationResult;

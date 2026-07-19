@@ -12,6 +12,13 @@
 
   --planner-surface-panel: var(--surface-panel);
   --planner-surface-subtle: var(--surface-soft);
+  /* Workspace chrome — cool studio (not ecru). Canvas stays CAD paper. */
+  --planner-chrome-page: var(--color-white-150);
+  --planner-chrome-panel: var(--color-white-50);
+  --planner-chrome-subtle: var(--color-white-200);
+  --planner-chrome-elevated: var(--color-white-50);
+  /* Product thumb well — cool studio plate for catalog SVG/photos */
+  --planner-chrome-thumb: var(--surface-studio-field);
   --planner-border-default: var(--border-soft);
   --planner-text-primary: var(--text-strong);
   --planner-text-secondary: var(--text-body);
