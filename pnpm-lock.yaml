@@ -68,6 +68,9 @@ importers:
       '@vercel/speed-insights':
         specifier: ^2.0.0
         version: 2.0.0(next@16.2.9(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.61.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(sass@1.51.0))(react@19.2.7)
+      class-variance-authority:
+        specifier: 0.7.1
+        version: 0.7.1
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -146,6 +149,9 @@ importers:
       sharp:
         specifier: ^0.35.2
         version: 0.35.2
+      svgcanvas:
+        specifier: ^2.6.0
+        version: 2.6.0
       svgo:
         specifier: ^4.0.1
         version: 4.0.1
@@ -4528,6 +4534,9 @@ packages:
   cjs-module-lexer@1.4.3:
     resolution: {integrity: sha512-9z8TZaGM1pfswYeXrUpzPrkx8UnWYdhJclsiYMm6x/w5+nN+8Tf/LnAgfLGQCm59qAOxU8WwHEq2vNwF6i4j+Q==}
 
+  class-variance-authority@0.7.1:
+    resolution: {integrity: sha512-Ka+9Trutv7G8M6WT6SeiRWz792K5qEqIGEGzXKhAE6xOWAY6pPH8U+9IY3oCMv6kqTmLsv7Xh/2w2RigkePMsg==}
+
   cli-color@2.0.4:
     resolution: {integrity: sha512-zlnpg0jNcibNrO7GG9IeHH7maWFeCz+Ja1wx/7tZNU5ASSSSZ+/qZciM0/LHCYxSdqv5h2sdbQ/PXYdOuetXvA==}
     engines: {node: '>=0.10'}
@@ -7379,6 +7388,9 @@ packages:
   svg-pathdata@6.0.3:
     resolution: {integrity: sha512-qsjeeq5YjBZ5eMdFuUa4ZosMLxgr5RZ+F+Y1OrDhuOCEInRMA3x74XdBtggJcj9kOeInz0WE+LgCPDkZFlBYJw==}
     engines: {node: '>=12.0.0'}
+
+  svgcanvas@2.6.0:
+    resolution: {integrity: sha512-H/2iVTLyuLxbLNYArnTaR8RmCR7fi8Gx7Hul7+lnPcN/b6AXLS56iVzUudgfMmkKrF9+GvXm+YJlT9Tg4eIj3A==}
 
   svgo@4.0.1:
     resolution: {integrity: sha512-XDpWUOPC6FEibaLzjfe0ucaV0YrOjYotGJO1WpF0Zd+n6ZGEQUsSugaoLq9QkEZtAfQIxT42UChcssDVPP3+/w==}
@@ -12076,6 +12088,10 @@ snapshots:
 
   cjs-module-lexer@1.4.3: {}
 
+  class-variance-authority@0.7.1:
+    dependencies:
+      clsx: 2.1.1
+
   cli-color@2.0.4:
     dependencies:
       d: 1.0.2
@@ -15342,6 +15358,8 @@ snapshots:
 
   svg-pathdata@6.0.3:
     optional: true
+
+  svgcanvas@2.6.0: {}
 
   svgo@4.0.1:
     dependencies:
