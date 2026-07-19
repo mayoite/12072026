@@ -15,10 +15,19 @@ import { useParametricProductEditor } from "./useParametricProductEditor";
 
 export function ParametricProductEditor({
   initialType = "desk-assembly",
+  initialEditSlug,
+  initialDisplay,
 }: {
   readonly initialType?: string;
+  /** Same-page deep link slug; prefer initialDisplay when hydrated from disk. */
+  readonly initialEditSlug?: string;
+  readonly initialDisplay?: unknown;
 }) {
-  const editor = useParametricProductEditor({ initialType });
+  const editor = useParametricProductEditor({
+    initialType,
+    initialEditSlug,
+    initialDisplay,
+  });
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const identity = editor.definition.identity.read(editor.display);

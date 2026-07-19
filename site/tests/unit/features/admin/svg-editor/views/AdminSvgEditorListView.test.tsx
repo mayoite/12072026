@@ -101,7 +101,7 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
     );
 
     const journey = screen.getByTestId("admin-svg-journey-copy");
-    expect(journey).toHaveTextContent(/linear desk|publish/i);
+    expect(journey).toHaveTextContent(/desk assembly|publish/i);
     expect(journey).toHaveTextContent(/do not need to edit/i);
     expect(journey).not.toHaveTextContent(/Zod|pipeline|schema|descriptor/i);
 
@@ -109,8 +109,8 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
       /Product plan symbols|SVG symbols/i,
     );
     const primary = screen.getByTestId("admin-shell-primary-action");
-    expect(primary).toHaveTextContent(/New linear desk/i);
-    expect(primary).toHaveAttribute("href", "/admin/svg-editor/parametric");
+    expect(primary).toHaveTextContent(/New desk assembly/i);
+    expect(primary).toHaveAttribute("href", "/admin/svg-editor?new=desk-assembly");
     expect(screen.getByTestId("admin-shell-freehand-new")).toHaveTextContent(
       /New SVG symbol/i,
     );
@@ -135,7 +135,7 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
     expect(page.textContent).not.toMatch(/schemaVersion/i);
   });
 
-  it("shows empty source inventory with primary New linear desk CTA", () => {
+  it("shows empty source inventory with primary New desk assembly CTA", () => {
     render(
       <AdminSvgEditorListView
         descriptors={[]}
@@ -146,18 +146,18 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
     );
     const empty = screen.getByTestId("admin-svg-inventory-empty-source");
     expect(empty).toHaveTextContent(/No SVG symbols yet/i);
-    expect(empty).toHaveTextContent(/linear desk|freehand/i);
+    expect(empty).toHaveTextContent(/desk assembly|freehand/i);
     const cta = screen.getByTestId("admin-svg-primary-new-empty");
-    expect(cta).toHaveAttribute("href", "/admin/svg-editor/parametric");
+    expect(cta).toHaveAttribute("href", "/admin/svg-editor?new=desk-assembly");
     expect(cta).toHaveClass("admin-btn--primary");
-    expect(cta).toHaveTextContent(/New linear desk/i);
+    expect(cta).toHaveTextContent(/New desk assembly/i);
     expect(screen.getByTestId("admin-svg-secondary-freehand-empty")).toHaveAttribute(
       "href",
       "/admin/svg-editor/new",
     );
     expect(screen.getByTestId("admin-shell-primary-action")).toHaveAttribute(
       "href",
-      "/admin/svg-editor/parametric",
+      "/admin/svg-editor?new=desk-assembly",
     );
   });
 

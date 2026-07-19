@@ -91,7 +91,6 @@ export async function publishLinearDeskAction(
     // (Studio freehand path still sets draft; this path is intentional ship.)
     setCatalogLifecycle(result.descriptor.slug, "live");
     revalidatePath("/admin/svg-editor");
-    revalidatePath("/admin/svg-editor/parametric");
     revalidatePath("/planner/guest");
   }
 

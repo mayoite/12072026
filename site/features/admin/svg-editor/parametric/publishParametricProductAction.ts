@@ -58,7 +58,8 @@ export async function publishParametricProductAction(raw: unknown): Promise<Publ
   const result = await publishDescriptorWithPipeline(descriptor, { compileSvg, actorId, reason: `parametric-${compiled.type}`, ...isolatedDeps, ...(dualWrite?.mode === "enabled" ? { dbRepository: dualWrite.dbRepository, artifactStore: dualWrite.artifactStore } : {}) });
   if (result.success) {
     setCatalogLifecycle(result.descriptor.slug, adapter.lifecycle, runtime?.lifecycleDir);
-    revalidatePath("/admin/svg-editor"); revalidatePath("/admin/svg-editor/parametric"); revalidatePath("/planner/guest");
+    revalidatePath("/admin/svg-editor");
+    revalidatePath("/planner/guest");
   }
   return result;
 }

@@ -89,7 +89,7 @@ const CUTOUT_TOKENS = new Set([
 ]);
 
 /** Wave 1 known maker recipes — expand only with types + Zod + buildMakerModel lockstep. */
-const KNOWN_RECIPES = new Set(["linear-desk", "l-desk"]);
+const KNOWN_RECIPES = new Set(["linear-desk", "l-desk", "desk-assembly"]);
 
 function asRecord(value: unknown): Record<string, unknown> | null {
   if (value !== null && typeof value === "object" && !Array.isArray(value)) {
@@ -274,6 +274,45 @@ function parseMakerRecipe(raw: unknown): MakerRecipe | undefined {
       );
     }
     return { recipe: "l-desk", widthMm, depthMm, returnWidthMm };
+  }
+
+  if (recipe === "desk-assembly") {
+    const layout = o.layout === "u" || o.layout === "linear" ? o.layout : null;
+    const workstationCount = finiteNumber(o.workstationCount);
+    const runLengthMm = finiteNumber(o.runLengthMm);
+    const returnLengthMm = finiteNumber(o.returnLengthMm);
+    const deskDepthMm = finiteNumber(o.deskDepthMm);
+    const aisleMm = finiteNumber(o.aisleMm);
+    if (
+      layout === null ||
+      workstationCount === null ||
+      runLengthMm === null ||
+      returnLengthMm === null ||
+      deskDepthMm === null ||
+      aisleMm === null ||
+      workstationCount < 1 ||
+      runLengthMm <= 0 ||
+      returnLengthMm <= 0 ||
+      deskDepthMm <= 0 ||
+      aisleMm <= 0
+    ) {
+      throw new Error(
+        `Invalid maker recipe: desk-assembly requires layout, workstationCount, and positive length fields`,
+      );
+    }
+    return {
+      recipe: "desk-assembly",
+      layout,
+      workstationCount: Math.trunc(workstationCount),
+      runLengthMm,
+      returnLengthMm,
+      deskDepthMm,
+      aisleMm,
+      powerRail: o.powerRail === true,
+      cableManagement: o.cableManagement === true,
+      modesty: o.modesty === true,
+      partitions: o.partitions === true,
+    };
   }
 
   // KNOWN_RECIPES and branches must stay lockstep

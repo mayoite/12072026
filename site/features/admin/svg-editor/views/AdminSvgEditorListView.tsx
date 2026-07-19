@@ -31,6 +31,10 @@ import {
 } from "@/features/admin/svg-editor/publish/svgPublishDualWriteMode";
 import type { CatalogLifecycleManifest, CatalogLifecycleState } from "../lifecycle/catalogLifecycle.shared";
 import { resolveCatalogLifecycle } from "../lifecycle/catalogLifecycle.shared";
+import {
+  adminSvgEditorEditHref,
+  adminSvgEditorNewDeskAssemblyHref,
+} from "@/features/admin/svg-editor/parametric/deskAssemblyFactoryIdentity";
 import { AdminSvgBulkImportPanel } from "./AdminSvgBulkImportPanel";
 import type { SvgArtifactStatus } from "../publish/svgArtifactStatus.server";
 import { PublishedSvgPreview } from "../publish/PublishedSvgPreview";
@@ -377,7 +381,7 @@ export function AdminSvgEditorListView({
             Product plan symbols
           </h1>
           <p className="admin-page__copy" data-testid="admin-svg-journey-copy">
-            Start with a linear desk for guest place and BOQ, or draw another
+            Start with a desk assembly for guest place and BOQ, or draw another
             symbol freehand. Set identity and footprint, preview the Planner
             symbol, then publish. Guests place these on the canvas. You do not
             need to edit source files by hand.
@@ -409,13 +413,13 @@ export function AdminSvgEditorListView({
             New SVG symbol
           </Link>
           <Link
-            href="/admin/svg-editor/parametric"
+            href={adminSvgEditorNewDeskAssemblyHref()}
             className="admin-btn admin-btn--primary"
             data-testid="admin-shell-primary-action"
             data-min-tap-px={minTapPx}
           >
             <Plus size={16} aria-hidden />
-            New linear desk
+            New desk assembly
           </Link>
         </div>
       </header>
@@ -476,7 +480,7 @@ export function AdminSvgEditorListView({
         >
           <p className="admin-empty__title">No SVG symbols yet</p>
           <p className="admin-empty__copy">
-            Create the first product with linear desk fields for guest place and
+            Create the first product with desk assembly fields for guest place and
             BOQ, or draw freehand. Set identity and footprint, preview the Planner
             symbol, then publish. You do not need JSON or source code. Bulk import
             stays under Advanced.
@@ -490,12 +494,12 @@ export function AdminSvgEditorListView({
               New SVG symbol
             </Link>
             <Link
-              href="/admin/svg-editor/parametric"
+              href={adminSvgEditorNewDeskAssemblyHref()}
               className="admin-btn admin-btn--primary"
               data-testid="admin-svg-primary-new-empty"
             >
               <Plus size={14} aria-hidden />
-              New linear desk
+              New desk assembly
             </Link>
           </div>
         </div>
@@ -764,12 +768,12 @@ export function AdminSvgEditorListView({
                   New SVG symbol
                 </Link>
                 <Link
-                  href="/admin/svg-editor/parametric"
+                  href={adminSvgEditorNewDeskAssemblyHref()}
                   className="admin-btn admin-btn--primary"
                   data-testid="admin-svg-primary-new-filtered-empty"
                 >
                   <Plus size={14} aria-hidden />
-                  New linear desk
+                  New desk assembly
                 </Link>
               </div>
             </div>
@@ -843,7 +847,7 @@ export function AdminSvgEditorListView({
                             <td data-label="Product">
                               <p className="admin-table__primary">
                                 <Link
-                                  href={`/admin/svg-editor/${d.slug}`}
+                                  href={adminSvgEditorEditHref(d.slug)}
                                   aria-label={`Open ${d.slug} identity`}
                                 >
                                   {d.slug}
@@ -914,9 +918,9 @@ export function AdminSvgEditorListView({
                               >
                                 {/* Row primary (outline — never competes with header New) */}
                                 <Link
-                                  href={`/admin/svg-editor/${d.slug}`}
+                                  href={adminSvgEditorEditHref(d.slug)}
                                   className="admin-btn admin-btn--outline admin-svg-inventory-actions__edit"
-                                  aria-label={`Edit ${d.slug} in SVG studio`}
+                                  aria-label={`Edit ${d.slug} in Product Studio`}
                                   data-testid={`admin-svg-edit-${d.slug}`}
                                   data-row-action="primary"
                                   data-min-tap-px={minTapPx}
@@ -1021,7 +1025,7 @@ export function AdminSvgEditorListView({
             <div className="admin-stack">
               <p className="admin-page__meta">
                 Migration tool only — paste spreadsheet rows, preview, then apply.
-                Day-to-day work uses Search and New linear desk above. Not required
+                Day-to-day work uses Search and New desk assembly above. Not required
                 for authoring.
               </p>
               <p

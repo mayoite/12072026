@@ -26,8 +26,8 @@ export async function publishDeskAssemblyFromAdmin(
   const runtime = resolveParametricFactoryE2eRoot();
   if (!runtime) throw new Error("Parametric factory E2E runtime is not configured");
 
-  if (!new URL(page.url()).pathname.startsWith("/admin/svg-editor/parametric")) {
-    await page.goto("/admin/svg-editor/parametric", {
+  if (!new URL(page.url()).pathname.startsWith("/admin/svg-editor")) {
+    await page.goto("/admin/svg-editor?new=desk-assembly", {
       waitUntil: "domcontentloaded",
     });
   }
@@ -81,7 +81,8 @@ export async function publishDeskAssemblyFromAdmin(
     page.waitForResponse(
       (response) =>
         response.request().method() === "POST" &&
-        response.url().includes("/admin/svg-editor/parametric"),
+        response.url().includes("/admin/svg-editor") &&
+        !response.url().includes("/api/"),
       { timeout: 30_000 },
     ),
     dialog.getByRole("button", { name: "Publish", exact: true }).click(),

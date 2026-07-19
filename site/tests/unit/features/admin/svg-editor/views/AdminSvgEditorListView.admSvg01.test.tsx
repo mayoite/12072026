@@ -61,14 +61,14 @@ describe("ADM-SVG-01 primary no-code SVG journey", () => {
 
     expect(screen.getByTestId("admin-svg-primary-journey")).toBeInTheDocument();
     const copy = screen.getByTestId("admin-svg-journey-copy");
-    expect(copy).toHaveTextContent(/linear desk|publish/i);
+    expect(copy).toHaveTextContent(/desk assembly|publish/i);
     expect(copy).toHaveTextContent(/do not need to edit/i);
     expect(copy.textContent ?? "").not.toMatch(/Zod|atomic-rename|pipeline/i);
 
     const primary = screen.getByTestId("admin-shell-primary-action");
-    expect(primary).toHaveAttribute("href", "/admin/svg-editor/parametric");
+    expect(primary).toHaveAttribute("href", "/admin/svg-editor?new=desk-assembly");
     expect(primary).toHaveClass("admin-btn--primary");
-    expect(primary).toHaveTextContent(/New linear desk/);
+    expect(primary).toHaveTextContent(/New desk assembly/);
 
     const freehand = screen.getByTestId("admin-shell-freehand-new");
     expect(freehand).toHaveAttribute("href", "/admin/svg-editor/new");
@@ -124,12 +124,46 @@ describe("ADM-SVG-01 primary no-code SVG journey", () => {
     );
     expect(screen.getByTestId("admin-svg-last-change-side-table-001")).toBeInTheDocument();
 
-    // Only header New linear desk is primary on the list surface
+    // Only header New desk assembly is primary on the list surface
     const primaries = document.querySelectorAll(".admin-btn--primary");
     expect(primaries).toHaveLength(1);
     expect(primaries[0]).toHaveAttribute(
       "data-testid",
       "admin-shell-primary-action",
+    );
+  });
+
+  it("routes desk-assembly Edit to one-page Product Studio", () => {
+    const desk = {
+      slug: "oando-desk-assembly-12",
+      sku: "OANDO-DSK-ASM-12",
+      variant: "fixed",
+      sourceProvenance: "native",
+      generatedAt: 1_700_000_000_000,
+      geometry: { widthMm: 4800, depthMm: 1200, heightMm: 760 },
+    } as unknown as BlockDescriptor;
+
+    render(
+      <AdminSvgEditorListView
+        descriptors={[desk]}
+        refreshedAtLabel="test-time"
+        artifactStatuses={{
+          "oando-desk-assembly-12": {
+            state: "published",
+            bytes: 12,
+            updatedAt: 1,
+            hash: "abc",
+            publicUrl: "/svg-catalog/oando-desk-assembly-12.svg",
+            markup: "<svg></svg>",
+          },
+        }}
+        lifecycleManifest={{}}
+      />,
+    );
+
+    expect(screen.getByTestId("admin-svg-edit-oando-desk-assembly-12")).toHaveAttribute(
+      "href",
+      "/admin/svg-editor?edit=oando-desk-assembly-12",
     );
   });
 });

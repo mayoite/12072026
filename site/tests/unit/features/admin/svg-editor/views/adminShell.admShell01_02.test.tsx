@@ -157,11 +157,11 @@ describe("ADM-SHELL-01 list page landmarks", () => {
     );
     expect(screen.getByTestId("admin-shell-state")).toHaveTextContent(/published/i);
     expect(screen.getByTestId("admin-shell-primary-action")).toHaveTextContent(
-      /New linear desk/i,
+      /New desk assembly/i,
     );
     expect(screen.getByTestId("admin-shell-primary-action")).toHaveAttribute(
       "href",
-      "/admin/svg-editor/parametric",
+      "/admin/svg-editor?new=desk-assembly",
     );
     expect(screen.getByTestId("admin-shell-freehand-new")).toHaveClass(
       "admin-btn--outline",

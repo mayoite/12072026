@@ -1,12 +1,11 @@
-import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-import { ParametricProductEditor } from "@/features/admin/svg-editor/parametric/ParametricProductEditor";
+import { ADMIN_PRODUCT_STUDIO_NEW_HREF } from "@/features/admin/svg-editor/parametric/deskAssemblyFactoryIdentity";
 
-export const metadata: Metadata = {
-  title: "Parametric product factory | Oando Admin",
-  description: "Configure exact product assemblies and publish Planner inventory.",
-};
-
-export default function AdminParametricProductFactoryPage() {
-  return <ParametricProductEditor initialType="desk-assembly" />;
+/**
+ * Legacy parametric door — one Product Studio page only.
+ * Keep route so old bookmarks/E2E land on the same page.
+ */
+export default function AdminParametricProductFactoryRedirectPage() {
+  redirect(ADMIN_PRODUCT_STUDIO_NEW_HREF);
 }

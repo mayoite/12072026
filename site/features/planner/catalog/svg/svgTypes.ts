@@ -356,6 +356,19 @@ export const BlockDescriptorMakerSchema = z.discriminatedUnion("recipe", [
     depthMm: z.number().finite().positive(),
     returnWidthMm: z.number().finite().positive(),
   }),
+  z.object({
+    recipe: z.literal("desk-assembly"),
+    layout: z.enum(["linear", "u"]),
+    workstationCount: z.number().int().min(1).max(24),
+    runLengthMm: z.number().finite().positive(),
+    returnLengthMm: z.number().finite().positive(),
+    deskDepthMm: z.number().finite().positive(),
+    aisleMm: z.number().finite().positive(),
+    powerRail: z.boolean(),
+    cableManagement: z.boolean(),
+    modesty: z.boolean(),
+    partitions: z.boolean(),
+  }),
 ]);
 export type BlockDescriptorMaker = z.infer<typeof BlockDescriptorMakerSchema>;
 

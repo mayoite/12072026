@@ -29,9 +29,10 @@ test.describe("Admin parametric product factory", () => {
       }
     });
 
-    await page.goto("/admin/svg-editor/parametric", {
+    await page.goto("/admin/svg-editor?new=desk-assembly", {
       waitUntil: "domcontentloaded",
     });
+    await expect(page).toHaveURL(/\/admin\/svg-editor\?new=desk-assembly/);
     const tools = page.getByTestId("admin-svg-dock-panel-tools");
     const properties = page.getByTestId("admin-svg-dock-panel-properties");
     const canvas = page.getByTestId("admin-svg-dock-panel-canvas");
@@ -108,7 +109,7 @@ test.describe("Admin parametric product factory", () => {
 
   test("phone authoring blocked at 390", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto("/admin/svg-editor/parametric", {
+    await page.goto("/admin/svg-editor?new=desk-assembly", {
       waitUntil: "domcontentloaded",
     });
     await expect(

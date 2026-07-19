@@ -40,6 +40,7 @@ import {
   type CanvasTransform,
   type SnapKind,
 } from "@/features/planner/lib/geometry/snapping";
+import { fitCanvasTransformToFloor } from "@/features/planner/lib/geometry/fitCanvasView";
 import {
   paintGeometryFromAnnotation,
 } from "@/features/planner/lib/geometry/dimensions";
@@ -585,6 +586,22 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       emitStatus(transform, activeTool);
     }, [activeTool, emitStatus, transform, activeFloor?.walls.length]);
 
+    const fitToView = useCallback(() => {
+      const host = hostRef.current;
+      const floor = activeFloorRef.current;
+      if (!host || !floor) {
+        setTransform(DEFAULT_FABRIC_STAGE_TRANSFORM);
+        return;
+      }
+      const width = host.clientWidth;
+      const height = host.clientHeight;
+      if (width <= 0 || height <= 0) {
+        setTransform(DEFAULT_FABRIC_STAGE_TRANSFORM);
+        return;
+      }
+      setTransform(fitCanvasTransformToFloor(floor, width, height));
+    }, []);
+
     useImperativeHandle(
       ref,
       () => ({
@@ -607,7 +624,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           commitExactWallValues();
         },
         resetZoom: () => setTransform(DEFAULT_FABRIC_STAGE_TRANSFORM),
-        fitToView: () => setTransform(DEFAULT_FABRIC_STAGE_TRANSFORM),
+        fitToView,
         setTool: () => {},
         getProject: () => workspaceCanvas?.project ?? createPlannerProject(),
         focusOnPoint: (xMm: number, yMm: number) => {
@@ -624,7 +641,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           }));
         },
       }),
-      [clearWallSession, commitExactWallValues, workspaceCanvas],
+      [clearWallSession, commitExactWallValues, workspaceCanvas, fitToView],
     );
 
     useEffect(() => {

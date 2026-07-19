@@ -21,6 +21,10 @@ export type ParametricViewportCommand = {
 
 export type UseParametricProductEditorOptions = {
   readonly initialType?: string;
+  /** Prefill identity.slug when opening via ?edit= without a full hydrate. */
+  readonly initialEditSlug?: string;
+  /** Full display hydrate from disk (wins over initialEditSlug). */
+  readonly initialDisplay?: unknown;
   readonly registry?: ParametricAuthoringRegistry;
 };
 
@@ -47,9 +51,13 @@ export function useParametricProductEditor(
   }
   const initialDefinition = registry.require(initialType);
   const [type, setType] = useState(initialType);
-  const [display, setDisplay] = useState<unknown>(() =>
-    initialDefinition.defaultDisplay(),
-  );
+  const [display, setDisplay] = useState<unknown>(() => {
+    if (options.initialDisplay !== undefined) return options.initialDisplay;
+    const base = initialDefinition.defaultDisplay();
+    const slug = options.initialEditSlug?.trim();
+    if (!slug) return base;
+    return initialDefinition.updateDisplay(base, "slug", slug);
+  });
   const [selectedToolId, setSelectedToolId] = useState<string | null>(null);
   const [selectedPartId, setSelectedPartId] = useState<string | null>(null);
   const [publishState, setPublishState] = useState<ParametricPublishState>("idle");

@@ -42,6 +42,27 @@ export function isDbSvgReleaseAuthority(
 }
 
 /**
+ * Whether publish may write `public/svg-catalog/{slug}.svg` (S4).
+ *
+ * - `SVG_DISK_WRITE=0|false|off|no` → never
+ * - `SVG_DISK_WRITE=1|true|on|yes` → always (even under db authority)
+ * - unset + `SVG_RELEASE_AUTHORITY=db` → off (DB/R2 is release; no silent catalog write)
+ * - unset + disk authority → on
+ */
+export function isSvgCatalogDiskWriteEnabled(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  const raw = env.SVG_DISK_WRITE?.trim().toLowerCase() ?? "";
+  if (raw === "0" || raw === "false" || raw === "off" || raw === "no") {
+    return false;
+  }
+  if (raw === "1" || raw === "true" || raw === "on" || raw === "yes") {
+    return true;
+  }
+  return getSvgReleaseAuthority(env) !== "db";
+}
+
+/**
  * When SVG_RELEASE_AUTHORITY=db, dual-write deps must be injected.
  * Returns a fail-closed error string, or null when publish may proceed.
  *
