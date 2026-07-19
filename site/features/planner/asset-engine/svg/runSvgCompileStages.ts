@@ -76,6 +76,17 @@ export async function runSvgCompileStages(
         viewBox,
         parts,
       );
+    } else if (normalized.pathParts && normalized.pathParts.length > 0) {
+      // Custom furniture: freeform `d` paths (SVG import / path authoring) emit
+      // directly through the maker-paths writer so an arbitrary outline is not
+      // reduced to its bounding rect by the polygon-clipping block compiler.
+      stages.push("svg-s2-path-compile");
+      stages.push("svg-s3-sanitize-optimize");
+      svg = await runPipelineCoreFromMakerPaths(
+        toPipelineDescriptor(normalized),
+        normalized.viewBox,
+        normalized.pathParts.map((p) => ({ id: p.id, dPath: p.dPath })),
+      );
     } else {
       stages.push("svg-s2-compile");
       stages.push("svg-s3-sanitize-optimize");

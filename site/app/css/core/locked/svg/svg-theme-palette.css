@@ -11,9 +11,8 @@
 .admin-svg-editor-workspace,
 .admin-linear-desk-preview,
 .admin-svg-preview,
-.admin-svg-dock-host,
 [data-product-type="linear-desk"],
-[data-chrome*="dockview"] {
+[data-chrome*="studio-shell"] {
   /* ── Ocean boat blue (full steps) ── */
   --svg-ocean-50: var(--color-ocean-boat-blue-50);
   --svg-ocean-100: var(--color-ocean-boat-blue-100);

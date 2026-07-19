@@ -149,8 +149,8 @@ function presetArrangement(preset: LayoutPresetId): DockArrangement {
 }
 
 /**
- * Slim TopBar + Dockview modular panels (dockview-react).
- * 2D/3D split elsewhere still uses react-resizable-panels.
+ * Slim TopBar + StudioShell modular dock panels (react-resizable-panels).
+ * Workflow step drives panel visibility via the StudioShell imperative handle.
  */
 export function ModularPlannerShell({
   accessContext = "authenticated",

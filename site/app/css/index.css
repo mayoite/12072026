@@ -24,6 +24,7 @@
 @import "./core/utilities/nav.css";
 @import "./core/utilities/misc.css";
 @import "./core/utilities/planner-shell.css";
+@import "./core/studio/index.css";
 @import "./core/components/buttons.css";
 @import "./core/components/cards.css";
 @import "./core/components/catalog-card-media.css";
