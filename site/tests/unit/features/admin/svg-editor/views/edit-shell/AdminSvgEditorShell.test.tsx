@@ -44,21 +44,22 @@ vi.mock("@/features/admin/svg-editor/publish/PublishedSvgPreview", () => ({
   PublishedSvgPreview: () => null,
 }));
 
-/** Dockview needs a real layout engine; unit tests stub chrome host. */
-vi.mock("@/features/admin/svg-editor/views/edit-shell/AdminSvgDockHost", () => ({
-  AdminSvgDockHost: ({
-    slots,
+/** StudioShell drives resizable layout; unit tests stub it to render slot content flat. */
+vi.mock("@/features/studio/shell", () => ({
+  StudioShell: ({
+    canvas,
+    panels = [],
   }: {
-    slots: {
-      preview: React.ReactNode;
-      stage: React.ReactNode;
-      details: React.ReactNode;
-    };
+    canvas: React.ReactNode;
+    panels?: readonly { id: string; content: React.ReactNode }[];
   }) => (
-    <div data-testid="admin-svg-dock-host" data-chrome="dockview-react">
-      <div data-testid="admin-svg-dock-panel-preview">{slots.preview}</div>
-      <div data-testid="admin-svg-dock-panel-stage">{slots.stage}</div>
-      <div data-testid="admin-svg-dock-panel-details">{slots.details}</div>
+    <div data-testid="admin-svg-dock-host" data-chrome="studio-shell">
+      <div data-testid="admin-svg-dock-panel-stage">{canvas}</div>
+      {panels.map((panel) => (
+        <div key={panel.id} data-testid={`admin-svg-dock-panel-${panel.id}`}>
+          {panel.content}
+        </div>
+      ))}
     </div>
   ),
 }));
@@ -119,7 +120,7 @@ function shellProps(
 }
 
 describe("AdminSvgEditorShell", () => {
-  it("composes top bar, feedback, status, Dockview chrome, and stage landmarks", () => {
+  it("composes top bar, feedback, status, Studio chrome, and stage landmarks", () => {
     render(<AdminSvgEditorShell {...shellProps()} />);
 
     expect(screen.getByTestId("admin-svg-edit-shell")).toHaveAttribute(
@@ -128,7 +129,7 @@ describe("AdminSvgEditorShell", () => {
     );
     expect(
       screen.getByTestId("admin-svg-edit-shell").getAttribute("data-chrome"),
-    ).toMatch(/dockview-react/);
+    ).toMatch(/studio-shell/);
     expect(screen.getByTestId("admin-shell-header")).toBeInTheDocument();
     expect(screen.getByTestId("admin-svg-a11y-live-feedback")).toBeInTheDocument();
     expect(screen.getByTestId("admin-svg-publication-impact")).toHaveTextContent(
@@ -147,7 +148,7 @@ describe("AdminSvgEditorShell", () => {
     );
     expect(screen.getByTestId("admin-svg-engine-shell")).toHaveAttribute(
       "data-stage-layout",
-      "dockview",
+      "studio",
     );
     expect(screen.getByTestId("admin-svg-dock-host")).toBeInTheDocument();
     expect(screen.getByTestId("admin-svg-engine-stage")).toBeInTheDocument();
