@@ -124,11 +124,15 @@ function createPipelineProjectRoot(): string {
 }
 
 beforeEach(() => {
+  process.env.SVG_RELEASE_AUTHORITY = "disk";
+  process.env.SVG_DISK_WRITE = "1";
   prevCwd = process.cwd();
   workDir = mkdtempSync(path.join(os.tmpdir(), "phase04-pipeline-test-"));
 });
 
 afterEach(() => {
+  delete process.env.SVG_RELEASE_AUTHORITY;
+  delete process.env.SVG_DISK_WRITE;
   if (mockState.originalFsWriteFileSync) {
     vi.mocked(writeFileSync).mockImplementation(
       mockState.originalFsWriteFileSync,
