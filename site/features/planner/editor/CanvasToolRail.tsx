@@ -45,6 +45,7 @@ import {
 } from "./canvasTool";
 import { useWorkspaceChrome } from "./workspaceChromeContext";
 import { useIsMobile } from "@/features/planner/hooks/useIsMobile";
+import type { CanvasToolRailItem } from "./canvasToolRailTypes";
 import {
   clamp,
   DEFAULT_RAIL_LAYOUT,
@@ -81,7 +82,8 @@ function readLocalRail(): RailLayoutConfig {
   }
 }
 
-export interface CanvasToolRailProps {
+export interface PlannerCanvasToolRailProps {
+  mode?: "planner";
   activeTool: PlannerTool;
   onToolChange: (tool: PlannerTool) => void;
   onZoomReset?: () => void;
@@ -97,6 +99,18 @@ export interface CanvasToolRailProps {
   /** Lock as a fixed left column (modular shell). Ignores float/tear-off. */
   pinned?: boolean;
 }
+
+export type ParametricCanvasToolRailProps = {
+  readonly mode: "parametric";
+  readonly activeToolId: string | null;
+  readonly tools: readonly CanvasToolRailItem[];
+  readonly onParametricToolChange: (toolId: string) => void;
+  readonly layout: "wide" | "compact";
+};
+
+export type CanvasToolRailProps =
+  | PlannerCanvasToolRailProps
+  | ParametricCanvasToolRailProps;
 
 function ToolToggle({
   tool,
@@ -241,7 +255,84 @@ type FloatingToolRailStyle = CSSProperties & {
 /**
  * RAC canvas tool rail — dockable left/top, floatable, optional split modules.
  */
-export function CanvasToolRail({
+function ParametricCanvasToolRail({
+  activeToolId,
+  tools,
+  onParametricToolChange,
+  layout,
+}: ParametricCanvasToolRailProps) {
+  return (
+    <Toolbar
+      className={`${styles.rail} ${styles.parametricRail} pw-tool-rail`}
+      aria-label="Product tools"
+      orientation="vertical"
+      data-testid="canvas-tool-rail"
+      data-rac-toolbar="true"
+      data-mode="parametric"
+      data-layout={layout}
+      data-orientation="vertical"
+      data-dock-managed="true"
+    >
+      <div className={styles.parametricGrid} role="group" aria-label="Product tools">
+        {tools.map((tool) => {
+          const IconComponent =
+            tool.kind === "part-focus"
+              ? Package
+              : tool.kind === "toggle"
+                ? GridFour
+                : Cursor;
+          const selected = activeToolId === tool.id;
+          const content = (
+            <span
+              className={styles.parametricToolFace}
+              data-selected={selected ? "true" : undefined}
+            >
+              <IconComponent size={18} aria-hidden />
+              <span>{tool.label}</span>
+            </span>
+          );
+          if (tool.kind === "toggle") {
+            return (
+              <ToggleButton
+                key={tool.id}
+                className={styles.parametricToolBtn}
+                aria-label={tool.label}
+                isSelected={selected}
+                isDisabled={Boolean(tool.disabledReason)}
+                onChange={() => onParametricToolChange(tool.id)}
+                data-testid={`canvas-tool-${tool.id}`}
+              >
+                {content}
+              </ToggleButton>
+            );
+          }
+          return (
+            <Button
+              key={tool.id}
+              className={styles.parametricToolBtn}
+              aria-label={tool.label}
+              isDisabled={Boolean(tool.disabledReason)}
+              onPress={() => onParametricToolChange(tool.id)}
+              data-testid={`canvas-tool-${tool.id}`}
+            >
+              {content}
+            </Button>
+          );
+        })}
+      </div>
+    </Toolbar>
+  );
+}
+
+export function CanvasToolRail(props: CanvasToolRailProps) {
+  if (props.mode === "parametric") {
+    return <ParametricCanvasToolRail {...props} />;
+  }
+  return <PlannerCanvasToolRail {...props} />;
+}
+
+function PlannerCanvasToolRail({
+  mode: _mode,
   activeTool,
   onToolChange,
   onZoomReset,
@@ -254,7 +345,7 @@ export function CanvasToolRail({
   disabled = false,
   dockManaged = false,
   pinned = false,
-}: CanvasToolRailProps) {
+}: PlannerCanvasToolRailProps) {
   const chrome = useWorkspaceChrome();
   const isMobile = useIsMobile();
   const [localRail, setLocalRail] = useState<RailLayoutConfig>(DEFAULT_RAIL_LAYOUT);

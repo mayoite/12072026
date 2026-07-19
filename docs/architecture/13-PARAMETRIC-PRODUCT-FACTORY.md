@@ -162,7 +162,7 @@ The host registers three semantic panel ids:
 | `properties` | `ParametricPropertiesPanel` | center-left |
 | `canvas` | `ParametricPlanCanvas` | dominant right |
 
-The factory preset matches `32.jpg`. The canvas is required and cannot close. Tools and properties may resize within locked semantic limits. Factory state uses a separate versioned storage key from freehand; invalid restore resets to the known factory preset.
+The factory preset matches `32.jpg`. The canvas is required and cannot close. Tools and properties may resize within locked semantic limits. Factory mode alone uses a versioned storage key; invalid restore resets to the known factory preset. Freehand remains unpersisted and unchanged.
 
 Dockview owns panel order, resizing, stacking, and responsive rearrangement. Locked CSS themes Dockview surfaces, headers, separators, and focus states. It must not duplicate Dockview layout with `grid-template-columns`.
 

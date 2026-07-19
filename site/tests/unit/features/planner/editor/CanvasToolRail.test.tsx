@@ -84,4 +84,35 @@ describe("CanvasToolRail", () => {
       expect(screen.getByTestId(id)).toHaveAttribute("data-min-tap-px", "44");
     }
   });
+
+  it("renders explicit product tools in parametric mode", () => {
+    const onParametricToolChange = vi.fn();
+    render(
+      <CanvasToolRail
+        mode="parametric"
+        activeToolId="fit"
+        tools={[
+          { kind: "command", id: "fit", label: "Fit", command: "fit" },
+          {
+            kind: "part-focus",
+            id: "headboard",
+            label: "Headboard",
+            partRole: "headboard",
+          },
+        ]}
+        onParametricToolChange={onParametricToolChange}
+        layout="wide"
+      />,
+    );
+
+    expect(screen.getByRole("button", { name: "Headboard" })).toBeInTheDocument();
+    expect(screen.getByTestId("canvas-tool-rail")).toHaveAttribute(
+      "data-mode",
+      "parametric",
+    );
+    expect(screen.getByTestId("canvas-tool-rail")).toHaveAttribute(
+      "data-layout",
+      "wide",
+    );
+  });
 });

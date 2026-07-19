@@ -45,7 +45,8 @@ Live durable intent: Supabase + R2. Owner blockers none.
 | **Engine pen** | Maker.js **only** | https://github.com/microsoft/maker.js · npm `makerjs` `^0.19.2` |
 | **Brain** | Eng type drawers (schema + draw) | this monorepo |
 | **Client** | Forms only (no code) | Admin parametric route |
-| **Canvas** | Fabric (place/zoom) | https://github.com/fabricjs/fabric.js · npm `fabric` `7.4.0` |
+| **Admin parametric preview** | Interactive structured Maker SVG; no Fabric | existing React/SVG stack |
+| **Planner canvas** | Fabric (place/zoom) | https://github.com/fabricjs/fabric.js · npm `fabric` `7.4.0` |
 | **Chrome packages** | **Same as Planner:** `dockview-react`, `react-aria-components`, `@phosphor-icons/react` | Shared toolbars / dockable panels / icons — **not** Fabric place tools |
 | **Draft studio** | Excalidraw (freehand draw only) | Own sketch tools inside freehand stage; freehand outer shell = Dockview; factory target extends the same Admin host + shared CanvasToolRail |
 | **AI** | Field draft only after C2 (**C-AI**). Never geometry | CHECKLIST Part C |
@@ -147,6 +148,6 @@ Live durable intent: Supabase + R2. Owner blockers none.
 
 ## Agents
 
-- **1 implementer max** on this track + parent evidence.
-- No 6-worker circus on one pipeline.
-- Commit verified slices so work is not lost; push only if owner asks.
+- One writer at a time; exactly two peer agents review every slice. Three participants total, including the writer.
+- The parent records fresh unit/browser evidence and does not override a peer FAIL.
+- Git actions follow active owner/repository instructions.

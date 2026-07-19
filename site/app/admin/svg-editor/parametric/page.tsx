@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { LinearDeskParametricForm } from "@/features/admin/svg-editor/parametric/LinearDeskParametricForm";
+
+import { ParametricProductEditor } from "@/features/admin/svg-editor/parametric/ParametricProductEditor";
 
 export const metadata: Metadata = {
-  title: "Linear desk parametric | Oando Admin",
-  description: "Field-driven linear desk SVG — preview and publish to disk.",
+  title: "Parametric product factory | Oando Admin",
+  description: "Configure exact product assemblies and publish Planner inventory.",
 };
 
-export default function AdminLinearDeskParametricPage() {
-  return <LinearDeskParametricForm />;
+export default function AdminParametricProductFactoryPage() {
+  return <ParametricProductEditor initialType="desk-assembly" />;
 }

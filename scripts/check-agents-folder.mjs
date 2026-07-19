@@ -4,16 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dir = path.join(root, "Agents");
-const allowed = new Set([
-  "INDEX.md",
-  "Agents-01-STANDARD.md",
-  "Agents-04-testing.md",
-  "Agents-05-browser.md",
-  "Agents-06-failure.md",
-  "Agents-07-docs.md",
-  "Agents-08-architecture.md",
-  "Agents-09-css.md",
-]);
+const allowed = new Set(["INDEX.md"]);
 const files = fs.readdirSync(dir).filter((file) => file.endsWith(".md"));
 const violations = [];
 

@@ -42,7 +42,7 @@ fs.writeFileSync(path.join(outDir, "HOME-TOKENS-SAMPLE.txt"), `${tokenList.join(
 const notes = `# Homepage = design base (Phase 2)
 
 **Date:** 2026-07-10  
-**Rule:** Suite pages align to home. Locked CSS frozen (\`Agents/Agents-09-css.md\`).
+**Rule:** Suite pages align to home. Locked CSS frozen (\`Agents/INDEX.md\`).
 
 ## Role
 Homepage is the **visual system root** for the public website suite:

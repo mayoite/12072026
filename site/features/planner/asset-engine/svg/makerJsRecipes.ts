@@ -36,7 +36,24 @@ export type LDeskMakerRecipe = {
   readonly returnWidthMm: number;
 };
 
-export type MakerRecipe = LinearDeskMakerRecipe | LDeskMakerRecipe;
+export type DeskAssemblyMakerRecipe = {
+  readonly recipe: "desk-assembly";
+  readonly layout: "linear" | "u";
+  readonly workstationCount: number;
+  readonly runLengthMm: number;
+  readonly returnLengthMm: number;
+  readonly deskDepthMm: number;
+  readonly aisleMm: number;
+  readonly powerRail: boolean;
+  readonly cableManagement: boolean;
+  readonly modesty: boolean;
+  readonly partitions: boolean;
+};
+
+export type MakerRecipe =
+  | LinearDeskMakerRecipe
+  | LDeskMakerRecipe
+  | DeskAssemblyMakerRecipe;
 
 export type MakerModelResult = {
   readonly model: makerjs.IModel;
@@ -169,12 +186,166 @@ export function buildLDeskMakerModel(recipe: LDeskMakerRecipe): MakerModelResult
   };
 }
 
+function rectangle(
+  widthMm: number,
+  depthMm: number,
+  x: number,
+  y: number,
+): makerjs.IModel {
+  const model = new makerjs.models.Rectangle(widthMm, depthMm);
+  model.origin = [x, y];
+  return model;
+}
+
+export function buildDeskAssemblyMakerModel(
+  recipe: DeskAssemblyMakerRecipe,
+): MakerModelResult {
+  const runLengthMm = assertPositiveMm(recipe.runLengthMm, "runLengthMm");
+  const returnLengthMm = assertPositiveMm(
+    recipe.returnLengthMm,
+    "returnLengthMm",
+  );
+  const deskDepthMm = assertPositiveMm(recipe.deskDepthMm, "deskDepthMm");
+  const aisleMm = assertPositiveMm(recipe.aisleMm, "aisleMm");
+  const workstationCount = Math.floor(
+    assertPositiveMm(recipe.workstationCount, "workstationCount"),
+  );
+  const models: Record<string, makerjs.IModel> = {};
+  let workstationIndex = 1;
+
+  const addWorkstation = (
+    widthMm: number,
+    depthMm: number,
+    x: number,
+    y: number,
+  ) => {
+    const id = `workstation-${String(workstationIndex).padStart(2, "0")}`;
+    models[id] = rectangle(widthMm, depthMm, x, y);
+    workstationIndex += 1;
+  };
+
+  if (recipe.layout === "linear") {
+    const stationWidthMm = runLengthMm / workstationCount;
+    models["shared-run"] = rectangle(runLengthMm, deskDepthMm, 0, 0);
+    for (let index = 0; index < workstationCount; index += 1) {
+      addWorkstation(stationWidthMm, deskDepthMm, index * stationWidthMm, 0);
+    }
+    models["aisle-clearance"] = rectangle(
+      runLengthMm,
+      aisleMm,
+      0,
+      deskDepthMm,
+    );
+  } else {
+    const backCount = Math.ceil(workstationCount / 2);
+    const sideCount = workstationCount - backCount;
+    const leftCount = Math.ceil(sideCount / 2);
+    const rightCount = Math.floor(sideCount / 2);
+    const backStationWidthMm = runLengthMm / backCount;
+    const sideStationDepthMm = returnLengthMm / Math.max(leftCount, rightCount);
+
+    models["shared-run"] = rectangle(runLengthMm, deskDepthMm, 0, 0);
+    models["return-left"] = rectangle(
+      deskDepthMm,
+      returnLengthMm,
+      0,
+      deskDepthMm + aisleMm,
+    );
+    models["return-right"] = rectangle(
+      deskDepthMm,
+      returnLengthMm,
+      runLengthMm - deskDepthMm,
+      deskDepthMm + aisleMm,
+    );
+    for (let index = 0; index < backCount; index += 1) {
+      addWorkstation(
+        backStationWidthMm,
+        deskDepthMm,
+        index * backStationWidthMm,
+        0,
+      );
+    }
+    for (let index = 0; index < leftCount; index += 1) {
+      addWorkstation(
+        deskDepthMm,
+        sideStationDepthMm,
+        0,
+        deskDepthMm + aisleMm + index * sideStationDepthMm,
+      );
+    }
+    for (let index = 0; index < rightCount; index += 1) {
+      addWorkstation(
+        deskDepthMm,
+        sideStationDepthMm,
+        runLengthMm - deskDepthMm,
+        deskDepthMm + aisleMm + index * sideStationDepthMm,
+      );
+    }
+    models["aisle-clearance"] = rectangle(
+      runLengthMm - deskDepthMm * 2,
+      aisleMm,
+      deskDepthMm,
+      deskDepthMm,
+    );
+  }
+
+  if (recipe.powerRail) {
+    models["power-rail"] = rectangle(runLengthMm, 40, 0, 0);
+  }
+  if (recipe.cableManagement) {
+    models["cable-management"] = rectangle(
+      runLengthMm,
+      60,
+      0,
+      Math.max(0, deskDepthMm - 60),
+    );
+  }
+  if (recipe.modesty) {
+    models.modesty = rectangle(
+      runLengthMm,
+      80,
+      0,
+      Math.max(0, deskDepthMm - 160),
+    );
+  }
+  if (recipe.partitions) {
+    const mainCount =
+      recipe.layout === "linear"
+        ? workstationCount
+        : Math.ceil(workstationCount / 2);
+    const stationWidthMm = runLengthMm / mainCount;
+    for (let index = 1; index < mainCount; index += 1) {
+      models[`partition-${String(index).padStart(2, "0")}`] = rectangle(
+        20,
+        deskDepthMm,
+        index * stationWidthMm - 10,
+        0,
+      );
+    }
+  }
+
+  return {
+    model: { models },
+    viewBox: {
+      x: 0,
+      y: 0,
+      width: runLengthMm,
+      height:
+        recipe.layout === "linear"
+          ? deskDepthMm + aisleMm
+          : deskDepthMm + aisleMm + returnLengthMm,
+    },
+  };
+}
+
 export function buildMakerModel(recipe: MakerRecipe): MakerModelResult {
   switch (recipe.recipe) {
     case "linear-desk":
       return buildLinearDeskMakerModel(recipe);
     case "l-desk":
       return buildLDeskMakerModel(recipe);
+    case "desk-assembly":
+      return buildDeskAssemblyMakerModel(recipe);
     default: {
       const _exhaustive: never = recipe;
       throw new Error(`Unknown maker recipe: ${String(_exhaustive)}`);

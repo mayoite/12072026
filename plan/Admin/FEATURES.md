@@ -21,7 +21,7 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 
 **Status vocabulary:** OPEN / PARTIAL / FAIL / DONE. FEATURES never grants DONE alone.
 
-**Execution status:** order factory fields → Maker SVG → publish → place. Maker pen unit green. Guest identity + width→default slug/SKU sync unit-green. C3/C4 browser OPEN. Owner dual = Supabase+R2; owner blockers NONE. Do not rebuild Planner.
+**Execution status:** generic order factory fields → Maker SVG → isolated publish → exact-byte guest place → BOQ is browser-green at 1280 and 390 (2026-07-19). Production dual-write/cutover remains Supabase+R2 work. Do not rebuild Planner.
 
 ---
 
@@ -58,14 +58,14 @@ Repo-sourced index: **feature → code path → honest gap**. Live code and fres
 | Form model mm/cm | `features/admin/svg-editor/parametric/linearDeskFormModel.ts` | PARTIAL (unit) — uses `units.ts`; width syncs default slug/SKU/name only while pattern-default |
 | Guest identity | `features/admin/svg-editor/parametric/linearDeskGuestIdentity.ts` | PARTIAL (unit) — `oando-…` slug + commercial SKU defaults |
 | Compile + sanitise | `features/admin/svg-editor/parametric/compileLinearDeskSvg.ts` | PARTIAL (unit) — Maker draw |
-| Form UI + preview | `features/admin/svg-editor/parametric/LinearDeskParametricForm.tsx` | PARTIAL — browser OPEN; preview = **Maker**; width→identity sync; K3 unit: topGap/backInset bound |
-| Publish action | `features/admin/svg-editor/parametric/publishLinearDeskAction.ts` | PARTIAL — browser OPEN; disk pipeline; Maker SVG; lifecycle live on success |
-| Route | `app/admin/svg-editor/parametric/page.tsx` | PARTIAL |
+| Generic form UI + preview | `features/admin/svg-editor/parametric/ParametricProductEditor.tsx` | C3 browser-green — Dockview + React Aria; production `desk-assembly`; preview = structured Maker paths |
+| Generic publish action | `features/admin/svg-editor/parametric/publishParametricProductAction.ts` | C3 browser-green in isolated runtime; exact sanitised Maker SVG + live lifecycle |
+| Route | `app/admin/svg-editor/parametric/page.tsx` | C3 desktop + phone-block browser-green |
 | List CTA | `svg-editor/views/AdminSvgEditorListView.tsx` | PARTIAL |
 | Units | `features/planner/model/units.ts` — `displayValueToMm`, `mmToDisplayValue` | DONE (API) |
 | Catalog write isolation | `svg-editor/storage/catalogWriteIsolation.ts` | DONE (unit A0) |
 | Sample bar | `public/svg-catalog/sample-desk-1.svg` | reference |
-| Planner place + BOQ | guest inventory / place · `placementAction` · `projectFurnitureBoq` | PARTIAL (C4) — unit load rule + place→BOQ; browser 1280/390 OPEN until parent-seen |
+| Planner place + BOQ | `tests/e2e/planner-c4-guest-place-boq.spec.ts` · existing placement/BOQ paths | C4 browser-green at 1280/390 using the exact isolated C3 SVG checksum, slug, and SKU |
 
 ### C4 load rule (guest place — exact path)
 

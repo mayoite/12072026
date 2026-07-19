@@ -74,7 +74,7 @@ Hardcoding tools (use them; do not reinvent):
 - `node site/scripts/audit-hardcoded-detail.mjs`
 - `node site/scripts/audit-tsx-hardcoded.mjs`
 
-CSS rules: `Agents/Agents-09-css.md`, `docs/architecture/04-CSS-SOLUTION.md`.
+CSS rules: `Agents/INDEX.md`, `docs/architecture/04-CSS-SOLUTION.md`.
 
 | Kind | Home |
 |------|------|

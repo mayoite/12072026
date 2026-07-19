@@ -44,4 +44,4 @@ Form/parametric stage must **not** inherit freehand graph-paper background. Free
 
 After shared CSS changes: `pnpm --filter oando-site run lint:ui` (strict: `lint:ui:strict`) and focused browser checks where UI acceptance applies.
 
-Detail for engines/packages: `12-DEPENDENCIES-ENGINES.md`. Process: `Agents/Agents-09-css.md`.
+Detail for engines/packages: `12-DEPENDENCIES-ENGINES.md`. Process: `Agents/INDEX.md`.

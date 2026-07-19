@@ -1,0 +1,8 @@
+.parametric-plan-viewport { min-width:0; min-height:0; flex:1; overflow:hidden; background:var(--planner-surface-canvas); }
+.parametric-plan-svg { display:block; width:100%; height:100%; touch-action:none; background:var(--planner-surface-canvas); }
+.parametric-plan-control { min-height:2.75rem; border:1px solid var(--border-soft); border-radius:var(--radius-sm); padding-inline:.75rem; background:var(--surface-panel); color:var(--text-body); }
+.parametric-plan-control[data-pressed] { background:var(--surface-focus); }
+.parametric-plan-control:focus-visible,.parametric-plan-part:focus-visible { outline:2px solid var(--color-primary); outline-offset:2px; }
+.parametric-plan-grid-path { fill:none; stroke:var(--border-soft); stroke-width:2; }
+.parametric-plan-part { cursor:pointer; vector-effect:non-scaling-stroke; }
+.parametric-plan-part[data-selected="true"] { filter:drop-shadow(0 0 .25rem var(--color-primary)); }

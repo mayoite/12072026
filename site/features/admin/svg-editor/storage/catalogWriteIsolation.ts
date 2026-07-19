@@ -41,11 +41,16 @@ export function isCanonicalCatalogPath(candidate: string): boolean {
 }
 
 /** Vitest / NODE_ENV=test — isolation enforcement is active. */
-export function isCatalogIsolationTestRuntime(): boolean {
+export function isCatalogIsolationTestRuntime(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
   return (
-    process.env.VITEST === "true" ||
-    typeof process.env.VITEST_WORKER_ID === "string" ||
-    process.env.NODE_ENV === "test"
+    env.VITEST === "true" ||
+    typeof env.VITEST_WORKER_ID === "string" ||
+    env.NODE_ENV === "test" ||
+    (typeof env.PARAMETRIC_FACTORY_E2E_RUN_ID === "string" &&
+      env.PARAMETRIC_FACTORY_E2E_RUN_ID.length > 0 &&
+      env.NODE_ENV !== "production")
   );
 }
 
@@ -63,6 +68,16 @@ export class CatalogIsolationError extends Error {
   }
 }
 
+/** Throws when a path resolves into either committed catalog tree. */
+export function assertCatalogPathIsNonCanonical(targetPath: string): void {
+  if (!isCanonicalCatalogPath(targetPath)) {
+    return;
+  }
+  throw new CatalogIsolationError(
+    `Catalog isolation violation: path targets committed catalog: ${path.resolve(targetPath)}.`,
+  );
+}
+
 /**
  * Throws {@link CatalogIsolationError} when `targetPath` points at committed
  * catalog trees during test runtime (or when `force` is set).
@@ -74,12 +89,5 @@ export function assertCatalogWriteAllowed(
   if (!options.force && !isCatalogIsolationTestRuntime()) {
     return;
   }
-  if (!isCanonicalCatalogPath(targetPath)) {
-    return;
-  }
-  throw new CatalogIsolationError(
-    `Catalog isolation violation: write path targets committed catalog ` +
-      `(inventory/descriptors or public/svg-catalog): ${path.resolve(targetPath)}. ` +
-      `Use a temp inventory root (mkdtemp / createIsolatedAdminSvgWorkspace).`,
-  );
+  assertCatalogPathIsNonCanonical(targetPath);
 }

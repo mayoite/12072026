@@ -146,7 +146,7 @@ Update `agent-reports/ADMIN.md` in place (Deploy auth, Done/Open next, Date).
 - Site marketing redesign
 - Full DB-SVG cutover to R2 revision authority (tracked in Failures.md until proven)
 - Production multi-tenant CRM backend
-- Secrets, production deploys, commits unless owner asks
+- Secrets and production deploys outside active owner/repository instructions
 
 ---
 
@@ -383,7 +383,7 @@ Exit: Automated unauth gates proven with bypass mocked off. Deploy auth remains 
 
 ## Part C — Order factory (fields → SVG → place) — GROW AS NEEDED
 
-**Status:** PARTIAL (Maker pen + guest identity unit green; C3/C4 browser OPEN)  
+**Status:** C3/C4 browser green in the gated isolated runtime (2026-07-19); production DB/R2 cutover remains separate.  
 **Live pen = Maker.js.** Template residual only.  
 **Code map:** `FEATURES.md` · **Tasks:** `IMPLEMENTATION-PLAN.md` · **Stack:** `REALITY-AND-STACK.md`
 
@@ -391,15 +391,15 @@ Exit: Automated unauth gates proven with bypass mocked off. Deploy auth remains 
 
 **Current owner lock:** generic product shell; existing `AdminSvgDockHost` factory preset; React Aria controls; Tailwind v4 with all new CSS under `site/app/css/core/locked/`; first production drawer = configurable desk assembly (linear/U, workstation count, aisle, dimensions, options). See `../../docs/architecture/13-PARAMETRIC-PRODUCT-FACTORY.md`.
 
-**Code truth:** form/CLI/publish → `drawLinearDesk` → Maker; guest `oando-…` slug/SKU + live lifecycle unit-green. **NEXT:** C3 browser (160 cm → publish → disk) → C4 place/BOQ.
+**Code truth:** generic fields → Maker multipath SVG → isolated publish → guest catalog → Fabric place → BOQ name/SKU is browser-proven at 1280 and 390. Production DB/R2 authority is unchanged.
 
-**Ship Linear desk v1 (done enough)** — all required before C5 polish / C6 types / C-AI product claim:
+**Linear desk compatibility baseline (unit evidence only; not the current production ship target):**
 
 | Gate | Required |
 |------|----------|
 | K1 + K2 | Maker-only pen; unit proves it |
 | K3 | Form knobs match schema (or explicit defaults policy) |
-| C3 browser | 160 cm → preview → publish → `svg-catalog` + descriptor |
+| C3 browser | U assembly, 12 workstations, 1200mm aisle → preview → isolated publish |
 | C4 browser | Guest place + BOQ name/SKU at **1280** and **390** |
 
 Planner **toolbars stay** Fabric + Dockview + React Aria (no rebuild).
@@ -411,7 +411,8 @@ Planner **toolbars stay** Fabric + Dockview + React Aria (no rebuild).
 | **Engine pen** | **Maker.js** only — do not switch pens |
 | **Brain** | Eng type drawers (schema + draw functions) |
 | **Client** | Forms only (no code) |
-| **Canvas** | Fabric (keep) |
+| **Admin preview** | Interactive structured Maker SVG; no Fabric |
+| **Planner placement** | Fabric (keep) |
 | **Chrome** | Dockview + React Aria (keep) |
 | **AI** | Optional **field draft** only (C-AI). Never geometry. **A is not AI** |
 
@@ -490,7 +491,7 @@ Planner **toolbars stay** Fabric + Dockview + React Aria (no rebuild).
 - [ ] No dual storage of cm+mm that can drift.  
 - [ ] Unit tests: 160 cm → 1600 mm; 1400 mm → 140 cm; round-trip stable.
 
-### C2. Type 1 — Linear desk (fields + drawer)
+### C2. Compatibility baseline — Linear desk (fields + drawer)
 
 #### Critic blockers (must clear before C2/C3 PASS)
 
@@ -558,6 +559,17 @@ Source: `site/features/planner/asset-engine/svg/parametric/linearDeskFields.ts`
 | Sample bar | `public/svg-catalog/sample-desk-1.svg` |
 | Units | `features/planner/model/units.ts` |
 
+### C2B. Production type — Configurable desk assembly
+
+**Canonical type id:** `desk-assembly`.
+
+- [ ] Schema covers `layout: linear|u`, workstation count, aisle mm, overall/run dimensions, desk depth/height, and drawer-owned options.
+- [ ] Maker recipe emits stable multipath workstation/run/return/aisle part ids for linear and U layouts.
+- [ ] Authoring and server registries each match the client-safe product manifest exactly.
+- [ ] Preview maps structured Maker path records with paint; publish sanitizes the full SVG from the same render.
+- [ ] Same-slug republish preserves `id` and `generatedAt`.
+- [ ] Legacy linear-desk input maps through an explicit compatibility adapter.
+
 ### C3. Admin shared-shell operator UI
 
 **Paths:** `features/admin/svg-editor/parametric/*` · route **`/admin/svg-editor/parametric`** · list CTA on SVG inventory (`AdminSvgEditorListView.tsx`).
@@ -579,23 +591,30 @@ Source: `site/features/planner/asset-engine/svg/parametric/linearDeskFields.ts`
 - unit-green: mm/cm toggle wired to `units.ts`.  
 - unit-green: Preview always code-drawn (**Maker** only) — unit.  
 - unit-green: Publish disabled while invalid or preview failing (code).  
-- [ ] **Browser gate:** create a U desk assembly with 12 workstations and 1200mm aisle → preview OK → publish → isolated SVG + descriptor.
-- [ ] Console errors = 0; failed requests = 0 on that journey.  
+- [ ] **PASS 2026-07-19 — Browser gate:** U desk assembly with 12 workstations and 1200mm aisle → preview OK → isolated SVG + descriptor.
+- [ ] **PASS 2026-07-19 — Geometry:** at `1280×720`, tool rail | properties | dominant canvas geometry passes; rail controls measure 56px and properties is approximately 260px.
+- [ ] Dockview keyboard: Tab reaches panel tabs/controls; Enter/Space activates; arrows work for stacked tabs; restore retains active-panel focus; canvas cannot close.
+- [ ] React Aria: NumberField/Select/Checkbox keyboard behavior, visible focus, `aria-invalid`, described errors, and live status announcements.
+- [ ] **PASS 2026-07-19 — Publish dialog:** accessible name, focus containment, Escape close, and trigger-focus restoration.
+- [ ] Interactive targets measure at least 44×44px.
+- [ ] **PASS 2026-07-19 — Phone block:** at 390px, the existing unsupported-authoring notice appears and factory controls are hidden.
+- [ ] Final visual pass records every top-bar, Dockview, rail, properties, canvas, dialog, and whole-page element against `32.jpg` only; screenshots support but do not replace measured/browser evidence.
+- [ ] **PASS 2026-07-19 — Runtime:** console errors = 0; failed requests = 0 on the isolated desktop journey.  
 - [ ] No client-side LLM keys.  
 - [ ] Auth: admin only (existing gates).  
 - [ ] Publish freezes SVG + identity; lifecycle draft→live policy unchanged.  
-- [ ] Guest visibility: published parametric product is buyer/approved-visible for C4.
+- [ ] **PASS 2026-07-19 — Guest visibility:** the isolated live product is buyer-visible through the gated catalog route.
 
 ### C4. Planner consume
 
 **Load rule (define + implement before C4 PASS):** On publish, parametric product must become **guest-placeable** without demo pollution — e.g. set buyer/approved lifecycle (or explicit `planner_managed` / published pointer) so catalog loaders that already filter brand/approved include `{slug, previewUrl: /svg-catalog/{slug}.svg}`. Document the exact flag/path in FEATURES when coded. Until then C4 stays OPEN even if C3 disk write works.
 
-- [ ] Catalog loader includes approved parametric products (slug + preview URL).  
-- [ ] Guest filter still brand/approved only (no demo pollution).  
-- [ ] Place: Fabric paints published SVG (not Block2D miss for these slugs) — **existing toolbars**, no new chrome.  
-- [ ] BOQ / review: **name · SKU** from product fields.  
-- [ ] **Browser gate:** proof **1280** and **390** — inventory thumb + place desk.  
-- [ ] Console errors 0 / failed SVG requests 0 on that journey.
+- [ ] **PASS 2026-07-19 — Catalog:** loader includes the exact isolated approved product slug + preview URL.  
+- [ ] **PASS 2026-07-19 — Guest filter:** brand/approved filtering remains active through `filterGuestInventoryCatalogItems`.  
+- [ ] **PASS 2026-07-19 — Place:** Fabric paints the fetched published SVG through existing Planner chrome; live furniture count and source slug/SKU match.  
+- [ ] **PASS 2026-07-19 — BOQ:** one exact BOQ line contains `Desk Assembly 12`, `OANDO-DSK-ASM-12`, quantity 1.  
+- [ ] **PASS 2026-07-19 — Browser gate:** exact C3 checksum, inventory, place, and BOQ pass at **1280** and **390**.  
+- [ ] **PASS 2026-07-19 — Runtime:** console errors 0 / failed SVG requests 0 on both C4 journeys.
 
 ### C5. Finesse (professional bar — after C2 green)
 
@@ -687,12 +706,12 @@ Each type = **new schema + new Maker drawer + form switch**. No mega-generic dra
 
 ### C9. Agents / process
 
-- [ ] One implementer at a time on this track.  
+- [ ] One writer at a time on this track; exactly two peer agents review every slice. Three participants total, including the writer.
 - [ ] Parent re-runs unit + browser when claiming.  
 - [ ] Update this Part C statuses only with evidence.  
 - [ ] FEATURES.md: keep "Parametric library" + Maker rows when code lands.  
 - [ ] C-AI does not block C2–C4 ship (C-AI.5 kill switch).  
-- [ ] Commit verified slices so work is not lost; push only if owner asks.
+- [ ] Run the two-peer team gate; git actions follow active owner/repository instructions.
 
 ### Commands
 

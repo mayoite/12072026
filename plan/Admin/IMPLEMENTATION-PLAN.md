@@ -12,7 +12,7 @@
 
 **Visual authority:** `docs/ui-benchmarks/parametric-lock/32.jpg` only.
 
-**Repository rules:** Do not create a worktree. Run the five-seat team gate for every implementation slice. Commit or push only under the active owner/repository instructions after verification.
+**Repository rules:** Do not create a worktree. Use exactly two peer agents for every implementation slice, with three participants total including the writer. Commit or push only under the active owner/repository instructions after verification.
 
 ---
 
@@ -47,11 +47,15 @@
 - Modify `site/app/admin/svg-editor/parametric/page.tsx` — render the generic editor.
 
 - Modify `site/features/admin/svg-editor/views/edit-shell/AdminSvgDockHost.tsx` — add backward-compatible factory slots/preset.
-- Create `site/features/admin/svg-editor/views/edit-shell/adminSvgDockPresets.ts` — versioned freehand/factory presets and storage validation.
+- Create `site/features/admin/svg-editor/views/edit-shell/adminSvgDockPresets.ts` — factory-only versioned storage/preset validation plus unchanged freehand seed behavior.
 
 ### Publish
 
 - Create `site/features/admin/svg-editor/parametric/parametricPublishRegistry.server.ts` — server-only allowlisted drawer/descriptor adapters.
+- Create `site/features/admin/svg-editor/parametric/compileParametricProductSvg.ts` — generic parse → Maker render → `sanitiseSvg` compile seam.
+- Create `site/features/admin/svg-editor/parametric/deskAssemblyPublishDescriptor.ts` — descriptor builder with stable republish identity.
+- Create `site/features/admin/svg-editor/parametric/linearDeskCompatibility.ts` — legacy linear input → assembly mapping.
+- Create `site/features/admin/svg-editor/parametric/parametricFactoryE2eRoot.server.ts` — gated non-canonical browser publish/read roots.
 - Create `site/features/admin/svg-editor/parametric/publishParametricProductAction.ts` — generic server action.
 - Modify `site/features/admin/svg-editor/parametric/publishLinearDeskAction.ts` — compatibility wrapper while callers migrate.
 
@@ -60,7 +64,7 @@
 - Create `site/features/planner/editor/canvasToolRailTypes.ts` — neutral discriminated command/toggle/part contract.
 - Modify `site/features/planner/editor/CanvasToolRail.tsx` — backward-compatible Planner and parametric prop variants.
 - Modify `site/app/css/core/locked/chrome/canvas-tool-rail.module.css` — explicit `data-mode="parametric"` wide three-column rail seam.
-- Create `site/app/css/core/locked/chrome/parametric-product-editor.css` — shell, wide rail, panels, responsive layout.
+- Create `site/app/css/core/locked/chrome/parametric-product-editor.css` — Dockview shell, panels, separators, and supported-width layout.
 - Create `site/app/css/core/locked/admin/parametric-product-editor.css` — Admin top/status/properties/publish states.
 - Create `site/app/css/core/locked/svg/parametric-product-preview.css` — canvas grid, SVG part states, dimensions.
 - Modify locked `index.css` files under `chrome/`, `admin/`, and `svg/` — import the new files.
@@ -81,14 +85,20 @@
 - Modify `site/tests/unit/features/planner/editor/CanvasToolRail.test.tsx`.
 - Modify `site/tests/unit/features/admin/svg-editor/parametric/LinearDeskParametricForm.test.tsx`.
 - Create `site/tests/e2e/admin-parametric-product-factory.spec.ts`.
-- Modify `site/tests/e2e/planner-c4-guest-place-boq.spec.ts` only if selectors need generic product naming.
+- Create `site/tests/e2e/helpers/parametricFactoryJourney.ts` — returns exact slug, SKU, descriptor, SVG bytes/checksum, and preview URL.
+- Create `site/scripts/run-parametric-factory-e2e.mjs` — isolated root + localhost server + Playwright launcher + cleanup.
+- Modify `site/app/api/planner/catalog/svg-blocks/route.ts` — gated E2E root read/preview mapping; production behavior unchanged.
+- Modify `site/tests/e2e/planner-c4-guest-place-boq.spec.ts` — consume dynamic C3 artifact, not a fixed slug.
+- Modify `.gitignore` — ignore only `.e2e-runtime/` and `site/public/.e2e-svg-catalog/` runtime roots.
 
 ---
 
 ### Task 0: Baseline and Catalog Isolation
 
 **Files:**
-- Read: `site/features/admin/svg-editor/storage/catalogWriteIsolation.ts`
+- Modify: `site/features/admin/svg-editor/storage/catalogWriteIsolation.ts`
+- Create: `site/features/admin/svg-editor/parametric/parametricFactoryE2eRoot.server.ts`
+- Modify: `.gitignore`
 - Read: `site/tests/helpers/adminCatalogIsolation.ts`
 - Test: existing parametric and isolation suites
 
@@ -112,7 +122,13 @@ pnpm --filter oando-site exec vitest run tests/unit/features/admin/svg-editor/st
 
 Expected: PASS; no write under `site/inventory/descriptors/` or `site/public/svg-catalog/`.
 
-- [ ] **Step 3: Run the existing parametric baseline**
+- [ ] **Step 3: Define and test the browser isolation root**
+
+`parametricFactoryE2eRoot.server.ts` activates only when `PARAMETRIC_FACTORY_E2E_RUN_ID` is present and production mode is false. The launcher sets `PARAMETRIC_FACTORY_E2E_ROOT=E:\12072026\.e2e-runtime\parametric-factory\<run-id>`. The helper resolves descriptors and lifecycle under that root, plus SVG bytes under `E:\12072026\site\public\.e2e-svg-catalog\<run-id>\`; Next serves those bytes at `/.e2e-svg-catalog/<run-id>/<slug>.svg`. Require run ids matching `^[a-z0-9-]{8,64}$`; require resolved paths to remain under those two parents; reject traversal, symlink/reparse escape, canonical `inventory/descriptors`, and canonical `public/svg-catalog`. Production calls return no override.
+
+Add tests proving canonical roots are rejected, traversal is rejected, production ignores the env, and cleanup cannot escape the run directory.
+
+- [ ] **Step 4: Run the existing parametric baseline**
 
 Run:
 
@@ -122,9 +138,9 @@ pnpm --filter oando-site exec vitest run tests/unit/features/planner/asset-engin
 
 Expected: record current PASS/FAIL exactly. Do not mark old failures as caused by this plan.
 
-- [ ] **Step 4: Record a verified checkpoint**
+- [ ] **Step 5: Record a verified checkpoint**
 
-Keep the baseline commands and exits for the final report. Run the five-seat team gate before any slice is proposed complete.
+Keep the baseline commands and exits for the final report. Run the two-peer team gate before any slice is proposed complete.
 
 ---
 
@@ -761,6 +777,8 @@ Expected: PASS.
 
 Render the factory preset and assert Dockview owns `tools`, `properties`, and required `canvas` panels in that order. Test versioned restore fallback and unchanged freehand mode. Render desk-assembly and test-bed definitions. Assert labels come from definitions and the shell never contains a hard-coded `Desk properties` label.
 
+Keyboard assertions: `Tab` reaches each Dockview tab/header and its first panel control; `Enter`/`Space` activates a focused tab; `ArrowLeft`/`ArrowRight` changes the active tab when panels are user-stacked; preset restore returns focus to the active panel; canvas cannot close by keyboard. Freehand keyboard behavior remains unchanged.
+
 ```tsx
 expect(screen.getByRole("heading", { name: "Desk assembly properties" })).toBeInTheDocument();
 rerender(<ParametricPropertiesPanel definition={testBedDefinition} {...bedProps} />);
@@ -824,7 +842,7 @@ Theme Dockview without taking over its layout:
 }
 ```
 
-Locked chrome CSS owns the Dockview theme bridge, panel surfaces, separators, focus states, and rail presentation. It must not set `grid-template-columns` for the workspace. Use Admin locked CSS for publish/status and SVG locked CSS for grid/part paint. Import each from the matching index. Remove migrated `.admin-cad*` declarations from `studio-chrome.css` after no component references them.
+Locked chrome CSS owns the Dockview theme bridge, panel surfaces, separators, and focus states. The existing `canvas-tool-rail.module.css` is the sole rail presentation authority. Editor CSS must not style rail internals or set `grid-template-columns` for the workspace. Use Admin locked CSS for publish/status and SVG locked CSS for grid/part paint. Import each from the matching index. Remove migrated `.admin-cad*` declarations from `studio-chrome.css` after no component references them.
 
 - [ ] **Step 8: Implement supported-width factory behavior**
 
@@ -852,6 +870,10 @@ Expected: PASS; zero new arbitrary Tailwind, palette utility, inline presentatio
 
 **Files:**
 - Create: `site/features/admin/svg-editor/parametric/parametricPublishRegistry.server.ts`
+- Create: `site/features/admin/svg-editor/parametric/compileParametricProductSvg.ts`
+- Create: `site/features/admin/svg-editor/parametric/deskAssemblyPublishDescriptor.ts`
+- Create: `site/features/admin/svg-editor/parametric/linearDeskCompatibility.ts`
+- Use: `site/features/admin/svg-editor/parametric/parametricFactoryE2eRoot.server.ts`
 - Create: `site/features/admin/svg-editor/parametric/publishParametricProductAction.ts`
 - Modify: `site/features/admin/svg-editor/parametric/publishLinearDeskAction.ts`
 - Test: `site/tests/unit/features/admin/svg-editor/parametric/publishParametricProductAction.test.ts`
@@ -900,11 +922,15 @@ export const PARAMETRIC_PUBLISH_REGISTRY = createParametricPublishRegistry([
 
 The server registry must not trust a client-provided module path, renderer, lifecycle, or descriptor builder. Its construction fails unless its ids exactly match the client-safe manifest.
 
-- [ ] **Step 4: Implement the generic action**
+- [ ] **Step 4: Implement the generic compile and descriptor seams**
 
-Flow: Admin auth → require registry type → parse → Maker render → existing sanitize/compile seam → descriptor with stable same-slug `id`/`generatedAt` → exact sanitized SVG through `publishDescriptorWithPipeline` → lifecycle on success → revalidate. Return specific errors without exposing secrets.
+`compileParametricProductSvg` resolves the allowlisted drawer, validates fields, renders Maker geometry, runs the existing `sanitiseSvg` authority, rejects non-SVG/image-unsafe paint, and returns canonical fields plus the exact sanitized full SVG. `deskAssemblyPublishDescriptor.ts` owns default identity and stable same-slug `id`/`generatedAt`. `linearDeskCompatibility.ts` owns the legacy input mapping used by the wrapper.
 
-- [ ] **Step 5: Convert the old action to a wrapper**
+- [ ] **Step 5: Implement the generic action**
+
+Flow: Admin auth → require registry type → parse → Maker render → existing sanitize/compile seam → descriptor with stable same-slug `id`/`generatedAt` → resolve production or gated E2E runtime roots → exact sanitized SVG through `publishDescriptorWithPipeline` → lifecycle on success → revalidate. The E2E runtime injects `runPipeline`, `persist`, existing-identity load, and lifecycle directories from one validated run root; production uses existing defaults. Return specific errors without exposing secrets.
+
+- [ ] **Step 6: Convert the old action to a wrapper**
 
 ```ts
 export async function publishLinearDeskAction(raw: PublishLinearDeskInput) {
@@ -912,7 +938,7 @@ export async function publishLinearDeskAction(raw: PublishLinearDeskInput) {
 }
 ```
 
-- [ ] **Step 6: Run generic and legacy publish tests**
+- [ ] **Step 7: Run generic and legacy publish tests**
 
 Run:
 
@@ -928,12 +954,13 @@ Expected: PASS with no canonical catalog changes.
 
 **Files:**
 - Create: `site/tests/e2e/admin-parametric-product-factory.spec.ts`
-- Use: `site/tests/e2e/helpers/isolatedAdminSvgPublish.ts`
 - Create: `site/tests/e2e/helpers/parametricFactoryJourney.ts`
+- Create: `site/scripts/run-parametric-factory-e2e.mjs`
+- Modify: `site/app/api/planner/catalog/svg-blocks/route.ts`
 
 - [ ] **Step 1: Write the browser journey**
 
-At `http://localhost:3000/admin/svg-editor/parametric` only:
+At `http://localhost:3000/admin/svg-editor/parametric` and an exact `1280×720` viewport:
 
 1. Measure left-to-right tool rail | product properties | dominant plan canvas geometry.
 2. Assert the rail has three columns with tokenized 56px controls, properties is approximately 260px, and canvas owns the remaining dominant width.
@@ -944,29 +971,43 @@ At `http://localhost:3000/admin/svg-editor/parametric` only:
 7. Publish through isolated catalog paths and retain the emitted slug/SKU/artifact path for Task 10.
 8. Confirm success identity and zero console/network errors.
 
+The launcher creates a unique run id and the exact E-drive roots defined in Task 0, starts `http://localhost:3000` with those env values, invokes Playwright with `-c config/build/playwright.config.ts`, and cleans only those validated run directories. `parametricFactoryJourney` reads the emitted descriptor and SVG, verifies checksum/bytes, and returns `{ slug, sku, descriptor, svgPath, svgBytes, svgChecksum, previewUrl }`. The catalog route reads the same descriptor/lifecycle root and maps preview to Next's public `/.e2e-svg-catalog/<run-id>/<slug>.svg`. No canonical fixture is copied or mutated.
+
 - [ ] **Step 2: Run desktop browser proof**
 
 Run:
 
 ```powershell
-pnpm --filter oando-site exec playwright test -c config/build/playwright.config.ts tests/e2e/admin-parametric-product-factory.spec.ts --project=chromium --grep "desktop"
+node site/scripts/run-parametric-factory-e2e.mjs --spec tests/e2e/admin-parametric-product-factory.spec.ts --grep "desktop"
 ```
 
-Expected: PASS at the test viewport; no failed requests and no console errors.
+Expected: PASS at `1280×720`; no failed requests and no console errors.
 
 - [ ] **Step 3: Verify the existing phone authoring block**
 
 Run:
 
 ```powershell
-pnpm --filter oando-site exec playwright test -c config/build/playwright.config.ts tests/e2e/admin-parametric-product-factory.spec.ts --project=chromium --grep "phone authoring blocked"
+node site/scripts/run-parametric-factory-e2e.mjs --spec tests/e2e/admin-parametric-product-factory.spec.ts --grep "phone authoring blocked"
 ```
 
 Expected: PASS at 390px; the existing unsupported-authoring notice is shown and the factory editor is not mounted.
 
 - [ ] **Step 4: Compare against `32.jpg`**
 
-Score only panel order, density, wide tool rail, properties hierarchy, dominant canvas, top bar, and Publish. Do not copy screenshot product geometry into every drawer.
+Run a final element-by-element visual pass at `1280×720` against `32.jpg` only. Do not open or mix `35.jpg` or `37.jpg`. Record PASS/FAIL for every row:
+
+| Area | Elements to inspect |
+|---|---|
+| Top bar | Product title, breadcrumb, Inventory, product selector, Publish, embedded status, account controls, spacing, focus/hover/disabled states |
+| Dockview | Tools/properties/canvas order, panel headers, separators, resize handles, active/focus treatment, required canvas, no duplicate status row |
+| Tool rail | Three-column density, 56px tiles, Phosphor icons, labels, shortcuts, selected/hover/focus/disabled states, footer count/settings, panel-contained scroll |
+| Properties | Product identity, type selector, section hierarchy, NumberField/TextField/Select/Checkbox/toggles, units, validation/error text, swatches/options, workstation/aisle values, preview thumbnail |
+| Plan canvas | Header/title/scale, cool CAD surface, grid, Maker multipath paint, U-layout geometry, workstation count, aisle/dimensions, selection handles, zoom/coordinate status, dominant width |
+| Publish dialog | Accessible title, summary, warning/error/success states, Cancel/Publish hierarchy, backdrop, focus ring, no clipping |
+| Whole page | No overlap, clipping, unintended horizontal scroll, raw browser controls, palette drift, arbitrary styling, ecru cast, or invented toolbar |
+
+Capture a fresh full-page screenshot and focused screenshots for top bar, tool rail, properties, canvas, and publish dialog. Screenshots are review evidence only, not PASS by themselves. Geometry assertions, console/network checks, keyboard proof, and the two-peer team gate must also pass. Do not copy the screenshot's desk geometry into non-desk drawers.
 
 ---
 
@@ -996,20 +1037,20 @@ Use the helper from Task 9 to publish the configured U assembly in the same test
 Run:
 
 ```powershell
-pnpm --filter oando-site exec playwright test -c config/build/playwright.config.ts tests/e2e/planner-c4-guest-place-boq.spec.ts --grep "desktop 1280"
+node site/scripts/run-parametric-factory-e2e.mjs --spec tests/e2e/planner-c4-guest-place-boq.spec.ts --grep "desktop 1280"
 ```
 
-Expected: PASS; published SVG paints, placed item stamps identity, and BOQ shows name/SKU.
+Expected: PASS; fetch the Planner catalog item's `previewUrl`, hash its response bytes, and require equality with C3's retained `svgChecksum` before placement. The published SVG paints, placed item stamps identity, and BOQ shows name/SKU.
 
 - [ ] **Step 4: Run 390px place and BOQ proof**
 
 Run:
 
 ```powershell
-pnpm --filter oando-site exec playwright test -c config/build/playwright.config.ts tests/e2e/planner-c4-guest-place-boq.spec.ts --grep "390"
+node site/scripts/run-parametric-factory-e2e.mjs --spec tests/e2e/planner-c4-guest-place-boq.spec.ts --grep "390"
 ```
 
-Expected: PASS without forced clicks, increased timeouts, or Block2D being accepted as published SVG success. BOQ at both viewports shows the same isolated C3 name/SKU.
+Expected: PASS without forced clicks, increased timeouts, or Block2D being accepted as published SVG success. At both viewports, fetched SVG checksum and BOQ name/SKU equal the isolated C3 artifact.
 
 ---
 
@@ -1063,7 +1104,7 @@ Mark C3/C4 or generic-factory rows only with same-session command exits and brow
 
 - [ ] **Step 6: Record final checkpoint**
 
-Run the five-seat team gate and record each seat's PASS/N/A evidence. This plan does not itself authorize or forbid a git action; follow the active owner and repository instructions.
+Run the two-peer team gate and record both peers' PASS/N/A evidence. Three participants total, including the writer. This plan does not itself authorize or forbid a git action; follow the active owner and repository instructions.
 
 ---
 

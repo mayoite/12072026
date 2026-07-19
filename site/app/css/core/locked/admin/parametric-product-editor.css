@@ -1,0 +1,33 @@
+.parametric-properties-panel { min-width:0; height:100%; overflow:auto; padding:var(--space-3); background:var(--surface-panel); }
+.parametric-properties-heading { margin:0 0 var(--space-3); color:var(--text-strong); font-size:var(--type-title-size); }
+.parametric-properties-section { min-width:0; margin:0 0 var(--space-4); padding:0; border:0; }
+.parametric-properties-legend,.parametric-properties-label { color:var(--text-body); font-size:var(--type-label-size); font-weight:600; }
+.parametric-properties-legend { margin-bottom:var(--space-2); }
+.parametric-properties-fields,.parametric-properties-field { display:grid; gap:var(--space-2); }
+.parametric-properties-field { gap:var(--space-1); }
+.parametric-properties-input-group { display:flex; min-height:2.75rem; align-items:center; border:1px solid var(--border-soft); border-radius:var(--radius-md); background:var(--surface-raised); }
+.parametric-properties-input { min-width:0; min-height:2.75rem; flex:1; border:1px solid var(--border-soft); border-radius:var(--radius-md); padding-inline:var(--space-2); background:var(--surface-raised); color:var(--text-body); }
+.parametric-properties-input-group .parametric-properties-input { border:0; background:transparent; }
+.parametric-properties-unit { padding-inline:var(--space-2); color:var(--text-muted); font-size:var(--type-caption-size); }
+.parametric-properties-checkbox { display:flex; min-height:2.75rem; align-items:center; gap:var(--space-2); color:var(--text-body); }
+.parametric-properties-checkbox-mark { display:inline-flex; width:1.25rem; height:1.25rem; align-items:center; justify-content:center; border:1px solid var(--border-soft); border-radius:var(--radius-sm); color:transparent; }
+.parametric-properties-checkbox[data-selected] .parametric-properties-checkbox-mark { border-color:var(--color-primary); background:var(--color-primary); color:var(--text-on-primary); }
+.parametric-properties-select-button { min-height:2.75rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); padding-inline:var(--space-2); background:var(--surface-raised); color:var(--text-body); text-align:left; }
+.parametric-properties-popover,.parametric-properties-listbox { background:var(--surface-panel); }
+.parametric-properties-listbox { min-width:12rem; padding:var(--space-1); border:1px solid var(--border-soft); border-radius:var(--radius-md); }
+.parametric-properties-option { padding:var(--space-2); border-radius:var(--radius-sm); color:var(--text-body); }
+.parametric-properties-option[data-focused],.parametric-properties-option[data-selected] { background:var(--surface-selected); }
+.parametric-properties-input:focus-visible,.parametric-properties-select-button[data-focus-visible],.parametric-properties-checkbox[data-focus-visible] { outline:2px solid var(--color-primary); outline-offset:2px; }
+.parametric-publish-overlay { position:fixed; z-index:200; inset:0; display:flex; align-items:center; justify-content:center; padding:var(--space-4); background:color-mix(in srgb,var(--text-strong) 48%,transparent); }
+.parametric-publish-modal { width:min(32rem,100%); border:1px solid var(--border-soft); border-radius:var(--radius-lg); background:var(--surface-panel); box-shadow:var(--shadow-lg); }
+.parametric-publish-dialog { display:grid; gap:var(--space-4); padding:var(--space-5); outline:none; }
+.parametric-publish-heading { margin:0; color:var(--text-strong); }
+.parametric-publish-summary { display:grid; gap:var(--space-2); margin:0; }
+.parametric-publish-summary div { display:grid; grid-template-columns:5rem 1fr; gap:var(--space-2); }
+.parametric-publish-summary dt { color:var(--text-muted); }
+.parametric-publish-summary dd { margin:0; overflow-wrap:anywhere; }
+.parametric-publish-actions { display:flex; justify-content:flex-end; gap:var(--space-2); }
+.parametric-publish-cancel,.parametric-publish-confirm { min-height:2.75rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); padding-inline:var(--space-3); }
+.parametric-publish-cancel { background:var(--surface-raised); color:var(--text-body); }
+.parametric-publish-confirm { border-color:var(--color-primary); background:var(--color-primary); color:var(--text-inverse); }
+.parametric-publish-cancel[data-focus-visible],.parametric-publish-confirm[data-focus-visible] { outline:2px solid var(--color-primary); outline-offset:2px; }

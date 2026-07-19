@@ -136,6 +136,13 @@ function defaultSvgPath(slug: string, projectRoot: string): string {
   );
 }
 
+export function resolvePublishedSvgPath(
+  slug: string,
+  projectRoot?: string,
+): string {
+  return defaultSvgPath(slug, findProjectRoot(projectRoot));
+}
+
 /**
  * Run the Phase 03 SVG pipeline against the just-saved descriptor (in-process dynamic import).
  *

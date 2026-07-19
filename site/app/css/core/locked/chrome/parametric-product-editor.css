@@ -1,0 +1,17 @@
+.parametric-editor-root { --surface-page:var(--color-white-150); --surface-soft:var(--color-white-200); --surface-muted:var(--color-white-200); --surface-panel:var(--color-white-50); --surface-raised:var(--color-white-50); --border-soft:var(--color-white-300); --planner-surface-canvas:var(--color-white-200); display:flex; min-width:0; min-height:100dvh; height:100dvh; flex-direction:column; overflow:hidden; background:var(--surface-page); color:var(--text-body); }
+.parametric-editor-supported { display:flex; min-width:0; min-height:0; height:100%; flex:1; flex-direction:column; }
+.parametric-editor-unsupported { display:none; padding:var(--space-6); }
+.parametric-editor-topbar { display:flex; min-height:4rem; align-items:center; justify-content:space-between; gap:var(--space-4); border-bottom:1px solid var(--border-soft); padding:var(--space-2) var(--space-4); background:var(--surface-panel); }
+.parametric-editor-back-link { color:var(--color-primary); font-size:var(--type-label-size); }
+.parametric-editor-unit-button,.parametric-editor-publish { min-height:2.75rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); padding-inline:var(--space-3); background:var(--surface-raised); color:var(--text-body); }
+.parametric-editor-type-button { min-height:2.75rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); padding-inline:var(--space-3); background:var(--surface-raised); color:var(--text-body); }
+.parametric-editor-type-popover,.parametric-editor-type-listbox { background:var(--surface-panel); }
+.parametric-editor-type-listbox { min-width:12rem; padding:var(--space-1); border:1px solid var(--border-soft); border-radius:var(--radius-md); }
+.parametric-editor-type-option { padding:var(--space-2); border-radius:var(--radius-sm); }
+.parametric-editor-type-option[data-focused],.parametric-editor-type-option[data-selected] { background:var(--surface-selected); }
+.parametric-editor-unit-button[data-selected] { border-color:var(--color-primary); color:var(--color-primary); }
+.parametric-editor-publish { border-color:var(--color-primary); background:var(--color-primary); color:var(--text-inverse); }
+.parametric-editor-publish[data-disabled] { opacity:.5; }
+.parametric-editor-dock-area { display:flex; min-width:0; min-height:0; height:100%; flex:1; overflow:hidden; }
+.parametric-editor-message { margin:0; border-bottom:1px solid var(--border-soft); padding:var(--space-2) var(--space-4); }
+@media (max-width:59.99rem) { .parametric-editor-supported { display:none; } .parametric-editor-unsupported { display:block; } }

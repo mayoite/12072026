@@ -27,13 +27,30 @@ import {
 import "dockview-react/dist/styles/dockview.css";
 
 import styles from "@/app/css/core/locked/chrome/admin-svg-dock.module.css";
+import {
+  persistAdminSvgFactoryLayout,
+  seedAdminSvgFactoryLayout,
+  tryRestoreAdminSvgFactoryLayout,
+} from "./adminSvgDockPresets";
 
-export type AdminSvgDockSlot = "preview" | "stage" | "details";
+export type AdminSvgDockSlot =
+  | "preview"
+  | "stage"
+  | "details"
+  | "tools"
+  | "properties"
+  | "canvas";
 
 export type AdminSvgDockSlots = {
   readonly preview: ReactNode;
   readonly stage: ReactNode;
   readonly details: ReactNode;
+};
+
+export type AdminSvgFactoryDockSlots = {
+  readonly tools: ReactNode;
+  readonly properties: ReactNode;
+  readonly canvas: ReactNode;
 };
 
 export type AdminSvgDockPanelTitles = {
@@ -50,11 +67,15 @@ const DEFAULT_TITLES: AdminSvgDockPanelTitles = {
 
 type AdminSvgDockConfig = {
   readonly stageScrollable: boolean;
+  readonly layoutMode: "freehand" | "factory";
 };
 
-const AdminSvgDockSlotsContext = createContext<AdminSvgDockSlots | null>(null);
+const AdminSvgDockSlotsContext = createContext<
+  Partial<Record<AdminSvgDockSlot, ReactNode>> | null
+>(null);
 const AdminSvgDockConfigContext = createContext<AdminSvgDockConfig>({
   stageScrollable: false,
+  layoutMode: "freehand",
 });
 
 function useSlot(slot: AdminSvgDockSlot): ReactNode {
@@ -79,6 +100,7 @@ function SlotPanel({
       className={fillClass}
       data-testid={`admin-svg-dock-panel-${slot}`}
       data-stage-scrollable={stage ? String(stageScrollable) : undefined}
+      data-required={slot === "canvas" ? "true" : undefined}
     >
       {node}
     </div>
@@ -94,10 +116,22 @@ function StagePanel(_props: IDockviewPanelProps) {
 function DetailsPanel(_props: IDockviewPanelProps) {
   return <SlotPanel slot="details" />;
 }
+function ToolsPanel(_props: IDockviewPanelProps) {
+  return <SlotPanel slot="tools" />;
+}
+function PropertiesPanel(_props: IDockviewPanelProps) {
+  return <SlotPanel slot="properties" />;
+}
+function CanvasPanel(_props: IDockviewPanelProps) {
+  return <SlotPanel slot="canvas" stage />;
+}
 
 function AdminSvgDockTab(props: IDockviewPanelHeaderProps) {
   return (
-    <DockviewDefaultTab {...props} hideClose={props.api.id === "stage"} />
+    <DockviewDefaultTab
+      {...props}
+      hideClose={props.api.id === "stage" || props.api.id === "canvas"}
+    />
   );
 }
 
@@ -105,6 +139,9 @@ const DOCK_COMPONENTS = {
   preview: PreviewPanel,
   stage: StagePanel,
   details: DetailsPanel,
+  tools: ToolsPanel,
+  properties: PropertiesPanel,
+  canvas: CanvasPanel,
 };
 
 function seedAdminSvgLayout(
@@ -139,7 +176,8 @@ function seedAdminSvgLayout(
   });
 }
 
-export type AdminSvgDockHostProps = {
+export type AdminSvgFreehandDockHostProps = {
+  readonly layoutMode?: "freehand";
   readonly slots: AdminSvgDockSlots;
   readonly className?: string;
   /** Tab titles. Defaults: Preview / Studio / Details. Parametric uses Form for stage. */
@@ -150,16 +188,35 @@ export type AdminSvgDockHostProps = {
   readonly stageScrollable?: boolean;
 };
 
+export type AdminSvgFactoryDockHostProps = {
+  readonly layoutMode: "factory";
+  readonly factorySlots: AdminSvgFactoryDockSlots;
+  readonly className?: string;
+};
+
+export type AdminSvgDockHostProps =
+  | AdminSvgFreehandDockHostProps
+  | AdminSvgFactoryDockHostProps;
+
 /**
  * Dockable Admin SVG chrome (Dockview + Phosphor tab titles via seed).
  * Freehand: Excalidraw inside stage. Parametric: field form inside stage.
  */
-export function AdminSvgDockHost({
-  slots,
-  className,
-  titles: titlesPartial,
-  stageScrollable = false,
-}: AdminSvgDockHostProps) {
+export function AdminSvgDockHost(props: AdminSvgDockHostProps) {
+  const layoutMode = props.layoutMode ?? "freehand";
+  const slots =
+    layoutMode === "factory"
+      ? (props as AdminSvgFactoryDockHostProps).factorySlots
+      : (props as AdminSvgFreehandDockHostProps).slots;
+  const className = props.className;
+  const titlesPartial =
+    layoutMode === "freehand"
+      ? (props as AdminSvgFreehandDockHostProps).titles
+      : undefined;
+  const stageScrollable =
+    layoutMode === "freehand"
+      ? ((props as AdminSvgFreehandDockHostProps).stageScrollable ?? false)
+      : false;
   const apiRef = useRef<DockviewApi | null>(null);
   const disposablesRef = useRef<Array<{ dispose: () => void }>>([]);
 
@@ -173,8 +230,8 @@ export function AdminSvgDockHost({
   );
 
   const dockConfig = useMemo<AdminSvgDockConfig>(
-    () => ({ stageScrollable }),
-    [stageScrollable],
+    () => ({ stageScrollable, layoutMode }),
+    [layoutMode, stageScrollable],
   );
 
   const onReady = useCallback(
@@ -183,11 +240,21 @@ export function AdminSvgDockHost({
       for (const d of disposablesRef.current) d.dispose();
       disposablesRef.current = [];
 
-      seedAdminSvgLayout(event.api, titles);
+      if (layoutMode === "factory") {
+        if (!tryRestoreAdminSvgFactoryLayout(event.api)) {
+          seedAdminSvgFactoryLayout(event.api);
+        }
+      } else {
+        seedAdminSvgLayout(event.api, titles);
+      }
 
       disposablesRef.current.push(
         event.api.onDidRemovePanel((removed) => {
-          if (removed.id === "stage" && event.api.getPanel("stage") == null) {
+          if (
+            layoutMode === "freehand" &&
+            removed.id === "stage" &&
+            event.api.getPanel("stage") === null
+          ) {
             event.api.addPanel({
               id: "stage",
               component: "stage",
@@ -195,10 +262,30 @@ export function AdminSvgDockHost({
               params: {},
             });
           }
+          if (
+            layoutMode === "factory" &&
+            removed.id === "canvas" &&
+            event.api.getPanel("canvas") === null
+          ) {
+            event.api.addPanel({
+              id: "canvas",
+              component: "canvas",
+              title: "Canvas",
+              minimumWidth: 480,
+              minimumHeight: 320,
+            });
+          }
         }),
       );
+      if (layoutMode === "factory") {
+        disposablesRef.current.push(
+          event.api.onDidLayoutChange(() =>
+            persistAdminSvgFactoryLayout(event.api),
+          ),
+        );
+      }
     },
-    [titles],
+    [layoutMode, titles],
   );
 
   useEffect(() => {
@@ -218,10 +305,14 @@ export function AdminSvgDockHost({
           data-testid="admin-svg-dock-host"
           data-chrome="dockview-react"
           data-stage-scrollable={String(stageScrollable)}
+          data-layout-mode={layoutMode}
+          data-required-panel={layoutMode === "factory" ? "canvas" : undefined}
           aria-label="SVG studio dock"
         >
           <span className="sr-only">
-            Panels: {titles.preview}, {titles.stage}, {titles.details}
+            {layoutMode === "factory"
+              ? "Panels: Tools, Properties, Canvas"
+              : `Panels: ${titles.preview}, ${titles.stage}, ${titles.details}`}
           </span>
           <DockviewReact
             className={styles.dockview}

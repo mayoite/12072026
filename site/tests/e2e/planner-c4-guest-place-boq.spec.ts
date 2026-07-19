@@ -1,21 +1,19 @@
-/**
- * C4 browser ship gate — guest place brand parametric desk + BOQ identity.
- * Targets oando-linear-desk-1600 (revision API preview under db authority).
- * Evidence: console errors = 0, failed SVG requests = 0, furniture +1, BOQ line.
- */
+import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
+
 import { expect, test, type Page } from "@playwright/test";
 
 import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
 import {
-  getObjectCount,
-  placeArmedCatalogOnCanvas,
+  clickOnCanvas,
+  ensurePlannerCanvasOnScreen,
   waitForPlannerCanvas,
   waitForPlannerCatalogReady,
 } from "./plannerCanvasHelpers";
-
-const DESK_SLUG = "oando-linear-desk-1600";
-const DESK_SKU = "OANDO-LINEAR-DSK-1600";
-const DESK_SEARCH = "linear desk 1600";
+import {
+  publishDeskAssemblyFromAdmin,
+  type ParametricFactoryArtifact,
+} from "./helpers/parametricFactoryJourney";
 
 function inventorySearch(page: Page) {
   return page
@@ -25,7 +23,6 @@ function inventorySearch(page: Page) {
     .first();
 }
 
-/** Onboarding coach modal blocks library — dismiss first. */
 async function dismissOnboardingIfPresent(page: Page): Promise<void> {
   const skip = page.getByRole("button", { name: /Skip onboarding/i });
   if (await skip.isVisible().catch(() => false)) {
@@ -41,27 +38,18 @@ async function dismissOnboardingIfPresent(page: Page): Promise<void> {
 
 async function openGuestInventory(page: Page): Promise<void> {
   await dismissOnboardingIfPresent(page);
-
   const search = inventorySearch(page);
-  if (await search.isVisible().catch(() => false)) {
-    return;
-  }
+  if (await search.isVisible().catch(() => false)) return;
 
-  // Workflow: 2. Place
   const placeStep = page.getByRole("button", { name: /2\.\s*Place/i });
-  if (await placeStep.isVisible().catch(() => false)) {
-    await placeStep.click();
-  }
+  if (await placeStep.isVisible().catch(() => false)) await placeStep.click();
 
-  // Library / Inventory left panel
   const inventoryPanel = page.getByRole("region", { name: /Inventory panel/i });
   if (!(await inventoryPanel.isVisible().catch(() => false))) {
     const libraryTab = page
       .getByRole("tablist", { name: "Left panel" })
       .getByRole("tab", { name: /^Library$|^Inventory$/i });
-    if (await libraryTab.isVisible().catch(() => false)) {
-      await libraryTab.click();
-    }
+    if (await libraryTab.isVisible().catch(() => false)) await libraryTab.click();
     const toggle = page.getByRole("button", {
       name: /Toggle inventory panel|Inventory/i,
     });
@@ -73,7 +61,6 @@ async function openGuestInventory(page: Page): Promise<void> {
     }
   }
 
-  // Status bar CTA may open library
   const placeWorkstation = page.getByRole("button", {
     name: /place a workstation from the library|Place workstation/i,
   });
@@ -83,37 +70,54 @@ async function openGuestInventory(page: Page): Promise<void> {
   ) {
     await placeWorkstation.click();
   }
-
   await expect(search).toBeVisible({ timeout: 45_000 });
 }
 
-async function placeLinearDeskFromInventory(page: Page): Promise<void> {
+async function placeAssemblyFromInventory(
+  page: Page,
+  artifact: ParametricFactoryArtifact,
+): Promise<void> {
   await waitForPlannerCatalogReady(page);
   await openGuestInventory(page);
-
   const search = inventorySearch(page);
-  await search.fill("");
-  await search.fill(DESK_SEARCH);
-  // Accessible name is aria-label: "Place — Add Linear Desk 1600 to canvas"
-  const addBtn = page
+  await search.fill(artifact.sku);
+  const liveFurnitureCount = () =>
+    page.evaluate(
+      () =>
+        (() => {
+          const project = (
+          window as unknown as {
+              __plannerLiveProject?: {
+                activeFloorId?: string;
+                floors?: Array<{ id: string; furniture?: unknown[] }>;
+              };
+          }
+          ).__plannerLiveProject;
+          const floor =
+            project?.floors?.find((candidate) => candidate.id === project.activeFloorId) ??
+            project?.floors?.[0];
+          return floor?.furniture?.length ?? 0;
+        })(),
+    );
+  const objectCountBefore = await liveFurnitureCount();
+  const add = page
     .getByRole("button", {
-      name: /Place — Add Linear Desk 1600 to canvas|Place — Add .*1600.* to canvas|Add Linear Desk 1600 to canvas/i,
+      name: /Place — Add .*Desk Assembly.*12.* to canvas/i,
     })
     .first();
+  await expect(add).toBeVisible({ timeout: 45_000 });
+  await add.click();
 
-  await expect(addBtn).toBeVisible({ timeout: 45_000 });
-  await addBtn.click();
-
-  // Arm honesty: toast (not sr-only live region — avoid strict mode dual hit)
   const toast = page.getByTestId("planner-workspace-toast");
-  await expect(toast.getByText(/Click canvas to place Linear Desk/i)).toBeVisible(
-    { timeout: 15_000 },
-  );
-
-  // Canvas click — do not rely on status-bar "N furniture" (shell layout varies)
-  const { clickOnCanvas, ensurePlannerCanvasOnScreen } = await import(
-    "./plannerCanvasHelpers"
-  );
+  await expect(toast.getByText(/Click canvas to place .*Desk Assembly/i)).toBeVisible({
+    timeout: 15_000,
+  });
+  const dismissSidePanel = page.getByRole("button", {
+    name: "Dismiss side panel",
+  });
+  if (await dismissSidePanel.isVisible().catch(() => false)) {
+    await dismissSidePanel.click();
+  }
   for (const point of [
     { rx: 0.5, ry: 0.48 },
     { rx: 0.55, ry: 0.52 },
@@ -121,19 +125,52 @@ async function placeLinearDeskFromInventory(page: Page): Promise<void> {
   ] as const) {
     await ensurePlannerCanvasOnScreen(page);
     await clickOnCanvas(page, point.rx, point.ry);
-    const placed = await toast
-      .getByText(/Placed Linear Desk/i)
-      .isVisible()
-      .catch(() => false);
-    if (placed) break;
+    if (
+      await toast
+        .getByText(/Placed .*Desk Assembly/i)
+        .isVisible()
+        .catch(() => false)
+    ) {
+      break;
+    }
   }
-  await expect(toast.getByText(/Placed Linear Desk/i)).toBeVisible({
+  await expect(toast.getByText(/Placed .*Desk Assembly/i)).toBeVisible({
     timeout: 20_000,
   });
+  await expect
+    .poll(liveFurnitureCount, { timeout: 15_000 })
+    .toBe(objectCountBefore + 1);
+  const identityPlaced = await page.evaluate(
+    ({ slug, sku }) => {
+      const project = (
+        window as unknown as {
+          __plannerLiveProject?: {
+            activeFloorId?: string;
+            floors?: Array<{
+              id: string;
+              furniture?: Array<{ sourceSlug?: string; sourceSku?: string }>;
+            }>;
+          };
+        }
+      ).__plannerLiveProject;
+      const floor =
+        project?.floors?.find((candidate) => candidate.id === project.activeFloorId) ??
+        project?.floors?.[0];
+      return Boolean(
+        floor?.furniture?.some(
+          (item) => item.sourceSlug === slug && item.sourceSku === sku,
+        ),
+      );
+    },
+    { slug: artifact.slug, sku: artifact.sku },
+  );
+  expect(identityPlaced).toBe(true);
 }
 
-async function openBoqAndAssertDesk(page: Page): Promise<void> {
-  // WorkspaceShell: File actions → More plan actions
+async function openBoqAndAssertAssembly(
+  page: Page,
+  artifact: ParametricFactoryArtifact,
+): Promise<void> {
   const more = page.getByTestId("planner-more-actions");
   await expect(more).toBeVisible({ timeout: 15_000 });
   await more.click();
@@ -144,136 +181,118 @@ async function openBoqAndAssertDesk(page: Page): Promise<void> {
   const boqCsv = page.getByRole("menuitem", {
     name: /Download BOQ \(CSV\)|Export BOQ \(CSV\)|BOQ \(CSV\)/i,
   });
-
-  if (await boqJson.isVisible().catch(() => false)) {
+  const exportItem = (await boqJson.isVisible().catch(() => false))
+    ? boqJson
+    : boqCsv;
+  if (await exportItem.isVisible().catch(() => false)) {
     const [download] = await Promise.all([
       page.waitForEvent("download", { timeout: 30_000 }),
-      boqJson.click(),
+      exportItem.click(),
     ]);
-    const path = await download.path();
-    expect(path, "BOQ JSON download path").toEqual(expect.any(String));
-    expect(path!.length).toBeGreaterThan(0);
-    const fs = await import("node:fs/promises");
-    const text = await fs.readFile(path!, "utf8");
-    expect(text).toMatch(new RegExp(DESK_SKU, "i"));
-    expect(text).toMatch(/Linear Desk 1600|linear-desk-1600/i);
+    const downloadPath = await download.path();
+    expect(downloadPath).toEqual(expect.any(String));
+    const text = await readFile(downloadPath!, "utf8");
+    if (exportItem === boqJson) {
+      const boq = JSON.parse(text) as {
+        lines?: Array<{ name?: string; sku?: string; quantity?: number }>;
+      };
+      const matchingLines =
+        boq.lines?.filter((line) => line.sku === artifact.sku) ?? [];
+      expect(matchingLines).toEqual([
+        expect.objectContaining({
+          name: "Desk Assembly 12",
+          sku: artifact.sku,
+          quantity: 1,
+        }),
+      ]);
+    } else {
+      const matchingRows = text
+        .split(/\r?\n/)
+        .filter((line) => line.includes(artifact.sku));
+      expect(matchingRows).toHaveLength(1);
+      expect(matchingRows[0]).toMatch(
+        /^furniture,Desk Assembly 12,[^,]+,OANDO-DSK-ASM-12,1,/,
+      );
+    }
     return;
   }
-
-  if (await boqCsv.isVisible().catch(() => false)) {
-    const [download] = await Promise.all([
-      page.waitForEvent("download", { timeout: 30_000 }),
-      boqCsv.click(),
-    ]);
-    const path = await download.path();
-    expect(path, "BOQ CSV download path").toEqual(expect.any(String));
-    expect(path!.length).toBeGreaterThan(0);
-    const fs = await import("node:fs/promises");
-    const text = await fs.readFile(path!, "utf8");
-    expect(text).toMatch(new RegExp(DESK_SKU, "i"));
-    return;
-  }
-
-  // Workflow Quote step
-  const quote = page.getByRole("button", { name: /3\.\s*Quote/i });
-  if (await quote.isVisible().catch(() => false)) {
-    await quote.click();
-    await expect(page.getByText(new RegExp(DESK_SKU, "i")).first()).toBeVisible({
-      timeout: 15_000,
-    });
-    return;
-  }
-
-  throw new Error("No BOQ export / Quote path found for C4 assert");
+  throw new Error("No BOQ export path found");
 }
 
-test.describe("C4 guest place brand desk + BOQ", () => {
-  test.describe.configure({ timeout: 120_000 });
+async function assertCatalogArtifact(
+  page: Page,
+  artifact: ParametricFactoryArtifact,
+): Promise<void> {
+  const response = await page.request.get("/api/planner/catalog/svg-blocks/", {
+    timeout: 60_000,
+  });
+  expect(response.ok()).toBe(true);
+  const body = (await response.json()) as {
+    items?: Array<{
+      slug: string;
+      sku?: string;
+      assets?: { previewImageUrl?: string };
+    }>;
+  };
+  const item = body.items?.find((candidate) => candidate.slug === artifact.slug);
+  expect(item?.sku).toBe(artifact.sku);
+  expect(item?.assets?.previewImageUrl).toBe(artifact.previewUrl);
+  const preview = await page.request.get(item!.assets!.previewImageUrl!);
+  expect(preview.ok()).toBe(true);
+  const checksum = createHash("sha256")
+    .update(Buffer.from(await preview.body()))
+    .digest("hex");
+  expect(checksum).toBe(artifact.svgChecksum);
+}
 
-  test("desktop 1280: place oando-linear-desk-1600, SVG OK, BOQ has SKU", async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 1280, height: 800 });
+async function runPlannerJourney(
+  page: Page,
+  viewport: { readonly width: number; readonly height: number },
+): Promise<void> {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  const artifact = await publishDeskAssemblyFromAdmin(page);
+  await page.setViewportSize(viewport);
 
-    const consoleErrors: string[] = [];
-    const failedSvg: string[] = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") consoleErrors.push(msg.text());
-    });
-    page.on("response", (res) => {
-      const url = res.url();
-      if (
-        res.status() >= 400 &&
-        (url.includes("/svg-catalog/") ||
-          url.includes("/api/planner/catalog/svg/"))
-      ) {
-        failedSvg.push(`${res.status()} ${url}`);
-      }
-    });
-
-    await enterGuestPlannerWorkspace(page, {
-      projectName: "C4 guest place desk",
-    });
-    await waitForPlannerCanvas(page);
-    await dismissOnboardingIfPresent(page);
-
-    // API must already list the brand desk (guest inventory truth)
-    const api = await page.request.get("/api/planner/catalog/svg-blocks/", {
-      timeout: 60_000,
-    });
-    expect(api.ok(), `svg-blocks status ${api.status()}`).toBe(true);
-    const body = (await api.json()) as {
-      items?: Array<{
-        slug: string;
-        sku?: string;
-        assets?: { previewImageUrl?: string };
-      }>;
-    };
-    const desk = body.items?.find((i) => i.slug === DESK_SLUG);
-    expect(desk, "svg-blocks must include brand parametric desk").toBeDefined();
-    expect(desk!.sku).toBe(DESK_SKU);
-    expect(desk!.assets?.previewImageUrl).toEqual(expect.stringMatching(/\S/));
-
-    await placeLinearDeskFromInventory(page);
-    await openBoqAndAssertDesk(page);
-
-    expect(failedSvg, `failed SVG requests: ${failedSvg.join("; ")}`).toEqual(
-      [],
-    );
-    const hardConsole = consoleErrors.filter(
-      (t) =>
-        !/favicon|Download the React DevTools|hydration|third-party/i.test(t),
-    );
-    expect(
-      hardConsole,
-      `console errors: ${hardConsole.join(" | ")}`,
-    ).toEqual([]);
+  const consoleErrors: string[] = [];
+  const failedSvg: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") consoleErrors.push(message.text());
+  });
+  page.on("response", (response) => {
+    const url = response.url();
+    if (
+      response.status() >= 400 &&
+      (url.includes("svg-catalog") || url.includes("/api/planner/catalog/svg/"))
+    ) {
+      failedSvg.push(`${response.status()} ${url}`);
+    }
   });
 
-  test("phone 390: inventory can find brand desk and place", async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
+  await enterGuestPlannerWorkspace(page, {
+    projectName: `C4 assembly ${viewport.width}`,
+  });
+  await waitForPlannerCanvas(page);
+  await assertCatalogArtifact(page, artifact);
+  await placeAssemblyFromInventory(page, artifact);
+  await openBoqAndAssertAssembly(page, artifact);
 
-    const failedSvg: string[] = [];
-    page.on("response", (res) => {
-      const url = res.url();
-      if (
-        res.status() >= 400 &&
-        (url.includes("/svg-catalog/") ||
-          url.includes("/api/planner/catalog/svg/"))
-      ) {
-        failedSvg.push(`${res.status()} ${url}`);
-      }
-    });
+  expect(failedSvg).toEqual([]);
+  expect(
+    consoleErrors.filter(
+      (text) =>
+        !/favicon|Download the React DevTools|hydration|third-party/i.test(text),
+    ),
+  ).toEqual([]);
+}
 
-    await enterGuestPlannerWorkspace(page, {
-      projectName: "C4 phone place desk",
-    });
-    await waitForPlannerCanvas(page);
-    await dismissOnboardingIfPresent(page);
-    await placeLinearDeskFromInventory(page);
+test.describe("C4 dynamic parametric assembly place and BOQ", () => {
+  test.describe.configure({ timeout: 180_000 });
 
-    expect(failedSvg, `failed SVG requests: ${failedSvg.join("; ")}`).toEqual(
-      [],
-    );
+  test("desktop 1280 consumes exact C3 artifact", async ({ page }) => {
+    await runPlannerJourney(page, { width: 1280, height: 800 });
+  });
+
+  test("390 consumes exact C3 artifact", async ({ page }) => {
+    await runPlannerJourney(page, { width: 390, height: 844 });
   });
 });

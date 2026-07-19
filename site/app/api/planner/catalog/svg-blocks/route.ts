@@ -7,6 +7,7 @@
  */
 
 import type { NextRequest } from "next/server";
+import { existsSync } from "node:fs";
 
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 import { success } from "@/features/shared/api/apiResponse";
@@ -17,11 +18,21 @@ import { clearLoaderCache } from "@/features/planner/catalog/svg/svgBlockDescrip
 import { readSvgArtifactStatus } from "@/features/admin/svg-editor/publish/svgArtifactStatus.server";
 import { isDbSvgReleaseAuthority } from "@/features/admin/svg-editor/publish/svgReleaseAuthority";
 import { isPublishedSvgApiUrl } from "@/features/planner/catalog/svg/svgPreviewAssets";
+import { loadAll } from "@/features/planner/catalog/svg/svgBlockDescriptorLoader";
+import {
+  isBuyerVisibleSlug,
+} from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
+import {
+  readParametricFactoryLifecycle,
+  resolveParametricFactoryE2eRoot,
+  type ParametricFactoryE2eRoot,
+} from "@/features/admin/svg-editor/parametric/parametricFactoryE2eRoot.server";
 
 function isBuyerPublishedCatalogItem(item: {
   readonly slug: string;
   readonly assets?: { readonly previewImageUrl?: string };
-}): boolean {
+}, runtime?: ParametricFactoryE2eRoot): boolean {
+  if (runtime) return existsSync(runtime.svgPath(item.slug));
   const preview = item.assets?.previewImageUrl?.trim() ?? "";
   if (preview && isPublishedSvgApiUrl(preview)) return true;
   // DB authority: only immutable revision API URLs count as published.
@@ -40,11 +51,33 @@ export async function GET(req: NextRequest) {
   // Drop in-process descriptor cache so Admin publish is visible without restart.
   // (Server action clearLoaderCache does not share module state with this route.)
   clearLoaderCache();
-  const descriptors = await loadBuyerVisibleDescriptorsWithDb();
+  const runtime = resolveParametricFactoryE2eRoot();
+  const isolatedLifecycle = runtime
+    ? readParametricFactoryLifecycle(runtime)
+    : undefined;
+  const descriptors = runtime
+    ? loadAll({ dir: runtime.descriptorDir, forceReload: true }).filter(
+        (descriptor) =>
+          isBuyerVisibleSlug(descriptor.slug, isolatedLifecycle ?? {}),
+      )
+    : await loadBuyerVisibleDescriptorsWithDb();
   // Guest / buyer inventory = oando-* brand heroes only (P10); no OFL toys / demo junk.
-  const items = filterGuestInventoryCatalogItems(
+  const mappedItems = filterGuestInventoryCatalogItems(
     mapDescriptorsToCatalogItems(descriptors),
-  ).filter(isBuyerPublishedCatalogItem);
+  ).filter((item) => isBuyerPublishedCatalogItem(item, runtime));
+  const items = runtime
+    ? mappedItems.map((item) => {
+        const previewUrl = runtime.previewUrl(item.slug);
+        return {
+          ...item,
+          assets: {
+            ...item.assets,
+            imageUrls: [previewUrl],
+            previewImageUrl: previewUrl,
+          },
+        };
+      })
+    : mappedItems;
 
   return success({
     items,

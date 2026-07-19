@@ -69,6 +69,15 @@ describe("catalogWriteIsolation path helpers", () => {
     expect(isCatalogIsolationTestRuntime()).toBe(true);
   });
 
+  it("enforces isolation in a nonproduction parametric factory E2E runtime", () => {
+    expect(
+      isCatalogIsolationTestRuntime({
+        NODE_ENV: "development",
+        PARAMETRIC_FACTORY_E2E_RUN_ID: "factory-guard-01",
+      }),
+    ).toBe(true);
+  });
+
   it("detects paths under canonical descriptor and svg-catalog dirs", () => {
     const desc = resolveCanonicalDescriptorDir();
     const svg = resolveCanonicalSvgCatalogDir();

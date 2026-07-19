@@ -141,5 +141,9 @@ mcps/
 # Generated SVG-Edit runtime
 site/public/vendor/svgedit/
 
+# Parametric factory E2E runtime only
+.e2e-runtime/
+site/public/.e2e-svg-catalog/
+
 .vercel
 .env*

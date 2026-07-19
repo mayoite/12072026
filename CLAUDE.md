@@ -108,5 +108,5 @@ Site marketing uses `next-intl` (locales `en`, `hi`, `fr`, `de`, `es`; `localePr
 - **Admin only** also has `IMPLEMENTATION-PLAN.md` + `REALITY-AND-STACK.md` — exactly four files under `plan/Admin/` (no FINISH-PLAN / COMPLETION-CONTRACT). Admin Part C is active execution.
 - Architecture & data facts: `docs/INDEX.md`, `docs/site/ARCHITECTURE.md` ("where do I edit?" decision tree).
 - Active blockers & release gate policy: `Failures.md`.
-- Agent process & quality bar: `Agents/INDEX.md`, `Agents/Agents-01-STANDARD.md`. `agent-reports/` is not PASS proof.
+- Agent process and quality bar: `Agents/INDEX.md`. `agent-reports/` is not PASS proof.
 - `PROTECTED/` is private owner material — never open, edit, or cite it. `.archive/` and `websites/` are reference only; do not import them in `site/`.

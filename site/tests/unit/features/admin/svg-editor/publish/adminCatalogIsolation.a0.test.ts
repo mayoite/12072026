@@ -6,9 +6,9 @@
  * 3. Canonical path without isolation fails loudly.
  */
 
-import { createHash } from "node:crypto";
 import {
   existsSync,
+  mkdirSync,
   readdirSync,
   readFileSync,
   statSync,
@@ -23,6 +23,10 @@ import {
   resolveCanonicalDescriptorDir,
   resolveCanonicalSvgCatalogDir,
 } from "@/features/admin/svg-editor/storage/catalogWriteIsolation";
+import {
+  cleanupParametricFactoryE2eRoot,
+  resolveParametricFactoryE2eRoot,
+} from "@/features/admin/svg-editor/parametric/parametricFactoryE2eRoot.server";
 import { persistBlockDescriptor } from "@/features/admin/svg-editor/storage/persistBlockDescriptor";
 import {
   BLOCK_DESCRIPTOR_SCHEMA_VERSION,
@@ -33,7 +37,6 @@ import {
   createIsolatedAdminInventoryRoot,
   snapshotCanonicalCatalog,
 } from "../../../../../helpers/adminCatalogIsolation";
-import { createIsolatedAdminSvgWorkspace } from "../../../../../e2e/helpers/isolatedAdminSvgPublish";
 import { resolveSitePackageRoot } from "@/lib/paths/sitePackageRoot";
 
 const SITE_ROOT = resolveSitePackageRoot();
@@ -134,10 +137,6 @@ function fixedDescriptor(slug: string): Record<string, unknown> {
   return { ...base, checksum: computeBlockDescriptorChecksum(base) };
 }
 
-function sha256File(filePath: string): string {
-  return createHash("sha256").update(readFileSync(filePath)).digest("hex");
-}
-
 describe("A0 admin catalog isolation — static convention", () => {
   it("publish/lifecycle/storage unit tests that write use temp roots", () => {
     const offenders: string[] = [];
@@ -210,39 +209,38 @@ describe("A0 admin catalog isolation — temp root proof", () => {
     }
   });
 
-  it("createIsolatedAdminSvgWorkspace copies fixtures then cleans without canonical mutation", () => {
-    const slug = "side-table-001";
-    const descPath = path.join(resolveCanonicalDescriptorDir(), `${slug}.json`);
-    const svgPath = path.join(resolveCanonicalSvgCatalogDir(), `${slug}.svg`);
-    if (!existsSync(descPath) || !existsSync(svgPath)) {
-      throw new Error(`Canonical fixture missing for ${slug}`);
-    }
-    const beforeDesc = sha256File(descPath);
-    const beforeSvg = sha256File(svgPath);
+  it("parametric factory runtime creates and cleans without canonical mutation", () => {
+    const runId = "a0-factory-0001";
+    const runtime = resolveParametricFactoryE2eRoot({
+      env: {
+        PARAMETRIC_FACTORY_E2E_RUN_ID: runId,
+        PARAMETRIC_FACTORY_E2E_ROOT: path.join(
+          path.dirname(SITE_ROOT),
+          ".e2e-runtime",
+          "parametric-factory",
+          runId,
+        ),
+      },
+      nodeEnv: "test",
+    });
+    if (!runtime) throw new Error("expected parametric factory runtime");
     const before = snapshotCanonicalCatalog();
 
-    const workspace = createIsolatedAdminSvgWorkspace(slug);
     try {
-      expect(existsSync(path.join(workspace.descriptorDir, `${slug}.json`))).toBe(
-        true,
-      );
-      expect(existsSync(workspace.svgPath)).toBe(true);
-      // mutate only the isolated copy
-      writeFileSync(
-        path.join(workspace.descriptorDir, `${slug}.json`),
-        `${JSON.stringify({ isolated: true })}\n`,
-        "utf8",
-      );
-      writeFileSync(workspace.svgPath, "<svg data-isolated='1'/>\n", "utf8");
-      expect(sha256File(descPath)).toBe(beforeDesc);
-      expect(sha256File(svgPath)).toBe(beforeSvg);
+      mkdirSync(runtime.descriptorDir, { recursive: true });
+      mkdirSync(runtime.svgDir, { recursive: true });
+      const descriptorPath = runtime.descriptorPath("a0-desk-001");
+      const svgPath = runtime.svgPath("a0-desk-001");
+      writeFileSync(descriptorPath, `${JSON.stringify({ isolated: true })}\n`, "utf8");
+      writeFileSync(svgPath, "<svg data-isolated='1'/>\n", "utf8");
+      expect(existsSync(descriptorPath)).toBe(true);
+      expect(existsSync(svgPath)).toBe(true);
       assertCanonicalCatalogUnchanged(before);
     } finally {
-      workspace.cleanup();
+      cleanupParametricFactoryE2eRoot(runtime);
     }
 
-    expect(existsSync(workspace.root)).toBe(false);
-    expect(sha256File(descPath)).toBe(beforeDesc);
-    expect(sha256File(svgPath)).toBe(beforeSvg);
+    expect(existsSync(runtime.runtimeRoot)).toBe(false);
+    assertCanonicalCatalogUnchanged(before);
   });
 });

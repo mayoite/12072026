@@ -38,7 +38,7 @@ No second general canvas engine. No pen switch for parametric.
 
 Semantic tokens only. No raw hex when a token exists.  
 Hardcoding audits: `site/scripts/audit-hardcoded-detail.mjs`, `site/scripts/audit-tsx-hardcoded.mjs`.  
-Policy: `Agents/Agents-09-css.md`, `docs/architecture/04-CSS-SOLUTION.md`.
+Policy: `Agents/INDEX.md`, `docs/architecture/04-CSS-SOLUTION.md`.
 
 ## Package decisions
 
