@@ -42,7 +42,7 @@
   color: var(--text-muted);
   cursor: pointer;
   font: inherit;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 600;
 }
 
@@ -67,7 +67,7 @@
 
 .disclaimer {
   color: var(--text-muted);
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
 }
 
 .warnings {
@@ -91,7 +91,7 @@
   border-radius: 0.375rem;
   border: 1px solid transparent;
   font: inherit;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 600;
   cursor: pointer;
 }

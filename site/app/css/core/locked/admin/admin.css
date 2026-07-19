@@ -180,7 +180,7 @@
 }
 
 .shell-admin-context__title {
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 600;
   color: var(--text-heading, var(--text-body));
   white-space: nowrap;
@@ -196,7 +196,7 @@
   min-height: var(--admin-topbar-control-h);
   padding: 0 0.55rem;
   border-radius: var(--radius-md, 0.5rem);
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 500;
   color: var(--text-muted, var(--text-body));
   text-decoration: none;
@@ -220,7 +220,7 @@
   background: color-mix(in srgb, var(--color-primary) 10%, var(--color-ecru-50));
   min-height: var(--admin-topbar-control-h);
   padding: 0.35rem 0.75rem;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 600;
   color: var(--color-primary);
   text-decoration: none;
@@ -365,7 +365,7 @@
 }
 
 .shell-admin-nav-group__chevron {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 700;
   line-height: 1;
   color: var(--text-subtle);
@@ -445,7 +445,7 @@
 
 .shell-admin-sidebar__current {
   margin: 0.25rem 0 0;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 600;
   color: var(--text-body);
   white-space: nowrap;
@@ -470,7 +470,7 @@
   gap: 0.55rem;
   border-radius: 0.55rem;
   padding: 0.4rem 0.55rem;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 500;
   text-decoration: none;
   transition: color var(--motion-fast) var(--ease-standard),
@@ -700,7 +700,7 @@
   gap: 0.35rem;
   margin-top: auto;
   padding-top: 0.85rem;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;

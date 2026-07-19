@@ -162,7 +162,7 @@
 
 .projects-card__category,
 .projects-card__eyebrow {
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: var(--font-weight-copy-semibold, 500);
   letter-spacing: 0.14em;
   line-height: 1.25;
@@ -309,7 +309,7 @@
 .home-trust-kpi-label--dark {
   margin-top: 0.625rem;
   font-family: var(--font-sans);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 600;
   letter-spacing: 0.1em;
   line-height: 1.35;

@@ -19,7 +19,7 @@
 .eyebrow {
   margin: 0;
   color: var(--text-muted);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -35,7 +35,7 @@
   margin: var(--space-2) 0 0;
   max-width: 28rem;
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   line-height: 1.4;
   font-weight: 500;
 }
@@ -45,7 +45,7 @@
   flex: 0 0 auto;
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-pill);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 700;
 }
 
@@ -86,7 +86,7 @@
 
 .metrics dt {
   color: var(--text-muted);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
 }
 
 .metrics dd {
@@ -103,7 +103,7 @@
   border: 1px solid color-mix(in srgb, var(--color-warning) 35%, var(--border-soft));
   background: color-mix(in srgb, var(--color-warning) 10%, var(--surface-soft));
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   line-height: 1.4;
 }
 
@@ -115,7 +115,7 @@
 
 .boqPreviewTitle {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 700;
   color: var(--text-strong);
 }
@@ -139,7 +139,7 @@
   gap: var(--space-2);
   padding: var(--space-2);
   border-bottom: 1px solid var(--border-soft);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   line-height: 1.35;
 }
 
@@ -179,7 +179,7 @@
 .boqMore {
   margin: 0;
   color: var(--text-muted);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
 }
 
 .issues {
@@ -191,7 +191,7 @@
 .clear,
 .hint {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   line-height: 1.45;
 }
 
@@ -226,7 +226,7 @@
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
   font: inherit;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 700;
   cursor: pointer;
 }
@@ -257,7 +257,7 @@
   border: 1px solid var(--border-soft);
   background: var(--surface-soft);
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   line-height: 1.4;
 }
 
@@ -273,7 +273,7 @@
 
 .handoffLegend {
   padding: 0 var(--space-1);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 700;
   color: var(--text-strong);
 }
@@ -282,7 +282,7 @@
   display: grid;
   gap: var(--space-1);
   min-width: 0;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--text-muted);
 }
 
@@ -297,7 +297,7 @@
   background: var(--surface-panel);
   color: var(--text-strong);
   font: inherit;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
 }
 
 .field textarea {
@@ -309,7 +309,7 @@
   display: flex;
   align-items: flex-start;
   gap: var(--space-2);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   line-height: 1.4;
   color: var(--text-muted);
 }
@@ -327,14 +327,14 @@
   background: color-mix(in srgb, var(--color-primary) 88%, black);
   color: var(--text-inverse);
   font: inherit;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 700;
   cursor: pointer;
 }
 
 .reference {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--color-success);
   word-break: break-all;
 }

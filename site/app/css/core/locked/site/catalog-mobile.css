@@ -46,7 +46,7 @@
     justify-content: center;
     min-height: 2.75rem;
     padding-inline: 0.75rem;
-    font-size: 0.75rem;
+    font-size: var(--type-label-size);
   }
 
   .pdp-page .pdp-detail-shell {
@@ -113,7 +113,7 @@
   .catalog-card--compact .catalog-card__quote-btn {
     min-height: 2.5rem;
     padding-block: 0.5rem;
-    font-size: 0.6875rem;
+    font-size: var(--type-tiny-size);
   }
 
   .catalog-card--compact .catalog-card__compare {
@@ -130,6 +130,6 @@
 
 @media (width >= theme(--breakpoint-sm)) {
   .catalog-card--compact .catalog-card__quote-btn {
-    font-size: 0.75rem;
+    font-size: var(--type-label-size);
   }
 }

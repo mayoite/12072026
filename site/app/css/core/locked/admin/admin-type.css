@@ -31,7 +31,7 @@
 
 .admin-type-label {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -51,27 +51,27 @@
 
 .admin-type-meta {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   line-height: 1.45;
   color: var(--text-muted);
 }
 
 .admin-type-soft {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   line-height: 1.4;
   color: var(--text-soft, var(--text-muted));
 }
 
 .admin-type-code {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--text-body);
 }
 
 .admin-type-code--strong {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--text-strong);
 }
 
@@ -120,7 +120,7 @@
 
 .admin-panel__intro {
   margin: 0.25rem 0 0;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   line-height: 1.45;
   color: var(--text-muted);
   font-weight: 400;
@@ -159,7 +159,7 @@
 
 .admin-list-row__meta {
   margin: 0.15rem 0 0;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--text-soft, var(--text-muted));
 }
 
@@ -198,7 +198,7 @@
 
 .admin-field-group__legend {
   padding: 0 0.25rem;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -207,7 +207,7 @@
 
 .admin-field__hint {
   margin: 0.2rem 0 0;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--text-soft, var(--text-muted));
 }
 
@@ -231,7 +231,7 @@
 .admin-field__control--textarea-code {
   min-height: 5.5rem;
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
 }
 
 /* ── Switch (feature flags) ── */

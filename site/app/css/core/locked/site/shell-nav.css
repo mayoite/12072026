@@ -34,7 +34,7 @@
 }
 
 .shell-dark-chip--label {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: var(--font-weight-copy-semibold);
   letter-spacing: 0.06em;
   text-transform: uppercase;

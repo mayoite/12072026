@@ -110,12 +110,12 @@
 
 .host :global(.dv-tabs-and-actions-container) {
   min-height: 1.75rem;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
 }
 
 .host :global(.dv-tab) {
   font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
 }

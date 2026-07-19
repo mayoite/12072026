@@ -108,7 +108,7 @@
   display: grid;
   gap: 0.25rem;
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   text-transform: capitalize;
 }
 

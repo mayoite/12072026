@@ -35,13 +35,13 @@
 .admin-svg-inventory-status__chips .admin-badge {
   text-transform: none;
   letter-spacing: 0.02em;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 700;
   padding: 0.2rem 0.55rem;
 }
 
 .admin-svg-inventory-status__total {
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   color: var(--text-muted);
   margin-inline-start: 0.15rem;
 }
@@ -242,7 +242,7 @@
   .admin-svg-inventory-table td[data-label="Updated"] {
     font-variant-numeric: tabular-nums;
     color: var(--text-muted);
-    font-size: 0.8125rem;
+    font-size: var(--type-small-size);
   }
 
   .admin-svg-inventory-row .admin-badge {
@@ -290,7 +290,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.15rem 0;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   color: var(--text-muted);
   margin: 0;
 }
@@ -303,7 +303,7 @@
   justify-content: space-between;
   gap: 0.5rem;
   flex-wrap: wrap;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   color: var(--text-muted);
   padding: 0.35rem 0.5rem 0.5rem;
 }
@@ -323,7 +323,7 @@
   cursor: pointer;
   list-style: none;
   color: var(--text-muted);
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 600;
   letter-spacing: 0.02em;
   position: relative;

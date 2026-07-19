@@ -58,7 +58,7 @@
 }
 
 @utility catalog-toolbar__eyebrow {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   text-transform: uppercase;
   color: var(--text-muted);
   letter-spacing: 0.16em;
@@ -73,7 +73,7 @@
 }
 
 @utility catalog-toolbar__results {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 500;
   white-space: nowrap;
   color: var(--text-muted);
@@ -239,7 +239,7 @@
   gap: 0.375rem;
   border-radius: var(--radius-pill);
   padding: 0.25rem 0.625rem;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--text-inverse);
   background: var(--color-primary);
   transition-property: opacity;

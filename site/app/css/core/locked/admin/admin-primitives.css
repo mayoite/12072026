@@ -178,7 +178,7 @@
 }
 
 .admin-field__unit {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 400;
   color: var(--text-muted);
 }
@@ -206,7 +206,7 @@
 
 .admin-field__control--mono {
   font-family: var(--font-mono, monospace);
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
 }
 
 .admin-field--search .admin-field__control,
@@ -235,7 +235,7 @@
 
 .admin-panel__header {
   padding: 0.6rem 0.875rem;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -257,7 +257,7 @@
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.8125rem; /* denser ops tables */
+  font-size: var(--type-small-size); /* denser ops tables */
 }
 
 .admin-table th,
@@ -270,7 +270,7 @@
 .admin-table th {
   font-weight: 700;
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -282,7 +282,7 @@
 
 .admin-table__secondary {
   color: var(--text-muted);
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
 }
 
 .admin-table__group {
@@ -340,7 +340,7 @@
 
 .admin-preformatted {
   font-family: var(--font-mono, monospace);
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   white-space: pre-wrap;
   word-break: break-all;
 }
@@ -392,7 +392,7 @@
   border: 1px solid var(--border-soft);
   background: var(--surface-soft, var(--color-white-150));
   font-family: var(--font-mono, monospace);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--text-strong);
   text-align: start;
 }
@@ -580,13 +580,13 @@
 }
 
 .admin-kpi__label {
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 700;
   color: var(--text-strong);
 }
 
 .admin-kpi__hint {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--text-muted);
   flex: 1 1 auto;
 }
@@ -595,7 +595,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 600;
   color: var(--color-primary);
 }
@@ -697,7 +697,7 @@
   min-height: 2.25rem;
   padding: 0.35rem 0.85rem;
   border-radius: calc(var(--radius-sm) - 0.1rem);
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 600;
   color: var(--text-muted);
   text-decoration: none;
@@ -847,7 +847,7 @@
 }
 
 .admin-feedback {
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   color: var(--text-muted);
 }
 
@@ -902,7 +902,7 @@
 }
 
 .admin-number-stepper__unit {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--text-muted);
   margin-left: 0.25rem;
 }

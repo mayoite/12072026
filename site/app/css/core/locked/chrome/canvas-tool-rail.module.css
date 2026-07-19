@@ -221,7 +221,7 @@
   display: block;
   padding: 0.4rem 0.55rem;
   border-radius: var(--radius-sm, 0.25rem);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--text-body);
   cursor: pointer;
   outline: none;
@@ -479,7 +479,7 @@
 .tooltipMeta {
   display: block;
   margin-top: 0.35rem;
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 600;
   color: var(--color-primary);
 }

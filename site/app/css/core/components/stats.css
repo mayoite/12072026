@@ -64,7 +64,7 @@
   align-items: center;
   justify-content: space-between;
   color: var(--text-muted);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 500;
   letter-spacing: 0.04em;
   line-height: 1.35;
@@ -75,7 +75,7 @@
   background: var(--surface-soft);
   padding: 0.125rem 0.5rem;
   color: var(--text-body);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 500;
   letter-spacing: 0.04em;
   line-height: 1.35;
@@ -83,7 +83,7 @@
 
 .shell-search-kind {
   color: var(--text-subtle);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: var(--font-weight-copy-semibold);
   letter-spacing: 0.14em;
   line-height: 1.25;
@@ -92,7 +92,7 @@
 
 .shell-search-note {
   color: var(--text-muted);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 500;
   letter-spacing: 0.04em;
   line-height: 1.35;
@@ -100,7 +100,7 @@
 
 .shell-utility-copy {
   color: var(--text-subtle);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 500;
   letter-spacing: 0.04em;
   line-height: 1.35;
@@ -111,7 +111,7 @@
   align-items: center;
   gap: 1.25rem;
   color: var(--text-muted);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 500;
   letter-spacing: 0.04em;
   line-height: 1.35;
@@ -119,7 +119,7 @@
 
 .shell-count {
   color: var(--text-subtle);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 500;
   letter-spacing: 0.04em;
   line-height: 1.35;

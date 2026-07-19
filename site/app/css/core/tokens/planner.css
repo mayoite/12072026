@@ -1,4 +1,5 @@
-/* Planner semantic contract. Components consume these tokens, never palette values directly. */
+/* Planner semantic contract. Components consume these tokens, never palette values directly.
+   Runtime-only vars (not Tailwind @theme utilities), so they stay in :root. */
 :root {
   /*
    * CAD paper (drawing area) — always light, like AutoCAD model space.
