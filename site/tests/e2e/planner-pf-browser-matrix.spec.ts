@@ -18,11 +18,9 @@ import { expect, test, type Page } from "@playwright/test";
 
 import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
 import {
-  clickOnCanvas,
   dragOnCanvas,
   PLANNER_FABRIC_STAGE,
   PLANNER_PRIMARY_CANVAS,
-  selectPlannerTool,
   waitForPlannerCanvas,
 } from "./plannerCanvasHelpers";
 
@@ -89,7 +87,7 @@ test.describe("PF browser matrix (guest)", () => {
     await expect(dimension).toBeVisible({ timeout: 15_000 });
     // If tier attribute exists, must be live
     const tier = await dimension.getAttribute("data-tier").catch(() => null);
-    if (tier != null) {
+    if (tier !== null) {
       expect(tier).toBe("live");
       expect(await dimension.getAttribute("data-deferred")).not.toBe("true");
     }

@@ -712,12 +712,6 @@ export function OOPlannerWorkspace({
     [underlayCalibrateSession, workspaceCanvas],
   );
 
-  const handleStartTemplate = useCallback(() => {
-    setActiveTool("room");
-    armedToolRef.current = "room";
-    setWorkspaceMessage("Enter exact room dimensions.");
-  }, []);
-
   const handleCreateExactRoom = useCallback(
     ({ widthMm, depthMm, wallThicknessMm }: ExactRoomDimensions) => {
       workspaceCanvas.updateProject((project) => {

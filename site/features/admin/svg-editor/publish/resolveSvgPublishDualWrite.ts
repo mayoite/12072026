@@ -121,8 +121,9 @@ export async function resolveSvgPublishDualWriteDeps(options?: {
     };
   }
 
+  // No DB dual-write unless the pointer column is present (disk stays authority).
   const schema =
-    options?.schemaProbe != null
+    options?.schemaProbe !== undefined
       ? await options.schemaProbe()
       : await probeProductsSvgPointerColumn();
   if (!schema.ok) {

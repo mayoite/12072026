@@ -142,7 +142,7 @@ export const InventoryPanel = memo(function InventoryPanel({
 }: InventoryPanelProps) {
   const id = useId();
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const siteProductFocusAppliedRef = useRef<string | null>(null);
+  const siteProductNotifyRef = useRef<string | null>(null);
   const hasExternalCatalog = catalogItems !== undefined;
   const productMode = officeSystemsInventory ? "office-systems" : "full";
   const roomGroups = useMemo(
@@ -172,6 +172,8 @@ export const InventoryPanel = memo(function InventoryPanel({
   const [compareOpen, setCompareOpen] = useState(false);
   /** Advanced attribute filters stay collapsed on first paint (guest / office-systems). */
   const [moreFiltersExpanded, setMoreFiltersExpanded] = useState(false);
+  /** Last siteProduct slug whose panel selection was applied (render-time adjust). */
+  const [appliedFocusSlug, setAppliedFocusSlug] = useState<string | null>(null);
 
   const indexedItems = useMemo(() => {
     // Honest empty when remote is empty — never inject demo-sofa / OFL pollution (BQ4/P18).
@@ -206,35 +208,50 @@ export const InventoryPanel = memo(function InventoryPanel({
   }, []);
 
   // P11 / S7: siteProduct → select/focus matching brand plan item when present.
+  // Adjust panel state during render (React “adjusting state when props change”);
+  // DOM scroll + parent notify stay in an effect (external systems).
+  const focusSlug =
+    typeof focusProductSlug === "string" ? focusProductSlug.trim() : "";
+  const siteProductMatch =
+    focusSlug && indexedItems.length > 0
+      ? matchCatalogItemBySiteProduct(indexedItems, focusSlug)
+      : null;
+
+  if (
+    focusSlug &&
+    indexedItems.length > 0 &&
+    appliedFocusSlug !== focusSlug
+  ) {
+    setAppliedFocusSlug(focusSlug);
+    if (siteProductMatch) {
+      setSelectedItemId(siteProductMatch.item.id);
+      setFocusedIndex(0);
+      setState((current) => {
+        let next = reduceInventoryCommand(current, {
+          type: "SET_SEARCH_QUERY",
+          query: siteProductMatch.item.slug || siteProductMatch.item.name,
+        });
+        next = reduceInventoryCommand(next, {
+          type: "SET_FOCUSED_ITEM",
+          item: { itemId: siteProductMatch.item.id, variantId: null },
+        });
+        return reduceInventoryCommand(next, {
+          type: "SET_SCROLL_ANCHOR",
+          item: { itemId: siteProductMatch.item.id, variantId: null },
+        });
+      });
+    }
+  }
+
   useEffect(() => {
-    const slug =
-      typeof focusProductSlug === "string" ? focusProductSlug.trim() : "";
-    if (!slug) return;
-    if (indexedItems.length === 0) return;
-    if (siteProductFocusAppliedRef.current === slug) return;
+    if (!focusSlug || !siteProductMatch) return;
+    if (siteProductNotifyRef.current === focusSlug) return;
+    siteProductNotifyRef.current = focusSlug;
 
-    const match = matchCatalogItemBySiteProduct(indexedItems, slug);
-    siteProductFocusAppliedRef.current = slug;
-    if (!match) return;
-
-    setSelectedItemId(match.item.id);
-    setFocusedIndex(0);
-    dispatch({
-      type: "SET_SEARCH_QUERY",
-      query: match.item.slug || match.item.name,
-    });
-    dispatch({
-      type: "SET_FOCUSED_ITEM",
-      item: { itemId: match.item.id, variantId: null },
-    });
-    dispatch({
-      type: "SET_SCROLL_ANCHOR",
-      item: { itemId: match.item.id, variantId: null },
-    });
-    onItemSelect?.(match.item, null);
+    onItemSelect?.(siteProductMatch.item, null);
 
     // Scroll after paint so the card is in the DOM under the search filter.
-    const itemId = match.item.id;
+    const itemId = siteProductMatch.item.id;
     const frame = window.requestAnimationFrame(() => {
       const safeId =
         typeof CSS !== "undefined" && typeof CSS.escape === "function"
@@ -250,7 +267,7 @@ export const InventoryPanel = memo(function InventoryPanel({
       }
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [dispatch, focusProductSlug, indexedItems, onItemSelect]);
+  }, [focusSlug, siteProductMatch, onItemSelect]);
 
   // Handle search input change
   const handleSearchValueChange = useCallback(

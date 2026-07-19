@@ -240,7 +240,7 @@ async function collectPhoneMetrics(page: Page): Promise<PhoneChromeMetrics> {
     topChromeHeight: Math.round(top.height * 10) / 10,
     topChromeSelectors: top.selectors,
     workflowStripHeight:
-      top.workflowHeight != null
+      typeof top.workflowHeight === "number"
         ? Math.round(top.workflowHeight * 10) / 10
         : null,
     canvasHeight: Math.round(canvas.height * 10) / 10,
