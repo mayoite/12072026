@@ -4,11 +4,13 @@ import {
   getDbReleaseAuthorityDualWriteBlockError,
   getSvgReleaseAuthority,
   isDbSvgReleaseAuthority,
+  isSvgCatalogDiskWriteEnabled,
 } from "@/features/admin/svg-editor/publish/svgReleaseAuthority";
 
 describe("svgReleaseAuthority", () => {
   afterEach(() => {
     delete process.env.SVG_RELEASE_AUTHORITY;
+    delete process.env.SVG_DISK_WRITE;
   });
 
   it("defaults to disk when unset or unknown", () => {
@@ -93,5 +95,20 @@ describe("svgReleaseAuthority", () => {
         env: { SVG_RELEASE_AUTHORITY: "db" },
       }),
     ).toBe("DB release authority requires reachable R2 catalog storage");
+  });
+
+  it("isSvgCatalogDiskWriteEnabled: off under db authority unless forced on", () => {
+    expect(isSvgCatalogDiskWriteEnabled({})).toBe(true);
+    expect(
+      isSvgCatalogDiskWriteEnabled({ SVG_RELEASE_AUTHORITY: "db" }),
+    ).toBe(false);
+    expect(
+      isSvgCatalogDiskWriteEnabled({
+        SVG_RELEASE_AUTHORITY: "db",
+        SVG_DISK_WRITE: "1",
+      }),
+    ).toBe(true);
+    expect(isSvgCatalogDiskWriteEnabled({ SVG_DISK_WRITE: "0" })).toBe(false);
+    expect(isSvgCatalogDiskWriteEnabled({ SVG_DISK_WRITE: "off" })).toBe(false);
   });
 });
