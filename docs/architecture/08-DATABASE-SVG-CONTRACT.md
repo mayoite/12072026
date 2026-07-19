@@ -87,9 +87,9 @@ Draft rows are private.
 
 They are never returned by public catalog routes.
 
-### `published_svg_revisions`
+### `published_svg_revisions` (live: `svg_revisions`)
 
-Published revisions are immutable.
+Published revisions are immutable. Live Products DB table: **`svg_revisions`** (see `docs/database/SCHEMA.md`).
 
 Required fields are:
 
@@ -115,7 +115,7 @@ The database enforces the revision and checksum rules required for idempotency.
 
 Released SVG text is never edited in place.
 
-### `svg_artifacts`
+### `svg_artifacts` (live: `svg_revision_artifacts`)
 
 Artifact rows implement the live `SvgArtifactRecord` contract.
 

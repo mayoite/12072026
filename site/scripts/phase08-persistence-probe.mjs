@@ -11,7 +11,7 @@ import { resolve } from "node:path";
 
 const siteRoot = resolve(process.cwd());
 const vitestCmd =
-  "pnpm exec vitest run tests/unit/features/planner/project/phase08-persistence.test.ts tests/unit/admin/svg-editor/persistBlockDescriptor.test.ts --config vitest.config.ts";
+  "pnpm exec vitest run tests/unit/features/planner/phase08-persistence.test.ts tests/unit/features/admin/svg-editor/storage/persistBlockDescriptor.test.ts --config vitest.config.ts";
 
 async function main() {
   const capturedAt = new Date().toISOString();

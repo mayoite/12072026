@@ -1,31 +1,17 @@
 # Documentation index
 
-**Budget: ≤24 live files under `docs/`.** Process → `Agents/`. Execution → `plan/`. Commands → `Readme.md`.  
-Allowed exception inside budget: `site/OUTSTANDING-ITEMS.md` (thin index → track CHECKLISTs; not a fifth plan file).
+**Budget: ≤25 live files under `docs/`.** Process → `Agents/`. Execution → `plan/`. Commands → `Readme.md`.
 
 **How to operate (ship discipline):** [`approach.md`](./approach.md) — factory loop first; no soft PASS; hardcoding/CSS gates.
 
-Start: `architecture/README.md` (vision + **current vs target** table). Live SVG = disk; dual-write optional when Products DB + R2 ready ≠ cutover; target = Products DB (`08-DATABASE-SVG-CONTRACT.md`). Active cutover: `../Failures.md`. One blockers file per track: `../agent-reports/{PLANNER,ADMIN,SITE,TECH-STACK}.md`.
+Start: `architecture/README.md` (vision + **current vs target** table). **SVG authority:** code default = disk; local dev may set `SVG_RELEASE_AUTHORITY=db` in `.env.local`; full cutover OPEN in `../Failures.md`. Dual-write optional when Products DB + R2 ready ≠ cutover. Target contract: `08-DATABASE-SVG-CONTRACT.md`. One blockers file per track: `../agent-reports/{PLANNER,ADMIN,SITE,TECH-STACK}.md`.
 
-## Architecture (13)
+## Architecture (14)
 
 | Doc | Content |
 |---|---|
 | `architecture/README.md` | Vision, tracks, **current vs target**, benchmarks |
-| `architecture/01-MODULE-LAYOUT.md` | Code ownership, product roots |
-| `architecture/02-DOMAINS.md` | Site, Admin, Planner, contracts |
-| `architecture/03-MODULE-UI-CONTRACT.md` | Interface quality |
-| `architecture/04-CSS-SOLUTION.md` | Styling ownership (`locked/chrome`, `locked/svg`, …) |
-| `architecture/05-DATA_FLOW.md` | Live disk path + target DB flow, BOQ |
-| `architecture/06-UI-BENCHMARK.md` | Planner acceptance |
-| `architecture/07-ADMIN-UI-BENCHMARK.md` | Admin SVG (freehand + parametric) acceptance |
-| `architecture/08-DATABASE-SVG-CONTRACT.md` | DB SVG publication contract |
-| `architecture/09-SITE-UI-BENCHMARK.md` | Site acceptance |
-| `architecture/10-SECURITY-BENCHMARK.md` | Security acceptance |
-| `architecture/11-RUNTIME-ARCHITECTURE.md` | Live runtime, boundaries, Planner flow |
-| `architecture/12-DEPENDENCIES-ENGINES.md` | Engines, i18n, persistence, CSS homes |
-
-(Removed wrong path: `docs/Lockedfiles/` — was a one-file oddity.)
+| `architecture/01-MODULE-LAYOUT.md` through `13-PARAMETRIC-PRODUCT-FACTORY.md` | Module layout, domains, UI contracts, CSS, data flow, benchmarks, runtime, engines, parametric factory |
 
 ## Technical (6)
 
@@ -38,7 +24,7 @@ Start: `architecture/README.md` (vision + **current vs target** table). Live SVG
 | `database/RESTORE-RUNBOOK.md` | Backup, restore, degraded mode |
 | *(execution, not under docs/)* `plan/TechStack/CHECKLIST.md` + `FEATURES.md` | Stack health checklist + code map — install, gates, deps, CI |
 
-## Site package maps (5) — `docs/site/`
+## Site package maps (4) — `docs/site/`
 
 Product code stays in `site/`. Package docs live here only.
 
@@ -48,6 +34,5 @@ Product code stays in `site/`. Package docs live here only.
 | `site/features.md` | Planner / site / admin feature maps |
 | `site/tests.md` | Name-mirror rules + inventory counts |
 | `site/route-classification.md` | Generated live page/API routes |
-| `site/OUTSTANDING-ITEMS.md` | Thin outstanding index → `plan/<Track>/` (K1–K3 unit-green; C3/C4 browser OPEN; not PASS proof) |
 
 Execution: `../plan/README.md`. Commands / ops / testing: `../Readme.md`.

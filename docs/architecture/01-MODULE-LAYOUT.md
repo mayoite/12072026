@@ -28,7 +28,7 @@
 | Site routes | `site/app/(site)/` |
 | Site UI / data / SEO | `site/components/home/`, `site/features/site/data/`, `site/features/site/assistant/` |
 | Site i18n | `site/i18n/` |
-| Planner workspace UI | `site/features/planner/editor/`, `canvas/`, `3d/`, **`project/`** |
+| Planner workspace UI | `site/features/planner/editor/`, `canvas/`, `3d/` |
 | Planner routes | `site/app/planner/` (`/guest`, `/canvas`; fabric/open3d 301 → canvas) |
 | Admin | `site/app/admin/`, `site/features/admin/` |
 | CRM / ops UI | `site/app/admin/crm/`, `site/app/admin/customer-queries/` + `features/crm/`, `features/ops/` |
@@ -39,15 +39,18 @@
 | Supabase clients | `@/platform/supabase/*` |
 | Analytics contract | `site/lib/analytics/conversionContract.ts` |
 
-## Planner dual trees (honest)
+## Planner layout (honest)
 
-| Tree | Role |
+| Path | Role |
 |---|---|
-| `features/planner/project/` | **Live canvas host** document model |
-| `features/planner/catalog-api/` | Panel, bridges, resolvers (parallel API surface) |
-| `features/planner/cloud-store/` | Cloud saves, domain stores (parallel) |
+| `features/planner/model/` | **Document kernel** — types, actions, operations, invariants |
+| `features/planner/cloud-store/` | Workspace Zustand stores, cloud saves, mutations |
+| `features/planner/persistence/` | Autosave, hydration, guest/member save wiring |
+| `features/planner/store/` | UI preferences and history (not the plan document) |
+| `features/planner/catalog-api/` | Catalog panel, bridges, resolvers (API surface) |
+| `features/planner/editor/`, `canvas/`, `3d/` | Live workspace host UI |
 
-Do not invent a third tree. Prefer consolidating duplicates over growing both.
+`features/planner/project/` was removed (lift complete). Do not restore it as a parallel tree.
 
 ## Tests
 

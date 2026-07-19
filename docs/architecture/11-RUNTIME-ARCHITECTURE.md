@@ -93,13 +93,12 @@ Protected plan APIs require authenticated access where configured.
 ## Catalog and SVG authority
 
 Marketing products and managed Planner products use the Products database.
-Released SVG authoring is still disk-authoritative.
-Live SVG descriptors are under `site/inventory/descriptors/`.
-Live SVG bytes are under `site/public/svg-catalog/`.
+Released SVG authoring: code default is disk (`site/inventory/descriptors/`, `site/public/svg-catalog/`).
+Local dev may set `SVG_RELEASE_AUTHORITY=db` in repo-root `.env.local` (see `Failures.md`).
 Dual-write injects only when Products DB is configured and R2 ListObjects succeeds.
 Dead R2 at the resolve gate skips dual-write without rolling back disk.
 Enabled dual-write is not sole release authority — **not** cutover.
-Planner `svg-blocks` is DB-aware with disk fallback; artifact-byte authority is target-only.
+Planner `svg-blocks` is DB-aware with disk fallback when authority is disk.
 
 Products database plus immutable R2 artifacts is the target authority.
 See [08-DATABASE-SVG-CONTRACT.md](08-DATABASE-SVG-CONTRACT.md).

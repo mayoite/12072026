@@ -1,7 +1,7 @@
 # Admin — reality and stack
 
 **Status:** policy locked with owner  
-**Pair:** `CHECKLIST.md` Part C · `IMPLEMENTATION-PLAN.md` · `FEATURES.md` · `../../Agents.md`
+**Pair:** `CHECKLIST.md` Part C · `IMPLEMENTATION-PLAN.md` · `FEATURES.md` · `../../AGENTS.md`
 **Factory contract:** `../../docs/architecture/13-PARAMETRIC-PRODUCT-FACTORY.md`
 
 **Business reality:** orders need **exact** configs; photos in `public/images` change per client and cannot close alone; cannot staff five designers per permutation. Build **fields → drawer → SVG** and grow drawers as jobs need them.

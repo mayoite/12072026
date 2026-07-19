@@ -127,7 +127,7 @@ Re-run: `pnpm --filter oando-site run db:advisors` · `:admin`. Keep SECURITY ER
 
 This applies after the SVG migration exists.
 
-- Enable RLS on `block_descriptors`, `published_svg_revisions`, and `svg_artifacts`.
+- Enable RLS on `block_descriptors`, `svg_revisions`, and `svg_revision_artifacts` (live migration names).
 - Deny direct public access to drafts and revision metadata.
 - Keep Products DB SECURITY ERROR count at zero.
 - Index product, definition, revision, artifact, and release-pointer foreign keys.

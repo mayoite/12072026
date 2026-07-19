@@ -1,5 +1,7 @@
 # Repository agent rules
 
+**Root authority:** `../AGENTS.md` wins on any conflict. This file adds detail; handbooks live under `Agents/01…07`.
+
 Read this file before each task.
 These rules cover the whole repository.
 
@@ -59,9 +61,8 @@ These rules cover the whole repository.
 - Do not write handwritten `any`.
 - Keep secrets in `.env.local` only.
 - Never open, edit, or cite `PROTECTED/`.
-- Treat `websites/` and `archive/` as references only.
-- Save finished, verified slices in clear commits.
-- Push verified slices when they should land.
+- Treat `websites/` and `.archive/` as references only.
+- Commit or push only when the owner explicitly asks.
 - Never force-push or rewrite shared history.
 
 ## Verification
@@ -105,9 +106,9 @@ These rules cover the whole repository.
 - Maker.js owns parametric brand geometry.
 - Do not create parallel canvas, catalog, or Planner trees.
 - Preserve stable identity and millimetre units.
-- Disk remains live SVG authority until verified cutover.
-- Products DB plus R2 is the durable target.
-- Do not claim DB authority before verified cutover.
+- Code default SVG authority: disk (`site/inventory/descriptors/` + `site/public/svg-catalog/`).
+- Local dev may set `SVG_RELEASE_AUTHORITY=db` in `.env.local`; cutover status lives in `../Failures.md`.
+- Products DB plus R2 is the durable target. Do not claim full cutover before `Failures.md` closes it.
 
 ## CSS and documentation
 

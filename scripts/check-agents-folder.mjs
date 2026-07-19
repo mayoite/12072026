@@ -4,7 +4,23 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dir = path.join(root, "Agents");
-const allowed = new Set(["INDEX.md"]);
+
+/** Must match `AGENTS.md` handbook routing + workflow roles. */
+const allowed = new Set([
+  "INDEX.md",
+  "01 — Standard.md",
+  "02 — Testing.md",
+  "03 — Browser.md",
+  "04 — Failures.md",
+  "05 — Documentation.md",
+  "06 — Architecture.md",
+  "07 — CSS.md",
+  "WORKFLOW-INDEX.md",
+  "A — UI Researcher.md",
+  "B — Executor.md",
+  "C — Critic.md",
+]);
+
 const files = fs.readdirSync(dir).filter((file) => file.endsWith(".md"));
 const violations = [];
 

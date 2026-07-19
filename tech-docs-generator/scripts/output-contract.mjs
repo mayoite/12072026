@@ -46,7 +46,7 @@ export const LIVE_WATCH_ROOTS = [
   'Readme.md',
   'Failures.md',
   'AGENTS.md',
-  'CLAUDE.md',
+  'Testing-handbook.md',
 ]
 
 function isWithinRoot(root, candidate) {

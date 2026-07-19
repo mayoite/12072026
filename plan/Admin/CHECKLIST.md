@@ -5,7 +5,7 @@
 **This file:** evidence (Part A) + phases A0–A14 (Part B) + **order factory** Part C.  
 **Blockers:** `../../Failures.md` — **owner blockers NONE**.  
 **Tasks:** `IMPLEMENTATION-PLAN.md` · **Stack:** `REALITY-AND-STACK.md`  
-**Owner rules:** `../../Agents.md`
+**Owner rules:** `../../AGENTS.md`
 
 **How to read:** Part C first (ship) → IMPLEMENTATION-PLAN → FEATURES → REALITY.  
 **Status honesty:** unit green + browser open = **PARTIAL**, not PASS.  

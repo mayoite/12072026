@@ -1,8 +1,4 @@
-# Tech stack
+# TechStack — track notes (not proof)
 
-**Plan:** `plan/TechStack/CHECKLIST.md` + `FEATURES.md` only.  
-**Engines fact:** `docs/architecture/12-DEPENDENCIES-ENGINES.md`.  
-**Not proof.**
-
-**Open:** full `release:gate` not claimed green · DB-SVG cutover OPEN (disk authority).  
-**Engines:** Fabric 2D · Three/R3F · Excalidraw draft · Maker.js parametric pen (Admin form/CLI/publish → `drawLinearDesk`; K1 unit-green; K3/C3 browser OPEN).
+**Execution:** `plan/TechStack/CHECKLIST.md` · `FEATURES.md`  
+**Blockers:** `Failures.md` only.

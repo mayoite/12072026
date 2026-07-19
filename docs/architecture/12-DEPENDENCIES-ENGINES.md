@@ -63,7 +63,7 @@ Policy: `Agents/INDEX.md`, `docs/architecture/04-CSS-SOLUTION.md`.
 |------|------|
 | DB | Drizzle + `postgres` for Products / catalog DB work |
 | Object storage | S3-compatible client → R2 for target artifacts |
-| **Live SVG** | **Disk** — `inventory/descriptors/`, `public/svg-catalog/` |
+| **Live SVG** | Code default **disk** — `inventory/descriptors/`, `public/svg-catalog/`. Local dev may flip `SVG_RELEASE_AUTHORITY=db`. Cutover status: `Failures.md`. |
 | Dual-write | Optional when Products DB + R2 probe + pointer column (`resolveSvgPublishDualWriteDeps`) — **not** cutover |
 | Cutover | Parent-seen place proof, then `SVG_RELEASE_AUTHORITY=db`. See `08-DATABASE-SVG-CONTRACT.md`, `Failures.md` |
 
@@ -80,4 +80,4 @@ Published SVG must be owned, licensed, or Oando-created. No agent `param-proof` 
 | C4 guest place + BOQ | Required for factory |
 | DB-SVG cutover | After C4 place proof |
 
-Operate per `docs/approach.md`. Process floor: `Agents.md`.
+Operate per `docs/approach.md`. Process floor: `AGENTS.md`.

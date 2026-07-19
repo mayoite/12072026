@@ -24,7 +24,7 @@ try {
     .map(f => path.relative(path.join(__dirname, '..'), f).replace(/\\/g, '/'));
 
   // 2. Get executed test files from vitest-results.json
-  const resultsData = JSON.parse(fs.readFileSync(path.join(__dirname, '../results/tests/vitest-results.json'), 'utf8'));
+  const resultsData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../results/tests/vitest-results.json'), 'utf8'));
   const executedFiles = resultsData.testResults.map(tr => path.relative(path.join(__dirname, '..'), tr.name).replace(/\\/g, '/'));
 
   // 3. Diff the two sets

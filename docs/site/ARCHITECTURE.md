@@ -13,8 +13,8 @@ Feature maps: `features.md`. Tests: `tests.md`. Live routes: `route-classificati
 |---|---|
 | Public marketing page or SEO | `app/(site)/` → `components/home/`, `components/site/`, `features/site/data/`, `i18n/` |
 | Site product listing / filters | `lib/catalog/site/` (facade) → `lib/catalog/` (logic) |
-| Planner guest/member workspace UI | `app/planner/` → `features/planner/editor/`, `canvas/`, `3d/`, **`project/`** |
-| Planner document / canvas state | **`features/planner/project/`** (`model/`, `store/`, `persistence/`, `catalog/`) |
+| Planner guest/member workspace UI | `app/planner/` → `features/planner/editor/`, `canvas/`, `3d/` |
+| Planner document / canvas state | `features/planner/model/` (document kernel) + `features/planner/cloud-store/` (workspace Zustand) + `features/planner/persistence/` |
 | Planner save / review persistence API | `features/planner/cloud-store/` + `features/planner/persistence/` |
 | Admin SVG editor, publish, lifecycle | **`features/admin/svg-editor/`** |
 | Admin parametric linear desk (Part C) | `features/admin/svg-editor/parametric/` + planner `asset-engine/svg/parametric/` — **live Maker pen** (`drawLinearDesk`); template residual deprecated only |
@@ -76,7 +76,7 @@ Detail maps: **`features.md`**.
 | Marketing products | `lib/catalog/` + Products DB | `catalog_products` |
 | Site page access | `lib/catalog/site/` | Facade over `lib/catalog/` |
 | Planner placement | `features/planner/catalog-api/`, `features/planner/catalog/` | Released inventory consumer |
-| SVG symbols | `inventory/descriptors/`, `public/svg-catalog/` | Disk (live); versions as `{slug}.{n}.json` |
+| SVG symbols | `inventory/descriptors/`, `public/svg-catalog/` | Code default: disk; local dev may set `SVG_RELEASE_AUTHORITY=db` — see `Failures.md` |
 
 Publish: `features/admin/svg-editor/`. Path helper: `resolveBlockDescriptorsDir()` → `inventory/descriptors`.
 

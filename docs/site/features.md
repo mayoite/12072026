@@ -6,29 +6,24 @@ Routes stay in `app/`. Behavior lives under `features/`. Package map: `ARCHITECT
 
 ## Planner (`features/planner/`)
 
-Routes: `app/planner/`. Live canvas host is **`project/`**.
+Routes: `app/planner/`. Live host: `editor/OOPlannerWorkspace.tsx` + `canvas/` + `3d/`.
 
 ### Live host
 
 | Path | Role |
 |------|------|
-| **`project/`** | Live plan document — model, placement catalog, store, persistence, export |
-| `editor/`, `canvas/`, `3d/` | Workspace UI tied to `project/` |
+| `model/` | Document kernel — types, actions, operations, wall contract |
+| `cloud-store/` | Workspace Zustand stores, cloud saves, review persistence |
+| `persistence/` | Autosave, hydration, guest/member save wiring |
+| `store/` | UI preferences and undo history (not the plan document) |
+| `catalog/` | Placement catalog loaders/sanitizers for the live host |
+| `editor/`, `canvas/`, `3d/` | Workspace UI tied to `model/` + `cloud-store/` |
 | `ui/` | Shared planner chrome widgets |
 
-**`project/` detail**
-
-| Area | Role |
-|------|------|
-| `model/` | Live project document types / scene |
-| `catalog/` | Placement catalog for the live host (SVG loader/sanitizer) |
-| `store/` | Live project store slice |
-| `persistence/` | Session / draft / autosave |
-| `shared/` | Export, document bridge, mesh contracts |
-| `cleanup/` | Import graph + asset classification |
+**Removed:** `project/` tree — do not reference or restore.
 
 **Live 2-D canvas:** Fabric from `features/planner/canvas/` (`PlannerFabricStage`).  
-Live routes: `/planner/guest`, `/planner/canvas` (not fabric/open3d — those 301 to canvas).
+Live routes: `/planner/guest`, `/planner/canvas` (fabric/open3d 301 → canvas).
 
 ### Placement catalog + SVG (live host)
 
@@ -41,13 +36,11 @@ Live routes: `/planner/guest`, `/planner/canvas` (not fabric/open3d — those 30
 
 Do not load from `block-descriptors/` (removed).
 
-### Parallel / API surfaces (not the guest/canvas plan host)
+### Parallel / API surfaces
 
 | Path | Role |
 |------|------|
 | **`catalog-api/`** | Catalog panel, bridges, ingest, resolvers |
-| **`cloud-store/`** | Cloud saves, review persistence, domain stores |
-| `model/` | Shared document types + canvas project document |
 | `onboarding/` | Project setup |
 | `shared/`, `lib/`, `hooks/`, `ai/`, `asset-engine/` | Export, geometry, AI, compile pipeline |
 
@@ -77,12 +70,13 @@ JSON, SVG, PNG, PDF, DXF from the document model (`shared/export/`).
 | Path | Status |
 |------|--------|
 | `features/planner/_archive/` | Deleted — never restore as live host |
+| `features/planner/project/` | Removed — lift complete; use `model/` + `cloud-store/` |
 | `app/planner/open3d` | Deleted — next.config 301 → `/planner/canvas` |
 | `/planner/fabric/**`, `/planner/open3d/**` | 301 → `/planner/canvas` |
 
 ### Tests
 
-Name-mirror under `tests/unit/features/planner/` (including `project/`, `catalog-api/`, `asset-engine/`).
+Name-mirror under `tests/unit/features/planner/` (including `model/`, `catalog-api/`, `asset-engine/`).
 
 ---
 

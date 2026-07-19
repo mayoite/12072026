@@ -60,7 +60,7 @@ const SETUP_FIELD_SHELL_STACK =
 const SETUP_FIELD_LABEL =
   "shrink-0 text-[0.8125rem] font-semibold text-[color:var(--text-body)]";
 const SETUP_FIELD_INPUT =
-  "min-h-9 min-w-0 w-full flex-1 border-none bg-transparent text-start text-[0.9375rem] font-medium text-[color:var(--text-strong)] outline-none";
+  "min-h-9 min-w-[6rem] w-full flex-1 border-none bg-transparent text-start text-[0.9375rem] font-medium text-[color:var(--text-strong)] outline-none";
 const SETUP_FIELDSET =
   "rounded-[var(--radius-md)] border border-[color:var(--border-soft)] bg-[color:var(--surface-soft)] p-4";
 

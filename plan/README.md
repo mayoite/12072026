@@ -17,7 +17,7 @@
 | **TechStack** | [`TechStack/CHECKLIST.md`](./TechStack/CHECKLIST.md) | [`TechStack/FEATURES.md`](./TechStack/FEATURES.md) |
 
 **Blockers:** [`Failures.md`](../Failures.md) — **owner blockers NONE**. Agent cutover/parametric work only.  
-**Owner rules:** [`AGENTS.md`](../Agents.md).
+**Owner rules:** [`AGENTS.md`](../AGENTS.md).
 
 ## Admin operating model (owner-aligned)
 

@@ -31,10 +31,10 @@ When docs and code differ, **code wins** until cutover is proven.
 
 | Area | Target | Live (2026-07-18) |
 |---|---|---|
-| Released SVG | Products DB + immutable R2 artifact bytes | **Disk** — `inventory/descriptors/`, `public/svg-catalog/` |
+| Released SVG | Products DB + immutable R2 artifact bytes | Code default **disk** — `inventory/descriptors/`, `public/svg-catalog/`; local dev may use `SVG_RELEASE_AUTHORITY=db` |
 | Admin publish | One DB transaction + product pointer | Disk first; dual-write **only** when Products DB + R2 probe + pointer column (`resolveSvgPublishDualWriteDeps`) |
-| Dual-write payload | Full revision + artifact bytes | When enabled: artifacts may write; **still not** sole release authority — enabled ≠ cutover |
-| Planner SVG read | DB revision bytes via API | `svg-blocks` DB-aware + disk fallback; published SVG gate still disk |
+| Dual-write payload | Full revision + artifact bytes | When enabled: artifacts may write; **still not** sole release authority unless env flipped — enabled ≠ cutover |
+| Planner SVG read | DB revision bytes via API | `svg-blocks` follows `getSvgReleaseAuthority()`; revision API when `db` |
 | Parametric pen | Maker only | **Live:** `drawLinearDesk` / form+CLI+publish. Freehand Excalidraw = draft stage only |
 | Admin studio chrome | Existing `AdminSvgDockHost` + Aria + Phosphor for freehand and factory modes | **Live:** freehand uses `AdminSvgDockHost`; parametric still uses a CSS grid + `CanvasToolRail` |
 | Marketing catalog | Products DB | Products DB — `catalog_products` |
@@ -47,9 +47,9 @@ Active cutover / blockers: `../../Failures.md`. Contract: `08-DATABASE-SVG-CONTR
 
 ## Boundaries (target)
 
-- Products DB: target catalog + SVG authority; **live SVG is disk** until cutover.
-- Admin: server-only publish transaction (target); disk write first (live).
-- Planner: server API import (target); disk descriptors (live) with DB-aware fallback.
+- Products DB: target catalog + SVG authority; code default is disk until full cutover (`Failures.md`).
+- Admin: server-only publish transaction (target); disk write first when authority is disk.
+- Planner: server API import (target); descriptor load follows release authority env.
 - Static files: fixtures, migration input, or **current live SVG** — never silent DB override after cutover.
 - Published SVG primary; `Block2D` only for load/missing.
 - BOQ branded and product-backed; no demo prices as commercial truth.

@@ -60,20 +60,20 @@ Gate list: `config/build/playwright-gate-specs.json` (must match `release:gate` 
 
 ## Inventory snapshot
 
-*Verified: 2026-07-14 (filesystem count). Refresh when structure changes.*
+*Verified: 2026-07-19 (filesystem count). Refresh when structure changes.*
 
 | Kind | Count |
 |------|------:|
-| Unit (`**/*.test.ts(x)`) | **1342** |
+| Unit (`**/*.test.ts(x)`) | **1387** |
 | Integration | **54** |
-| Playwright e2e (`**/*.spec.ts`) | **51** |
+| Playwright e2e (`**/*.spec.ts`) | **64** |
 | Helpers | ~5 |
 
 ### Unit by top folder
 
 | Path | Files |
 |------|------:|
-| `unit/features/` | 775 |
+| `unit/features/` | 819 |
 | `unit/scripts/` | 171 |
 | `unit/app/` | 169 |
 | `unit/lib/` | 121 |

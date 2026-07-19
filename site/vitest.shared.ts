@@ -67,7 +67,6 @@ export const VITEST_COMMON_EXCLUDE = [
   "**/tests/unit/planner-fabric-**",
   "**/tests/unit/planner-lib-fabric**",
   "**/tests/unit/planner-ai-fabric**",
-  "**/tests/integration/features/planner/project/**",
   "**/tests/unit/applySuggestedLayout**",
   "**/tests/unit/features/planner/3d/parity**",
   "**/tests/integration/planner-fabric-**",

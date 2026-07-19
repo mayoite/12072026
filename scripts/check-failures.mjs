@@ -7,7 +7,7 @@ const text = fs.readFileSync(path.join(root, "Failures.md"), "utf8");
 const forbidden = [
   /\bresolved\b/i,
   /\bclosed\b/i,
-  /\bpassed?\b/i,
+  /\bpass(?:ed)?\b/i,
   /truth snapshot/i,
   /histor(?:y|ical)/i,
   /\[x\]/i,
@@ -17,7 +17,7 @@ const violations = text.split(/\r?\n/).flatMap((line, index) =>
 );
 
 if (violations.length) {
-  console.error("check:failures FAIL:\n" + violations.map((item) => `  ${item}`).join("\n"));
+  console.error("check-failures FAIL:\n" + violations.map((item) => `  ${item}`).join("\n"));
   process.exit(1);
 }
 console.log("check:failures OK");

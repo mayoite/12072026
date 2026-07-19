@@ -231,21 +231,21 @@ const siteFolders = {
     ],
     see: ["../../Readme.md", "../../Plans/Planner-track/BOARD.md"],
   },
-  "features/planner/project": {
-    title: "Live planner canvas host",
-    why: "Plan document, placement catalog, workspace store, export — start here for canvas behavior.",
-    contains: ["model/, store/, catalog/, persistence/, shared/document/"],
+  "features/planner/model": {
+    title: "Planner document kernel",
+    why: "Plan document types, actions, operations — canonical mm document model.",
+    contains: ["types.ts", "actions/", "operations/", "wallContract.ts"],
+  },
+  "features/planner/cloud-store": {
+    title: "Planner workspace stores",
+    why: "Zustand workspace state, cloud saves, review persistence.",
+    contains: ["workspaceStore.ts", "plannerStore.ts", "plannerPersistence.ts"],
   },
   "features/planner/catalog-api": {
     title: "Planner catalog API",
-    why: "Catalog panel, bridges, ingest — not the live canvas document host (see project/catalog/).",
+    why: "Catalog panel, bridges, ingest — API surface; document kernel is features/planner/model/.",
     contains: ["ingest/", "CatalogPanel.tsx", "catalogStore.ts", "catalogBlockBridge.ts"],
     see: ["scripts/ingest-planner-catalog.ts", "features/planner/catalog/README.md"],
-  },
-  "features/planner/cloud-store": {
-    title: "Planner cloud persistence",
-    why: "Zustand stores, cloud saves, review persistence, offline queue.",
-    contains: ["plannerPersistence, workspaceStore, plannerProjectStore, reviewPersistence, etc."],
   },
   "features/planner/3d": {
     title: "Planner 3D",

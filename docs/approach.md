@@ -2,7 +2,7 @@
 
 **Audience:** owner + parent agent.  
 **Purpose:** stop thrash. Ship the product loop.  
-**Not** a checklist substitute. Execution stays in `plan/<Track>/`. Process floor stays in `Agents.md` + `Agents/`.
+**Not** a checklist substitute. Execution stays in `plan/<Track>/`. Process floor stays in `AGENTS.md` + `Agents/`.
 
 ---
 
@@ -114,7 +114,7 @@ No new hex/rgb in product UI when a token exists. No second global styling tree.
 ### 7. Git
 
 - Prefer one clear commit per verified slice.  
-- Full authority: commit/push verified work (per `Agents.md`).  
+- Full authority: commit/push verified work when the owner explicitly asks (per `AGENTS.md`).  
 - Never force-push. Never wipe owner catalog by accident; restore immediately if mass delete appears.
 
 ---
@@ -143,7 +143,7 @@ UI craft on parametric form is allowed **only** if it unblocks operators for C3 
 
 ## Parent agent contract
 
-1. Re-read `Agents.md` each task.  
+1. Re-read `AGENTS.md` each task.  
 2. User wins. Brutal truth.  
 3. Subagents dig; **parent only** marks ship/PASS/cutover.  
 4. Block only the exact dependent item.  

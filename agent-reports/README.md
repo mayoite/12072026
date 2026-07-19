@@ -1,14 +1,12 @@
 # Agent reports
 
-Four short **track status** files. **Not proof.**
+Short **track status** files. **Not proof.** Fresh commands and `plan/` checklists win.
 
-| Track | Status file | Plan |
-|-------|-------------|------|
-| Admin | `ADMIN.md` | `plan/Admin/` — CHECKLIST · FEATURES · IMPLEMENTATION-PLAN · REALITY-AND-STACK (4 files) |
-| Planner | `PLANNER.md` | `plan/Planner/CHECKLIST.md` + `FEATURES.md` |
-| Site | `SITE.md` | `plan/Site/CHECKLIST.md` + `FEATURES.md` |
-| TechStack | `TECH-STACK.md` | `plan/TechStack/CHECKLIST.md` + `FEATURES.md` |
+| Track | File | Plan |
+|-------|------|------|
+| Admin | `ADMIN.md` | `plan/Admin/` (4 files) |
+| Planner | `PLANNER.md` | `plan/Planner/` |
+| Site | `SITE.md` | `plan/Site/` |
+| TechStack | `TECH-STACK.md` | `plan/TechStack/` |
 
-**Session blunder reports** (multi-agent review, still not PASS): [`blunders/`](./blunders/).
-
-Index rollup: `docs/site/OUTSTANDING-ITEMS.md`. Blockers: `Failures.md`.
+**Blockers:** `Failures.md` only.

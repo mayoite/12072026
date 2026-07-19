@@ -8,7 +8,8 @@
  *
  * Fail contract:
  *   - top chrome height > MAX_TOP_CHROME_PX (160)
- *   - canvas height < MIN_CANVAS_VIEWPORT_RATIO (40%) of viewport height
+ *   - canvas height < MIN_CANVAS_VIEWPORT_RATIO (60%) of viewport height
+ *   - any sampled primary control under 44px (UI-MOB-03 hard gate)
  *
  * Also records undersized primary control count (< 44px on either axis).
  */
@@ -32,8 +33,8 @@ const DESKTOP = { width: 1440, height: 900 } as const;
  * Historical baseline wrapped header was ~289px — this bar rejects that.
  */
 const MAX_TOP_CHROME_PX = 160;
-/** Soft step toward UI-MOB-02 (60%). Ticket gate is 40% until product catches up. */
-const MIN_CANVAS_VIEWPORT_RATIO = 0.4;
+/** UI-MOB-02 raised standard — phone canvas ≥ 60% viewport height. */
+const MIN_CANVAS_VIEWPORT_RATIO = 0.6;
 /** WCAG / UI-MOB-03 phone floor. */
 const MIN_TAP_PX = 44;
 
@@ -167,7 +168,10 @@ const PRIMARY_CONTROL_SELECTORS: Array<{ id: string; selector: string }> = [
   { id: "toggle-properties", selector: '[data-testid="planner-toggle-properties"]' },
   { id: "toggle-layers", selector: '[data-testid="planner-toggle-layers"]' },
   { id: "more-actions", selector: '[data-testid="planner-more-actions"]' },
-  { id: "view-2d", selector: '[data-testid="planner-view-mode"] [role="radio"][aria-label="2D"], [data-testid="planner-view-mode"] input[value="2d"], [data-testid="planner-view-mode"] [data-min-tap-px]' },
+  {
+    id: "view-2d",
+    selector: '[data-testid="planner-view-mode"] [role="radio"]:has-text("2D")',
+  },
   {
     id: "tool-select",
     selector: '[data-testid="planner-mobile-bottom-chrome"] [data-testid="canvas-tool-select"]',
@@ -272,7 +276,7 @@ test.describe("Planner phone chrome composition (UI-MOB browser proof)", () => {
     fs.mkdirSync(EVIDENCE_ROOT, { recursive: true });
   });
 
-  test("390×844: top chrome ≤160px and canvas ≥40% viewport", async ({ page }) => {
+  test("390×844: top chrome ≤160px, canvas ≥60% viewport, taps ≥44px", async ({ page }) => {
     await page.setViewportSize(PHONE);
     await enterGuestPlannerWorkspace(page, {
       projectName: "E2E phone chrome",
@@ -313,19 +317,21 @@ test.describe("Planner phone chrome composition (UI-MOB browser proof)", () => {
         `Product must reclaim canvas from chrome — do not lower this threshold.`,
     ).toBeGreaterThanOrEqual(MIN_CANVAS_VIEWPORT_RATIO);
 
-    // UI-MOB-03 residual: measure undersized sample; ticket fail gates are
-    // top chrome + canvas only. Do not hide residual — write OPEN when count > 0.
+    // UI-MOB-03 hard gate — zero undersized primary controls.
     const undersizedIds = metrics.primaryControls
       .filter((c) => c.visible && c.under44)
       .map((c) => `${c.id}(${c.width}×${c.height})`);
-    const tapResidual =
-      metrics.undersizedPrimaryCount > 0
-        ? {
-            status: "OPEN" as const,
-            reason: `UI-MOB-03: ${metrics.undersizedPrimaryCount} sampled primary control(s) under ${MIN_TAP_PX}px`,
-            controls: undersizedIds,
-          }
-        : { status: "PASS" as const, reason: "All sampled primary controls ≥ 44px", controls: [] as string[] };
+
+    expect(
+      metrics.undersizedPrimaryCount,
+      `UI-MOB-03: ${metrics.undersizedPrimaryCount} control(s) under ${MIN_TAP_PX}px: ${undersizedIds.join(", ")}`,
+    ).toBe(0);
+
+    const tapResidual = {
+      status: "PASS" as const,
+      reason: "All sampled primary controls ≥ 44px",
+      controls: [] as string[],
+    };
 
     writeEvidence("phone-390x844-tap-targets.json", {
       undersizedPrimaryCount: metrics.undersizedPrimaryCount,
@@ -335,7 +341,10 @@ test.describe("Planner phone chrome composition (UI-MOB browser proof)", () => {
     });
 
     writeEvidence("phone-390x844-summary.json", {
-      status: metrics.pass.topChrome && metrics.pass.canvas ? "PASS" : "FAIL",
+      status:
+        metrics.pass.topChrome && metrics.pass.canvas && metrics.undersizedPrimaryCount === 0
+          ? "PASS"
+          : "FAIL",
       gates: {
         topChrome: {
           valuePx: metrics.topChromeHeight,
@@ -348,22 +357,23 @@ test.describe("Planner phone chrome composition (UI-MOB browser proof)", () => {
           minRatio: MIN_CANVAS_VIEWPORT_RATIO,
           pass: metrics.pass.canvas,
         },
+        tapTargets: {
+          undersizedCount: metrics.undersizedPrimaryCount,
+          minTapPx: MIN_TAP_PX,
+          pass: metrics.undersizedPrimaryCount === 0,
+        },
       },
       residual: {
-        uiMob03TapTargets: tapResidual,
         workflowStripHeightPx: metrics.workflowStripHeight,
         bottomChromeHeightPx: metrics.bottomChromeHeight,
         note:
-          "Ticket hard-fail gates are top chrome ≤160px and canvas ≥40% viewport only. " +
-          "UI-MOB-03 44px sample is residual OPEN when undersizedPrimaryCount > 0 — product must fix; thresholds not lowered.",
+          "Hard gates: top chrome ≤160px, canvas ≥60% viewport, all sampled primary controls ≥44px.",
       },
       measuredAt: metrics.measuredAt,
     });
 
-    // Hard gates already asserted above. Tap residual is evidence-only for this ticket
-    // (count is measured; product W for 44px targets still OPEN when count > 0).
     test.info().annotations.push({
-      type: tapResidual.status === "PASS" ? "ui-mob-03" : "ui-mob-03-OPEN",
+      type: "ui-mob-03",
       description: tapResidual.reason,
     });
   });
