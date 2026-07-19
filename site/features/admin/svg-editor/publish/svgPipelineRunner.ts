@@ -17,6 +17,7 @@ import {
   assertCatalogWriteAllowed,
   CatalogIsolationError,
 } from "@/features/admin/svg-editor/storage/catalogWriteIsolation";
+import { isSvgCatalogDiskWriteEnabled } from "@/features/admin/svg-editor/publish/svgReleaseAuthority";
 
 /** Default timeout per Phase 04 §04-SUB-02 (10s). */
 export const DEFAULT_TIMEOUT_MS = 10_000;
@@ -178,6 +179,22 @@ export function runSvgPipeline(
   const _maxStderrBytes = options.maxStderrBytes ?? DEFAULT_MAX_STDERR_BYTES;
   void _timeoutMs;
   void _maxStderrBytes;
+
+  if (!isSvgCatalogDiskWriteEnabled()) {
+    const noop = (): void => undefined;
+    return Promise.resolve({
+      ok: true as const,
+      exitCode: 0,
+      stdout: "[SVG_DISK_WRITE disabled — S4 svg-catalog write skipped]",
+      stderr: "",
+      fixturePath,
+      svgPath,
+      durationMs: 0,
+      rollback: noop,
+      commit: noop,
+      cleanup: noop,
+    });
+  }
 
   try {
     assertCatalogWriteAllowed(svgPath);
