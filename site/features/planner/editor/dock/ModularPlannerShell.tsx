@@ -23,13 +23,12 @@ import type { WorkspacePlanMetrics } from "../workspacePlanMetrics";
 import { WorkspaceShell } from "../WorkspaceShell";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import styles from "@/app/css/core/locked/planner/workspace-shell.module.css";
-import { PlannerDockHost, type DockviewApi } from "./PlannerDockHost";
 import {
-  clearPersistedDockLayout,
-  closePlannerDockPanel,
-  ensurePlannerDockPanel,
-} from "./plannerDockPresets";
-import type { PlannerDockSlots } from "./plannerDockSlots";
+  StudioShell,
+  type StudioShellHandle,
+  type StudioPanel,
+  type DockArrangement,
+} from "@/features/studio/shell";
 
 function isEditableHelpTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
@@ -116,6 +115,40 @@ const STEP_PRESET: Record<PlannerStep, LayoutPresetId> = {
 };
 
 /**
+ * Translate a customer layout preset into a full StudioShell arrangement.
+ * `canvas` is the always-present stage (not a dock panel); tools live on the
+ * pinned CanvasToolRail, so the only dock panels are inventory + properties.
+ * Every managed panel is listed so presets are absolute (no residual state).
+ */
+function presetArrangement(preset: LayoutPresetId): DockArrangement {
+  switch (preset) {
+    case "catalog":
+      return {
+        inventory: { zone: "left", hidden: false },
+        properties: { hidden: true },
+      };
+    case "review":
+      return {
+        inventory: { hidden: true },
+        properties: { zone: "right", hidden: false },
+      };
+    case "floating":
+      // No floating layer in StudioShell — show both docked side panels.
+      return {
+        inventory: { zone: "left", hidden: false },
+        properties: { zone: "right", hidden: false },
+      };
+    case "canvas":
+    case "default":
+    default:
+      return {
+        inventory: { hidden: true },
+        properties: { hidden: true },
+      };
+  }
+}
+
+/**
  * Slim TopBar + Dockview modular panels (dockview-react).
  * 2D/3D split elsewhere still uses react-resizable-panels.
  */
@@ -176,15 +209,11 @@ export function ModularPlannerShell({
 }: ModularPlannerShellProps) {
   const id = useId();
   const isMobile = useIsMobile();
-  const dockApiRef = useRef<DockviewApi | null>(null);
-  // Seed canvas-first dock once via initializers (no setState-in-effect).
+  const shellRef = useRef<StudioShellHandle | null>(null);
+  // Canvas-first: draw step starts with the plan filling the stage.
   const [layoutPresetId, setLayoutPresetId] = useState<LayoutPresetId | "custom">(
-    () => {
-      clearPersistedDockLayout();
-      return STEP_PRESET.draw;
-    },
+    STEP_PRESET.draw,
   );
-  const [layoutEpoch, setLayoutEpoch] = useState(0);
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [layersOpen, setLayersOpen] = useState(false);
@@ -275,9 +304,8 @@ export function ModularPlannerShell({
   };
 
   const applyPreset = useCallback((preset: LayoutPresetId) => {
-    clearPersistedDockLayout();
     setLayoutPresetId(preset);
-    setLayoutEpoch((n) => n + 1);
+    shellRef.current?.applyArrangement(presetArrangement(preset));
   }, []);
 
   const resetLayout = useCallback(() => {
@@ -296,83 +324,84 @@ export function ModularPlannerShell({
 
   const showDockPanel = useCallback(
     (panelId: "inventory" | "tools" | "properties") => {
-      const api = dockApiRef.current;
-      if (!api) return;
-      ensurePlannerDockPanel(api, panelId);
+      // Tools live on the pinned rail, not a dock panel — ignore.
+      if (panelId === "tools") return;
+      shellRef.current?.showPanel(panelId);
       setLayoutPresetId("custom");
     },
     [],
   );
 
-  // Open properties on selection; collapse when empty so the panel does not eat canvas (PF-21).
+  // Open properties on selection; hide when empty so the panel does not eat canvas (PF-21).
   // Review step always keeps the right dock for BOQ / validation.
   useEffect(() => {
     if (isMobile) return;
-    const api = dockApiRef.current;
-    if (plannerStep === "review") {
-      showDockPanel("properties");
-      return;
-    }
-    if (hasSelection) {
-      showDockPanel("properties");
-      return;
-    }
-    if (api) {
-      closePlannerDockPanel(api, "properties");
-    }
-  }, [hasSelection, isMobile, plannerStep, showDockPanel]);
-
-  const handleDockApiReady = useCallback((api: DockviewApi) => {
-    dockApiRef.current = api;
-    // Apply selection/review visibility once dock mounts.
+    const shell = shellRef.current;
+    if (!shell) return;
     if (plannerStep === "review" || hasSelection) {
-      ensurePlannerDockPanel(api, "properties");
+      shell.showPanel("properties");
     } else {
-      closePlannerDockPanel(api, "properties");
+      shell.hidePanel("properties");
     }
-  }, [hasSelection, plannerStep]);
+  }, [hasSelection, isMobile, plannerStep]);
 
-  const slots: PlannerDockSlots = useMemo(
-    () => ({
-      canvas: <div className={styles.planCanvasInset}>{children}</div>,
-      inventory,
-      properties:
-        plannerStep === "review"
-          ? (review ?? (
-              <div className={styles.dockEmptyHint}>
-                <strong>Review</strong>
-                <span>Validation and quote actions appear when the plan is ready.</span>
-              </div>
-            ))
-          : (properties ?? (
-              <div className={styles.dockEmptyHint}>
-                <strong>Nothing selected</strong>
-                <span>
-                  Select a wall, opening, or catalog item to edit its dimensions
-                  and placement.
-                </span>
-              </div>
-            )),
-      tools: showTools ? (
-        <div className={styles.dockEmptyHint}>
-          <strong>Tools live on the plan</strong>
-          <span>Drawing tools sit on the left rail. Open Inventory or Properties from the top bar when needed.</span>
-        </div>
-      ) : (
-        <div className={styles.dockEmptyHint}>
-          <strong>2D tools paused</strong>
-          <span>Switch to 2D to draw walls, place openings, and add inventory.</span>
-        </div>
-      ),
-    }),
-    [
-      children,
-      inventory,
-      plannerStep,
-      properties,
-      review,
-      showTools,
+  // Seed the initial arrangement once the shell mounts (draw step = canvas only,
+  // plus properties if we already have a selection / are in review). Runs once;
+  // ongoing step/selection changes are handled by the effects above.
+  useEffect(() => {
+    const shell = shellRef.current;
+    if (!shell || isMobile) return;
+    shell.applyArrangement(presetArrangement(STEP_PRESET[plannerStep]));
+    if (plannerStep === "review" || hasSelection) {
+      shell.showPanel("properties");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- one-shot seed on mount
+  }, [isMobile]);
+
+  const canvasSlot = useMemo(
+    () => <div className={styles.planCanvasInset}>{children}</div>,
+    [children],
+  );
+
+  const propertiesContent = useMemo(
+    () =>
+      plannerStep === "review"
+        ? (review ?? (
+            <div className={styles.dockEmptyHint}>
+              <strong>Review</strong>
+              <span>Validation and quote actions appear when the plan is ready.</span>
+            </div>
+          ))
+        : (properties ?? (
+            <div className={styles.dockEmptyHint}>
+              <strong>Nothing selected</strong>
+              <span>
+                Select a wall, opening, or catalog item to edit its dimensions
+                and placement.
+              </span>
+            </div>
+          )),
+    [plannerStep, properties, review],
+  );
+
+  const dockPanels = useMemo<StudioPanel[]>(
+    () => [
+      {
+        id: "inventory",
+        title: "Inventory",
+        defaultZone: "left",
+        defaultHidden: true,
+        content: inventory,
+      },
+      {
+        id: "properties",
+        title: plannerStep === "review" ? "Review" : "Properties",
+        defaultZone: "right",
+        defaultHidden: true,
+        content: propertiesContent,
+      },
     ],
+    [inventory, plannerStep, propertiesContent],
   );
 
   if (isMobile) {
@@ -390,8 +419,8 @@ export function ModularPlannerShell({
         storage={storage}
         cloudEnabled={cloudEnabled}
         isOffline={isOffline}
-        leftPanel={slots.inventory}
-        rightPanel={slots.properties}
+        leftPanel={inventory}
+        rightPanel={propertiesContent}
         onViewModeChange={onViewModeChange}
         onFloorChange={onFloorChange}
         onProjectNameChange={onProjectNameChange}
@@ -571,11 +600,10 @@ export function ModularPlannerShell({
             />
           ) : null}
           <div className={styles.dockStage}>
-            <PlannerDockHost
-              slots={slots}
-              layoutPresetId={layoutPresetId}
-              layoutEpoch={layoutEpoch}
-              onApiReady={handleDockApiReady}
+            <StudioShell
+              ref={shellRef}
+              canvas={canvasSlot}
+              panels={dockPanels}
             />
             {layersOpen && layersFloor && layerVisibility && onLayerVisibilityChange ? (
               <aside className={styles.layersOverlay} aria-label="Layers">
