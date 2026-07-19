@@ -141,18 +141,6 @@
   animation: marquee-reverse 30s linear infinite;
 }
 
-/* â”€â”€ Swiper custom nav buttons â”€â”€ */
-@utility swiper-button-prev-custom {
-  cursor: pointer;
-  -webkit-user-select: none;
-  user-select: none;
-}
-@utility swiper-button-next-custom {
-  cursor: pointer;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
 /* â”€â”€ Skeleton loading â”€â”€ */
 @utility skeleton {
   background: linear-gradient(90deg, var(--surface-muted) 25%, var(--surface-hover) 50%, var(--surface-muted) 75%);

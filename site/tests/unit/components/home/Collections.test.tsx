@@ -3,15 +3,24 @@ import { render, screen } from '@testing-library/react';
 import { Collections } from '@/components/home/Collections';
 import { HOMEPAGE_COLLECTIONS_CONTENT } from '@/features/site/data/homepage';
 
-// Mock Swiper
-vi.mock('swiper/react', () => ({
-  Swiper: ({ children }: any) => <div data-testid="mock-swiper">{children}</div>,
-  SwiperSlide: ({ children }: any) => <div data-testid="mock-swiper-slide">{children}</div>
+// Mock embla-carousel (the carousel lib Collections migrated onto).
+// useEmblaCarousel returns [ref, api]; api is used for scrollPrev/Next + events.
+vi.mock('embla-carousel-react', () => ({
+  default: () => [
+    vi.fn(),
+    {
+      canScrollPrev: () => false,
+      canScrollNext: () => true,
+      scrollPrev: vi.fn(),
+      scrollNext: vi.fn(),
+      on: vi.fn(),
+      off: vi.fn()
+    }
+  ]
 }));
 
-vi.mock('swiper/modules', () => ({
-  Navigation: {},
-  Autoplay: {}
+vi.mock('embla-carousel-autoplay', () => ({
+  default: () => ({ play: vi.fn(), stop: vi.fn() })
 }));
 
 // Mock framer-motion
@@ -49,12 +58,17 @@ describe('Collections Component', () => {
     const cta = screen.getByRole('link', { name: HOMEPAGE_COLLECTIONS_CONTENT.catalogCta.label });
     expect(cta).toHaveAttribute('href', HOMEPAGE_COLLECTIONS_CONTENT.catalogCta.href);
 
-    // Verify Swiper rendering
-    expect(screen.getByTestId('mock-swiper')).toBeInTheDocument();
+    // Verify carousel section renders
+    expect(screen.getByTestId('home-collections')).toBeInTheDocument();
 
-    // Verify Swiper slides have been created
-    const slides = screen.getAllByTestId('mock-swiper-slide');
-    expect(slides.length).toBe(HOMEPAGE_COLLECTIONS_CONTENT.items.length);
+    // One card link per collection item (accessible name from the visible h3).
+    for (const item of HOMEPAGE_COLLECTIONS_CONTENT.items) {
+      expect(screen.getByRole('link', { name: item.name })).toBeInTheDocument();
+    }
+
+    // Nav controls present.
+    expect(screen.getByRole('button', { name: 'Previous slide' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Next slide' })).toBeInTheDocument();
 
     // Link accessible name comes from visible h3; image is decorative (alt="").
     const firstItem = HOMEPAGE_COLLECTIONS_CONTENT.items[0];
