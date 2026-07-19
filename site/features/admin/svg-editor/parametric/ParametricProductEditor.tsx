@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 
 import { phoneAuthoringBlockedMessage } from "@/features/admin/ui/adminMobileReview";
-import { AdminSvgDockHost } from "@/features/admin/svg-editor/views/edit-shell/AdminSvgDockHost";
+import { StudioShell, type StudioPanel } from "@/features/studio/shell";
 import { ParametricEditorTopBar } from "./ParametricEditorTopBar";
 import { ParametricPlanCanvas } from "./ParametricPlanCanvas";
 import { ParametricPropertiesPanel } from "./ParametricPropertiesPanel";
@@ -66,50 +66,56 @@ export function ParametricProductEditor({
           </p>
         ) : null}
         <div className="parametric-editor-dock-area">
-          <AdminSvgDockHost
-            layoutMode="factory"
-            factorySlots={{
-              tools: (
-                <ParametricToolRailAdapter
-                  definition={editor.definition}
-                  activeToolId={editor.selectedToolId}
-                  onToolSelect={editor.selectTool}
-                  onCommand={editor.requestViewportCommand}
-                  onToggle={editor.toggleCanvasField}
-                  onPartRoleFocus={(role) => {
-                    const part = editor.preview?.parts.find(
-                      (candidate) => candidate.role === role,
-                    );
-                    editor.focusPart(part?.id ?? null);
-                  }}
-                />
-              ),
-              properties: (
-                <ParametricPropertiesPanel
-                  definition={editor.definition}
-                  display={editor.display}
-                  unit={editor.unit}
-                  errors={errors}
-                  onFieldChange={editor.updateField}
-                />
-              ),
-              canvas: (
-                <ParametricPlanCanvas
-                  key={editor.viewportCommand?.sequence ?? 0}
-                  label={editor.definition.drawer.label}
-                  capabilities={editor.definition.drawer.capabilities}
-                  preview={editor.preview}
-                  selectedPartId={editor.selectedPartId}
-                  onPartSelect={editor.focusPart}
-                  gridEnabled={editor.gridEnabled}
-                  onGridChange={(enabled) => {
-                    if (enabled !== editor.gridEnabled) {
-                      editor.toggleCanvasField("grid");
-                    }
-                  }}
-                />
-              ),
-            }}
+          <StudioShell
+            leftRail={
+              <ParametricToolRailAdapter
+                definition={editor.definition}
+                activeToolId={editor.selectedToolId}
+                onToolSelect={editor.selectTool}
+                onCommand={editor.requestViewportCommand}
+                onToggle={editor.toggleCanvasField}
+                onPartRoleFocus={(role) => {
+                  const part = editor.preview?.parts.find(
+                    (candidate) => candidate.role === role,
+                  );
+                  editor.focusPart(part?.id ?? null);
+                }}
+              />
+            }
+            canvas={
+              <ParametricPlanCanvas
+                key={editor.viewportCommand?.sequence ?? 0}
+                label={editor.definition.drawer.label}
+                capabilities={editor.definition.drawer.capabilities}
+                preview={editor.preview}
+                selectedPartId={editor.selectedPartId}
+                onPartSelect={editor.focusPart}
+                gridEnabled={editor.gridEnabled}
+                onGridChange={(enabled) => {
+                  if (enabled !== editor.gridEnabled) {
+                    editor.toggleCanvasField("grid");
+                  }
+                }}
+              />
+            }
+            panels={
+              [
+                {
+                  id: "properties",
+                  title: "Properties",
+                  defaultZone: "right",
+                  content: (
+                    <ParametricPropertiesPanel
+                      definition={editor.definition}
+                      display={editor.display}
+                      unit={editor.unit}
+                      errors={errors}
+                      onFieldChange={editor.updateField}
+                    />
+                  ),
+                },
+              ] satisfies StudioPanel[]
+            }
           />
         </div>
       </div>
