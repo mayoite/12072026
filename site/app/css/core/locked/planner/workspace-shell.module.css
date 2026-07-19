@@ -84,7 +84,7 @@
   --ws-header-pad-inline: var(--space-3);
   --ws-header-gap: var(--space-1) var(--space-2);
   --ws-action-gap: var(--space-1);
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
 }
 
 .shell[data-planner-density="touch"] {
@@ -254,7 +254,7 @@
   border-radius: var(--radius-pill);
   border: 1px solid color-mix(in srgb, var(--color-warning) 28%, transparent);
   background: color-mix(in srgb, var(--color-warning) 10%, var(--ws-panel-bg));
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 600;
   letter-spacing: 0.03em;
   line-height: 1.35;
@@ -409,7 +409,7 @@
   border-radius: var(--radius-pill);
   border: 1px solid var(--ws-panel-border);
   background: color-mix(in srgb, var(--planner-chrome-subtle) 90%, var(--ws-panel-bg));
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -429,7 +429,7 @@
 }
 
 .header[data-density="touch"] .saveStatus {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   max-width: 16rem;
 }
 
@@ -604,7 +604,7 @@
   border: 1px solid var(--warning-border, var(--ws-panel-border));
   border-radius: var(--radius-md);
   box-shadow: var(--ws-shadow-float);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   line-height: 1.4;
 }
 
@@ -698,7 +698,7 @@
 .exactRoomHeading span,
 .exactRoomField span {
   color: var(--ws-text-muted);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
 }
 
 .exactRoomField {
@@ -744,7 +744,7 @@
   grid-column: 1 / -1;
   margin: 0;
   color: var(--danger-text, var(--ws-text-primary));
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
 }
 
 .workflowStep {
@@ -815,7 +815,7 @@
 
 .workflowCompletion {
   color: var(--ws-text-muted);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 700;
   line-height: 1.2;
 }
@@ -894,7 +894,7 @@
   border-top: 1px solid var(--ws-panel-border);
   background: var(--ws-panel-bg);
   color: var(--ws-text-muted);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
 }
 
 @media (max-width: 48rem) {
@@ -927,7 +927,7 @@
   min-height: 6rem;
   padding: var(--space-6);
   text-align: center;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   color: var(--ws-text-muted);
 }
 
@@ -1052,7 +1052,7 @@
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
   background: transparent;
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 600;
   color: var(--ws-text-muted);
   cursor: pointer;
@@ -1172,7 +1172,7 @@
 }
 
 .dropZoneLabel {
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -1239,7 +1239,7 @@
   align-items: center;
   gap: var(--space-2);
   min-width: 0;
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1343,7 +1343,7 @@
   align-items: center;
   gap: var(--space-2);
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1452,7 +1452,7 @@
   background: transparent;
   color: var(--ws-text-muted);
   cursor: grab;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   line-height: 1;
   padding: 0.1rem 0.15rem;
   border-radius: var(--radius-sm);
@@ -1480,7 +1480,7 @@
   border: none;
   background: transparent;
   color: var(--ws-text-muted);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 700;
   letter-spacing: 0;
   text-transform: none;
@@ -1563,7 +1563,7 @@
   padding: var(--space-1) var(--space-4);
   border-top: 1px solid var(--ws-panel-border);
   background: var(--ws-status-bg);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--ws-text-muted);
   flex-shrink: 0;
   overflow-x: auto;
@@ -1637,7 +1637,7 @@
   background: transparent;
   color: var(--text-strong);
   font: inherit;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   cursor: pointer;
   font-weight: 400;
 }
@@ -1686,7 +1686,7 @@
   border: none;
   border-radius: 2px;
   background: transparent;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 500;
   color: var(--ws-text-muted);
   cursor: pointer;
@@ -1696,12 +1696,12 @@
 
 .header[data-density="compact"] .viewToggleBtn {
   min-width: 2rem;
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
 }
 
 .header[data-density="touch"] .viewToggleBtn {
   min-width: 2.75rem;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
 }
 
 .viewToggleBtn:hover,
@@ -1753,7 +1753,7 @@
   border: none;
   border-radius: var(--radius-sm);
   background: transparent;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 500;
   text-align: left;
   color: var(--planner-text-secondary);
@@ -1807,7 +1807,7 @@
   border: 1px solid var(--ws-panel-border);
   border-radius: var(--radius-sm);
   background: var(--ws-panel-bg);
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 500;
   color: var(--ws-text-secondary);
   cursor: pointer;
@@ -1844,7 +1844,7 @@
 
 .header[data-density="compact"] .btn {
   padding-inline: var(--space-2);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
 }
 
 .header[data-density="touch"] .btn {
@@ -2039,13 +2039,13 @@
   }
 
   .brandTitle {
-    font-size: 0.8125rem;
+    font-size: var(--type-small-size);
     max-width: 8.5rem;
   }
 
   .brandTitleInput {
     max-width: 8.5rem;
-    font-size: 0.8125rem;
+    font-size: var(--type-small-size);
   }
 
   /* UI-MOB-03: frequent phone actions ≥44×44 (2.75rem touch target) */
@@ -2080,7 +2080,7 @@
   .viewToggleBtn {
     min-width: var(--planner-touch-target, 2.75rem);
     min-height: var(--planner-touch-target, 2.75rem);
-    font-size: 0.8125rem;
+    font-size: var(--type-small-size);
     font-weight: 600;
   }
 
@@ -2342,7 +2342,7 @@
 @media (width <= 23.4375rem) {
   .btn {
     padding-inline: var(--space-2);
-    font-size: 0.75rem;
+    font-size: var(--type-label-size);
   }
 
   .center .btn {

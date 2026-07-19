@@ -45,7 +45,7 @@
 
 .admin-page__meta {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   color: var(--text-muted);
 }
 
@@ -391,7 +391,7 @@ body:has(.admin-page--svg-engine) {
 
   table[data-phone-layout="cards-priority"] td[data-label="Product"] .admin-table__secondary,
   table[data-phone-layout="cards-priority"] td[data-label="Name"] .admin-table__secondary {
-    font-size: 0.8125rem;
+    font-size: var(--type-small-size);
     line-height: 1.35;
   }
 
@@ -505,7 +505,7 @@ body:has(.admin-page--svg-engine) {
     white-space: normal;
     background: transparent;
     cursor: default;
-    font-size: 0.75rem;
+    font-size: var(--type-label-size);
   }
 }
 
@@ -583,7 +583,7 @@ body:has(.admin-page--svg-engine) {
 
 .shell-admin-dashboard .shell-admin-card__desc {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   line-height: 1.4;
   color: var(--text-muted);
   display: -webkit-box;

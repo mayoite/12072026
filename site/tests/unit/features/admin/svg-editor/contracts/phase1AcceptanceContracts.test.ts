@@ -125,19 +125,20 @@ describe("ADM-SVG-05 / ADM-SVG-08 regions and subset", () => {
   });
 
   it("documents and enforces the supported authoring subset", () => {
-    expect(SUPPORTED_SVG_AUTHORING_DOC.kinds).toEqual(["rect", "circle", "line", "text"]);
+    expect(SUPPORTED_SVG_AUTHORING_DOC.kinds).toEqual(["rect", "circle", "line", "text", "path"]);
     expect(isSupportedSvgAuthoringKind("rect")).toBe(true);
     expect(isSupportedSvgAuthoringKind("line")).toBe(true);
     expect(isSupportedSvgAuthoringKind("text")).toBe(true);
-    expect(isSupportedSvgAuthoringKind("path")).toBe(false);
-    expect(assertSupportedStudioKinds(["rect", "circle", "line", "text"])).toEqual({ ok: true });
-    expect(assertSupportedStudioKinds(["rect", "path"])).toEqual({
+    expect(isSupportedSvgAuthoringKind("path")).toBe(true);
+    expect(isSupportedSvgAuthoringKind("image")).toBe(false);
+    expect(assertSupportedStudioKinds(["rect", "circle", "line", "text", "path"])).toEqual({ ok: true });
+    expect(assertSupportedStudioKinds(["rect", "image"])).toEqual({
       ok: false,
-      unsupported: ["path"],
+      unsupported: ["image"],
     });
   });
 
-  it("rejects unsupported kinds at serialize (publish authority)", async () => {
+  it("accepts a path node at serialize (custom-geometry authority)", async () => {
     const { serializeSceneToDefinition } = await import(
       "@/features/admin/svg-editor/scene/svgSceneSerializer"
     );
@@ -157,7 +158,7 @@ describe("ADM-SVG-05 / ADM-SVG-08 regions and subset", () => {
       nodes: [
         {
           kind: "path" as const,
-          id: "bad-path",
+          id: "custom-path",
           name: "Path",
           locked: false,
           hidden: false,
@@ -166,11 +167,13 @@ describe("ADM-SVG-05 / ADM-SVG-08 regions and subset", () => {
             strokeToken: "currentColor",
             lineWeight: 1,
           },
-          d: "M0 0 L10 10",
+          d: "M0 0 L10 10 L0 10 Z",
         },
       ],
     };
-    expect(() => serializeSceneToDefinition(doc)).toThrow(/Unsupported SVG authoring kinds/);
+    const definition = serializeSceneToDefinition(doc);
+    expect(definition.parts).toHaveLength(1);
+    expect(definition.parts[0]).toMatchObject({ kind: "path", d: "M0 0 L10 10 L0 10 Z" });
   });
 });
 

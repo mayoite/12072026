@@ -273,7 +273,7 @@
   flex-shrink: 0;
 }
 
-/* Desktop inventory/properties: locked/chrome/planner-dock.module.css (Dockview).
+/* Desktop inventory/properties: StudioShell dock zones (features/studio/shell).
  * Mobile WorkspaceShell panels: workspace-shell.module.css (.panelLeft/.panelRight).
  * pw-left-panel/pw-right-panel exist only on PanelContainer (mobile path) as hooks. */
 

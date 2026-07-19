@@ -1,0 +1,214 @@
+.studio-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--surface-panel);
+}
+
+.studio-panel--left {
+  border-right: 1px solid var(--border-soft);
+  box-shadow: inset -1px 0 0 color-mix(in srgb, var(--border-soft) 55%, transparent);
+}
+
+.studio-panel--right {
+  border-left: 1px solid var(--border-soft);
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  box-shadow: inset 1px 0 0 color-mix(in srgb, var(--border-soft) 55%, transparent);
+}
+
+.studio-panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--studio-panel-pad);
+}
+
+.studio-resize-handle {
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--space-1);
+  background: var(--border-soft);
+  transition: background-color var(--motion-fast) var(--ease-standard);
+}
+
+.studio-resize-handle::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline: calc(var(--space-1) * -1);
+}
+
+.studio-resize-handle:hover {
+  background: color-mix(in srgb, var(--color-primary) 45%, var(--border-soft));
+}
+
+.studio-resize-handle[data-separator]:where([aria-orientation="vertical"], :not([aria-orientation])) {
+  cursor: col-resize;
+}
+
+.studio-resize-handle:focus-visible {
+  outline: none;
+  background: var(--color-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.studio-resize-handle--horizontal {
+  width: auto;
+  height: var(--space-1);
+}
+
+.studio-resize-handle--horizontal:where([aria-orientation="horizontal"]) {
+  cursor: row-resize;
+}
+
+/* ── Canvas + bottom-dock vertical split ── */
+.studio-canvas-stack {
+  flex: 1;
+  min-height: 0;
+}
+
+.studio-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.studio-panel--bottom {
+  border-top: 1px solid var(--border-soft);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--border-soft) 55%, transparent);
+}
+
+/* ── Dock zone: a stack of dockable panels ── */
+.studio-dock-zone {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.studio-dock-zone--bottom {
+  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.studio-dock-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.studio-dock-panel[data-collapsed="true"] {
+  flex: 0 0 auto;
+}
+
+.studio-dock-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-1);
+  border-bottom: 1px solid var(--border-soft);
+  background: color-mix(in srgb, var(--surface-soft) 60%, var(--surface-panel));
+}
+
+.studio-dock-panel-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-1);
+  border: none;
+  background: transparent;
+  color: var(--text-strong);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+.studio-dock-panel-toggle:hover {
+  background: var(--surface-hover);
+}
+
+.studio-dock-panel-toggle[data-focus-visible="true"] {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.studio-dock-panel-caret {
+  display: inline-flex;
+  width: var(--space-4);
+  height: var(--space-4);
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.studio-dock-panel-title {
+  font-size: var(--studio-text-xs);
+  font-weight: 600;
+  letter-spacing: var(--studio-letter-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.studio-dock-panel-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.studio-dock-panel-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-6);
+  height: var(--space-6);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard);
+}
+
+.studio-dock-panel-action:hover {
+  background: var(--surface-hover);
+  color: var(--text-strong);
+}
+
+.studio-dock-panel-action[data-focus-visible="true"] {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.studio-dock-panel-action-icon {
+  display: inline-flex;
+  width: var(--space-4);
+  height: var(--space-4);
+  align-items: center;
+  justify-content: center;
+}
+
+.studio-dock-panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--studio-panel-pad);
+}

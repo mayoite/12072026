@@ -48,9 +48,9 @@ type StudioSearchParams = {
 export default async function AdminSvgEditorListPage({
   searchParams,
 }: {
-  readonly searchParams?: Promise<StudioSearchParams> | StudioSearchParams;
+  readonly searchParams?: Promise<StudioSearchParams>;
 }) {
-  const params = await Promise.resolve(searchParams ?? {});
+  const params: StudioSearchParams = (await searchParams) ?? {};
   const editRaw = Array.isArray(params.edit) ? params.edit[0] : params.edit;
   const editSlug = typeof editRaw === "string" ? editRaw.trim() : "";
   if (editSlug.length > 0 && !isDeskAssemblyFactorySlug(editSlug)) {

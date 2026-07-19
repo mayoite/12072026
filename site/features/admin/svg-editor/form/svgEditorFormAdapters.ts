@@ -179,6 +179,56 @@ export function scenePartsToBlocks(
   return out;
 }
 
+/**
+ * Map V1 scene parts → freeform `importedPaths` ({ id, d }).
+ *
+ * Custom furniture is arbitrary geometry, so every visible part flattens to a
+ * path `d`: rect/circle/line synthesize a `d`, and native `path` keeps its `d`.
+ * This is the authority carrier that survives `BlockDescriptorSchema` (which has
+ * no `parts` field) and routes to `runPipelineCoreFromMakerPaths`, so an imported
+ * or drawn outline is emitted verbatim rather than reduced to a bounding rect.
+ *
+ * `text` is intentionally skipped — glyphs are not vector outline geometry.
+ * Ids are re-slugged to the descriptor id shape (`^[a-z][a-z0-9-]{1,63}$`); the
+ * `z####-` paint-order prefix from the serializer already satisfies it.
+ */
+export function scenePartsToImportedPaths(
+  parts: SvgBlockDefinitionV1["parts"],
+): { id?: string; d: string }[] {
+  const out: { id?: string; d: string }[] = [];
+  for (const part of parts) {
+    if (part.visible === false) continue;
+    const d = partToPathD(part);
+    if (!d) continue;
+    const id = part.id.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/^-+/, "");
+    out.push({ ...(/^[a-z][a-z0-9-]{1,63}$/.test(id) ? { id } : {}), d });
+  }
+  return out;
+}
+
+/** Synthesize a path `d` for any V1 part kind (text excluded — not geometry). */
+function partToPathD(part: SvgBlockDefinitionV1["parts"][number]): string | null {
+  switch (part.kind) {
+    case "path":
+      return part.d.trim() || null;
+    case "rect": {
+      if (!(part.width > 0) || !(part.height > 0)) return null;
+      const { x, y, width: w, height: h } = part;
+      return `M${x} ${y} H${x + w} V${y + h} H${x} Z`;
+    }
+    case "circle": {
+      if (!(part.r > 0)) return null;
+      const { cx, cy, r } = part;
+      // Two arc halves — a full circle as a closed path.
+      return `M${cx - r} ${cy} a${r} ${r} 0 1 0 ${r * 2} 0 a${r} ${r} 0 1 0 ${-r * 2} 0 Z`;
+    }
+    case "line":
+      return `M${part.x1} ${part.y1} L${part.x2} ${part.y2}`;
+    case "text":
+      return null;
+  }
+}
+
 function cleanNumber(value: number | undefined): number | undefined {
   return typeof value === "number" && Number.isFinite(value) ? value : undefined;
 }
@@ -295,6 +345,16 @@ export function formStateToDescriptorInput(
     }
     // Keep parts for raw compile paths that still read them.
     base.parts = form.sceneParts.map((part) => ({ ...part }));
+    // Custom-furniture geometry: path parts survive the schema via `importedPaths`
+    // (BlockDescriptorSchema has no `parts`, and scenePartsToBlocks drops path/line/
+    // text). This is the authority path for imported/drawn arbitrary outlines —
+    // normalizeDescriptorForPipeline routes importedPaths → runPipelineCoreFromMakerPaths.
+    const importedPaths = scenePartsToImportedPaths(form.sceneParts);
+    if (importedPaths.length > 0) {
+      base.importedPaths = importedPaths;
+    } else {
+      delete base.importedPaths;
+    }
     // Map to blocks so freezeFreshDescriptor / BlockDescriptorSchema retain geometry.
     const sceneBlocks = scenePartsToBlocks(form.sceneParts);
     if (sceneBlocks.length > 0) {

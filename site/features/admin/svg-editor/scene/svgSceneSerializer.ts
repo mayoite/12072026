@@ -184,7 +184,7 @@ export function serializeSceneToDefinition(doc: SvgSceneDocument): SvgBlockDefin
   const kindCheck = assertSupportedStudioKinds(doc.nodes.map((node) => node.kind));
   if (!kindCheck.ok) {
     throw new RangeError(
-      `Unsupported SVG authoring kinds: ${kindCheck.unsupported.join(", ")}. Supported: rect, circle.`,
+      `Unsupported SVG authoring kinds: ${kindCheck.unsupported.join(", ")}. Supported: rect, circle, line, text, path.`,
     );
   }
   const parts = doc.nodes.map((node, index) => nodeToPart(node, index));

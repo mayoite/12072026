@@ -159,7 +159,7 @@
   border-radius: var(--radius-pill);
   border: 1px solid var(--color-contrast-accent);
   padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 500;
   background: linear-gradient(135deg, var(--overlay-inverse-06), var(--overlay-inverse-12));
   color: var(--color-contrast-accent-strong);

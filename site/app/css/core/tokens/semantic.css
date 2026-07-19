@@ -1,0 +1,350 @@
+@theme {
+  --color-primary: var(--color-dark-midnight-blue-500);
+  --color-primary-hover: var(--color-dark-midnight-blue-550);
+  --color-primary-active: var(--color-dark-midnight-blue-600);
+
+  --color-accent: var(--color-bronze-400);
+  --color-accent-hover: var(--color-bronze-500);
+  --color-accent-soft: var(--color-bronze-300);
+  --color-accent-strong: var(--color-bronze-500);
+  --color-accent1: var(--color-bronze-400);
+  --color-accent2: var(--color-ocean-boat-blue-600);
+
+  --color-contrast-accent: var(--color-bronze-500);
+  --color-contrast-accent-soft: var(--color-bronze-300);
+  --color-contrast-accent-strong: var(--color-bronze-600);
+
+  --color-success: var(--color-ocean-boat-blue-550);
+  --color-warning: var(--color-bronze-400);
+  --color-danger: var(--color-dark-midnight-blue-450);
+  --color-error-red: #972B1A;
+
+  --color-whatsapp: var(--color-ocean-boat-blue-500);
+  --color-whatsapp-hover: var(--color-ocean-boat-blue-600);
+  --color-whatsapp-footer-hover: var(--color-ocean-boat-blue-700);
+
+  /* Page paper = ecru (warm brand). Product photo fields = studio neutral (cool).
+     Never use ecru under product photography — it reads yellow. */
+  --surface-page: var(--color-ecru-50);
+  --surface-soft: var(--color-ecru-100);
+  --surface-muted: var(--color-ecru-100);
+  --surface-card: var(--color-ecru-50);
+  --surface-panel: var(--color-ecru-50);
+  --surface-panel-strong: color-mix(in srgb, var(--color-white-50) 72%, var(--color-ecru-50));
+  --surface-panel-soft: var(--color-ecru-100);
+  --surface-hover: var(--color-ecru-100);
+  --surface-hover-soft: var(--color-ecru-200);
+  --surface-focus: var(--color-ecru-200);
+  /* Studio neutral — product thumbs / catalog media only.
+     Compose from palette tokens only (cool white scale + support-mist). Never ecru. No raw hex. */
+  --surface-studio: var(--color-white-150);
+  --surface-studio-highlight: var(--color-white-50);
+  --surface-studio-edge: var(--color-white-250);
+  --surface-studio-field: radial-gradient(
+    120% 100% at 50% 18%,
+    var(--surface-studio-highlight) 0%,
+    color-mix(in srgb, var(--color-support-mist) 55%, var(--surface-studio)) 55%,
+    var(--surface-studio-edge) 100%
+  );
+  /* Cool relief bands — split-layout text columns, “white” sections. Not ecru. */
+  --surface-content-column: var(--color-white-100);
+  --surface-content-elevated: var(--color-white-50);
+  --surface-relief: linear-gradient(
+    180deg,
+    var(--color-white-50) 0%,
+    var(--color-white-150) 100%
+  );
+  --surface-inverse: var(--color-dark-midnight-blue-900);
+  --surface-inverse-soft: var(--color-dark-midnight-blue-800);
+  --surface-canvas: var(--color-dark-midnight-blue-950);
+  --surface-canvas-soft: var(--color-dark-midnight-blue-900);
+  --surface-canvas-panel: var(--color-dark-midnight-blue-800);
+  /* Warm wash: ecru + soft bronze (not cool support-mist) */
+  --surface-accent-wash: color-mix(
+    in srgb,
+    var(--color-bronze-300) 14%,
+    var(--color-ecru-100)
+  );
+  --surface-glass: color-mix(in srgb, var(--color-ecru-50) 82%, transparent);
+  --surface-glass-strong: color-mix(in srgb, var(--color-ecru-50) 92%, transparent);
+  --surface-tint-soft: color-mix(in srgb, var(--color-ecru-50) 92%, transparent);
+  --surface-tint-muted: color-mix(in srgb, var(--color-ecru-100) 78%, transparent);
+  --surface-status-ok: color-mix(in srgb, var(--color-ocean-boat-blue-200) 28%, var(--color-ecru-50));
+  --surface-status-bad: color-mix(in srgb, var(--color-bronze-200) 22%, var(--color-ecru-50));
+  --surface-sustain-soft: #7FAF9614;
+  --surface-sustain-soft-strong: #7FAF9624;
+  --surface-sustain-glow: #7FAF9633;
+  --surface-sustain-glow-strong: #7FAF9647;
+
+  --text-strong: #0B1324;
+  --text-heading: #050B17;
+  --text-heading-soft: #3B4756;
+  --text-body: #1B2940;
+  --text-muted: #3F5168;
+  --text-subtle: #56697E;
+  --text-brand: var(--color-primary);
+  --text-link: var(--color-primary);
+  --text-link-hover: var(--color-primary-hover);
+  --text-inverse: #F8FAFC;
+  --text-inverse-body: #E2E8F0;
+  --text-inverse-muted: #CBD5E1;
+  --text-inverse-subtle: #94A3B8;
+  --text-sustain: var(--color-sustain-300);
+
+  /* warm paper edges (ecru) with ink strength */
+  --border-soft: color-mix(in srgb, var(--color-ecru-300) 55%, var(--color-white-350));
+  --border-muted: color-mix(in srgb, var(--color-ecru-400) 40%, var(--color-white-450));
+  --border-strong: var(--color-dark-midnight-blue-300);
+  --border-accent: #1F36532E;
+  --border-hover: #1F365347;
+  --border-inverse: #FFFFFF47;
+  --border-sustain-soft: #7FAF9652;
+  --border-contrast-accent: #7F6A522E;
+
+  --overlay-inverse-06: #070D120F;
+  --overlay-inverse-12: #070D121F;
+  --overlay-inverse-18: #070D122E;
+  --overlay-inverse-24: #070D123D;
+  --overlay-inverse-35: #070D1259;
+  --overlay-panel-08: #FFFFFF14;
+  --overlay-panel-10: #FFFFFF1A;
+  --overlay-panel-12: #FFFFFF1F;
+  --overlay-panel-14: #FFFFFF24;
+  --overlay-panel-72: #FFFFFFB8;
+  --overlay-panel-88: #FFFFFFE0;
+  --overlay-panel-92: #FFFFFFEB;
+  --overlay-panel-95: #FFFFFFF2;
+  --overlay-panel-98: #FFFFFFFA;
+
+  /* Scrim & glass tints (image overlays, hero buttons, frosted panels) */
+  --scrim-black-20: #00000033;
+  --scrim-black-40: #00000066;
+  --scrim-black-80: #000000CC;
+  --glass-white-18: #FFFFFF2E;
+  --glass-white-20: #FFFFFF33;
+  --glass-white-28: #FFFFFF47;
+  --glass-white-40: #FFFFFF66;
+  --glass-white-90: #FFFFFFE6;
+  --hero-btn-bg: #080C12E6;
+  --hero-btn-bg-hover: #060A10FA;
+  --hero-btn-shadow: #000000F2;
+  --hero-btn-secondary-shadow: #0408108C;
+  --panel-frost-96: #F8FAFDF5;
+  --shadow-tint-pdp-22: #111E2D38;
+  --shadow-tint-pdp-28: #111E2D47;
+  --shadow-tint-pdp-30: #111E2D4D;
+
+  --shadow-soft: 0 16px 3rem -30px #111E2D29;
+  --shadow-panel: 0 1.5rem 3.5rem -42px #111E2D33;
+  --shadow-lift: 0 1.375rem 2.75rem -30px #1F36534A;
+  --shadow-float: 0 32px 5rem -48px #111E2D42;
+  --shadow-inverse: 0 1.75rem 4.5rem -48px #111E2D99;
+  --focus-ring: 0 0 0 0.1875rem #406F9940;
+
+  --blur-sm: 0.5rem;
+  --blur-md: 16px;
+  --blur-lg: 24px;
+  --blur-xl: 2.5rem;
+}
+
+/* Planner: cool studio chrome; CAD canvas stays light paper (never ecru shell). */
+body.planner-workspace {
+  --color-accent: var(--color-primary);
+  --color-accent-hover: var(--color-primary-hover);
+  --color-accent-soft: color-mix(in srgb, var(--color-primary) 10%, var(--color-white-100));
+  --surface-page: var(--color-white-150);
+  --surface-soft: var(--color-white-200);
+  --surface-muted: var(--color-white-200);
+  --surface-card: var(--color-white-50);
+  --surface-panel: var(--color-white-50);
+  --surface-panel-strong: var(--color-white-50);
+  --surface-panel-soft: var(--color-white-100);
+  --surface-hover: var(--color-white-200);
+  --surface-hover-soft: var(--color-white-250);
+  --surface-focus: var(--color-white-250);
+  --surface-accent-wash: color-mix(
+    in srgb,
+    var(--color-ocean-boat-blue-100) 35%,
+    var(--color-white-150)
+  );
+  --border-soft: color-mix(in srgb, var(--color-white-350) 70%, var(--color-ocean-boat-blue-150));
+  --border-muted: color-mix(in srgb, var(--color-white-400) 55%, var(--color-ocean-boat-blue-200));
+  /* Model-space paper (not inverted with html.dark). */
+  --planner-surface-canvas: #f4f4f0;
+  --planner-grid-minor: #c4c4bc;
+  --planner-grid-major: #8f8f86;
+  --color-canvas-bg: #f4f4f0;
+  --color-canvas-grid: #c4c4bc;
+  --planner-chrome-page: var(--color-white-150);
+  --planner-chrome-panel: var(--color-white-50);
+  --planner-chrome-subtle: var(--color-white-200);
+}
+
+/* Dark chrome must not paint the plan black — CAD stays light paper. */
+html.dark body.planner-workspace {
+  --planner-surface-canvas: #f4f4f0;
+  --planner-grid-minor: #c4c4bc;
+  --planner-grid-major: #8f8f86;
+  --color-canvas-bg: #f4f4f0;
+  --color-canvas-grid: #c4c4bc;
+}
+
+/* Admin console default: warm brand paper (inventory lists, CRM, non-CAD). */
+body.admin-shell,
+.admin-shell,
+[data-admin-shell="true"] {
+  --surface-page: var(--color-ecru-50);
+  --surface-soft: var(--color-ecru-100);
+  --surface-panel: color-mix(in srgb, var(--color-white-50) 60%, var(--color-ecru-50));
+  --surface-panel-strong: color-mix(in srgb, var(--color-white-50) 75%, var(--color-ecru-50));
+  --surface-panel-soft: var(--color-ecru-100);
+  --surface-accent-wash: color-mix(
+    in srgb,
+    var(--color-bronze-300) 14%,
+    var(--color-ecru-100)
+  );
+}
+
+/*
+ * Admin SVG / parametric CAD studio — cool professional chrome.
+ * Marker: data-cad-studio="cool" on freehand + parametric shells.
+ * Guest planner (body.planner-workspace without admin SVG) stays warm CAD paper.
+ * This block must stay AFTER body.planner-workspace so body:has() wins when both apply.
+ */
+body:has(.admin-page--svg-engine),
+body:has(.admin-parametric-workspace),
+body:has([data-cad-studio="cool"]),
+.shell-admin-layout:has(.admin-page--svg-engine),
+.shell-admin-layout:has(.admin-parametric-workspace),
+.shell-admin-layout:has([data-cad-studio="cool"]),
+.shell-admin-main:has(.admin-page--svg-engine),
+.shell-admin-main:has(.admin-parametric-workspace),
+.shell-admin-main:has([data-cad-studio="cool"]),
+.admin-page--svg-engine,
+.admin-parametric-workspace,
+[data-cad-studio="cool"],
+[data-admin-shell="edit"],
+[data-admin-shell="parametric"] {
+  /* Page + panels: cool studio, never ecru */
+  --surface-page: var(--color-white-150);
+  --surface-soft: var(--color-white-200);
+  --surface-muted: var(--color-white-200);
+  --surface-card: var(--color-white-50);
+  --surface-panel: var(--color-white-50);
+  --surface-panel-strong: var(--color-white-50);
+  --surface-panel-soft: var(--color-white-100);
+  --surface-hover: var(--color-white-200);
+  --surface-hover-soft: var(--color-white-250);
+  --surface-focus: var(--color-white-250);
+  --surface-accent-wash: color-mix(
+    in srgb,
+    var(--color-ocean-boat-blue-200) 18%,
+    var(--color-white-150)
+  );
+  --surface-glass: color-mix(in srgb, var(--color-white-50) 88%, transparent);
+  --surface-glass-strong: color-mix(in srgb, var(--color-white-50) 94%, transparent);
+  --surface-tint-soft: color-mix(in srgb, var(--color-white-100) 92%, transparent);
+  --surface-tint-muted: color-mix(in srgb, var(--color-white-200) 78%, transparent);
+  --surface-status-ok: color-mix(
+    in srgb,
+    var(--color-ocean-boat-blue-200) 28%,
+    var(--color-white-50)
+  );
+  --surface-status-bad: color-mix(
+    in srgb,
+    var(--color-bronze-200) 22%,
+    var(--color-white-50)
+  );
+
+  /* Cool hairlines (white scale), not warm ecru edges */
+  --border-soft: var(--color-white-300);
+  --border-muted: var(--color-white-400);
+
+  /* Model-space canvas: cool neutral grey (not warm #f4f4f0 paper) */
+  --planner-surface-canvas: var(--color-white-200);
+  --planner-grid-minor: var(--color-white-300);
+  --planner-grid-major: var(--color-white-450);
+  --planner-surface-panel: var(--color-white-50);
+  --planner-surface-subtle: var(--color-white-150);
+  --planner-border-default: var(--border-soft);
+  --color-canvas-bg: var(--planner-surface-canvas);
+  --color-canvas-grid: var(--planner-grid-minor);
+
+  /* WorkspaceShell module locals (cascade into .shell) */
+  --ws-shell-bg: var(--color-white-150);
+  --ws-panel-bg: var(--color-white-50);
+  --ws-header-bg: var(--color-white-50);
+  --ws-status-bg: var(--color-white-100);
+  --ws-panel-border: var(--color-white-300);
+
+  /* Legacy paper aliases → cool studio */
+  --color-paper: var(--surface-page);
+  --color-paper-raised: var(--surface-panel);
+  --color-paper-sunken: var(--surface-soft);
+  --color-paper-line: var(--border-soft);
+  --color-surface: var(--surface-page);
+  --color-surface-raised: var(--surface-panel);
+  --color-surface-sunken: var(--surface-soft);
+  --color-border: var(--border-soft);
+}
+
+/* Dark color scheme (html.dark via planner WorkspaceThemeProvider) */
+html.dark {
+  --color-primary: var(--color-ocean-boat-blue-400);
+  --color-primary-hover: var(--color-ocean-boat-blue-350);
+  --color-primary-active: var(--color-ocean-boat-blue-300);
+
+  --color-accent: var(--color-bronze-300);
+  --color-accent-hover: var(--color-bronze-400);
+  --color-accent-soft: var(--color-bronze-500);
+
+  --surface-page: var(--color-dark-midnight-blue-950);
+  --surface-soft: var(--color-dark-midnight-blue-900);
+  --surface-muted: var(--color-dark-midnight-blue-850);
+  --surface-card: var(--color-dark-midnight-blue-800);
+  --surface-panel: var(--color-dark-midnight-blue-800);
+  --surface-panel-strong: var(--color-dark-midnight-blue-750);
+  --surface-panel-soft: var(--color-dark-midnight-blue-850);
+  --surface-hover: var(--color-dark-midnight-blue-750);
+  --surface-hover-soft: var(--color-dark-midnight-blue-700);
+  --surface-focus: var(--color-dark-midnight-blue-700);
+  --surface-inverse: var(--color-white-100);
+  --surface-inverse-soft: var(--color-white-150);
+  --surface-accent-wash: color-mix(in srgb, var(--color-ocean-boat-blue-500) 14%, var(--color-dark-midnight-blue-900));
+  --surface-glass: #0B141DD9;
+  --surface-glass-strong: #111E2DEB;
+  --surface-status-ok: color-mix(in srgb, var(--color-ocean-boat-blue-500) 18%, var(--color-dark-midnight-blue-900));
+  --surface-status-bad: color-mix(in srgb, var(--color-bronze-400) 12%, var(--color-dark-midnight-blue-900));
+
+  --text-strong: #F1F5F9;
+  --text-heading: #F8FAFC;
+  --text-heading-soft: #CBD5E1;
+  --text-body: #E2E8F0;
+  --text-muted: #94A3B8;
+  --text-subtle: #64748B;
+  --text-link: var(--color-ocean-boat-blue-300);
+  --text-link-hover: var(--color-ocean-boat-blue-200);
+
+  --border-soft: var(--color-dark-midnight-blue-700);
+  --border-muted: var(--color-dark-midnight-blue-650);
+  --border-strong: var(--color-dark-midnight-blue-500);
+  --border-accent: #77A2C93D;
+  --border-hover: #77A2C966;
+
+  --shadow-soft: 0 16px 48px -30px #00000066;
+  --shadow-panel: 0 24px 56px -42px #00000073;
+  --shadow-lift: 0 22px 44px -30px #00000059;
+  --shadow-float: 0 32px 80px -48px #00000080;
+  --focus-ring: 0 0 0 3px #77A2C966;
+
+  --color-block-wall: var(--color-dark-midnight-blue-600);
+  --color-block-wall-hover: var(--color-dark-midnight-blue-500);
+  --color-block-desk: var(--color-dark-midnight-blue-500);
+  --color-block-desk-hover: var(--color-dark-midnight-blue-400);
+  --color-block-chair: var(--color-dark-midnight-blue-400);
+  --color-block-chair-hover: var(--color-dark-midnight-blue-350);
+
+  /* Dark UI theme still uses light CAD paper for any non-workspace canvas consumers. */
+  --color-canvas-bg: #f4f4f0;
+  --color-canvas-grid: #c4c4bc;
+}

@@ -115,7 +115,7 @@
   border: 1px solid var(--border-soft);
   background: var(--surface-panel);
   color: var(--text-body);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
 }
 
 .admin-svg-engine-shell__chrome-btn[data-selected],
@@ -366,7 +366,7 @@
   align-items: stretch;
   gap: 0.28rem;
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 600;
   line-height: 1.25;
   color: var(--text-body);
@@ -455,7 +455,7 @@ select.admin-parametric-form__control {
 
 .admin-parametric-form__error {
   display: block;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 500;
   color: var(--color-error-red);
 }
@@ -944,7 +944,7 @@ select.admin-parametric-form__control {
   gap: 0.35rem;
   min-width: 0;
   flex-wrap: wrap;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
 }
 
 .admin-cad__crumb-link {

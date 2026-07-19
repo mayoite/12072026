@@ -133,7 +133,7 @@
 }
 
 @utility catalog-card__eyebrow {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   text-transform: uppercase;
   letter-spacing: 0.24em;
   color: var(--text-subtle);
@@ -256,7 +256,7 @@
 }
 
 .catalog-card--compact .catalog-card__meta {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   line-height: 1.35;
   color: var(--text-muted);
 }

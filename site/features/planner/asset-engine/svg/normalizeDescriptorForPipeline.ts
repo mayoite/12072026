@@ -29,6 +29,12 @@ export interface PipelineBlockRect {
   id?: string;
 }
 
+/** One imported/authored freeform path in plan space (custom furniture). */
+export interface PipelinePathPart {
+  readonly id: string;
+  readonly dPath: string;
+}
+
 export interface PipelineCompileDescriptor {
   slug: string;
   name?: string;
@@ -39,6 +45,13 @@ export interface PipelineCompileDescriptor {
   themeTokens?: Record<string, string | undefined>;
   /** When set, S2 uses Maker.js path compile instead of polygon-clipping blocks. */
   makerRecipe?: MakerRecipe;
+  /**
+   * When set, S2 emits these freeform `d` paths directly (custom furniture from
+   * SVG import or path authoring). Preferred over `blocks` when present so an
+   * arbitrary outline is not reduced to its bounding rect. `path` scene parts
+   * have no rect IR, so this is the only carrier that preserves their geometry.
+   */
+  pathParts?: PipelinePathPart[];
 }
 
 const BOOLEAN_VARIANTS = new Set<PipelineBooleanVariant>([
@@ -144,6 +157,47 @@ function normalizeBlockFromPart(raw: unknown): PipelineBlockRect | null {
   if (x === null || y === null || width === null || height === null) return null;
   if (width <= 0 || height <= 0) return null;
   return { x, y, width, height, id };
+}
+
+/**
+ * Extract a freeform `d` path from a scene part that has no rect IR.
+ * `path` parts carry `d` directly; `line` parts become a two-point `d` (a line
+ * has no width/height so it cannot survive as a block). rect/circle return null
+ * here because they are already handled by {@link normalizeBlockFromPart}.
+ */
+function pathPartFromPart(raw: unknown): PipelinePathPart | null {
+  const o = asRecord(raw);
+  if (!o) return null;
+  if (o.visible === false) return null;
+  const kind = typeof o.kind === "string" ? o.kind : "rect";
+  const id = typeof o.id === "string" && o.id.trim() !== "" ? o.id : undefined;
+
+  if (kind === "path") {
+    const d = typeof o.d === "string" ? o.d.trim() : "";
+    if (d === "") return null;
+    return { id: id ?? "path-part", dPath: d };
+  }
+
+  if (kind === "line") {
+    const x1 = finiteNumber(o.x1);
+    const y1 = finiteNumber(o.y1);
+    const x2 = finiteNumber(o.x2);
+    const y2 = finiteNumber(o.y2);
+    if (x1 === null || y1 === null || x2 === null || y2 === null) return null;
+    return { id: id ?? "line-part", dPath: `M${x1} ${y1} L${x2} ${y2}` };
+  }
+
+  return null;
+}
+
+/** Persisted `importedPaths[]` entry ({ id, d }) → pipeline path part. */
+function importedPathToPathPart(raw: unknown): PipelinePathPart | null {
+  const o = asRecord(raw);
+  if (!o) return null;
+  const d = typeof o.d === "string" ? o.d.trim() : "";
+  if (d === "") return null;
+  const id = typeof o.id === "string" && o.id.trim() !== "" ? o.id.trim() : "imported-path";
+  return { id, dPath: d };
 }
 
 function synthesizeBlocksFromGeometry(
@@ -390,6 +444,15 @@ export function normalizeDescriptorForPipeline(
     .map(normalizeBlockFromPart)
     .filter((b): b is PipelineBlockRect => b !== null);
 
+  // Freeform path/line parts have no rect IR. When present they are the geometry
+  // authority (custom furniture); rect/circle parts still ride along as paths so
+  // a mixed scene (imported outline + a placed rect) publishes every shape.
+  const rawImported = Array.isArray(root.importedPaths) ? root.importedPaths : [];
+  const pathParts = [
+    ...rawParts.map(pathPartFromPart),
+    ...rawImported.map(importedPathToPathPart),
+  ].filter((p): p is PipelinePathPart => p !== null);
+
   const finalBlocks =
     partBlocks.length > 0
       ? partBlocks
@@ -415,5 +478,6 @@ export function normalizeDescriptorForPipeline(
     blocks: finalBlocks,
     themeTokens,
     makerRecipe,
+    ...(pathParts.length > 0 ? { pathParts } : {}),
   };
 }

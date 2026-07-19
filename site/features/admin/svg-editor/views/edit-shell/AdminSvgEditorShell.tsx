@@ -16,8 +16,8 @@ import {
   STAGE_MIN_FRACTION,
   stageMeetsMinimumAt1280,
 } from "../../contracts/stageLayoutContract";
+import { StudioShell, type StudioPanel } from "@/features/studio/shell";
 import { AdminSvgDetailsRail } from "./AdminSvgDetailsRail";
-import { AdminSvgDockHost } from "./AdminSvgDockHost";
 import { AdminSvgEditorFeedbackRegion } from "./AdminSvgEditorFeedbackRegion";
 import { AdminSvgEditorTopBar } from "./AdminSvgEditorTopBar";
 import { AdminSvgPreviewRail } from "./AdminSvgPreviewRail";
@@ -150,7 +150,7 @@ export function AdminSvgEditorShell({
       className="admin-page admin-page--svg-engine admin-svg-editor-workspace admin-svg-editor-workspace--dock"
       data-admin-shell="edit"
       data-testid="admin-svg-edit-shell"
-      data-chrome="dockview-react aria phosphor"
+      data-chrome="studio-shell aria phosphor"
     >
       <AdminSvgEditorTopBar
         slug={form.slug.trim() || slug}
@@ -248,18 +248,30 @@ export function AdminSvgEditorShell({
         className="admin-svg-engine-shell admin-svg-engine-shell--dock"
         data-testid="admin-svg-engine-shell"
         data-studio-node-count={form.sceneParts?.length ?? 0}
-        data-stage-layout="dockview"
+        data-stage-layout="studio"
         data-stage-grid-columns={STAGE_GRID_COLUMNS}
         data-authoring-width-px={AUTHORING_WIDTH_PX}
         data-stage-min-fraction={STAGE_MIN_FRACTION}
         data-stage-meets-min-at-1280={stageMeetsMinimumAt1280() ? "true" : "false"}
       >
-        <AdminSvgDockHost
-          slots={{
-            preview: previewSlot,
-            stage: stageSlot,
-            details: detailsSlot,
-          }}
+        <StudioShell
+          canvas={stageSlot}
+          panels={
+            [
+              {
+                id: "preview",
+                title: "Preview",
+                defaultZone: "left",
+                content: previewSlot,
+              },
+              {
+                id: "details",
+                title: "Details",
+                defaultZone: "right",
+                content: detailsSlot,
+              },
+            ] satisfies StudioPanel[]
+          }
         />
       </div>
     </div>

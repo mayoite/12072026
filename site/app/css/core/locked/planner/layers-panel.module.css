@@ -19,7 +19,7 @@
   background: var(--lp-bg);
   color: var(--lp-text);
   font-family: var(--font-sans, system-ui, sans-serif);
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   line-height: 1.35;
 }
 
@@ -43,7 +43,7 @@
 }
 
 .layerCountMeta {
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-variant-numeric: tabular-nums;
   color: var(--lp-text-muted);
 }
@@ -63,7 +63,7 @@
   border: 1px solid var(--lp-border);
   border-radius: var(--radius-sm);
   background: var(--lp-bg);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 600;
   color: var(--lp-accent);
   cursor: pointer;
@@ -155,7 +155,7 @@
 }
 
 .layerCount {
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-variant-numeric: tabular-nums;
   color: var(--lp-text-muted);
   min-width: 1.25rem;
@@ -167,7 +167,7 @@
 }
 
 .layerLabel {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 500;
   color: var(--lp-text-secondary);
   overflow: hidden;
@@ -190,7 +190,7 @@
 
   .layersToolbarBtn {
     padding-inline: 0.65rem;
-    font-size: 0.75rem;
+    font-size: var(--type-label-size);
   }
 
   .layerRow {
@@ -199,7 +199,7 @@
   }
 
   .layerLabel {
-    font-size: 0.8125rem;
+    font-size: var(--type-small-size);
   }
 }
 

@@ -3,8 +3,29 @@ import { cleanup, render, screen, waitFor } from "@testing-library/react";
 
 import { ModularPlannerShell } from "@/features/planner/editor/dock/ModularPlannerShell";
 
+let mockIsMobile = true;
 vi.mock("@/features/planner/hooks/useIsMobile", () => ({
-  useIsMobile: () => true,
+  useIsMobile: () => mockIsMobile,
+}));
+
+/** StudioShell drives resizable dock layout; unit tests stub it to render slots flat. */
+vi.mock("@/features/studio/shell", () => ({
+  StudioShell: ({
+    canvas,
+    panels = [],
+  }: {
+    canvas: React.ReactNode;
+    panels?: readonly { id: string; content: React.ReactNode }[];
+  }) => (
+    <div data-testid="studio-shell-mock">
+      <div data-testid="studio-canvas">{canvas}</div>
+      {panels.map((panel) => (
+        <div key={panel.id} data-testid={`studio-panel-${panel.id}`}>
+          {panel.content}
+        </div>
+      ))}
+    </div>
+  ),
 }));
 
 vi.mock("@/features/planner/cloud-store/workspaceStore", () => ({
@@ -20,6 +41,50 @@ vi.mock("@/features/planner/cloud-store/workspaceStore", () => ({
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+});
+
+describe("ModularPlannerShell desktop dock (StudioShell)", () => {
+  beforeEach(() => {
+    mockIsMobile = false;
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 1440,
+    });
+  });
+
+  afterEach(() => {
+    mockIsMobile = true;
+  });
+
+  it("mounts the StudioShell with a canvas plus inventory + properties dock panels", async () => {
+    render(
+      <ModularPlannerShell
+        projectName="Desktop shell"
+        inventory={<div data-testid="inv-slot">Inventory</div>}
+        properties={<div data-testid="props-slot">Properties</div>}
+        activeTool="wall"
+        onToolChange={vi.fn()}
+      >
+        <div data-testid="plan-stage">plan</div>
+      </ModularPlannerShell>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("studio-shell-mock")).toBeInTheDocument();
+    });
+
+    // Canvas always present; both dock panels declared (visibility driven by step).
+    expect(screen.getByTestId("plan-stage")).toHaveTextContent("plan");
+    expect(screen.getByTestId("studio-panel-inventory")).toBeInTheDocument();
+    expect(screen.getByTestId("studio-panel-properties")).toBeInTheDocument();
+    expect(screen.getByTestId("inv-slot")).toBeInTheDocument();
+
+    // Desktop keeps the modular studio surface + pinned tool rail.
+    expect(
+      document.querySelector("[data-modular-dock='true']"),
+    ).not.toBeNull();
+    expect(screen.getByTestId("canvas-tool-rail")).toBeInTheDocument();
+  });
 });
 
 describe("ModularPlannerShell mobile chrome (P3)", () => {

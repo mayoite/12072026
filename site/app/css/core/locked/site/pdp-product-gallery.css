@@ -59,7 +59,7 @@
   right: 0.75rem;
   background: var(--hero-btn-secondary-shadow);
   color: white;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   border-radius: var(--radius-full);
   padding: 0.125rem 0.5rem;
   pointer-events: none;

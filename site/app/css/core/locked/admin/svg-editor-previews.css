@@ -44,7 +44,7 @@
 .admin-svg-preview__stage--empty {
   background: var(--color-surface-raised);
   color: var(--text-muted);
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
 }
 
 .admin-svg-preview__img {
@@ -77,13 +77,13 @@
 
 .admin-svg-preview__empty {
   padding: 1.5rem;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   color: var(--text-muted);
   text-align: center;
 }
 
 .admin-svg-preview__meta {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--text-muted);
 }
 
@@ -138,7 +138,7 @@
 
 .admin-model-viewer__message {
   padding: 0.5rem;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   text-align: center;
 }
 
@@ -156,7 +156,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
 }
 
 .admin-glb-status__mount {

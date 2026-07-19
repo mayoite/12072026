@@ -1,0 +1,124 @@
+.studio-shell {
+  --studio-rail-w: 3.25rem;
+  --studio-left-w: 19.375rem;
+  --studio-right-w: 18.125rem;
+  --studio-topbar-h: 3.5rem;
+  --studio-subtopbar-h: 2.75rem;
+  --studio-dock-h: 3.25rem;
+  --studio-canvas-min: 20rem;
+  --studio-panel-pad: var(--space-3);
+  --studio-panel-pad-lg: var(--space-4);
+
+  --studio-text-2xs: var(--type-tiny-size);
+  --studio-text-xs: var(--type-label-size);
+  --studio-text-sm: var(--type-small-size);
+  --studio-text-base: var(--type-body-size);
+  --studio-text-title: var(--type-title-sm-size);
+
+  --studio-letter-label: var(--type-letter-label);
+  --studio-leading-tight: var(--type-leading-label);
+  --studio-leading-copy: var(--type-leading-copy);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* Fills its container; consumers establish viewport height (e.g. a 100dvh root). */
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: var(--studio-text-base);
+  line-height: var(--studio-leading-copy);
+  background: var(--surface-page);
+  color: var(--text-strong);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.studio-topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  z-index: var(--z-toolbar);
+  min-height: var(--studio-topbar-h);
+  padding: var(--space-2) var(--space-4);
+  border-bottom: 1px solid var(--border-soft);
+  background: color-mix(in srgb, var(--surface-panel) 94%, var(--surface-soft));
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--border-soft) 70%, transparent);
+  font-size: var(--studio-text-title);
+  color: var(--text-heading);
+}
+
+.studio-subtopbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  z-index: var(--z-toolbar);
+  min-height: var(--studio-subtopbar-h);
+  padding: var(--space-1) var(--space-4);
+  border-bottom: 1px solid var(--border-soft);
+  background: color-mix(in srgb, var(--surface-soft) 72%, var(--surface-panel));
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  font-size: var(--studio-text-xs);
+  color: var(--text-muted);
+}
+
+.studio-main {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.studio-rail {
+  position: relative;
+  z-index: var(--z-sidebar);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: var(--studio-rail-w);
+  border-right: 1px solid var(--border-soft);
+  background: linear-gradient(
+    180deg,
+    var(--surface-panel) 0%,
+    color-mix(in srgb, var(--surface-soft) 88%, var(--surface-panel)) 100%
+  );
+}
+
+.studio-panels {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.studio-canvas {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: var(--studio-canvas-min);
+  min-height: 0;
+  overflow: hidden;
+  z-index: var(--z-canvas);
+  background: var(--surface-page);
+}
+
+.studio-dock {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  z-index: var(--z-toolbar);
+  min-height: var(--studio-dock-h);
+  padding: var(--space-2) var(--space-4);
+  border-top: 1px solid var(--border-soft);
+  background: color-mix(in srgb, var(--surface-panel) 94%, var(--surface-soft));
+  box-shadow: 0 -1px 0 color-mix(in srgb, var(--border-soft) 70%, transparent);
+  font-size: var(--studio-text-xs);
+  color: var(--text-muted);
+}

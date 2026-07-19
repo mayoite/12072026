@@ -78,7 +78,7 @@
 
 .legal-cookie-card__name {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 700;
   letter-spacing: 0.02em;
   color: var(--text-strong);
@@ -87,7 +87,7 @@
 
 .legal-cookie-card__meta {
   margin: 0.35rem 0 0;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--text-muted);
 }
 
@@ -142,7 +142,7 @@
 
 @media (width >= theme(--breakpoint-sm)) {
   .projects-kpi__label {
-    font-size: 0.6875rem;
+    font-size: var(--type-tiny-size);
   }
 }
 

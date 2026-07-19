@@ -13,7 +13,7 @@
 /* App dark mode is html.dark (ThemeProvider), not prefers-color-scheme alone */
 @custom-variant dark (&:where(.dark, .dark *));
 
-@import "./core/theme.css";
+@import "./core/tokens/index.css";
 @import "./core/utilities/animations.css";
 @import "./core/utilities/typography.css";
 @import "./core/utilities/layout.css";
@@ -24,6 +24,7 @@
 @import "./core/utilities/nav.css";
 @import "./core/utilities/misc.css";
 @import "./core/utilities/planner-shell.css";
+@import "./core/studio/index.css";
 @import "./core/components/buttons.css";
 @import "./core/components/cards.css";
 @import "./core/components/catalog-card-media.css";

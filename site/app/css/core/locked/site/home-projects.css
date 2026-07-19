@@ -149,7 +149,7 @@
 
 @utility projects-card__category {
   color: var(--text-muted);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: var(--font-weight-copy-semibold);
   letter-spacing: 0.14em;
   line-height: 1.25;

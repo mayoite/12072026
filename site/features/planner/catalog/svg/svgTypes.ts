@@ -270,6 +270,18 @@ export const BlockDescriptorBlockSchema = z.object({
 /** Single block rect in a descriptor's explicit blocks list (mm coords relative to viewBox). */
 export type BlockDescriptorBlock = z.infer<typeof BlockDescriptorBlockSchema>;
 
+/**
+ * A freeform imported/drawn path part (custom furniture). Carries an SVG `d`
+ * in viewBox plan space so an arbitrary outline survives persist and reaches the
+ * compile pipeline (rect `blocks` cannot represent it). See
+ * `normalizeDescriptorForPipeline` pathParts.
+ */
+export const BlockDescriptorImportedPathSchema = z.object({
+  id: z.string().regex(/^[a-z][a-z0-9-]{1,63}$/).optional(),
+  d: z.string().trim().min(1).max(20_000),
+});
+export type BlockDescriptorImportedPath = z.infer<typeof BlockDescriptorImportedPathSchema>;
+
 export const BlockDescriptorGeometrySchema = z.object({
   widthMm: z.number().finite().positive(),
   depthMm: z.number().finite().positive(),
@@ -387,6 +399,8 @@ const BlockDescriptorCommonBaseSchema = z.object({
   mountingPoints: z.array(MountingPointSchema).optional(),
   /** Optional explicit blocks for resolver contract (PLAN-FAIL-0413 / 0406). See BlockDescriptorBlockSchema. Cites BP-02 schema parity + Phase 06 loader. */
   blocks: z.array(BlockDescriptorBlockSchema).optional(),
+  /** Optional freeform imported/drawn paths (custom furniture). See BlockDescriptorImportedPathSchema. */
+  importedPaths: z.array(BlockDescriptorImportedPathSchema).max(1_000).optional(),
   maker: BlockDescriptorMakerSchema.optional(),
   themeTokens: BlockDescriptorThemeTokensSchema,
   rovingFocus: z.array(BlockDescriptorRovingFocusEntrySchema),

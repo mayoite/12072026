@@ -1,0 +1,10 @@
+/*
+ * FOCSS design tokens — single source of truth.
+ * Load order matters: palette ramps first, then semantic aliases that
+ * reference them, then typography/layout, then planner runtime vars.
+ */
+@import "./palette.css";
+@import "./semantic.css";
+@import "./typography.css";
+@import "./layout.css";
+@import "./planner.css";

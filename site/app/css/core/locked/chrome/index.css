@@ -9,9 +9,7 @@
  *
  * ── CSS modules (TSX imports these paths only) ────────────────────────────
  *   canvas-tool-rail.module.css → features/planner/editor/CanvasToolRail.tsx
- *   planner-dock.module.css     → features/planner/editor/dock/PlannerDockHost.tsx
- *   admin-svg-dock.module.css   → features/admin/svg-editor/.../AdminSvgDockHost.tsx
- *   studio-chrome.css           → freehand + parametric dock shell helpers
+ *   studio-chrome.css           → freehand + parametric StudioShell helpers
  *
  * Rule: new shared tool/dock chrome → here.
  *       SVG palette / plan paint / preview → locked/svg only.

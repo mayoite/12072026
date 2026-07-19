@@ -32,7 +32,7 @@
   overflow: hidden;
   background: var(--inv-panel-bg);
   font-family: var(--font-sans, system-ui, sans-serif);
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   line-height: 1.35;
   color: var(--inv-text-primary);
 }
@@ -85,7 +85,7 @@
   border: 1px solid var(--inv-panel-border);
   border-radius: var(--inv-radius-sm);
   background: var(--inv-panel-bg);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   line-height: 1.25;
   color: var(--inv-text-primary);
   transition: border-color 0.12s ease, box-shadow 0.12s ease;
@@ -153,7 +153,7 @@
   border: 1px solid var(--inv-panel-border);
   border-radius: var(--inv-radius-sm);
   background: var(--inv-panel-bg);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 500;
   color: var(--inv-text-secondary);
   white-space: nowrap;
@@ -285,7 +285,7 @@
   padding: 0.2rem var(--inv-chrome-pad-x);
   border: none;
   background: transparent;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 500;
   color: var(--inv-text-secondary);
   text-align: left;
@@ -384,7 +384,7 @@
 }
 
 .resultsCount {
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   color: var(--inv-text-muted);
   font-variant-numeric: tabular-nums;
 }
@@ -543,7 +543,7 @@
   overflow: hidden;
   word-break: break-word;
   overflow-wrap: anywhere;
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 600;
   color: var(--inv-text-primary);
   line-height: 1.3;
@@ -588,7 +588,7 @@
 }
 
 .itemSku {
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
@@ -600,7 +600,7 @@
 }
 
 .itemDimensions {
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 500;
   color: var(--inv-text-secondary);
   line-height: 1.25;
@@ -652,7 +652,7 @@
   border: 1px solid var(--inv-accent);
   border-radius: var(--inv-radius-sm);
   background: var(--inv-accent-subtle);
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   font-weight: 700;
   color: var(--inv-accent);
   cursor: pointer;
@@ -756,7 +756,7 @@
   flex: 1 1 auto;
   min-height: 0;
   color: var(--inv-text-muted);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
 }
 
 .loadingSpinner {
@@ -797,7 +797,7 @@
 
 .emptyText {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: var(--type-small-size);
   font-weight: 500;
   color: var(--inv-text-secondary);
   text-align: center;
@@ -806,7 +806,7 @@
 .emptyHint {
   margin: 0;
   max-width: 14rem;
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
   line-height: 1.35;
   color: var(--inv-text-muted);
   text-align: center;
@@ -824,7 +824,7 @@
   display: grid;
   gap: 0.25rem;
   padding: 0.35rem 0.5rem;
-  font-size: 0.6875rem;
+  font-size: var(--type-tiny-size);
 }
 
 .compareRow {
@@ -849,7 +849,7 @@
   border: 1px solid var(--inv-panel-border);
   border-radius: var(--inv-radius-sm);
   background: var(--inv-panel-bg);
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   font-weight: 500;
   color: var(--inv-accent);
   cursor: pointer;
@@ -910,7 +910,7 @@
 
   .filterChip {
     padding: 0.35rem 0.6rem;
-    font-size: 0.75rem;
+    font-size: var(--type-label-size);
   }
 
   .itemCard {
@@ -921,14 +921,14 @@
   }
 
   .itemName {
-    font-size: 0.8125rem;
+    font-size: var(--type-small-size);
     line-height: 1.35;
     max-height: calc(1.35em * 2);
   }
 
   .itemSku,
   .itemDimensions {
-    font-size: 0.75rem;
+    font-size: var(--type-label-size);
   }
 
   .itemActions {
@@ -941,12 +941,12 @@
     min-height: 2.75rem; /* 44px */
     min-width: 2.75rem;
     padding: 0.4rem 0.7rem;
-    font-size: 0.8125rem;
+    font-size: var(--type-small-size);
   }
 
   .compareAction {
     min-height: 1.75rem;
-    font-size: 0.6875rem;
+    font-size: var(--type-tiny-size);
     padding: 0.15rem 0.4rem;
   }
 

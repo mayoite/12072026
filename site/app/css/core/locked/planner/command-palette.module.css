@@ -62,7 +62,7 @@
 }
 
 .commandPaletteHint {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--cp-text-muted);
   white-space: nowrap;
 }
@@ -121,12 +121,12 @@
 }
 
 .commandPaletteItemCategory {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--cp-text-muted);
 }
 
 .commandPaletteShortcut {
-  font-size: 0.75rem;
+  font-size: var(--type-label-size);
   color: var(--cp-text-muted);
   font-family: var(--font-mono, ui-monospace, monospace);
 }
