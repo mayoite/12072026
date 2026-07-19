@@ -47,6 +47,7 @@ const tempDirs: string[] = [];
 /** Isolate from ambient .env.local (SVG_RELEASE_AUTHORITY=db breaks disk-path unit). */
 beforeEach(() => {
   process.env.SVG_RELEASE_AUTHORITY = "disk";
+  process.env.SVG_DISK_WRITE = "1";
   isProductsDatabaseConfigured.mockReturnValue(false);
 });
 
@@ -55,6 +56,7 @@ afterEach(() => {
     rmSync(dir, { recursive: true, force: true });
   }
   delete process.env.SVG_RELEASE_AUTHORITY;
+  delete process.env.SVG_DISK_WRITE;
   isProductsDatabaseConfigured.mockReturnValue(false);
 });
 
